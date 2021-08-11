@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp">
+    <TextView
+        android:id="@+id/lbl_orden_venta_ERP_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="10dp"
+        android:text="N° Orden:"
+        android:textAppearance="?attr/textAppearanceListItem"/>
+
+    <TextView
+        android:id="@+id/tv_orden_venta_ERP_id"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:text="1"
+
+        android:textAppearance="?attr/textAppearanceListItem" />
+    <TextView
+        android:id="@+id/lbl_rucdnni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="30dp"
+        android:text="RUC/DNI:"
+        android:textAppearance="?attr/textAppearanceListItem"/>
+    <TextView
+        android:id="@+id/tv_rucdnni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="95dp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:text="00000000"
+        android:textAppearance="?attr/textAppearanceListItem"/>
+
+    <TextView
+        android:id="@+id/lbl_nombrecliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="50dp"
+        android:text="Cliente:"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/tv_nombrecliente"
+        android:layout_width="265dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="50dp"
+        android:text="Cliente01"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem"/>
+
+    <TextView
+        android:id="@+id/lbl_monto_orden_venta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="70dp"
+        android:text="Monto"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/tv_monto_historico_orden_venta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="70dp"
+        android:textStyle="bold"
+        android:text="0.00"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/tv_estado_historico_orden_venta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="90dp"
+        android:text="Estado"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/lbl_estado_historico_orden_venta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="90dp"
+        android:text="Estado"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+
+    <TextView
+        android:id="@+id/lbl_historico_orden_venta_cometario_aprob"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="10dp"
+        android:text="Com. Aprob:"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <ImageView
+        android:id="@+id/imv_historico_orden_venta_cometario_aprob"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="340dp"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/ic_insert_comment_black_24dp" />
+
+    <TextView
+        android:id="@+id/lbl_recibido_orden_venta_ERP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="120dp"
+        android:text="Recibido"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <CheckBox
+        android:id="@+id/chk_recibido_orden_venta_ERP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="185dp"
+        android:layout_marginTop="140dp"
+        android:clickable="false"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/lbl_envio_orden_venta_ERP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="120dp"
+        android:text="Envio"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+
+
+    <CheckBox
+        android:id="@+id/chk_envio_orden_venta_ERP"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="140dp"
+        android:clickable="false"
+        android:text="" />
+    <TextView
+        android:id="@+id/lbl_envio_orden_venta_comentario_ws"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="120dp"
+        android:text="Ver Error"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <ImageView
+        android:id="@+id/imv_historico_orden_venta_cometario_ws"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="270dp"
+        android:layout_marginTop="145dp"
+        app:srcCompat="@drawable/ic_insert_comment_black_24dp" />
+
+    <ImageView
+        android:id="@+id/imv_flecha_historico_orden_venta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="340dp"
+        android:layout_marginTop="60dp"
+        app:srcCompat="@mipmap/icons8_chebron_hacia_la_derecha_96" />
+
+
+
+
+</RelativeLayout>

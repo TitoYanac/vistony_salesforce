@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeListaCabezera"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="false"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/imv_cliente_cabecera"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:srcCompat="@mipmap/icons8_chebron_hacia_la_derecha_96" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lbl_moneda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Moneda"
+                android:textAppearance="?attr/textAppearanceListItem"
+                tools:text="Moneda" />
+
+            <TextView
+                android:id="@+id/lbl_saldo_cliente_cabecera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Saldo"
+                android:textAppearance="?attr/textAppearanceListItem"
+                tools:text="Saldo" />
+
+            <TextView
+                android:id="@+id/lbl_cliente_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Codigo"
+                android:textAppearance="?attr/textAppearanceListItem"
+                tools:text="Codigo" />
+
+            <TextView
+                android:id="@+id/lbl_nombrecliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Nombre"
+                android:textAppearance="?attr/textAppearanceListItem"
+                tools:text="Nombre" />
+
+            <TextView
+                android:id="@+id/lbl_categoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Categoria"
+                android:textAppearance="?attr/textAppearanceListItem"
+                />
+
+            <TextView
+                android:id="@+id/lbl_linea_credito"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Linea Cred:"
+                android:textAppearance="?attr/textAppearanceListItem"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:focusable="false"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_moneda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Moneda"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceListItem"
+                tools:text="Moneda" />
+
+            <TextView
+                android:id="@+id/tv_saldo_cliente_cabecera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Saldo"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceListItem"
+                tools:text="Saldo" />
+
+            <TextView
+                android:id="@+id/tv_cliente_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="RUC 01"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceListItem"
+                tools:text="RUC 01" />
+
+            <TextView
+                android:id="@+id/tv_nombrecliente"
+                android:layout_width="315dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="CLIENTE 01"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceListItem"
+                tools:text="CLIENTE 01" />
+            <TextView
+                android:id="@+id/tv_categoria"
+                android:layout_width="315dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="CATEGORIA"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/tv_linea_credito"
+                android:layout_width="315dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="Linea Credito 1"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
+
+

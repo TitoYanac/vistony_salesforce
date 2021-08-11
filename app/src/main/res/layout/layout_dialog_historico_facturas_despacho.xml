@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentLeft="false"
+    android:layout_alignParentTop="false"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/custom_background_alert"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:background="@android:color/white"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:maxLines="1"
+                android:minLines="1"
+                android:scrollbars="vertical"
+                android:text="TITULO"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_background_alert"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/lbl_historico_facturas_despacho_nrofactura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:text="Documento:"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/tv_historico_facturas_despacho_nrofactura"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginLeft="120dp"
+                    android:textStyle="bold"
+                    android:text="Documento1"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/lbl_historico_facturas_despacho_nombrechofer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="Chofer:"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/tv_historico_facturas_despacho_nombrechofer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="120dp"
+                    android:textStyle="bold"
+                    android:text="Chofer1"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/lbl_historico_facturas_despacho_fechaprogramaciondespacho"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="F.Despacho:"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/tv_historico_facturas_despacho_fechaprogramaciondespacho"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginLeft="120dp"
+                    android:textStyle="bold"
+                    android:text="1900-01-01"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/lbl_historico_facturas_despacho_estadodespacho"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="Estado:"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/tv_historico_facturas_despacho_estadodespacho"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginLeft="120dp"
+                    android:textStyle="bold"
+                    android:text="Estado1"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/lbl_historico_facturas_despacho_motivoestado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="Motivo:"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/tv_historico_facturas_despacho_motivoestado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginLeft="120dp"
+                    android:textStyle="bold"
+                    android:text="Motivo1"
+                    android:textSize="18dp" />
+
+                <ImageView
+                    android:id="@+id/imv_historico_facturacion_despacho_historial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="220dp"
+                    android:layout_marginTop="60dp"
+                    app:srcCompat="@drawable/ic_baseline_article_24" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/dialogButtonOK"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/custom_border_button"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="ACEPTAR"
+                android:textColor="#0957C3" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/logo" />
+    </FrameLayout>
+
+
+</LinearLayout>

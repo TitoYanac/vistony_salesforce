@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp"
+    android:id="@+id/relativeListaDireccionCliente"
+    >
+
+    <TextView
+        android:id="@+id/lbl_domembarque_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="ID:"
+        />
+    <TextView
+        android:id="@+id/tv_domembarque_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="10dp"
+        android:text="ID1"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"
+
+        />
+
+    <TextView
+        android:id="@+id/lbl_zona"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="Zona:"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_zona"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="30dp"
+        android:text="Zona1"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/lbl_direccion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="Direccion:"
+        />
+
+    <TextView
+        android:id="@+id/tv_direccion"
+        android:layout_width="500dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="50dp"
+        android:text="Direccion1"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/lbl_nombrefuerzatrabajo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="Vendedor:"
+        />
+
+    <TextView
+        android:id="@+id/tv_nombrefuerzatrabajo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="70dp"
+        android:text="Vendedor1"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"/>
+
+</RelativeLayout>

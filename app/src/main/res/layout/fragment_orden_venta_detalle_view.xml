@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/OrdenVentaDetalleView"
+    tools:context=".View.OrdenVentaDetalleView">
+    <!-- TODO: Update blank fragment layout -->
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="160dp"
+            android:id="@+id/lv_ordenventadetalle"
+            />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_consulta_productos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="120dp"
+            android:src="@drawable/ic_add_black_24dp"
+            app:backgroundTint="@color/Rojo_Vistony" />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:focusable="false">
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lbl_orden_detalle_galonaje"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="Galones:"
+                android:textColor="@color/white"
+                android:textSize="24dp"></TextView>
+
+            <TextView
+                android:id="@+id/tv_orden_detalle_galones"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textSize="24dp"></TextView>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+
+            <TextView
+                android:id="@+id/lbl_orden_venta_detalle_subtotal"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="SubTotal:"
+                android:textColor="@color/white"
+                android:textSize="24dp"></TextView>
+
+            <TextView
+                android:id="@+id/tv_orden_venta_detalle_subtotal"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textSize="24dp"></TextView>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            >
+
+            <TextView
+                android:id="@+id/lbl_orden_venta_detalle_descuento"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="Descuento:"
+                android:textColor="@color/white"
+                android:textSize="24dp"></TextView>
+
+            <TextView
+                android:id="@+id/tv_orden_venta_detalle_descuento"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textSize="24dp"></TextView>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:focusable="false">
+
+            <TextView
+                android:id="@+id/lbl_orden_venta_detalle_igv"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="IGV:"
+                android:textColor="@color/white"
+                android:textSize="24dp"></TextView>
+
+            <TextView
+                android:id="@+id/tv_orden_venta_detalle_igv"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:textAlignment="center"
+                android:text="0"
+                android:textColor="@color/white"
+
+                android:textSize="24dp"></TextView>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:focusable="false">
+
+            <TextView
+                android:id="@+id/lbl_orden_venta_detalle_total"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="Total:"
+                android:textColor="@color/white"
+                android:textSize="24dp"></TextView>
+
+            <TextView
+                android:id="@+id/tv_orden_venta_detalle_total"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:textAlignment="center"
+                android:focusable="false"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="24dp"></TextView>
+
+        </TableRow>
+    </TableLayout>
+</FrameLayout>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:id="@+id/listapromocioncabecera"
+tools:context=".View.PromocionCabeceraView">
+<LinearLayout
+    android:id="@+id/mapLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="100dp"
+    android:orientation="vertical"
+    >
+    <ListView
+        android:id="@+id/lv_listapromociones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+    </ListView>
+</LinearLayout>
+
+<TableLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@color/Rojo_Vistony"
+
+    >
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lbl_cantidad_disponible"
+            style="@android:style/TextAppearance.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Cantidad Venta:"
+            android:textColor="@color/white"
+            android:textSize="24dp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_cantidad_disponible"
+            style="@android:style/TextAppearance.Widget.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:textAlignment="center"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="24dp">
+
+        </TextView>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lbl_cantidad_promocion"
+            style="@android:style/TextAppearance.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Promocion Seleccionada:"
+            android:textColor="@color/white"
+            android:textSize="24dp"></TextView>
+
+        <TextView
+            android:id="@+id/tv_cantidad_promocion"
+            style="@android:style/TextAppearance.Widget.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:textAlignment="center"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="24dp"></TextView>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/lbl_cantidad_pendiente"
+            style="@android:style/TextAppearance.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Promocion Pendiente:"
+            android:textColor="@color/white"
+            android:textSize="24dp"></TextView>
+
+        <TextView
+            android:id="@+id/tv_cantidad_pendiente"
+            style="@android:style/TextAppearance.Widget.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_weight="4"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="24dp"></TextView>
+
+    </TableRow>
+</TableLayout>
+
+</FrameLayout>

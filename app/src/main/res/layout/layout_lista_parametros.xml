@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp">
+
+
+    <CheckBox
+        android:id="@+id/chk_cobranzaconciliada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="20dp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/lbl_cantidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/CantidadParametro"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Cantidad:" />
+
+    <TextView
+        android:id="@+id/tv_cantidad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="170dp"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="30dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+    <TextView
+        android:id="@+id/lbl_nombreparametro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/NombreParametro"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Nombre:" />
+
+    <TextView
+        android:id="@+id/tv_nombreparametro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="170dp"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+    <TextView
+        android:id="@+id/lbl_fechacarga"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/FechaParametro"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Fecha:" />
+
+    <TextView
+        android:id="@+id/tv_fechacarga"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="170dp"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="50dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+
+</RelativeLayout>

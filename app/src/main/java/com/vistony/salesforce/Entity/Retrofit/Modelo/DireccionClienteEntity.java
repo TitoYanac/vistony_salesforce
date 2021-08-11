@@ -1,0 +1,83 @@
+package com.vistony.salesforce.Entity.Retrofit.Modelo;
+
+import com.google.gson.annotations.SerializedName;
+
+public class DireccionClienteEntity {
+
+    @SerializedName("CardCode")
+    private String clienteId;
+
+    @SerializedName("ShipToCode")
+    private String domicilioEmbarque;
+
+    @SerializedName("Address")
+    private String direccion;
+
+    @SerializedName("TerritoryID")
+    private String zonaid;
+
+    @SerializedName("Territory")
+    private String zona;
+
+    @SerializedName("SlpCode")
+    private String fuerzatrabajoid;
+
+    @SerializedName("SlpName")
+    private String nombrefuerzatrabajo;
+
+    public String getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(String clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public String getDomicilioEmbarque() {
+        return domicilioEmbarque;
+    }
+
+    public void setDomicilioEmbarque(String domicilioEmbarque) {
+        this.domicilioEmbarque = domicilioEmbarque;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getZonaid() {
+        return zonaid;
+    }
+
+    public void setZonaid(String zonaid) {
+        this.zonaid = zonaid;
+    }
+
+    public String getZona() {
+        return zona;
+    }
+
+    public void setZona(String zona) {
+        this.zona = zona;
+    }
+
+    public String getFuerzatrabajoid() {
+        return fuerzatrabajoid;
+    }
+
+    public void setFuerzatrabajoid(String fuerzatrabajoid) {
+        this.fuerzatrabajoid = fuerzatrabajoid;
+    }
+
+    public String getNombrefuerzatrabajo() {
+        return nombrefuerzatrabajo;
+    }
+
+    public void setNombrefuerzatrabajo(String nombrefuerzatrabajo) {
+        this.nombrefuerzatrabajo = nombrefuerzatrabajo;
+    }
+}

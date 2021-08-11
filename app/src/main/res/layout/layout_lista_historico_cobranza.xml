@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/tv_nombrecliente_cobranza"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="10dp"
+        android:text="CLIENTE01"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="CLIENTE01" />
+
+    <TextView
+        android:id="@+id/lbl_nombrecliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="10dp"
+        android:text="Cliente"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Cliente" />
+
+
+    <TextView
+        android:id="@+id/tv_fecha_cobranza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="30dp"
+        android:text="1900-01-01"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="1900-01-01" />
+
+    <TextView
+        android:id="@+id/lbl_fecha_cobranza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="30dp"
+        android:text="Deposito"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Deposito" />
+
+    <TextView
+        android:id="@+id/lbl_recibo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="50dp"
+        android:text="Recibo"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Recibo" />
+
+    <TextView
+        android:id="@+id/tv_recibo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="50dp"
+        android:text="RECIBO01"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="RECIBO01" />
+
+    <TextView
+        android:id="@+id/lbl_monto_cobrado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="70dp"
+        android:text="Monto"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Monto" />
+
+    <TextView
+        android:id="@+id/tv_monto_cobrado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="70dp"
+        android:text="100000.00"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="100000.00" />
+
+    <TextView
+        android:id="@+id/tv_estado_historico_cobranza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="90dp"
+        android:text="Estado"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Estado" />
+
+    <TextView
+        android:id="@+id/lbl_estado_historico_cobranza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="90dp"
+        android:text="Estado"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Estado" />
+    <!-- <TextView
+        android:id="@+id/lbl_anular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="200dp"
+        android:text="ANULAR"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="ANULAR" />-->
+
+    <TextView
+        android:id="@+id/lbl_documento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="110dp"
+        android:text="Documento"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Documento" />
+
+    <TextView
+        android:id="@+id/tv_documento_cobrado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="110dp"
+        android:text="DOCUMENTO01"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="DOCUMENTO01" />
+
+    <ImageView
+        android:id="@+id/imv_anular_historico_cobranza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="50dp"
+        android:visibility="invisible"
+        app:srcCompat="@mipmap/icons8_cancelar_52" />
+
+    <ImageView
+        android:id="@+id/imv_flecha_historico_cobranza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="40dp"
+        app:srcCompat="@mipmap/icons8_chebron_hacia_la_derecha_96" />
+
+    <TextView
+        android:id="@+id/lbl_validacionqrhistoricocobranza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="255dp"
+        android:layout_marginTop="30dp"
+        android:text="QR"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="QR" />
+
+    <CheckBox
+        android:id="@+id/chk_validacionqrhistoricocobranza"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="50dp"
+        android:clickable="false"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/lbl_wsrecibido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="245dp"
+        android:layout_marginTop="85dp"
+        android:text="Recibido"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Recibido" />
+
+    <CheckBox
+        android:id="@+id/chk_wsrecibido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="100dp"
+        android:clickable="false"
+        android:text="" />
+
+
+</RelativeLayout>

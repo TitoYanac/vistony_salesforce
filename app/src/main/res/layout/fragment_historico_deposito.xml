@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConsDepositoView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.ConsDepositoView">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/imb_fechainidep"
+                    android:layout_width="49dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_baseline_date_range_24_white"
+                    android:background="@drawable/custom_border_button_red"/>
+
+                <TextView
+                    android:id="@+id/tv_fechainidep"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="4"
+                    android:textSize="20dp"
+                    android:enabled="true"
+                    android:hint=""
+                    android:textAlignment="center" />
+                <ImageButton
+                    android:id="@+id/imb_fechafindep"
+                    android:layout_width="49dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_baseline_date_range_24_white"
+                    android:background="@drawable/custom_border_button_red"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_fechafindep"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="4"
+                    android:textSize="20dp"
+                    android:enabled="true"
+                    android:hint=""
+                    android:textAlignment="center" />
+                <com.omega_r.libs.OmegaCenterIconButton
+                    android:id="@+id/imb_consultardep"
+                    android:layout_width="49dp"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/ic_search_white_24dp"
+                    android:background="@drawable/custom_border_button_red" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txtdocumento"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_weight="4"
+                    android:background="@color/colorPrimary"
+                    android:text="DEPOSITOS"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+            </TableRow>
+
+
+        </TableLayout>
+
+        <ListView
+            android:id="@+id/listconsdepositos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+        </ListView>
+
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Vistony Sales Force</string>
+    <string name="app_fragment_Parametro" translatable="false">Parametros</string>
+    <string name="title_activity_menu_view" translatable="false">MenuView</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">V001</string>
+    <string name="nav_header_subtitle" translatable="false">VENDEDOR 01</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings" translatable="false">Settings</string>
+    <string name="add" translatable="false">Buscar</string>
+    <string name="send" translatable="false">Enviar</string>
+    <string name="UR" translatable="false">Pago Adelantado</string>
+    <string name="CHK" translatable="false">Cheque</string>
+    <string name="generar" translatable="false">Generar_PDF</string>
+    <string name="save" translatable="false">Guardar</string>
+    <string name="validar_qr" translatable="false">Validar_QR</string>
+    <string name="actualizar" translatable="false">Actualizar</string>
+    <string name="abrir" translatable="false">Abrir</string>
+    <string name="TomarFoto" translatable="false">TomarFoto</string>
+    <string name="FechaCheque" translatable="false">F.CHEQUE</string>
+    <string name="CantidadParametro" translatable="false">Cantidad</string>
+    <string name="NombreParametro" translatable="false">Nombre</string>
+    <string name="FechaParametro" translatable="false">Fecha</string>
+    <string name="LogoPrincipal" translatable="false">LogoPrincipal</string>
+    <string name="PerfilPrincipal" translatable="false">PerfilPrincipal</string>
+    <string name="CompaniaPrincipal" translatable="false">CompaniaPrincipal</string>
+    <string name="UsuarioPrincipal" translatable="false">UsuarioPrincipal</string>
+    <string name="BotonPrincipalLogin">Iniciar sesión</string>
+    <string name="VersionLogin" translatable="false">Version 1.1.6</string>
+    <string name="DeudaDrawer" translatable="false">Cliente</string>
+    <string name="DepositoDrawer" translatable="false">Deposito</string>
+    <string name="RutaVendedorDrawer" translatable="false">Ruta Vendedor</string>
+    <string name="ConsultaDepositoDrawer" translatable="false">Consulta Deposito</string>
+    <string name="ConsultaCobradoDrawer" translatable="false">Consulta Cobrado</string>
+    <string name="ParametrosDrawer" translatable="false">Parametros</string>
+    <string name="ConfiguracionImpresoraDrawer" translatable="false">Configuracion Impresora</string>
+    <string name="ConfiguracionSistemaDrawer" translatable="false">Configuracion Sistema</string>
+    <string name="AvanceVentasDrawer" translatable="false">Avance Ventas</string>
+    <string name="SalirDrawer">Salir</string>
+    <string name="CobranzaCabeceraN" translatable="false">N°</string>
+    <string name="DepositoDirecto" translatable="false">Deposito Directo</string>
+    <string name="DeleteCajaChica" translatable="false">Eliminar BD - Caja Chica</string>
+    <string name="HojaDespachoView" translatable="false">Hoja Despacho</string>
+    <string name="DineroCobradoView" translatable="false">Dinero Cobrado</string>
+    <string name="AsistenciaCamionView" translatable="false">Camion</string>
+    <string name="clearTemp" translatable="false">Liberar espacio</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+
+    <string name="AddCliente" translatable="false">Sugerencia Cliente</string>
+    <string name="conectado">Conectando...</string>
+    <string name="sinInfo">Sin Información</string>
+</resources>

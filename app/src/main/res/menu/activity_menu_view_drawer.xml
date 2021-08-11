@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <!--<item
+            android:id="@+id/nav_clientes"
+            android:icon="@drawable/ic_assignment_ind_black_24dp"
+            android:title="@string/DeudaDrawer" />-->
+        <item
+            android:id="@+id/nav_hoja_despacho"
+            android:icon="@drawable/ic_baseline_account_circle_24"
+            android:title="@string/HojaDespachoView" />
+        <item
+            android:id="@+id/nav_ruta_vendedor"
+            android:icon="@drawable/ic_directions_walk_black_24dp"
+            android:title="@string/RutaVendedorDrawer" />
+        <item
+            android:id="@+id/nav_cobranzas"
+            android:icon="@drawable/ic_local_atm_black_24dp"
+            android:title="@string/DepositoDrawer" />
+
+         <item
+             android:id="@+id/nav_consultas"
+             android:icon="@drawable/ic_search_black_24dp"
+             android:title="Consultas"
+             />
+        <item
+            android:id="@+id/nav_comisiones"
+            android:icon="@drawable/ic_baseline_insert_chart_24"
+            android:title="Comisiones"
+            />
+        <item
+            android:id="@+id/nav_formularios"
+            android:icon="@drawable/ic_baseline_list_alt_24"
+            android:title="Formularios"
+            />
+        <item
+            android:id="@+id/nav_dinero_cobrado"
+            android:icon="@mipmap/moneda_64"
+            android:title="@string/DineroCobradoView"
+            />
+        <item
+            android:id="@+id/nav_asistencia_chofer"
+            android:icon="@mipmap/camion_reparto_64"
+            android:title="@string/AsistenciaCamionView"
+            />
+        <item
+            android:id="@+id/nav_configuracion_general"
+            android:icon="@drawable/ic_baseline_settings_applications_24"
+            android:title="Configuracion"
+            />
+
+
+        <!--<item
+            android:id="@+id/nav_add_client"
+            android:icon="@drawable/ic_person_add_black_24dp"
+            android:title="@string/AddCliente" />
+         <item
+             android:id="@+id/nav_parametros"
+             android:icon="@drawable/ic_menu_manage"
+             android:title="@string/ParametrosDrawer" />
+        <item
+            android:id="@+id/nav_configuracion"
+            android:icon="@drawable/ic_print_black_24dp"
+            android:title="@string/ConfiguracionImpresoraDrawer" />
+        <item
+            android:id="@+id/nav_configuracion_sistema"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/ConfiguracionSistemaDrawer" />-->
+         <item
+             android:id="@+id/nav_salir"
+             android:icon="@drawable/ic_exit_to_app_black_24dp"
+             android:title="@string/SalirDrawer" />
+     </group>
+
+
+
+ </menu>

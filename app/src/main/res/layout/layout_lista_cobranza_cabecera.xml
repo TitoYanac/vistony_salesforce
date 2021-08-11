@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp">
+
+    <TextView
+        android:id="@+id/lbl_cliente_cobranza_cabecera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="0dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="Cliente:"
+        tools:text="Cliente:" />
+
+    <TextView
+        android:id="@+id/tv_cliente"
+        android:layout_width="300dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="100dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="CLIENTE 01"
+        tools:text="CLIENTE 01" />
+    <TextView
+        android:id="@+id/lbl_documento_cobranza_cabecera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="30dp"
+        android:text="Recibo:"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Recibo N°:" />
+
+    <TextView
+        android:id="@+id/tv_documento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="30dp"
+        android:text="Documento"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="F001-00027538" />
+
+    <TextView
+        android:id="@+id/lbl_importe_cobranza_cabecera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="0dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="Cobrado:" />
+
+    <TextView
+        android:id="@+id/tv_importe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="100dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="100000" />
+
+    <ImageView
+        android:id="@+id/imvdetalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        app:srcCompat="@mipmap/icons8_chebron_hacia_la_derecha_96" />
+
+
+</RelativeLayout>

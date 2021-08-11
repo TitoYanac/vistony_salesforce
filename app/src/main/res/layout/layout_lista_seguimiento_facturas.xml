@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/tv_numero_factura"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Factura1" />
+    <TextView
+        android:id="@+id/tv_numero_orden"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Orden1" />
+    <TextView
+        android:id="@+id/tv_monto_factura"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Monto1" />
+    <TextView
+        android:id="@+id/tv_ruc_cliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Ruc1" />
+
+    <TextView
+        android:id="@+id/tv_nombre_cliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="50dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Cliente1" />
+    <TextView
+        android:id="@+id/tv_nombre_conductor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="70dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Conductor1" />
+    <TextView
+        android:id="@+id/tv_fecha_programacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="90dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="fecha1" />
+
+    <TextView
+        android:id="@+id/tv_estado_entrega_factura"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="90dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="estado_entrega" />
+
+
+
+
+</RelativeLayout>

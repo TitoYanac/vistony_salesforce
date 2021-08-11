@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp"
+    android:id="@+id/relativeListaPromocionCabecera"
+    android:background="@drawable/borde_cuadrado_promocion_cabecera"
+    >
+    <TextView
+        android:id="@+id/lbl_promocion_cabecera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="00dp"
+        android:layout_marginTop="10dp"
+        android:text="PACK DE:"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/tv_promocion_id"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="190dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Promocion_id" />
+
+    <TextView
+        android:id="@+id/tv_promocion_producto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="40dp"
+        android:textStyle="bold"
+        android:text="Producto1"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+        <TextView
+        android:id="@+id/lbl_umd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="230dp"
+        android:layout_marginTop="40dp"
+        android:text="UMD:"
+        android:visibility="invisible"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/tv_umd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="140dp"
+        android:layout_marginTop="10dp"
+        android:text="UMD1"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textAppearance="?attr/textAppearanceListItem" />
+    <TextView
+        android:id="@+id/lbl_cantidadcompra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="40dp"
+        android:text="Cantidad Comprada:"
+        android:visibility="invisible"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/tv_cantidadcompra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="10dp"
+        android:text="Cantidad1"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:textAppearance="?attr/textAppearanceListItem" />
+    <TextView
+        android:id="@+id/tv_cant_promocion"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="270dp"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:digits="0123456789"
+        android:ems="9"
+        android:textColor="@color/Rojo_Vistony"
+        android:text="0"
+        android:inputType="number"
+        android:maxLength="5"
+        android:singleLine="true"
+        android:background="@drawable/borde_cuadrado_promocion_cabecera_cantidad"
+        />
+    <TextView
+        android:id="@+id/lbl_detalle_promocion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text="DETALLE PROMOCION:"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem"
+        />
+    <TextView
+        android:id="@+id/lbl_porcentajedescuentocabecera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="70dp"
+        android:text="% Descuento"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:visibility="invisible"
+        />
+    <TextView
+        android:id="@+id/tv_porcentajedescuentocabecera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="70dp"
+        android:text="% Descuento"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:visibility="invisible"
+        />
+
+    <ImageView
+        android:id="@+id/imv_incrementar"
+        android:layout_marginLeft="240dp"
+        android:layout_marginTop="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        app:srcCompat="@mipmap/mas" />
+
+    <ImageView
+        android:id="@+id/imv_decrementar"
+        android:layout_marginLeft="340dp"
+        android:layout_marginTop="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        app:srcCompat="@mipmap/menos_96" />
+    <ImageView
+        android:id="@+id/imv_editar_promocion_detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="350dp"
+        android:layout_marginTop="100dp"
+        app:srcCompat="@drawable/ic_baseline_edit_24" />
+    <ImageView
+        android:id="@+id/imv_editar_promocion_cabecera_descuento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="70dp"
+        app:srcCompat="@drawable/ic_baseline_edit_24"
+        android:visibility="invisible"
+        />
+    <LinearLayout
+        android:id="@+id/contentpromociondetalle"
+        android:layout_marginTop="130dp"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/borde_cuadrado_promocion_detalle"
+
+        >
+
+
+    </LinearLayout>
+
+</RelativeLayout>

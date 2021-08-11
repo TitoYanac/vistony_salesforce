@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vistony Sales Force</string>
+    <string name="BotonPrincipalLogin">Iniciar sesión</string>
+    <string name="SalirDrawer">Salir</string>
+    <string name="conectado">Conectando...</string>
+    <string name="sinInfo">Sin Información</string>
+</resources>

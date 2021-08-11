@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clientedetalleview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.ClienteDetalleView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:orientation="vertical">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_nombrecliente"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="10dp"
+                    android:text="CLIENTE"
+                    android:textSize="20dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_ruccliente"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_weight="4"
+                    android:paddingLeft="10dp"
+
+
+                    android:text="RUC" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/txtdocumento"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="4"
+                    android:background="@color/Rojo_Vistony"
+                    android:text="DOCUMENTOS CON DEUDA"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+            </TableRow>
+
+
+        </TableLayout>
+
+        <ListView
+            android:id="@+id/listdeuda"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+
+
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/Rojo_Vistony"
+        android:paddingLeft="10dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/lbl_cantidad_cliente_detalle"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Documento:"
+                android:textColor="@color/white"
+                android:textSize="24dp"></TextView>
+
+            <TextView
+                android:id="@+id/tv_cantidad_cliente_detalle"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="24dp">
+
+            </TextView>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/lbl_monto_cliente_detalle"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Deuda S/:"
+                android:textColor="@color/white"
+                android:textSize="24dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_monto_cliente_detalle"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="24dp">
+
+            </TextView>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/lbl_monto_cliente_detalle_dolares"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Deuda $:"
+                android:textColor="@color/white"
+                android:textSize="24dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_monto_cliente_detalle_dolares"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="24dp">
+
+            </TextView>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <TextView
+                android:id="@+id/lbl_pago_adelantado"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text="Pago Adelantado"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:visibility="invisible"></TextView>
+        </TableRow>
+    </TableLayout>
+</FrameLayout>

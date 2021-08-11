@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.vistony.salesforce.View.MenuView">
+    >
+
+    <EditText
+        android:id="@+id/et_comentario_recibo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_columnSpan="2"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="4"
+        android:background="@drawable/edittext"
+        android:enabled="true"
+        android:hint=" Escriba Comentario"
+        android:maxLength="150"
+        android:paddingLeft="5dp" />
+
+</RelativeLayout>

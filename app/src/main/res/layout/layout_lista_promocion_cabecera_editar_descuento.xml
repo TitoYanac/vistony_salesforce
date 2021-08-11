@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:id="@+id/relativeListaProducto">
+
+    <TextView
+        android:id="@+id/lbl_id_promocion_detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="Item:"
+        android:textAppearance="?attr/textAppearanceListItem"
+        />
+
+    <TextView
+        android:id="@+id/tv_id_promocion_detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="0dp"
+        android:text="id1"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem" />
+    <TextView
+        android:id="@+id/lbl_producto_promocion_detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="60dp"
+        android:text="Producto:"
+        android:textAppearance="?attr/textAppearanceListItem" />
+    <TextView
+        android:id="@+id/tv_producto_promocion_detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="60dp"
+        android:text="Producto1"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem" />
+    <TextView
+        android:id="@+id/lbl_cant_producto_promocion_detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="20dp"
+        android:text="Cantidad:"
+        android:textAppearance="?attr/textAppearanceListItem"/>
+    <TextView
+        android:id="@+id/tv_cant_producto_promocion_detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:text="Cantidad1"
+        android:textAppearance="?attr/textAppearanceListItem" />
+    <TextView
+        android:id="@+id/lbl_cant_producto_promocion_umd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="40dp"
+        android:text="UMD:"
+        android:textAppearance="?attr/textAppearanceListItem"/>
+    <TextView
+        android:id="@+id/tv_cant_producto_promocion_umd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="40dp"
+        android:textStyle="bold"
+        android:text="UMD1"
+        android:textAppearance="?attr/textAppearanceListItem"
+        />
+
+    <ImageView
+        android:id="@+id/imv_incrementar"
+        android:layout_marginLeft="230dp"
+        android:layout_marginTop="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        app:srcCompat="@mipmap/mas" />
+
+    <ImageView
+        android:id="@+id/imv_decrementar"
+        android:layout_marginLeft="340dp"
+        android:layout_marginTop="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        app:srcCompat="@mipmap/menos_96" />
+    <TextView
+        android:id="@+id/tv_cant_promocion_detalle_editable"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="270dp"
+        android:layout_width="80dp"
+        android:layout_height="35dp"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:digits="0123456789"
+        android:ems="9"
+        android:textColor="@color/Rojo_Vistony"
+        android:text="0"
+        android:inputType="number"
+        android:maxLength="5"
+        android:singleLine="true"
+        android:background="@drawable/borde_cuadrado_promocion_cabecera_cantidad"
+        />
+
+</RelativeLayout>

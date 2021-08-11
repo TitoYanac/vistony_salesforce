@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:id="@+id/layoutXD"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/lbl_documento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:text="Documento"
+
+        tools:text="Documento" />
+
+    <TextView
+        android:id="@+id/tv_documento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="105dp"
+        android:text="Documento"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="F001-00027538" />
+
+    <TextView
+        android:id="@+id/lbl_fecha_emision"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="20dp"
+        android:text="F. Emision"
+
+        tools:text="F. Emision" />
+
+    <TextView
+        android:id="@+id/tv_fecha_emision"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="20dp"
+        android:text="F. Emision"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="17/06/2019" />
+
+    <TextView
+        android:id="@+id/lbl_fecha_vencimiento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="40dp"
+        android:text="F. Vncto."
+
+        tools:text="F. Vncto." />
+
+    <TextView
+        android:id="@+id/tv_fecha_vencimiento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="40dp"
+        android:text="F. Vencimiento"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="30/06/2019" />
+
+
+    <TextView
+        android:id="@+id/lbl_importe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="60dp"
+        android:text="Importe" />
+
+
+    <TextView
+        android:id="@+id/tv_importe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="60dp"
+        android:text="100000"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+
+    <TextView
+        android:id="@+id/lbl_saldo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="80dp"
+        android:text="Saldo" />
+
+    <TextView
+        android:id="@+id/tv_saldo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="80dp"
+        android:text="100000"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/lbl_moneda_cliente_detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="100dp"
+        android:text="Moneda" />
+
+    <TextView
+        android:id="@+id/tv_moneda_cliente_detalle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="105dp"
+        android:layout_marginTop="100dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <ImageView
+        android:id="@+id/imv_cliente_detalle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:srcCompat="@mipmap/icons8_chebron_hacia_la_derecha_96" />
+
+
+</RelativeLayout>

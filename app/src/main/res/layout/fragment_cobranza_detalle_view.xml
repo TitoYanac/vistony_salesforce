@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CobranzaView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.CobranzaDetalleView">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lblrecibo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RECIBO N°:"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_recibo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:text=""
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvpagoadelantado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pago Adelantado" />
+
+                <CheckBox
+                    android:id="@+id/chkpagoadelantado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/tv_qr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Scan QR" />
+
+                <CheckBox
+                    android:id="@+id/chk_validacionqr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:text="" />
+                <TextView
+                    android:id="@+id/tv_vacio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Pago POS"
+                    android:visibility="invisible"
+                    />
+
+                <CheckBox
+                    android:id="@+id/chk_vacio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:visibility="invisible"
+                    android:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_bancarizado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bancarizado" />
+
+                <CheckBox
+                    android:id="@+id/chk_bancarizado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/tv_pago_directo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Pago Directo" />
+
+                <CheckBox
+                    android:id="@+id/chk_pago_directo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:text="" />
+                <TextView
+                    android:id="@+id/tv_pago_pos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Pago POS" />
+
+                <CheckBox
+                    android:id="@+id/chk_pago_pos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:text="" />
+            </TableRow>
+
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.omega_r.libs.OmegaCenterIconButton
+                android:id="@+id/imbcomentariorecibo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/ic_insert_comment_black_24dp"
+                android:text=" Comentario..."
+                android:textSize="13dp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listViewCobranzaCabecera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp">
+
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageButton
+            android:id="@+id/imbaceptar"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/agregar" />
+
+        <ImageButton
+            android:id="@+id/imbcancelar"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/quitar" />
+
+        <EditText
+            android:id="@+id/et_cobrado_edit"
+            style="@android:style/TextAppearance.Widget.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_marginTop="6dp"
+            android:background="@android:color/transparent"
+            android:digits="0123456789."
+            android:ems="9"
+            android:hint="0.00"
+            android:inputType="number"
+            android:maxLength="11"
+            android:singleLine="true"
+
+            android:textAlignment="center"
+            android:textSize="30dp"></EditText>
+
+    </LinearLayout>
+
+
+    <!--</RelativeLayout>-->
+
+
+
+</FrameLayout>

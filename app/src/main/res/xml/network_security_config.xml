@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">104.131.186.170</domain>
+        <domain includeSubdomains="true">http://169.47.196.209</domain>
+        <domain includeSubdomains="true">https://run.mocky.io</domain>
+    </domain-config>
+</network-security-config>

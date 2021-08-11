@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="Compania" >
+        <item >Elegir Compañia</item>
+        <item >01-VISTONY S.A.C.</item>
+        <item >11-BLUKER S.A.C.</item>
+        <!-- <item >06-COILSA S.A.C.</item>
+        <item >50-INDUVIS COMPAÑIA INDUSTRIAL DEL ECUADOR S.A.</item>
+        <item >51-INDUVIS CIA INDUSTRIAL DE PARAGUAY S.A.</item>
+        <item >52-INDUVIS S.R.L.</item>
+        <item >53-TRIBOL S.A.C.</item>   -->
+    </string-array>
+
+    <string-array name="Meses" >
+        <item >ENERO</item>
+        <item >FEBRERO</item>
+        <item >MARZO</item>
+        <item >ABRIL</item>
+        <item >MAYO</item>
+        <item >JUNIO</item>
+        <item >JULIO</item>
+        <item >AGOSTO</item>
+        <item >SETIEMBRE</item>
+        <item >OCTUBRE</item>
+        <item >NOVIEMBRE</item>
+        <item >DICIEMBRE</item>
+    </string-array>
+
+    <string-array name="Perfil" >
+        <item >VENDEDOR</item>
+        <item >SUPERVISOR</item>
+        <item >CHOFER</item>
+    </string-array>
+
+    <string-array name="Año" >
+        <item >2021</item>
+    </string-array>
+    <string-array name="Mes" >
+        <item >01-Enero</item>
+        <item >02-Febrero</item>
+        <item >03-Marzo</item>
+        <item >04-Abril</item>
+        <item >05-Mayo</item>
+        <item >06-Junio</item>
+        <item >07-Julio</item>
+        <item >08-Agosto</item>
+        <item >09-Setiembre</item>
+        <item >10-Octubre</item>
+        <item >11-Noviembre</item>
+        <item >12-Diciembre</item>
+    </string-array>
+
+    <string-array name="Moneda" >
+        <item >S/-SOLES</item>
+        <item >US$-DOLARES</item>
+    </string-array>
+
+    <string-array name="tipo_visita" >
+        <item >01-ORDEN VENTA</item>
+        <item >02-COBRANZA</item>
+        <item >03-VISITA</item>
+    </string-array>
+
+    <string-array name="motivo_visita" >
+        <item >01-MOTIVO 01</item>
+        <item >02-MOTIVO 02</item>
+        <item >03-MOTIVO 03</item>
+        <item >04-MOTIVO 04</item>
+        <item >05-MOTIVO 05</item>
+    </string-array>
+
+
+</resources>

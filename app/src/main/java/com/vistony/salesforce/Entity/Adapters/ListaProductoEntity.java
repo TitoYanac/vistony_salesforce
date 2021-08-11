@@ -1,0 +1,90 @@
+package com.vistony.salesforce.Entity.Adapters;
+
+public class ListaProductoEntity {
+    public String producto_item_id;
+    public String producto_id;
+    public String producto;
+    public String umd;
+    public String stock;
+    public String preciobase;
+    public String precioigv;
+    public String gal;
+
+    public ListaProductoEntity(String producto_item_id, String producto_id, String producto, String umd, String stock, String preciobase, String precioigv, String gal) {
+        this.producto_item_id = producto_item_id;
+        this.producto_id = producto_id;
+        this.producto = producto;
+        this.umd = umd;
+        this.stock = stock;
+        this.preciobase = preciobase;
+        this.precioigv = precioigv;
+        this.gal = gal;
+    }
+
+    public ListaProductoEntity() {
+    }
+
+    public String getGal() {
+        return gal;
+    }
+
+    public void setGal(String gal) {
+        this.gal = gal;
+    }
+
+    public String getProducto_item_id() {
+        return producto_item_id;
+    }
+
+    public void setProducto_item_id(String producto_item_id) {
+        this.producto_item_id = producto_item_id;
+    }
+
+    public String getProducto_id() {
+        return producto_id;
+    }
+
+    public void setProducto_id(String producto_id) {
+        this.producto_id = producto_id;
+    }
+
+    public String getProducto() {
+        return producto;
+    }
+
+    public void setProducto(String producto) {
+        this.producto = producto;
+    }
+
+    public String getUmd() {
+        return umd;
+    }
+
+    public void setUmd(String umd) {
+        this.umd = umd;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
+
+    public String getPreciobase() {
+        return preciobase;
+    }
+
+    public void setPreciobase(String preciobase) {
+        this.preciobase = preciobase;
+    }
+
+    public String getPrecioigv() {
+        return precioigv;
+    }
+
+    public void setPrecioigv(String precioigv) {
+        this.precioigv = precioigv;
+    }
+}
