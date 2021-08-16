@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -101,10 +102,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         // ¿Ya se infló este view?
         if (null == convertView) {
             //Si no existe, entonces inflarlo con image_list_view.xml
-            convertView = inflater.inflate(
-                    R.layout.layout_lista_cliente_cabecera,
-                    parent,
-                    false);
+            convertView = inflater.inflate(R.layout.layout_lista_cliente_cabecera,parent,false);
 
             holder = new ListaConsClienteCabeceraAdapter.ViewHolder();
             holder.tv_clienteid = (TextView) convertView.findViewById(R.id.tv_cliente_id);
@@ -113,8 +111,10 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             holder.imv_clientecabecera = (ImageView) convertView.findViewById(R.id.imv_cliente_cabecera);
             holder.tv_moneda = (TextView) convertView.findViewById(R.id.tv_moneda);
             holder.tv_linea_credito = (TextView) convertView.findViewById(R.id.tv_linea_credito);
+            holder.tv_linea_credito_usado= (TextView) convertView.findViewById(R.id.tv_linea_credito_usado);
             holder.tv_categoria = (TextView) convertView.findViewById(R.id.tv_categoria);
             holder.relativeListaCabezeraCns=convertView.findViewById(R.id.relativeListaCabezera);
+            holder.progressLineCredit=convertView.findViewById(R.id.progressBar);
             convertView.setTag(holder);
         } else {
             holder = (ListaConsClienteCabeceraAdapter.ViewHolder) convertView.getTag();
@@ -130,33 +130,39 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         holder.tv_moneda.setText(lead.getMoneda());
         holder.tv_categoria.setText(lead.getCategoria());
         holder.tv_linea_credito.setText(lead.getLinea_credito());
+        holder.tv_linea_credito_usado.setText(lead.getLinea_credito_usado());
+
+        holder.progressLineCredit.setMax(Math.round(Float.parseFloat(""+lead.getLinea_credito())));
+
+        holder.progressLineCredit.setProgress(Math.round(Float.parseFloat(""+lead.getLinea_credito_usado())));
 
         holder.relativeListaCabezeraCns.setOnClickListener(new View.OnClickListener() {
                                                                @Override
                                                                public void onClick(View v) {
                                                                    ConsClienteView consClienteView= new ConsClienteView();
                                                                    listaClienteCabeceraEntity = new ListaClienteCabeceraEntity();
-                                                                   listaClienteCabeceraEntity.cliente_id = lead.getCliente_id();
-                                                                   listaClienteCabeceraEntity.nombrecliente = lead.getNombrecliente();
-                                                                   listaClienteCabeceraEntity.direccion = lead.getDireccion();
-                                                                   listaClienteCabeceraEntity.moneda = lead.getMoneda();
-                                                                   listaClienteCabeceraEntity.saldo = lead.getSaldo();
-                                                                   listaClienteCabeceraEntity.domembarque_id=lead.getDomembarque_id();
-                                                                   listaClienteCabeceraEntity.impuesto_id=lead.getImpuesto_id();
-                                                                   listaClienteCabeceraEntity.impuesto=lead.getImpuesto();
-                                                                   listaClienteCabeceraEntity.rucdni=lead.getRucdni();
-                                                                   listaClienteCabeceraEntity.categoria=lead.getCategoria();
-                                                                   listaClienteCabeceraEntity.linea_credito=lead.getLinea_credito();
-                                                                   listaClienteCabeceraEntity.terminopago_id=lead.getTerminopago_id();
-                                                                   listaClienteCabeceraEntity.zona_id=lead.getZona_id();
-                                                                   listaClienteCabeceraEntity.compania_id= SesionEntity.compania_id;
-                                                                   listaClienteCabeceraEntity.ordenvisita=lead.getOrdenvisita();
-                                                                   listaClienteCabeceraEntity.zona=lead.getZona();
-                                                                   listaClienteCabeceraEntity.telefonofijo=lead.getTelefonofijo();
-                                                                   listaClienteCabeceraEntity.telefonomovil=lead.getTelefonomovil();
-                                                                   listaClienteCabeceraEntity.correo=lead.getCorreo();
-                                                                   listaClienteCabeceraEntity.ubigeo_id=lead.getUbigeo_id();
-                                                                   listaClienteCabeceraEntity.tipocambio=lead.getTipocambio();
+                                                                   listaClienteCabeceraEntity.setCliente_id ( lead.getCliente_id());
+                                                                   listaClienteCabeceraEntity.setNombrecliente ( lead.getNombrecliente());
+                                                                   listaClienteCabeceraEntity.setDireccion ( lead.getDireccion());
+                                                                   listaClienteCabeceraEntity.setMoneda ( lead.getMoneda());
+                                                                   listaClienteCabeceraEntity.setSaldo ( lead.getSaldo());
+                                                                   listaClienteCabeceraEntity.setDomembarque_id(lead.getDomembarque_id());
+                                                                   listaClienteCabeceraEntity.setImpuesto_id(lead.getImpuesto_id());
+                                                                   listaClienteCabeceraEntity.setImpuesto(lead.getImpuesto());
+                                                                   listaClienteCabeceraEntity.setRucdni(lead.getRucdni());
+                                                                   listaClienteCabeceraEntity.setCategoria(lead.getCategoria());
+                                                                   listaClienteCabeceraEntity.setLinea_credito(lead.getLinea_credito());
+                                                                   listaClienteCabeceraEntity.setLinea_credito_usado(lead.getLinea_credito_usado());
+                                                                   listaClienteCabeceraEntity.setTerminopago_id(lead.getTerminopago_id());
+                                                                   listaClienteCabeceraEntity.setZona_id(lead.getZona_id());
+                                                                   listaClienteCabeceraEntity.setCompania_id( SesionEntity.compania_id);
+                                                                   listaClienteCabeceraEntity.setOrdenvisita(lead.getOrdenvisita());
+                                                                   listaClienteCabeceraEntity.setZona(lead.getZona());
+                                                                   listaClienteCabeceraEntity.setTelefonofijo(lead.getTelefonofijo());
+                                                                   listaClienteCabeceraEntity.setTelefonomovil(lead.getTelefonomovil());
+                                                                   listaClienteCabeceraEntity.setCorreo(lead.getCorreo());
+                                                                   listaClienteCabeceraEntity.setUbigeo_id(lead.getUbigeo_id());
+                                                                   listaClienteCabeceraEntity.setTipocambio(lead.getTipocambio());
 
 
 
@@ -179,7 +185,9 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         TextView tv_moneda;
         TextView tv_categoria;
         TextView tv_linea_credito;
+        TextView tv_linea_credito_usado;
         ImageView imv_clientecabecera;
         RelativeLayout relativeListaCabezeraCns;
+        ProgressBar progressLineCredit;
     }
 }

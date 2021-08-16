@@ -72,7 +72,7 @@ public class CobranzaDetalleWS {
         params.put("POSPay", PagoPOS);
 
         if(Utilitario.validationNotNull(params)){
-            Call call = api.PostInsertCobranzaD("https://graph.vistony.pe/api/CobranzaD",params);
+            Call call = api.sendCollection("https://graph.vistony.pe/CobranzaD",params);
             try{
                 Response response= call.execute();
                 if(response.isSuccessful()) {

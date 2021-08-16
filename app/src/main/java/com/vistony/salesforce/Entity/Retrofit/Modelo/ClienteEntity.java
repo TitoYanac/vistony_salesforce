@@ -62,9 +62,20 @@ public class ClienteEntity {
     @SerializedName("CreditLimit")
     private String linea_credito;
 
+    @SerializedName("Balance")
+    private String linea_credito_usado;
+
     @SerializedName("PymntGroup")
     private String terminoPago_id;
 
+
+    public String getlinea_credito_usado() {
+        return linea_credito_usado;
+    }
+
+    public void setlinea_credito_usado(String linea_credito_usado) {
+        this.linea_credito_usado = linea_credito_usado;
+    }
 
     public String getTerminoPago_id() {
         return terminoPago_id;

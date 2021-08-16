@@ -44,13 +44,12 @@ public class HistoricoCobranzaWS {
 
         try{
             Response<HistoricoCobranzaEntityResponse> response= call.execute();
-            Log.e("REOS","Response-HistoricoCobranzaWS: "+response.toString());
             if(response.isSuccessful()) {
 
 
                 HistoricoCobranzaEntityResponse historicoCobranzaEntityResponse=response.body();
 
-                response.raw().body().close();
+//
 
                     for(int i=0;i<historicoCobranzaEntityResponse.getHistoricoCobranza().size();i++){
                         ListaHistoricoCobranzaEntity ObjLHCobranza = new ListaHistoricoCobranzaEntity();
@@ -87,6 +86,7 @@ public class HistoricoCobranzaWS {
                         Log.e("REOS","HistoricoCobranzaWS-Lista: "+LHDCobranza.size());
                     }
                 }
+
 
         }catch (Exception e)
         {

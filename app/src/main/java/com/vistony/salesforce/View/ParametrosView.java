@@ -380,28 +380,32 @@ public class ParametrosView extends Fragment {
                                                     listaCobranzaCabeceraSQLiteEntity.get(j).getPagodirecto()
                                             );*/
                             CobranzaCabeceraWS cobranzaCabeceraWS=new CobranzaCabeceraWS(getContext());
+
                             //int resultado=0;
-                            resultadoccabeceraenviows=
-                                    cobranzaCabeceraWS.PostCobranzaCabeceraWS
-                                            (
-                                                    SesionEntity.imei,
-                                                    "CREATE",
-                                                    SesionEntity.compania_id,
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getBanco_id(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getTipoingreso(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getCobranza_id(),
-                                                    SesionEntity.usuario_id,
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getFechadeposito(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getTotalmontocobrado(),
-                                                    "Pendiente",
-                                                    "0",
-                                                    SesionEntity.fuerzatrabajo_id,
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getChkbancarizado(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getFechadiferido(),
-                                                    "0",
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getPagodirecto(),
-                                                    "0"
-                                            );
+
+                            Log.e("JEPICAME","SE EEJCUTA EL PostCobranzaCabeceraWS EN PARAMETROS");
+
+                            resultadoccabeceraenviows=cobranzaCabeceraWS.PostCobranzaCabeceraWS
+                            (
+                                SesionEntity.imei,
+                                "CREATE",
+                                SesionEntity.compania_id,
+                                listaCobranzaCabeceraSQLiteEntity.get(j).getBanco_id(),
+                                listaCobranzaCabeceraSQLiteEntity.get(j).getTipoingreso(),
+                                listaCobranzaCabeceraSQLiteEntity.get(j).getCobranza_id(),
+                                SesionEntity.usuario_id,
+                                listaCobranzaCabeceraSQLiteEntity.get(j).getFechadeposito(),
+                                listaCobranzaCabeceraSQLiteEntity.get(j).getTotalmontocobrado(),
+                                "Pendiente",
+                                "0",
+                                SesionEntity.fuerzatrabajo_id,
+                                listaCobranzaCabeceraSQLiteEntity.get(j).getChkbancarizado(),
+                                listaCobranzaCabeceraSQLiteEntity.get(j).getFechadiferido(),
+                                "0",
+                                listaCobranzaCabeceraSQLiteEntity.get(j).getPagodirecto(),
+                                "0"
+                            );
+
 
 
                             //resultadoccabeceraenviows=String.valueOf(resultado);
@@ -1524,6 +1528,7 @@ public class ParametrosView extends Fragment {
                         Lista.get(i).getTipocambio(),
                         Lista.get(i).getCategoria(),
                         Lista.get(i).getLinea_credito(),
+                        Lista.get(i).getLinea_credito_usado(),
                         Lista.get(i).getTerminopago_id()
 
                 );

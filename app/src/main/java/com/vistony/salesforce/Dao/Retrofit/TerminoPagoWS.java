@@ -25,7 +25,7 @@ public class TerminoPagoWS {
     public ArrayList<TerminoPagoSQLiteEntity> getTerminoPagoWS(String Imei){
         Api api = Config.getClient().create(Api.class);
 
-        Call<TerminoPagoEntityResponse> call = api.getTerminoPago("https://graph.vistony.pe/TerminoPago?imei="+Imei);
+        Call<TerminoPagoEntityResponse> call = api.getTerminoPago(Imei);
         try
         {
             Response<TerminoPagoEntityResponse> response= call.execute();

@@ -3,35 +3,36 @@ package com.vistony.salesforce.Entity.Adapters;
 import java.io.Serializable;
 
 public class ListaClienteCabeceraEntity implements Serializable {
-    public String cliente_id;
-    public String nombrecliente;
-    public String direccion;
-    public String saldo;
-    public int imvclientecabecera;
-    public String moneda;
-    public String domembarque_id;
-    public String impuesto_id;
-    public String impuesto;
-    public String rucdni;
-    public String categoria;
-    public String linea_credito;
-    public String terminopago_id;
-    public String zona_id;
-    public String compania_id;
-    public String ordenvisita;
-    public String zona;
-    public String telefonofijo;
-    public String telefonomovil;
-    public String correo;
-    public String ubigeo_id;
-    public String tipocambio;
-    public String chk_visita;
-    public String chk_pedido;
-    public String chk_cobranza;
-    public String chk_ruta;
-    public String fecharuta;
+    private String cliente_id;
+    private String nombrecliente;
+    private String direccion;
+    private String saldo;
+    private int imvclientecabecera;
+    private String moneda;
+    private String domembarque_id;
+    private String impuesto_id;
+    private String impuesto;
+    private String rucdni;
+    private String categoria;
+    private String linea_credito;
+    private String terminopago_id;
+    private String zona_id;
+    private String compania_id;
+    private String ordenvisita;
+    private String zona;
+    private String telefonofijo;
+    private String telefonomovil;
+    private String correo;
+    private String ubigeo_id;
+    private String tipocambio;
+    private String chk_visita;
+    private String chk_pedido;
+    private String chk_cobranza;
+    private String chk_ruta;
+    private String linea_credito_usado;
+    private String fecharuta;
 
-    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta) {
+    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String linea_credito_usado,   String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -44,6 +45,7 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.rucdni = rucdni;
         this.categoria = categoria;
         this.linea_credito = linea_credito;
+        this.linea_credito_usado=linea_credito_usado;
         this.terminopago_id = terminopago_id;
         this.zona_id = zona_id;
         this.compania_id = compania_id;
@@ -59,6 +61,14 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.chk_cobranza = chk_cobranza;
         this.chk_ruta = chk_ruta;
         this.fecharuta = fecharuta;
+    }
+
+    public String getLinea_credito_usado() {
+        return linea_credito_usado;
+    }
+
+    public void setLinea_credito_usado(String linea_credito_usado) {
+        this.linea_credito_usado = linea_credito_usado;
     }
 
     public String getChk_visita() {

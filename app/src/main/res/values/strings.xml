@@ -52,4 +52,5 @@
     <string name="AddCliente" translatable="false">Sugerencia Cliente</string>
     <string name="conectado">Conectando...</string>
     <string name="sinInfo">Sin Información</string>
+    <string name="Ingresando">Ingresando...</string>
 </resources>

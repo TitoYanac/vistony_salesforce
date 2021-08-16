@@ -25,7 +25,7 @@ public class RutaFuerzaTrabajoWS {
     public ArrayList<RutaFuerzaTrabajoSQLiteEntity> getRutaFuerzaTrabajoWS(String Imei){
         Api api = Config.getClient().create(Api.class);
 
-        Call<RutaFuerzaTrabajoEntityResponse> call = api.getRutaFuerzaTrabajo("https://graph.vistony.pe/RutaTrabajo?imei="+Imei);
+        Call<RutaFuerzaTrabajoEntityResponse> call = api.getRutaFuerzaTrabajo(Imei);
 
         try
         {

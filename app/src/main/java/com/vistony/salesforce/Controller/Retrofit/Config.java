@@ -1,7 +1,10 @@
+
 package com.vistony.salesforce.Controller.Retrofit;
 
+import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -12,18 +15,23 @@ public class Config {
 
     public static Retrofit getClient() {
         try{
-            OkHttpClient client = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
+            if(client==null) {
+                client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
+                //.retryOnConnectionFailure(true)
+                .proxy(Proxy.NO_PROXY)
+                .connectionPool(new ConnectionPool(10,15,TimeUnit.SECONDS))
+                .dns(new Ipv4PreferDns())
                 .build();
+            }
 
             if(retrofit==null){
                 retrofit = new Retrofit.Builder()
-                        .baseUrl("http://169.47.196.209")// Pruebas SAP
-                        .addConverterFactory(GsonConverterFactory.create()).client(client)
-                        .build();
-
+                .baseUrl("https://graph.vistony.pe")
+                .addConverterFactory(GsonConverterFactory.create()).client(client)
+                .build();
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -36,8 +44,4 @@ public class Config {
         client.dispatcher().executorService().shutdown();
         client.connectionPool().evictAll();
     }
-
-    //DocumentLine
-
-
 }

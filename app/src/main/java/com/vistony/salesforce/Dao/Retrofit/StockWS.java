@@ -27,7 +27,7 @@ public class StockWS {
     ){
         Api api = Config.getClient().create(Api.class);
 
-        Call<StockEntityResponse> call = api.getStock("https://graph.vistony.pe/Stock?imei="+Imei);
+        Call<StockEntityResponse> call = api.getStock(Imei);
         try
         {
             Response<StockEntityResponse> response= call.execute();

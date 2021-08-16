@@ -18,12 +18,10 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,7 +36,6 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -48,8 +45,8 @@ import com.vistony.salesforce.Controller.Funcionalidades.FormulasController;
 import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
 import com.vistony.salesforce.Controller.Funcionalidades.UpdateApp;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
-import com.vistony.salesforce.Dao.Retrofit.LoginModalView;
-import com.vistony.salesforce.Dao.Retrofit.VersionWS;
+import com.vistony.salesforce.Dao.Retrofit.LoginViewModel;
+import com.vistony.salesforce.Dao.Retrofit.VersionViewModel;
 import com.vistony.salesforce.Dao.SQLIte.OrdenVentaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
@@ -97,14 +94,14 @@ public class LoginView extends AppCompatActivity{
     private LocationManager locationManager;
     private AlertDialog alert = null;
     private String version = "";
-    private LoginModalView loginModalView;
+    private LoginViewModel loginViewModel;
     static public SharedPreferences statusImei;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Locale locale = new Locale("en", "US");
+        Locale locale = new Locale("es", "PE");
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
@@ -137,6 +134,29 @@ public class LoginView extends AppCompatActivity{
         configuracionSQLiteDao5.ActualizaVinculo("0");
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+
+        loginViewModel =  new ViewModelProvider(this).get(LoginViewModel.class);
+        obtenerImei();
+
+        loginViewModel.getAndLoadUsers(Imei,getApplicationContext()).observe(LoginView.this, data -> {
+            if(data==null){
+                Toast.makeText(context, "Ocurrio un error en la red", Toast.LENGTH_LONG).show();
+            }else if(data.isEmpty()){
+                btnlogin.setEnabled(false);
+                btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_onclick));
+                btnlogin.setText(getResources().getString(R.string.sinInfo));
+                btnlogin.setClickable(false);
+
+                Toast.makeText(context, "Sin información local", Toast.LENGTH_LONG).show();
+            }else{
+                //loginModalView.getAndLoadUsers(Imei,getApplicationContext()).removeObservers(LoginView.this);
+
+                ArrayAdapter<String> adapterProfile = new ArrayAdapter<String>(this,R.layout.layout_custom_spinner,data);
+                spnperfil.setAdapter(adapterProfile);
+                adapterProfile.notifyDataSetChanged();
+            }
+        });
+
         /****Mejora****/
         if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
            // AlertNoGps();
@@ -153,37 +173,13 @@ public class LoginView extends AppCompatActivity{
         String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),Settings.Secure.ANDROID_ID);
         Toast.makeText(getApplicationContext(), android_id, Toast.LENGTH_SHORT).show();
 
-        loginModalView =  new ViewModelProvider(this).get(LoginModalView.class);
-
-        obtenerImei();
-
-        loginModalView.getAndLoadUsers(Imei,getApplicationContext()).observe(LoginView.this, data -> {
-            if(data==null){
-                Toast.makeText(context, "Ocurrio un error en la red", Toast.LENGTH_LONG).show();
-            }else if(data.isEmpty()){
-                btnlogin.setEnabled(false);
-                btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_onclick));
-                btnlogin.setText(getResources().getString(R.string.sinInfo));
-                btnlogin.setClickable(false);
-
-                Toast.makeText(context, "Sin información local", Toast.LENGTH_LONG).show();
-            }else{
-                ArrayAdapter<String> adapterProfile = new ArrayAdapter<String>(this,R.layout.layout_custom_spinner,data);
-                spnperfil.setAdapter(adapterProfile);
-                adapterProfile.notifyDataSetChanged();
-            }
-        });
-
         spnperfil.setOnItemSelectedListener(
             new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-                   //   TextView textView = (TextView)parent.getChildAt(position);
-//                    textView.setTextColor(getResources().getColor(R.color.white));
-
                     perfil = parent.getItemAtPosition(position).toString();
 
-                    ArrayList<String> companiaList = loginModalView.getCompanies(perfil);
+                    ArrayList<String> companiaList = loginViewModel.getCompanies(perfil);
 
                     ArrayAdapter<String> adapterCompania = new ArrayAdapter<String>(LoginView.this,R.layout.layout_custom_spinner,companiaList);
                     spncompania.setAdapter(adapterCompania);
@@ -198,18 +194,8 @@ public class LoginView extends AppCompatActivity{
             new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                   /* TextView textView = (TextView)parent.getChildAt(0);
-                    textView.setTextColor(getResources().getColor(R.color.white));*/
                     Companiatext = spncompania.getSelectedItem().toString();
-
-                    /*if(Companiatext.equals("BLUKER SAC")){
-                        imv_compania_login.setImageResource(R.mipmap.bluker);
-                    }
-                    if(Companiatext.equals("ROFALAB SAC")){
-                        imv_compania_login.setImageResource(R.mipmap.rofalab);
-                    }*/
-
-                    ArrayList<String> usuarioList = loginModalView.getUsers(perfil,Companiatext);
+                    ArrayList<String> usuarioList = loginViewModel.getUsers(perfil,Companiatext);
 
                     ArrayAdapter<String> adapterUser = new ArrayAdapter<String>(LoginView.this,R.layout.layout_custom_spinner,usuarioList);
                     spnnombre.setAdapter(adapterUser);
@@ -224,8 +210,6 @@ public class LoginView extends AppCompatActivity{
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        //TextView textView = (TextView)parent.getChildAt(0);
-                        //textView.setTextColor(getResources().getColor(R.color.white));
                         vendedortext = spnnombre.getSelectedItem().toString();
 
                         btnlogin.setEnabled(true);
@@ -258,7 +242,13 @@ public class LoginView extends AppCompatActivity{
 
     }
 
-    public void obtenerImei() {
+    @Override
+    public void onResume(){
+        super.onResume();
+        ObtenerVideo();
+    }
+
+    private void obtenerImei() {
         Imei=statusImei.getString("imei", "");
 
         if(Imei.equals("")){
@@ -300,8 +290,7 @@ public class LoginView extends AppCompatActivity{
                         Toast.makeText(context, "IMEI registrado", Toast.LENGTH_LONG).show();
                         Imei=textDImei.getText().toString();
 
-                        //Se llama a la obtencion de usuarios y se queda a la escucha
-                        loginModalView.getAndLoadUsers(Imei,getApplicationContext());
+                        loginViewModel.getAndLoadUsers(Imei,getApplicationContext());
 
                     }else{
                         Toast.makeText(context, "Vuelva a presionar guardar para configurar su IMEI...", Toast.LENGTH_SHORT).show();
@@ -343,47 +332,21 @@ public class LoginView extends AppCompatActivity{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             int permsRequestCode = 100;
 
-            /*
-             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-            <uses-permission android:name="android.permission.BLUETOOTH" />
-            <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
-            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-            <uses-permission android:name="android.permission.CAMERA" />
-            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-            <uses-permission android:name="android.permission.INTERNET" />
-             <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-
-
-
-            <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
-            <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
-            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-            <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-            <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-            * */
-
             String[] perms = {
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.INTERNET,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-               // Manifest.permission.WRITE_INTERNAL_STORAGE,
-
+                Manifest.permission.READ_EXTERNAL_STORAGE
             };
 
             int accessReadPhoneState = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
             int accessWriteExternalStorage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             int accessCamera = checkSelfPermission(Manifest.permission.CAMERA);
             int accessCoarseLocation = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+            int accessReadExternalStorage = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
 
-            if (accessReadPhoneState == PackageManager.PERMISSION_GRANTED && accessWriteExternalStorage == PackageManager.PERMISSION_GRANTED && accessCamera == PackageManager.PERMISSION_GRANTED &&  accessCoarseLocation == PackageManager.PERMISSION_GRANTED ) {
+            if (accessReadPhoneState == PackageManager.PERMISSION_GRANTED && accessWriteExternalStorage == PackageManager.PERMISSION_GRANTED && accessCamera == PackageManager.PERMISSION_GRANTED &&  accessCoarseLocation == PackageManager.PERMISSION_GRANTED && accessReadExternalStorage==PackageManager.PERMISSION_GRANTED) {
                 //se realiza metodo si es necesario...
             } else {
                 requestPermissions(perms, permsRequestCode);
@@ -392,196 +355,66 @@ public class LoginView extends AppCompatActivity{
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-        ObtenerVideo();
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode != 0) {
-            if (requestCode == 1) {
-                if ((grantResults.length <= 0 || grantResults[0] != 0) && ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") != 0) {
-                    ActivityCompat.requestPermissions(this, new String[]{"android.permission.CAMERA"}, 0);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==100){
+            for (int i=0;i<grantResults.length;i++) {
+                if(grantResults[i]==-1){
+                    verifyPermission();
+                    break;
                 }
             }
-        } else if ((grantResults.length <= 0 || grantResults[0] != 0) && ContextCompat.checkSelfPermission(this, "android.permission.READ_PHONE_STATE") != 0) {
-            ActivityCompat.requestPermissions(this, new String[]{"android.permission.READ_PHONE_STATE"}, 0);
         }
     }
 
     public void btnLogin(View v){
         btnlogin.setEnabled(false);
         btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_onclick));
-        btnlogin.setText(getResources().getString(R.string.conectado));
+        btnlogin.setText(getResources().getString(R.string.Ingresando));
 
         btnlogin.setClickable(false);
 
-        ConsultarLogin consultar = new ConsultarLogin();
-        consultar.execute();
+        listaUsuariosqliteEntity.clear();
+        listaUsuariosqliteEntity= loginViewModel.loginUser(Companiatext,vendedortext);
+
+        if(listaUsuariosqliteEntity!=null) {
+            for(int g=0;g<listaUsuariosqliteEntity.size();g++){
+
+                Sesion.compania_id = listaUsuariosqliteEntity.get(g).getCompania_id();
+                Sesion.fuerzatrabajo_id = listaUsuariosqliteEntity.get(g).getFuerzatrabajo_id();
+                Sesion.nombrecompania = listaUsuariosqliteEntity.get(g).getNombrecompania();
+                Sesion.nombrefuerzadetrabajo = listaUsuariosqliteEntity.get(g).getNombrefuerzatrabajo();
+                Sesion.nombreusuario = listaUsuariosqliteEntity.get(g).getNombreUsuario();
+                Sesion.usuario_id = listaUsuariosqliteEntity.get(g).getUsuario_id();
+                Sesion.imei = Imei;
+                Sesion.recibo = listaUsuariosqliteEntity.get(g).getRecibo();
+                Sesion.almacen_id=listaUsuariosqliteEntity.get(g).getAlmacen_id();
+                Sesion.planta_id=listaUsuariosqliteEntity.get(g).getPlanta();
+                Sesion.perfil_id=listaUsuariosqliteEntity.get(g).getPerfil();
+                Sesion.cogsacct=listaUsuariosqliteEntity.get(g).getCogsacct();
+                Sesion.u_vist_ctaingdcto=listaUsuariosqliteEntity.get(g).getU_vist_ctaingdcto();
+                Sesion.documentsowner=listaUsuariosqliteEntity.get(g).getDocumentsowner();
+                Sesion.U_VIST_SUCUSU=listaUsuariosqliteEntity.get(g).getU_VIST_SUCUSU();
+                Sesion.CentroCosto=listaUsuariosqliteEntity.get(g).getCentroCosto();
+                Sesion.UnidadNegocio=listaUsuariosqliteEntity.get(g).getUnidadNegocio();
+                Sesion.LineaProduccion=listaUsuariosqliteEntity.get(g).getLineaProduccion();
+                Sesion.Impuesto_ID=listaUsuariosqliteEntity.get(g).getImpuesto_ID();
+                Sesion.Impuesto=listaUsuariosqliteEntity.get(g).getImpuesto();
+                Sesion.TipoCambio=listaUsuariosqliteEntity.get(g).getTipoCambio();
+                Sesion.U_VIS_CashDscnt=listaUsuariosqliteEntity.get(g).getU_VIS_CashDscnt();
+            }
+
+            verificationVersion();
+        }else{
+            Toast.makeText(context, "Equipo No Autorizado, Comunicarse a Helpdesk@vistony.com", Toast.LENGTH_SHORT).show();
+            btnlogin.setEnabled(true);
+
+            btnlogin.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.custom_border_button_red));
+            btnlogin.setText(getResources().getString(R.string.BotonPrincipalLogin));
+            btnlogin.setClickable(true);
+        }
     }
 
-    private class ConsultarLogin extends AsyncTask<String, Void, Object> {
-
-       /* protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(LoginView.this);
-            pd = ProgressDialog.show(LoginView.this, "Por favor espere", "Consultando Acceso", true, false);
-        }*/
-
-        @Override
-        protected String doInBackground(String... arg0) {
-
-            String resultado="";
-
-            return resultado;
-        }
-        protected void onPostExecute(Object result){
-           // int Autorizacion=0;
-
-            //if (Llogin.isEmpty()&&Llogin2.isEmpty()){
-
-            Log.e("JEPICAME","SE EJECUTA AsyncTask");
-                Integer statusQuery=usuarioSQLiteDao.ActualizaUsuario(Companiatext,vendedortext);
-
-                listaUsuariosqliteEntity.clear();
-                listaUsuariosqliteEntity=usuarioSQLiteDao.ObtenerUsuarioSesion();
-                if(!listaUsuariosqliteEntity.isEmpty() && statusQuery==1){
-
-                    for(int g=0;g<listaUsuariosqliteEntity.size();g++){
-
-                        Sesion.compania_id = listaUsuariosqliteEntity.get(g).getCompania_id();
-                        Sesion.fuerzatrabajo_id = listaUsuariosqliteEntity.get(g).getFuerzatrabajo_id();
-                        Sesion.nombrecompania = listaUsuariosqliteEntity.get(g).getNombrecompania();
-                        Sesion.nombrefuerzadetrabajo = listaUsuariosqliteEntity.get(g).getNombrefuerzatrabajo();
-                        Sesion.nombreusuario = listaUsuariosqliteEntity.get(g).getNombreUsuario();
-                        Sesion.usuario_id = listaUsuariosqliteEntity.get(g).getUsuario_id();
-                        Sesion.imei = Imei;
-                        Sesion.recibo = listaUsuariosqliteEntity.get(g).getRecibo();
-                        Sesion.almacen_id=listaUsuariosqliteEntity.get(g).getAlmacen_id();
-                        Sesion.planta_id=listaUsuariosqliteEntity.get(g).getPlanta();
-                        Sesion.perfil_id=listaUsuariosqliteEntity.get(g).getPerfil();
-                        Sesion.cogsacct=listaUsuariosqliteEntity.get(g).getCogsacct();
-                        Sesion.u_vist_ctaingdcto=listaUsuariosqliteEntity.get(g).getU_vist_ctaingdcto();
-                        Sesion.documentsowner=listaUsuariosqliteEntity.get(g).getDocumentsowner();
-                        Sesion.U_VIST_SUCUSU=listaUsuariosqliteEntity.get(g).getU_VIST_SUCUSU();
-                        Sesion.CentroCosto=listaUsuariosqliteEntity.get(g).getCentroCosto();
-                        Sesion.UnidadNegocio=listaUsuariosqliteEntity.get(g).getUnidadNegocio();
-                        Sesion.LineaProduccion=listaUsuariosqliteEntity.get(g).getLineaProduccion();
-                        Sesion.Impuesto_ID=listaUsuariosqliteEntity.get(g).getImpuesto_ID();
-                        Sesion.Impuesto=listaUsuariosqliteEntity.get(g).getImpuesto();
-                        Sesion.TipoCambio=listaUsuariosqliteEntity.get(g).getTipoCambio();
-                        Sesion.U_VIS_CashDscnt=listaUsuariosqliteEntity.get(g).getU_VIS_CashDscnt();
-                    }
-                    //Autorizacion=1;
-
-                    verificationVersion();
-                }else{
-                    Toast.makeText(context, "Equipo No Autorizado, Comunicarse a Helpdesk@vistony.com", Toast.LENGTH_SHORT).show();
-                    btnlogin.setEnabled(true);
-
-                    btnlogin.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.custom_border_button_red));
-                    btnlogin.setText(getResources().getString(R.string.BotonPrincipalLogin));
-                    btnlogin.setClickable(true);
-                }
-        /*    }else{
-
-                String Conexion="";
-                UsuarioSQLiteDao usuarioSQLiteDao = new UsuarioSQLiteDao(getApplicationContext());
-//                    if(spnconexion.getSelectedItem().toString().equals("ONLINE"))
-//                    {
-                usuarioSQLiteDao.LimpiarTablaUsuario();
-                for(int i=0;i<Llogin.size();i++)
-                {
-                    usuarioSQLiteDao.InsertaUsuario(
-                            Llogin.get(i).getCompania_id(),
-                            Llogin.get(i).getFuerzatrabajo_id(),
-                            Llogin.get(i).getNombrecompania(),
-                            Llogin.get(i).getNombrefuerzadetrabajo(),
-                            Llogin.get(i).getNombreusuario(),
-                            Llogin.get(i).getUsuario_id(),
-                            Llogin.get(i).getRecibo(),
-                            "0",
-                            spnperfil.getSelectedItem().toString(),
-                            Llogin.get(i).getBloqueopago().toString(),
-                            Llogin.get(i).getListaprecio_id_1().toString(),
-                            Llogin.get(i).getListaprecio_id_2().toString(),
-                            Llogin.get(i).getAlmacen_id().toString(),
-                            Llogin.get(i).getCogsacct(),
-                            Llogin.get(i).getU_vist_ctaingdcto(),
-                            Llogin.get(i).getDocumentsowner(),
-                            Llogin.get(i).getU_VIST_SUCUSU(),
-                            Llogin.get(i).getCentroCosto(),
-                            Llogin.get(i).getUnidadNegocio(),
-                            Llogin.get(i).getLineaProduccion(),
-                            Llogin.get(i).getImpuesto_ID(),
-                            Llogin.get(i).getImpuesto(),
-                            Llogin.get(i).getTipoCambio(),
-                            Llogin.get(i).getU_VIS_CashDscnt()
-                    );
-                }
-
-                for (int i = 0; i < Llogin.size(); i++) {
-                    String nombrevendedortext = "";
-                    nombrevendedortext = String.valueOf(Llogin.get(i).getNombrefuerzadetrabajo());
-
-                    if (nombrevendedortext.equals(vendedortext) && Llogin.get(i).getNombrecompania().equals(Companiatext)) {
-                        Sesion.compania_id = Llogin.get(i).getCompania_id();
-                        Sesion.fuerzatrabajo_id = Llogin.get(i).getFuerzatrabajo_id();
-                        Sesion.nombrecompania = Llogin.get(i).getNombrecompania();
-                        Sesion.nombrefuerzadetrabajo = Llogin.get(i).getNombrefuerzadetrabajo();
-                        Sesion.nombreusuario = Llogin.get(i).getNombreusuario();
-                        String nombreusuario = "";
-                        nombreusuario = Llogin.get(i).getNombreusuario();
-                        Sesion.usuario_id = Llogin.get(i).getUsuario_id();
-                        Sesion.imei = Imei;
-                        Sesion.recibo=Llogin.get(i).getRecibo();
-                        Sesion.perfil_id=Llogin.get(i).getPerfil();
-                        Sesion.almacen_id=Llogin.get(i).getAlmacen_id();
-                        Sesion.planta_id=Llogin.get(i).getPlanta();
-                        Sesion.perfil_id=Llogin.get(i).getPerfil();
-                        Sesion.cogsacct=Llogin.get(i).getCogsacct();
-                        Sesion.u_vist_ctaingdcto=Llogin.get(i).getU_vist_ctaingdcto();
-                        Sesion.documentsowner=Llogin.get(i).getDocumentsowner();
-                        Sesion.U_VIST_SUCUSU=Llogin.get(i).getU_VIST_SUCUSU();
-                        Sesion.CentroCosto=Llogin.get(i).getCentroCosto();
-                        Sesion.UnidadNegocio=Llogin.get(i).getUnidadNegocio();
-                        Sesion.LineaProduccion=Llogin.get(i).getLineaProduccion();
-                        Sesion.Impuesto_ID=Llogin.get(i).getImpuesto_ID();
-                        Sesion.Impuesto=Llogin.get(i).getImpuesto();
-                        Sesion.TipoCambio=Llogin.get(i).getTipoCambio();
-                        Sesion.U_VIS_CashDscnt=Llogin.get(i).getU_VIS_CashDscnt();
-                        Sesion.recibo=Llogin.get(i).getRecibo();
-
-
-                    }
-                }
-
-                Log.e("jpcm","tamao login2 "+Llogin2.size());
-
-                for (int j = 0; j < Llogin2.size(); j++) {
-
-                    usuarioSQLiteDao.ActualizaRecibo(Llogin2.get(j).getRecibo());
-                    ArrayList<UsuarioSQLiteEntity> listadoUsuarioSQLiteEntity = new ArrayList<>();
-                    listadoUsuarioSQLiteEntity=usuarioSQLiteDao.ObtenerUsuario();
-                    try {
-                        Sesion.recibo = listadoUsuarioSQLiteEntity.get(j).getRecibo();
-                    }catch(Exception e){
-                        Toast.makeText(context, "VERIFICA TU PERFIL", Toast.LENGTH_LONG).show();
-                        finish();
-                        startActivity(getIntent());
-                    }
-                }
-
-                Conexion="1";
-                usuarioSQLiteDao.ActualizaUsuario(Sesion.compania_id,vendedortext,Conexion);
-                Autorizacion=1;*/
-//            }
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        }
-
-    }
     private void verificationVersion(){
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -592,7 +425,7 @@ public class LoginView extends AppCompatActivity{
             //verificamos que el usuario elegido para la sesion tenga codigo de compania
 
             if(!userUnlinked){
-                new VersionWS().getVs(SesionEntity.imei,version).observe(this, data -> {
+                new VersionViewModel().getVs(SesionEntity.imei,version).observe(this, data -> {
                     if(data.getClass().getName().equals("java.lang.String")){
                         if(data.toString().length()>6){
                             Toast.makeText(getApplicationContext(), data.toString(), Toast.LENGTH_LONG).show();
@@ -611,7 +444,6 @@ public class LoginView extends AppCompatActivity{
                         user.setOthers(vendedor);
                         Sentry.setUser(user);
                         startActivity(intent);
-
 
                         finish();
                     }

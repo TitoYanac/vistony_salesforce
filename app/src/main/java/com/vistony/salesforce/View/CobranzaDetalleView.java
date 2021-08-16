@@ -142,8 +142,8 @@ public class CobranzaDetalleView extends Fragment {
     ArrayList<ListaHistoricoCobranzaEntity> Listado = new ArrayList<>();
     private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=2;
     String Estadochkbancarizado="",Estadodepositodirecto="",Estadopagopos="",Estadopagoadelantado="";
-    private GPSController gpsController;
-    private Location mLocation;
+
+
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     String cliente_id_visita,domembarque_id_visita,zona_id_visita;
@@ -228,9 +228,8 @@ public class CobranzaDetalleView extends Fragment {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
 
         } else {
-
-            gpsController =  new GPSController(getContext());
-            mLocation = gpsController.getLocation(mLocation);
+            GPSController gpsController =  new GPSController(getActivity());
+            Location mLocation= gpsController.getLocation(null);
             latitude = mLocation.getLatitude();
             longitude= mLocation.getLongitude();
         }

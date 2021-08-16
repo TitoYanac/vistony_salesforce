@@ -22,7 +22,7 @@ public class StockSQLiteDao {
         sqLiteController = new SQLiteController(context);
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se abre conexion desde " + this.getClass().getName() );
         bd = sqLiteController.getWritableDatabase();
     }
 

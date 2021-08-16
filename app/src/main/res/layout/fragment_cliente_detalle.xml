@@ -73,12 +73,21 @@
 
         </TableLayout>
 
-        <ListView
-            android:id="@+id/listdeuda"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refreshClient"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            tools:context=".MainActivity">
 
-        </ListView>
+            <ListView
+                android:id="@+id/listdeuda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </ListView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
     </LinearLayout>

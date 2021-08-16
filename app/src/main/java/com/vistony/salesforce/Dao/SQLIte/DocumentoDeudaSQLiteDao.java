@@ -22,7 +22,7 @@ public class DocumentoDeudaSQLiteDao {
         sqLiteController = new SQLiteController(context);
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se abre conexion desde " + this.getClass().getName() );
         bd = sqLiteController.getWritableDatabase();
     }
 
@@ -103,7 +103,7 @@ public class DocumentoDeudaSQLiteDao {
             bd.close();
         }catch (Exception e)
         {
-            // TODO: handle exception
+            bd.close();
             System.out.println(e.getMessage());
         }
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
@@ -124,7 +124,7 @@ public class DocumentoDeudaSQLiteDao {
             bd.close();
         }catch (Exception e)
         {
-            // TODO: handle exception
+            bd.close();
             System.out.println(e.getMessage());
 
         }

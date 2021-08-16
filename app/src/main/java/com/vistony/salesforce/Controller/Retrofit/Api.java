@@ -5,7 +5,6 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.AgenciaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.CobranzaCabeceraEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ComisionesEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DireccionClienteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DocumentoDeudaEntityResponse;
@@ -46,35 +45,35 @@ import retrofit2.http.Url;
 
 public interface Api {
 
-    @GET
-    Call<LoginEntityResponse> getUsers(@Url String url);
+    @GET("/user")
+    Call<LoginEntityResponse> getUsers(@Query("imei") String imei);
 
-    @GET
-    Call<VersionEntity> getVs(@Url String url);
+    @GET("/version")
+    Call<VersionEntity> getVs(@Query("imei") String imei,@Query("app") String app);
 
-    @GET
-    Call<ClienteEntityResponse> getCliente (@Url String url);
+    @GET("/customers")
+    Call<ClienteEntityResponse> getCliente (@Query("imei") String imei);
 
-    @GET
-    Call<AgenciaEntityResponse> getAgencia (@Url String url);
+    @GET("/agencies")
+    Call<AgenciaEntityResponse> getAgencia (@Query("imei") String imei);
 
-    @GET
-    Call<BancoEntityResponse> getBanco (@Url String url);
+    @GET("/banks")
+    Call<BancoEntityResponse> getBanco (@Query("imei") String imei);
 
-    @GET
-    Call<TerminoPagoEntityResponse> getTerminoPago (@Url String url);
+    @GET("/TerminoPago")
+    Call<TerminoPagoEntityResponse> getTerminoPago (@Query("imei") String imei);
 
-    @GET
-    Call<StockEntityResponse> getStock (@Url String url);
+    @GET("/Stock")
+    Call<StockEntityResponse> getStock (@Query("imei") String imei);
 
-    @GET
-    Call<ListaPromocionEntityResponse> getListaPromocion (@Url String url);
+    @GET("/TipoListaPromo")
+    Call<ListaPromocionEntityResponse> getListaPromocion (@Query("imei") String imei);
 
-    @GET
-    Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Url String url);
+    @GET("/RutaTrabajo")
+    Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Query("imei") String imei);
 
-    @GET
-    Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Url String url);
+    @GET("/PriceLists")
+    Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Query("imei") String imei);
 
     @GET
     Call<DocumentoDeudaEntityResponse> getDocumentoDeuda (@Url String url);
@@ -105,12 +104,16 @@ public interface Api {
     @GET
     Call<HistoricoCobranzaEntityResponse> getHistoricoCobranza (@Url String url);//revisar
 
+    @FormUrlEncoded
     @POST
-    Call<Void> PostInsertCobranzaD (@Url String url,@FieldMap HashMap<String, String> params);
+    Call<Void> sendCollection(@Url String url,@FieldMap HashMap<String, String> params);
 
     @POST
     Call<Void> sendOrder (@Url String url,@Body RequestBody params);
 
+    @FormUrlEncoded
+    @POST
+    Call<Void> sendDeposit (@Url String url,@FieldMap HashMap<String, String> params);
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,29 +138,7 @@ public interface Api {
     @GET("/AppVistonySalesTestNew/ServicioApp.svc/LeerCobranzaRecibo/{Imei},{Compania_ID},{Usuario_ID},{Recibo}")
     Call<HistoricoCobranzaUnidadEntityResponse> getHistoricoCobranzaIndividual (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Usuario_ID") String Usuario_ID,@Path("Recibo") String Recibo);
 
-    @GET("/AppVistonySalesTestNew/ServicioApp.svc/InsertCobranzaC/{Imei},{TipoCrud},{Compania_ID},{Banco_ID},{TipoIngreso}," +
-            "{Deposito_ID},{Usuario_ID},{FechaDeposito},{MontoDeposito},{Estado},{Comentario}" +
-            ",{FuerzaTrabajo_ID},{Bancarizacion},{FechaDiferida},{MotivoAnulacion},{DepositoDirecto},{PagoPOS}")
-    Call<CobranzaCabeceraEntityResponse> PostInsertCobranzaC (
-            @Path("Imei") String Imei,
-            @Path("TipoCrud") String TipoCrud,
-            @Path("Compania_ID") String Compania_ID,
-            @Path("Banco_ID") String Banco_ID,
-            @Path("TipoIngreso") String TipoIngreso,
-            @Path("Deposito_ID") String Deposito_ID,
-            @Path("Usuario_ID") String Usuario_ID,
-            @Path("FechaDeposito") String FechaDeposito,
-            @Path("MontoDeposito") String MontoDeposito,
-            @Path("Estado") String Estado,
-            @Path("Comentario") String Comentario,
-            @Path("FuerzaTrabajo_ID") String FuerzaTrabajo_ID,
-            @Path("Bancarizacion") String Bancarizacion,
-            @Path("FechaDiferida") String FechaDiferida,
-            @Path("MotivoAnulacion") String MotivoAnulacion,
-            @Path("DepositoDirecto") String DepositoDirecto,
-            @Path("PagoPOS") String pagopos
 
-    );
 
     @GET
     Call<ComisionesEntityResponse> getComisiones (@Url String url);

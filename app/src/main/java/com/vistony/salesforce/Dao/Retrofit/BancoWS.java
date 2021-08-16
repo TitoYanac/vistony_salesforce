@@ -23,7 +23,7 @@ public class BancoWS {
 
     public ArrayList<BancoSQLiteEntity> getBancoWS(String Imei){
         Api api = Config.getClient().create(Api.class);
-        Call<BancoEntityResponse> call = api.getBanco("https://graph.vistony.pe/Banco?imei="+Imei);
+        Call<BancoEntityResponse> call = api.getBanco(Imei);
         try
         {
             Response<BancoEntityResponse> response= call.execute();

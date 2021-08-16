@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -38,6 +39,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
@@ -99,7 +101,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     private final int MY_PERMISSIONS_REQUEST_CAMERA=1;
     ConfigImpresoraView configImpresoraView;
     private static OnFragmentInteractionListener mListener;
-    //FloatingActionButton fabeditarcliente;
+    private SwipeRefreshLayout refreshMasterClient;
 
 
     //ListenerBackPress.setCurrentFragment("FormListaDeudaCliente");
@@ -166,6 +168,14 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         tv_cantidad_cliente_detalle = (TextView) v.findViewById(R.id.tv_cantidad_cliente_detalle);
         tv_monto_cliente_detalle = (TextView) v.findViewById(R.id.tv_monto_cliente_detalle);
         tv_monto_cliente_detalle_dolares = (TextView) v.findViewById(R.id.tv_monto_cliente_detalle_dolares);
+        refreshMasterClient=v.findViewById(R.id.refreshClient);
+
+
+        refreshMasterClient.setOnRefreshListener(() -> {
+           //Metodo que actualiza
+            Toast.makeText(getContext(), "Cliente actualizado...", Toast.LENGTH_SHORT).show();
+            refreshMasterClient.setRefreshing(false);
+        });
 
         obtenerPametros();
         obtenerSQLiteDDeuda = new ObtenerSQLiteDDeuda();

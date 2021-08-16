@@ -141,9 +141,9 @@ public class ListaRutaVendedorAdapter  extends ArrayAdapter<ListaRutaVendedorEnt
                                                               cliente_id=lead.getCliente_id().toString();
                                                               nombrecliente=lead.getNombrecliente().toString();
                                                               direccion=lead.getDireccion().toString();
-                                                              listaClienteCabeceraEntity.cliente_id=cliente_id;
-                                                              listaClienteCabeceraEntity.nombrecliente=nombrecliente;
-                                                              listaClienteCabeceraEntity.direccion=direccion;
+                                                              listaClienteCabeceraEntity.setCliente_id(cliente_id);
+                                                              listaClienteCabeceraEntity.setNombrecliente(nombrecliente);
+                                                              listaClienteCabeceraEntity.setDireccion(direccion);
 
 
                                                               ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);

@@ -30,30 +30,30 @@ public class ClienteWS {
     getClienteWS(String Imei){
         Api api = Config.getClient().create(Api.class);
         Object[] objects=new Object[2];
-        Call<ClienteEntityResponse> call = api.getCliente("https://graph.vistony.pe/cliente?imei="+Imei);
+        Call<ClienteEntityResponse> call = api.getCliente(Imei);
         try
         {
             Response<ClienteEntityResponse> response= call.execute();
                 if(response.isSuccessful()) {
                     ClienteEntityResponse clienteEntityResponse=response.body();
-                    Log.e("REOS","ListaCliente"+clienteEntityResponse.getClienteEntity().size());
+
                     for(int i=0;i<clienteEntityResponse.getClienteEntity().size();i++){
 
                         ClienteSQLiteEntity ObjCliente = new ClienteSQLiteEntity();
-                        ObjCliente.cliente_id = clienteEntityResponse.getClienteEntity().get(i).getClienteId();
-                        ObjCliente.domembarque_id = clienteEntityResponse.getClienteEntity().get(i).getDomicilioEmbarque();
-                        ObjCliente.compania_id = SesionEntity.compania_id;
-                        ObjCliente.nombrecliente = clienteEntityResponse.getClienteEntity().get(i).getNombre();
-                        ObjCliente.direccion = clienteEntityResponse.getClienteEntity().get(i).getDireccion();
-                        ObjCliente.orden=clienteEntityResponse.getClienteEntity().get(i).getOrdenVisita();
-                        ObjCliente.zona_id=clienteEntityResponse.getClienteEntity().get(i).getZonaId();
-                        ObjCliente.zona=clienteEntityResponse.getClienteEntity().get(i).getZona();
-                        ObjCliente.rucdni=clienteEntityResponse.getClienteEntity().get(i).getDocumento();
-                        ObjCliente.moneda=clienteEntityResponse.getClienteEntity().get(i).getMoneda();
-                        ObjCliente.telefonofijo=clienteEntityResponse.getClienteEntity().get(i).getTelefoFijo();
-                        ObjCliente.telefonomovil=clienteEntityResponse.getClienteEntity().get(i).getTelefonoMovil();
-                        ObjCliente.correo=clienteEntityResponse.getClienteEntity().get(i).getCorreo();
-                        ObjCliente.ubigeo_id=clienteEntityResponse.getClienteEntity().get(i).getUbigeoId();
+                        ObjCliente.setCliente_id ( clienteEntityResponse.getClienteEntity().get(i).getClienteId());
+                        ObjCliente.setDomembarque_id (clienteEntityResponse.getClienteEntity().get(i).getDomicilioEmbarque());
+                        ObjCliente.setCompania_id ( SesionEntity.compania_id);
+                        ObjCliente.setNombrecliente ( clienteEntityResponse.getClienteEntity().get(i).getNombre());
+                        ObjCliente.setDireccion ( clienteEntityResponse.getClienteEntity().get(i).getDireccion());
+                        ObjCliente.setOrden(clienteEntityResponse.getClienteEntity().get(i).getOrdenVisita());
+                        ObjCliente.setZona_id(clienteEntityResponse.getClienteEntity().get(i).getZonaId());
+                        ObjCliente.setZona(clienteEntityResponse.getClienteEntity().get(i).getZona());
+                        ObjCliente.setRucdni(clienteEntityResponse.getClienteEntity().get(i).getDocumento());
+                        ObjCliente.setMoneda(clienteEntityResponse.getClienteEntity().get(i).getMoneda());
+                        ObjCliente.setTelefonofijo(clienteEntityResponse.getClienteEntity().get(i).getTelefoFijo());
+                        ObjCliente.setTelefonomovil(clienteEntityResponse.getClienteEntity().get(i).getTelefonoMovil());
+                        ObjCliente.setCorreo(clienteEntityResponse.getClienteEntity().get(i).getCorreo());
+                        ObjCliente.setUbigeo_id(clienteEntityResponse.getClienteEntity().get(i).getUbigeoId());
 
                         /*
                         ObjCliente.impuesto_id=clienteEntityResponse.getClienteEntity().get(i).getImpuesto_id();
@@ -61,10 +61,10 @@ public class ClienteWS {
                         ObjCliente.tipocambio=clienteEntityResponse.getClienteEntity().get(i).getTipocambio();
                         */
 
-                        ObjCliente.categoria=clienteEntityResponse.getClienteEntity().get(i).getCategoria();
-                        ObjCliente.linea_credito=clienteEntityResponse.getClienteEntity().get(i).getLinea_credito();
-                        Log.e("REOS","ClienteWS:Linea_Credito"+clienteEntityResponse.getClienteEntity().get(i).getLinea_credito().toString());
-                        ObjCliente.terminopago_id=clienteEntityResponse.getClienteEntity().get(i).getTerminoPago_id();
+                        ObjCliente.setCategoria(clienteEntityResponse.getClienteEntity().get(i).getCategoria());
+                        ObjCliente.setLinea_credito(clienteEntityResponse.getClienteEntity().get(i).getLinea_credito());
+                        ObjCliente.setLinea_credito_usado(clienteEntityResponse.getClienteEntity().get(i).getlinea_credito_usado());
+                        ObjCliente.setTerminopago_id(clienteEntityResponse.getClienteEntity().get(i).getTerminoPago_id());
                         LCliente.add(ObjCliente);
                     }
                     /*for(int i=0;i<clienteEntityResponse.getSeguridadEntity().size();i++){

@@ -35,7 +35,7 @@ public class ClienteSQliteDAO
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se cierra conexion desde " +this.getClass().getName()  );
         sqLiteController.close();
     }
 
@@ -59,6 +59,7 @@ public class ClienteSQliteDAO
             String tipocambio,
             String categoria,
             String linea_credito,
+            String linea_credito_usado,
             String terminopago_id
 
     )
@@ -85,6 +86,7 @@ public class ClienteSQliteDAO
         registro.put("tipocambio",tipocambio);
         registro.put("categoria",categoria);
         registro.put("linea_credito",linea_credito);
+        registro.put("linea_credito_usado",linea_credito_usado);
         registro.put("terminopago_id",terminopago_id);
         bd.insert("cliente",null,registro);
         bd.close();
@@ -127,9 +129,9 @@ public class ClienteSQliteDAO
         try {
         Cursor fila = bd.rawQuery(
                 "Select " +
-                        "b.cliente_id,b.nombrecliente,b.direccion,SUM(saldo),a.moneda,b.domembarque_id,b.impuesto_id,b.impuesto,b.categoria,b.linea_credito,b.terminopago_id " +
+                        "b.cliente_id,b.nombrecliente,b.direccion,SUM(saldo),a.moneda,b.domembarque_id,b.impuesto_id,b.impuesto,b.categoria,b.linea_credito,b.linea_credito_usado,b.terminopago_id " +
                         "from documentodeuda a " +
-                        "INNER JOIN (Select compania_id,cliente_id,nombrecliente,direccion,domembarque_id,impuesto_id,impuesto,rucdni,categoria,linea_credito,terminopago_id from cliente GROUP BY compania_id,cliente_id,nombrecliente,direccion,domembarque_id,impuesto_id,impuesto,rucdni,categoria,linea_credito,terminopago_id) b ON" +
+                        "INNER JOIN (Select compania_id,cliente_id,nombrecliente,direccion,domembarque_id,impuesto_id,impuesto,rucdni,categoria,linea_credito,linea_credito_usado,terminopago_id from cliente GROUP BY compania_id,cliente_id,nombrecliente,direccion,domembarque_id,impuesto_id,impuesto,rucdni,categoria,linea_credito,terminopago_id) b ON" +
                         " a.compania_id=b.compania_id " +
                         "and a.cliente_id=b.cliente_id " +
                         "where a.saldo <> '0' and a.saldo>1 "  +
@@ -150,7 +152,8 @@ public class ClienteSQliteDAO
             clienteentity.setRucdni(fila.getString(8));
             clienteentity.setCategoria(fila.getString(9));
             clienteentity.setLinea_credito(fila.getString(10));
-            clienteentity.setTerminopago_id(fila.getString(11));
+            clienteentity.setLinea_credito_usado(fila.getString(11));
+            clienteentity.setTerminopago_id(fila.getString(12));
             arraylistaClienteSQLiteEntity.add(clienteentity);
         }
         }catch (Exception e)
@@ -171,7 +174,7 @@ public class ClienteSQliteDAO
         ClienteSQLiteEntity clienteentity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select cliente_id,compania_id,nombrecliente,direccion,rucdni,categoria,linea_credito,terminopago_id,domembarque_id,zona_id from cliente" +
+                "Select cliente_id,compania_id,nombrecliente,direccion,rucdni,categoria,linea_credito,linea_credito_usado,terminopago_id,domembarque_id,zona_id from cliente" +
                         " where cliente_id= '"+cliente_id+"' and compania_id= '"+compania_id+"'",null);
 
         while (fila.moveToNext())
@@ -184,9 +187,10 @@ public class ClienteSQliteDAO
             clienteentity.setRucdni(fila.getString(4));
             clienteentity.setCategoria(fila.getString(5));
             clienteentity.setLinea_credito(fila.getString(6));
-            clienteentity.setTerminopago_id(fila.getString(7));
-            clienteentity.setDomembarque_id(fila.getString(8));
-            clienteentity.setZona_id(fila.getString(9));
+            clienteentity.setLinea_credito_usado(fila.getString(7));
+            clienteentity.setTerminopago_id(fila.getString(8));
+            clienteentity.setDomembarque_id(fila.getString(9));
+            clienteentity.setZona_id(fila.getString(10));
             listaClienteSQLiteEntity.add(clienteentity);
         }
 
@@ -244,13 +248,13 @@ public class ClienteSQliteDAO
         try {
             Cursor fila = bd.rawQuery(
                     "Select " +
-                            "a.cliente_id,a.nombrecliente,'',IFNULL(SUM(b.saldo),0),IFNULL(a.moneda,0),a.rucdni,a.categoria,a.linea_credito,a.terminopago_id " +
+                            "a.cliente_id,a.nombrecliente,'',IFNULL(SUM(b.saldo),0),IFNULL(a.moneda,0),a.rucdni,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id " +
                             "from cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
                             "and a.cliente_id=b.cliente_id " +
                             "where b.saldo is null "  +
-                            "GROUP BY a.cliente_id,a.nombrecliente,a.rucdni,a.categoria,a.linea_credito,a.terminopago_id ",null);
+                            "GROUP BY a.cliente_id,a.nombrecliente,a.rucdni,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id ",null);
 
             while (fila.moveToNext())
             {
@@ -263,7 +267,8 @@ public class ClienteSQliteDAO
                 clienteentity.setRucdni(fila.getString(6));
                 clienteentity.setCategoria(fila.getString(7));
                 clienteentity.setLinea_credito(fila.getString(8));
-                clienteentity.setTerminopago_id(fila.getString(9));
+                clienteentity.setLinea_credito_usado(fila.getString(9));
+                clienteentity.setTerminopago_id(fila.getString(10));
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }
         }catch (Exception e)
@@ -346,7 +351,7 @@ public class ClienteSQliteDAO
         try {
             Cursor fila = bd.rawQuery(
                     "Select " +
-                            "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.terminopago_id,IFNULL(SUM(b.saldo),0) " +
+                            "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0) " +
                             "from cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
@@ -355,8 +360,8 @@ public class ClienteSQliteDAO
                             //"a.compania_id=c.compania_id and "+
                             //"a.cliente_id=c.cliente_id "+
                             "where a.cliente_id not in (Select cliente_id from rutavendedor where fecharuta='"+fecha+"') "  +
-                            "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.terminopago_id",null);
-            Log.e("REOS","ClienteSQLiteDao.ObtenerClientes-bd.rawQuery: "+bd.toString());
+                            "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id",null);
+
             while (fila.moveToNext())
             {
                 clienteentity= new ListaClienteCabeceraEntity();
@@ -379,8 +384,9 @@ public class ClienteSQliteDAO
                 clienteentity.setTipocambio(fila.getString(16));
                 clienteentity.setCategoria(fila.getString(17));
                 clienteentity.setLinea_credito(fila.getString(18));
-                clienteentity.setTerminopago_id(fila.getString(19));
-                clienteentity.setSaldo(fila.getString(20));
+                clienteentity.setLinea_credito_usado(fila.getString(19));
+                clienteentity.setTerminopago_id(fila.getString(20));
+                clienteentity.setSaldo(fila.getString(21));
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }
         }catch (Exception e)
@@ -390,8 +396,7 @@ public class ClienteSQliteDAO
         }
 
         bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
-        Log.e("REOS","ClienteSQLiteDao.ObtenerClientes-arraylistaClienteSQLiteEntity.size(): "+arraylistaClienteSQLiteEntity.size());
+
         return arraylistaClienteSQLiteEntity;
     }
 
@@ -425,13 +430,13 @@ public class ClienteSQliteDAO
         try {
             Cursor fila = bd.rawQuery(
                     "Select " +
-                            "a.cliente_id,a.nombrecliente,a.direccion,IFNULL(SUM(b.saldo),0),IFNULL(a.moneda,0),a.domembarque_id,a.impuesto_id,a.impuesto,a.rucdni,a.categoria,a.linea_credito,a.terminopago_id " +
+                            "a.cliente_id,a.nombrecliente,a.direccion,IFNULL(SUM(b.saldo),0),IFNULL(a.moneda,0),a.domembarque_id,a.impuesto_id,a.impuesto,a.rucdni,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id " +
                             "from cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
                             "and a.cliente_id=b.cliente_id " +
                              "where a.cliente_id='"+cliente_id+"' "  +
-                            "GROUP BY a.cliente_id,a.nombrecliente,a.direccion,a.domembarque_id,a.impuesto_id,a.impuesto,a.rucdni,a.categoria,a.linea_credito,a.terminopago_id ",null);
+                            "GROUP BY a.cliente_id,a.nombrecliente,a.direccion,a.domembarque_id,a.impuesto_id,a.impuesto,a.rucdni,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id ",null);
 
             while (fila.moveToNext())
             {
@@ -447,7 +452,8 @@ public class ClienteSQliteDAO
                 clienteentity.setRucdni(fila.getString(8));
                 clienteentity.setCategoria(fila.getString(9));
                 clienteentity.setLinea_credito(fila.getString(10));
-                clienteentity.setTerminopago_id(fila.getString(11));
+                clienteentity.setLinea_credito_usado(fila.getString(11));
+                clienteentity.setTerminopago_id(fila.getString(12));
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }
         }catch (Exception e)
@@ -511,13 +517,13 @@ public class ClienteSQliteDAO
         try {
             Cursor fila = bd.rawQuery(
                     "Select " +
-                            "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.terminopago_id,IFNULL(SUM(b.saldo),0) " +
+                            "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0) " +
                             "from cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
                             "and a.cliente_id=b.cliente_id " +
                             "where a.zona_id='"+zona_id+"' "+
-                            "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.terminopago_id",null);
+                            "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id",null);
 
             while (fila.moveToNext())
             {
@@ -541,8 +547,9 @@ public class ClienteSQliteDAO
                 clienteentity.setTipocambio(fila.getString(16));
                 clienteentity.setCategoria(fila.getString(17));
                 clienteentity.setLinea_credito(fila.getString(18));
-                clienteentity.setTerminopago_id(fila.getString(19));
-                clienteentity.setSaldo(fila.getString(20));
+                clienteentity.setLinea_credito_usado(fila.getString(19));
+                clienteentity.setTerminopago_id(fila.getString(20));
+                clienteentity.setSaldo(fila.getString(21));
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }
         }catch (Exception e)

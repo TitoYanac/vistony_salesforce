@@ -62,6 +62,7 @@ public class ListaClienteCabeceraDao {
                         ,Lista.get(i).getRucdni()
                         ,Lista.get(i).getCategoria()
                         ,Lista.get(i).getLinea_credito()
+                        ,Lista.get(i).getLinea_credito_usado()
                         ,Lista.get(i).getTerminopago_id()
                         ,Lista.get(i).getZona_id()
                         ,Lista.get(i).getCompania_id()

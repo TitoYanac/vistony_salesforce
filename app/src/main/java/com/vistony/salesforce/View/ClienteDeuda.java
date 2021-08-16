@@ -150,7 +150,7 @@ public class ClienteDeuda extends Fragment implements SearchView.OnQueryTextList
 
                 for(int i=0;i<ListaClienteCabeceraAdapter.ArraylistaClienteCabeceraEntity.size();i++)
                 {
-                    texto=String.valueOf(ListaClienteCabeceraAdapter.ArraylistaClienteCabeceraEntity.get(i).cliente_id) ;
+                    texto=String.valueOf(ListaClienteCabeceraAdapter.ArraylistaClienteCabeceraEntity.get(i).getCliente_id()) ;
                 }
 
                 String Fragment="ClientCabeceraView";

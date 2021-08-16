@@ -7,14 +7,13 @@ import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.CobranzaCabeceraEntityResponse;
+
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
 public class CobranzaCabeceraWS {
-    private UsuarioSQLiteDao usuarioSQLiteDao;
-    private VersionEntity vsDatada;
     private Context context;
     static String resultado="0";
 
@@ -43,63 +42,41 @@ public class CobranzaCabeceraWS {
     ){
 
         Api api = Config.getClient().create(Api.class);
-        Call<CobranzaCabeceraEntityResponse> call = api.PostInsertCobranzaC(
-                Imei,
-                TipoCrud,
-                Compania_ID,
-                Banco_ID,
-                TipoIngreso,
-                Deposito_ID,
-                Usuario_ID,
-                FechaDeposito,
-                MontoDeposito,
-                Estado,
-                Comentario,
-                FuerzaTrabajo_ID,
-                Bancarizacion,
-                FechaDiferida,
-                MotivoAnulacion,
-                DepositoDirecto,
-                PagoPOS
-        );
-        /*call.enqueue(new Callback<CobranzaCabeceraEntityResponse>() {
-            @Override
-            public void onResponse(Call<CobranzaCabeceraEntityResponse> call, Response<CobranzaCabeceraEntityResponse> response) {
 
-                if(response.isSuccessful()) {
-                    CobranzaCabeceraEntityResponse cobranzaCabeceraEntityResponse=response.body();
-                    for(int i=0;i<cobranzaCabeceraEntityResponse.getCobranzaCabeceraEntity().size();i++){
-                        resultado = Integer.parseInt(cobranzaCabeceraEntityResponse.getCobranzaCabeceraEntity().get(i).getResultado()) ;
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<CobranzaCabeceraEntityResponse> call, Throwable t) {
+        HashMap<String, String> params = new HashMap<>();
 
-            }
-        });*/
-        try
-        {
-            Response<CobranzaCabeceraEntityResponse> response= call.execute();
-            Log.e("REOS","Response-CobranzaCabeceraWS: "+response.toString());
+        params.put("Imei", Imei);
+        params.put("CrudType", TipoCrud);
+        params.put("CompanyCode", Compania_ID);
+        params.put("BankID", Banco_ID);
+        params.put("IncomeType", TipoIngreso);
+        params.put("DepositID", Deposito_ID);
+        params.put("DepositDate", FechaDeposito);
+        params.put("DeferredDate", FechaDiferida);
+        params.put("Banking", Bancarizacion);
+        params.put("UserCode", Usuario_ID);
+        params.put("SlpCode",FuerzaTrabajo_ID);
+        params.put("DepositAmount", MontoDeposito);
+        params.put("Status", Estado);
+        params.put("Commentary", Comentario);
+        params.put("CancellationReason", MotivoAnulacion);
+        params.put("DirectDeposit", DepositoDirecto);
+        params.put("POSPay", PagoPOS);
+
+        Call call = api.sendDeposit("https://graph.vistony.pe/deposit",params);
+
+        try{
+            Response response= call.execute();
+
             if(response.isSuccessful()) {
-                CobranzaCabeceraEntityResponse cobranzaCabeceraEntityResponse=response.body();
-                //Log.e("REOS","response.body()-CobranzaCabeceraWS: "+response.body().toString());
-
-                //for(int i=0;i<cobranzaCabeceraEntityResponse.getCobranzaCabeceraEntity().size();i++){
-                resultado = cobranzaCabeceraEntityResponse.getCobranzaCabeceraEntity().toString();
-                //}
-                Log.e("REOS","cobranzaCabeceraEntityResponse.getCobranzaCabeceraEntity()-CobranzaCabeceraWS: "+cobranzaCabeceraEntityResponse.getCobranzaCabeceraEntity().toString());
+                //response.body().toString();
+                resultado ="1";
             }
 
-
-        }catch (Exception e)
-        {
+        }catch (Exception e){
             e.printStackTrace();
-            Log.e("REOS ->","CobranzaCabeceraWSError: "+e);
-            resultado="0";
         }
-        Log.e("REOS ->","CobranzaCabeceraWSResultado: "+String.valueOf(resultado) );
+
         return resultado;
     }
 }

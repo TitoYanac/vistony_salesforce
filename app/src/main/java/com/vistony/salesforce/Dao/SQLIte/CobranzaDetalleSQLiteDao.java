@@ -38,9 +38,9 @@ public class CobranzaDetalleSQLiteDao {
         //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
         //SQLiteDatabase bd = admin.getWritableDatabase();
         String resultado="";
-        //abrir();
+        abrir();
         try {
-            abrir();
+
             Cursor fila = bd.rawQuery(
                     "Select IFNULL(COUNT(recibo),0) cantidad from cobranzadetalle " ,null);
 
@@ -49,12 +49,13 @@ public class CobranzaDetalleSQLiteDao {
                 resultado=fila.getString(0);
             }
 
-            bd.close();
+
         }catch (Exception e)
         {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
+        bd.close();
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return resultado;
     }

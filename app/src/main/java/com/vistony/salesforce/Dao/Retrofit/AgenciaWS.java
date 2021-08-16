@@ -23,7 +23,7 @@ public class AgenciaWS {
 
     public ArrayList<AgenciaSQLiteEntity> getAgenciaWS(String Imei){
         Api api = Config.getClient().create(Api.class);
-        Call<AgenciaEntityResponse> call = api.getAgencia("https://graph.vistony.pe/agencia?imei="+Imei);
+        Call<AgenciaEntityResponse> call = api.getAgencia(Imei);
         try
         {
             Response<AgenciaEntityResponse> response= call.execute();

@@ -176,20 +176,20 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-
                 <com.omega_r.libs.OmegaCenterIconButton
                     android:id="@+id/btnlogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
-                    android:background="@drawable/custom_border_button_red"
+                    android:background="@drawable/custom_border_button_grey"
                     android:drawableLeft="@drawable/ic_lock_white_24dp"
                     android:paddingRight="40dp"
-                    android:text="@string/BotonPrincipalLogin"
+                    android:text="@string/conectado"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:onClick="btnLogin"/>
+
 
             </LinearLayout>
 
@@ -220,6 +220,7 @@
             android:text="Version 2.1.6"
             android:textColor="#FFFFFF"
             android:textStyle="bold" />
+
         <!--<TextView
             android:id="@+id/txt_bd"
             android:layout_width="match_parent"

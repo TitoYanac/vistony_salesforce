@@ -24,7 +24,7 @@ public class ListaPrecioDetalleWS {
 
     public ArrayList<ListaPrecioDetalleSQLiteEntity> getListaPrecioDetalleWS(String Imei){
         Api api = Config.getClient().create(Api.class);
-        Call<ListaPrecioDetalleEntityResponse> call = api.getListaPrecioDetalle("https://graph.vistony.pe/ListaPrecios?imei="+Imei);
+        Call<ListaPrecioDetalleEntityResponse> call = api.getListaPrecioDetalle(Imei);
         try
         {
             Response<ListaPrecioDetalleEntityResponse> response= call.execute();

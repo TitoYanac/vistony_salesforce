@@ -261,13 +261,10 @@ public class ConfigImpresoraView extends Fragment implements RadioGroup.OnChecke
 
         pullToRefresh = v.findViewById(R.id.pullToRefresh);
 
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                setPairedDevices();
-                Toast.makeText(getContext(), "Lista actualizada...", Toast.LENGTH_SHORT).show();
-                pullToRefresh.setRefreshing(false);
-            }
+        pullToRefresh.setOnRefreshListener(() -> {
+            setPairedDevices();
+            Toast.makeText(getContext(), "Lista actualizada...", Toast.LENGTH_SHORT).show();
+            pullToRefresh.setRefreshing(false);
         });
 
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

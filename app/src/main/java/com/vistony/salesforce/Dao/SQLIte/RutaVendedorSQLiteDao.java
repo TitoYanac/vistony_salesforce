@@ -26,7 +26,7 @@ public class RutaVendedorSQLiteDao {
         this.context=context;
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se abre conexion sqlite desde "+this.getClass().getName());
         bd = sqLiteController.getWritableDatabase();
     }
 
@@ -176,24 +176,21 @@ public class RutaVendedorSQLiteDao {
         ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntity=new ArrayList<>();
         ListaClienteCabeceraEntity ObjListaClienteCabeceraEntity;
         abrir();
-        Cursor fila = bd.rawQuery(
-                "Select * from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chk_ruta+"'",null);
+        Cursor fila = bd.rawQuery("Select * from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chk_ruta+"'",null);
 
         while (fila.moveToNext())
         {
             ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity=new ArrayList<>();
             ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(context);
             String terminopago_id="";
+            String linea_credito_usado="";
 
-            listaClienteSQLiteEntity=clienteSQliteDAO.ObtenerDatosCliente(
-                    fila.getString(0),
-                    fila.getString(2));
-            Log.e("REOS",fila.getString(0));
-            Log.e("REOS",fila.getString(2));
+            listaClienteSQLiteEntity=clienteSQliteDAO.ObtenerDatosCliente(fila.getString(0),fila.getString(2));
 
             for(int i=0;i<listaClienteSQLiteEntity.size();i++)
             {
                 terminopago_id=listaClienteSQLiteEntity.get(i).getTerminopago_id();
+                linea_credito_usado=listaClienteSQLiteEntity.get(i).getLinea_credito_usado();
             }
 
 
@@ -218,6 +215,7 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setTipocambio(fila.getString(16));
             ObjListaClienteCabeceraEntity.setCategoria(fila.getString(17));
             ObjListaClienteCabeceraEntity.setLinea_credito(fila.getString(18));
+            ObjListaClienteCabeceraEntity.setLinea_credito_usado(linea_credito_usado);
             ObjListaClienteCabeceraEntity.setTerminopago_id(terminopago_id);
             ObjListaClienteCabeceraEntity.setChk_visita(fila.getString(20));
             ObjListaClienteCabeceraEntity.setChk_pedido(fila.getString(21));

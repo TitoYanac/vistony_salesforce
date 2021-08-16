@@ -30,9 +30,10 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
     public String chk_cobranza;
     public String chk_ruta;
     public String fecharuta;
+    public String linea_credito_usado;
 
 
-    public ListaConsClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta) {
+    public ListaConsClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -45,6 +46,7 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
         this.rucdni = rucdni;
         this.categoria = categoria;
         this.linea_credito = linea_credito;
+        this.linea_credito_usado=linea_credito_usado;
         this.terminopago_id = terminopago_id;
         this.zona_id = zona_id;
         this.compania_id = compania_id;
@@ -64,6 +66,14 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
 
     public ListaConsClienteCabeceraEntity() {
 
+    }
+
+    public String getLinea_credito_usado() {
+        return linea_credito_usado;
+    }
+
+    public void setLinea_credito_usado(String linea_credito_usado) {
+        this.linea_credito_usado = linea_credito_usado;
     }
 
     public String getCompania_id() {

@@ -2,30 +2,31 @@ package com.vistony.salesforce.Entity.SQLite;
 
 public class ClienteSQLiteEntity {
 
-    public String cliente_id;
-    public String compania_id;
-    public String nombrecliente;
-    public String domembarque_id;
-    public String direccion;
-    public String zona_id;
-    public String orden;
-    public String zona;
-    public String rucdni;
-    public String moneda;
-    public String telefonofijo;
-    public String telefonomovil;
-    public String correo;
-    public String ubigeo_id;
-    public String impuesto_id;
-    public String impuesto;
-    public String tipocambio;
-    public String categoria;
-    public String linea_credito;
-    public String terminopago_id;
+    private String cliente_id;
+    private String compania_id;
+    private String nombrecliente;
+    private String domembarque_id;
+    private String direccion;
+    private String zona_id;
+    private String orden;
+    private String zona;
+    private String rucdni;
+    private String moneda;
+    private String telefonofijo;
+    private String telefonomovil;
+    private String correo;
+    private String ubigeo_id;
+    private String impuesto_id;
+    private String impuesto;
+    private String tipocambio;
+    private String categoria;
+    private String linea_credito;
+    private String linea_credito_usado;
+    private String terminopago_id;
 
 
 
-    public ClienteSQLiteEntity(String cliente_id, String compania_id, String nombrecliente, String domembarque_id, String direccion, String zona_id, String orden, String zona, String rucdni, String moneda, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String impuesto_id, String impuesto, String tipocambio, String categoria, String linea_credito, String terminopago_id) {
+    public ClienteSQLiteEntity(String cliente_id, String compania_id, String nombrecliente, String domembarque_id, String direccion, String zona_id, String orden, String zona, String rucdni, String moneda, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String impuesto_id, String impuesto, String tipocambio, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id) {
         this.cliente_id = cliente_id;
         this.compania_id = compania_id;
         this.nombrecliente = nombrecliente;
@@ -45,11 +46,20 @@ public class ClienteSQLiteEntity {
         this.tipocambio = tipocambio;
         this.categoria = categoria;
         this.linea_credito = linea_credito;
+        this.linea_credito_usado=linea_credito_usado;
         this.terminopago_id = terminopago_id;
     }
 
     public ClienteSQLiteEntity() {
 
+    }
+
+    public String getLinea_credito_usado() {
+        return linea_credito_usado;
+    }
+
+    public void setLinea_credito_usado(String linea_credito_usado) {
+        this.linea_credito_usado = linea_credito_usado;
     }
 
     public String getTerminopago_id() {

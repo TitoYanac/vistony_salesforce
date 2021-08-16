@@ -144,7 +144,7 @@ public class ClienteSinDeuda extends Fragment implements SearchView.OnQueryTextL
 
                 for(int i=0;i<ListaClienteCabeceraAdapter.ArraylistaClienteCabeceraEntity.size();i++)
                 {
-                    texto=String.valueOf(ListaClienteCabeceraAdapter.ArraylistaClienteCabeceraEntity.get(i).cliente_id) ;
+                    texto=String.valueOf(ListaClienteCabeceraAdapter.ArraylistaClienteCabeceraEntity.get(i).getCliente_id()) ;
                 }
 
                 String Fragment="ClientCabeceraView";

@@ -209,6 +209,8 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     listaClienteCabeceraAdapter = new ListaClienteCabeceraAdapter(getActivity(), ListaClienteCabeceraDao.getInstance().getLeads(listaClienteCabeceraEntityconruta));
                     listrutavendedorruta.setAdapter(listaClienteCabeceraAdapter);
 
+
+
                     int visita=0,pedido=0,cobranza=0;
                     for(int i=0;i<listaClienteCabeceraEntityconruta.size();i++)
                     {

@@ -1,42 +1,35 @@
 package com.vistony.salesforce.Dao.Retrofit;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
-
 import com.google.gson.JsonSyntaxException;
-import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
-import com.vistony.salesforce.Entity.ChekingUpdate;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.VersionEntityResponse;
-
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.vistony.salesforce.Entity.SesionEntity.urlFormMicrosft;
 import static com.vistony.salesforce.View.LoginView.statusImei;
 
-public class VersionWS {
+public class VersionViewModel {
 
     private MutableLiveData<Object> status= new MutableLiveData<>();
 
     public MutableLiveData<Object> getVs(String imei,String version){
-        Config.getClient().create(Api.class).getVs("https://graph.vistony.pe/Version?imei="+imei+"&app=SalesForce").enqueue(new Callback<VersionEntity>() {
-            @Override
+        Log.e("Error","VersionWS inicio peticion");
+        Config.getClient().create(Api.class).getVs(imei,"SalesForce").enqueue(new Callback<VersionEntity>() {
+         @Override
             public void onResponse(Call<VersionEntity> call, Response<VersionEntity> response) {
                 if (response.isSuccessful()) {
+                    Log.e("Error","VersionWS true");
                     VersionEntity versionEntity=response.body();
 
                         SharedPreferences.Editor editor = statusImei.edit();
@@ -51,15 +44,28 @@ public class VersionWS {
                         editor.apply();
 
                 }else{
+                    Log.e("Error","VersionWS else "+response.errorBody());
+                    Log.e("JPCM","ENTRO ELSE LoginViewModel "+response.code()+" => "+response.message());
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Log.e("JPCM","ENTRO ELSE VersionWS "+jObjError.getJSONObject("error").getString("message"));
+                        Log.e("JPCM","ENTRO ELSE VersionWS "+response.code()+" => "+response.message());
+
+                    } catch (Exception e) {
+                        Log.e("JPCM","ENTRO ELSE VersionWS "+e.getMessage());
+                    }
+
                     SharedPreferences.Editor editor = statusImei.edit();
                     editor.putString("status","yes");
                     editor.apply();
+
+                    status.setValue(false);
                 }
             }
 
             @Override
             public void onFailure(Call<VersionEntity> call, Throwable error) {
-                Log.e("Error",""+error.getMessage());
+                Log.e("Error","VersionWS "+error.getMessage());
 
                 SharedPreferences.Editor editor = statusImei.edit();
                 editor.putString("status","yes");

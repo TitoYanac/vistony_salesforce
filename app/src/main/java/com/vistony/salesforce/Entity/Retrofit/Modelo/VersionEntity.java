@@ -34,7 +34,6 @@ public class VersionEntity {
     private String rutaWs;
     */
 
-    @NonNull
     @SerializedName("Version")
     private String vs;
 
@@ -102,12 +101,11 @@ public class VersionEntity {
         this.rutaWs = rutaWs;
     }
 */
-    @NonNull
     public String getVs() {
         return vs;
     }
 
-    public void setVs(@NonNull String vs) {
+    public void setVs(String vs) {
         this.vs = vs;
     }
 }

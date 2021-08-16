@@ -22,6 +22,7 @@ public class UsuarioSQLiteDao {
     }
     public void abrir(){
         bd = sqLiteController.getWritableDatabase();
+        Log.i("SQLite", "Se abre conexion sqlite desde "+this.getClass().getName());
     }
 
     public void cerrar(){
@@ -95,9 +96,8 @@ public class UsuarioSQLiteDao {
     public int ActualizaUsuario (String CompanyName, String nombrefuerzatrabajo)
     {
         int resultado=0;
+        abrir();
         try {
-
-            abrir();
             ContentValues registro = new ContentValues();
             registro.put("online",1);
             registro.put("chksesion",1);
@@ -106,14 +106,12 @@ public class UsuarioSQLiteDao {
             resultado = bd.update("usuario",registro,"nombrecompania like '%"+CompanyName+"%' and nombrefuerzatrabajo like '%"+nombrefuerzatrabajo+"%'" ,null);
 
             bd.close();
-        }catch (Exception e)
-        {
-            // TODO: handle exception
-            System.out.println(e.getMessage());
-
+        }catch (Exception e){
+            bd.close();
+            Log.e("Error"," UsuarioSQLiteDato "+e.getMessage());
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return resultado;
     }
 
@@ -175,7 +173,7 @@ public class UsuarioSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return listaDDeudaentity;
 
     }
@@ -187,7 +185,7 @@ public class UsuarioSQLiteDao {
 
             UsuarioSQLiteEntity usuarioSQLiteEntity;
             abrir();
-            Cursor fila = bd.rawQuery("Select * from usuario where chksesion='1'", null);
+            Cursor fila = bd.rawQuery("Select * from usuario where chksesion=? LIMIT 1;",new String [] {"1"});
 
             if (fila.moveToFirst()) {
                 do {
@@ -221,14 +219,12 @@ public class UsuarioSQLiteDao {
                 } while (fila.moveToNext());
             }
 
-            bd.close();
-        }catch (Exception e)
-        {
-            // TODO: handle exception
-            System.out.println(e.getMessage());
+
+        }catch (Exception e){
+           Log.e("Error","UsuarioSQLiteDato "+e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
-        Log.e("JEPICAME","=>"+listaDDeudaentity.size());
+
+        bd.close();
         return listaDDeudaentity;
 
     }
@@ -291,6 +287,7 @@ public class UsuarioSQLiteDao {
             bd.close();
         }catch (Exception e)
         {
+            bd.close();
             e.printStackTrace();
         }
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
@@ -315,6 +312,7 @@ public class UsuarioSQLiteDao {
             return usuarios;
 
         }catch (Exception e){
+            bd.close();
             return null;
         }
     }
@@ -338,6 +336,7 @@ public class UsuarioSQLiteDao {
             return perfiles;
 
         }catch (Exception e){
+            bd.close();
             return null;
         }
     }
@@ -358,6 +357,7 @@ public class UsuarioSQLiteDao {
             bd.close();
             return compania;
         }catch (Exception e){
+            bd.close();
             return null;
         }
     }
@@ -389,6 +389,7 @@ public class UsuarioSQLiteDao {
             bd.close();
         }catch (Exception e)
         {
+            bd.close();
             e.printStackTrace();
         }
 

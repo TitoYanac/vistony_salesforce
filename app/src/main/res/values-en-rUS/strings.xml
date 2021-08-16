@@ -5,4 +5,5 @@
     <string name="SalirDrawer">Exit</string>
     <string name="conectado">Connecting...</string>
     <string name="sinInfo">No Information</string>
+    <string name="Ingresando">Entering ...</string>
 </resources>
