@@ -1,4 +1,4 @@
-package com.vistony.salesforce.Controller.Funcionalidades;
+package com.vistony.salesforce.Controller.Utilitario;
 
 /**
  * Created by CHENAO on 1/07/2017.

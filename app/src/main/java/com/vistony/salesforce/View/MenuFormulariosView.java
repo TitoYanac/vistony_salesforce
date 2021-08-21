@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -30,7 +31,7 @@ public class MenuFormulariosView extends Fragment {
     private String mParam1;
     private String mParam2;
     View v;
-    private CardView cv_catalogos,cv_agregarcliente;
+    private CardView cv_catalogos,cv_agregarcliente,cv_reclamocliente;
     OnFragmentInteractionListener mListener;
     public MenuFormulariosView() {
         // Required empty public constructor
@@ -65,31 +66,34 @@ public class MenuFormulariosView extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
         v= inflater.inflate(R.layout.fragment_menu_formularios, container, false);
         cv_catalogos=v.findViewById(R.id.cv_catalogos);
         cv_agregarcliente=v.findViewById(R.id.cv_agregarcliente);
-        cv_catalogos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String Fragment="MenuFormulariosView";
-                String accion="catalogos";
-                String compuesto=Fragment+"-"+accion;
-                mListener.onFragmentInteraction(compuesto,"");
-            }
+        cv_reclamocliente=v.findViewById(R.id.cv_reclamocliente);
+
+        cv_catalogos.setOnClickListener(v -> {
+            String Fragment="MenuFormulariosView";
+            String accion="catalogos";
+            String compuesto=Fragment+"-"+accion;
+            mListener.onFragmentInteraction(compuesto,"");
         });
 
-        cv_agregarcliente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String Fragment="MenuFormulariosView";
-                String accion="sugerenciacliente";
-                String compuesto=Fragment+"-"+accion;
-                mListener.onFragmentInteraction(compuesto,"");
-            }
+        cv_reclamocliente.setOnClickListener(v -> {
+            String Fragment="MenuFormulariosView";
+            String accion="reclamocliente";
+            String compuesto=Fragment+"-"+accion;
+            mListener.onFragmentInteraction(compuesto,"");
         });
+
+        cv_agregarcliente.setOnClickListener(v -> {
+            String Fragment="MenuFormulariosView";
+            String accion="agregarcliente";
+            String compuesto=Fragment+"-"+accion;
+            mListener.onFragmentInteraction(compuesto,"");
+        });
+
         return v;
     }
 

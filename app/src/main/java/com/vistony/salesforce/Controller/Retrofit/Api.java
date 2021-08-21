@@ -54,6 +54,16 @@ public interface Api {
     @GET("/customers")
     Call<ClienteEntityResponse> getCliente (@Query("imei") String imei);
 
+    @GET("/customers")
+    Call<ClienteEntityResponse> getClienteInformation (@Query("imei") String imei,@Query("cliente") String cliente);
+
+    //@FormUrlEncoded
+    //@Multipart
+    //@POST //, @Part HashMap<String, String> params @Body
+    @POST("/customers")
+    Call<Void> sendLead(@Body RequestBody params);
+
+
     @GET("/agencies")
     Call<AgenciaEntityResponse> getAgencia (@Query("imei") String imei);
 
@@ -75,6 +85,13 @@ public interface Api {
     @GET("/PriceLists")
     Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Query("imei") String imei);
 
+    @POST("/RegistrarOV")
+    Call<Void> sendOrder (@Body RequestBody params);
+
+    //@FormUrlEncoded
+    @POST("Collections")
+    Call<Void> sendCollection(@Body RequestBody params);
+
     @GET
     Call<DocumentoDeudaEntityResponse> getDocumentoDeuda (@Url String url);
 
@@ -89,8 +106,8 @@ public interface Api {
     Call<DireccionClienteEntityResponse> getDireccionCliente (@Url String url);
 
     @FormUrlEncoded
-    @POST
-    Call<Void> getVisita (@Url String url, @FieldMap HashMap<String, String> params);
+    @POST("/RegistroVisita")
+    Call<Void> getVisita (@FieldMap HashMap<String, String> params);
 
     @GET
     Call<PromocionCabeceraEntityResponse> getPromomocionCabecera (@Url String url);
@@ -104,12 +121,7 @@ public interface Api {
     @GET
     Call<HistoricoCobranzaEntityResponse> getHistoricoCobranza (@Url String url);//revisar
 
-    @FormUrlEncoded
-    @POST
-    Call<Void> sendCollection(@Url String url,@FieldMap HashMap<String, String> params);
 
-    @POST
-    Call<Void> sendOrder (@Url String url,@Body RequestBody params);
 
     @FormUrlEncoded
     @POST
@@ -131,8 +143,6 @@ public interface Api {
 
     @GET("/AppVistonySalesTestNew/ServicioApp.svc/LeerCobranzaDeposito/{Imei},{Compania_ID},{Usuario_ID},{Banco_ID},{Deposito_ID}")
     Call<HistoricoDepositoUnidadEntityResponse> getHistoricoDepositoIndividual (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Usuario_ID") String Usuario_ID,@Path("Banco_ID") String Banco_ID,@Path("Deposito_ID") String Deposito_ID);
-
-
 
     //@GET("/LeerCobranzaRecibo ")
     @GET("/AppVistonySalesTestNew/ServicioApp.svc/LeerCobranzaRecibo/{Imei},{Compania_ID},{Usuario_ID},{Recibo}")

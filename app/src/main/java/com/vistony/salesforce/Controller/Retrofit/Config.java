@@ -17,13 +17,13 @@ public class Config {
         try{
             if(client==null) {
                 client = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                //.retryOnConnectionFailure(true)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
                 .proxy(Proxy.NO_PROXY)
-                .connectionPool(new ConnectionPool(10,15,TimeUnit.SECONDS))
-                .dns(new Ipv4PreferDns())
+                //.connectionPool(new ConnectionPool(10,15,TimeUnit.SECONDS))
+                //.dns(new Ipv4PreferDns())
                 .build();
             }
 

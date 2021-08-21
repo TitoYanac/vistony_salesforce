@@ -51,7 +51,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaCobranzaCabeceraAdapter;
-import com.vistony.salesforce.Controller.Funcionalidades.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaCabeceraWS;
 import com.vistony.salesforce.Dao.SQLIte.BancoSQLiteDAO;
 import com.vistony.salesforce.Dao.SQLIte.CobranzaCabeceraSQLiteDao;

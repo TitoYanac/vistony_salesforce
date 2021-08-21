@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,10 +40,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
+import com.vistony.salesforce.Dao.Retrofit.ClienteViewModel;
+import com.vistony.salesforce.Dao.Retrofit.LoginViewModel;
 import com.vistony.salesforce.Dao.SQLIte.DocumentoDeudaSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteDetalleDao;
@@ -102,6 +106,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     ConfigImpresoraView configImpresoraView;
     private static OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout refreshMasterClient;
+    private ClienteViewModel clienteViewModel;
 
 
     //ListenerBackPress.setCurrentFragment("FormListaDeudaCliente");
@@ -153,8 +158,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         v=inflater.inflate(R.layout.fragment_cliente_detalle,container,false);
         menuView = new MenuView();
         listaDDeuda = (ListView) v.findViewById(R.id.listdeuda);
@@ -170,10 +174,24 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         tv_monto_cliente_detalle_dolares = (TextView) v.findViewById(R.id.tv_monto_cliente_detalle_dolares);
         refreshMasterClient=v.findViewById(R.id.refreshClient);
 
+        clienteViewModel =  new ViewModelProvider(this.getActivity()).get(ClienteViewModel.class);
+        clienteViewModel.updateInformationClient(imei,ruccliente,getContext()).observe(this.getActivity(), data -> {
+            switch(data){
+                case "if":
+                    Toast.makeText(getContext(), "Documentos actualizados...", Toast.LENGTH_SHORT).show();
+                    break;
+                case "else":
+                    Toast.makeText(getContext(), "Ocurrio un error al actualizar documentos...", Toast.LENGTH_SHORT).show();
+                    break;
+                case "onFailure":
+                    Toast.makeText(getContext(), "Revisar conección a internet...", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        });
+
 
         refreshMasterClient.setOnRefreshListener(() -> {
-           //Metodo que actualiza
-            Toast.makeText(getContext(), "Cliente actualizado...", Toast.LENGTH_SHORT).show();
+            clienteViewModel.updateInformationClient(imei,ruccliente,getContext());
             refreshMasterClient.setRefreshing(false);
         });
 
@@ -283,8 +301,6 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         protected String doInBackground(String... arg0) {
             try {
                 listaDDeudaEntity=documentoDeudaSQLiteDao.ObtenerDDeudaporcliente(compania_id,fuerzatrabajo_id,texto);
-                Log.e("REOS","CliendeDetalleView:ObtenerSQLiteDDeuda -"+compania_id+"-"+fuerzatrabajo_id+"-"+texto);
-                Log.e("REOS","CliendeDetalleView:listaDDeudaEntity.size -"+listaDDeudaEntity.size());
             } catch (Exception e) {
                 // TODO: handle exception
                 System.out.println(e.getMessage());

@@ -3,7 +3,7 @@ package com.vistony.salesforce.Dao.Adapters;
 import android.content.Context;
 import android.util.Log;
 
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
@@ -24,7 +24,7 @@ public class ListaClienteDetalleDao {
     ParametrosView parametrosView;
 
             //getInstance().clienteDetalleView.getActivity();
-    ClienteSQliteDAO clienteSQliteDAO;
+    ClienteSQlite clienteSQlite;
     public static ListaClienteDetalleDao repository = new ListaClienteDetalleDao();
     public HashMap<String, ListaClienteDetalleEntity> leads = new HashMap<>();
     public ClienteDetalleView clienteDetalleView;

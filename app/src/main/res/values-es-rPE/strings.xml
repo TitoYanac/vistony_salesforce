@@ -6,4 +6,7 @@
     <string name="conectado">Conectando...</string>
     <string name="sinInfo">Sin Información</string>
     <string name="Ingresando">Ingresando...</string>
+    <string name="ficha_tecnica">Ficha Técnica</string>
+    <string name="reclamo_clientes">Reclamo de Clientes</string>
+    <string name="lead_cliente">Generar Oportunidad</string>
 </resources>

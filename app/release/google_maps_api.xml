@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=36:6B:AB:38:62:E9:98:DF:51:BF:89:04:C6:8E:D3:1C:A1:F4:4D:EB%3Bcom.vistony.salesforce
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.vistony.salesforce
+
+    SHA-1 certificate fingerprint:
+    36:6B:AB:38:62:E9:98:DF:51:BF:89:04:C6:8E:D3:1C:A1:F4:4D:EB
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyC8AIG8-G3ZaddSz47lMcmgevwCK7ddGTw</string>
+</resources>

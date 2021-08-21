@@ -40,12 +40,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vistony.salesforce.Controller.Funcionalidades.FormulasController;
-import com.vistony.salesforce.Controller.Funcionalidades.GPSController;
-import com.vistony.salesforce.Controller.Funcionalidades.PDFOrdenVenta;
-import com.vistony.salesforce.Dao.Network.XML.OrdenVentaWSDao;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.GPSController;
+import com.vistony.salesforce.Controller.Utilitario.PDFOrdenVenta;
+import com.vistony.salesforce.Dao.Retrofit.OrdenVentaViewModel;
 import com.vistony.salesforce.Dao.SQLIte.AgenciaSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.OrdenVentaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.TerminoPagoSQLiteDao;
@@ -63,7 +63,7 @@ import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.Utilitario;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -130,7 +130,7 @@ public class OrdenVentaCabeceraView extends Fragment {
     List<String> values;
     String cantidaddescuento,historicoOVcantidaddescuento;
 
-    private OrdenVentaWSDao ordenVentaWSDao;
+    private OrdenVentaViewModel ordenVentaViewModel;
     private Observer<String []> viewModelOrdenDeVenta = null;
     
     public OrdenVentaCabeceraView() {
@@ -292,7 +292,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                 listaOrdenVentaCabecera=new ArrayList<>();
                 listaOrdenVentaDetalle=new ArrayList<>();
                 ArrayList<ListaClienteCabeceraEntity> listaClienteCabecera=new ArrayList<>();
-                ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
+                ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
                 AgenciaSQLiteDao agenciaSQLiteDao=new AgenciaSQLiteDao(getContext());
                 ArrayList<AgenciaSQLiteEntity> listaAgenciasqliteentity=new ArrayList<>();
                 //String ordenventa_id="";
@@ -308,7 +308,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                 listaOrdenVentaDetalleEntities=formulasController.ConvertirListaOrdenVentaDetalleEntity(listaOrdenVentaDetalle);
                 for(int g=0;g<listaOrdenVentaCabecera.size();g++)
                 {
-                    listaClienteCabecera=clienteSQliteDAO.ObtenerClienteporClienteID(listaOrdenVentaCabecera.get(g).getCliente_id());
+                    listaClienteCabecera= clienteSQlite.ObtenerClienteporClienteID(listaOrdenVentaCabecera.get(g).getCliente_id());
                     comentario=listaOrdenVentaCabecera.get(g).getComentario();
                     galonesAcum=listaOrdenVentaCabecera.get(g).getTotal_gal_acumulado();
                     subtotalAcum=listaOrdenVentaCabecera.get(g).getMontosubtotal();
@@ -397,7 +397,7 @@ public class OrdenVentaCabeceraView extends Fragment {
 
 
 
-        ordenVentaWSDao = new ViewModelProvider(getActivity()).get(OrdenVentaWSDao.class);
+        ordenVentaViewModel = new ViewModelProvider(getActivity()).get(OrdenVentaViewModel.class);
         viewModelOrdenDeVenta = new Observer<String []>() {
             @Override
             public void onChanged(@Nullable final String [] newName) {
@@ -1105,7 +1105,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                 //pd = new ProgressDialog(getActivity());
                 //pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando Orden de Venta", true, false);
 
-                ordenVentaWSDao.sendSalesOrder(Jsonx).observe(this, data->{
+                ordenVentaViewModel.sendSalesOrder(Jsonx).observe(this, data->{
 
                     OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao = new OrdenVentaCabeceraSQLiteDao(getContext());
                     if(data==null){

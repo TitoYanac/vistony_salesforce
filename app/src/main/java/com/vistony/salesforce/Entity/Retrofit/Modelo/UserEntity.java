@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class LoginEntity {
+public class UserEntity {
 
     @NonNull
     @SerializedName("imei")

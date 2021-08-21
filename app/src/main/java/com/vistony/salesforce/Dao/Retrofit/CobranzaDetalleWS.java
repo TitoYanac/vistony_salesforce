@@ -5,10 +5,13 @@ import android.util.Log;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Utilitario;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
+
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -50,29 +53,35 @@ public class CobranzaDetalleWS {
 
         HashMap<String, String> params = new HashMap<>();
 
-        params.put("Imei", Imei);
-        params.put("Type", TipoCrud);
-        params.put("BankID", Banco_ID);
-        params.put("IncomeType", "0");
-        params.put("DepositID", Deposito_ID);
-        params.put("ItemDatail", Detalle_Item);
-        params.put("CardCode", Cliente_ID);
-        params.put("DocNum", Documento_ID);
-        params.put("DocTotal", ImporteDocumento);
-        params.put("Balance", SaldoDocumento);
-        params.put("AmountCharged", MontoCobrado);
-        params.put("NewBalance", NuevoSaldoDocumento);
-        params.put("IncomeDate", FechaCobranza);
-        params.put("Receip", Recibo);
-        params.put("Status", Estado);
-        params.put("Commentary", Comentario);
-        params.put("Banking", Bancarizacion);
-        params.put("QRStatus", EstadoQR);
-        params.put("DirectDeposit", DepositoDirecto);
-        params.put("POSPay", PagoPOS);
+        params.put("ItemDetail","1");
+        params.put("CardCode", "C10482169703");
+        params.put("DocEntryInvoice", "48198");
+        params.put("DocNum", "214015676");
+        params.put("DocTotal", "66690.06");
+        params.put("Balance", "62590.06");
+        params.put("AmountCharged", "100");
+        params.put("NewBalance", "62490.06");
+        params.put("IncomeDate", "20210816");
+        params.put("Receip", "1");
+        params.put("Status","P");
+        params.put("Commentary", "Comentario de prueba hardCodeado");
+        params.put("Banking", "N");
+        params.put("QRStatus", "N");
+        params.put("U_VIS_UserID", "200");
+        params.put("U_VIS_SlpCode", "3");
+        params.put("UserID", "200");
+        params.put("SlpCode", "3");
+        params.put("DirectDeposit", "N");
+        params.put("POSPay","N");
 
         if(Utilitario.validationNotNull(params)){
-            Call call = api.sendCollection("https://graph.vistony.pe/CobranzaD",params);
+
+            RequestBody json = null;
+
+            json = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),(new JSONObject(params)).toString());
+
+
+            Call call = api.sendCollection(json);
             try{
                 Response response= call.execute();
                 if(response.isSuccessful()) {

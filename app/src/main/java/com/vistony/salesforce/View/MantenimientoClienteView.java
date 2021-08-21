@@ -17,7 +17,7 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
@@ -184,8 +184,8 @@ public class MantenimientoClienteView extends Fragment {
             ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity = new ArrayList<>();
             try {
 
-                ClienteSQliteDAO clienteSQliteDAO = new ClienteSQliteDAO(getContext());
-                listaClienteSQLiteEntity=clienteSQliteDAO.ObtenerDatosCliente(mParam1, SesionEntity.compania_id);
+                ClienteSQlite clienteSQlite = new ClienteSQlite(getContext());
+                listaClienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(mParam1, SesionEntity.compania_id);
 
                 //listaDDeudaEntity=documentoDeudaSQLiteDao.ObtenerDDeudaporcliente(compania_id,fuerzatrabajo_id,texto);
 

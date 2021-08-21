@@ -6,17 +6,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Entity.SQLite.DireccionClienteSQLiteEntity;
 
 import java.util.ArrayList;
 
-public class DireccionClienteSQLiteDao {
+public class DireccionSQLite {
     SQLiteController sqLiteController;
     SQLiteDatabase bd;
     ArrayList<DireccionClienteSQLiteEntity> listaDireccionClienteSQLiteEntity;
 
-    public DireccionClienteSQLiteDao(Context context)
+    public DireccionSQLite(Context context)
     {
         sqLiteController = new SQLiteController(context);
     }
@@ -55,6 +55,7 @@ public class DireccionClienteSQLiteDao {
         registro.put("zona",zona);
         registro.put("fuerzatrabajo_id",fuerzatrabajo_id);
         registro.put("nombrefuerzatrabajo",nombrefuerzatrabajo);
+
         bd.insert("direccioncliente",null,registro);
         bd.close();
         return 1;

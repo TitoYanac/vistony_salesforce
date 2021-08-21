@@ -18,7 +18,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -34,7 +34,7 @@ import java.util.Locale;
 public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoCobranzaEntity> {
     public static ArrayList<ListaHistoricoCobranzaEntity> ArraylistaHistoricoCobranzaEntity;
     ListaCobranzaDetalleAdapter listaCobranzaDetalleAdapter;
-    ClienteSQliteDAO clienteSQliteDAO;
+    ClienteSQlite clienteSQlite;
     ArrayList<ClienteSQLiteEntity> arrayListClienteSQLiteEntity;
     String Recibo;
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
@@ -101,7 +101,7 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
         ArraylistaHistoricoCobranzaEntity = new ArrayList<ListaHistoricoCobranzaEntity>();
         arrayListClienteSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
 
-        clienteSQliteDAO = new ClienteSQliteDAO(getContext());
+        clienteSQlite = new ClienteSQlite(getContext());
         // Obtener inflater.
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

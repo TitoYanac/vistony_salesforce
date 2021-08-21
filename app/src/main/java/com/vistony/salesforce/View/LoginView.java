@@ -41,9 +41,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
-import com.vistony.salesforce.Controller.Funcionalidades.FormulasController;
-import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
-import com.vistony.salesforce.Controller.Funcionalidades.UpdateApp;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.UpdateApp;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.LoginViewModel;
 import com.vistony.salesforce.Dao.Retrofit.VersionViewModel;
@@ -101,7 +101,7 @@ public class LoginView extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Locale locale = new Locale("es", "PE");
+        Locale locale = new Locale("en", "US");
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
@@ -269,7 +269,7 @@ public class LoginView extends AppCompatActivity{
             dialogButton.setText("GUARDAR");
             dialogButtonExit.setText("VER IMEI");
 
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+          //  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             image.setBackground(new ColorDrawable(Color.TRANSPARENT));
 
             dialog.show();

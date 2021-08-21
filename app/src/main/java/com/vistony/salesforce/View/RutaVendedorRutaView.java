@@ -17,9 +17,9 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
-import com.vistony.salesforce.Controller.Funcionalidades.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteCabeceraDao;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.RutaFuerzaTrabajoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
@@ -188,12 +188,12 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     }
                     //Declaracion Variables
                     ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntityconruta=new ArrayList<>();
-                    ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
+                    ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
                     RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(getContext());
                     FormulasController formulasController=new FormulasController(getContext());
                     String chk_ruta="1";
                     //Obtiene Clientes con zona del dia
-                    listaClienteCabeceraEntities= clienteSQliteDAO.ObtenerClientePorZonaCompleto(zona_id);
+                    listaClienteCabeceraEntities= clienteSQlite.ObtenerClientePorZonaCompleto(zona_id);
 
                     //Evalua si RutaVendedor ya tiene clientes
                     listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(fecha,chk_ruta,getContext());

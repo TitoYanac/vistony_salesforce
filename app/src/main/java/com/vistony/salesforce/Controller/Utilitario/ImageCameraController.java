@@ -1,5 +1,6 @@
-package com.vistony.salesforce.Controller.Funcionalidades;
+package com.vistony.salesforce.Controller.Utilitario;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
@@ -15,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class ImageCameraController {
     private Context TheThis;
@@ -52,18 +54,16 @@ public class ImageCameraController {
 
     private void MakeSureFileWasCreatedThenMakeAvabile(File file){
         MediaScannerConnection.scanFile(TheThis,
-            new String[] { file.toString() } , null,
-            new MediaScannerConnection.OnScanCompletedListener() {
+            new String[] { file.toString() } ,null, new MediaScannerConnection.OnScanCompletedListener() {
                 public void onScanCompleted(String path, Uri uri) {
+                    Toast.makeText(TheThis, "Album actualizado", Toast.LENGTH_SHORT).show();
                 }
             });
     }
 
     private String getCurrentDateAndTime() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd" +
-                "-HH-mm-­ss"
-        );
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd" +"-HH-mm-­ss");
         String formattedDate = df.format(c.getTime());
         return formattedDate;
     }

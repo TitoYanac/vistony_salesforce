@@ -32,6 +32,7 @@ public class LoginViewModel extends ViewModel{
         Config.getClient().create(Api.class).getUsers(imei).enqueue(new Callback<LoginEntityResponse>() {
             @Override
             public void onResponse(Call<LoginEntityResponse> call, Response<LoginEntityResponse> response) {
+
                 usuarioSQLiteDao = new UsuarioSQLiteDao(context);
                 if(response.isSuccessful() && response.body().getUsers().size()>0){
                     usuarioSQLiteDao.LimpiarTablaUsuario();
@@ -65,7 +66,7 @@ public class LoginViewModel extends ViewModel{
                     }
 
                 }else{
-
+                    Log.e("JEPICAME","=>"+response.code());
                 }
                 profile.setValue(usuarioSQLiteDao.ObtenerPerfiles());
             }

@@ -1,4 +1,4 @@
-package com.vistony.salesforce.Controller.Funcionalidades;
+package com.vistony.salesforce.Controller.Utilitario;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;

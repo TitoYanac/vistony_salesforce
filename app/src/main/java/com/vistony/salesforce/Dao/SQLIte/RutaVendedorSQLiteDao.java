@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaVendedorSQLiteEntity;
@@ -181,11 +181,11 @@ public class RutaVendedorSQLiteDao {
         while (fila.moveToNext())
         {
             ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity=new ArrayList<>();
-            ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(context);
+            ClienteSQlite clienteSQlite =new ClienteSQlite(context);
             String terminopago_id="";
             String linea_credito_usado="";
 
-            listaClienteSQLiteEntity=clienteSQliteDAO.ObtenerDatosCliente(fila.getString(0),fila.getString(2));
+            listaClienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(fila.getString(0),fila.getString(2));
 
             for(int i=0;i<listaClienteSQLiteEntity.size();i++)
             {

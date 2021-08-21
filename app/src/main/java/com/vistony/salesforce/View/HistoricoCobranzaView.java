@@ -30,7 +30,7 @@ import androidx.fragment.app.Fragment;
 
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricoCobranzaAdapter;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoCobranzaDao;
@@ -545,8 +545,8 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
                                                                                                     listaHCE.banco_id = listareciboSQLite.get(l).getBanco_id();
                                                                                                     listaHCE.cliente_id = listareciboSQLite.get(l).getCliente_id();
                                                                                                     ArrayList<ClienteSQLiteEntity> listaclienteSQLiteEntity = new ArrayList<>();
-                                                                                                    ClienteSQliteDAO clienteSQliteDAO = new ClienteSQliteDAO(getContext());
-                                                                                                    listaclienteSQLiteEntity = clienteSQliteDAO.ObtenerDatosCliente(listareciboSQLite.get(l).getCliente_id(), SesionEntity.compania_id);
+                                                                                                    ClienteSQlite clienteSQlite = new ClienteSQlite(getContext());
+                                                                                                    listaclienteSQLiteEntity = clienteSQlite.ObtenerDatosCliente(listareciboSQLite.get(l).getCliente_id(), SesionEntity.compania_id);
                                                                                                     for (int m=0;m<listaclienteSQLiteEntity.size();m++)
                                                                                                     {
                                                                                                         listaHCE.cliente_nombre = listaclienteSQLiteEntity.get(m).getNombrecliente();

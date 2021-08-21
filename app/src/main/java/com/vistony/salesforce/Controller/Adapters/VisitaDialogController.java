@@ -20,8 +20,8 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
-import com.vistony.salesforce.Controller.Funcionalidades.FormulasController;
-import com.vistony.salesforce.Controller.Funcionalidades.GPSController;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.R;
 

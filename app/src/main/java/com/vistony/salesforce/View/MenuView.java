@@ -51,7 +51,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.vistony.salesforce.Controller.BixolonPrinterController;
-import com.vistony.salesforce.Controller.Funcionalidades.ImageCameraController;
+import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
@@ -75,13 +75,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static com.vistony.salesforce.Controller.Funcionalidades.CifradoController.decrypt;
+import static com.vistony.salesforce.Controller.Utilitario.CifradoController.decrypt;
 
 
 public class MenuView extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         ClienteCabeceraView.OnFragmentInteractionListener,
         ClienteDetalleView.OnFragmentInteractionListener,
+        LeadClientesView.OnFragmentInteractionListener,
         ParametrosView.OnFragmentInteractionListener,
         CobranzaCabeceraView.OnFragmentInteractionListener,
         CobranzaDetalleView.OnFragmentInteractionListener,
@@ -227,6 +228,7 @@ public class MenuView extends AppCompatActivity
         usuarioSQLiteDao= new UsuarioSQLiteDao(this);
         listaUsuarioSQLiteEntity = new ArrayList<>();
         listaUsuarioSQLiteEntity=usuarioSQLiteDao.ObtenerUsuarioSesion();
+
         for(int g=0;g<listaUsuarioSQLiteEntity.size();g++)
         {
             Conexion=listaUsuarioSQLiteEntity.get(g).getOnline();
@@ -1593,22 +1595,25 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
             }
         }
+
         if(tag.equals("MenuFormulariosView")){
-            if(tag2.equals("catalogos"))
-            {
-                contentFragment=new CatalogoView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
+            switch(tag2){
+                case "catalogos":
+                    contentFragment=new CatalogoView();
+                    break;
+                case "reclamocliente":
+                    contentFragment=new ReclamoClientesView();
+                    break;
+                case "agregarcliente":
+                    contentFragment=new LeadClientesView();
+                    break;
             }
-            if(tag2.equals("sugerenciacliente"))
-            {
-                contentFragment=new ReclamoClientesView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
+
+            ft.replace(R.id.content_menu_view,contentFragment,tag2);
+            ft.addToBackStack("popsssggggersa");
+            ft.commit();
         }
+
         if(tag.equals("MenuConfiguracionView")){
             if(tag2.equals("parametros"))
             {
@@ -1784,21 +1789,21 @@ public class MenuView extends AppCompatActivity
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         String QRScaneado = "";
-        final CobranzaDetalleView cobranzaDetalleView = new CobranzaDetalleView();
-        final CobranzaCabeceraView cobranzaCabeceraView = new CobranzaCabeceraView();
-        CobranzaDetalleSQLiteDao cobranzaCabeceraSQLiteDao = new CobranzaDetalleSQLiteDao(this);
 
+        final CobranzaDetalleView cobranzaDetalleView = new CobranzaDetalleView();
+        //final CobranzaCabeceraView cobranzaCabeceraView = new CobranzaCabeceraView();
+
+        CobranzaDetalleSQLiteDao cobranzaCabeceraSQLiteDao = new CobranzaDetalleSQLiteDao(this);
 
         if (resultCode == RESULT_OK) {
            switch (requestCode) {
                 case COD_FOTO:
 
-
                     File file = new File(mCurrentPhotoPath);
                     Bitmap bitmap2=null;
                     try {
                         bitmap2 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.fromFile(file));
-                    } catch (IOException e) {
+                    } catch (IOException e){
                         e.printStackTrace();
                     }
 
@@ -1806,7 +1811,7 @@ public class MenuView extends AppCompatActivity
                     imageCameraController.SaveImage (this,bitmap2);
 
                     if(cobranzaCabeceraSQLiteDao.ActualizaValidacionQRCobranzaDetalle(recibovalidado,SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id)==1){
-                        fragmentManager = ((AppCompatActivity) this).getSupportFragmentManager();
+                        fragmentManager = this.getSupportFragmentManager();
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         transaction.add(R.id.content_menu_view, cobranzaDetalleView.nuevainstancia("0"));
                     }
@@ -1893,62 +1898,13 @@ public class MenuView extends AppCompatActivity
                     Toast.makeText(this, "Imagen adjuntada...", Toast.LENGTH_SHORT).show();
 
 
-                    /*String nombreFile = "DEP" + SesionEntity.compania_id + SesionEntity.fuerzatrabajo_id + getCurrentDateAndTime() + ".jpg";
-
-                    File destFile = new File(Environment.getExternalStorageDirectory() + File.separator + RUTA_IMAGEN + File.separator + nombreFile);
-
-                    if (!sourceFile.exists()) {
-                        Log.d("jpcm", "el archivo no existe");
-                        return;
-                    }
-
-                    try {
-                        FileChannel source = null;
-                        FileChannel destination = null;
-
-                        source = new FileInputStream(sourceFile).getChannel();
-
-                        destination = new FileOutputStream(destFile).getChannel();
-
-                        if (destination != null && source != null) {
-                            destination.transferFrom(source, 0, source.size());
-
-                            CobranzaCabeceraView.estado = 1;
-                            CobranzaCabeceraView.etgrupo.setSelection(0);
-                            CobranzaCabeceraView.etgrupo.setEnabled(true);
-
-                            CobranzaCabeceraView.abrir.setEnabled(false);
-                            CobranzaCabeceraView.guardar_deposito.setEnabled(true);
-                            CobranzaCabeceraView.agregar_foto_deposito.setEnabled(false);
-
-                            Drawable drawable3 = CobranzaCabeceraView.menu_variable.findItem(R.id.guardar_deposito).getIcon();
-                            drawable = DrawableCompat.wrap(drawable3);
-                            DrawableCompat.setTint(drawable, getResources().getColor(R.color.white));
-
-
-                            Drawable drawable4 = CobranzaCabeceraView.menu_variable.findItem(R.id.agregar_foto_deposito).getIcon();
-                            drawable2 = DrawableCompat.wrap(drawable4);
-                            DrawableCompat.setTint(drawable2, getResources().getColor(R.color.Black));
-
-                            SesionEntity.imagen = "DEP";
-
-                            Toast.makeText(this, "Imagen adjuntada...", Toast.LENGTH_SHORT).show();
-                        }if (source != null) {
-                            source.close();
-                        }if (destination != null) {
-                            destination.close();
-                        }
-                    } catch (Exception ex) {
-                        Log.d("jpcm", "" + ex);
-                        Toast.makeText(context, "Sucedio un error...", Toast.LENGTH_SHORT).show();
-                    }*/
                     break;
                case 10000:
 
                    Log.e("JPCM","LLEGO DESDE EL WEB VIEW");
                    if (null == uploadMessage && null == ReclamoClientesView.uploadMessageAboveL) return;
                    Uri resultx = data == null || resultCode != RESULT_OK ? null : data.getData();
-                   // Uri result = (((data == null) || (resultCode != RESULT_OK)) ? null : data.getData());
+
                    if (ReclamoClientesView.uploadMessageAboveL != null) {
                        onActivityResultAboveL(requestCode, resultCode, data);
                    } else if (uploadMessage != null) {
@@ -1983,24 +1939,36 @@ public class MenuView extends AppCompatActivity
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        // Crea el File
-                        File photoFile = null;
-                        try {
-                            photoFile = createImageFile();
-                        } catch (IOException ex) {
-                            Log.e("log,",""+ex);
-                        }
-                        if (photoFile != null) {
-                            Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.vistony.salesforce" , photoFile);
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                            startActivityForResult(intent,20);
-                        }
+                    // Crea el File
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                    } catch (IOException ex) {
+                        Log.e("log,",""+ex);
+                    }
+                    if (photoFile != null) {
+                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.vistony.salesforce" , photoFile);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        startActivityForResult(intent,20);
+                    }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
                 } else {
                     Toast.makeText(this, "El QR Scaneado no coindice con el Generado", Toast.LENGTH_LONG).show();
                 }
             }
         }
+    }
+
+    private File createImageFile() throws IOException {
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(imageFileName,".jpg",storageDir);
+        mCurrentPhotoPath = image.getAbsolutePath();
+
+        return image;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -2029,25 +1997,6 @@ public class MenuView extends AppCompatActivity
         ReclamoClientesView.uploadMessageAboveL = null;
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-               ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-        mCurrentPhotoPath = image.getAbsolutePath();
-        String TAG="tag";
-        Log.e(TAG,"el path de la imagen es = " + mCurrentPhotoPath);
-        //return file;
-        return image;
-    }
-
-
     private String getCurrentDateAndTime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-­ss");
@@ -2075,22 +2024,12 @@ public class MenuView extends AppCompatActivity
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_CAMERA:
 
-                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED))
-                {
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)){
 
-                } else
-                {
-                    if ((ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.CAMERA)
-                            != PackageManager.PERMISSION_GRANTED))
-                    {
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
-                                MY_PERMISSIONS_REQUEST_CAMERA
-                                //1
-                        );
+                } else{
+                    if ((ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED)){
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
                     }
-                    //break;
-                    //}
                 }
                 break;
         }

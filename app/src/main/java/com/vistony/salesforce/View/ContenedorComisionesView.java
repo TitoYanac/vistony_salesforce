@@ -19,7 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.vistony.salesforce.Controller.Adapters.SeccionesAdapter;
-import com.vistony.salesforce.Controller.Funcionalidades.UtilidadesController;
+import com.vistony.salesforce.Controller.Utilitario.UtilidadesController;
 import com.vistony.salesforce.R;
 
 /**

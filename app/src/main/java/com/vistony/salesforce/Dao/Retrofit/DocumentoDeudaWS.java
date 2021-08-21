@@ -35,7 +35,7 @@ public class DocumentoDeudaWS {
                     DocumentoDeudaEntityResponse documentoDeudaEntityResponse=response.body();
                     for(int i=0;i<documentoDeudaEntityResponse.getDocumentoDeuda().size();i++){
                         DocumentoDeudaSQLiteEntity ObjDDeuda = new DocumentoDeudaSQLiteEntity();
-                        ObjDDeuda.cliente_id = documentoDeudaEntityResponse.getDocumentoDeuda().get(i).getClienteId();
+                        //ObjDDeuda.cliente_id = documentoDeudaEntityResponse.getDocumentoDeuda().get(i).getClienteId();
                         ObjDDeuda.documento_id = documentoDeudaEntityResponse.getDocumentoDeuda().get(i).getDocumentoId();
                         ObjDDeuda.domembarque_id   = documentoDeudaEntityResponse.getDocumentoDeuda().get(i).getDomicilioEmbarqueId();
                         ObjDDeuda.fechaemision = documentoDeudaEntityResponse.getDocumentoDeuda().get(i).getFechaEmision();

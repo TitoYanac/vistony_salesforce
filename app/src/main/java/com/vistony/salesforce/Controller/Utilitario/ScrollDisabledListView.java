@@ -1,4 +1,4 @@
-package com.vistony.salesforce.Controller.Funcionalidades;
+package com.vistony.salesforce.Controller.Utilitario;
 
 import android.content.Context;
 import android.util.AttributeSet;

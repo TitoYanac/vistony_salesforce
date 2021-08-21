@@ -28,7 +28,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.vistony.salesforce.Controller.Adapters.ListaRutaVendedorAdapter;
 import com.vistony.salesforce.Controller.Adapters.PageAdapter;
 import com.vistony.salesforce.Controller.Adapters.TabsPagerAdapter;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
@@ -46,7 +46,7 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private ClienteSQliteDAO clienteSQliteDAO;
+    private ClienteSQlite clienteSQlite;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -132,7 +132,7 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Ruta Vendedor");
-        clienteSQliteDAO = new ClienteSQliteDAO(getContext());
+        clienteSQlite = new ClienteSQlite(getContext());
         rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
         //setHasOptionsMenu(true);
         if (getArguments() != null) {
@@ -143,6 +143,7 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
         String vinculaimpresora="0",serialnumber="0";
         ArrayList<ConfiguracionSQLEntity> arraylistConfiguracionentity;
         ConfiguracionSQLiteDao configuracionSQLiteDao2 =  new ConfiguracionSQLiteDao(getContext());
+
         arraylistConfiguracionentity=configuracionSQLiteDao2.ObtenerConfiguracion();
         for(int i=0;i<arraylistConfiguracionentity.size();i++)
         {

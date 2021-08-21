@@ -32,8 +32,10 @@ public class BackupWS {
 
         File file = new File(Environment.getDataDirectory(),"/data/com.vistony.salesforce/databases/dbcobranzas");
         Api api = Config.getClient().create(Api.class);
-        api.sendBackup("https://reclamos.vistonyapp.com/backup/sqlite",
-        MultipartBody.Part.createFormData("file",(imei==null?"sinImei":imei),RequestBody.create(MediaType.parse("multipart/form-data"),file))).enqueue(new Callback<ResponseBody>(){
+        RequestBody requestBody=RequestBody.create(MediaType.parse("multipart/form-data"),file);
+        final String endPoint="https://reclamos.vistonyapp.com/backup/sqlite";
+
+        api.sendBackup(endPoint,MultipartBody.Part.createFormData("file",(imei==null?"sinImei":imei),requestBody)).enqueue(new Callback<ResponseBody>(){
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 status.setValue(true);

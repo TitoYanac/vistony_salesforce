@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 
 import java.util.ArrayList;

@@ -31,8 +31,8 @@ import android.widget.Toast;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.vistony.salesforce.Controller.Funcionalidades.FormulasController;
-import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Dao.Retrofit.BackupWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
 import com.vistony.salesforce.Dao.SQLIte.CobranzaCabeceraSQLiteDao;

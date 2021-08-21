@@ -50,13 +50,13 @@ import androidx.fragment.app.Fragment;
 
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
-import com.vistony.salesforce.Controller.Funcionalidades.DocumentPDFController;
+import com.vistony.salesforce.Controller.Utilitario.DocumentPDFController;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaCobranzaDetalleAdapter;
-import com.vistony.salesforce.Controller.Funcionalidades.FormulasController;
-import com.vistony.salesforce.Controller.Funcionalidades.GPSController;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaCabeceraWS;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
@@ -122,7 +122,7 @@ public class CobranzaDetalleView extends Fragment {
     public static CheckBox chk_validacionqr;
     static HiloVlidarQR hiloVlidarQR;
     ListaClienteDetalleEntity listaClienteDetalleEntity;
-    ClienteSQliteDAO clienteSQliteDAO;
+    ClienteSQlite clienteSQlite;
     ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity;
     private boolean linternaOn;
     private boolean tieneFlash;
@@ -221,7 +221,7 @@ public class CobranzaDetalleView extends Fragment {
         documentoDeudaSQLiteDao = new DocumentoDeudaSQLiteDao(getContext());
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         listaCobranzaDetalleEntities = new ArrayList<CobranzaDetalleSQLiteEntity>();
-        clienteSQliteDAO = new ClienteSQliteDAO(getContext());
+        clienteSQlite = new ClienteSQlite(getContext());
 
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
 
@@ -1097,24 +1097,20 @@ public class CobranzaDetalleView extends Fragment {
         builder.setTitle("Advertencia")
                 .setMessage("Iniciar validacion QR?")
                 .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                SesionEntity.imagen="R"+recibo;
-                                final Activity activity = getActivity();
-                                //encenderFlash();
-                                IntentIntegrator integrator = new IntentIntegrator(activity);
-                                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                        (dialog, which) -> {
+                            SesionEntity.imagen="R"+recibo;
+                            final Activity activity = getActivity();
+                            //encenderFlash();
+                            IntentIntegrator integrator = new IntentIntegrator(activity);
+                            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
 
-                                //integrator.setScanningRectangle(450, 450);
-                                integrator.setPrompt("Scan");
-                                integrator.setCameraId(0);
-                                integrator.setBeepEnabled(true);
-                                integrator.setBarcodeImageEnabled(false);
-                                integrator.setOrientationLocked(true);
-                                integrator.initiateScan();
+                            integrator.setPrompt("Scan");
+                            integrator.setCameraId(0);
+                            integrator.setBeepEnabled(true);
+                            integrator.setBarcodeImageEnabled(false);
+                            integrator.setOrientationLocked(true);
+                            integrator.initiateScan();
 
-                            }
                         })
                 .setNegativeButton("CANCELAR",
                         new DialogInterface.OnClickListener() {
@@ -1242,8 +1238,8 @@ public class CobranzaDetalleView extends Fragment {
             if (!chkpagoadelantado.isChecked())
             {
                 ArrayList<ClienteSQLiteEntity> listaclientesqlSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
-                ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
-                listaclientesqlSQLiteEntity=clienteSQliteDAO.ObtenerDatosCliente(String.valueOf(Lista.get(i).getCliente_id()),
+                ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
+                listaclientesqlSQLiteEntity= clienteSQlite.ObtenerDatosCliente(String.valueOf(Lista.get(i).getCliente_id()),
                         String.valueOf(SesionEntity.compania_id));
                 for(int j=0;j<listaclientesqlSQLiteEntity.size();j++)
                 {

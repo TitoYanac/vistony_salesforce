@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.View.MenuView;
 
@@ -23,14 +23,14 @@ public class CobranzaDetalleSQLiteDao {
         sqLiteController = new SQLiteController(context);
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se abre conexion a la base de datos desde" + this.getClass().getName() );
         bd = sqLiteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se cierra conexion a la base de datos desde" + this.getClass().getName() );
         sqLiteController.close();
     }
     public String ObtenerCantidadCobranzaDetalle (String usuario_id,String Compania_id)
@@ -118,7 +118,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("pagodirecto",pagodirecto);
             registro.put("pagopos",pagopos);
             bd.insert("cobranzadetalle", null, registro);
-            bd.close();
+
             resultado=1;
         }catch (Exception e)
         {
@@ -127,7 +127,7 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return resultado;
     }
 
@@ -175,7 +175,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -205,7 +206,7 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return resultado;
     }
 
@@ -226,7 +227,7 @@ public class CobranzaDetalleSQLiteDao {
 
             }
 
-            bd.close();
+
         }catch (Exception e)
         {
             // TODO: handle exception
@@ -234,7 +235,7 @@ public class CobranzaDetalleSQLiteDao {
 
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return id;
     }
 
@@ -286,7 +287,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -323,7 +325,7 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return resultado;
     }
 
@@ -375,7 +377,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -411,7 +414,7 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return resultado;
     }
 
@@ -464,7 +467,7 @@ public class CobranzaDetalleSQLiteDao {
 
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return recibo;
     }
 
@@ -502,7 +505,7 @@ public class CobranzaDetalleSQLiteDao {
 
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return recibo;
     }
 
@@ -550,7 +553,7 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return resultado;
     }
 
@@ -602,7 +605,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -654,7 +658,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -691,7 +696,7 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return resultado;
     }
 
@@ -738,7 +743,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -785,7 +791,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -821,6 +828,7 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
 
+        bd.close();
         return  resultado;
     }
 
@@ -875,7 +883,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -915,6 +924,7 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
 
+        bd.close();
         return  resultado;
     }
 
@@ -944,7 +954,8 @@ public class CobranzaDetalleSQLiteDao {
         {
            Log.e("jpcm",""+e);
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return resultado;
     }
 
@@ -972,6 +983,7 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
 
+        bd.close();
         return  resultado;
     }
 
@@ -1026,7 +1038,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -1080,7 +1093,8 @@ public class CobranzaDetalleSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
+        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 

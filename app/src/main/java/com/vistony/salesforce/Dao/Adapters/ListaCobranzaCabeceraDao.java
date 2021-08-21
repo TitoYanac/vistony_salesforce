@@ -2,7 +2,7 @@ package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
 
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaCobranzaCabeceraEntity;
@@ -20,7 +20,7 @@ public class ListaCobranzaCabeceraDao {
     public ArrayList<ListaCobranzaCabeceraEntity> leads = new ArrayList<>();
     public ClienteDetalleView clienteDetalleView;
     public DocumentoDeudaSQLiteEntity documentoDeudaSQLiteEntity;
-    public ClienteSQliteDAO clienteSQliteDAO;
+    public ClienteSQlite clienteSQlite;
     ArrayList<ClienteSQLiteEntity> listaclienteSQLiteEntity;
     ListaCobranzaCabeceraEntity listaCobranzaCabeceraEntity;
     ArrayList<ListaCobranzaCabeceraEntity> listaCobranzaCabeceraEntities;
@@ -51,7 +51,7 @@ public class ListaCobranzaCabeceraDao {
         Lista.size();
         String cliente_id,nombrecliente="";
         listaclienteSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
-        clienteSQliteDAO = new ClienteSQliteDAO(context);
+        clienteSQlite = new ClienteSQlite(context);
 
 
 
@@ -61,7 +61,7 @@ public class ListaCobranzaCabeceraDao {
             {
                 ListaCobranzaCabeceraEntity listaCobranzaCabeceraEntity = new ListaCobranzaCabeceraEntity();
                 cliente_id=Lista.get(i).getCliente_id();
-                listaclienteSQLiteEntity=clienteSQliteDAO.ObtenerDatosCliente(cliente_id, SesionEntity.compania_id);
+                listaclienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(cliente_id, SesionEntity.compania_id);
 
 
                 for(int g=0;g<listaclienteSQLiteEntity.size();g++)

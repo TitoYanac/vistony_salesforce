@@ -21,7 +21,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteCabeceraDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.ListenerBackPress;
@@ -40,7 +40,7 @@ public class ClienteSinDeuda extends Fragment implements SearchView.OnQueryTextL
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private ClienteSQliteDAO clienteSQliteDAO;
+    private ClienteSQlite clienteSQlite;
     private MenuView menuView;
     public static OnFragmentInteractionListener mListener;
     ListView listcliente2;
@@ -89,7 +89,7 @@ public class ClienteSinDeuda extends Fragment implements SearchView.OnQueryTextL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        clienteSQliteDAO = new ClienteSQliteDAO(getContext());
+        clienteSQlite = new ClienteSQlite(getContext());
         menuView = new MenuView();
 
 
@@ -189,7 +189,7 @@ public class ClienteSinDeuda extends Fragment implements SearchView.OnQueryTextL
 
     private void cargarClientesSqlite(){
         listaClienteSQLiteEntity.clear();
-        listaClienteSQLiteEntity = clienteSQliteDAO.ObtenerClienteSinDeuda();
+        listaClienteSQLiteEntity = clienteSQlite.ObtenerClienteSinDeuda();
         float monto_cliente_cabecera=0,monto_cliente_cabecera_dolares=0;
         DecimalFormat format =  new DecimalFormat("###,###.##");
         cantidad_cliente_cabecera=listaClienteSQLiteEntity.size();

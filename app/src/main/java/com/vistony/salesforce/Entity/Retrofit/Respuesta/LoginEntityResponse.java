@@ -1,17 +1,17 @@
 package com.vistony.salesforce.Entity.Retrofit.Respuesta;
 
 import com.google.gson.annotations.SerializedName;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.LoginEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.UserEntity;
 
 import java.util.List;
 
 public class LoginEntityResponse {
     @SerializedName("Users")
-    private List<LoginEntity> users;
-    public LoginEntityResponse(List<LoginEntity> users) {
+    private List<UserEntity> users;
+    public LoginEntityResponse(List<UserEntity> users) {
         this.users = users;
     }
-    public List<LoginEntity> getUsers() {
+    public List<UserEntity> getUsers() {
         return users;
     }
 

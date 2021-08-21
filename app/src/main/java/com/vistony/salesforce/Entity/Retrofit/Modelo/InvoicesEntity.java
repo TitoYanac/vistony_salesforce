@@ -4,12 +4,16 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DocumentoDeudaEntity {
+public class InvoicesEntity {
 
+    /*
     @SerializedName("CardCode")
-    private String clienteId;
+    private String clienteId;*/
 
-    @SerializedName("DocID")
+    @SerializedName("DocEntry")
+    private String docEntry;
+
+    @SerializedName("DocNum")
     private String documentoId;
 
     @SerializedName("ShipToCode")
@@ -27,7 +31,7 @@ public class DocumentoDeudaEntity {
     @SerializedName("Currency")
     private String moneda;
 
-    @SerializedName("InvoiceNum")
+    @SerializedName("LegalNumber")
     private String nroFactura;
 
     @SerializedName("Balance")
@@ -35,7 +39,7 @@ public class DocumentoDeudaEntity {
 
     @SerializedName("RawBalance")
     private String saldoSinProcesar;
-
+/*
     @NonNull
     public String getClienteId() {
         return clienteId;
@@ -43,6 +47,15 @@ public class DocumentoDeudaEntity {
 
     public void setClienteId(@NonNull String clienteId) {
         this.clienteId = clienteId;
+    }
+*/
+
+    public String getDocEntry() {
+        return docEntry;
+    }
+
+    public void setDocEntry(String docEntry) {
+        this.docEntry = docEntry;
     }
 
     @NonNull

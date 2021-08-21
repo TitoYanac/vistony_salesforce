@@ -8,7 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 
 import java.util.ArrayList;
@@ -24,14 +24,14 @@ public class VisitaSQLiteDAO {
     }
 
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se abre conexion a la base de datos desde " + this.getClass().getName());
         bd = sqLiteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se cierra conexion a la base de datos desde " + this.getClass().getName());
         sqLiteController.close();
     }
 
@@ -145,7 +145,7 @@ public class VisitaSQLiteDAO {
             resultado=0;
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        bd.close();
         return resultado;
     }
 }

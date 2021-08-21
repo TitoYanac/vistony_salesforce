@@ -6,4 +6,7 @@
     <string name="conectado">Connecting...</string>
     <string name="sinInfo">No Information</string>
     <string name="Ingresando">Entering ...</string>
+    <string name="ficha_tecnica">Data Sheet</string>
+    <string name="reclamo_clientes">"Customer Complaint "</string>
+    <string name="lead_cliente">Lead Generation</string>
 </resources>

@@ -1,5 +1,10 @@
 package com.vistony.salesforce.Entity.SQLite;
 
+import com.vistony.salesforce.Entity.Retrofit.Modelo.AddressEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
+
+import java.util.List;
+
 public class ClienteSQLiteEntity {
 
     private String cliente_id;
@@ -23,10 +28,15 @@ public class ClienteSQLiteEntity {
     private String linea_credito;
     private String linea_credito_usado;
     private String terminopago_id;
+    private List<AddressEntity> listAddress;
+    private List<InvoicesEntity> listInvoice;
 
 
+    public ClienteSQLiteEntity(){
 
-    public ClienteSQLiteEntity(String cliente_id, String compania_id, String nombrecliente, String domembarque_id, String direccion, String zona_id, String orden, String zona, String rucdni, String moneda, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String impuesto_id, String impuesto, String tipocambio, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id) {
+    }
+
+    public ClienteSQLiteEntity(String cliente_id, String compania_id, String nombrecliente, String domembarque_id, String direccion, String zona_id, String orden, String zona, String rucdni, String moneda, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String impuesto_id, String impuesto, String tipocambio, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id,List<AddressEntity> listAddress,List<InvoicesEntity> listInvoice) {
         this.cliente_id = cliente_id;
         this.compania_id = compania_id;
         this.nombrecliente = nombrecliente;
@@ -48,10 +58,24 @@ public class ClienteSQLiteEntity {
         this.linea_credito = linea_credito;
         this.linea_credito_usado=linea_credito_usado;
         this.terminopago_id = terminopago_id;
+        this.listAddress=listAddress;
+        this.listInvoice=listInvoice;
     }
 
-    public ClienteSQLiteEntity() {
+    public List<AddressEntity> getListAddress() {
+        return listAddress;
+    }
 
+    public void setListAddress(List<AddressEntity> listAddress) {
+        this.listAddress = listAddress;
+    }
+
+    public List<InvoicesEntity> getListInvoice() {
+        return listInvoice;
+    }
+
+    public void setListInvoice(List<InvoicesEntity> listInvoice) {
+        this.listInvoice = listInvoice;
     }
 
     public String getLinea_credito_usado() {

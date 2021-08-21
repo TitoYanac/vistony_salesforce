@@ -24,7 +24,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
 import com.vistony.salesforce.Controller.Adapters.PageAdapter;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
@@ -51,7 +51,7 @@ public class ClienteCabeceraView extends Fragment /*implements SearchView.OnQuer
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private ClienteSQliteDAO clienteSQliteDAO;
+    private ClienteSQlite clienteSQlite;
     private MenuView menuView;
     private ProgressDialog pd;
     public static OnFragmentInteractionListener mListener;
@@ -121,7 +121,7 @@ public class ClienteCabeceraView extends Fragment /*implements SearchView.OnQuer
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        clienteSQliteDAO = new ClienteSQliteDAO(getContext());
+        clienteSQlite = new ClienteSQlite(getContext());
         menuView = new MenuView();
 
 

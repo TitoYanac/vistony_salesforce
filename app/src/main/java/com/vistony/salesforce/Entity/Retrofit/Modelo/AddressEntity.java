@@ -2,15 +2,16 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DireccionClienteEntity {
+public class AddressEntity {
 
-    @SerializedName("CardCode")
+    private String companiaid;
+
     private String clienteId;
 
     @SerializedName("ShipToCode")
     private String domicilioEmbarque;
 
-    @SerializedName("Address")
+    @SerializedName("Street")
     private String direccion;
 
     @SerializedName("TerritoryID")
@@ -24,6 +25,14 @@ public class DireccionClienteEntity {
 
     @SerializedName("SlpName")
     private String nombrefuerzatrabajo;
+
+    public String getCompaniaid() {
+        return companiaid;
+    }
+
+    public void setCompaniaid(String companiaid) {
+        this.companiaid = companiaid;
+    }
 
     public String getClienteId() {
         return clienteId;

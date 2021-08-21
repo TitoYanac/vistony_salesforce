@@ -1,4 +1,4 @@
-package com.vistony.salesforce.Controller.Funcionalidades;
+package com.vistony.salesforce.Controller.Utilitario;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
@@ -29,12 +29,11 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.vistony.salesforce.BuildConfig;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.TerminoPagoSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
@@ -96,7 +95,7 @@ public class PDFOrdenVenta extends AppCompatActivity {
 
         String cliente_id="",nombrecliente="",direccion="",fechaemision="",terminopago="",subtotal="",igv="",descuento="",total="",ordenventa_id="",ordenventa_erp_id="",vendedor="",moneda="";
                 ;
-        ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(context);
+        ClienteSQlite clienteSQlite =new ClienteSQlite(context);
         TerminoPagoSQLiteDao terminoPagoSQLiteDao=new TerminoPagoSQLiteDao(context);
         ArrayList<ClienteSQLiteEntity> listaClienteSQLite=new ArrayList<>();
         ArrayList<TerminoPagoSQLiteEntity> listaTerminoPago=new ArrayList<>();
@@ -107,7 +106,7 @@ public class PDFOrdenVenta extends AppCompatActivity {
             ordenventa_erp_id=ListaOrdenVentaCabecera.get(i).getOrdenventa_ERP_id();
             //vendedor=SesionEntity.fuerzatrabajo_id+" "+SesionEntity.nombrefuerzadetrabajo;
             cliente_id=ListaOrdenVentaCabecera.get(i).getCliente_id();
-            listaClienteSQLite=clienteSQliteDAO.ObtenerDatosCliente(cliente_id,SesionEntity.compania_id);
+            listaClienteSQLite= clienteSQlite.ObtenerDatosCliente(cliente_id,SesionEntity.compania_id);
             for(int j=0;j<listaClienteSQLite.size();j++)
             {
                 nombrecliente=listaClienteSQLite.get(j).getNombrecliente();

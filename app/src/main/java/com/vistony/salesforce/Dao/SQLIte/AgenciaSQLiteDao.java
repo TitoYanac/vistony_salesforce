@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
 
 import java.util.ArrayList;
@@ -22,14 +22,14 @@ public class AgenciaSQLiteDao {
     }
 
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se abre conexion a la base de datos desde " +this.getClass().getName());
         bd = sqLiteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se cierra conexion a la base de datos desde " +this.getClass().getName());
         sqLiteController.close();
     }
 

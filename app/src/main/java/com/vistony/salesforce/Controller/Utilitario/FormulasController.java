@@ -1,4 +1,4 @@
-package com.vistony.salesforce.Controller.Funcionalidades;
+package com.vistony.salesforce.Controller.Utilitario;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -12,7 +12,7 @@ import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaWS;
 import com.vistony.salesforce.Dao.SQLIte.AgenciaSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLIte.OrdenVentaCabeceraSQLiteDao;
@@ -718,7 +718,7 @@ public class FormulasController {
         DocumentLines documentLines;
         listaordenVentaCabeceraSQLiteEntity=ordenVentaCabeceraSQLiteDao.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
         listaordenVentaDetalleSQLiteEntity=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
-        ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(context);
+        ClienteSQlite clienteSQlite =new ClienteSQlite(context);
         UsuarioSQLiteDao usuarioSQLiteDao=new UsuarioSQLiteDao(context);
         ArrayList<UsuarioSQLiteEntity> listaUsuariosqliteentity=new ArrayList<>();
         listaUsuariosqliteentity=usuarioSQLiteDao.ObtenerUsuario();

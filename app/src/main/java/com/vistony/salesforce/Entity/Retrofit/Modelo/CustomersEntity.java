@@ -2,9 +2,11 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /*Mismos attr fuerzaTrabajo con objtenerCliente*/
 
-public class ClienteEntity {
+public class CustomersEntity {
 
     @SerializedName("CardCode")
     private String clienteId;
@@ -68,6 +70,35 @@ public class ClienteEntity {
     @SerializedName("PymntGroup")
     private String terminoPago_id;
 
+    @SerializedName("Invoices")
+    private List<InvoicesEntity> invoices;
+
+    @SerializedName("Addresses")
+    private List<AddressEntity> address;
+
+    public List<AddressEntity> getAddress() {
+        return address;
+    }
+
+    public void setAddress(List<AddressEntity> address) {
+        this.address = address;
+    }
+
+    public String getLinea_credito_usado() {
+        return linea_credito_usado;
+    }
+
+    public void setLinea_credito_usado(String linea_credito_usado) {
+        this.linea_credito_usado = linea_credito_usado;
+    }
+
+    public List<InvoicesEntity> getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(List<InvoicesEntity> invoices) {
+        this.invoices = invoices;
+    }
 
     public String getlinea_credito_usado() {
         return linea_credito_usado;

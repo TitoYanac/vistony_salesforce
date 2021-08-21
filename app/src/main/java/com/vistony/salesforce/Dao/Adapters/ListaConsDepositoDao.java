@@ -2,7 +2,7 @@ package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
 
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
@@ -21,7 +21,7 @@ public class ListaConsDepositoDao {
     public HashMap<String, ListaConsDepositoEntity> leads = new HashMap<>();
     public ClienteDetalleView clienteDetalleView;
     public DocumentoDeudaSQLiteEntity documentoDeudaSQLiteEntity;
-    public ClienteSQliteDAO clienteSQliteDAO;
+    public ClienteSQlite clienteSQlite;
     ArrayList<ClienteSQLiteEntity> listaclienteSQLiteEntity;
 
     public static ListaConsDepositoDao getInstance() {
@@ -50,13 +50,13 @@ public class ListaConsDepositoDao {
         //clienteDetalleView =  new ClienteDetalleView();
         Lista.size();
         listaclienteSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
-        clienteSQliteDAO = new ClienteSQliteDAO(context);
+        clienteSQlite = new ClienteSQlite(context);
         try {
             for( int i=0;i<Lista.size();i++)
             {
                 String nombrecliente="",cliente_id="";
                 cliente_id=Lista.get(i).getCliente_id();
-                listaclienteSQLiteEntity=clienteSQliteDAO.ObtenerDatosCliente(cliente_id, SesionEntity.compania_id);
+                listaclienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(cliente_id, SesionEntity.compania_id);
 
 
                 for(int g=0;g<listaclienteSQLiteEntity.size();g++)

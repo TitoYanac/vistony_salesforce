@@ -2,11 +2,10 @@ package com.vistony.salesforce.Dao.Retrofit;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Utilitario;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 
 import java.util.HashMap;
 
@@ -52,8 +51,7 @@ public class VisitaWS {
         params.put("Longitude", Longitud);
 
         if(Utilitario.validationNotNull(params)){
-            //https://graph.vistony.pe/RegistroVisita
-            Call call = api.getVisita("http://169.47.196.209/v1.0/api/RegistroVisita",params);
+            Call call = api.getVisita(params);
             try{
                 Response response= call.execute();
                 if(response.isSuccessful()) {

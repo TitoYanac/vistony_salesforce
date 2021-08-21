@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Funcionalidades.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.View.MenuView;
@@ -14,16 +14,17 @@ import com.vistony.salesforce.View.MenuView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-public class ClienteSQliteDAO
+public class ClienteSQlite
 {
     private MenuView menuView;
     SQLiteController sqLiteController;
     SQLiteDatabase bd;
     ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity;
     ArrayList<ListaClienteCabeceraEntity> arraylistaClienteSQLiteEntity;
-    public ClienteSQliteDAO(Context context)
+    public ClienteSQlite(Context context)
     {
         sqLiteController = new SQLiteController(context);
     }
@@ -60,12 +61,8 @@ public class ClienteSQliteDAO
             String categoria,
             String linea_credito,
             String linea_credito_usado,
-            String terminopago_id
+            String terminopago_id){
 
-    )
-    {
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-       // SQLiteDatabase bd = admin.getWritableDatabase();
         abrir();
         ContentValues registro = new ContentValues();
         registro.put("cliente_id",cliente_id);
@@ -88,6 +85,7 @@ public class ClienteSQliteDAO
         registro.put("linea_credito",linea_credito);
         registro.put("linea_credito_usado",linea_credito_usado);
         registro.put("terminopago_id",terminopago_id);
+
         bd.insert("cliente",null,registro);
         bd.close();
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
@@ -199,15 +197,10 @@ public class ClienteSQliteDAO
         return listaClienteSQLiteEntity;
     }
 
-    public int LimpiarTablaCliente ()
-    {
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
+    public int LimpiarTablaCliente (){
         abrir();
-        // bd.insert("documentodeuda",null,);
-        bd.execSQL("delete from cliente");
+        bd.execSQL("DELETE FROM cliente");
         bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return 1;
     }
 

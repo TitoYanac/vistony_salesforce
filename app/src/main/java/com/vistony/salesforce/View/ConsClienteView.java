@@ -18,7 +18,7 @@ import android.widget.SearchView;
 
 import com.vistony.salesforce.Controller.Adapters.ListaConsClienteCabeceraAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaConsClienteCabeceraDao;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -156,8 +156,8 @@ public class ConsClienteView extends Fragment implements SearchView.OnQueryTextL
         protected Object doInBackground(String... arg0) {
             ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntities=new ArrayList<>();
             try {
-                ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
-                listaClienteCabeceraEntities=clienteSQliteDAO.ObtenerClientes();
+                ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
+                listaClienteCabeceraEntities= clienteSQlite.ObtenerClientes();
 
             } catch (Exception e) {
                 // TODO: handle exception

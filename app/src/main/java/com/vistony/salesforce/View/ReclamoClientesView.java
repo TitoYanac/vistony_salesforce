@@ -84,12 +84,11 @@ public class ReclamoClientesView extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
 
         // Inflate the layout for this fragment
-        v = inflater.inflate(R.layout.fragment_sug_cliente_view,container,false);
+        v = inflater.inflate(R.layout.fragment_reclamo_cliente_view,container,false);
         getActivity().setTitle("Reclamos de Clientes");
 
         progDailog = ProgressDialog.show(getActivity(), "Loading", "Please wait...", true);

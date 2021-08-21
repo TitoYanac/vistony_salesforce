@@ -24,10 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricoOrdenVentaAdapter;
-import com.vistony.salesforce.Controller.Funcionalidades.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoOrdenVentaDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoOrdenVentaWS;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQliteDAO;
+import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLIte.OrdenVentaCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
@@ -276,9 +276,9 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                 //Log.e("REOS","listaOrdenVentaSQLite"+listaOrdenVentaSQLite.size());
                                 if (listadepuracion2.get(k).equals(listaOrdenVentaSQLite.get(l).getOrdenventa_id())) {
                                     String nombrecliente="";
-                                    ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
+                                    ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
                                     ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity=new ArrayList<>();
-                                    listaClienteSQLiteEntity=clienteSQliteDAO.ObtenerDatosCliente(listaOrdenVentaSQLite.get(l).getCliente_id(),SesionEntity.compania_id);
+                                    listaClienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(listaOrdenVentaSQLite.get(l).getCliente_id(),SesionEntity.compania_id);
                                     for(int w=0;w<listaClienteSQLiteEntity.size();w++)
                                     {
                                         nombrecliente=listaClienteSQLiteEntity.get(w).getNombrecliente();
