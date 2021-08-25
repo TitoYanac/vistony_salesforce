@@ -21,7 +21,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteCabeceraDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.ListenerBackPress;

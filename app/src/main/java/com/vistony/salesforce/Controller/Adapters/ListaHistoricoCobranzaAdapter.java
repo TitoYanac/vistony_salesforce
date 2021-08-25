@@ -18,8 +18,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;

@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Adapters.ListaTerminoPagoAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaTerminoPagoDao;
-import com.vistony.salesforce.Dao.SQLIte.TerminoPagoSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;

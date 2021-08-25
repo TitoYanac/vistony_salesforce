@@ -66,7 +66,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:ems="10"
-                        android:hint="Razón Social"
+                        android:hint="@string/razon_social"
                         android:inputType="textPersonName"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -85,7 +85,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:ems="10"
-                        android:hint="Ruc"
+                        android:hint="@string/ruc"
                         android:inputType="textPersonName"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -104,7 +104,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:ems="10"
-                        android:hint="Nombre Comercial"
+                        android:hint="@string/nombre_comercial"
                         android:inputType="textPersonName"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -123,7 +123,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:ems="10"
-                        android:hint="Número de telefono"
+                        android:hint="@string/numero_telefono"
                         android:inputType="textPhonetic"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -142,7 +142,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:ems="10"
-                        android:hint="Número de celular"
+                        android:hint="@string/numero_celular"
                         android:inputType="textPhonetic"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -162,7 +162,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:ems="10"
-                        android:hint="Persona de Contacto"
+                        android:hint="@string/persona_contacto"
                         android:inputType="textPersonName"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -181,7 +181,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:ems="10"
-                        android:hint="Correo Electronico"
+                        android:hint="@string/email"
                         android:inputType="textEmailAddress"
                         android:text="" />
 
@@ -201,7 +201,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:ems="10"
-                        android:hint="Pagina Web"
+                        android:hint="@string/web"
                         android:inputType="textWebEditText"
                         android:text="" />
 
@@ -221,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:enabled="false"
-                        android:hint="Coordinates..." />
+                        android:hint="@string/coordenadas" />
 
                     <Button
                         android:id="@+id/buttonSendGPS"
@@ -245,7 +245,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:ems="10"
-                        android:hint="Comentario"
+                        android:hint="@string/comentario"
                         android:inputType="textMultiLine"
                         android:maxLines="3"
                         android:text="" />
@@ -264,19 +264,6 @@
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
-        <!--
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="383dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="10dp"
-            android:paddingRight="10dp"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="275dp" />
-        -->
     </androidx.cardview.widget.CardView>
 
     <com.omega_r.libs.OmegaCenterIconButton
@@ -289,8 +276,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/custom_border_button_red"
-        android:paddingRight="40dp"
-        android:text="Enviar Lead"
+        android:text="@string/enviar_lead"
         android:textColor="@color/white"
         android:textStyle="bold" />
 

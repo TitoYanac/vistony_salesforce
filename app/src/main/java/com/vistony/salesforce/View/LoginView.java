@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -40,26 +39,26 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Controller.Utilitario.UpdateApp;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
-import com.vistony.salesforce.Dao.Retrofit.LoginViewModel;
 import com.vistony.salesforce.Dao.Retrofit.VersionViewModel;
-import com.vistony.salesforce.Dao.SQLIte.OrdenVentaCabeceraSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaCabeceraSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
+import com.vistony.salesforce.Entity.LoginEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
-import com.vistony.salesforce.Entity.LoginEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
-//import org.apache.commons.net.io.ToNetASCIIInputStream;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,8 +67,7 @@ import java.util.Map;
 
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
-//import static android.Manifest.permission.READ_PHONE_STATE;
-
+import com.vistony.salesforce.Dao.Retrofit.LoginViewModel;
 
 public class LoginView extends AppCompatActivity{
     public Button btnlogin;
@@ -87,7 +85,7 @@ public class LoginView extends AppCompatActivity{
     private ImageView imv_compania_login;
     private String result;
     private ArrayList<UsuarioSQLiteEntity> listaUsuariosqliteEntity;
-    private UsuarioSQLiteDao usuarioSQLiteDao;
+    private UsuarioSQLite usuarioSQLite;
     private final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
     private VideoView videoBG;
     private int temp = 0;
@@ -95,13 +93,13 @@ public class LoginView extends AppCompatActivity{
     private AlertDialog alert = null;
     private String version = "";
     private LoginViewModel loginViewModel;
-    static public SharedPreferences statusImei;
+    private SharedPreferences statusImei;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Locale locale = new Locale("en", "US");
+        Locale locale = new Locale("EN", "US");
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
@@ -127,7 +125,7 @@ public class LoginView extends AppCompatActivity{
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         imv_compania_login =findViewById(R.id.imv_compania_login);
         listaUsuariosqliteEntity = new ArrayList<UsuarioSQLiteEntity>();
-        usuarioSQLiteDao = new UsuarioSQLiteDao(this);
+        usuarioSQLite = new UsuarioSQLite(this);
         SesionEntity.loginSesion="0";
         SesionEntity.listaConsDeposito="0";
         ConfiguracionSQLiteDao configuracionSQLiteDao5=  new ConfiguracionSQLiteDao(getBaseContext());
@@ -166,12 +164,12 @@ public class LoginView extends AppCompatActivity{
         /********/
 
         ObtenerVideo();
-        bluetoothAdapter.enable();
+       // bluetoothAdapter.enable(); para india no
         turnGPSOn();
 
 
-        String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),Settings.Secure.ANDROID_ID);
-        Toast.makeText(getApplicationContext(), android_id, Toast.LENGTH_SHORT).show();
+        //String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),Settings.Secure.ANDROID_ID);
+        //Toast.makeText(getApplicationContext(), android_id, Toast.LENGTH_SHORT).show();
 
         spnperfil.setOnItemSelectedListener(
             new AdapterView.OnItemSelectedListener() {
@@ -249,7 +247,8 @@ public class LoginView extends AppCompatActivity{
     }
 
     private void obtenerImei() {
-        Imei=statusImei.getString("imei", "");
+
+        Imei=statusImei.getString("imei", BuildConfig.IMEI_DEFAULT);
 
         if(Imei.equals("")){
             final Dialog dialog = new Dialog(LoginView.this);
@@ -312,20 +311,6 @@ public class LoginView extends AppCompatActivity{
 
         videoBG.setOnPreparedListener(mp -> mp.setLooping(true));
     }
-
-    private void AlertNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("El sistema GPS esta desactivado, ¿Desea activarlo?")
-                .setCancelable(false)
-                .setPositiveButton("Si", new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                }).setNegativeButton("No", (dialog, id) -> dialog.cancel());
-        alert = builder.create();
-        alert.show();
-    }
-
 
     private void verifyPermission() {
 
@@ -425,27 +410,18 @@ public class LoginView extends AppCompatActivity{
             //verificamos que el usuario elegido para la sesion tenga codigo de compania
 
             if(!userUnlinked){
-                new VersionViewModel().getVs(SesionEntity.imei,version).observe(this, data -> {
+                new VersionViewModel().getVs(SesionEntity.imei,version,getApplicationContext()).observe(this, data -> {
                     if(data.getClass().getName().equals("java.lang.String")){
                         if(data.toString().length()>6){
                             Toast.makeText(getApplicationContext(), data.toString(), Toast.LENGTH_LONG).show();
+                            readUserAndLogin(intent);
                         }else{
                             btnlogin.setText("Validando Recibos...");
                             ObtenerPendientesEnvioWS();
                             new UpdateApp(btnlogin,data.toString(),getApplicationContext());
                         }
                     }else if(data.getClass().getName().equals("java.lang.Boolean")){
-                        Map<String, String> vendedor = new HashMap<>();
-                        vendedor.put("Imei", SesionEntity.imei);
-                        vendedor.put("Compañia",SesionEntity.compania_id);
-                        vendedor.put("Fuerza de Venta", SesionEntity.fuerzatrabajo_id);
-
-                        User user = new User();
-                        user.setOthers(vendedor);
-                        Sentry.setUser(user);
-                        startActivity(intent);
-
-                        finish();
+                        readUserAndLogin(intent);
                     }
                 });
             }else{
@@ -461,6 +437,20 @@ public class LoginView extends AppCompatActivity{
                 Toast.makeText(context, "Es necesario conectarse a internet para actualizar esta version de la App", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void readUserAndLogin(Intent intent){
+        Map<String, String> vendedor = new HashMap<>();
+        vendedor.put("Imei", SesionEntity.imei);
+        vendedor.put("Compañia",SesionEntity.compania_id);
+        vendedor.put("Fuerza de Venta", SesionEntity.fuerzatrabajo_id);
+
+        User user = new User();
+        user.setOthers(vendedor);
+        Sentry.setUser(user);
+        startActivity(intent);
+
+        finish();
     }
 
     @Override

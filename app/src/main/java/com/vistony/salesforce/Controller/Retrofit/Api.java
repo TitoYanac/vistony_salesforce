@@ -45,8 +45,8 @@ import retrofit2.http.Url;
 
 public interface Api {
 
-    @GET("/user")
-    Call<LoginEntityResponse> getUsers(@Query("imei") String imei);
+    @GET //("/user")
+    Call<LoginEntityResponse> getUsers(@Url String url,@Query("imei") String imei);
 
     @GET("/version")
     Call<VersionEntity> getVs(@Query("imei") String imei,@Query("app") String app);
@@ -60,8 +60,8 @@ public interface Api {
     //@FormUrlEncoded
     //@Multipart
     //@POST //, @Part HashMap<String, String> params @Body
-    @POST("/customers")
-    Call<Void> sendLead(@Body RequestBody params);
+    @POST //("/customers")
+    Call<Void> sendLead(@Url String url,@Body RequestBody params);
 
 
     @GET("/agencies")

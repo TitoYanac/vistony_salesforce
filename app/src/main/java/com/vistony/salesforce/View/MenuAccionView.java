@@ -34,7 +34,7 @@ import android.widget.Toast;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
 import com.vistony.salesforce.Controller.Adapters.VisitaDialogController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;

@@ -26,7 +26,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
-import com.vistony.salesforce.Dao.SQLIte.PromocionCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;

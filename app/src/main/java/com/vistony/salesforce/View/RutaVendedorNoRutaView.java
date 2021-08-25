@@ -22,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteCabeceraDao;
-import com.vistony.salesforce.Dao.SQLIte.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;

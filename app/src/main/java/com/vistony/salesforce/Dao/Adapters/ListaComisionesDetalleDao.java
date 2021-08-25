@@ -2,7 +2,7 @@ package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
 
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Entity.Adapters.ListaComisionesDetalleEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ComisionesSQLiteEntity;

@@ -30,9 +30,9 @@ import androidx.fragment.app.Fragment;
 
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricoCobranzaAdapter;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoCobranzaDao;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;

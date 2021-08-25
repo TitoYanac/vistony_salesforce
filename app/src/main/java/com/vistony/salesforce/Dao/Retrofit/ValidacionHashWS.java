@@ -4,13 +4,13 @@ import android.content.Context;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.LoginEntity;
 
 import java.util.ArrayList;
 
 public class ValidacionHashWS {
-    private UsuarioSQLiteDao usuarioSQLiteDao;
+    private UsuarioSQLite usuarioSQLite;
     private ArrayList<String> perfiles;
     private Context context;
     ArrayList<LoginEntity> listaLoginEntity=new ArrayList<>();

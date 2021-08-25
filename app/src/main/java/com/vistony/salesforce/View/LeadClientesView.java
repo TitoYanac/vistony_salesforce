@@ -12,6 +12,8 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -20,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -69,6 +72,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import io.sentry.Sentry;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -97,9 +101,9 @@ public class LeadClientesView extends Fragment {
     private Button buttonSendGPS;
     private String direccion = "Sin dirección", referencia = "Sin referencias";
     final String message = "Este campo no puede ir vacio";
-    private GoogleMap googleMap = null;
+    private boolean status = true;
+    private GoogleMap myGoogleMap;
     private Dialog dialog;
-    private boolean status=true;
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String tag, Object dato);
@@ -118,6 +122,8 @@ public class LeadClientesView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle(getResources().getString(R.string.lead_cliente));
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+        dialog = new Dialog(getActivity());
 
         v = inflater.inflate(R.layout.fragment_agregar_cliente_view, container, false);
 
@@ -141,7 +147,6 @@ public class LeadClientesView extends Fragment {
         imageViewPhoto.setBackgroundResource(R.drawable.portail);
 
         leadClienteViewModel = new ViewModelProvider(this).get(LeadClienteViewModel.class);
-        dialog = new Dialog(getActivity());
 
         floatingButtonTakePhoto.setOnClickListener(data -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -163,9 +168,7 @@ public class LeadClientesView extends Fragment {
         });
 
         buttonSendGPS.setOnClickListener(e -> {
-
-
-            displayDialog();
+            displayDialogMap();
 
             MapsInitializer.initialize(getActivity());
 
@@ -173,6 +176,7 @@ public class LeadClientesView extends Fragment {
             mapView.onResume();
 
         });
+
         return v;
     }
 
@@ -182,7 +186,7 @@ public class LeadClientesView extends Fragment {
         if (editTextCardName.getText().length() == 0) {
             editTextCardName.setError(message);
             acount = acount + 1;
-        } else if (editTextCardCode.getText().length() == 0) {
+        } /*else if (editTextCardCode.getText().length() == 0) {
             editTextCardCode.setError(message);
             acount = acount + 1;
         } else if (editTextCardNameComercial.getText().length() == 0) {
@@ -193,6 +197,9 @@ public class LeadClientesView extends Fragment {
             acount = acount + 1;
         } else if (editTextContactPerson.getText().length() == 0) {
             editTextContactPerson.setError(message);
+            acount = acount + 1;
+        }*/ else if (editTextCoordenates.getText().length() == 0) {
+            editTextCoordenates.setError(message);
             acount = acount + 1;
         }
 
@@ -227,12 +234,12 @@ public class LeadClientesView extends Fragment {
             parametros.put("Address", direccion);
             parametros.put("Reference", referencia);
             parametros.put("Category", spinner.getSelectedItem().toString());
-            parametros.put("Latitude", ""+latitud);
-            parametros.put("Longitude", ""+longitud);
-            parametros.put("DateTime", ""+formattedDate);
+            parametros.put("Latitude", "" + latitud);
+            parametros.put("Longitude", "" + longitud);
+            parametros.put("DateTime", "" + formattedDate);
             parametros.put("photo", encoded);
 
-            leadClienteViewModel.sendLead(parametros).observe(this.getActivity(), data -> {
+            leadClienteViewModel.sendLead(parametros, getContext()).observe(this.getActivity(), data -> {
                 if (data.equals("init")) {
                     btnUpload.setEnabled(false);
                     btnUpload.setClickable(false);
@@ -243,7 +250,9 @@ public class LeadClientesView extends Fragment {
                     btnUpload.setClickable(true);
                     btnUpload.setText("Enviar Lead");
                     btnUpload.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.custom_border_button_red));
-                    Toast.makeText(getActivity(), "Lead enviado...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Lead enviado", Toast.LENGTH_SHORT).show();
+
+                    clearEditText();
                 } else {
                     btnUpload.setEnabled(true);
                     btnUpload.setClickable(true);
@@ -253,79 +262,159 @@ public class LeadClientesView extends Fragment {
                 }
             });
         }
+
+        leadClienteViewModel.sendLeadNotSend(getContext()).observe(this.getActivity(), data -> {
+            Log.e("JEPICAMEE", "=>" + data);
+        });
     }
 
-    private void displayDialog() {
+    private void clearEditText() {
+        editTextCardCode.setText("");
+        editTextCardName.setText("");
+        editTextCardNameComercial.setText("");
+        editTextPhone.setText("");
+        editTextCellPhone.setText("");
+        editTextContactPerson.setText("");
+        editTextEmail.setText("");
+        editTextWeb.setText("");
+        editTextCoordenates.setText("");
+        editTextComentary.setText("");
+    }
+
+    private void displayDialogMap() {
         dialog.setContentView(R.layout.layout_mapa_dialog);
 
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
-
-        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         final EditText editTextAddress = dialog.findViewById(R.id.editTextAddressDialog);
         final EditText editTextAddressReference = dialog.findViewById(R.id.editTextAddressReferenceDialog);
 
+        editTextAddress.setText((direccion.equals("Sin dirección") ? "" : direccion));
+        editTextAddressReference.setText((referencia.equals("Sin referencias") ? "" : referencia));
+
         ImageView image = dialog.findViewById(R.id.image);
         image.setImageResource(R.mipmap.logo_circulo);
+        image.setBackground(new ColorDrawable(Color.TRANSPARENT));
 
         final Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
         final Button dialogButtonExit = dialog.findViewById(R.id.dialogButtonCancel);
         mapView = dialog.findViewById(R.id.mapView);
 
-        ////////////////////////////////////////////////////////////////////////////////////////////
+        dialogButton.setText("Add");
+        dialogButtonExit.setText("Cancel");
 
+        ////////////////////////////////////////////////////////////////////////////////////////////
         if (mapView != null) {
 
-            mapView.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(final GoogleMap googleMap) {
-                    ////////////////////////////////////////////////////////////////////////////////////
-                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
+            LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
-                    googleMap.setMyLocationEnabled(true);
-                    googleMap.getUiSettings().setZoomControlsEnabled(true);
+            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                mapView.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(final GoogleMap googleMap) {
+
+                        myGoogleMap=googleMap;
+
+                        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+
+                            myGoogleMap.setMyLocationEnabled(true);
+                            myGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+                                    new LocationListener() {
+                                        @Override
+                                        public void onLocationChanged(Location location) {
+                                            Toast.makeText(getActivity(), "onLocationChanged", Toast.LENGTH_SHORT).show();
+
+                                            latitud = location.getLatitude();
+                                            longitud = location.getLongitude();
+
+                                            LatLng latLng = new LatLng(latitud, longitud);
+                                            myGoogleMap.clear();
+                                            myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Potential client").draggable(true));
+
+                                            editTextCoordenates.setText(latitud + "," + longitud);
+
+                                            if (status) {
+                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+                                                status = false;
+                                            } else {
+                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onStatusChanged(String provider, int status, Bundle extras) {
+                                            Toast.makeText(getActivity(), "onStatusChanged", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                        @Override
+                                        public void onProviderEnabled(String provider) {
+                                            Toast.makeText(getActivity(), "onProviderEnabled", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                        @Override
+                                        public void onProviderDisabled(String provider) {
+                                            Toast.makeText(getActivity(), "onProviderDisabled", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                    }
+                            );
+
+
+
+                            dialog.show();
+
+                        }else{
+                            Toast.makeText( getActivity().getApplicationContext(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
+                            getActivity().requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION },100);
+                        }
+
+                        ////////////////////////////////////////////////////////////////////////////////////
+
+
+                /*
+                if(googleMap!=null) {
 
                     googleMap.setOnMyLocationChangeListener(location -> {
-                        if(location!=null && googleMap!=null){
-                            latitud=location.getLatitude();
-                            longitud=location.getLongitude();
+                        if (location != null) {
 
-                            LatLng latLng=new LatLng(latitud,longitud);
+                            latitud = location.getLatitude();
+                            longitud = location.getLongitude();
+
+                            LatLng latLng = new LatLng(latitud, longitud);
                             googleMap.clear();
                             googleMap.addMarker(new MarkerOptions().position(latLng).title("Potential client").draggable(true));
 
                             editTextCoordenates.setText(latitud + "," + longitud);
 
-                            if(status){
+                            if (status) {
                                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
-                                status=false;
-                            }else{
+                                status = false;
+                            } else {
                                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                             }
                         }
                     });
 
-
                     googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                         @Override
                         public void onMarkerDragStart(Marker location) {
                             // TODO Auto-generated method stub
-
-                            latitud = location.getPosition().latitude;
-                            longitud = location.getPosition().longitude;
-                            editTextCoordenates.setText(latitud + "," + longitud);
-
-                            Log.d("System out", "onMarkerDragStart..." + location.getPosition().latitude + "..." + location.getPosition().longitude);
                         }
 
-                        @SuppressWarnings("unchecked")
                         @Override
                         public void onMarkerDragEnd(Marker location) {
-                            Log.d("System out", "onMarkerDragEnd..." + location.getPosition().latitude + "..." + location.getPosition().longitude);
-
                             latitud = location.getPosition().latitude;
                             longitud = location.getPosition().longitude;
                             editTextCoordenates.setText(latitud + "," + longitud);
@@ -336,27 +425,27 @@ public class LeadClientesView extends Fragment {
                         @Override
                         public void onMarkerDrag(Marker arg0) {
                             // TODO Auto-generated method stub
-                            Log.i("System out", "onMarkerDrag...");
                         }
                     });
 
-
+                    googleMap.setMyLocationEnabled(true);
+                    googleMap.getUiSettings().setZoomControlsEnabled(true);
                 }
-                ////////////////////////////////////////////////////////////////////////////////////
-            });
+                */
+                    }
+                });
 
+
+            } else {
+                Toast.makeText( getActivity(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
+                getActivity().requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION },100);
+            }
 
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
-        dialogButton.setText("Add");
-        dialogButtonExit.setText("Cancel");
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        image.setBackground(new ColorDrawable(Color.TRANSPARENT));
-
-        dialog.show();
 
         dialogButtonExit.setOnClickListener(v -> {
+           // mapView=null;
             dialog.dismiss();
         });
 
@@ -365,18 +454,11 @@ public class LeadClientesView extends Fragment {
             direccion=editTextAddress.getText().toString();
             referencia=editTextAddressReference.getText().toString();
 
-            if(direccion.length()>0){
-                if(referencia.length()>0){
-                    dialog.dismiss();
-                }else{
-                    editTextAddressReference.setError(message);
-                }
-            }else{
-                editTextAddress.setError(message);
-            }
+//            mapView=null;
+            dialog.dismiss();
+
         });
     }
-
 
     @Override
     public void onResume() {

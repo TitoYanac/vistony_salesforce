@@ -15,7 +15,7 @@ import android.widget.SearchView;
 
 import com.vistony.salesforce.Controller.Adapters.ListaStockAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaStockDao;
-import com.vistony.salesforce.Dao.SQLIte.StockSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.StockSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.StockSQLiteEntity;
 import com.vistony.salesforce.R;
 

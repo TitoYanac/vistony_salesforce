@@ -5,13 +5,10 @@ import android.util.Log;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLIte.DireccionSQLite;
+import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaDireccionClienteEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.AddressEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DireccionClienteEntityResponse;
-import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.DireccionClienteSQLiteEntity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -31,7 +31,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 import com.vistony.salesforce.Controller.Adapters.ListaConsDepositoAdapter;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaConsDepositoDao;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaConsDepositoEntity;

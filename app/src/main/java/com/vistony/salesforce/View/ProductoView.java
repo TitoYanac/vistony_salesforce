@@ -17,7 +17,7 @@ import android.widget.SearchView;
 
 import com.vistony.salesforce.Controller.Adapters.ListaProductoAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaProductoDao;
-import com.vistony.salesforce.Dao.SQLIte.ListaPrecioDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;

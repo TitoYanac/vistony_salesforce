@@ -27,8 +27,8 @@ import com.vistony.salesforce.Controller.Adapters.ListaHistoricoOrdenVentaAdapte
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoOrdenVentaDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoOrdenVentaWS;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLIte.OrdenVentaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;

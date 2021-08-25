@@ -17,7 +17,7 @@ import android.widget.SearchView;
 
 import com.vistony.salesforce.Controller.Adapters.ListaAgenciaAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaAgenciaDao;
-import com.vistony.salesforce.Dao.SQLIte.AgenciaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;

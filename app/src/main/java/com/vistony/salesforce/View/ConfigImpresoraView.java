@@ -36,7 +36,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bxl.config.editor.BXLConfigLoader;
 import com.bxl.config.util.BXLBluetoothLE;
 import com.bxl.config.util.BXLNetwork;
-import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;

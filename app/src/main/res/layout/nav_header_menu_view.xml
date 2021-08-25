@@ -33,7 +33,7 @@
                 android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Codigo"
+                android:text="@string/head_codigo"
                 android:textColor="@color/white"/>
 
             <TextView
@@ -54,7 +54,7 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Usuario"
+                android:text="@string/head_usuario"
                 android:textColor="@color/white"/>
 
             <TextView
@@ -73,7 +73,8 @@
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Conexión   "
+                android:text="@string/head_conexion"
+                android:paddingRight="10dp"
                 android:textColor="@color/white" />
 
             <TextView
@@ -92,7 +93,7 @@
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Secuencia"
+                android:text="@string/head_secuencia"
                 android:textColor="@color/white" />
 
             <TextView

@@ -184,11 +184,12 @@
                     android:layout_marginRight="50dp"
                     android:background="@drawable/custom_border_button_grey"
                     android:drawableLeft="@drawable/ic_lock_white_24dp"
+                    android:enabled="false"
+                    android:onClick="btnLogin"
                     android:paddingRight="40dp"
                     android:text="@string/conectado"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:onClick="btnLogin"/>
+                    android:textStyle="bold" />
 
 
             </LinearLayout>

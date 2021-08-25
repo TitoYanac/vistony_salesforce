@@ -35,10 +35,10 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Dao.Retrofit.BackupWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaCabeceraSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.OrdenVentaCabeceraSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
@@ -80,7 +80,7 @@ public class ConfigSistemaView extends Fragment{
     private OnFragmentInteractionListener mListener;
 
     private File fileRuta;
- private UsuarioSQLiteDao usuarioSQLiteDao;
+ private UsuarioSQLite usuarioSQLite;
     public ConfigSistemaView() {
         // Required empty public constructor
     }
@@ -117,7 +117,7 @@ public class ConfigSistemaView extends Fragment{
 
         v= inflater.inflate(R.layout.fragment_config_sistema_view, container, false);
         clearTemp=v.findViewById(R.id.clearTemp);
-        usuarioSQLiteDao=new UsuarioSQLiteDao(getContext());
+        usuarioSQLite =new UsuarioSQLite(getContext());
 
         LinearLayout linear=v.findViewById(R.id.firstFile);
 
@@ -129,7 +129,7 @@ public class ConfigSistemaView extends Fragment{
 
         deletecajachica=v.findViewById(R.id.deletecajachica);
         ArrayList<UsuarioSQLiteEntity> listausuariosqliteentity = new ArrayList<>();
-        listausuariosqliteentity=usuarioSQLiteDao.ObtenerUsuarioBlockPay();
+        listausuariosqliteentity= usuarioSQLite.ObtenerUsuarioBlockPay();
 
         if(listausuariosqliteentity.size()>0){
             if(listausuariosqliteentity.get(0).getChkbloqueopago().equals("0")){
@@ -172,7 +172,7 @@ public class ConfigSistemaView extends Fragment{
             String validarblockpay="";
             int validar=0;
             ArrayList<UsuarioSQLiteEntity> listausuariosqliteentity1 = new ArrayList<>();
-            listausuariosqliteentity1 =usuarioSQLiteDao.ObtenerUsuarioBlockPay();
+            listausuariosqliteentity1 = usuarioSQLite.ObtenerUsuarioBlockPay();
 
             for(int i = 0; i< listausuariosqliteentity1.size(); i++)
             {
@@ -206,7 +206,7 @@ public class ConfigSistemaView extends Fragment{
             progress.show();
 
             BackupWS xd=new BackupWS();
-            xd.sendSqlite(SesionEntity.imei).observe(this, data -> {
+            xd.sendSqlite(SesionEntity.imei).observe(getActivity(), data -> {
                 progress.dismiss();
 
                 if(data.getClass().getName().equals("java.lang.String")){
@@ -231,9 +231,7 @@ public class ConfigSistemaView extends Fragment{
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
         textMsj.setText("Ud. No se encuentra Autorizado para Usar esta Opcion");
 
-
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
-
 
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);

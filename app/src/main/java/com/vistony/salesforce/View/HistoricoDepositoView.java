@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricoDepositoAdapter;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoWS;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoDepositoDao;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoDepositoEntity;

@@ -9,27 +9,77 @@ android {
             targetSdkVersion 28
             versionCode 1
             versionName "2.1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
-        ndk {
-            abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
-        }
-        //
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            multiDexEnabled true
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            }
     }
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable false
+        }
+        develop {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            debuggable true
         }
     }
+
+    flavorDimensions "country"
+    productFlavors{
+        india{
+            applicationIdSuffix ".india"
+            //applicationId  "com.vistony.salesforce.india"
+            buildConfigField('String' , 'IMEI_DEFAULT', '"355691112769630"')
+            minSdkVersion 23
+            targetSdkVersion 28
+            versionCode 1
+            versionName "0.0.1"
+        }
+        chile{
+            //applicationId  "com.vistony.salesforce.chile"
+            applicationIdSuffix ".chile"
+            buildConfigField('String' , 'IMEI_DEFAULT', '""')
+            //versionName "0.0.1"
+        }
+    }
+
+    variantFilter { variant ->
+        def names = variant.buildType.name
+        if (names!="debug" /*&& names.contains("demo")*/) {
+            setIgnore(true)
+        }
+    }
+
+    sourceSets {
+        india {
+           // manifest.srcFile 'AndroidManifest.xml'
+            java{
+               srcDirs('src/india/java/')
+            }
+           // res.srcDirs = ['src/main/res']
+            //assets.srcDirs = ['src/main/assets']
+        }
+        chile {
+            //manifest.srcFile 'src/pro/AndroidManifestPro.xml'
+            java{
+                srcDirs('src/chile/java/')
+
+                //srcDirs('src/chile/java/com/vistony/salesforce/chile/')
+            }
+        }
+    }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
 }
-
-
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -41,7 +91,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -56,11 +106,7 @@ dependencies {
     //PDF Libreria
     implementation files('libs/android-viewbadger.jar')
     //Libreria que contiene Clase QR
-    //implementation ('com.journeyapps:zxing-android-embedded:3.2.0@aar')
-    //{ transitive = false }
     implementation('com.journeyapps:zxing-android-embedded:3.6.0')
-    //{ transitive = false }
-    // implementation 'com.google.zxing:core:3.2.1'
 
     implementation files('libs/jpos118-controls.jar')
     implementation files('libs/bixolon_printer_v130.jar')
@@ -70,7 +116,8 @@ dependencies {
 
     //Mapa de Google
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
-    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation "com.google.android.gms:play-services-location:18.0.0"
+    implementation 'com.google.maps.android:android-maps-utils:0.4'
 
     implementation 'com.github.Omega-R:OmegaCenterIconButton:0.0.3@aar'
     implementation "androidx.drawerlayout:drawerlayout:1.1.1"
@@ -87,13 +134,8 @@ dependencies {
 
     implementation  'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-    implementation 'io.sentry:sentry-android:4.3.0'
+    implementation 'io.sentry:sentry-android:5.1.1'
     implementation 'dnsjava:dnsjava:2.1.7'
-
-    implementation 'com.google.android.gms:play-services-maps:17.0.1'
-    implementation "com.google.android.gms:play-services-location:18.0.0"
-    implementation 'com.google.maps.android:android-maps-utils:0.4'
-
 
 
 }

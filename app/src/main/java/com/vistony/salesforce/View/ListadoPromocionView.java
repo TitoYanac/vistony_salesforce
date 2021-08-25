@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import com.vistony.salesforce.Controller.Adapters.ListaListadoPromocionAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaListadoPromocionDao;
-import com.vistony.salesforce.Dao.SQLIte.ListaPromocionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaListadoPromocionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;

@@ -56,13 +56,13 @@ import com.vistony.salesforce.Controller.Adapters.ListaCobranzaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaCabeceraWS;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaCabeceraSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.DocumentoDeudaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DocumentoDeudaSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaDetalleDao;
-import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
@@ -136,7 +136,7 @@ public class CobranzaDetalleView extends Fragment {
     ConfiguracionSQLiteDao configuracionSQLiteDao;
     ArrayList<ConfiguracionSQLEntity> listaConfiguracionSQLEntity;
     String vinculaimpresora;
-    UsuarioSQLiteDao usuarioSQLiteDao;
+    UsuarioSQLite usuarioSQLite;
     String Conexion="";
     ArrayList<UsuarioSQLiteEntity> listaUsuarioSQLiteEntity;
     ArrayList<ListaHistoricoCobranzaEntity> Listado = new ArrayList<>();
@@ -240,7 +240,7 @@ public class CobranzaDetalleView extends Fragment {
         tieneFlash = getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
         listaConfiguracionSQLEntity =  new ArrayList<>();
-        usuarioSQLiteDao = new UsuarioSQLiteDao(getContext());
+        usuarioSQLite = new UsuarioSQLite(getContext());
         if (getArguments() != null) {
 
             Listado = (ArrayList<ListaHistoricoCobranzaEntity>)getArguments().getSerializable(ARG_PARAM1);

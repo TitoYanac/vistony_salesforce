@@ -33,8 +33,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.vistony.salesforce.Dao.SQLIte.CobranzaCabeceraSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoDepositoEntity;
 import com.vistony.salesforce.R;

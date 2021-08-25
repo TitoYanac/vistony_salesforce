@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Dao.SQLIte.DocumentoDeudaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DocumentoDeudaSQLiteDao;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DocumentoDeudaEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;

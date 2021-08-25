@@ -52,9 +52,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.navigation.NavigationView;
 import com.vistony.salesforce.Controller.BixolonPrinterController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
-import com.vistony.salesforce.Dao.SQLIte.CobranzaDetalleSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.ConfiguracionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
@@ -169,7 +169,7 @@ public class MenuView extends AppCompatActivity
     public static  String indicador="0";
     String tag ="Lifecycle";
     CountDownTimer temporizador=null;
-    UsuarioSQLiteDao usuarioSQLiteDao;
+    UsuarioSQLite usuarioSQLite;
     String Conexion="";
     ArrayList<UsuarioSQLiteEntity> listaUsuarioSQLiteEntity;
     private final int MY_PERMISSIONS_REQUEST_CAMERA=1;
@@ -225,9 +225,9 @@ public class MenuView extends AppCompatActivity
         configuracionSQLiteDao =  new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         context=this;
-        usuarioSQLiteDao= new UsuarioSQLiteDao(this);
+        usuarioSQLite = new UsuarioSQLite(this);
         listaUsuarioSQLiteEntity = new ArrayList<>();
-        listaUsuarioSQLiteEntity=usuarioSQLiteDao.ObtenerUsuarioSesion();
+        listaUsuarioSQLiteEntity= usuarioSQLite.ObtenerUsuarioSesion();
 
         for(int g=0;g<listaUsuarioSQLiteEntity.size();g++)
         {
@@ -307,7 +307,7 @@ public class MenuView extends AppCompatActivity
             onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
 
         }
-        else if(SesionEntity.perfil_id.equals("Vendedor")||SesionEntity.perfil_id.equals("VENDEDOR"))
+        else if(SesionEntity.perfil_id.equals("Vendedor")||SesionEntity.perfil_id.equals("VENDEDOR") || SesionEntity.perfil_id.equals("SALES PERSON"))
         {
             onNavigationItemSelected(navigationView.getMenu().getItem(0).setVisible(false));
             onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
@@ -317,10 +317,16 @@ public class MenuView extends AppCompatActivity
         //onNavigationItemSelected(navigationView.getMenu().getItem(9).setChecked(true));
 
         //Envia a Parametros
+
+        /*
         String Fragment="ParametrosView";
         String accion="Todos";
+        */
+        String Fragment="MenuFormulariosView";
+        String accion="agregarcliente";
         String compuesto=Fragment+"-"+accion;
         onFragmentInteraction(compuesto,"");
+// ConfigSistemaView configuracion
     }
 
     private Fragment getCurrentFragment(){
@@ -545,135 +551,6 @@ public class MenuView extends AppCompatActivity
 
     }
 
-    /*
-    @Override
-    public void onBackPressed() {
-
-        Log.e("jpcm","se esta intentando retroceder "+ListenerBackPress.getCurrentFragment()+" "+ListenerBackPress.getTemporaIdentityFragment());
-
-        if(ListenerBackPress.getCurrentFragment()!=null){
-            switch (ListenerBackPress.getCurrentFragment()){
-                case "Webview":
-                    onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    break;
-                case "FormListClienteDetalleRutaVendedor":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("pagoDirecto")){
-                        onNavigationItemSelected(navigationView.getMenu().getItem(3).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("cliente")){
-                        onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
-
-                    }else{
-                        onNavigationItemSelected(navigationView.getMenu().getItem(2).setChecked(true));
-                    }
-
-                    break;
-                case "FormaAsociatyListCobranzaDeposito":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")){
-                        onNavigationItemSelected(navigationView.getMenu().getItem(5).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("HistoricoDepositoViewCobranzasDetails")){
-                        super.onBackPressed();
-                    }else{
-                        onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    }
-                    break;
-                case "FormCobranzaDetalleFromHistoryCobranza":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("HistoricoDepositoViewCobranzasDetails")){
-                        super.onBackPressed();
-                    }else{
-                        onNavigationItemSelected(navigationView.getMenu().getItem(5).setChecked(true));
-                    }
-                    break;
-                case "FormListaDeudaCliente":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("rutaVendedor")){
-                        onNavigationItemSelected(navigationView.getMenu().getItem(2).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("pagoDirecto")){
-                        onNavigationItemSelected(navigationView.getMenu().getItem(3).setChecked(true));
-                    }else{
-                        onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
-                    }
-
-                    break;
-                case "FormDetalleCobranzaCliente":
-                    Log.e("jpcm","se regreso al tab layout");
-                    super.onBackPressed();
-                    break;
-                case "ConfigSistemaView":
-                    Log.e("jpocm","Congfirua cide sistema");
-                    onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    break;
-                case "ConfigImpresoraView":
-                    contentFragment=new ConfigImpresoraView();
-                    Log.e("jpcm","ConfigImpresoraView IMPRESORA");
-                    onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    break;
-                case "RutaVendedorView":
-                    Log.e("jpcm","ruta vendedor");
-                    onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    break;
-                case "HistoricoDepositoView":
-                    Log.e("jpcm","historico deposito");
-                    //onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    super.onBackPressed();
-                    break;
-                case "HistoricoCobranzaView":
-                    Log.e("jpcm","historico cobrnaza");
-                    onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    break;
-                case "CLIENTE ASDASD":
-                    Log.e("jpcm","cliente  XDDD");
-                    onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    break;
-                case "CLIENTEDEUDA":
-                    Log.e("jpcm","cliente  deuda");
-                    onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    break;
-                case "CLIENTESINDEUDA":
-                    Log.e("jpcm","cliente  sin deuda");
-                    onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    break;
-                case "DepositoViewXd":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")){
-                        onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("redirectToDepositoItem1")){
-                        onNavigationItemSelected(navigationView.getMenu().getItem(1).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("temporaAddCorbaznaToListDeposito")){
-                        super.onBackPressed();
-                    }
-                    break;
-                case "PagoDirecto":
-                    Log.e("jpcm","pago directoooo");
-                    onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    break;      
-                case "CObranzaDetalleView":
-                    Log.e("jpcm","cobranza detalle view");
-                    break;
-                case "ConsultaCobranzaParaDepositarView":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")){
-                        onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("redirectToDepositoItem1")){
-                        super.onBackPressed();
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("temporaAddCorbaznaToListDeposito")){
-                        super.onBackPressed();
-                    }else{
-                        super.onBackPressed();
-                    }
-                    break;
-                case "FormParametrosView":
-                    onNavigationItemSelected(navigationView.getMenu().getItem(9).setChecked(true));
-                    break;
-                case "MenuAccionView":
-                    super.onBackPressed();
-                    break;
-                case "OrdenVentaCabeceraView":
-                    super.onBackPressed();
-                    break;
-                case "OrdenVentaDetalleView":
-                    super.onBackPressed();
-                    break;
-            }
-        }
-    }
-*/
     public static BixolonPrinterController getPrinterInstance()
     {
         return bxlPrinter;
@@ -733,7 +610,7 @@ public class MenuView extends AppCompatActivity
         Object object=null;
         String validarblockpay=null;
         int validar=0;
-        UsuarioSQLiteDao usuarioSQLiteDao=null;
+        UsuarioSQLite usuarioSQLite =null;
         ArrayList<UsuarioSQLiteEntity> listausuariosqliteentity=null;
 
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -1010,41 +887,34 @@ public class MenuView extends AppCompatActivity
         dialog.setContentView(R.layout.layout_alert_dialog);
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA!");
+        textTitle.setText(getResources().getString(R.string.dialog_advertencia));
 
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("Esta seguro de salir de la Aplicación?");
+        textMsj.setText(getResources().getString(R.string.dialog_text));
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
-
-        Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
 
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonExit = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-        // if button is clicked, close the custom dialog
-        dialogButton.setText("SALIR");
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                if (bluetoothAdapter.isEnabled()) {
-                    bluetoothAdapter.disable();
-                } else {
-                    bluetoothAdapter.enable();
-                }
 
-                System.exit(0);
+
+        dialogButton.setText(getResources().getString(R.string.dialog_btn_salir));
+        dialogButtonExit.setText(getResources().getString(R.string.dialog_btn_cancelar));
+
+        dialogButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            if (bluetoothAdapter.isEnabled()) {
+                bluetoothAdapter.disable();
+            } else {
+                bluetoothAdapter.enable();
             }
+
+            System.exit(0);
         });
 
-        dialogButtonExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        dialogButtonExit.setOnClickListener(v -> dialog.dismiss());
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1108,8 +978,6 @@ public class MenuView extends AppCompatActivity
 
        return  dialog;
     }
-
-
 
     @Override
     public void onFragmentInteraction(String Tag, Object Lista) {

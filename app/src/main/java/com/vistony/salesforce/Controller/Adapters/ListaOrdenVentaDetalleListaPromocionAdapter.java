@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 
-import com.vistony.salesforce.Dao.SQLIte.PromocionCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaAgenciaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleListaPromocionEntity;
 import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;

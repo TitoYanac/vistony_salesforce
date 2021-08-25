@@ -11,16 +11,16 @@ import com.vistony.salesforce.Dao.Retrofit.CobranzaDetalleWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaWS;
-import com.vistony.salesforce.Dao.SQLIte.AgenciaSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLIte.ListaPrecioDetalleSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.ListaPromocionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.OrdenVentaCabeceraSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.OrdenVentaDetallePromocionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.OrdenVentaDetalleSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.RutaVendedorSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
-import com.vistony.salesforce.Dao.SQLIte.VisitaSQLiteDAO;
+import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
+import com.vistony.salesforce.Dao.SQLite.VisitaSQLiteDAO;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
@@ -719,9 +719,9 @@ public class FormulasController {
         listaordenVentaCabeceraSQLiteEntity=ordenVentaCabeceraSQLiteDao.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
         listaordenVentaDetalleSQLiteEntity=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
         ClienteSQlite clienteSQlite =new ClienteSQlite(context);
-        UsuarioSQLiteDao usuarioSQLiteDao=new UsuarioSQLiteDao(context);
+        UsuarioSQLite usuarioSQLite =new UsuarioSQLite(context);
         ArrayList<UsuarioSQLiteEntity> listaUsuariosqliteentity=new ArrayList<>();
-        listaUsuariosqliteentity=usuarioSQLiteDao.ObtenerUsuario();
+        listaUsuariosqliteentity= usuarioSQLite.ObtenerUsuario();
         Gson gson=new Gson();
 
         for(int u=0;u<listaUsuariosqliteentity.size();u++)

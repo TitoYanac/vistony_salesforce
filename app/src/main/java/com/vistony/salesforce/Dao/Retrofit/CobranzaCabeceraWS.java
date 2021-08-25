@@ -1,12 +1,9 @@
 package com.vistony.salesforce.Dao.Retrofit;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Dao.SQLIte.UsuarioSQLiteDao;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 
 import java.util.HashMap;
 
