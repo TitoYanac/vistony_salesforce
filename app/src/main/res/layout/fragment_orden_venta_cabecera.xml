@@ -28,7 +28,7 @@
                     android:layout_weight="4"
                     android:enabled="true"
                     android:hint=""
-                    android:text="RUC"
+                    android:text="RUT"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </TableRow>
@@ -358,7 +358,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="SubTotal:    S/."
+                android:text="SubTotal:    $/."
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -388,7 +388,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Descuento: S/."
+                android:text="Descuento: $/."
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -419,7 +419,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="IGV:              S/."
+                android:text="IVA:              $/."
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -449,7 +449,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Total:           S/."
+                android:text="Total:           $/."
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 

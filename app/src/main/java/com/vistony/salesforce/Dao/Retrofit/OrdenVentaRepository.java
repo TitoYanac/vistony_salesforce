@@ -62,8 +62,12 @@ public class OrdenVentaRepository extends ViewModel {
                 if(data==null){
                     temp.setValue("No hay ordenes de venta pendientes de enviar");
                 }else{
-                    //Solo devolveremos uno, el envio masivo es trasnaprente
-                    temp.setValue("La orden de venta "+data.getSalesOrderEntity().get(0).getDocNum()+", fue registrada con éxito");
+                    if(data.getSalesOrderEntity().get(0).getDocNum()==null){
+                        temp.setValue("Ocurrio un error al enviar la orden de venta");
+                    }else{
+                        //Solo devolveremos uno, el envio masivo es trasnaprente
+                        temp.setValue("La orden de venta "+data.getSalesOrderEntity().get(0).getDocNum()+", fue registrada con éxito");
+                    }
                 }
             }
 

@@ -346,11 +346,7 @@ public class ClienteSQlite
                             " FROM cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
-                            "and a.cliente_id=b.cliente_id " +
-                            //"LEFT JOIN (Select * from rutavendedor where fecharuta='"+fecha+"') c ON "+
-                            //"a.compania_id=c.compania_id and "+
-                            //"a.cliente_id=c.cliente_id "+
-                            "where a.cliente_id not in (Select cliente_id from rutavendedor where fecharuta='"+fecha+"') "  +
+                            "and a.cliente_id=b.cliente_id where a.cliente_id not in (Select cliente_id from rutavendedor where fecharuta='"+fecha+"') "  +
                             "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id",null);
 
             while (fila.moveToNext())

@@ -22,11 +22,10 @@ public class StockWS {
         this.context=context;
     }
 
-    public ArrayList<StockSQLiteEntity> getStockWS(
-            String Imei
-    ){
+    public ArrayList<StockSQLiteEntity> getStockWS(String Imei){
         Api api = Config.getClient().create(Api.class);
 
+        //ACTUALMENTE ESTA TODO EN EL ENDPOINT DE PRICELIST PARA PERU SI EL STOCK ESTA MODELADO
         Call<StockEntityResponse> call = api.getStock("http://169.47.196.209/cl/api/pricelist",Imei);
         try
         {

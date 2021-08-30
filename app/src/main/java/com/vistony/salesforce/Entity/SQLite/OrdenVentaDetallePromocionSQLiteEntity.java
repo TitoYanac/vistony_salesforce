@@ -25,32 +25,6 @@ public class OrdenVentaDetallePromocionSQLiteEntity {
     public String montosubtotalcondescuento;
     public String chk_descuentocontado;
 
-    public OrdenVentaDetallePromocionSQLiteEntity(String compania_id, String ordenventa_id, String lineaordenventa_id, String producto_id, String umd, String cantidad, String preciounitario, String montosubtotal, String porcentajedescuento, String montodescuento, String montoimpuesto, String montototallinea, String lineareferencia, String impuesto_id, String producto, String acctCode, String almacen_id, String promocion_id, String gal_unitario, String gal_acumulado, String u_SYP_FECAT07, String montosubtotalcondescuento, String chk_descuentocontado) {
-        this.compania_id = compania_id;
-        this.ordenventa_id = ordenventa_id;
-        this.lineaordenventa_id = lineaordenventa_id;
-        this.producto_id = producto_id;
-        this.umd = umd;
-        this.cantidad = cantidad;
-        this.preciounitario = preciounitario;
-        this.montosubtotal = montosubtotal;
-        this.porcentajedescuento = porcentajedescuento;
-        this.montodescuento = montodescuento;
-        this.montoimpuesto = montoimpuesto;
-        this.montototallinea = montototallinea;
-        this.lineareferencia = lineareferencia;
-        this.impuesto_id = impuesto_id;
-        this.producto = producto;
-        AcctCode = acctCode;
-        this.almacen_id = almacen_id;
-        this.promocion_id = promocion_id;
-        this.gal_unitario = gal_unitario;
-        this.gal_acumulado = gal_acumulado;
-        U_SYP_FECAT07 = u_SYP_FECAT07;
-        this.montosubtotalcondescuento = montosubtotalcondescuento;
-        this.chk_descuentocontado = chk_descuentocontado;
-    }
-
     public OrdenVentaDetallePromocionSQLiteEntity() {
     }
 

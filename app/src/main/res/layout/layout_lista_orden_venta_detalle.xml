@@ -49,7 +49,7 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="25dp">
+            android:layout_marginTop="3dp">
 
             <TableRow
                 android:layout_width="wrap_content"
@@ -82,17 +82,17 @@
                     android:id="@+id/et_orden_detalle_cantidad"
                     android:layout_width="70dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/borde_editext_orden_venta_detalle"
+                    android:background="@drawable/borde_editext_ov_negro"
                     android:digits="0123456789"
                     android:ems="9"
                     android:hint="0"
                     android:imeOptions="actionSend"
                     android:inputType="number"
-                    android:maxLength="5"
+                    android:maxLength="4"
                     android:singleLine="true"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:textColor="@color/Rojo_Vistony"
+                    android:textColor="@color/Black"
                     android:textStyle="bold" />
 
 
@@ -105,7 +105,7 @@
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_galon_unitario"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Gal Unit:"
                     android:textAppearance="?attr/textAppearanceListItem" />
@@ -141,7 +141,7 @@
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_precio"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pre Unit:"
                     android:textAppearance="?attr/textAppearanceListItem" />
@@ -155,57 +155,28 @@
                     tools:text="Precio1" />
 
                 <TextView
-                    android:id="@+id/lbl_orden_detalle_porcentaje_descuento"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="Dcto Prom%:"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
-                    android:id="@+id/tv_orden_detalle_porcentaje_descuento"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textAlignment="center"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="100%" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/lbl_dcto_ctdo"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:text="Dcto Ctdo:"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <CheckBox
-                    android:id="@+id/chk_descuento_contado"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="30dp"
-                    android:layout_weight="4"
-                    android:enabled="false"
-                    android:textStyle="bold" />
-
-                <TextView
                     android:id="@+id/lbl_porcentaje_descuento_contado"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Dcto Ctdo %:"
+                    android:text="Desct %:"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
-                <TextView
-                    android:id="@+id/tv_porcentaje_descuento_contado"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                <EditText
+                    android:id="@+id/editDspPorcentaje"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/borde_editext_ov_negro"
+                    android:ems="9"
+                    android:hint="0"
+                    android:imeOptions="actionSend"
+                    android:inputType="numberDecimal"
+                    android:maxLength="4"
+                    android:singleLine="true"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold"
-                    tools:text="0" />
+                    android:textColor="@color/Black"
+                    android:textStyle="bold" />
+
             </TableRow>
 
             <TableRow
@@ -215,9 +186,9 @@
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_igv"
-                    android:layout_width="50dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IGV:"
+                    android:text="IVA:"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
@@ -227,6 +198,45 @@
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceListItem"
                     tools:text="IGV1" />
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_porcentaje_descuento"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Dcto Prom%:"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/tv_orden_detalle_porcentaje_descuento"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:visibility="invisible"
+                    tools:text="100%" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_eliminar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Borrar:"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imv_eliminar_orden_venta_detalle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
+                    app:srcCompat="@drawable/ic_delete_black_24dp" />
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_total"
@@ -250,45 +260,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <CheckBox
+                    android:id="@+id/chk_descuento_contado"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="4"
+                    android:textStyle="bold"
+                    android:visibility="invisible" />
+
                 <TextView
-                    android:id="@+id/lbl_orden_detalle_promocion_cabecera"
+                    android:id="@+id/tv_porcentaje_descuento_contado"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Promocion:"
-                    android:textAppearance="?attr/textAppearanceListItem" />
+                    android:layout_height="0dp"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    tools:text="0" />
 
                 <ImageView
                     android:id="@+id/imv_consultar_promocion_cabecera"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
                     app:srcCompat="@drawable/ic_baseline_card_giftcard_24" />
 
                 <TextView
-                    android:id="@+id/lbl_orden_detalle_eliminar"
+                    android:id="@+id/lbl_orden_detalle_promocion_cabecera"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:text="Borrar:"
+                    android:layout_height="0dp"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/imv_eliminar_orden_venta_detalle"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-
-                    app:srcCompat="@drawable/ic_delete_black_24dp" />
+                    android:visibility="invisible" />
             </TableRow>
         </TableLayout>
 
         <TextView
             android:id="@+id/lbl_orden_detalle_resumen_promocion"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
+            android:layout_height="0dp"
             android:text="Resumen Promocion"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="invisible" />
 
         <LinearLayout
             android:id="@+id/content"

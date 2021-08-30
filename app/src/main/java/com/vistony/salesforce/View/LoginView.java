@@ -96,7 +96,7 @@ public class LoginView extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Locale locale = new Locale("EN", "US");
+        Locale locale = new Locale("ES", "PE");
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;

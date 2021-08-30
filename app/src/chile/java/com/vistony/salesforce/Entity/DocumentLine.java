@@ -1,102 +1,17 @@
 package com.vistony.salesforce.Entity;
 
 public class DocumentLine {
-    public String ItemCode;
-    public String WarehouseCode;
-    public String Quantity;
-    public String Dscription;
-    //public String AcctCode;
-    public String COGSAccountCode;
-    public String Price;
-    public String DiscountPercent;
-    public String LineTotal;
-    public String TaxCode;
-    public String CostingCode;
-    public String CostingCode2;
-    public String CostingCode3;
-    public String AcctCode;
-    public String TaxOnly;
-    public String U_SYP_FECAT07;
-    public String U_VIS_PromID;
-    public String U_VIS_PromLineID;
-    public String U_VIST_CTAINGDCTO;
 
-    public DocumentLine(String itemCode, String warehouseCode, String quantity, String dscription, String COGSAccountCode, String price, String discountPercent, String lineTotal, String taxCode, String costingCode, String costingCode2, String costingCode3, String acctCode, String taxOnly, String u_SYP_FECAT07, String u_VIS_PromID, String u_VIS_PromLineID, String u_VIST_CTAINGDCTO) {
-        ItemCode = itemCode;
-        WarehouseCode = warehouseCode;
-        Quantity = quantity;
-        Dscription = dscription;
-        this.COGSAccountCode = COGSAccountCode;
-        Price = price;
-        DiscountPercent = discountPercent;
-        LineTotal = lineTotal;
-        TaxCode = taxCode;
-        CostingCode = costingCode;
-        CostingCode2 = costingCode2;
-        CostingCode3 = costingCode3;
-        AcctCode = acctCode;
-        TaxOnly = taxOnly;
-        U_SYP_FECAT07 = u_SYP_FECAT07;
-        U_VIS_PromID = u_VIS_PromID;
-        U_VIS_PromLineID = u_VIS_PromLineID;
-        U_VIST_CTAINGDCTO = u_VIST_CTAINGDCTO;
-    }
-
-    public String getDiscountPercent() {
-        return DiscountPercent;
-    }
-
-    public void setDiscountPercent(String discountPercent) {
-        DiscountPercent = discountPercent;
-    }
-
-    public String getAcctCode() {
-        return AcctCode;
-    }
-
-    public void setAcctCode(String acctCode) {
-        AcctCode = acctCode;
-    }
-
-    public String getTaxOnly() {
-        return TaxOnly;
-    }
-
-    public void setTaxOnly(String taxOnly) {
-        TaxOnly = taxOnly;
-    }
-
-    public String getU_SYP_FECAT07() {
-        return U_SYP_FECAT07;
-    }
-
-    public void setU_SYP_FECAT07(String u_SYP_FECAT07) {
-        U_SYP_FECAT07 = u_SYP_FECAT07;
-    }
-
-    public String getU_VIS_PromID() {
-        return U_VIS_PromID;
-    }
-
-    public void setU_VIS_PromID(String u_VIS_PromID) {
-        U_VIS_PromID = u_VIS_PromID;
-    }
-
-    public String getU_VIS_PromLineID() {
-        return U_VIS_PromLineID;
-    }
-
-    public void setU_VIS_PromLineID(String u_VIS_PromLineID) {
-        U_VIS_PromLineID = u_VIS_PromLineID;
-    }
-
-    public String getU_VIST_CTAINGDCTO() {
-        return U_VIST_CTAINGDCTO;
-    }
-
-    public void setU_VIST_CTAINGDCTO(String u_VIST_CTAINGDCTO) {
-        U_VIST_CTAINGDCTO = u_VIST_CTAINGDCTO;
-    }
+    private String CostingCode;
+    private String CostingCode2;
+    private String DiscountPercent;
+    private String ItemCode;
+    private String Dscription;
+    private String Price;
+    private String Quantity;
+    private String TaxCode;
+    private String TaxOnly;
+    private String WarehouseCode;
 
     public String getCostingCode() {
         return CostingCode;
@@ -114,12 +29,12 @@ public class DocumentLine {
         CostingCode2 = costingCode2;
     }
 
-    public String getCostingCode3() {
-        return CostingCode3;
+    public String getDiscountPercent() {
+        return DiscountPercent;
     }
 
-    public void setCostingCode3(String costingCode3) {
-        CostingCode3 = costingCode3;
+    public void setDiscountPercent(String discountPercent) {
+        DiscountPercent = discountPercent;
     }
 
     public String getItemCode() {
@@ -130,36 +45,12 @@ public class DocumentLine {
         ItemCode = itemCode;
     }
 
-    public String getWarehouseCode() {
-        return WarehouseCode;
-    }
-
-    public void setWarehouseCode(String warehouseCode) {
-        WarehouseCode = warehouseCode;
-    }
-
-    public String getQuantity() {
-        return Quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        Quantity = quantity;
-    }
-
     public String getDscription() {
         return Dscription;
     }
 
     public void setDscription(String dscription) {
         Dscription = dscription;
-    }
-
-    public String getCOGSAccountCode() {
-        return COGSAccountCode;
-    }
-
-    public void setCOGSAccountCode(String COGSAccountCode) {
-        this.COGSAccountCode = COGSAccountCode;
     }
 
     public String getPrice() {
@@ -170,12 +61,12 @@ public class DocumentLine {
         Price = price;
     }
 
-    public String getLineTotal() {
-        return LineTotal;
+    public String getQuantity() {
+        return Quantity;
     }
 
-    public void setLineTotal(String lineTotal) {
-        LineTotal = lineTotal;
+    public void setQuantity(String quantity) {
+        Quantity = quantity;
     }
 
     public String getTaxCode() {
@@ -184,5 +75,21 @@ public class DocumentLine {
 
     public void setTaxCode(String taxCode) {
         TaxCode = taxCode;
+    }
+
+    public String getTaxOnly() {
+        return TaxOnly;
+    }
+
+    public void setTaxOnly(String taxOnly) {
+        TaxOnly = taxOnly;
+    }
+
+    public String getWarehouseCode() {
+        return WarehouseCode;
+    }
+
+    public void setWarehouseCode(String warehouseCode) {
+        WarehouseCode = warehouseCode;
     }
 }

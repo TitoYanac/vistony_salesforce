@@ -92,7 +92,7 @@ public class PDFOrdenVenta extends AppCompatActivity {
     }
 
     public void generarPdf(Context context, ArrayList<OrdenVentaCabeceraSQLiteEntity> ListaOrdenVentaCabecera, ArrayList<OrdenVentaDetallePromocionSQLiteEntity> ListaOrdenVentaDetalle ) {
-
+        File f;
         String cliente_id="",nombrecliente="",direccion="",fechaemision="",terminopago="",subtotal="",igv="",descuento="",total="",ordenventa_id="",ordenventa_erp_id="",vendedor="",moneda="";
                 ;
         ClienteSQlite clienteSQlite =new ClienteSQlite(context);
@@ -100,15 +100,15 @@ public class PDFOrdenVenta extends AppCompatActivity {
         ArrayList<ClienteSQLiteEntity> listaClienteSQLite=new ArrayList<>();
         ArrayList<TerminoPagoSQLiteEntity> listaTerminoPago=new ArrayList<>();
 
-        for(int i=0;i<ListaOrdenVentaCabecera.size();i++)
-        {
+        for(int i=0;i<ListaOrdenVentaCabecera.size();i++){
+
             ordenventa_id=ListaOrdenVentaCabecera.get(i).getOrdenventa_id();
             ordenventa_erp_id=ListaOrdenVentaCabecera.get(i).getOrdenventa_ERP_id();
             //vendedor=SesionEntity.fuerzatrabajo_id+" "+SesionEntity.nombrefuerzadetrabajo;
             cliente_id=ListaOrdenVentaCabecera.get(i).getCliente_id();
             listaClienteSQLite= clienteSQlite.ObtenerDatosCliente(cliente_id,SesionEntity.compania_id);
-            for(int j=0;j<listaClienteSQLite.size();j++)
-            {
+            for(int j=0;j<listaClienteSQLite.size();j++){
+
                 nombrecliente=listaClienteSQLite.get(j).getNombrecliente();
                 direccion=listaClienteSQLite.get(j).getDireccion();
             }
@@ -137,17 +137,15 @@ public class PDFOrdenVenta extends AppCompatActivity {
                 , 1120
                 //PageSize.ARCH_A
         );
-        Document documento = new Document(
-                pagina
-        );
+        Document documento = new Document(pagina);
 
         try {
-            File f = crearFichero(ordenventa_id+".pdf");
+            f = crearFichero(ordenventa_id+".pdf");
 
             // Creamos el flujo de datos de salida para el fichero donde
             // guardaremos el pdf.
-            FileOutputStream ficheroPdf = new FileOutputStream(
-                    f.getAbsolutePath());
+            FileOutputStream ficheroPdf = new FileOutputStream(f.getAbsolutePath());
+
 
             // Asociamos el flujo que acabamos de crear al documento.
             PdfWriter writer = PdfWriter.getInstance(documento, ficheroPdf);
@@ -169,20 +167,7 @@ public class PDFOrdenVenta extends AppCompatActivity {
             // aplicacion.
             Bitmap bitmap=null;
 
-            if(SesionEntity.compania_id.equals("C001"))
-            {
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
-            }
-            else if(SesionEntity.compania_id.equals("C011")) {
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_bluker_negro);
-            }
-            else if(SesionEntity.compania_id.equals("C013"))
-            {
-                //bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.rofalab_negro_300_90);
-                bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo_rofalab_negro2);
-            }else{
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
-            }
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100 ,stream);
@@ -194,39 +179,13 @@ public class PDFOrdenVenta extends AppCompatActivity {
             tblcliente.setWidthPercentage(100);
             PdfPCell cellTable = null;
 
-            if(SesionEntity.compania_id.equals("C001") )
-            {
-                cellTable=new PdfPCell(new Phrase(
-                        "\n R.U.C N° 20102306598 " +
-                                "Mz. B1 Lt. 1 - Parque Industrial de Ancón - Acompia " +
-                                "Central: (01) 5521325 E-mail: ventas@vistony.com   " +
-                                " Web: www.vistony.com"+
-                                "",font3));
-            }else if(SesionEntity.compania_id.equals("C011"))
-            {
-                cellTable= new PdfPCell(new Phrase(
-                        "\n R.U.C N° 20536335448 - " +
-                                "Mz. B1 Lt. 1 - Parque Industrial de Ancón - Acompia (Km. 46.5) LIMA - ANCÓN - " +
-                                "Central: (01) 5521325"+
-                                "",font3));
-            }else if(SesionEntity.compania_id.equals("C013"))
-            {
-                cellTable= new PdfPCell(new Phrase(
-                        "\n R.U.C N° 20601500605 - " +
-                                "Oficina Principal: Mz. D Lt. 3 La Calichera (Altura Km 46 Pan.Norte) Ancon - Lima - " +
-                                "Telf: 993088798 E-mail: rofalab@tolbrin.com"+
-                                "",font3));
-            }
+            cellTable=new PdfPCell(new Phrase(
+                    "\n R.U.T N° 764114914 " +
+                            "Panamericana Norte 19434 - Bodega 2 - Lampa - Chile " +
+                            "Central: (56) 952285492 E-mail: ventas.chile@vistony.com" +
+                            " Web: www.vistony.com"+
+                            "",font3));
 
-            else
-            {
-                cellTable=new PdfPCell(new Phrase(
-                        "\n R.U.C N° 20102306598 " +
-                                "Mz. B1 Lt. 1 - Parque Industrial de Ancón - Acompia " +
-                                "Central: (01) 5521325 E-mail: lubricantes@vistony.com   " +
-                                " Web: www.vistony.com"+
-                                "",font3));
-            }
 
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -249,7 +208,7 @@ public class PDFOrdenVenta extends AppCompatActivity {
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
-            cellgneral = new PdfPCell(new Phrase("RUC/DNI:",font3));
+            cellgneral = new PdfPCell(new Phrase("RUT:",font3));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
@@ -435,6 +394,9 @@ public class PDFOrdenVenta extends AppCompatActivity {
             //tbl.setWidthPercentage(100);
             documento.add(tblResu);
 
+
+
+
         } catch (DocumentException e) {
 
             Log.e(ETIQUETA_ERROR, e.getMessage());
@@ -450,6 +412,28 @@ public class PDFOrdenVenta extends AppCompatActivity {
         finally {
             // Cerramos el documento.
             documento.close();
+
+            ///////////////////ABRIR PDF////////////////////////
+
+           File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator
+                    +"OrdenVenta"+File.separator+ordenventa_id+".pdf");
+
+            Uri  excelPath = FileProvider.getUriForFile(context, context.getPackageName(), file);
+
+                Intent target = new Intent(Intent.ACTION_VIEW);
+                target.setDataAndType(excelPath,"application/pdf");
+                target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            try {
+
+                    context.startActivity(target);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(context, "Es necesario que instales algun visor de PDF", Toast.LENGTH_SHORT).show();
+                }
+
+            ///////////////////////////////////////////////////
+
         }
     }
 
@@ -472,8 +456,7 @@ public class PDFOrdenVenta extends AppCompatActivity {
         // El fichero sera almacenado en un directorio dentro del directorio
         // Descargas
         File ruta = null;
-        if (Environment.MEDIA_MOUNTED.equals(Environment
-                .getExternalStorageState())) {
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             ruta = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),NOMBRE_DIRECTORIO);
 
             if (ruta != null) {

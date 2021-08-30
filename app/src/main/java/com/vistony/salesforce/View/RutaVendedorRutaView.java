@@ -1,5 +1,6 @@
 package com.vistony.salesforce.View;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
@@ -54,6 +56,8 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
     ObtenerSQLiteRutaFuerzaTrabajo obtenerSQLiteRutaFuerzaTrabajo;
     private SearchView mSearchView;
     TextView tv_cantidad_cliente_ruta,tv_cantidad_cliente_cabecera_total,tv_cantidad_cliente_cabecera_visita,tv_cantidad_cliente_cabecera_cobranza,tv_cantidad_cliente_cabecera_pedido;
+    private ProgressDialog pd;
+
     public RutaVendedorRutaView() {
         // Required empty public constructor
     }
@@ -105,7 +109,16 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
 
 
     public class ObtenerSQLiteRutaFuerzaTrabajo extends AsyncTask<String, Void, Object> {
+
         String fecha;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(getActivity());
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Calculando Ruta de Trabajo", true, false);
+        }
+
         @Override
         protected Object doInBackground(String... arg0) {
             ArrayList<RutaFuerzaTrabajoSQLiteEntity> listaRutaFuerzaTrabajoSQLiteEntity=new ArrayList<>();
@@ -122,6 +135,15 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
 
                 Log.e("JPCM","tiwne dataaaaa "+fecha);
                 Log.e("JPCM","tiwne dataaaaa "+listaRutaFuerzaTrabajoSQLiteEntity.size());
+
+
+                if(listaRutaFuerzaTrabajoSQLiteEntity==null || listaRutaFuerzaTrabajoSQLiteEntity.isEmpty() || listaRutaFuerzaTrabajoSQLiteEntity.size()==0){
+                    getActivity().runOnUiThread(() -> {
+                        Toast.makeText(getActivity(), "No hay ruta de trabajo para el dia de hoy", Toast.LENGTH_SHORT).show();
+                    });
+                }
+
+
             } catch (Exception e) {
                 // TODO: handle exception
                 System.out.println(e.getMessage());
@@ -155,6 +177,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     String fechainicioruta="",fecharutaactualizada="";
                     Date fechainiciorutadate;
 
+
                     //recorre la lista
                     for(int i=0;i<Lista.size();i++)
                     {
@@ -170,6 +193,9 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                                 String.valueOf(fecharutaactualizada)
                         );
                     }
+
+
+
                     //Obtiene lista menor con fecha actual
                     Lista=rutaFuerzaTrabajoSQLiteDao.ObtenerRutaFuerzaTrabajoFechaMenor(fecha);
                 }
@@ -178,9 +204,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                 //obtenerSQLiteRutaFuerzaTrabajo.execute();
 
 
-            }
-            else
-                {
+            }else{
                     //recorre lista para obtener codigo de Zona
                     for(int i=0;i<Lista.size();i++)
                     {
@@ -235,11 +259,13 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     //getActivity().setTitle("Ruta Vendedor");
                 }
             Log.e("REOS","Finaliza Hilo");
+
+            pd.dismiss();
         }
 
 
-        public Date ConvertirFechaStringDate(String fecha)
-        {
+        public Date ConvertirFechaStringDate(String fecha){
+
             SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date fechaDate = new Date();
             try {

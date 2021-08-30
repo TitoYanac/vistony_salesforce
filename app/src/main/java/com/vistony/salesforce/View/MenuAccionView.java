@@ -47,19 +47,10 @@ import java.util.Locale;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MenuAccionView#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MenuAccionView extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM = "ListaClienteCabeceraEntity";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     int validar=0;
@@ -70,11 +61,13 @@ public class MenuAccionView extends Fragment {
 
     OnFragmentInteractionListener mListener;
     public static Object objetoMenuAccionView=new Object();
-    //private GPSController gpsController;
-    //private Location mLocation;
-    //double latitude, longitude;
-    //private static final int REQUEST_PERMISSION_LOCATION = 255;
-    //LocationManager locationManager;
+
+    private GPSController gpsController;
+    private Location mLocation;
+    double latitude, longitude;
+    private static final int REQUEST_PERMISSION_LOCATION = 255;
+    LocationManager locationManager;
+
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
@@ -92,19 +85,17 @@ public class MenuAccionView extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static MenuAccionView newInstance(Object objeto) {
-        //Log.e("jpcm","regreso here 1 de "+ ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
-        Log.e("jpcm","regreso here 1 de "+ ListenerBackPress.getCurrentFragment());
+
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         MenuAccionView menuAccionView = new MenuAccionView();
-        //ArrayList<String> Listado = new ArrayList<String>();
+
         Bundle b = new Bundle();
         ArrayList<ListaClienteCabeceraEntity> Lista = (ArrayList<ListaClienteCabeceraEntity>) objeto;
-        Lista.size();
-        b.putSerializable(TAG_1,Lista);
+
+        b.putSerializable(ARG_PARAM,Lista);
+
         menuAccionView.setArguments(b);
         Listado = Lista;
-        //Listado.size();
         objetoMenuAccionView=objeto;
 
         return menuAccionView;
@@ -114,7 +105,7 @@ public class MenuAccionView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*
+
         ////COMENTADO EL 26/08/2021
 
         locationManager = (LocationManager) getActivity(). getSystemService(LOCATION_SERVICE);
@@ -148,8 +139,6 @@ public class MenuAccionView extends Fragment {
 
         }
 
-        */
-
 
         /*if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
@@ -161,16 +150,20 @@ public class MenuAccionView extends Fragment {
         }*/
 
         //latitude = mLocation.getLatitude();
-        getActivity().setTitle("Menu Accion");
+
+
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            //Listado = getArguments().(ARG_PARAM);
+            //mParam2 = getArguments().getString(ARG_PARAM); //Key is Cliente y contiene nombre del cliente
+
+            getActivity().setTitle(Listado.get(0).getNombrecliente());
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         v= inflater.inflate(R.layout.fragment_menu_accion_view, container, false);
         cv_pedido=v.findViewById(R.id.cv_pedido);
         cv_cobranza=v.findViewById(R.id.cv_cobranza);

@@ -61,9 +61,7 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
 
     public static ProductoView newInstance(Object objeto) {
         listaprecio_id=(String) objeto;
-        Log.e("REOS:listaprecio_id", "listaprecio_id " + listaprecio_id);
-        ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+        ListenerBackPress.setCurrentFragment("ProductoView");
         ProductoView productoView = new ProductoView();
         Bundle b = new Bundle();
         productoView.setArguments(b);
@@ -71,9 +69,7 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
     }
 
     public static ProductoView newInstancia(Object objeto) {
-        Log.e("jpcm", "regreso here 1 de " + ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
-        ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+        ListenerBackPress.setCurrentFragment("ProductoView");
         ProductoView productoView = new ProductoView();
         Bundle b = new Bundle();
         productoView.setArguments(b);
@@ -99,8 +95,7 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_producto_view, container, false);
         lv_producto=v.findViewById(R.id.lv_producto);

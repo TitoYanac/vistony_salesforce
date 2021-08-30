@@ -539,7 +539,20 @@ public class MenuView extends AppCompatActivity
                     super.onBackPressed();
                     break;
                 case "OrdenVentaDetalleView":
-                    super.onBackPressed();
+                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("NoTieneLineas")){
+                        super.onBackPressed();
+                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("TieneLineas")){
+                        Toast.makeText(getApplicationContext(), "No es posible retroceder por que tiene productos agregados", Toast.LENGTH_LONG).show();
+                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("rutaVendedor")){
+                        super.onBackPressed();
+                    }
+                    break;
+                case "ProductoView":
+                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("TieneLineas")) {
+                        Toast.makeText(getApplicationContext(), "No es posible retroceder por que tiene productos agregados", Toast.LENGTH_LONG).show();
+                    }else{
+                        super.onBackPressed();
+                    }
                     break;
                 //super.onBackPressed();
                 /*default:
@@ -869,7 +882,7 @@ public class MenuView extends AppCompatActivity
                 String tagClienteCabeceraView="nuevoinicioClienteCabeceraView";
                 ClienteCabeceraView = getSupportFragmentManager().findFragmentByTag(tagClienteCabeceraView);
                 ft.remove(ClienteCabeceraView);
-                //ft.add(R.id.content_menu_view,ClienteDetalleView.newInstance(Lista),tag2);
+
                 ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("po1p");
                 ft.commit();
@@ -891,7 +904,7 @@ public class MenuView extends AppCompatActivity
                 String tagRutaVendedorView="nuevoinicioRutaVendedorView";
                 RutaVendedorView = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
                 ft.remove(RutaVendedorView);
-                //ft.add(R.id.content_menu_view,ClienteDetalleView.newInstance(Lista),tag3);
+
                 ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("2pop");
 

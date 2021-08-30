@@ -13,22 +13,21 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class RutaFuerzaTrabajoWS {
+public class RutaFuerzaTrabajoRepository {
 
     private ArrayList<RutaFuerzaTrabajoSQLiteEntity> LRFTrabajo =  new ArrayList<>();
     private Context context;
 
-    public RutaFuerzaTrabajoWS (final Context context){
+    public RutaFuerzaTrabajoRepository(final Context context){
         this.context=context;
     }
 
     public ArrayList<RutaFuerzaTrabajoSQLiteEntity> getRutaFuerzaTrabajoWS(String Imei){
         Api api = Config.getClient().create(Api.class);
 
-        Call<RutaFuerzaTrabajoEntityResponse> call = api.getRutaFuerzaTrabajo(Imei);
+        Call<RutaFuerzaTrabajoEntityResponse> call = api.getRutaFuerzaTrabajo("http://169.47.196.209/cl/api/WorkPath",Imei);
 
-        try
-        {
+        try{
             Response<RutaFuerzaTrabajoEntityResponse> response= call.execute();
             if(response.isSuccessful()) {
                 RutaFuerzaTrabajoEntityResponse rutaFuerzaTrabajoEntityResponse=response.body();

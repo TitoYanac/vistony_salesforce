@@ -85,7 +85,9 @@ public class CatalogoView extends Fragment implements SearchView.OnQueryTextList
         progress.setMessage("Por favor espere...");
         progress.setCancelable(false);
         progress.show();
+
         CatalogoWS xd=new CatalogoWS(getActivity());
+
         xd.send("asdasd").observe(getActivity(), data -> {
             progress.dismiss();
             if(data.getClass().getName().equals("java.lang.String")){

@@ -312,7 +312,7 @@ public class OrdenVentaCabeceraSQLite {
             registro.put("ordenventa_ERP_id",ordenventa_id_erp);
             registro.put("mensajeWS",mensajeWS);
             bd = sqLiteController.getWritableDatabase();
-            resultado = bd.update("ordenventacabecera",registro,"ordenventa_id='"+ordenventa_id+"' LIMIT 1" ,null);
+            resultado = bd.update("ordenventacabecera",registro,"ordenventa_id='"+ordenventa_id+"'" ,null);
             bd.close();
         }catch (Exception e){
             System.out.println(e.getMessage());

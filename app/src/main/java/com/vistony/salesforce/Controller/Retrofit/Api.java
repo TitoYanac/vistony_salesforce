@@ -79,8 +79,8 @@ public interface Api {
     @GET("/TipoListaPromo")
     Call<ListaPromocionEntityResponse> getListaPromocion (@Query("imei") String imei);
 
-    @GET("/RutaTrabajo")
-    Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Query("imei") String imei);
+    @GET//("/RutaTrabajo")
+    Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Url String url,@Query("imei") String imei);
 
     @GET//("/PriceLists")
     Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Url String url,@Query("imei") String imei);

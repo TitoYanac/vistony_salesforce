@@ -152,8 +152,7 @@ public class OrdenVentaCabeceraView extends Fragment {
     }
 
     public static OrdenVentaCabeceraView newInstance(Object objeto) {
-        Log.e("jpcm","regreso here 1 de "+ ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
         //ArrayList<String> Listado = new ArrayList<String>();
@@ -677,9 +676,8 @@ public class OrdenVentaCabeceraView extends Fragment {
                 menu_variable.findItem(R.id.guardar_orden_venta).setIcon(drawable);
                 guardar_orden_venta.setEnabled(false);
 
-                for(int i=0;i<listaHistoricoOrdenVentaEntity.size();i++)
-                {
-                    Log.e("REOS","listaHistoricoOrdenVentaEntity.get(i).isRecepcionERPOV():"+listaHistoricoOrdenVentaEntity.get(i).isRecepcionERPOV());
+                for(int i=0;i<listaHistoricoOrdenVentaEntity.size();i++){
+
                     if(listaHistoricoOrdenVentaEntity.get(i).isRecepcionERPOV()==true)
                     {
                         Drawable drawable2 = menu_variable.findItem(R.id.enviar_erp).getIcon();
@@ -842,31 +840,17 @@ public class OrdenVentaCabeceraView extends Fragment {
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
 
-
-        Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
-
 
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-        // if button is clicked, close the custom dialog
-        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*String Fragment="OrdenVentaCabeceraView";
-                String accion="detalle";
-                String compuesto=Fragment+"-"+accion;
-                String Objeto=contado;
-                mListener.onFragmentInteraction(compuesto,Objeto);*/
-                GenerarArchivoPDF ();
-                dialog.dismiss();
-            }
+
+        dialogButtonOK.setOnClickListener(v -> {
+            GenerarArchivoPDF ();
+            dialog.dismiss();
         });
-        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
+        dialogButtonCancel.setOnClickListener(v -> {
+            dialog.dismiss();
         });
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -875,51 +859,21 @@ public class OrdenVentaCabeceraView extends Fragment {
         return  dialog;
     }
 
-    public AlertDialog alertaGenerarPDF2() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Advertencia")
-                .setMessage("Esta Seguro de Generar el Archivo PDF?")
-                .setPositiveButton("OK",
-
-                        new DialogInterface.OnClickListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.O)
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                GenerarArchivoPDF ();
-
-
-                            }
-                        })
-                .setNegativeButton("CANCELAR",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-
-        return builder.create();
-    }
     public void GenerarArchivoPDF ()
     {
         ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabecera=new ArrayList<>();
-        //ArrayList<OrdenVentaDetalleSQLiteEntity> listaOrdenVentaDetalle=new ArrayList<>();
         ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaOrdenVentaDetallePromocion=new ArrayList<>();
 
         OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(getContext());
-        //OrdenVentaDetalleSQLiteDao ordenVentaDetalleSQLiteDao=new OrdenVentaDetalleSQLiteDao(getContext());
         OrdenVentaDetallePromocionSQLiteDao ordenVentaDetallePromocionSQLiteDao=new OrdenVentaDetallePromocionSQLiteDao(getContext());
 
         listaOrdenVentaCabecera= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
-        //listaOrdenVentaDetalle=ordenVentaDetalleSQLiteDao.ObtenerOrdenVentaDetalleporID(ordenventa_id);
         listaOrdenVentaDetallePromocion=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
 
         PDFOrdenVenta pdfOrdenVenta=new PDFOrdenVenta();
         pdfOrdenVenta.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
-        //pdfOrdenVenta.showPdfFile(ordenventa_id,getContext());
+        //TOAST DE ARCHIVOC READO ESTA EN EL generarPdf
 
-        Toast.makeText(getContext(), "Se genero correctamente el PDF", Toast.LENGTH_SHORT).show();
         Drawable drawable = menu_variable.findItem(R.id.enviar_erp).getIcon();
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.Black));
@@ -931,10 +885,9 @@ public class OrdenVentaCabeceraView extends Fragment {
         DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.Black));
         menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
         generarpdf.setEnabled(true);
-
     }
-    public void RegistrarOrdenVentaBD ()
-    {
+
+    public void RegistrarOrdenVentaBD (){
         listaOrdenVentaCabeceraEntities=new ArrayList<>();
         FormulasController formulasController=new FormulasController(getContext());
         ListaOrdenVentaCabeceraEntity listaOrdenVentaCabeceraEntity=new ListaOrdenVentaCabeceraEntity();

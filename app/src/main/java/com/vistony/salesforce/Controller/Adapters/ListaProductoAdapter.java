@@ -126,25 +126,24 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         holder.tv_igv.setText(lead.getPrecioigv());
         holder.tv_gal.setText(lead.getGal());
         holder.relativeListaProducto.setOnClickListener(new View.OnClickListener() {
-                                                           @Override
-                                                           public void onClick(View v) {
-                                                               ArrayList<ListaProductoEntity> arrayListaProductoEntity= new ArrayList<>();
-                                                               ListaProductoEntity listaProductoEntity=new ListaProductoEntity();
-                                                               listaProductoEntity.producto_id = lead.getProducto_id().toString();
-                                                               listaProductoEntity.producto = lead.getProducto().toString();
-                                                               listaProductoEntity.umd = lead.getUmd().toString();
-                                                               listaProductoEntity.stock = lead.getStock().toString();
-                                                               listaProductoEntity.preciobase = lead.getPreciobase().toString();
-                                                               listaProductoEntity.precioigv = lead.getPrecioigv().toString();
-                                                               listaProductoEntity.gal = lead.getGal().toString();
-                                                               arrayListaProductoEntity.add(listaProductoEntity);
+           @Override
+           public void onClick(View v) {
+               ArrayList<ListaProductoEntity> arrayListaProductoEntity= new ArrayList<>();
+               ListaProductoEntity listaProductoEntity=new ListaProductoEntity();
+               listaProductoEntity.producto_id = lead.getProducto_id().toString();
+               listaProductoEntity.producto = lead.getProducto().toString();
+               listaProductoEntity.umd = lead.getUmd().toString();
+               listaProductoEntity.stock = lead.getStock().toString();
+               listaProductoEntity.preciobase = lead.getPreciobase().toString();
+               listaProductoEntity.precioigv = lead.getPrecioigv().toString();
+               listaProductoEntity.gal = lead.getGal().toString();
+               arrayListaProductoEntity.add(listaProductoEntity);
 
-                                                               fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
-                                                               FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                                               transaction.add(R.id.content_menu_view, ProductoView.newInstancia(arrayListaProductoEntity));
-
-                                                           }
-                                                       }
+               fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+               FragmentTransaction transaction = fragmentManager.beginTransaction();
+               transaction.add(R.id.content_menu_view, ProductoView.newInstancia(arrayListaProductoEntity));
+           }
+       }
 
         );
         return convertView;

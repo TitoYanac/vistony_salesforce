@@ -32,9 +32,11 @@ import com.vistony.salesforce.Dao.Adapters.ListaOrdenVentaDetalleDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 /**
@@ -104,10 +106,10 @@ public class OrdenVentaDetalleView extends Fragment {
             terminopago_id=compuesto[2];
         }
         else
-            {
-                listaprecio_id=compuesto[0];
-                descuentocontado="false";
-            }
+        {
+            listaprecio_id=compuesto[0];
+            descuentocontado="false";
+        }
 
         Log.e("REOS", "OrdenVentaDetalleView-listaprecio_id:" + listaprecio_id);
         Log.e("REOS", "OrdenVentaDetalleView-descuentocontado:" + descuentocontado);
@@ -138,9 +140,9 @@ public class OrdenVentaDetalleView extends Fragment {
                 indice="1";
             }
             else
-                {
-                    indice=String.valueOf(listadoProductosAgregados.size()+1);
-                }
+            {
+                indice=String.valueOf(listadoProductosAgregados.size()+1);
+            }
             ObjListaProductosEntity.orden_detalle_item=(indice);
             ObjListaProductosEntity.orden_detalle_producto_id=listadoProductosConversion.get(i).getProducto_id();
             ObjListaProductosEntity.orden_detalle_producto=listadoProductosConversion.get(i).getProducto();
@@ -455,7 +457,7 @@ public class OrdenVentaDetalleView extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.vincular_orden_venta_cabecera:
-                         DialogoOrdenVentaDetalle().show();
+                DialogoOrdenVentaDetalle().show();
 
                 return false;
             default:
@@ -489,17 +491,17 @@ public class OrdenVentaDetalleView extends Fragment {
                 {
                     Toast.makeText(getContext(), "La Cantidad de Lineas, Supera las 15 Lineas!!! Revisar la Cantidad de Lineas", Toast.LENGTH_SHORT).show();
                 }else
-                    {
-                        if (formulasController.ValidarMontoEnCero(listadoProductosAgregados)) {
-                            alertaValidacionMontoCero().show();
-                        } else {
-                            String Fragment = "OrdenVentaDetalleView";
-                            String accion = "ordenventacabecera";
-                            String compuesto = Fragment + "-" + accion;
-                            mListener.onFragmentInteraction(compuesto, listadoProductosAgregados);
-                            dialog.dismiss();
-                        }
+                {
+                    if (formulasController.ValidarMontoEnCero(listadoProductosAgregados)) {
+                        alertaValidacionMontoCero().show();
+                    } else {
+                        String Fragment = "OrdenVentaDetalleView";
+                        String accion = "ordenventacabecera";
+                        String compuesto = Fragment + "-" + accion;
+                        mListener.onFragmentInteraction(compuesto, listadoProductosAgregados);
+                        dialog.dismiss();
                     }
+                }
             }
         });
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {

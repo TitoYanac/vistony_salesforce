@@ -241,7 +241,7 @@ public class FormulasController {
 
         CalculoSubTotal=Float.valueOf(format.format(Calculo));
         CalculoTotalPromocion=Float.valueOf(format.format(CalculoPromocion+CalculoTotalDescuento));
-        CalculoTotalIGV=Float.valueOf(format.format((CalculoSubTotal-CalculoTotalPromocion)*0.18));
+        CalculoTotalIGV=Float.valueOf(format.format((CalculoSubTotal-CalculoTotalPromocion)*0.19));
         CalculoTotal=Float.valueOf(format.format((CalculoSubTotal-CalculoTotalPromocion)+CalculoTotalIGV));
         Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-CalculoSubTotal: "+CalculoSubTotal);
         Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-CalculoPromocion: "+CalculoPromocion);
@@ -307,7 +307,7 @@ public class FormulasController {
         Float CalculoDescuento=0f;
         for(int i=0;i<Lista.size();i++)
         {
-            if(Integer.parseInt(Lista.get(i).getOrden_detalle_porcentaje_descuento())>0&&Integer.parseInt(Lista.get(i).getOrden_detalle_porcentaje_descuento())<100)
+            if(Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())>0&&Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())<100)
             {
                 Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-ObtenerCalculoDescuentoOrdenDetallePromocion-Lista.get(i).getOrden_detalle_monto_descuento(): "+Lista.get(i).getOrden_detalle_monto_descuento());
                 CalculoDescuento=CalculoDescuento+Float.parseFloat(Lista.get(i).getOrden_detalle_monto_descuento());
@@ -450,8 +450,8 @@ public class FormulasController {
             OrdenVentaDetallePromocionSQLiteDao ordenVentaDetallePromocionSQLiteDao=new OrdenVentaDetallePromocionSQLiteDao(Context);
             ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
             ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
-            listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(
-                    listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id());
+            listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id());
+
             for(int g=0;g<listaPrecioDetalleSQLiteEntities.size();g++)
             {
                 producto=listaPrecioDetalleSQLiteEntities.get(g).getProducto();
@@ -728,7 +728,7 @@ public class FormulasController {
             documentHeader.setDocumentsOwner(SesionEntity.documentsowner);
             documentHeader.setFederalTaxID(listaordenVentaCabeceraSQLiteEntity.get(i).getRucdni());
             documentHeader.setPaymentGroupCode(listaordenVentaCabeceraSQLiteEntity.get(i).getTerminopago_id());
-            documentHeader.setSalesPersonCode(SesionEntity.documentsowner);
+            documentHeader.setSalesPersonCode(SesionEntity.fuerzatrabajo_id);
 
             documentHeader.setPayToCode(listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id());
             documentHeader.setShipToCode(listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id());
@@ -739,70 +739,32 @@ public class FormulasController {
 
         for(int j=0;j<listaordenVentaDetalleSQLiteEntity.size();j++)
         {
-            String COGSAccountCode="",U_SYP_FECAT_07="",taxOnly="",taxCode="",U_VIST_CTAINGDCTO="",montolineatotal="";
-            //Casuistica Bonificacion
-            if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100")){
-                COGSAccountCode="659420";
-                U_SYP_FECAT_07="31";
-                taxOnly="Y";
-                taxCode="EXE_IGV";
-                U_VIST_CTAINGDCTO="741111";
-                montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotal();
-            }
-            //Casustica Descuento
-            else if(Integer.parseInt(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())>0&&
-                    Integer.parseInt(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())<100)
-            {
-                COGSAccountCode="659419";
-                U_SYP_FECAT_07="10";
-                taxOnly="N";
-                taxCode="IGV";
-                U_VIST_CTAINGDCTO="741113";
-                montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
-            }
-            //Casuistica Transferencia Gratuita
-            else if(metodoterminopago_id.equals("47"))
-            {
-                COGSAccountCode="659419";
-                U_SYP_FECAT_07="11";
-                taxOnly="Y";
-                taxCode="IGV";
-                U_VIST_CTAINGDCTO="";
-                montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotal();
-            }
+            String taxOnly="",taxCode="";
+
+
             //Casuistica Venta
-            else
-                {
-                    U_SYP_FECAT_07="10";
-                    COGSAccountCode="";
-                    taxOnly="N";
-                    taxCode="IGV";
-                    U_VIST_CTAINGDCTO="";
-                    montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
-                }
+
+            //U_SYP_FECAT_07="10";
+            //COGSAccountCode="";
+            taxOnly="N";
+            taxCode="IVA";
+            //U_VIST_CTAINGDCTO="";
+           // montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
 
 
-                documentLine =new DocumentLine(
-                        listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id(),
-                        listaordenVentaDetalleSQLiteEntity.get(j).getAlmacen_id(),
-                        listaordenVentaDetalleSQLiteEntity.get(j).getCantidad(),
-                        ObtenerProductoDescripcion(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id(),context),
-                        COGSAccountCode,
-                        listaordenVentaDetalleSQLiteEntity.get(j).getPreciounitario(),
-                        "0",
-                        montolineatotal,
-                        taxCode,
-                        SesionEntity.UnidadNegocio,
-                        SesionEntity.CentroCosto,
-                        SesionEntity.LineaProduccion,
-                        "",
-                        taxOnly,
-                        U_SYP_FECAT_07,
-                        listaordenVentaDetalleSQLiteEntity.get(j).getPromocion_id(),
-                        listaordenVentaDetalleSQLiteEntity.get(j).getLineareferencia(),
-                        U_VIST_CTAINGDCTO
 
-                );
+                documentLine =new DocumentLine();
+                documentLine.setCostingCode( SesionEntity.UnidadNegocio);
+                documentLine.setCostingCode2(SesionEntity.CentroCosto);
+                documentLine.setDiscountPercent(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento()); //el vendedor puede desde 0 a 99.9%, de 0 a 5% todo ok en adelnate mostrar alerta
+                documentLine.setDscription(ObtenerProductoDescripcion(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id(),context));
+                documentLine.setItemCode(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id());
+                documentLine.setPrice(listaordenVentaDetalleSQLiteEntity.get(j).getPreciounitario());
+                documentLine.setQuantity(listaordenVentaDetalleSQLiteEntity.get(j).getCantidad());
+                documentLine.setTaxCode(taxCode);
+                documentLine.setTaxOnly(taxOnly);
+                documentLine.setWarehouseCode(listaordenVentaDetalleSQLiteEntity.get(j).getAlmacen_id());
+
 
             listadoDocumentLines.add(documentLine);
         }

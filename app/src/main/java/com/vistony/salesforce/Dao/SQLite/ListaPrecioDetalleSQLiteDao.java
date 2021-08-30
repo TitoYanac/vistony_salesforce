@@ -69,8 +69,7 @@ public class ListaPrecioDetalleSQLiteDao {
         return 1;
     }
 
-    public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (String contado)
-    {
+    public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (String contado){
         //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
         //SQLiteDatabase bd = admin.getWritableDatabase();
         arraylistaProductoEntity = new ArrayList<ListaProductoEntity>();
@@ -80,21 +79,21 @@ public class ListaPrecioDetalleSQLiteDao {
         try {
         if(contado.equals("1")) {
              fila = bd.rawQuery(
-                    "Select A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.contado,a.contado,a.gal  from listapreciodetalle A" +
-                            " left join stock B on " +
-                            " A.compania_id=b.compania_id and" +
-                            " A.producto_id=b.producto_id and" +
-                            " A.umd=b.umd "
+                    "SELECT A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.contado,a.contado,a.gal  FROM listapreciodetalle A" +
+                            " LEFT JOIN stock B on " +
+                            " A.compania_id=b.compania_id AND" +
+                            " A.producto_id=b.producto_id AND" +
+                            " A.umd=b.umd"
                     , null);
 
         }else
         {
             fila = bd.rawQuery(
-                    "Select A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.credito,a.credito,a.gal from listapreciodetalle A" +
-                            " left join stock B on " +
-                            " A.compania_id=b.compania_id and" +
-                            " A.producto_id=b.producto_id and" +
-                            " A.umd=b.umd "
+                    "SELECT A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.credito,a.credito,a.gal FROM listapreciodetalle A" +
+                            " LEFT JOIN stock B ON " +
+                            " A.compania_id=b.compania_id AND" +
+                            " A.producto_id=b.producto_id AND" +
+                            " A.umd=b.umd"
                     , null);
 
         }

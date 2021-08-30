@@ -10,6 +10,7 @@ import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.AddressEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SeguridadEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
@@ -61,14 +62,33 @@ public class ClienteRepository extends ViewModel {
                         ObjCliente.setUbigeo_id(clienteEntityResponse.getCustomersEntity().get(i).getUbigeoId());
                         ObjCliente.setRucdni(clienteEntityResponse.getCustomersEntity().get(i).getLicTradNum());
 
+                        //Documentos
+                        if(clienteEntityResponse.getCustomersEntity().get(i).getInvoices().size()==0){
+                            ObjCliente.setListInvoice(null);
+                        }else{
+                            List<InvoicesEntity> listaDocumentos=clienteEntityResponse.getCustomersEntity().get(i).getInvoices();
+                        }
+
+                        //Direcciones
                         if(clienteEntityResponse.getCustomersEntity().get(i).getAddress().size()==0){
                             ObjCliente.setListAddress(null);
                         }else{
-                            ObjCliente.setListAddress(clienteEntityResponse.getCustomersEntity().get(i).getAddress());
+                            List<AddressEntity> listaDirecciones=clienteEntityResponse.getCustomersEntity().get(i).getAddress();
+
+                            for(AddressEntity direccion:listaDirecciones){
+                                if(direccion.getFuerzatrabajoid().equals(SesionEntity.fuerzatrabajo_id)){
+                                    ObjCliente.setDireccion(direccion.getDireccion());
+                                    ObjCliente.setZona(direccion.getZona());
+                                    ObjCliente.setZona_id(direccion.getZonaid());
+                                    ObjCliente.setDomembarque_id(direccion.getDomicilioEmbarque());
+                                    break;
+                                }
+                            }
+
+                            ObjCliente.setListAddress(listaDirecciones);
                         }
 
                         ObjCliente.setListInvoice(clienteEntityResponse.getCustomersEntity().get(i).getInvoices());
-
                         ObjCliente.setCategoria(clienteEntityResponse.getCustomersEntity().get(i).getCategoria());
                         ObjCliente.setLinea_credito(clienteEntityResponse.getCustomersEntity().get(i).getLinea_credito());
                         ObjCliente.setLinea_credito_usado(clienteEntityResponse.getCustomersEntity().get(i).getlinea_credito_usado());

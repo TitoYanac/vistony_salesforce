@@ -99,8 +99,7 @@ public class OrdenVentaDetallePromocionSQLiteDao {
         listaOrdenVentaDetallePromocionSQLiteEntity = new ArrayList<>();
         OrdenVentaDetallePromocionSQLiteEntity ordenVentaDetallePromocionSQLiteEntity;
         abrir();
-        Cursor fila = bd.rawQuery(
-                "Select * from ordenventadetallepromocion where ordenventa_id='"+ordenventa_id+"'",null);
+        Cursor fila = bd.rawQuery("Select * from ordenventadetallepromocion where ordenventa_id='"+ordenventa_id+"'",null);
 
         while (fila.moveToNext())
         {

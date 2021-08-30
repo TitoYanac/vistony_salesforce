@@ -3,7 +3,7 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 import com.google.gson.annotations.SerializedName;
 
 public class RutaFuerzaTrabajoEntity {
-    @SerializedName("TerritoryID")
+    @SerializedName("TerritoryId")
     private String zona_id;
 
     @SerializedName("Territory")
@@ -20,6 +20,28 @@ public class RutaFuerzaTrabajoEntity {
 
     @SerializedName("Status")
     private String estado;
+
+    @SerializedName("VisitDate")
+    private String visitDate;
+
+    @SerializedName("SlpCode")
+    private String slpCode;
+
+    public String getVisitDate() {
+        return visitDate;
+    }
+
+    public void setVisitDate(String visitDate) {
+        this.visitDate = visitDate;
+    }
+
+    public String getSlpCode() {
+        return slpCode;
+    }
+
+    public void setSlpCode(String slpCode) {
+        this.slpCode = slpCode;
+    }
 
     public String getFechainicioruta() {
         return fechainicioruta;

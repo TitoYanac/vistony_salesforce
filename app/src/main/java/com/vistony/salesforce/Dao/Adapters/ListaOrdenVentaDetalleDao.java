@@ -62,9 +62,7 @@ public class ListaOrdenVentaDetalleDao {
                         Lista.get(i).getOrden_detalle_cantidad(),
                         Lista.get(i).getOrden_detalle_precio_unitario(),
                         Lista.get(i).getOrden_detalle_montosubtotal(),
-                        String.valueOf(
-                                Integer.parseInt(Lista.get(i).getOrden_detalle_porcentaje_descuento())+
-                                Integer.parseInt(contadodescuento)),
+                        String.valueOf(Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())+Double.parseDouble(contadodescuento)),
                         Lista.get(i).getOrden_detalle_monto_descuento(),
                         Lista.get(i).getOrden_detalle_monto_igv(),
                         Lista.get(i).getOrden_detalle_montototallinea(),

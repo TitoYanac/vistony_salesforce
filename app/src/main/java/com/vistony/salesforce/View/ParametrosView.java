@@ -14,10 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
-import androidx.annotation.Nullable;
+
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.BuildConfig;
@@ -35,7 +34,7 @@ import com.vistony.salesforce.Dao.Retrofit.ListaPrecioDetalleWS;
 import com.vistony.salesforce.Dao.Retrofit.ListaPromocionWS;
 import com.vistony.salesforce.Dao.Retrofit.PromocionCabeceraWS;
 import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleWS;
-import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoWS;
+import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoRepository;
 import com.vistony.salesforce.Dao.Retrofit.StockWS;
 import com.vistony.salesforce.Dao.Retrofit.TerminoPagoWS;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
@@ -153,7 +152,6 @@ public class ParametrosView extends Fragment {
     ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity;
     private final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION=1;
     private OrdenVentaRepository ordenVentaRepository;
-    private Observer<String []> viewModelOrdenDeVenta = null;
 
     public ParametrosView() {
         // Required empty public constructor
@@ -232,14 +230,6 @@ public class ParametrosView extends Fragment {
 
         ordenVentaRepository = new ViewModelProvider(this).get(OrdenVentaRepository.class);
 
-        viewModelOrdenDeVenta = new Observer<String []>() {
-            @Override
-            public void onChanged(@Nullable final String [] newName) {
-                Toast.makeText(getContext(), "Ya respondio ov enviada", Toast.LENGTH_SHORT).show();
-            }
-        };
-
-
         ///////////////// ENVIAR PEDIDOS
         ordenVentaRepository.salesOrderResend(getContext()).observe(getActivity(), data -> {
             Log.e("jepicame","=>"+data);
@@ -301,6 +291,11 @@ public class ParametrosView extends Fragment {
         return v;
     }
 
+    private String getDateTime(){
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+        Date date2 = new Date();
+        return dateFormat2.format(date2);
+    }
     private class ObtenerWSParametros extends AsyncTask<String, Void, String> {
         String argumento="";
         @Override
@@ -314,13 +309,7 @@ public class ParametrosView extends Fragment {
             try {
                 int CantClientes=0,CantBancos=0,CantDocumentosDeuda=0,CantRutaVendedor=0,CantTerminoPago=0,
                         CantAgencia=0,CantListaPrecioDetalle=0,CantStock=0,CantListaPromocion=0,CantPromocionCabecera=0,
-                CantPromocionDetalle=0,CantRutaFuerzaTrabajo=0,CantCatalogo=0,CantDireccionCliente=0,CantHojaDespacho=0
-                ;
-
-                //dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
-                Date date2 = new Date();
-                String fecha2 =dateFormat2.format(date2);
+                CantPromocionDetalle=0,CantRutaFuerzaTrabajo=0,CantCatalogo=0,CantDireccionCliente=0,CantHojaDespacho=0;
 
 
                 for(int i=0;i<arg0.length;i++) {
@@ -349,24 +338,7 @@ public class ParametrosView extends Fragment {
                         //Envio de Cabecera a WsService
                         for (int j = 0; j < listaCobranzaCabeceraSQLiteEntity.size(); j++) {
                             String resultadoccabeceraenviows = "0";
-                            /*resultadoccabeceraenviows =
-                                    cobranzaCabeceraWSDao.RegistraDeposito
-                                            (
-                                                    SesionEntity.imei,
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getCompania_id(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getBanco_id(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getTipoingreso(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getCobranza_id(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getUsuario_id(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getFechadeposito(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getTotalmontocobrado(),
-                                                    "0",
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getFuerzatrabajo_id(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getChkbancarizado(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getFechadiferido(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getComentarioanulado(),
-                                                    listaCobranzaCabeceraSQLiteEntity.get(j).getPagodirecto()
-                                            );*/
+
                             CobranzaCabeceraWS cobranzaCabeceraWS=new CobranzaCabeceraWS(getContext());
 
                             //int resultado=0;
@@ -414,19 +386,7 @@ public class ParametrosView extends Fragment {
                         //VisitaWSDAO visitaWSDAO = new VisitaWSDAO(getActivity());
                         FormulasController formulasController=new FormulasController(getContext());
                         for (int j = 0; j < listaVisitaSQLiteEntity.size(); j++) {
-                            /*Log.e("jpmc fecha=>", "" + listaVisitaSQLiteEntity.get(j).getFecha_registro().toString());
-                            visitaWSDAO.RegistraDeposito
-                                    (
-                                            listaVisitaSQLiteEntity.get(j).getFecha_registro(),
-                                            listaVisitaSQLiteEntity.get(j).getMotivo(),
-                                            listaVisitaSQLiteEntity.get(j).getTipo(),
-                                            listaVisitaSQLiteEntity.get(j).getCompania_id(),
-                                            listaVisitaSQLiteEntity.get(j).getUsuario_id(),
-                                            listaVisitaSQLiteEntity.get(j).getFuerzatrabajo_id(),
-                                            listaVisitaSQLiteEntity.get(j).getCliente_id(),
-                                            listaVisitaSQLiteEntity.get(j).getDireccion_id(),
-                                            SesionEntity.imei
-                                    );*/
+
                             ConnectivityManager manager= (ConnectivityManager) getContext().getSystemService(getContext().CONNECTIVITY_SERVICE);;
                             NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
@@ -464,18 +424,6 @@ public class ParametrosView extends Fragment {
 
                                 }
                             }
-                            /*visitaWSDAO.RegistraDeposito
-                                    (
-                                            listaVisitaSQLiteEntity.get(j).getFecha_registro(),
-                                            listaVisitaSQLiteEntity.get(j).getMotivo(),
-                                            listaVisitaSQLiteEntity.get(j).getTipo(),
-                                            listaVisitaSQLiteEntity.get(j).getCompania_id(),
-                                            listaVisitaSQLiteEntity.get(j).getUsuario_id(),
-                                            listaVisitaSQLiteEntity.get(j).getFuerzatrabajo_id(),
-                                            listaVisitaSQLiteEntity.get(j).getCliente_id(),
-                                            listaVisitaSQLiteEntity.get(j).getDireccion_id(),
-                                            SesionEntity.imei
-                                    );*/
 
                         }
                         /*********************************/
@@ -501,15 +449,6 @@ public class ParametrosView extends Fragment {
                                         listaCobranzaDetalleSQLiteEntity.get(j).getRecibo()
                                 );
 
-                                /*HistoricoCobranzaWS historicoCobranzaWS=new HistoricoCobranzaWS(getContext());
-                                listaleercobranza = historicoCobranzaWS.getHistoricoCobranzaIndividual
-                                        (
-                                                SesionEntity.imei,
-                                                SesionEntity.compania_id,
-                                                SesionEntity.usuario_id,
-                                                listaCobranzaDetalleSQLiteEntity.get(j).getRecibo().toString()
-                                        );*/
-
                                 HistoricoCobranzaWS historicoCobranzaWS=new HistoricoCobranzaWS(getContext());
                                 if (listaleercobranza.isEmpty()) {
                                     if (listaCobranzaDetalleSQLiteEntity.get(j).getCobranza_id().equals("1")) {
@@ -533,13 +472,6 @@ public class ParametrosView extends Fragment {
                                         cobranzaDetalleSQLiteEntity.banco_id = listaCobranzaDetalleSQLiteEntity.get(j).getBanco_id();
                                         cobranzaDetalleSQLiteEntity.comentario = listaCobranzaDetalleSQLiteEntity.get(j).getComentario();
                                         cobranzaDetalleSQLiteEntity.pagodirecto = listaCobranzaDetalleSQLiteEntity.get(j).getPagodirecto();
-
-                                        /*
-                                        ListaCobranzaDetalleSQLiteEntity.add(cobranzaDetalleSQLiteEntity);
-                                        resultado = cobranzaDetalleWSDao.enviarRecibo
-                                                (ListaCobranzaDetalleSQLiteEntity, SesionEntity.imei, SesionEntity.usuario_id,
-                                                        listaCobranzaDetalleSQLiteEntity.get(j).getComentario(), SesionEntity.fuerzatrabajo_id);
-                                        */
 
                                         resultado=formulasController.EnviarReciboWsRetrofit(
                                                 cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
@@ -666,15 +598,6 @@ public class ParametrosView extends Fragment {
                                 cobranzaDetalleSQLiteEntity.pagodirecto = listaCobranzaDetalleSQLiteEntity.get(j).getPagodirecto();
                                 nuevalista.add(cobranzaDetalleSQLiteEntity);
 
-
-                                /*chkwsdepositorecibido = cobranzaDetalleWSDao.ActualizarRecibo(
-                                        nuevalista,
-                                        SesionEntity.imei,
-                                        SesionEntity.usuario_id,
-                                        listaCobranzaDetalleSQLiteEntity.get(j).getComentario(),
-                                        SesionEntity.fuerzatrabajo_id,
-                                        listaCobranzaDetalleSQLiteEntity.get(j).getBanco_id()
-                                );*/
                                 String resultado="0";
                                 formulasController=new FormulasController(getContext());
                                 chkwsdepositorecibido=formulasController.EnviarReciboWsRetrofit(
@@ -764,47 +687,13 @@ public class ParametrosView extends Fragment {
                         for (int y = 0; y < listaCobranzaCabeceraSQLiteEntity2.size(); y++) {
                             String motivoanulacion = listaCobranzaCabeceraSQLiteEntity2.get(y).getComentarioanulado();
 
-                  //          ===========================JPCM REVISAR, AL REMOVER KSOAP QUEDA INABILITADA LAS LINEAS DE ABAJO ==========================================================================
-                            /*VALIDAR SI FUNCIONABA O NO
-
-                            reswsanuladep =  cobranzaCabeceraWSDao.AnularDeposito(
-                                    SesionEntity.imei,
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getCompania_id(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getBanco_id(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getTipoingreso(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getCobranza_id(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getUsuario_id(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getFechadeposito(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getTotalmontocobrado(),
-                                    "",
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getFuerzatrabajo_id(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getChkbancarizado(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getFechadiferido(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getComentarioanulado(),
-                                    listaCobranzaCabeceraSQLiteEntity2.get(y).getPagodirecto()
-                            );
-
-                            if (reswsanuladep.equals("1")) {
-                                resultadocabecera = cobranzaCabeceraSQLiteDao.AnularCobranzaCabecera(
-                                        listaCobranzaCabeceraSQLiteEntity2.get(y).getCobranza_id(),
-                                        listaCobranzaCabeceraSQLiteEntity2.get(y).getCompania_id(),
-                                        listaCobranzaCabeceraSQLiteEntity2.get(y).getFuerzatrabajo_id(),
-                                        motivoanulacion,
-                                        reswsanuladep);
-                            } else {
-                                resultadocabecera = cobranzaCabeceraSQLiteDao.AnularCobranzaCabecera(
-                                        listaCobranzaCabeceraSQLiteEntity2.get(y).getCobranza_id(),
-                                        listaCobranzaCabeceraSQLiteEntity2.get(y).getCompania_id(),
-                                        listaCobranzaCabeceraSQLiteEntity2.get(y).getFuerzatrabajo_id(),
-                                        motivoanulacion,
-                                        reswsanuladep);
-                            }*/
                         }
                         ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity2 = new ArrayList<>();
                         listaCobranzaDetalleSQLiteEntity2 = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleActualizacionPendiente(SesionEntity.usuario_id, SesionEntity.compania_id);
                         String reswsliberadetalle = "0";
 
                         for (int j = 0; j < listaCobranzaDetalleSQLiteEntity2.size(); j++) {
+
                             reswsliberadetalle=formulasController.EnviarReciboWsRetrofit(
                                     cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
                                             listaCobranzaDetalleSQLiteEntity2.get(j).getRecibo(),
@@ -818,34 +707,6 @@ public class ParametrosView extends Fragment {
                                     "0"
                             );
 
-                            /*reswsliberadetalle = cobranzaDetalleWSDao.DesvinculaReciboconDeposito(
-                                    SesionEntity.imei,
-                                    "UPDATE",
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getCompania_id().toString(),
-                                    "0",
-                                    "",
-                                    "1",
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getId(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getCliente_id(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getDocumento_id(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getImportedocumento(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getSaldodocumento(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getSaldocobrado(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getNuevosaldodocumento(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getFechacobranza(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getRecibo(),
-                                    "Pendiente",
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getComentario()
-                                    ,
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getUsuario_id()
-                                    ,
-                                    SesionEntity.fuerzatrabajo_id,
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getChkbancarizado(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getChkqrvalidado(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getMotivoanulacion(),
-                                    listaCobranzaDetalleSQLiteEntity.get(j).getPagodirecto()
-                            );
-                            */
                             if (reswsliberadetalle.equals("1")) {
                                 cobranzaDetalleSQLiteDao.ActualizaWSCobranzaDetalle(
                                         listaCobranzaDetalleSQLiteEntity2.get(j).getRecibo(),
@@ -861,65 +722,9 @@ public class ParametrosView extends Fragment {
                                 );
 
                             }
-                            /*else
-                                {
-                                    cobranzaDetalleSQLiteDao.ActualizaWSCobranzaDetalle(
-                                            listaCobranzaDetalleSQLiteEntity2.get(j).getRecibo(),
-                                            listaCobranzaDetalleSQLiteEntity2.get(j).getCompania_id(),
-                                            listaCobranzaDetalleSQLiteEntity2.get(j).getUsuario_id(),
-                                            "1",
-                                            listaCobranzaDetalleSQLiteEntity2.get(j).getCobranza_id(),
-                                            listaCobranzaDetalleSQLiteEntity2.get(j).getBanco_id()
-                                    );
-                                }*/
 
                         }
 
-                        //Sincronizacion Automatica de Recibos Anulados
-                        ArrayList<CobranzaDetalleSQLiteEntity> ListaCobranzaDetalleSQLiteEntity = new ArrayList<>();
-                        /*HistoricoCobranzaWSDao historicoCobranzaWSDao = new HistoricoCobranzaWSDao();
-                        ListaCobranzaDetalleSQLiteEntity = historicoCobranzaWSDao.obtenerHistoricoCobranzaAnulado
-                                (
-                                        SesionEntity.imei,
-                                        SesionEntity.compania_id,
-                                        "",
-                                        "",
-                                        "RECIBO_ANULADO",
-                                        "01-01-0001",
-                                        SesionEntity.usuario_id,
-                                        ""
-                                );*/
-                        //HistoricoCobranzaWS historicoCobranzaWS=new HistoricoCobranzaWS(getContext());
-                        //formulasController.ObtenerListaConvertidaHistoricoCobranza
-                        /*ListaCobranzaDetalleSQLiteEntity = formulasController.ObtenerListaConvertidaHistoricoCobranza
-                                (
-                                        getContext(),
-                                        SesionEntity.imei,
-                                        SesionEntity.compania_id,
-                                        "0",
-                                        "1",
-                                        "RECIBO_ANULADO",
-                                        "01-01-0001",
-                                        SesionEntity.fuerzatrabajo_id,
-                                        "0"
-                                );*/
-                        /*if (!ListaCobranzaDetalleSQLiteEntity.isEmpty()) {
-
-                            // resultado="1";
-                            for (int g = 0; g < ListaCobranzaDetalleSQLiteEntity.size(); g++) {
-                                //ArrayList<CobranzaDetalleSQLiteEntity> listadoCobranzaDetalleSQLiteEntity = new ArrayList<>();
-                                CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
-                                if (ListaCobranzaDetalleSQLiteEntity.get(g).getChkanulado().equals("1")) {
-                                    cobranzaDetalleSQLiteDao.ActualizaEstadoCobranzaDetalle(
-                                            ListaCobranzaDetalleSQLiteEntity.get(g).getRecibo(),
-                                            SesionEntity.compania_id,
-                                            SesionEntity.usuario_id,
-                                            "1",
-                                            ListaCobranzaDetalleSQLiteEntity.get(g).getMotivoanulacion()
-                                    );
-                                }
-                            }
-                        }*/
 
 
 
@@ -928,23 +733,39 @@ public class ParametrosView extends Fragment {
                         listaparametrosSQLiteEntity = parametrosSQLiteDao.ObtenerParametros();
                         if (listaparametrosSQLiteEntity.isEmpty()) {
                             parametrosSQLiteDao.LimpiarParametros();
-                            parametrosSQLiteDao.InsertaParametros("1", "CLIENTES", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("2", "BANCOS", "0", fecha2);
-                            //parametrosSQLiteDao.InsertaParametros("3", "DOCUMENTOS", "0", fecha2);
-                            //parametrosSQLiteDao.InsertaParametros("4", "RUTA VENDEDOR", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("5", "TERMINO PAGO", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("6", "AGENCIAS", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("7", "LISTA PRECIO", "0", fecha2);
-                            //parametrosSQLiteDao.InsertaParametros("8", "STOCK", "0", fecha2);
-                            //parametrosSQLiteDao.InsertaParametros("9", "LISTA PROMOCION", "0", fecha2);
-                            //parametrosSQLiteDao.InsertaParametros("10", "PROMOCION CABECERA", "0", fecha2);
-                            //parametrosSQLiteDao.InsertaParametros("11", "PROMOCION DETALLE", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", fecha2);
-                            //parametrosSQLiteDao.InsertaParametros("13", "CATALOGO", "0", fecha2);
-                            //parametrosSQLiteDao.InsertaParametros("14", "DIRECCION CLIENTE", "0", fecha2);
-                            //parametrosSQLiteDao.InsertaParametros("15", "HOJA DESPACHO", "0", fecha2);
+                            parametrosSQLiteDao.InsertaParametros("1", "CLIENTES", "0", getDateTime());
+                            parametrosSQLiteDao.InsertaParametros("2", "BANCOS", "0", getDateTime());
+                            //parametrosSQLiteDao.InsertaParametros("3", "DOCUMENTOS", "0", getDateTime());
+                            //parametrosSQLiteDao.InsertaParametros("4", "RUTA VENDEDOR", "0", getDateTime());
+                            parametrosSQLiteDao.InsertaParametros("5", "TERMINO PAGO", "0", getDateTime());
+                            parametrosSQLiteDao.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
+                            parametrosSQLiteDao.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
+                            //parametrosSQLiteDao.InsertaParametros("8", "STOCK", "0", getDateTime());
+                            //parametrosSQLiteDao.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
+                            //parametrosSQLiteDao.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
+                            //parametrosSQLiteDao.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
+                            parametrosSQLiteDao.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
+                            //parametrosSQLiteDao.InsertaParametros("13", "CATALOGO", "0", getDateTime());
+                            //parametrosSQLiteDao.InsertaParametros("14", "DIRECCION CLIENTE", "0", getDateTime());
+                            //parametrosSQLiteDao.InsertaParametros("15", "HOJA DESPACHO", "0", getDateTime());
                         }
 
+                        BancoRepository bancoRepository = new BancoRepository(getContext());
+                        LBanco = bancoRepository.getBancoWS(SesionEntity.imei);
+                        if (!(LBanco.isEmpty())) {
+                            bancoSQLiteDAO.LimpiarTablaBanco();
+                            CantBancos = registrarBancoSQLite(LBanco);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("2", "BANCOS", String.valueOf(CantBancos), getDateTime());
+                        }
+
+                        ListaPrecioDetalleWS listaPrecioDetalleWS = new ListaPrecioDetalleWS(getContext());
+                        LPDetalle = listaPrecioDetalleWS.getListaPrecioDetalleWS(SesionEntity.imei);
+
+                        if (!(LPDetalle.isEmpty())) {
+                            listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
+                            CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
+                        }
 
                         ClienteRepository clienteRepository = new ClienteRepository();
                         LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
@@ -952,7 +773,35 @@ public class ParametrosView extends Fragment {
                         if (!LclientesqlSQLiteEntity.isEmpty()) {
                             clienteSQlite.LimpiarTablaCliente();
                             CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), fecha2);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), getDateTime());
+                        }
+
+                        TerminoPagoWS terminoPagoWS = new TerminoPagoWS(getContext());
+                        LTPago = terminoPagoWS.getTerminoPagoWS(SesionEntity.imei);
+
+                        if (!(LTPago.isEmpty())) {
+                            terminoPagoSQLiteDao.LimpiarTablaTerminoPago();
+                            CantTerminoPago = registrarTerminoPagoSQLite(LTPago);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("5", "TERMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
+
+                        }
+
+                        AgenciaWS agenciaWS = new AgenciaWS(getContext());
+                        LAgencia = agenciaWS.getAgenciaWS(SesionEntity.imei);
+
+                        if (!(LAgencia.isEmpty())) {
+                            agenciaSQLiteDao.LimpiarTablaAgencia();
+                            CantAgencia = registrarAgenciaSQLite(LAgencia);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("6", "AGENCIAS", String.valueOf(CantAgencia), getDateTime());
+                        }
+
+
+                        RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
+                        LRutaFuerzaTrabajo = rutaFuerzaTrabajoRepository.getRutaFuerzaTrabajoWS(SesionEntity.imei);
+                        if (LRutaFuerzaTrabajo!=null) {
+                            rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo();
+                            CantRutaFuerzaTrabajo = registrarRutaFuerzaTrabajoSQLite(LRutaFuerzaTrabajo);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
                         }
 
                         DocumentoDeudaWS documentoDeudaWS = new DocumentoDeudaWS(getContext());
@@ -960,29 +809,13 @@ public class ParametrosView extends Fragment {
                         if (!(LDDeuda.isEmpty())) {
                             documentoDeudaSQLiteDao.LimpiarTablaDocumentoDeuda();
                             CantDocumentosDeuda = registrarDocumentoDeudaSQLite(LDDeuda);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("3", "DOCUMENTOS", String.valueOf(CantDocumentosDeuda), fecha2);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("3", "DOCUMENTOS", String.valueOf(CantDocumentosDeuda), getDateTime());
 
-                        }
-
-                        StockWS stockWS = new StockWS(getContext());
-                        LStock = stockWS.getStockWS(SesionEntity.imei);
-
-                        if (!(LStock.isEmpty())) {
-                            stockSQLiteDao.LimpiarTablaStock();
-                            CantStock = registrarStockSQLite(LStock);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("8", "STOCK", String.valueOf(CantStock), fecha2);
-                        }
-
-
-                        RutaFuerzaTrabajoWS rutaFuerzaTrabajoWS = new RutaFuerzaTrabajoWS(getContext());
-                        //LRutaFuerzaTrabajo = rutaFuerzaTrabajoWS.getRutaFuerzaTrabajoWS(SesionEntity.imei, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
-                        if (LRutaFuerzaTrabajo!=null) {
-                            rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo();
-                            CantRutaFuerzaTrabajo = registrarRutaFuerzaTrabajoSQLite(LRutaFuerzaTrabajo);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), fecha2);
                         }
 
                     }
+
+                    ///////////////////////FIN DE TODOS
                     else if (argumento.equals("CLIENTES")) {
                         ClienteRepository clienteRepository = new ClienteRepository();
                         LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
@@ -999,7 +832,7 @@ public class ParametrosView extends Fragment {
                         if (!(LBanco.isEmpty())) {
                             bancoSQLiteDAO.LimpiarTablaBanco();
                             CantBancos = registrarBancoSQLite(LBanco);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("2", "BANCOS", String.valueOf(CantBancos), fecha2);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("2", "BANCOS", String.valueOf(CantBancos), getDateTime());
                         }
                     }
                     else if (argumento.equals("TERMINO PAGO")) {
@@ -1009,7 +842,7 @@ public class ParametrosView extends Fragment {
                         if (!(LTPago.isEmpty())) {
                             terminoPagoSQLiteDao.LimpiarTablaTerminoPago();
                             CantTerminoPago = registrarTerminoPagoSQLite(LTPago);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("5", "TERMINO PAGO", String.valueOf(CantTerminoPago), fecha2);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("5", "TERMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
 
                         }
 
@@ -1022,7 +855,7 @@ public class ParametrosView extends Fragment {
                         if (!(LAgencia.isEmpty())) {
                             agenciaSQLiteDao.LimpiarTablaAgencia();
                             CantAgencia = registrarAgenciaSQLite(LAgencia);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("6", "AGENCIAS", String.valueOf(CantAgencia), fecha2);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("6", "AGENCIAS", String.valueOf(CantAgencia), getDateTime());
                         }
                     }
                     else if (argumento.equals("LISTA PRECIO")) {
@@ -1032,19 +865,18 @@ public class ParametrosView extends Fragment {
                         if (!(LPDetalle.isEmpty())) {
                             listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
                             CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), fecha2);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
                         }
                     }
                     else if (argumento.equals("STOCK")) {
-                    StockWS stockWS = new StockWS(getContext());
-                    LStock = stockWS.getStockWS
-                            (SesionEntity.imei);
+                        StockWS stockWS = new StockWS(getContext());
+                        LStock = stockWS.getStockWS(SesionEntity.imei);
 
-                    if (!(LStock.isEmpty())) {
-                        stockSQLiteDao.LimpiarTablaStock();
-                        CantStock = registrarStockSQLite(LStock);
-                        parametrosSQLiteDao.ActualizaCantidadRegistros("8", "STOCK", String.valueOf(CantStock), fecha2);
-                    }
+                        if (!(LStock.isEmpty())) {
+                            stockSQLiteDao.LimpiarTablaStock();
+                            CantStock = registrarStockSQLite(LStock);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("8", "STOCK", String.valueOf(CantStock), getDateTime());
+                        }
                     }
                     else if (argumento.equals("LISTA PROMOCION")) {
                     ListaPromocionWS listaPromocionWS = new ListaPromocionWS(getContext());
@@ -1053,7 +885,7 @@ public class ParametrosView extends Fragment {
                     if (!(LPromocion.isEmpty())) {
                         listaPromocionSQLiteDao.LimpiarTablaListaPromocion();
                         CantListaPromocion = registrarListaPromocionSQLite(LPromocion);
-                        parametrosSQLiteDao.ActualizaCantidadRegistros("9", "LISTA PROMOCION", String.valueOf(CantListaPromocion), fecha2);
+                        parametrosSQLiteDao.ActualizaCantidadRegistros("9", "LISTA PROMOCION", String.valueOf(CantListaPromocion), getDateTime());
                     }
                     }
                     else if (argumento.equals("PROMOCION CABECERA")) {
@@ -1064,7 +896,7 @@ public class ParametrosView extends Fragment {
                         if (!(LPCabecera.isEmpty())) {
                             promocionCabeceraSQLiteDao.LimpiarTablaPromocionCabecera();
                             CantPromocionCabecera = registrarPromocionCabeceraSQLite(LPCabecera);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("10", "PROMOCION CABECERA", String.valueOf(CantPromocionCabecera), fecha2);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("10", "PROMOCION CABECERA", String.valueOf(CantPromocionCabecera), getDateTime());
                         }
                     }
                     else if (argumento.equals("PROMOCION DETALLE")) {
@@ -1073,28 +905,23 @@ public class ParametrosView extends Fragment {
                         if (!(LPromocionDetalle.isEmpty())) {
                             promocionDetalleSQLiteDao.LimpiarTablaPromocionDetalle();
                             CantPromocionDetalle = registrarPromocionDetalleSQLite(LPromocionDetalle);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("11", "PROMOCION DETALLE", String.valueOf(CantPromocionDetalle), fecha2);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("11", "PROMOCION DETALLE", String.valueOf(CantPromocionDetalle), getDateTime());
                         }
                     }
                     else if (argumento.equals("RUTA FUERZATRABAJO")) {
-                        RutaFuerzaTrabajoWS rutaFuerzaTrabajoWS = new RutaFuerzaTrabajoWS(getContext());
-                        LRutaFuerzaTrabajo = rutaFuerzaTrabajoWS.getRutaFuerzaTrabajoWS(SesionEntity.imei);
+
+                        Log.e("JPCM","FUERZA DE TRABAJO DESCARGANDO");
+                        RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
+                        LRutaFuerzaTrabajo = rutaFuerzaTrabajoRepository.getRutaFuerzaTrabajoWS(SesionEntity.imei);
 
                         if (!(LRutaFuerzaTrabajo.isEmpty())) {
                             rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo();
                             CantRutaFuerzaTrabajo = registrarRutaFuerzaTrabajoSQLite(LRutaFuerzaTrabajo);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), fecha2);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
                         }
                     }
-                    else if (argumento.equals("HOJA DESPACHO")) {
 
                     }
-
-
-                    }
-
-
-
 
             } catch (Exception e){
                 e.printStackTrace();
