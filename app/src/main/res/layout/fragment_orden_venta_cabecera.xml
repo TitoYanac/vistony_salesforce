@@ -1,32 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ConsDepositoView"
+    android:id="@+id/fragment_orden_venta_cabecera"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.HistoricoCobranzaView">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-
+    tools:context=".View.OrdenVentaCabeceraView">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            >
+            android:layout_gravity="center">
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/lbl_ruc"
                     android:layout_width="match_parent"
@@ -35,32 +29,33 @@
                     android:enabled="true"
                     android:hint=""
                     android:text="RUC"
-                    android:textStyle="bold"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/tv_ruc"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:background="@drawable/borde_cuadrado"
                     android:enabled="true"
                     android:hint=""
-                    android:background="@drawable/borde_cuadrado"
                     android:text="RUC1:"
-                    android:layout_gravity="center_horizontal"
                     android:textSize="20dp" />
 
 
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/lbl_cliente"
                     android:layout_width="match_parent"
@@ -69,30 +64,31 @@
                     android:enabled="true"
                     android:hint=""
                     android:text="CLIENTE"
-                    android:textStyle="bold"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/tv_cliente"
                     android:layout_width="0dp"
                     android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:background="@drawable/borde_cuadrado"
                     android:enabled="true"
                     android:hint=""
                     android:text="Cliente1:"
-                    android:background="@drawable/borde_cuadrado"
-                    android:layout_gravity="center_horizontal"
                     android:textSize="20dp" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/lbl_direccion"
                     android:layout_width="match_parent"
@@ -101,25 +97,26 @@
                     android:enabled="true"
                     android:hint=""
                     android:text="DIRECCION"
-                    android:textStyle="bold"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/tv_direccion"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:background="@drawable/borde_cuadrado"
                     android:enabled="true"
                     android:hint=""
                     android:text="Direccion1:"
-                    android:background="@drawable/borde_cuadrado"
-                    android:layout_gravity="center_horizontal"
                     android:textSize="20dp" />
+
                 <ImageButton
                     android:id="@+id/btn_consultar_direccion"
                     android:layout_width="50dp"
@@ -127,10 +124,11 @@
                     android:background="@color/Rojo_Vistony"
                     android:src="@drawable/ic_search_white_24dp" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/lbl_moneda"
                     android:layout_width="match_parent"
@@ -139,29 +137,30 @@
                     android:enabled="true"
                     android:hint=""
                     android:text="MONEDA"
-                    android:textStyle="bold"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <Spinner
                     android:id="@+id/spnmoneda"
+                    style="@android:style/Widget.Holo.Light.Spinner"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="0dp"
                     android:layout_weight="4"
                     android:entries="@array/Moneda"
-                    android:textAlignment="gravity"
                     android:spinnerMode="dropdown"
-                    style="@android:style/Widget.Holo.Light.Spinner"
-                    />
+                    android:textAlignment="gravity" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/lbl_terminopago"
                     android:layout_width="match_parent"
@@ -170,24 +169,25 @@
                     android:enabled="true"
                     android:hint=""
                     android:text="TERMINO PAGO"
-                    android:textStyle="bold"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/tv_orden_venta_terminopago"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:background="@drawable/borde_cuadrado"
                     android:enabled="true"
+                    android:gravity="center"
                     android:hint=""
                     android:text="CONTRA ENTREGA"
-                    android:gravity="center"
-                    android:background="@drawable/borde_cuadrado"
-                    android:layout_gravity="center_horizontal"
                     android:textAlignment="center"
                     android:textSize="20dp" />
 
@@ -200,10 +200,11 @@
 
 
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <CheckBox
                     android:id="@+id/chk_descuento_contado"
                     android:layout_width="match_parent"
@@ -212,25 +213,26 @@
                     android:enabled="false"
                     android:hint=""
                     android:text="DESCUENTO POR CONTADO"
-                    android:textStyle="bold"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
                 <Spinner
                     android:id="@+id/sp_cantidaddescuento"
+                    style="@android:style/Widget.Holo.Light.Spinner"
                     android:layout_width="70dp"
                     android:layout_height="50dp"
                     android:layout_weight="2"
-                    android:textAlignment="gravity"
-                    android:spinnerMode="dropdown"
-                    android:enabled="false"
                     android:clickable="false"
-                    style="@android:style/Widget.Holo.Light.Spinner"
-                    />
+                    android:enabled="false"
+                    android:spinnerMode="dropdown"
+                    android:textAlignment="gravity" />
 
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/lbl_agencia"
                     android:layout_width="match_parent"
@@ -239,25 +241,26 @@
                     android:enabled="true"
                     android:hint=""
                     android:text="AGENCIA"
-                    android:textStyle="bold"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/tv_orden_venta_agencia"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:background="@drawable/borde_cuadrado"
                     android:enabled="true"
-                    android:hint=""
                     android:gravity="center"
+                    android:hint=""
                     android:text="VISTONY S.A.C."
                     android:textAlignment="center"
-                    android:background="@drawable/borde_cuadrado"
-                    android:layout_gravity="center_horizontal"
                     android:textSize="20dp" />
 
                 <ImageButton
@@ -267,23 +270,7 @@
                     android:background="@color/Rojo_Vistony"
                     android:src="@drawable/ic_search_white_24dp" />
             </TableRow>
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-                <TextView
-                    android:id="@+id/lbl_comentario"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:enabled="true"
-                    android:hint=""
-                    android:text="COMENTARIO"
-                    android:textStyle="bold"
-                    android:textSize="15dp"
-                    android:textAlignment="center"
-                    />
-            </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -292,14 +279,15 @@
                     android:id="@+id/et_comentario"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="4"
+                    android:background="@drawable/borde_cuadrado"
                     android:enabled="true"
                     android:hint="Ingrese Comentario"
                     android:textAlignment="center"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/borde_cuadrado"
                     android:textSize="20dp" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -310,18 +298,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
+                    android:background="@color/Rojo_Vistony"
+                    android:drawableLeft="@drawable/ic_baseline_format_list_numbered_24"
                     android:enabled="true"
                     android:text="DETALLE"
-                    android:background="@drawable/custom_border_button_red"
-                    android:drawableLeft="@drawable/ic_baseline_format_list_numbered_24"
                     android:textColor="@color/white"
                     android:textSize="20dp" />
             </TableRow>
         </TableLayout>
 
 
-
-
+    </LinearLayout>
 
     <TableLayout
         android:layout_width="match_parent"
@@ -329,6 +316,7 @@
         android:layout_gravity="bottom"
         android:background="@color/colorPrimary"
         android:focusable="false">
+
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -349,14 +337,16 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
                 android:focusable="false"
+                android:gravity="right"
                 android:text="0"
                 android:textColor="@color/white"
-                android:textAlignment="center"
                 android:textSize="24dp"></TextView>
 
         </TableRow>
+
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -377,14 +367,16 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
                 android:focusable="false"
+                android:gravity="right"
                 android:text="0"
                 android:textColor="@color/white"
-                android:textAlignment="center"
                 android:textSize="24dp"></TextView>
 
         </TableRow>
+
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -405,11 +397,12 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
                 android:focusable="false"
+                android:gravity="right"
                 android:text="0"
                 android:textColor="@color/white"
-                android:textAlignment="center"
                 android:textSize="24dp"></TextView>
 
         </TableRow>
@@ -435,9 +428,10 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
                 android:focusable="false"
-                android:textAlignment="center"
+                android:gravity="right"
                 android:text="0"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
@@ -464,15 +458,15 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
-                android:textAlignment="center"
                 android:focusable="false"
+                android:gravity="right"
                 android:text="0"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
         </TableRow>
     </TableLayout>
-    </LinearLayout>
-    </ScrollView>
+
 </FrameLayout>

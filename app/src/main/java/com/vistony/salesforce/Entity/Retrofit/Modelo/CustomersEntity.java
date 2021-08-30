@@ -14,6 +14,9 @@ public class CustomersEntity {
     @SerializedName("Address")
     private String direccion;
 
+    @SerializedName("LicTradNum")
+    private String LicTradNum;
+
     @SerializedName("ShipToCode")
     private String domicilioEmbarque;
 
@@ -28,9 +31,6 @@ public class CustomersEntity {
 
     @SerializedName("TerritoryId")
     private String zonaId;
-
-    @SerializedName("RucDni")
-    private String documento;
 
     @SerializedName("Currency")
     private String moneda;
@@ -47,17 +47,6 @@ public class CustomersEntity {
     @SerializedName("ZipCode")
     private String ubigeoId;
 
-    /*
-    @SerializedName("Impuesto_ID")
-    private String impuesto_id;
-
-    @SerializedName("Impuesto")
-    private String impuesto;
-
-    @SerializedName("TipoCambio")
-    private String tipocambio;
-    */
-
     @SerializedName("Category")
     private String categoria;
 
@@ -70,11 +59,30 @@ public class CustomersEntity {
     @SerializedName("PymntGroup")
     private String terminoPago_id;
 
+    @SerializedName("PriceList")
+    private String lista_precio;
+
     @SerializedName("Invoices")
     private List<InvoicesEntity> invoices;
 
     @SerializedName("Addresses")
     private List<AddressEntity> address;
+
+    public String getLista_precio() {
+        return lista_precio;
+    }
+
+    public void setLista_precio(String lista_precio) {
+        this.lista_precio = lista_precio;
+    }
+
+    public String getLicTradNum() {
+        return LicTradNum;
+    }
+
+    public void setLicTradNum(String licTradNum) {
+        LicTradNum = licTradNum;
+    }
 
     public List<AddressEntity> getAddress() {
         return address;
@@ -211,14 +219,6 @@ public class CustomersEntity {
 
     public void setZonaId(String zonaId) {
         this.zonaId = zonaId;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-
-    public void setDocumento(String documento) {
-        this.documento = documento;
     }
 
     public String getMoneda() {

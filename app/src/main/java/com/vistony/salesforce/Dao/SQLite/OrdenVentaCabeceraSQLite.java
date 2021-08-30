@@ -11,12 +11,12 @@ import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 
 import java.util.ArrayList;
 
-public class OrdenVentaCabeceraSQLiteDao {
+public class OrdenVentaCabeceraSQLite {
     SQLiteController sqLiteController;
     SQLiteDatabase bd;
     ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabeceraSQLiteEntity;
 
-    public OrdenVentaCabeceraSQLiteDao(Context context)
+    public OrdenVentaCabeceraSQLite(Context context)
     {
         sqLiteController = new SQLiteController(context);
     }
@@ -301,32 +301,23 @@ public class OrdenVentaCabeceraSQLiteDao {
         return listaOrdenVentaCabeceraSQLiteEntity;
     }
 
-    public int ActualizaResultadoOVenviada (String compania_id, String ordenventa_id, String estado,String ordenventa_id_erp,String mensajeWS)
+    public int ActualizaResultadoOVenviada (String ordenventa_id, String estado,String ordenventa_id_erp,String mensajeWS)
     {
         int resultado=0;
-        String chkdepositado="1";
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
         abrir();
         try {
-
             ContentValues registro = new ContentValues();
             registro.put("enviadoERP","1");
             registro.put("recibidoERP",estado);
             registro.put("ordenventa_ERP_id",ordenventa_id_erp);
             registro.put("mensajeWS",mensajeWS);
             bd = sqLiteController.getWritableDatabase();
-            resultado = bd.update("ordenventacabecera",registro,"compania_id='"+compania_id+"'"+" and ordenventa_id='"+ordenventa_id+"'" ,null);
-            resultado=1;
+            resultado = bd.update("ordenventacabecera",registro,"ordenventa_id='"+ordenventa_id+"' LIMIT 1" ,null);
             bd.close();
-        }catch (Exception e)
-        {
-            // TODO: handle exception
+        }catch (Exception e){
             System.out.println(e.getMessage());
-            resultado=0;
         }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return resultado;
     }
 
@@ -363,18 +354,18 @@ public class OrdenVentaCabeceraSQLiteDao {
         return estado;
     }
 
-    public ArrayList<OrdenVentaCabeceraSQLiteEntity> ObtenerOrdenVentaCabeceraPendientesEnvioWS ()
+    public ArrayList<String> ObtenerOrdenVentaCabeceraPendientesEnvioWS ()
     {
-        listaOrdenVentaCabeceraSQLiteEntity = new ArrayList<OrdenVentaCabeceraSQLiteEntity>();
-        OrdenVentaCabeceraSQLiteEntity ordenVentaCabeceraSQLiteEntity;
+        ArrayList<String> listSalesOrder = new ArrayList<String>();
+        //OrdenVentaCabeceraSQLiteEntity ordenVentaCabeceraSQLiteEntity;
         abrir();
         try {
-        Cursor fila = bd.rawQuery(
-                "Select * from ordenventacabecera where enviadoERP='1' and (recibidoERP is null or recibidoERP='0')  ",null);
+        Cursor fila = bd.rawQuery("Select ordenventa_id  from ordenventacabecera where recibidoERP is null or recibidoERP='0' ",null);
 
         while (fila.moveToNext())
         {
-            ordenVentaCabeceraSQLiteEntity= new OrdenVentaCabeceraSQLiteEntity();
+            listSalesOrder.add(fila.getString(0));
+            /*ordenVentaCabeceraSQLiteEntity= new OrdenVentaCabeceraSQLiteEntity();
             ordenVentaCabeceraSQLiteEntity.setCompania_id(fila.getString(0));
             ordenVentaCabeceraSQLiteEntity.setOrdenventa_id(fila.getString(1));
             ordenVentaCabeceraSQLiteEntity.setCliente_id(fila.getString(2));
@@ -410,16 +401,15 @@ public class OrdenVentaCabeceraSQLiteDao {
             ordenVentaCabeceraSQLiteEntity.setTotal_gal_acumulado(fila.getString(32));
             ordenVentaCabeceraSQLiteEntity.setDescuentocontado(fila.getString(33));
 
-            listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
+            listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);*/
         }
         }catch (Exception e)
         {
             System.out.println(e.getMessage());
-            Log.e("REOS", "Exception"+e.toString() );
+            Log.e("REOS", "Exception "+e.toString() );
         }
         bd.close();
-        Log.e("REOS", "listaOrdenVentaCabeceraSQLiteEntity.size(): "+listaOrdenVentaCabeceraSQLiteEntity.size() );
-        return listaOrdenVentaCabeceraSQLiteEntity;
+        return listSalesOrder;
     }
 
 }

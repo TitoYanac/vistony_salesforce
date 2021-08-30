@@ -44,7 +44,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
-import com.vistony.salesforce.Dao.Retrofit.ClienteViewModel;
+import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.SQLite.DocumentoDeudaSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteDetalleDao;
@@ -104,7 +104,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     ConfigImpresoraView configImpresoraView;
     private static OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout refreshMasterClient;
-    private ClienteViewModel clienteViewModel;
+    private ClienteRepository clienteRepository;
 
 
     //ListenerBackPress.setCurrentFragment("FormListaDeudaCliente");
@@ -172,8 +172,8 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         tv_monto_cliente_detalle_dolares = (TextView) v.findViewById(R.id.tv_monto_cliente_detalle_dolares);
         refreshMasterClient=v.findViewById(R.id.refreshClient);
 
-        clienteViewModel =  new ViewModelProvider(this.getActivity()).get(ClienteViewModel.class);
-        clienteViewModel.updateInformationClient(imei,ruccliente,getContext()).observe(this.getActivity(), data -> {
+        clienteRepository =  new ViewModelProvider(this.getActivity()).get(ClienteRepository.class);
+        clienteRepository.updateInformationClient(imei,ruccliente,getContext()).observe(this.getActivity(), data -> {
             switch(data){
                 case "if":
                     Toast.makeText(getContext(), "Documentos actualizados...", Toast.LENGTH_SHORT).show();
@@ -189,7 +189,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
 
 
         refreshMasterClient.setOnRefreshListener(() -> {
-            clienteViewModel.updateInformationClient(imei,ruccliente,getContext());
+            clienteRepository.updateInformationClient(imei,ruccliente,getContext());
             refreshMasterClient.setRefreshing(false);
         });
 

@@ -20,13 +20,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaParametrosAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
-import com.vistony.salesforce.Dao.Retrofit.OrdenVentaViewModel;
+import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.Retrofit.AgenciaWS;
-import com.vistony.salesforce.Dao.Retrofit.BancoWS;
-import com.vistony.salesforce.Dao.Retrofit.ClienteViewModel;
+import com.vistony.salesforce.Dao.Retrofit.BancoRepository;
+import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaCabeceraWS;
 import com.vistony.salesforce.Dao.Retrofit.DocumentoDeudaWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
@@ -48,7 +49,6 @@ import com.vistony.salesforce.Dao.SQLite.DocumentoDeudaSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaParametrosDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ParametrosSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionDetalleSQLiteDao;
@@ -71,7 +71,6 @@ import com.vistony.salesforce.Entity.Adapters.ListaParametrosEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ParametrosSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
@@ -153,7 +152,7 @@ public class ParametrosView extends Fragment {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity;
     private final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION=1;
-    private OrdenVentaViewModel ordenVentaViewModel;
+    private OrdenVentaRepository ordenVentaRepository;
     private Observer<String []> viewModelOrdenDeVenta = null;
 
     public ParametrosView() {
@@ -203,7 +202,7 @@ public class ParametrosView extends Fragment {
         zonaSQLiteDao = new ZonaSQLiteDao(getContext());
         obtenerPametros();
         LclientesqlSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
-        //rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
+
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
@@ -214,12 +213,13 @@ public class ParametrosView extends Fragment {
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(getContext());
 
-        obtenerWSParametros.execute("Todos-x");
+        if(BuildConfig.FLAVOR.equals("chile")){
+            obtenerWSParametros.execute("Todos");
+        }
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
         }
-
     }
 
     @Override
@@ -230,22 +230,51 @@ public class ParametrosView extends Fragment {
         listviewparametro = (ListView) v.findViewById(R.id.listparametro);
         fabdescargarparametros = (FloatingActionButton) v.findViewById(R.id.fabdescargarparametros);
 
-        ordenVentaViewModel = new ViewModelProvider(this).get(OrdenVentaViewModel.class);
+        ordenVentaRepository = new ViewModelProvider(this).get(OrdenVentaRepository.class);
+
         viewModelOrdenDeVenta = new Observer<String []>() {
             @Override
             public void onChanged(@Nullable final String [] newName) {
-                Toast.makeText(getContext(), "Ya respondio ov enviada", Toast.LENGTH_SHORT).show();
                 Toast.makeText(getContext(), "Ya respondio ov enviada", Toast.LENGTH_SHORT).show();
             }
         };
 
 
+        ///////////////// ENVIAR PEDIDOS
+        ordenVentaRepository.salesOrderResend(getContext()).observe(getActivity(), data -> {
+            Log.e("jepicame","=>"+data);
+        });
+
+        /*
+        OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(getContext());
+        ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabeceraSQLiteEntity = new ArrayList<>();
+        listaOrdenVentaCabeceraSQLiteEntity= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
+
+        for(int z=0;z<listaOrdenVentaCabeceraSQLiteEntity.size();z++){
+            String ordenVentaId=listaOrdenVentaCabeceraSQLiteEntity.get(z).getOrdenventa_id();
+            String JSON=EnviarNubeOV(ordenVentaId,getContext());
+
+            ordenVentaViewModel.sendSalesOrder(JSON).observe(getActivity(), data->{
+                if(data!=null){
+                    ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
+                            SesionEntity.compania_id,
+                            ordenVentaId,
+                            data[0],
+                            data[3],
+                            data[1]
+                    );
+                }else{
+
+                }
+            });
+        }*/
+
+
         fabdescargarparametros.setOnClickListener(view -> {
             Object objeto=null,object2=null;
-            //listaConsDepositoAdapter = new ListaConsDepositoAdapter();
+
             objeto=listaParametrosAdapter.ObtenerListaParametros();
-            //object2=objeto;
-            //listaConsDepositoEntity = new ArrayList<ListaConsDepositoEntity>();
+
             arraylistaparametrosentity = (ArrayList<ListaParametrosEntity>) objeto;
             String [] valores=new String[]{"","","","","","","","","","","","","","",""};
             int p=0;
@@ -256,8 +285,11 @@ public class ParametrosView extends Fragment {
                     p++;
                 }
             }
+
+
             obtenerWSParametros =  new ObtenerWSParametros();
             obtenerWSParametros.execute(valores);
+
 
         });
 
@@ -889,61 +921,33 @@ public class ParametrosView extends Fragment {
                             }
                         }*/
 
-                        Log.e("REOS", "SQLite-Inicia Envio Automatico OV " );
-                        //Envio Automatico de Ordenes de Venta, sin recepcion de SAP
-                        OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao=new OrdenVentaCabeceraSQLiteDao(getContext());
-                        ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabeceraSQLiteEntity = new ArrayList<>();
-                        listaOrdenVentaCabeceraSQLiteEntity=ordenVentaCabeceraSQLiteDao.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
-                        Log.e("REOS", "listaOrdenVentaCabeceraSQLiteEntity.size(): "+listaOrdenVentaCabeceraSQLiteEntity.size() );
-                        for(int z=0;z<listaOrdenVentaCabeceraSQLiteEntity.size();z++){
-                            String ordenVentaId=listaOrdenVentaCabeceraSQLiteEntity.get(z).getOrdenventa_id();
-                            String JSON;
-                            JSON=EnviarNubeOV(ordenVentaId,getContext());
 
-                            //listaOrdenVentaCabeceraSQLiteEntity.get(z).getOrdenventa_id()
 
-                            ordenVentaViewModel.sendSalesOrder(JSON).observe(getActivity(), data->{
-                                if(data!=null){
-                                   // OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao=new OrdenVentaCabeceraSQLiteDao(getContext());
-                                    ordenVentaCabeceraSQLiteDao.ActualizaResultadoOVenviada(
-                                            SesionEntity.compania_id,
-                                            ordenVentaId,
-                                            data[0],
-                                            data[3],
-                                            data[1]
-                                    );
-                                }else{
 
-                                }
-                            });
-
-                            //hiloEnviarNubeOV=new HiloEnviarNubeOV(getContext(),listaOrdenVentaCabeceraSQLiteEntity.get(z).getOrdenventa_id());
-                            //hiloEnviarNubeOV.execute(JSON);
-                        }
                         //CARGA DE MAESTROS
                         listaparametrosSQLiteEntity = parametrosSQLiteDao.ObtenerParametros();
                         if (listaparametrosSQLiteEntity.isEmpty()) {
                             parametrosSQLiteDao.LimpiarParametros();
                             parametrosSQLiteDao.InsertaParametros("1", "CLIENTES", "0", fecha2);
                             parametrosSQLiteDao.InsertaParametros("2", "BANCOS", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("3", "DOCUMENTOS", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("4", "RUTA VENDEDOR", "0", fecha2);
+                            //parametrosSQLiteDao.InsertaParametros("3", "DOCUMENTOS", "0", fecha2);
+                            //parametrosSQLiteDao.InsertaParametros("4", "RUTA VENDEDOR", "0", fecha2);
                             parametrosSQLiteDao.InsertaParametros("5", "TERMINO PAGO", "0", fecha2);
                             parametrosSQLiteDao.InsertaParametros("6", "AGENCIAS", "0", fecha2);
                             parametrosSQLiteDao.InsertaParametros("7", "LISTA PRECIO", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("8", "STOCK", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("9", "LISTA PROMOCION", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("10", "PROMOCION CABECERA", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("11", "PROMOCION DETALLE", "0", fecha2);
+                            //parametrosSQLiteDao.InsertaParametros("8", "STOCK", "0", fecha2);
+                            //parametrosSQLiteDao.InsertaParametros("9", "LISTA PROMOCION", "0", fecha2);
+                            //parametrosSQLiteDao.InsertaParametros("10", "PROMOCION CABECERA", "0", fecha2);
+                            //parametrosSQLiteDao.InsertaParametros("11", "PROMOCION DETALLE", "0", fecha2);
                             parametrosSQLiteDao.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", fecha2);
                             //parametrosSQLiteDao.InsertaParametros("13", "CATALOGO", "0", fecha2);
-                            parametrosSQLiteDao.InsertaParametros("14", "DIRECCION CLIENTE", "0", fecha2);
+                            //parametrosSQLiteDao.InsertaParametros("14", "DIRECCION CLIENTE", "0", fecha2);
                             //parametrosSQLiteDao.InsertaParametros("15", "HOJA DESPACHO", "0", fecha2);
                         }
 
 
-                        ClienteViewModel clienteViewModel = new ClienteViewModel();
-                        LclientesqlSQLiteEntity = clienteViewModel.getClienteWS(SesionEntity.imei);
+                        ClienteRepository clienteRepository = new ClienteRepository();
+                        LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
 
                         if (!LclientesqlSQLiteEntity.isEmpty()) {
                             clienteSQlite.LimpiarTablaCliente();
@@ -980,8 +984,8 @@ public class ParametrosView extends Fragment {
 
                     }
                     else if (argumento.equals("CLIENTES")) {
-                        ClienteViewModel clienteViewModel = new ClienteViewModel();
-                        LclientesqlSQLiteEntity = clienteViewModel.getClienteWS(SesionEntity.imei);
+                        ClienteRepository clienteRepository = new ClienteRepository();
+                        LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
                         if (!(LclientesqlSQLiteEntity.isEmpty())) {
                             clienteSQlite.LimpiarTablaCliente();
                             //CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
@@ -990,8 +994,8 @@ public class ParametrosView extends Fragment {
 
                     }
                     else if (argumento.equals("BANCOS")) {
-                        BancoWS bancoWS = new BancoWS(getContext());
-                        LBanco = bancoWS.getBancoWS(SesionEntity.imei);
+                        BancoRepository bancoRepository = new BancoRepository(getContext());
+                        LBanco = bancoRepository.getBancoWS(SesionEntity.imei);
                         if (!(LBanco.isEmpty())) {
                             bancoSQLiteDAO.LimpiarTablaBanco();
                             CantBancos = registrarBancoSQLite(LBanco);
@@ -1185,14 +1189,7 @@ public class ParametrosView extends Fragment {
 
 
     }
-    public String EnviarNubeOV(String ordenventa_id,Context context)
-    {
-        String JSON="";
-        FormulasController formulasController=new FormulasController(context);
-        JSON=formulasController.GenerayConvierteaJSONOV(ordenventa_id,context);
 
-        return  JSON;
-    }
 
 
 
@@ -1271,10 +1268,10 @@ public class ParametrosView extends Fragment {
 
     public int registrarClienteSQLite(List<ClienteSQLiteEntity> Lista){
 
-        ClienteViewModel clienteViewModel=new ClienteViewModel(getContext());
-        clienteViewModel.addCustomer(Lista);
+        ClienteRepository clienteRepository =new ClienteRepository(getContext());
+        clienteRepository.addCustomer(Lista);
 
-        return clienteViewModel.countCustomer();
+        return clienteRepository.countCustomer();
     }
 
     public int registrarBancoSQLite(List<BancoSQLiteEntity> Lista)
@@ -1429,16 +1426,15 @@ public class ParametrosView extends Fragment {
             for (int i = 0; i < Lista.size(); i++) {
                 listaPrecioDetalleSQLiteDao.InsertaListaPrecioDetalle(
                         Lista.get(i).getCompania_id(),
-                        //Lista.get(i).getListaprecio_id(),
                         Lista.get(i).getCredito(),
                         Lista.get(i).getContado(),
                         Lista.get(i).getProducto_id(),
                         Lista.get(i).getProducto(),
                         Lista.get(i).getUmd(),
                         Lista.get(i).getGal(),
-                        Lista.get(i).getU_vis_cashdscnt()
-                )
-                ;
+                        Lista.get(i).getU_vis_cashdscnt(),
+                        Lista.get(i).getTypo()
+                );
             }
             resultado=listaPrecioDetalleSQLiteDao.ObtenerCantidadListaPrecioDetalle();
         }catch (Exception e) {

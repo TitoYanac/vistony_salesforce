@@ -44,7 +44,8 @@ public class ListaPrecioDetalleSQLiteDao {
             String producto,
             String umd,
             String gal,
-            String u_vis_cashdscnt
+            String u_vis_cashdscnt,
+            String tipo
     )
 
     {
@@ -61,6 +62,7 @@ public class ListaPrecioDetalleSQLiteDao {
         registro.put("umd",umd);
         registro.put("gal",gal);
         registro.put("U_VIS_CashDscnt",u_vis_cashdscnt);
+        registro.put("Tipo",tipo);
         bd.insert("listapreciodetalle",null,registro);
         bd.close();
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();

@@ -7,7 +7,6 @@ import java.util.List;
 
 public class ListaPrecioDetalleEntityResponse {
     @SerializedName("PriceList")
-    //@SerializedName("data")
     private List<ListaPrecioDetalleEntity> listaPrecioDetalleEntity;
 
     public ListaPrecioDetalleEntityResponse (List<ListaPrecioDetalleEntity> listaPrecioDetalleEntity)  {

@@ -1,6 +1,6 @@
-package com.vistony.salesforce.Entity.XML;
+package com.vistony.salesforce.Entity;
 
-public class DocumentLines {
+public class DocumentLine {
     public String ItemCode;
     public String WarehouseCode;
     public String Quantity;
@@ -21,7 +21,7 @@ public class DocumentLines {
     public String U_VIS_PromLineID;
     public String U_VIST_CTAINGDCTO;
 
-    public DocumentLines(String itemCode, String warehouseCode, String quantity, String dscription, String COGSAccountCode, String price, String discountPercent, String lineTotal, String taxCode, String costingCode, String costingCode2, String costingCode3, String acctCode, String taxOnly, String u_SYP_FECAT07, String u_VIS_PromID, String u_VIS_PromLineID, String u_VIST_CTAINGDCTO) {
+    public DocumentLine(String itemCode, String warehouseCode, String quantity, String dscription, String COGSAccountCode, String price, String discountPercent, String lineTotal, String taxCode, String costingCode, String costingCode2, String costingCode3, String acctCode, String taxOnly, String u_SYP_FECAT07, String u_VIS_PromID, String u_VIS_PromLineID, String u_VIST_CTAINGDCTO) {
         ItemCode = itemCode;
         WarehouseCode = warehouseCode;
         Quantity = quantity;

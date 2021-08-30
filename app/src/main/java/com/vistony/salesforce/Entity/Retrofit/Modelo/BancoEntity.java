@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 public class BancoEntity {
-    @SerializedName("BankID")
+    @SerializedName("BankId")
     private String Banco_ID;
 
     @SerializedName("BankName")

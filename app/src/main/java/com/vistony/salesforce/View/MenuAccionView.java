@@ -70,11 +70,11 @@ public class MenuAccionView extends Fragment {
 
     OnFragmentInteractionListener mListener;
     public static Object objetoMenuAccionView=new Object();
-    private GPSController gpsController;
-    private Location mLocation;
-    double latitude, longitude;
-    private static final int REQUEST_PERMISSION_LOCATION = 255;
-    LocationManager locationManager;
+    //private GPSController gpsController;
+    //private Location mLocation;
+    //double latitude, longitude;
+    //private static final int REQUEST_PERMISSION_LOCATION = 255;
+    //LocationManager locationManager;
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
@@ -113,9 +113,13 @@ public class MenuAccionView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /*
+        ////COMENTADO EL 26/08/2021
+
         locationManager = (LocationManager) getActivity(). getSystemService(LOCATION_SERVICE);
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
-        /****Mejora****/
+        //****Mejora****
         if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             // AlertNoGps();
             androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
@@ -144,6 +148,8 @@ public class MenuAccionView extends Fragment {
 
         }
 
+        */
+
 
         /*if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
@@ -153,7 +159,7 @@ public class MenuAccionView extends Fragment {
         } else {
             //Toast.makeText(this, R.string.error_permission_map, Toast.LENGTH_LONG).show();
         }*/
-        Log.e("REOS","MenuaccionView: Latidud: "+String.valueOf(latitude)+" "+"Longitud: "+String.valueOf(longitude));
+
         //latitude = mLocation.getLatitude();
         getActivity().setTitle("Menu Accion");
         if (getArguments() != null) {
@@ -163,8 +169,7 @@ public class MenuAccionView extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_menu_accion_view, container, false);
         cv_pedido=v.findViewById(R.id.cv_pedido);
@@ -176,12 +181,11 @@ public class MenuAccionView extends Fragment {
         cv_pedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String Fragment="MenuAccionView";
                 String accion="pedido";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
-
-                //alertaAdvertencia("La Opcion Aun no Esta Habilitada",getContext()).show();
             }
         });
 

@@ -78,6 +78,7 @@ public class ListaClienteCabeceraDao {
                         ,Lista.get(i).getChk_cobranza()
                         ,Lista.get(i).getChk_ruta()
                         ,Lista.get(i).getFecharuta()
+                        ,Lista.get(i).getLista_precio()
                 ));
             }
         }catch (Exception e)

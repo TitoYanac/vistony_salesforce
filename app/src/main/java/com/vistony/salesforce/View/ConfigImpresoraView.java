@@ -14,6 +14,7 @@ import android.os.Message;
 //import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -539,13 +540,19 @@ public class ConfigImpresoraView extends Fragment implements RadioGroup.OnChecke
                    // address = editTextIPAddress.getText().toString();
                 }
 
-                if (MenuView.getPrinterInstance().printerOpen(finalPuerto, finalNombre, finalDireccion, finalModo)) {
-                    //getActivity().finish();
-                    //Toast.makeText(getContext(), "Impresora Vinculada Correctamente ", Toast.LENGTH_SHORT).show();
-                    mHandler.obtainMessage(1, 0, 0, "Impresora Vinculada Correctamente").sendToTarget();
-                } else {
-                    //Indicador="0";
-                    mHandler.obtainMessage(1, 0, 0, "Fail to printer open!!").sendToTarget();
+                try {
+
+
+                    if (MenuView.getPrinterInstance().printerOpen(finalPuerto, finalNombre, finalDireccion, finalModo)) {
+                        //getActivity().finish();
+                        //Toast.makeText(getContext(), "Impresora Vinculada Correctamente ", Toast.LENGTH_SHORT).show();
+                        mHandler.obtainMessage(1, 0, 0, "Impresora Vinculada Correctamente").sendToTarget();
+                    } else {
+                        //Indicador="0";
+                        mHandler.obtainMessage(1, 0, 0, "Fail to printer open!!").sendToTarget();
+                    }
+                }catch (Throwable x){
+                    Log.e("ERROR FATAL IMPRESORA","En la clase"+getClass().getName()+" "+x.getMessage());
                 }
             }
         }).start();

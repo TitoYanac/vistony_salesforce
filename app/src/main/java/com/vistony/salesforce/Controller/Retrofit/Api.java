@@ -6,7 +6,6 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.AgenciaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ComisionesEntityResponse;
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.DireccionClienteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DocumentoDeudaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaUnidadEntityResponse;
@@ -22,6 +21,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.LoginEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PromocionCabeceraEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PromocionDetalleEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.RutaFuerzaTrabajoEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.StockEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.TerminoPagoEntityResponse;
 
@@ -48,11 +48,11 @@ public interface Api {
     @GET //("/user")
     Call<LoginEntityResponse> getUsers(@Url String url,@Query("imei") String imei);
 
-    @GET("/version")
-    Call<VersionEntity> getVs(@Query("imei") String imei,@Query("app") String app);
+    @GET //("/version")
+    Call<VersionEntity> getVs(@Url String url/*, @Query("imei") String imei,@Query("token") String token*/);
 
-    @GET("/customers")
-    Call<ClienteEntityResponse> getCliente (@Query("imei") String imei);
+    @GET //("/customers")
+    Call<ClienteEntityResponse> getCliente (@Url String url,@Query("imei") String imei);
 
     @GET("/customers")
     Call<ClienteEntityResponse> getClienteInformation (@Query("imei") String imei,@Query("cliente") String cliente);
@@ -67,14 +67,14 @@ public interface Api {
     @GET("/agencies")
     Call<AgenciaEntityResponse> getAgencia (@Query("imei") String imei);
 
-    @GET("/banks")
-    Call<BancoEntityResponse> getBanco (@Query("imei") String imei);
+    @GET//("/banks")
+    Call<BancoEntityResponse> getBanco(@Url String url,@Query("imei") String imei);
 
     @GET("/TerminoPago")
     Call<TerminoPagoEntityResponse> getTerminoPago (@Query("imei") String imei);
 
-    @GET("/Stock")
-    Call<StockEntityResponse> getStock (@Query("imei") String imei);
+    @GET//("/Stock")
+    Call<StockEntityResponse> getStock (@Url String url,@Query("imei") String imei);
 
     @GET("/TipoListaPromo")
     Call<ListaPromocionEntityResponse> getListaPromocion (@Query("imei") String imei);
@@ -82,11 +82,11 @@ public interface Api {
     @GET("/RutaTrabajo")
     Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Query("imei") String imei);
 
-    @GET("/PriceLists")
-    Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Query("imei") String imei);
+    @GET//("/PriceLists")
+    Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Url String url,@Query("imei") String imei);
 
-    @POST("/RegistrarOV")
-    Call<Void> sendOrder (@Body RequestBody params);
+    @POST//("/RegistrarOV")
+    Call<SalesOrderEntityResponse> sendOrder (@Url String url, @Body RequestBody params);
 
     //@FormUrlEncoded
     @POST("Collections")
@@ -102,8 +102,8 @@ public interface Api {
     @GET
     Call<List<CatalogoEntity>> getCatalog(@Url String pathUrl);
 
-    @GET
-    Call<DireccionClienteEntityResponse> getDireccionCliente (@Url String url);
+    //@GET
+    //Call<DireccionClienteEntityResponse> getDireccionCliente (@Url String url);
 
     @FormUrlEncoded
     @POST("/RegistroVisita")

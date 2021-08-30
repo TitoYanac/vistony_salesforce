@@ -7,7 +7,6 @@ import java.util.List;
 
 public class BancoEntityResponse {
     @SerializedName("Banks")
-    //@SerializedName("data") //Pruebas Mockups Pedidos
     private List<BancoEntity> bancoEntity;
 
     public BancoEntityResponse (List<BancoEntity> bancoEntity)  {

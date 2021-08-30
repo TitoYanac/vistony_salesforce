@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Entity.Adapters.ListaDireccionClienteEntity;
 import com.vistony.salesforce.Entity.SQLite.DireccionClienteSQLiteEntity;
 
 import java.util.ArrayList;
@@ -61,34 +62,31 @@ public class DireccionSQLite {
         return 1;
     }
 
-    public ArrayList<DireccionClienteSQLiteEntity> ObtenerDireccionCliente (
-            String compania_id,
-            String cliente_id
-    )
-    {
+    public ArrayList<ListaDireccionClienteEntity> getListAddress(String cliente_id){
+        ArrayList<ListaDireccionClienteEntity> LDCliente = new ArrayList<>();
 
-        listaDireccionClienteSQLiteEntity = new ArrayList<DireccionClienteSQLiteEntity>();
-        DireccionClienteSQLiteEntity direccionClienteSQLiteEntity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select * from direccioncliente where compania_id= '"+compania_id+"' and cliente_id= '"+cliente_id+"'",null);
+                "SELECT cliente_id,domembarque_id,direccion,zona_id,zona,nombrefuerzatrabajo FROM direccioncliente WHERE cliente_id= '"+cliente_id+"'",null);
 
-        while (fila.moveToNext())
-        {
-            direccionClienteSQLiteEntity= new DireccionClienteSQLiteEntity();
-            direccionClienteSQLiteEntity.setCompania_id(fila.getString(0));
-            direccionClienteSQLiteEntity.setCliente_id(fila.getString(1));
-            direccionClienteSQLiteEntity.setDomembarque_id(fila.getString(2));
-            direccionClienteSQLiteEntity.setDireccion(fila.getString(3));
-            direccionClienteSQLiteEntity.setZona_id(fila.getString(4));
-            direccionClienteSQLiteEntity.setZona(fila.getString(5));
-            direccionClienteSQLiteEntity.setFuerzatrabajo_id(fila.getString(6));
-            direccionClienteSQLiteEntity.setNombrefuerzatrabajo(fila.getString(7));
-            listaDireccionClienteSQLiteEntity.add(direccionClienteSQLiteEntity);
+        if (fila.moveToFirst()) {
+            if (fila.moveToFirst()) {
+                do {
+                    ListaDireccionClienteEntity ObjDCliente = new ListaDireccionClienteEntity();
+                    ObjDCliente.setCliente_id(fila.getString(fila.getColumnIndex("cliente_id")));
+                    ObjDCliente.setDomembarque_id(fila.getString(fila.getColumnIndex("domembarque_id")));
+                    ObjDCliente.setDireccion(fila.getString(fila.getColumnIndex("direccion")));
+                    ObjDCliente.setZona_id(fila.getString(fila.getColumnIndex("zona_id")));
+                    ObjDCliente.setZona(fila.getString(fila.getColumnIndex("zona")));
+                    ObjDCliente.setNombrefuerzatrabajo(fila.getString(fila.getColumnIndex("nombrefuerzatrabajo")));
+
+                    LDCliente.add(ObjDCliente);
+                } while (fila.moveToNext());
+            }
         }
 
         bd.close();
-        return listaDireccionClienteSQLiteEntity;
+        return LDCliente;
     }
 
     public int LimpiarTablaDireccionCliente ()

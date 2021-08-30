@@ -25,7 +25,7 @@ public class LoginViewModel extends ViewModel{
     private MutableLiveData<ArrayList<String>> profile= new MutableLiveData<>();
 
     public MutableLiveData<ArrayList<String>> getAndLoadUsers(final String imei,final Context context){
-        Toast.makeText(context, "VENGO DE INDIA", Toast.LENGTH_SHORT).show();
+
         Config.getClient().create(Api.class).getUsers("http://169.47.196.209/v1.0/api/User?imei="+imei,"").enqueue(new Callback<LoginEntityResponse>() {
             @Override
             public void onResponse(Call<LoginEntityResponse> call, Response<LoginEntityResponse> response) {

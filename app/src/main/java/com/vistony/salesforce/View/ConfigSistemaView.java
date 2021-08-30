@@ -37,7 +37,7 @@ import com.vistony.salesforce.Dao.Retrofit.BackupWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -852,9 +852,10 @@ public class ConfigSistemaView extends Fragment{
                 tipo="1";
             }
             //Validacion de Orden de Venta
-            ArrayList<OrdenVentaCabeceraSQLiteEntity> listaordenventacabecerasqliteentity=new ArrayList<>();
-            OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao=new OrdenVentaCabeceraSQLiteDao(getContext());
-            listaordenventacabecerasqliteentity=ordenVentaCabeceraSQLiteDao.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
+            ArrayList<String> listaordenventacabecerasqliteentity=new ArrayList<>();
+            OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(getContext());
+
+            listaordenventacabecerasqliteentity= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
             if(!listaordenventacabecerasqliteentity.isEmpty())
             {
                 resultadoPendientesEnvioWS="1";

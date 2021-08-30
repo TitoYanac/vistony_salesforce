@@ -126,12 +126,13 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
                 android:focusable="false"
-                android:text="0"
-                android:textColor="@color/white"
                 android:gravity="right"
+                android:text="0"
                 android:textAlignment="gravity"
+                android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
         </TableRow>
@@ -155,12 +156,13 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
                 android:focusable="false"
+                android:gravity="right"
+
                 android:text="0"
                 android:textColor="@color/white"
-
-                android:gravity="right"
                 android:textSize="24dp"></TextView>
 
         </TableRow>
@@ -184,11 +186,12 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
                 android:focusable="false"
+                android:gravity="right"
                 android:text="0"
                 android:textColor="@color/white"
-                android:gravity="right"
                 android:textSize="24dp"></TextView>
 
         </TableRow>
@@ -212,11 +215,12 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
                 android:focusable="false"
+                android:gravity="right"
                 android:text="0"
                 android:textColor="@color/white"
-                android:gravity="right"
                 android:textSize="24dp"></TextView>
 
         </TableRow>

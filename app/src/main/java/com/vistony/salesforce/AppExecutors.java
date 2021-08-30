@@ -1,12 +1,14 @@
 package com.vistony.salesforce;
 
+import android.app.Application;
 import android.os.Handler;
 import android.os.Looper;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class AppExecutors {
+public class AppExecutors{
     private final Executor diskIO;
     private final Executor networkIO;
     private final Executor mainThread;
@@ -18,8 +20,7 @@ public class AppExecutors {
     }
 
     public AppExecutors(){
-        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),
-                new MainThreadExecutor());
+        this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),new MainThreadExecutor());
     }
 
     public Executor diskIO(){

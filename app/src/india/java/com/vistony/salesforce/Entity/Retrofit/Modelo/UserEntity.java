@@ -1,4 +1,4 @@
-package vistony.salesforce.Entity.Retrofit.Modelo;
+package com.vistony.salesforce.Entity.Retrofit.Modelo;
 
 import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
@@ -7,7 +7,6 @@ public class UserEntity {
     @NonNull
     @SerializedName("imei")
     private String imei;
-
     @NonNull
     @SerializedName("UserName")
     private String nombreusuario;

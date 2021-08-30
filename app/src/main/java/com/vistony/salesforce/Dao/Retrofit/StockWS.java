@@ -27,7 +27,7 @@ public class StockWS {
     ){
         Api api = Config.getClient().create(Api.class);
 
-        Call<StockEntityResponse> call = api.getStock(Imei);
+        Call<StockEntityResponse> call = api.getStock("http://169.47.196.209/cl/api/pricelist",Imei);
         try
         {
             Response<StockEntityResponse> response= call.execute();

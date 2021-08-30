@@ -52,8 +52,9 @@
     </string-array>
 
     <string-array name="Moneda" >
-        <item >S/-SOLES</item>
-        <item >US$-DOLARES</item>
+        <item >CLP - PESO CHILENO</item>
+        <!--<item >S/-SOLES</item>
+        <item >US$-DOLARES</item>-->
     </string-array>
 
     <string-array name="tipo_visita" >

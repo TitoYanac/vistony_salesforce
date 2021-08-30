@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vistony.salesforce.Entity.Adapters.ListaParametrosEntity;
@@ -50,6 +51,7 @@ public class ListaParametrosAdapter  extends ArrayAdapter<ListaParametrosEntity>
             holder.tv_nombreparametro = (TextView) convertView.findViewById(R.id.tv_nombreparametro);
             holder.tv_cantidad = (TextView) convertView.findViewById(R.id.tv_cantidad);
             holder.tv_fechacarga = (TextView) convertView.findViewById(R.id.tv_fechacarga);
+            holder.relativeLayout=convertView.findViewById(R.id.layoutParameter);
             convertView.setTag(holder);
         } else {
             holder = (ListaParametrosAdapter.ViewHolder) convertView.getTag();
@@ -64,52 +66,29 @@ public class ListaParametrosAdapter  extends ArrayAdapter<ListaParametrosEntity>
         holder.tv_cantidad.setText(lead.getCantidad());
         holder.tv_fechacarga.setText(lead.getFechacarga());
 
-        holder.chkparametro.setOnClickListener(new View.OnClickListener() {
-                                                   @Override
-                                                   public void onClick(View v) {
-                                                       boolean estado=holder.chkparametro.isChecked();
+        holder.chkparametro.setOnClickListener(v -> {
+        //holder.relativeLayout.setOnClickListener(v -> {
 
-                                                       lead.chkparametro=estado;
+                boolean estado=holder.chkparametro.isChecked();
 
-                                                       for(int i=0;i<ArraylistaParametrosEntity.size();i++)
-                                                       {
-                                                           if(position==i)
-                                                           {
-                                                               ArraylistaParametrosEntity.get(i).setChkparametro(estado);
-                                                           }
-                                                       }
+                /*if(estado){
+                    holder.chkparametro.setChecked(false);
+                }else{
+                    holder.chkparametro.setChecked(true);
+                }*/
 
-                                                       //fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                                                       //FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                                       //transaction.replace(android.R.id.content, fragment);
-                                                       //transaction.addToBackStack("DiscoverPage");
+                lead.chkparametro=estado;
 
-
-                                                       //transaction.add(R.id.content_menu_view, consDepositoView.nuevaInstancia(ArraylistaConsDepositoEntity));
-
-
-
-
-                                                   }}
+                for(int i=0;i<ArraylistaParametrosEntity.size();i++)
+                {
+                    if(position==i)
+                    {
+                        ArraylistaParametrosEntity.get(i).setChkparametro(estado);
+                    }
+                }
+        }
 
         );
-
-        //holder.et_saldo.setFocusable(false);
-        //holder.et_saldo.setEnabled(false);
-        //holder.et_nuevosaldo.setFocusable(false);
-        //holder.et_nuevosaldo.setEnabled(false);
-       /* holder.imvdetalle.setOnClickListener(new View.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(View v) {
-                                                     String Texto="VALERIA";
-                                                     String Texto1=Texto;
-                                                 }
-                                             }
-
-        );
-*/
-
-        //Glide.with(getContext()).load(lead.getImage()).into(holder.avatar);
 
         return convertView;
     }
@@ -117,12 +96,10 @@ public class ListaParametrosAdapter  extends ArrayAdapter<ListaParametrosEntity>
     static class ViewHolder {
 
         CheckBox chkparametro;
-
         TextView tv_nombreparametro;
-
         TextView tv_cantidad;
-
         TextView tv_fechacarga;
+        RelativeLayout relativeLayout;
     }
 
     public Object ObtenerListaParametros()

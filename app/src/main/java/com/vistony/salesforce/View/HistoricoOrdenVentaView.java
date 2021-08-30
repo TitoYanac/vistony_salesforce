@@ -28,7 +28,7 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoOrdenVentaDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoOrdenVentaWS;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
@@ -120,8 +120,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_historico_orden_venta_view, container, false);
         imb_calendario_historico_orden_venta=(ImageButton)v.findViewById(R.id.imb_calendario_historico_orden_venta);
@@ -230,7 +229,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
             try {
                 //Declara Variables
                 ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaSQLite = new ArrayList<>();
-                OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao = new OrdenVentaCabeceraSQLiteDao(getContext());
+                OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite = new OrdenVentaCabeceraSQLite(getContext());
 
                 ClienteSQLiteEntity clienteSQLiteEntity=new ClienteSQLiteEntity();
                 ArrayList<String> listadepuracion1 = new ArrayList<>();
@@ -251,7 +250,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                     }
 
                 //Consulta SQLite Orden Venta Cabecera
-                    listaOrdenVentaSQLite = ordenVentaCabeceraSQLiteDao.ObtenerOrdenVentaCabeceraporFecha(formulasController.ObtenerFechaCadena(
+                    listaOrdenVentaSQLite = ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporFecha(formulasController.ObtenerFechaCadena(
                             tv_fecha_historico_orden_venta.getText().toString()),
                             SesionEntity.fuerzatrabajo_id,
                             SesionEntity.compania_id

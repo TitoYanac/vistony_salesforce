@@ -36,4 +36,5 @@
     <string name="dialog_btn_salir">EXIT</string>
     <string name="dialog_btn_cancelar">CANCEL</string>
     <string name="dialog_text">Are you sure to exit the application?</string>
+    <string name="menu_tag">"System options "</string>
 </resources>

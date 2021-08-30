@@ -130,8 +130,7 @@ public class TerminoPagoSQLiteDao {
         listaTerminoPagoSQLiteEntity = new ArrayList<TerminoPagoSQLiteEntity>();
         TerminoPagoSQLiteEntity terminoPagoSQLiteEntity;
         abrir();
-        Cursor fila = bd.rawQuery(
-                "Select * from terminopago where terminopago_id='"+terminopago_id+"' and compania_id='"+compania_id+"'",null);
+        Cursor fila = bd.rawQuery("Select * from terminopago where terminopago_id='"+terminopago_id+"' and compania_id='"+compania_id+"'",null);
 
         while (fila.moveToNext())
         {

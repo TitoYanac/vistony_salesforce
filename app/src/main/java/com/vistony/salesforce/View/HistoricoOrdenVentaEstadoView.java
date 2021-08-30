@@ -23,7 +23,7 @@ import com.vistony.salesforce.Controller.Adapters.PageAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoOrdenVentaWS;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
@@ -202,7 +202,7 @@ public class HistoricoOrdenVentaEstadoView extends Fragment implements View.OnCl
             try {
                 //Declara Variables
                 ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaSQLite = new ArrayList<>();
-                OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao = new OrdenVentaCabeceraSQLiteDao(getContext());
+                OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite = new OrdenVentaCabeceraSQLite(getContext());
 
                 ClienteSQLiteEntity clienteSQLiteEntity=new ClienteSQLiteEntity();
                 ArrayList<String> listadepuracion1 = new ArrayList<>();
@@ -224,7 +224,7 @@ public class HistoricoOrdenVentaEstadoView extends Fragment implements View.OnCl
                 }
 
                 //Consulta SQLite Orden Venta Cabecera
-                listaOrdenVentaSQLite = ordenVentaCabeceraSQLiteDao.ObtenerOrdenVentaCabeceraporFechaInicioyFinal
+                listaOrdenVentaSQLite = ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporFechaInicioyFinal
                         (formulasController.ObtenerFechaCadena(tv_fecha_historico_orden_venta_estado_inicio.getText().toString()),
                                 formulasController.ObtenerFechaCadena(tv_fecha_historico_orden_venta_estado_final.getText().toString())
                                 );

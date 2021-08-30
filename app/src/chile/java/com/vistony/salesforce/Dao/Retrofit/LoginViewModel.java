@@ -25,9 +25,8 @@ public class LoginViewModel extends ViewModel{
     private MutableLiveData<ArrayList<String>> profile= new MutableLiveData<>();
 
     public MutableLiveData<ArrayList<String>> getAndLoadUsers(final String imei,final Context context){
-        Toast.makeText(context, "VENGO DE CHILE", Toast.LENGTH_SHORT).show();
 
-        Config.getClient().create(Api.class).getUsers("http://169.47.196.209/v1.0/api/User?imei="+imei,"").enqueue(new Callback<LoginEntityResponse>() {
+        Config.getClient().create(Api.class).getUsers("http://169.47.196.209/cl/api/Users",imei).enqueue(new Callback<LoginEntityResponse>() {
             @Override
             public void onResponse(Call<LoginEntityResponse> call, Response<LoginEntityResponse> response) {
 
@@ -35,38 +34,15 @@ public class LoginViewModel extends ViewModel{
                 if(response.isSuccessful() && response.body().getUsers().size()>0){
                     usuarioSQLite.LimpiarTablaUsuario();
                     for (int i = 0; i < response.body().getUsers().size(); i++){
-                        usuarioSQLite.InsertaUsuario(
-                                response.body().getUsers().get(i).getCompaniaid(),
-                                response.body().getUsers().get(i).getFuerzatrabajo_id(),
-                                response.body().getUsers().get(i).getNombrecompania(),
-                                response.body().getUsers().get(i).getNombreusuario(), //getNombrefuerzadetrabajo pero son iguales anombre de usuario
-                                response.body().getUsers().get(i).getNombreusuario(),
-                                response.body().getUsers().get(i).getUsuario_id(),
-                                ""+response.body().getUsers().get(i).getSettings().get(0).getRecibo(),
-                                "0",
-                                (response.body().getUsers().get(i).getPerfil().equals("VENDEDOR")? "SALES PERSON":response.body().getUsers().get(i).getPerfil()),
-                                "0",
-                                null,//response.body().getUsers().get(i).getLista_precios1(),
-                                null,//response.body().getUsers().get(i).getLista_precios2(),
-                                response.body().getUsers().get(i).getAlmacen(),
-                                response.body().getUsers().get(i).getSettings().get(0).getCogsAcct(),
-                                response.body().getUsers().get(i).getU_vist_ctaingdcto(),
-                                response.body().getUsers().get(i).getFuerzatrabajo_id(),
-                                response.body().getUsers().get(i).getU_vist_sucusu(),
-                                response.body().getUsers().get(i).getSettings().get(0).getCentrocosto(),
-                                response.body().getUsers().get(i).getSettings().get(0).getUnidadnegocio(),
-                                response.body().getUsers().get(i).getSettings().get(0).getLineaproduccion(),
-                                "IGV",
-                                "18",
-                                response.body().getUsers().get(i).getTipocambio(),
-                                response.body().getUsers().get(i).getU_vis_cashdscnt()
-                        );
+                        usuarioSQLite.InsertaUsuario(response.body().getUsers().get(i));
                     }
 
                 }else{
                     Log.e("JEPICAME","=>"+response.code());
                 }
+
                 profile.setValue(usuarioSQLite.ObtenerPerfiles());
+                call.cancel();
             }
 
             @Override
@@ -78,9 +54,9 @@ public class LoginViewModel extends ViewModel{
                 }else{
                     profile.setValue(null);
                 }
+                call.cancel();
             }
         });
-        //closeConection();
         return profile;
     }
 
@@ -89,6 +65,10 @@ public class LoginViewModel extends ViewModel{
     }
 
     public ArrayList<String> getUsers(String profile, String compania){
+        return usuarioSQLite.ObtenerUsuario(profile,compania);
+    }
+
+    public ArrayList<String> getLenguage(String profile, String compania){
         return usuarioSQLite.ObtenerUsuario(profile,compania);
     }
 

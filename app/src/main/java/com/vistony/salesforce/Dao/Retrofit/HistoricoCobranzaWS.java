@@ -87,13 +87,11 @@ public class HistoricoCobranzaWS {
                     }
                 }
 
-
-        }catch (Exception e)
-        {
+            call.cancel();
+        }catch (Exception e){
+            call.cancel();
             e.printStackTrace();
-            Log.e("REOS","Error-HistoricoCobranzaWS: "+e.toString());
         }
-        Log.e("REOS","HistoricoCobranzaWS-Lista: "+LHDCobranza.size());
 
         //Config.closeConection();
         return LHDCobranza;

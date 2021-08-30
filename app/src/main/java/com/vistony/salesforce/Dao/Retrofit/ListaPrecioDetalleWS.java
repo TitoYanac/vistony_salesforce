@@ -24,13 +24,14 @@ public class ListaPrecioDetalleWS {
 
     public ArrayList<ListaPrecioDetalleSQLiteEntity> getListaPrecioDetalleWS(String Imei){
         Api api = Config.getClient().create(Api.class);
-        Call<ListaPrecioDetalleEntityResponse> call = api.getListaPrecioDetalle(Imei);
+        Call<ListaPrecioDetalleEntityResponse> call = api.getListaPrecioDetalle("http://169.47.196.209/cl/api/pricelist",Imei);
         try
         {
             Response<ListaPrecioDetalleEntityResponse> response= call.execute();
             if(response.isSuccessful()) {
                 ListaPrecioDetalleEntityResponse listaPrecioDetalleEntityResponse=response.body();
                 for(int i=0;i<listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().size();i++){
+
                     ListaPrecioDetalleSQLiteEntity ObjLPDetalle = new ListaPrecioDetalleSQLiteEntity();
                     //ObjLPDetalle.listaprecio_id = listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getListaprecio_id();
                     ObjLPDetalle.contado = listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getContado();
@@ -40,7 +41,7 @@ public class ListaPrecioDetalleWS {
                     ObjLPDetalle.umd = listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getUmd();
                     ObjLPDetalle.gal = listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getGal();
                     ObjLPDetalle.compania_id = SesionEntity.compania_id;
-                    //ObjLPDetalle.u_vis_cashdscnt = listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getU_vis_cashdscnt();
+                    ObjLPDetalle.typo=listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getTipo();
                     LPDetalle.add(ObjLPDetalle);
                 }
             }

@@ -9,10 +9,11 @@ public class ListaPrecioDetalleSQLiteEntity {
     public String producto;
     public String umd;
     public String gal;
+    public String typo;
     public String u_vis_cashdscnt;
 
 
-    public ListaPrecioDetalleSQLiteEntity(String compania_id, String contado, String credito, String producto_id, String producto, String umd, String gal, String u_vis_cashdscnt) {
+    public ListaPrecioDetalleSQLiteEntity(String compania_id, String contado, String credito, String producto_id, String producto, String umd, String gal, String typo,String u_vis_cashdscnt) {
         this.compania_id = compania_id;
         this.contado = contado;
         this.credito = credito;
@@ -20,10 +21,19 @@ public class ListaPrecioDetalleSQLiteEntity {
         this.producto = producto;
         this.umd = umd;
         this.gal = gal;
+        this.typo = typo;
         this.u_vis_cashdscnt = u_vis_cashdscnt;
     }
 
     public ListaPrecioDetalleSQLiteEntity() {
+    }
+
+    public String getTypo() {
+        return typo;
+    }
+
+    public void setTypo(String typo) {
+        this.typo = typo;
     }
 
     public String getU_vis_cashdscnt() {

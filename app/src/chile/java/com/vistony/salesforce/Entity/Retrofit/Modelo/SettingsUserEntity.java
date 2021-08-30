@@ -25,6 +25,28 @@ public class SettingsUserEntity {
     @SerializedName("CogsAcct")
     private String cogsAcct;
 
+    @SerializedName("TaxCode")
+    private String taxCode;
+
+    @SerializedName("TaxRate")
+    private double taxRate;
+
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    public void setTaxCode(String taxCode) {
+        this.taxCode = taxCode;
+    }
+
+    public double getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(double taxRate) {
+        this.taxRate = taxRate;
+    }
+
     public String getLanguage() {
         return Language;
     }

@@ -7,295 +7,295 @@
     android:minHeight="?attr/listPreferredItemHeight"
     android:orientation="vertical">
 
-<androidx.appcompat.widget.LinearLayoutCompat
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginLeft="10dp"
-    >
-                <TextView
-                    android:id="@+id/tv_orden_detalle_item"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold"
-                    tools:text="1)" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_orden_detalle_umd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceListItem"
-                        android:textStyle="bold"
-                        tools:text="UMD1" />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_orden_detalle_producto"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold"
-                    tools:text="PRODUCTO1" />
+            <TextView
+                android:id="@+id/tv_orden_detalle_item"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold"
+                tools:text="1)" />
+
+            <TextView
+                android:id="@+id/tv_orden_detalle_umd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold"
+                tools:text="UMD1" />
+
+            <TextView
+                android:id="@+id/tv_orden_detalle_producto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold"
+                tools:text="PRODUCTO1" />
 
 
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="25dp">
 
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="25dp"
-        android:layout_marginTop="10dp"
-        >
-
-    <TableRow
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center">
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"
                     android:text="Stock:"
-                    />
+                    android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_orden_detalle_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"
                     android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
                     tools:text="Stock1" />
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_cantidad"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:text="Cantidad:" />
+                    android:text="Cantidad:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
 
-        <EditText
-            android:id="@+id/et_orden_detalle_cantidad"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:background="@drawable/borde_editext_orden_venta_detalle"
-            android:digits="0123456789"
-            android:ems="9"
-            android:hint="0"
-            android:imeOptions="actionSend"
-            android:inputType="number"
-            android:maxLength="5"
-            android:singleLine="true"
-            android:textAlignment="center"
-            android:textColor="@color/Rojo_Vistony"
+                <EditText
+                    android:id="@+id/et_orden_detalle_cantidad"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/borde_editext_orden_venta_detalle"
+                    android:digits="0123456789"
+                    android:ems="9"
+                    android:hint="0"
+                    android:imeOptions="actionSend"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:singleLine="true"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/Rojo_Vistony"
+                    android:textStyle="bold" />
+
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_galon_unitario"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Gal Unit:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <TextView
+                    android:id="@+id/tv_orden_detalle_galon_unitario"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    tools:text="Gal Unit" />
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_galon_acumulado"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Gal Total:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <TextView
+                    android:id="@+id/tv_orden_detalle_galon_acumulado"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    tools:text="Gal 100" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_precio"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Pre Unit:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <TextView
+                    android:id="@+id/tv_orden_detalle_precio"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    tools:text="Precio1" />
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_porcentaje_descuento"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Dcto Prom%:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <TextView
+                    android:id="@+id/tv_orden_detalle_porcentaje_descuento"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    tools:text="100%" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/lbl_dcto_ctdo"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="Dcto Ctdo:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <CheckBox
+                    android:id="@+id/chk_descuento_contado"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="4"
+                    android:enabled="false"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/lbl_porcentaje_descuento_contado"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Dcto Ctdo %:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <TextView
+                    android:id="@+id/tv_porcentaje_descuento_contado"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    tools:text="0" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_igv"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:text="IGV:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <TextView
+                    android:id="@+id/tv_orden_detalle_igv"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    tools:text="IGV1" />
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_total"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Total:"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_orden_detalle_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    tools:text="Total1" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_promocion_cabecera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Promocion:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <ImageView
+                    android:id="@+id/imv_consultar_promocion_cabecera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_card_giftcard_24" />
+
+                <TextView
+                    android:id="@+id/lbl_orden_detalle_eliminar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Borrar:"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imv_eliminar_orden_venta_detalle"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
+                    app:srcCompat="@drawable/ic_delete_black_24dp" />
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/lbl_orden_detalle_resumen_promocion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:text="Resumen Promocion"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold" />
 
-
-    </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/lbl_orden_detalle_galon_unitario"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Gal Unit:"
-                />
-
-            <TextView
-                android:id="@+id/tv_orden_detalle_galon_unitario"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textAlignment="center"
-                tools:text="Gal Unit" />
-
-            <TextView
-                android:id="@+id/lbl_orden_detalle_galon_acumulado"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Gal Total:" />
-
-            <TextView
-                android:id="@+id/tv_orden_detalle_galon_acumulado"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="Gal 100" />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/lbl_orden_detalle_precio"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Pre Unit:"
-                />
-
-            <TextView
-                android:id="@+id/tv_orden_detalle_precio"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textAlignment="center"
-                tools:text="Precio1" />
-
-            <TextView
-                android:id="@+id/lbl_orden_detalle_porcentaje_descuento"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Dcto Prom%:" />
-
-            <TextView
-                android:id="@+id/tv_orden_detalle_porcentaje_descuento"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="100%" />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <TextView
-                android:id="@+id/lbl_dcto_ctdo"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Dcto Ctdo:"
-                />
-
-            <CheckBox
-                android:id="@+id/chk_descuento_contado"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:enabled="false"
-                android:textStyle="bold"
-                android:layout_marginLeft="30dp"
-                />
-
-            <TextView
-                android:id="@+id/lbl_porcentaje_descuento_contado"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Dcto Ctdo %:" />
-
-            <TextView
-                android:id="@+id/tv_porcentaje_descuento_contado"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="0" />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <TextView
-                android:id="@+id/lbl_orden_detalle_igv"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="IGV:"
-                />
-
-            <TextView
-                android:id="@+id/tv_orden_detalle_igv"
-                android:layout_width="90dp"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="IGV1" />
-
-            <TextView
-                android:id="@+id/lbl_orden_detalle_total"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Total:" />
-
-            <TextView
-                android:id="@+id/tv_orden_detalle_total"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="Total1" />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <TextView
-                android:id="@+id/lbl_orden_detalle_promocion_cabecera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Promocion:" />
-            <ImageView
-                android:id="@+id/imv_consultar_promocion_cabecera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_baseline_card_giftcard_24"
-                />
-
-            <TextView
-                android:id="@+id/lbl_orden_detalle_eliminar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:textStyle="bold"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Borrar:" />
-
-            <ImageView
-                android:id="@+id/imv_eliminar_orden_venta_detalle"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-
-                app:srcCompat="@drawable/ic_delete_black_24dp"
-                />
-        </TableRow>
-    </TableLayout>
-    <TextView
-        android:id="@+id/lbl_orden_detalle_resumen_promocion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="170dp"
-        android:layout_marginLeft="25dp"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Resumen Promocion" />
-
-    <LinearLayout
-        android:id="@+id/content"
-        android:layout_marginTop="190dp"
-        android:layout_marginLeft="25dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/borde_cuadrado"
-        android:orientation="vertical" >
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:background="@drawable/borde_cuadrado"
+            android:orientation="vertical"></LinearLayout>
     </LinearLayout>
-
 </RelativeLayout>

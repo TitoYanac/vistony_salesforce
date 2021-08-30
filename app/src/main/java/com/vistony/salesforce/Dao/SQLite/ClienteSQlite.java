@@ -28,7 +28,7 @@ public class ClienteSQlite
         sqLiteController = new SQLiteController(context);
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se abre conexion a la base de datos desde " + this.getClass().getName() );
         bd = sqLiteController.getWritableDatabase();
     }
 
@@ -60,7 +60,8 @@ public class ClienteSQlite
             String categoria,
             String linea_credito,
             String linea_credito_usado,
-            String terminopago_id){
+            String terminopago_id,
+            String lista_precio){
 
         abrir();
         ContentValues registro = new ContentValues();
@@ -84,6 +85,7 @@ public class ClienteSQlite
         registro.put("linea_credito",linea_credito);
         registro.put("linea_credito_usado",linea_credito_usado);
         registro.put("terminopago_id",terminopago_id);
+        registro.put("lista_precio",lista_precio);
 
         bd.insert("cliente",null,registro);
         bd.close();
@@ -329,10 +331,7 @@ public class ClienteSQlite
         return arraylistaClienteSQLiteEntity;
     }
 
-    public ArrayList<ListaClienteCabeceraEntity> ObtenerClientes ()
-    {
-        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
-        //SQLiteDatabase bd = admin.getWritableDatabase();
+    public ArrayList<ListaClienteCabeceraEntity> ObtenerClientes (){
 
         arraylistaClienteSQLiteEntity = new ArrayList<ListaClienteCabeceraEntity>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -343,8 +342,8 @@ public class ClienteSQlite
         try {
             Cursor fila = bd.rawQuery(
                     "Select " +
-                            "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0) " +
-                            "from cliente a " +
+                            "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lista_precio" +
+                            " FROM cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
                             "and a.cliente_id=b.cliente_id " +
@@ -379,6 +378,7 @@ public class ClienteSQlite
                 clienteentity.setLinea_credito_usado(fila.getString(19));
                 clienteentity.setTerminopago_id(fila.getString(20));
                 clienteentity.setSaldo(fila.getString(21));
+                clienteentity.setLista_precio(fila.getString(21));
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }
         }catch (Exception e)

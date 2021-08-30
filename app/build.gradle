@@ -34,7 +34,6 @@ android {
     productFlavors{
         india{
             applicationIdSuffix ".india"
-            //applicationId  "com.vistony.salesforce.india"
             buildConfigField('String' , 'IMEI_DEFAULT', '"355691112769630"')
             minSdkVersion 23
             targetSdkVersion 28
@@ -42,10 +41,9 @@ android {
             versionName "0.0.1"
         }
         chile{
-            //applicationId  "com.vistony.salesforce.chile"
             applicationIdSuffix ".chile"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
-            //versionName "0.0.1"
+            versionName "0.0.1"
         }
     }
 
@@ -58,19 +56,13 @@ android {
 
     sourceSets {
         india {
-           // manifest.srcFile 'AndroidManifest.xml'
             java{
-               srcDirs('src/india/java/')
+              //srcDirs('src/india/java/')
             }
-           // res.srcDirs = ['src/main/res']
-            //assets.srcDirs = ['src/main/assets']
         }
         chile {
-            //manifest.srcFile 'src/pro/AndroidManifestPro.xml'
             java{
-                srcDirs('src/chile/java/')
-
-                //srcDirs('src/chile/java/com/vistony/salesforce/chile/')
+                //srcDirs('src/chile/java/')
             }
         }
     }

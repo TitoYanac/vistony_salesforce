@@ -70,8 +70,7 @@ public class StockSQLiteDao {
         listaStockSQLiteEntity = new ArrayList<StockSQLiteEntity>();
         StockSQLiteEntity stockSQLiteEntity;
         abrir();
-        Cursor fila = bd.rawQuery(
-                "Select * from stock",null);
+        Cursor fila = bd.rawQuery("Select * from stock",null);
 
         while (fila.moveToNext())
         {

@@ -11,8 +11,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
+
+import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.R;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,14 +30,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class UpdateApp {
-    public UpdateApp(Button btnlogin, String nameFile, Context context){
+    public UpdateApp(OmegaCenterIconButton btnlogin, String nameFile, Context context){
         btnlogin.setText("Descargando...");
         File  ruta = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"SalesForce");
         if(!ruta.exists()) {
             ruta.mkdirs();
         }
 
-        Config.getClient().create(Api.class).getNewApk("https://reclamos.vistonyapp.com/salesforce/release?vs="+nameFile).enqueue(new Callback<ResponseBody>() {
+        Config.getClient().create(Api.class).getNewApk("http://169.47.196.209/cl/api/version?v="+nameFile).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
@@ -44,18 +48,24 @@ public class UpdateApp {
                         creaArchivo(Environment.getExternalStorageDirectory()+ File.separator+"Download"+File.separator+"SalesForce"+File.separator+nameFile+".apk",apkFile);
                         intallApk(nameFile,context);
                     } catch (Exception e) {
-                         btnlogin.setText("Error al instalar...");
+                        btnlogin.setText("Error al instalar...");
+                        btnlogin.setEnabled(true);
+                        btnlogin.setClickable(true);
                     }
 
                 }else{
-                     btnlogin.setText("Error Desconocido");
+                     btnlogin.setText("Error Desconocido "+response.code());
+                     btnlogin.setEnabled(true);
+                     btnlogin.setClickable(true);
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
-               btnlogin.setText("Error en red");
+                btnlogin.setText("Error en red");
+                btnlogin.setEnabled(true);
+                btnlogin.setClickable(true);
             }
         });
     }
@@ -80,7 +90,7 @@ public class UpdateApp {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-            data = FileProvider.getUriForFile(context, "com.vistony.salesforce",imagen );
+            data = FileProvider.getUriForFile(context, context.getPackageName(),imagen );
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             for (ResolveInfo resolveInfo : resInfoList) {

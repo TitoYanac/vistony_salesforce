@@ -103,6 +103,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
     }
 
 
+
     public class ObtenerSQLiteRutaFuerzaTrabajo extends AsyncTask<String, Void, Object> {
         String fecha;
         @Override

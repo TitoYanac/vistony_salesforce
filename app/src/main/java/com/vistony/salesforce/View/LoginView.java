@@ -33,12 +33,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
-
+import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
@@ -49,7 +48,7 @@ import com.vistony.salesforce.Dao.Retrofit.VersionViewModel;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.LoginEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
@@ -58,19 +57,17 @@ import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
 import com.vistony.salesforce.Dao.Retrofit.LoginViewModel;
 
 public class LoginView extends AppCompatActivity{
-    public Button btnlogin;
+    public OmegaCenterIconButton btnlogin;
     private Spinner spncompania, spnperfil, spnnombre;
     private ProgressDialog pd;
     private Context context;
@@ -164,12 +161,11 @@ public class LoginView extends AppCompatActivity{
         /********/
 
         ObtenerVideo();
-       // bluetoothAdapter.enable(); para india no
+        bluetoothAdapter.enable();
         turnGPSOn();
 
-
         //String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),Settings.Secure.ANDROID_ID);
-        //Toast.makeText(getApplicationContext(), android_id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),android_id,Toast.LENGTH_SHORT).show();
 
         spnperfil.setOnItemSelectedListener(
             new AdapterView.OnItemSelectedListener() {
@@ -411,16 +407,21 @@ public class LoginView extends AppCompatActivity{
 
             if(!userUnlinked){
                 new VersionViewModel().getVs(SesionEntity.imei,version,getApplicationContext()).observe(this, data -> {
-                    if(data.getClass().getName().equals("java.lang.String")){
-                        if(data.toString().length()>6){
-                            Toast.makeText(getApplicationContext(), data.toString(), Toast.LENGTH_LONG).show();
+                    if(data!=null){
+                        if(data.getClass().getName().equals("java.lang.String")){
+                            if(data.toString().length()>6){
+                                Toast.makeText(getApplicationContext(), data.toString(), Toast.LENGTH_LONG).show();
+                                readUserAndLogin(intent);
+                            }else{
+                                btnlogin.setText("Validando Recibos...");
+                                ObtenerPendientesEnvioWS();
+                                new UpdateApp(btnlogin,data.toString(),getApplicationContext());
+                            }
+                        }else if(data.getClass().getName().equals("java.lang.Boolean")){
                             readUserAndLogin(intent);
-                        }else{
-                            btnlogin.setText("Validando Recibos...");
-                            ObtenerPendientesEnvioWS();
-                            new UpdateApp(btnlogin,data.toString(),getApplicationContext());
                         }
-                    }else if(data.getClass().getName().equals("java.lang.Boolean")){
+                    }else{
+                        Toast.makeText(context, "Error en la respuesta del servidor...", Toast.LENGTH_SHORT).show();
                         readUserAndLogin(intent);
                     }
                 });
@@ -643,11 +644,10 @@ public class LoginView extends AppCompatActivity{
             tipo="1";
         }
         //Validacion de Orden de Venta
-        ArrayList<OrdenVentaCabeceraSQLiteEntity> listaordenventacabecerasqliteentity=new ArrayList<>();
-        OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao=new OrdenVentaCabeceraSQLiteDao(this);
-        listaordenventacabecerasqliteentity=ordenVentaCabeceraSQLiteDao.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
-        if(!listaordenventacabecerasqliteentity.isEmpty())
-        {
+        ArrayList<String> listaordenventacabecerasqliteentity=new ArrayList<>();
+        OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(this);
+        listaordenventacabecerasqliteentity= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
+        if(!listaordenventacabecerasqliteentity.isEmpty()) {
             resultadoPendientesEnvioWS="1";
             tipo="4";
         }

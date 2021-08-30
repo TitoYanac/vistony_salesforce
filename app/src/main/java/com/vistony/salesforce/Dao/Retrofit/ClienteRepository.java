@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.AddressEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SeguridadEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
@@ -15,27 +16,28 @@ import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ClienteViewModel extends ViewModel {
+public class ClienteRepository extends ViewModel {
     private ArrayList<ClienteSQLiteEntity> LCliente = new ArrayList<>();
     private ArrayList<SeguridadEntity> LSeguridad = new ArrayList<>();
     private MutableLiveData<String> estado= new MutableLiveData<>();
     private Context context;
     private ClienteSQlite clienteSQlite;
-    private DireccionClienteWS direccionClienteWS;
+    private DireccionViewModel direccionViewModel;
 
-    public ClienteViewModel(){}
+    public ClienteRepository(){}
 
-    public ClienteViewModel(Context context){
+    public ClienteRepository(Context context){
         this.context=context;
     }
 
-    public ArrayList<ClienteSQLiteEntity>getClienteWS(String Imei){
-        Call<ClienteEntityResponse> call = Config.getClient().create(Api.class).getCliente(Imei);
+    public ArrayList<ClienteSQLiteEntity>getCustomers(String Imei){
+        Call<ClienteEntityResponse> call = Config.getClient().create(Api.class).getCliente("http://169.47.196.209/cl/api/customers",Imei);
         try{
             Response<ClienteEntityResponse> response= call.execute();
                 if(response.isSuccessful()) {
@@ -52,12 +54,12 @@ public class ClienteViewModel extends ViewModel {
                         ObjCliente.setOrden(clienteEntityResponse.getCustomersEntity().get(i).getOrdenVisita());
                         ObjCliente.setZona_id(clienteEntityResponse.getCustomersEntity().get(i).getZonaId());
                         ObjCliente.setZona(clienteEntityResponse.getCustomersEntity().get(i).getZona());
-                        ObjCliente.setRucdni(clienteEntityResponse.getCustomersEntity().get(i).getDocumento());
                         ObjCliente.setMoneda(clienteEntityResponse.getCustomersEntity().get(i).getMoneda());
                         ObjCliente.setTelefonofijo(clienteEntityResponse.getCustomersEntity().get(i).getTelefoFijo());
                         ObjCliente.setTelefonomovil(clienteEntityResponse.getCustomersEntity().get(i).getTelefonoMovil());
                         ObjCliente.setCorreo(clienteEntityResponse.getCustomersEntity().get(i).getCorreo());
                         ObjCliente.setUbigeo_id(clienteEntityResponse.getCustomersEntity().get(i).getUbigeoId());
+                        ObjCliente.setRucdni(clienteEntityResponse.getCustomersEntity().get(i).getLicTradNum());
 
                         if(clienteEntityResponse.getCustomersEntity().get(i).getAddress().size()==0){
                             ObjCliente.setListAddress(null);
@@ -71,7 +73,9 @@ public class ClienteViewModel extends ViewModel {
                         ObjCliente.setLinea_credito(clienteEntityResponse.getCustomersEntity().get(i).getLinea_credito());
                         ObjCliente.setLinea_credito_usado(clienteEntityResponse.getCustomersEntity().get(i).getlinea_credito_usado());
                         ObjCliente.setTerminopago_id(clienteEntityResponse.getCustomersEntity().get(i).getTerminoPago_id());
+                        ObjCliente.setLista_precio(clienteEntityResponse.getCustomersEntity().get(i).getLista_precio());
 
+                        //la funcion addCustomer  debe darse aqui!
                         LCliente.add(ObjCliente);
                     }
                 }
@@ -109,17 +113,18 @@ public class ClienteViewModel extends ViewModel {
     }
 
     public void addCustomer(List<ClienteSQLiteEntity> Lista){
-        Log.e("addCustomer","ENTRO");
+        //DEbe ir dentro de la funcion getCustomers
         clienteSQlite=new ClienteSQlite(context);
-        direccionClienteWS=new DireccionClienteWS(context);
+        direccionViewModel =new DireccionViewModel();
 
         for (int i = 0; i < Lista.size(); i++) {
 
             List<AddressEntity> addressCustomer=Lista.get(i).getListAddress();
             if(addressCustomer!=null){
-                direccionClienteWS.addAddress(addressCustomer,Lista.get(i).getCompania_id(),Lista.get(i).getCliente_id());
+                direccionViewModel.addAddress(context,addressCustomer,Lista.get(i).getCompania_id(),Lista.get(i).getCliente_id());
             }
 
+            //FLATA GUARDAR LOS DOCUMENTOS
             //Lista.get(i).getListInvoice();
 
             clienteSQlite.InsertaCliente(
@@ -142,12 +147,34 @@ public class ClienteViewModel extends ViewModel {
                 Lista.get(i).getCategoria(),
                 Lista.get(i).getLinea_credito(),
                 Lista.get(i).getLinea_credito_usado(),
-                Lista.get(i).getTerminopago_id()
+                Lista.get(i).getTerminopago_id(),
+                Lista.get(i).getLista_precio()
             );
         }
     }
 
     public Integer countCustomer(){
         return clienteSQlite.ObtenerCantidadClientes();
+    }
+
+    public MutableLiveData<ArrayList<ListaClienteCabeceraEntity>> getCustomerNotRoute(Context context, Executor executor){
+
+        MutableLiveData<ArrayList<ListaClienteCabeceraEntity>> listCustomerNotRoute=new MutableLiveData<ArrayList<ListaClienteCabeceraEntity>>();
+
+        if(clienteSQlite==null){
+            clienteSQlite=new ClienteSQlite(context);
+        }
+
+        executor.execute(() -> {
+            ArrayList<ListaClienteCabeceraEntity> listaTemp=clienteSQlite.ObtenerClientes();
+
+            if(listaTemp!=null && listaTemp.size()>0){
+                listCustomerNotRoute.postValue(clienteSQlite.ObtenerClientes());
+            }else{
+                listCustomerNotRoute.postValue(null);
+            }
+        });
+
+        return  listCustomerNotRoute;
     }
 }

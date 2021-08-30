@@ -3,6 +3,7 @@ package com.vistony.salesforce.View;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
  * Use the {@link TerminoPagoView#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextListener {
+public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextListener   {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

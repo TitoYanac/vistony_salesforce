@@ -18,7 +18,7 @@ public class UserEntity {
 
     @NonNull
     @SerializedName("UserCode")
-    private String usuario_id;
+    private String user_code;
 
     @NonNull
     @SerializedName("WhsCode")
@@ -26,7 +26,7 @@ public class UserEntity {
 
     @NonNull
     @SerializedName("SlpCode")
-    private String fuerzatrabajo_id;
+    private String slp_code;
 
     @NonNull
     @SerializedName("Profile")
@@ -35,6 +35,10 @@ public class UserEntity {
     @NonNull
     @SerializedName("CompanyCode")
     private String companiaid;
+
+    @NonNull
+    @SerializedName("Country")
+    private String country;
 
     @NonNull
     @SerializedName("CompanyName")
@@ -53,42 +57,19 @@ public class UserEntity {
         return Settings;
     }
 
+    @NonNull
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(@NonNull String country) {
+        this.country = country;
+    }
+
     public void setSettings(@NonNull List<SettingsUserEntity> settings) {
         Settings = settings;
     }
 
-    //@NonNull
-    //@SerializedName("Impuesto_ID")
-    private String impuesto_id;
-
-    //@NonNull
-    //@SerializedName("Impuesto")
-    private String Impuesto;
-
-    //@NonNull
-    //@SerializedName("Rate")
-    private String tipocambio;
-
-    //@NonNull
-    //@SerializedName("U_VIS_CashDscnt")
-    private String u_vis_cashdscnt;
-
-    //@NonNull
-    //@SerializedName("NombreFuerzaTrabajo")
-    private String nombrefuerzadetrabajo;
-
-    //@NonNull
-    //@SerializedName("CTAINGDCTO")
-    private String u_vist_ctaingdcto;
-
-    @NonNull
-    public String getU_vis_cashdscnt() {
-        return u_vis_cashdscnt;
-    }
-
-    public void setU_vis_cashdscnt(@NonNull String u_vis_cashdscnt) {
-        this.u_vis_cashdscnt = u_vis_cashdscnt;
-    }
 
     @NonNull
     public String getU_vist_sucusu() {
@@ -97,42 +78,6 @@ public class UserEntity {
 
     public void setU_vist_sucusu(@NonNull String u_vist_sucusu) {
         this.u_vist_sucusu = u_vist_sucusu;
-    }
-
-    @NonNull
-    public String getImpuesto_id() {
-        return impuesto_id;
-    }
-
-    public void setImpuesto_id(@NonNull String impuesto_id) {
-        this.impuesto_id = impuesto_id;
-    }
-
-    @NonNull
-    public String getImpuesto() {
-        return Impuesto;
-    }
-
-    public void setImpuesto(@NonNull String impuesto) {
-        Impuesto = impuesto;
-    }
-
-    @NonNull
-    public String getTipocambio() {
-        return tipocambio;
-    }
-
-    public void setTipocambio(@NonNull String tipocambio) {
-        this.tipocambio = tipocambio;
-    }
-
-    @NonNull
-    public String getU_vist_ctaingdcto() {
-        return u_vist_ctaingdcto;
-    }
-
-    public void setU_vist_ctaingdcto(@NonNull String u_vist_ctaingdcto) {
-        this.u_vist_ctaingdcto = u_vist_ctaingdcto;
     }
 
     @NonNull
@@ -172,15 +117,6 @@ public class UserEntity {
     }
 
     @NonNull
-    public String getUsuario_id() {
-        return usuario_id;
-    }
-
-    public void setUsuario_id(@NonNull String usuario_id) {
-        this.usuario_id = usuario_id;
-    }
-
-    @NonNull
     public String getAlmacen() {
         return almacen;
     }
@@ -190,29 +126,29 @@ public class UserEntity {
     }
 
     @NonNull
-    public String getFuerzatrabajo_id() {
-        return fuerzatrabajo_id;
-    }
-
-    public void setFuerzatrabajo_id(@NonNull String fuerzatrabajo_id) {
-        this.fuerzatrabajo_id = fuerzatrabajo_id;
-    }
-
-    @NonNull
-    public String getNombrefuerzadetrabajo() {
-        return nombrefuerzadetrabajo;
-    }
-
-    public void setNombrefuerzadetrabajo(@NonNull String nombrefuerzadetrabajo) {
-        this.nombrefuerzadetrabajo = nombrefuerzadetrabajo;
-    }
-
-    @NonNull
     public String getPerfil() {
         return perfil;
     }
 
     public void setPerfil(@NonNull String perfil) {
         this.perfil = perfil;
+    }
+
+    @NonNull
+    public String getUser_code() {
+        return user_code;
+    }
+
+    public void setUser_code(@NonNull String user_code) {
+        this.user_code = user_code;
+    }
+
+    @NonNull
+    public String getSlp_code() {
+        return slp_code;
+    }
+
+    public void setSlp_code(@NonNull String slp_code) {
+        this.slp_code = slp_code;
     }
 }

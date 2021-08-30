@@ -13,17 +13,17 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class BancoWS {
+public class BancoRepository {
     private ArrayList<BancoSQLiteEntity> LBanco= new ArrayList<>();
     private Context context;
 
-    public BancoWS(final Context context){
+    public BancoRepository(final Context context){
         this.context=context;
     }
 
     public ArrayList<BancoSQLiteEntity> getBancoWS(String Imei){
         Api api = Config.getClient().create(Api.class);
-        Call<BancoEntityResponse> call = api.getBanco(Imei);
+        Call<BancoEntityResponse> call = api.getBanco("http://169.47.196.209/cl/api/Banks",Imei);
         try
         {
             Response<BancoEntityResponse> response= call.execute();
@@ -37,9 +37,9 @@ public class BancoWS {
                         LBanco.add(ObjBanco);
                     }
                 }
-
-        }catch (Exception e)
-        {
+            call.cancel();
+        }catch (Exception e){
+            call.cancel();
             e.printStackTrace();
         }
 

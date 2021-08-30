@@ -183,9 +183,22 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         holder.tv_linea_credito.setText(lead.getLinea_credito());
         holder.tv_linea_credito_usado.setText(lead.getLinea_credito_usado());
 
-        holder.progressLineCredit.setMax(Math.round(Float.parseFloat(""+lead.getLinea_credito())));
+        if(lead.getLinea_credito().isEmpty() || lead.getLinea_credito()==null){
+            holder.progressLineCredit.setMax(0);
+            holder.progressLineCredit.setProgress(0);
+        }else{
+            holder.progressLineCredit.setMax(Math.round(Float.parseFloat(""+lead.getLinea_credito())));
 
-        holder.progressLineCredit.setProgress(Math.round(Float.parseFloat(""+lead.getLinea_credito_usado())));
+            if(lead.getLinea_credito_usado().isEmpty() || lead.getLinea_credito_usado()==null){
+                holder.progressLineCredit.setProgress(0);
+            }else{
+                holder.progressLineCredit.setProgress(Math.round(Float.parseFloat(""+lead.getLinea_credito_usado())));
+            }
+        }
+
+
+
+
 
         if(!(lead.getChk_visita()==null||lead.getChk_pedido()==null||lead.getChk_pedido()==null))
         {

@@ -31,8 +31,9 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String chk_ruta;
     private String linea_credito_usado;
     private String fecharuta;
+    private String lista_precio;
 
-    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String linea_credito_usado,   String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta) {
+    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String linea_credito_usado,   String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta,String lista_precio) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -61,6 +62,15 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.chk_cobranza = chk_cobranza;
         this.chk_ruta = chk_ruta;
         this.fecharuta = fecharuta;
+        this.lista_precio=lista_precio;
+    }
+
+    public String getLista_precio() {
+        return lista_precio;
+    }
+
+    public void setLista_precio(String lista_precio) {
+        this.lista_precio = lista_precio;
     }
 
     public String getLinea_credito_usado() {

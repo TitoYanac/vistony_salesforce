@@ -48,18 +48,14 @@ public class ListaDireccionClienteAdapter extends ArrayAdapter<ListaDireccionCli
 
 
         // Obtener inflater.
-        LayoutInflater inflater = (LayoutInflater) getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         final ListaDireccionClienteAdapter.ViewHolder holder;
 
         // ¿Ya se infló este view?
         if (null == convertView) {
             //Si no existe, entonces inflarlo con image_list_view.xml
-            convertView = inflater.inflate(
-                    R.layout.layout_lista_direccion_cliente,
-                    parent,
-                    false);
+            convertView = inflater.inflate(R.layout.layout_lista_direccion_cliente,parent,false);
 
             holder = new ListaDireccionClienteAdapter.ViewHolder();
             // holder.lbl_documento = (TextView) convertView.findViewById(R.id.lbl_documento);

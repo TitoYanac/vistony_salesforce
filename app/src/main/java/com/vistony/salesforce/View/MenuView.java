@@ -50,6 +50,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.BixolonPrinterController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -66,10 +67,8 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -87,7 +86,7 @@ public class MenuView extends AppCompatActivity
         CobranzaCabeceraView.OnFragmentInteractionListener,
         CobranzaDetalleView.OnFragmentInteractionListener,
         ConsDepositoView.OnFragmentInteractionListener,
-        com.vistony.salesforce.View.RutaVendedorView.OnFragmentInteractionListener,
+        RutaVendedorView.OnFragmentInteractionListener,
         HistoricoDepositoView.OnFragmentInteractionListener,
         HistoricoCobranzaView.OnFragmentInteractionListener,
         ConfigImpresoraView.OnFragmentInteractionListener,
@@ -111,7 +110,7 @@ public class MenuView extends AppCompatActivity
         MenuFormulariosView.OnFragmentInteractionListener,
         CatalogoView.OnFragmentInteractionListener,
         MenuConfiguracionView.OnFragmentInteractionListener,
-        ConsClienteView.OnFragmentInteractionListener,
+        BuscarClienteView.OnFragmentInteractionListener,
         RutaVendedorNoRutaView.OnFragmentInteractionListener,
         DireccionClienteView.OnFragmentInteractionListener,
         HojaDespachoView.OnFragmentInteractionListener,
@@ -151,7 +150,7 @@ public class MenuView extends AppCompatActivity
     private File file = new File(ruta_fotos);
     TextView tv_fuerzatrabajo_id_navheader,tv_nombrefuerzatrabajo_navheader,tv_correlativo_navheader,tv_conexion_navheader;
     FragmentManager fragmentManager;
-   DrawerLayout drawer;
+    DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     SimpleDateFormat dateFormat;
     Date date;
@@ -181,9 +180,6 @@ public class MenuView extends AppCompatActivity
     ConfigSistemaView configSistemaView;
     Uri image_uri;
     private ValueCallback<Uri> uploadMessage;
-    //private ValueCallback<Uri[]> uploadMessageAboveL;
-
-
 
     /*VARIABLES TEMPORALESS*/
     final int COD_FOTO=20;
@@ -207,8 +203,7 @@ public class MenuView extends AppCompatActivity
         setSupportActionBar(toolbar);
         view= (MenuItem) findViewById(R.id.nav_cobranzas);
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(this);
-        //fuerzatrabajo_id = (TextView) findViewById(R.id.tv_fuerzatrabajo_id);
-        //nombrefuerzatrabajo = (TextView) findViewById(R.id.tv_nombrefuerzatrabajo);
+
         CobranzaCabeceraFragment= new Fragment();
         ConsDepositoFragment=new Fragment();
         ConsDepositoFragment2=new Fragment();
@@ -244,7 +239,7 @@ public class MenuView extends AppCompatActivity
 
         cobranzaCabeceraView = new CobranzaCabeceraView();
 
-         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
 
@@ -314,19 +309,50 @@ public class MenuView extends AppCompatActivity
             onNavigationItemSelected(navigationView.getMenu().getItem(7).setVisible(false));
         }
 
-        //onNavigationItemSelected(navigationView.getMenu().getItem(9).setChecked(true));
+        switch (BuildConfig.FLAVOR){
+            case "chile":
+                navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_formularios).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_configuracion_general).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
+                break;
+            case "india":
+                navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_formularios).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_configuracion_general).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
+                break;
+            default:
+                break;
+        }
 
         //Envia a Parametros
 
-        /*
+        //String Fragment="MenuFormulariosView";
+        //String accion="agregarcliente";
+
         String Fragment="ParametrosView";
         String accion="Todos";
-        */
-        String Fragment="MenuFormulariosView";
-        String accion="agregarcliente";
+
+        if(BuildConfig.FLAVOR.equals("india")){
+            Fragment="MenuFormulariosView";
+            accion="agregarcliente";
+       }
+
         String compuesto=Fragment+"-"+accion;
         onFragmentInteraction(compuesto,"");
-// ConfigSistemaView configuracion
     }
 
     private Fragment getCurrentFragment(){
@@ -571,31 +597,6 @@ public class MenuView extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    // Converting File to Base64.encode String type using Method
-    public static String getStringFile(File originalFile) {
-
-        String encodedBase64 = null;
-        try {
-            FileInputStream fileInputStreamReader = new FileInputStream(originalFile);
-            byte[] bytes = new byte[(int) originalFile.length()];
-            fileInputStreamReader.read(bytes);
-            encodedBase64=Base64.encodeToString(bytes,Base64.NO_WRAP|Base64.DEFAULT);
-
-            // String text = new String(encodedBase64,"UTF-8");
-
-            return URLEncoder.encode(encodedBase64,"UTF-8");
-            //encodedBase64 = new String(Base64.encode(bytes));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-
-
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -682,43 +683,7 @@ public class MenuView extends AppCompatActivity
                 }*/
                 break;
             case R.id.nav_ruta_vendedor:
-                // Handle the camera action
-                /*validarblockpay="";
-                validar=0;
-                dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                date = new Date();
-                fecha =dateFormat.format(date);
-                //fecha="2019-08-04";
-                usuarioSQLiteDao=new UsuarioSQLiteDao(this);
-                listausuariosqliteentity = new ArrayList<>();
-                listausuariosqliteentity=usuarioSQLiteDao.ObtenerUsuarioBlockPay();
-                for(int i=0;i<listausuariosqliteentity.size();i++)
-                {
-                    validarblockpay=listausuariosqliteentity.get(i).getChkbloqueopago();
-                }
 
-
-                Log.e("jpcm","este merito es ele rrror "+validarblockpay);
-
-
-                if(validarblockpay==null){
-                    validarblockpay="0";
-                }
-
-                validar=cobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id,fecha);
-                if(validar>0){
-                    //Toast.makeText(this, "Ud. cuenta con Recibos Pendientes de Deposito, favor de completar el Proceso de Deposito", Toast.LENGTH_LONG).show();
-                    alertarecibospendientes().show();
-                }else{
-                    SesionEntity.pagodirecto="0";
-                    contentFragment = new RutaVendedorView();
-                    fragment = "RutaVendedorView";
-                    accion = "nuevoinicioRutaVendedorView";
-                    compuesto = fragment + "-" + accion;
-                    object = null;
-                    onFragmentInteraction(compuesto, object);
-                    Log.e("jpcm","Entramos aqui");
-                }*/
                 SesionEntity.pagodirecto="0";
                 contentFragment = new RutaVendedorView();
                 fragment = "RutaVendedorView";
@@ -729,56 +694,6 @@ public class MenuView extends AppCompatActivity
                 Log.e("jpcm","Entramos aqui");
 
                 break;
-            /*case  R.id.nav_pago_directo:
-
-                validarblockpay="";
-                validar=0;
-                dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                date = new Date();
-                fecha =dateFormat.format(date);
-                //fecha="2019-08-04";
-                usuarioSQLiteDao=new UsuarioSQLiteDao(this);
-                listausuariosqliteentity = new ArrayList<>();
-                listausuariosqliteentity=usuarioSQLiteDao.ObtenerUsuarioBlockPay();
-
-                for(int i=0;i<listausuariosqliteentity.size();i++)
-                {
-                    validarblockpay=listausuariosqliteentity.get(i).getChkbloqueopago();
-                }
-
-                if(validarblockpay==null)
-                {
-                    validarblockpay="0";
-                }
-
-                validar=cobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id,fecha);
-
-                if(validar>0)
-                {
-                    //Toast.makeText(this, "Ud. cuenta con Recibos Pendientes de Deposito, favor de completar el Proceso de Deposito", Toast.LENGTH_LONG).show();
-                    alertarecibospendientes().show();
-                }
-                /*else if(validarblockpay.equals("1"))
-                {
-                    //Toast.makeText(this, "Usuario Bloqueado por Depositos sin Conciliar", Toast.LENGTH_LONG).show();
-                    alertaUsuarioBloqueado().show();
-
-                else
-                {
-                    SesionEntity.pagodirecto="1";
-                    contentFragment = new RutaVendedorView();
-                    fragment = "RutaVendedorView";
-                    accion = "nuevoinicioRutaVendedorView";
-                    //contentFragment=new ClienteCabeceraView();
-                    //fragment="ClienteCabeceraView";
-                    //accion="nuevoinicioClienteCabeceraView";
-                    compuesto=fragment+"-"+accion;
-                    object=null;
-
-                    ListenerBackPress.setTemporaIdentityFragment("pagoDirecto");
-                    onFragmentInteraction(compuesto,object);
-                }
-                break;*/
             case R.id.nav_consultas:
                 contentFragment=new MenuConsultasView();
                 fragmentSeleccionado=true;
@@ -805,59 +720,6 @@ public class MenuView extends AppCompatActivity
             case R.id.nav_asistencia_chofer:
                 //contentFragment=new HojaDespachoView();
                 break;
-/*            case R.id.nav_parametros:
-
-                FragmentManager fm = getSupportFragmentManager();
-                for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-                    fm.popBackStack();
-                }
-
-                contentFragment=new ParametrosView();
-                fragmentSeleccionado=true;
-
-                if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                    AsyncTask<Void, Void, Void> retorno=new Preguntar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
-                }
-                break;*/
-           /* case R.id.nav_historico_depositado:
-                fragment="HistoricoDepositoView";
-                accion="nuevoinicioHistoricoDepositoView";
-                compuesto=fragment+"-"+accion;
-                object=null;
-                onFragmentInteraction(compuesto,object);
-                TAG_FRAGMENT="historyDepositoFragment";
-                break;
-            case R.id.nav_historico_cobrado:
-                ListenerBackPress.setTemporaIdentityFragment("ConsultaHistoricoCobranzaa");
-                fragment="HistoricoCobranzaView";
-                accion="COBRANZA";
-                compuesto=fragment+"-"+accion;
-                object=null;
-                TAG_FRAGMENT="history_collection";
-                onFragmentInteraction(compuesto,object);
-                break;*/
-           /* case R.id.nav_configuracion:
-                contentFragment=new ConfigImpresoraView();
-                fragmentSeleccionado=true;
-                TAG_FRAGMENT="config_print";
-                break;
-            case R.id.nav_configuracion_sistema:
-                contentFragment=new ConfigSistemaView();
-                fragmentSeleccionado=true;
-                TAG_FRAGMENT="config_system";
-                break;
-            case R.id.nav_salir:
-                createSimpleDialog().show();
-                break;
-            case R.id.nav_add_client:
-                if(textViewStatus.getText().equals("CONECTADO")){
-                    contentFragment=new SugClienteView();
-                    fragmentSeleccionado=true;
-                }else{
-                    Toast.makeText(context, "Este modulo solo esta disponible con conexión a internet!", Toast.LENGTH_SHORT).show();
-                }
-              
-                break;*/
             default:
                 createSimpleDialog().show();
                 break;
@@ -866,9 +728,7 @@ public class MenuView extends AppCompatActivity
 
 
         if (fragmentSeleccionado==true){
-
             getSupportFragmentManager().beginTransaction().replace(R.id.content_menu_view,contentFragment,contentFragment.getClass().getName()).commit();
-
         }
 
         DrawerLayout drawer =findViewById(R.id.drawer_layout);
@@ -1540,7 +1400,7 @@ public class MenuView extends AppCompatActivity
 
             if(tag2.equals("agregarClienteNoRuta"))
             {
-                contentFragment=new ConsClienteView();
+                contentFragment=new BuscarClienteView();
                 String tagRutaVendedorView="nuevoinicioRutaVendedorView";
                 RutaVendedorView=getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
                 ft.hide(RutaVendedorView);
@@ -1826,6 +1686,8 @@ public class MenuView extends AppCompatActivity
             }
         }
     }
+
+
 
     private File createImageFile() throws IOException {
 

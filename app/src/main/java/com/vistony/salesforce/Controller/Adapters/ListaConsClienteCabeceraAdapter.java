@@ -19,7 +19,7 @@ import com.vistony.salesforce.Entity.Adapters.ListaConsClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ClienteCabeceraView;
-import com.vistony.salesforce.View.ConsClienteView;
+import com.vistony.salesforce.View.BuscarClienteView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +139,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         holder.relativeListaCabezeraCns.setOnClickListener(new View.OnClickListener() {
                                                                @Override
                                                                public void onClick(View v) {
-                                                                   ConsClienteView consClienteView= new ConsClienteView();
+                                                                   BuscarClienteView buscarClienteView = new BuscarClienteView();
                                                                    listaClienteCabeceraEntity = new ListaClienteCabeceraEntity();
                                                                    listaClienteCabeceraEntity.setCliente_id ( lead.getCliente_id());
                                                                    listaClienteCabeceraEntity.setNombrecliente ( lead.getNombrecliente());
@@ -171,7 +171,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
 
                                                                    fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
                                                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                                                   transaction.add(R.id.content_menu_view, consClienteView.newInstanciaEnviarCliente(ArraylistaClienteCabeceraEntity));
+                                                                   transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarCliente(ArraylistaClienteCabeceraEntity));
                                                                }
                                                            }
 

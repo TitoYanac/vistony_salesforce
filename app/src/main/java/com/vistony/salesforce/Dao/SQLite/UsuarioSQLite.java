@@ -7,8 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.UserEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
+
+import org.xbill.DNS.NULLRecord;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioSQLite {
     SQLiteController sqLiteController;
@@ -27,64 +32,36 @@ public class UsuarioSQLite {
         sqLiteController.close();
     }
 
+    public int InsertaUsuario (UserEntity vendedor){
 
-    public int InsertaUsuario (
-            String compania_id,
-            String fuerzatrabajo_id,
-            String nombrecompania,
-            String nombrefuerzatrabajo,
-            String nombreusuario,
-            String usuario_id,
-            String recibo,
-            String online,
-            String perfil,
-            String bloqueopago,
-            String listaPrecios_id_1,
-            String listaPrecios_id_2,
-            String almacen_id,
-            String CogsAcct,
-            String U_VIST_CTAINGDCTO,
-            String DocumentsOwner,
-            String U_VIST_SUCUSU,
-            String CentroCosto,
-            String UnidadNegocio,
-            String LineaProduccion,
-            String Impuesto_ID,
-            String Impuesto,
-            String TipoCambio,
-            String U_VIS_CashDscnt
-
-    )
-    {
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
         abrir();
         ContentValues registro = new ContentValues();
-        registro.put("compania_id",compania_id);
-        registro.put("fuerzatrabajo_id",fuerzatrabajo_id);
-        registro.put("nombrecompania",nombrecompania);
-        registro.put("nombrefuerzatrabajo",nombrefuerzatrabajo);
-        registro.put("nombreusuario",nombreusuario);
-        registro.put("usuario_id",usuario_id);
-        registro.put("recibo",recibo);
+        registro.put("compania_id",vendedor.getCompaniaid());
+        registro.put("fuerzatrabajo_id",vendedor.getSlp_code());
+        registro.put("nombrecompania",vendedor.getNombrecompania());
+        registro.put("nombrefuerzatrabajo",vendedor.getNombreusuario());
+        registro.put("nombreusuario",vendedor.getNombreusuario());
+        registro.put("usuario_id",vendedor.getUser_code());
+        registro.put("recibo",vendedor.getSettings().get(0).getRecibo());
         registro.put("chksesion","0");
-        registro.put("online",online);
-        registro.put("perfil",perfil);
-        registro.put("chkbloqueopago",bloqueopago);
-        registro.put("listaPrecios_id_1",listaPrecios_id_1);
-        registro.put("listaPrecios_id_2",listaPrecios_id_2);
-        registro.put("almacen_id",almacen_id);
-        registro.put("CogsAcct",CogsAcct);
-        registro.put("U_VIST_CTAINGDCTO",U_VIST_CTAINGDCTO);
-        registro.put("DocumentsOwner",DocumentsOwner);
-        registro.put("U_VIST_SUCUSU",U_VIST_SUCUSU);
-        registro.put("CentroCosto",CentroCosto);
-        registro.put("UnidadNegocio",UnidadNegocio);
-        registro.put("LineaProduccion",LineaProduccion);
-        registro.put("Impuesto_ID",Impuesto_ID);
-        registro.put("Impuesto",Impuesto);
-        registro.put("TipoCambio",TipoCambio);
-        registro.put("U_VIS_CashDscnt",U_VIS_CashDscnt);
+        registro.put("online","0");
+        registro.put("perfil",vendedor.getPerfil());
+        registro.put("chkbloqueopago","0");
+       // registro.put("listaPrecios_id_1",null);
+        //registro.put("listaPrecios_id_2",null);
+        registro.put("almacen_id", vendedor.getAlmacen());
+        registro.put("CogsAcct",vendedor.getSettings().get(0).getCogsAcct());
+        registro.put("U_VIST_CTAINGDCTO",vendedor.getSettings().get(0).getDiscAccount());
+        registro.put("DocumentsOwner",vendedor.getUser_code());
+        registro.put("U_VIST_SUCUSU",vendedor.getU_vist_sucusu());//branch
+        registro.put("CentroCosto",vendedor.getSettings().get(0).getCentrocosto());
+        registro.put("UnidadNegocio",vendedor.getSettings().get(0).getUnidadnegocio());
+        registro.put("LineaProduccion",vendedor.getSettings().get(0).getLineaproduccion());
+        registro.put("Impuesto_ID",vendedor.getSettings().get(0).getTaxCode());
+        registro.put("Impuesto",vendedor.getSettings().get(0).getTaxRate());
+        //registro.put("U_VIS_CashDscnt",null);
+        registro.put("Language",vendedor.getSettings().get(0).getLanguage());
+        registro.put("Country",vendedor.getCountry());
         bd.insert("usuario",null,registro);
         bd.close();
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
@@ -273,8 +250,7 @@ public class UsuarioSQLite {
 
             UsuarioSQLiteEntity usuarioSQLiteEntity;
             abrir();
-            Cursor fila = bd.rawQuery(
-                    "Select chkbloqueopago from usuario where chksesion='1'", null);
+            Cursor fila = bd.rawQuery("Select chkbloqueopago from usuario where chksesion='1'", null);
 
             while (fila.moveToNext()) {
                 usuarioSQLiteEntity = new UsuarioSQLiteEntity();

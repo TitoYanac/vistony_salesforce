@@ -11,11 +11,9 @@ import com.vistony.salesforce.Dao.Retrofit.CobranzaDetalleWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaWS;
-import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
@@ -27,18 +25,16 @@ import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
-import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
+import com.vistony.salesforce.Entity.DocumentHeader;
+import com.vistony.salesforce.Entity.DocumentLine;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
-import com.vistony.salesforce.Entity.XML.DocumentLines;
-import com.vistony.salesforce.Entity.XML.OrdenVentaCabeceraJsonEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.text.DateFormat;
@@ -408,8 +404,8 @@ public class FormulasController {
             OrdenVenta_id=listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_id();
             impuesto_id=listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_impuesto_id();
             almacen_id=listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_almacen_id();
-            OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao=new OrdenVentaCabeceraSQLiteDao(Context);
-            ordenVentaCabeceraSQLiteDao.InsertaOrdenVentaCabecera(
+            OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(Context);
+            ordenVentaCabeceraSQLite.InsertaOrdenVentaCabecera(
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_compania_id(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_id(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_cliente_id(),
@@ -419,7 +415,7 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_moneda_id(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_comentario(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_almacen_id(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_impuesto_id(),
+                    ""+listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_impuesto_id(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_montosubtotal(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_montodescuento(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_montoimpuesto(),
@@ -705,110 +701,47 @@ public class FormulasController {
         return validacion;
     }
 
-    public String GenerayConvierteaJSONOV (String ordenventa_id,Context context)
-    {
-        String cadenaJSON="",almacen_id="",metodoterminopago_id="";
-        OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao=new OrdenVentaCabeceraSQLiteDao(context);
-        OrdenVentaDetalleSQLiteDao ordenVentaDetalleSQLiteDao=new OrdenVentaDetalleSQLiteDao(context);
+    public String GenerayConvierteaJSONOV (String ordenventa_id,Context context){
+        String cadenaJSON="",metodoterminopago_id="";
+        OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(context);
         OrdenVentaDetallePromocionSQLiteDao ordenVentaDetallePromocionSQLiteDao=new OrdenVentaDetallePromocionSQLiteDao(context);
         ArrayList<OrdenVentaCabeceraSQLiteEntity> listaordenVentaCabeceraSQLiteEntity=new ArrayList<>();
         ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaordenVentaDetalleSQLiteEntity=new ArrayList<>();
-        OrdenVentaCabeceraJsonEntity ordenVentaCabeceraJsonEntity=null;
-        ArrayList<DocumentLines> listadoDocumentLines =new ArrayList<>();
-        DocumentLines documentLines;
-        listaordenVentaCabeceraSQLiteEntity=ordenVentaCabeceraSQLiteDao.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
+        DocumentHeader documentHeader =null;
+        ArrayList<DocumentLine> listadoDocumentLines =new ArrayList<>();
+        DocumentLine documentLine;
+        listaordenVentaCabeceraSQLiteEntity= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
         listaordenVentaDetalleSQLiteEntity=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
-        ClienteSQlite clienteSQlite =new ClienteSQlite(context);
         UsuarioSQLite usuarioSQLite =new UsuarioSQLite(context);
-        ArrayList<UsuarioSQLiteEntity> listaUsuariosqliteentity=new ArrayList<>();
-        listaUsuariosqliteentity= usuarioSQLite.ObtenerUsuario();
         Gson gson=new Gson();
 
-        for(int u=0;u<listaUsuariosqliteentity.size();u++)
-        {
-            almacen_id=listaUsuariosqliteentity.get(u).getAlmacen_id();
-        }
+        for(int i=0;i<listaordenVentaCabeceraSQLiteEntity.size();i++){
 
-            for(int i=0;i<listaordenVentaCabeceraSQLiteEntity.size();i++)
-        {
-                    String agenciaruc="", agenciadir="", agencianombre="", agenciacode="",U_SYP_MDMT="",U_SYP_TVENTA="",U_SYP_VIST_TG="";
-                    metodoterminopago_id=listaordenVentaCabeceraSQLiteEntity.get(i).getTerminopago_id();
-                    if(listaordenVentaCabeceraSQLiteEntity.get(i).getTerminopago_id().equals("47"))
-                    {
-                        U_SYP_MDMT="08";
-                        U_SYP_TVENTA="03";
-                        U_SYP_VIST_TG="Y";
-                    }
-                    else
-                        {
-                            U_SYP_MDMT=listaordenVentaCabeceraSQLiteEntity.get(i).getU_SYP_MDMT();
-                            U_SYP_TVENTA="01";
-                            U_SYP_VIST_TG="N";
-                        }
+            documentHeader =new DocumentHeader();
+            documentHeader.setCardCode(listaordenVentaCabeceraSQLiteEntity.get(i).getCliente_id());
+            documentHeader.setComments(listaordenVentaCabeceraSQLiteEntity.get(i).getComentario());
+            documentHeader.setDocCurrency(listaordenVentaCabeceraSQLiteEntity.get(i).getMoneda_id());
+            documentHeader.setDocDate(Convertirfechahoraafechanumerica(listaordenVentaCabeceraSQLiteEntity.get(i).getFecharegistro()));
+            documentHeader.setDocDueDate(Convertirfechahoraafechanumerica(listaordenVentaCabeceraSQLiteEntity.get(i).getFecharegistro()));
+            documentHeader.setDocType(listaordenVentaCabeceraSQLiteEntity.get(i).getDocType());
+            documentHeader.setU_VIS_SalesOrderID(listaordenVentaCabeceraSQLiteEntity.get(i).getOrdenventa_id());
+            documentHeader.setDocumentsOwner(SesionEntity.documentsowner);
+            documentHeader.setFederalTaxID(listaordenVentaCabeceraSQLiteEntity.get(i).getRucdni());
+            documentHeader.setPaymentGroupCode(listaordenVentaCabeceraSQLiteEntity.get(i).getTerminopago_id());
+            documentHeader.setSalesPersonCode(SesionEntity.documentsowner);
 
-                    if(!listaordenVentaCabeceraSQLiteEntity.get(i).getAgencia_id().equals("P20102306598"))
-                    {
-                        AgenciaSQLiteDao agenciaSQLiteDao = new AgenciaSQLiteDao(context);
-                        ArrayList<AgenciaSQLiteEntity> listaAgencia = new ArrayList<>();
-                        listaAgencia=agenciaSQLiteDao.ObtenerAgencia_porID(listaordenVentaCabeceraSQLiteEntity.get(i).getAgencia_id());
-                        for (int j = 0; j < listaAgencia.size(); j++)
-                        {
-                            agenciaruc=listaAgencia.get(j).getRuc();
-                            agenciadir=listaAgencia.get(j).getDireccion();
-                            agencianombre=listaAgencia.get(j).getAgencia();
-                            agenciacode=listaAgencia.get(j).getAgencia_id();
-                        }
-                    }
+            documentHeader.setPayToCode(listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id());
+            documentHeader.setShipToCode(listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id());
 
-                    ordenVentaCabeceraJsonEntity=new OrdenVentaCabeceraJsonEntity(
-                    Convertirfechahoraafechanumerica(listaordenVentaCabeceraSQLiteEntity.get(i).getFecharegistro()),
-                    Convertirfechahoraafechanumerica(listaordenVentaCabeceraSQLiteEntity.get(i).getFecharegistro()),
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getCliente_id(),
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getMoneda_id(),
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getTipocambio(),
-                    //Convertirfechahoraafechanumerica(listaordenVentaCabeceraSQLiteEntity.get(i).getFecharegistro()),
-                            listaordenVentaCabeceraSQLiteEntity.get(i).getFechatipocambio(),
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getU_SYP_MDTD(),
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getU_SYP_MDSD(),
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getU_SYP_MDCD(),
-                            U_SYP_MDMT,
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getU_SYP_STATUS(),
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getComentario(),
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getDocType(),
-                    listaordenVentaCabeceraSQLiteEntity.get(i).getRucdni(),
-                    SesionEntity.fuerzatrabajo_id,
-                            null,
-                            listaordenVentaCabeceraSQLiteEntity.get(i).getTerminopago_id(),
-                            listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id(),
-                            listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id(),
-                            "N",
-                            SesionEntity.documentsowner,
-                            "N",
-                            "PE",
-                            U_SYP_TVENTA,
-                            "01",
-                            "1",
-                            listaordenVentaCabeceraSQLiteEntity.get(i).getOrdenventa_id(),
-                            "",
-                            listaordenVentaCabeceraSQLiteEntity.get(i).getComentario(),
-                            "",
-                            "",
-                            SesionEntity.U_VIST_SUCUSU,
-                            U_SYP_VIST_TG,
-                            agenciacode,
-                            agenciaruc,
-                            agencianombre,
-                            agenciadir
-
-            );
+            //documentHeader.setTaxDate();
+            documentHeader.setDocumentLines(null);
         }
 
         for(int j=0;j<listaordenVentaDetalleSQLiteEntity.size();j++)
         {
             String COGSAccountCode="",U_SYP_FECAT_07="",taxOnly="",taxCode="",U_VIST_CTAINGDCTO="",montolineatotal="";
             //Casuistica Bonificacion
-            if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100"))
-            {
+            if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100")){
                 COGSAccountCode="659420";
                 U_SYP_FECAT_07="31";
                 taxOnly="Y";
@@ -849,7 +782,7 @@ public class FormulasController {
                 }
 
 
-                documentLines =new DocumentLines(
+                documentLine =new DocumentLine(
                         listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id(),
                         listaordenVentaDetalleSQLiteEntity.get(j).getAlmacen_id(),
                         listaordenVentaDetalleSQLiteEntity.get(j).getCantidad(),
@@ -871,14 +804,12 @@ public class FormulasController {
 
                 );
 
-            listadoDocumentLines.add(documentLines);
+            listadoDocumentLines.add(documentLine);
         }
 
-        ordenVentaCabeceraJsonEntity.setDocumentLines(listadoDocumentLines);
+        documentHeader.setDocumentLines(listadoDocumentLines);
 
-        cadenaJSON=gson.toJson(ordenVentaCabeceraJsonEntity);
-
-        Log.e("REOS","cadenaJSON "+cadenaJSON);
+        cadenaJSON=gson.toJson(documentHeader);
         return cadenaJSON;
     }
 
@@ -981,11 +912,11 @@ public class FormulasController {
     public boolean ValidarOrdenVentaIDSQLite (Context context,String OrdenVenta_ID)
     {
         boolean estado=false;
-        OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao=new OrdenVentaCabeceraSQLiteDao(context);
+        OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(context);
         OrdenVentaDetalleSQLiteDao ordenVentaDetalleSQLiteDao=new OrdenVentaDetalleSQLiteDao(context);
 
         try {
-            if(ordenVentaCabeceraSQLiteDao.ObtenerCantidadOrdenVentaCabeceraPorOrdenVentaID(OrdenVenta_ID)&&ordenVentaDetalleSQLiteDao.ObtenerCantidadOrdenVentaDetallePorOrdenVentaID(OrdenVenta_ID))
+            if(ordenVentaCabeceraSQLite.ObtenerCantidadOrdenVentaCabeceraPorOrdenVentaID(OrdenVenta_ID)&&ordenVentaDetalleSQLiteDao.ObtenerCantidadOrdenVentaDetallePorOrdenVentaID(OrdenVenta_ID))
             {
                 estado=true;
             }
@@ -1026,9 +957,9 @@ public class FormulasController {
         public final ArrayList<OrdenVentaCabeceraSQLiteEntity>  doInBackground(String... arg0) {
 
             ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabecera=new ArrayList<>();
-            OrdenVentaCabeceraSQLiteDao ordenVentaCabeceraSQLiteDao=new OrdenVentaCabeceraSQLiteDao(context);
+            OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(context);
             try {
-                listaOrdenVentaCabecera=ordenVentaCabeceraSQLiteDao.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
+                listaOrdenVentaCabecera= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
             } catch (Exception e)
             {
                 // TODO: handle exception

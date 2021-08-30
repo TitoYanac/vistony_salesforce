@@ -1,10 +1,12 @@
 package com.vistony.salesforce.View;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,9 +17,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.Controller.Adapters.ListaConsClienteCabeceraAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaConsClienteCabeceraDao;
+import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
+import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.ListenerBackPress;
@@ -27,10 +33,10 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ConsClienteView#newInstance} factory method to
+ * Use the {@link BuscarClienteView#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ConsClienteView extends Fragment implements SearchView.OnQueryTextListener {
+public class BuscarClienteView extends Fragment implements SearchView.OnQueryTextListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,11 +49,12 @@ public class ConsClienteView extends Fragment implements SearchView.OnQueryTextL
     View v;
     ListView listconscliente;
     public static OnFragmentInteractionListener mListener;
-    //ListaClienteCabeceraAdapter listaClienteCabeceraAdapter;
-    ObtenerConsultaCliente obtenerConsultaCliente;
+    private ProgressDialog pd;
     ListaConsClienteCabeceraAdapter listaConsClienteCabeceraAdapter;
     SearchView mSearchView;
-    public ConsClienteView() {
+    private ClienteRepository clienteRepository;
+
+    public BuscarClienteView() {
         // Required empty public constructor
     }
 
@@ -60,8 +67,8 @@ public class ConsClienteView extends Fragment implements SearchView.OnQueryTextL
      * @return A new instance of fragment ConsCliente.
      */
     // TODO: Rename and change types and number of parameters
-    public static ConsClienteView newInstance(String param1, String param2) {
-        ConsClienteView fragment = new ConsClienteView();
+    public static BuscarClienteView newInstance(String param1, String param2) {
+        BuscarClienteView fragment = new BuscarClienteView();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -69,8 +76,8 @@ public class ConsClienteView extends Fragment implements SearchView.OnQueryTextL
         return fragment;
     }
 
-    public static ConsClienteView newInstanciaEnviarCliente(Object param1) {
-        ConsClienteView fragment = new ConsClienteView();
+    public static BuscarClienteView newInstanciaEnviarCliente(Object param1) {
+        BuscarClienteView fragment = new BuscarClienteView();
         String Fragment="ConsClienteView";
         String accion="agregarClienteNoRuta";
         String compuesto=Fragment+"-"+accion;
@@ -93,13 +100,26 @@ public class ConsClienteView extends Fragment implements SearchView.OnQueryTextL
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         v= inflater.inflate(R.layout.fragment_cons_cliente, container, false);
         listconscliente=v.findViewById(R.id.listconscliente);
-        obtenerConsultaCliente=new ObtenerConsultaCliente();
-        obtenerConsultaCliente.execute();
+
+        clienteRepository = new ViewModelProvider(this).get(ClienteRepository.class);
+        AppExecutors executor=new AppExecutors();
+
+        pd = new ProgressDialog(getActivity());
+        pd = ProgressDialog.show(getActivity(), "Por favor espere", "Listando clientes", true, false);
+
+        clienteRepository.getCustomerNotRoute(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+            if(data!=null){
+                listaConsClienteCabeceraAdapter = new ListaConsClienteCabeceraAdapter(getActivity(), ListaConsClienteCabeceraDao.getInstance().getLeads(data));
+                listconscliente.setAdapter(listaConsClienteCabeceraAdapter);
+            }else{
+                Toast.makeText(getContext(), "Actualiza tus parametros, no hay clientes disponibles", Toast.LENGTH_LONG).show();
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+            pd.dismiss();
+        });
 
         return v;
     }
@@ -108,19 +128,16 @@ public class ConsClienteView extends Fragment implements SearchView.OnQueryTextL
         // TODO: Update argument type and name
         void onFragmentInteraction(String Dato,Object Lista);
     }
-/*
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.e("jpcm","se cargo ruta vendedorrr");
         ListenerBackPress.setTemporaIdentityFragment("rutaVendedor");
         ListenerBackPress.setCurrentFragment("RutaVendedorView");
-
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString()+ " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -128,58 +145,6 @@ public class ConsClienteView extends Fragment implements SearchView.OnQueryTextL
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-*/
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.e("jpcm","se cargo ruta vendedorrr");
-        ListenerBackPress.setTemporaIdentityFragment("rutaVendedor");
-        ListenerBackPress.setCurrentFragment("RutaVendedorView");
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    public class ObtenerConsultaCliente extends AsyncTask<String, Void, Object> {
-
-        @Override
-        protected Object doInBackground(String... arg0) {
-            ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntities=new ArrayList<>();
-            try {
-                ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
-                listaClienteCabeceraEntities= clienteSQlite.ObtenerClientes();
-
-            } catch (Exception e) {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-            }
-            return listaClienteCabeceraEntities;
-        }
-
-        protected void onPostExecute(Object result) {
-            ArrayList<ListaClienteCabeceraEntity>Lista=(ArrayList<ListaClienteCabeceraEntity>) result;
-
-            if(Lista.isEmpty())
-            {
-
-            }
-            else
-            {
-
-                listaConsClienteCabeceraAdapter = new ListaConsClienteCabeceraAdapter(getActivity(), ListaConsClienteCabeceraDao.getInstance().getLeads(Lista));
-                listconscliente.setAdapter(listaConsClienteCabeceraAdapter);
-            }
-        }
     }
 
     @Override

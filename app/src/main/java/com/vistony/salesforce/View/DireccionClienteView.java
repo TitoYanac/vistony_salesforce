@@ -8,12 +8,12 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,11 +27,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.Controller.Adapters.ListaDireccionClienteAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaDireccionClienteDao;
-import com.vistony.salesforce.Dao.Retrofit.DireccionClienteWS;
+import com.vistony.salesforce.Dao.Retrofit.DireccionViewModel;
+import com.vistony.salesforce.Dao.Retrofit.LoginViewModel;
 import com.vistony.salesforce.Entity.Adapters.ListaDireccionClienteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
@@ -49,11 +50,13 @@ public class DireccionClienteView extends Fragment {
     View v;
     public static OnFragmentInteractionListener mListener;
     ListaDireccionClienteAdapter listaDireccionClienteAdapter;
-    ObtenerSQLiteDireccionCliente obtenerSQLiteDireccionCliente;
     static String codigocliente="";
     static MenuItem habilitar_direccioncliente;
     private ProgressDialog pd;
     Context context;
+
+    private DireccionViewModel direccionViewModel;
+
     public DireccionClienteView() {
         // Required empty public constructor
     }
@@ -89,13 +92,30 @@ public class DireccionClienteView extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
         v =inflater.inflate(R.layout.fragment_direccion_cliente_view, container, false);
         lv_direccioncliente=(ListView)v.findViewById(R.id.lv_direccioncliente);
-        obtenerSQLiteDireccionCliente=new ObtenerSQLiteDireccionCliente();
-        obtenerSQLiteDireccionCliente.execute();
+
+        direccionViewModel =  new ViewModelProvider(this).get(DireccionViewModel.class);
+
+        pd = new ProgressDialog(getActivity());
+        pd = ProgressDialog.show(getActivity(), "Por favor espere", "Cargando Direcciones", true, false);
+
+        getActivity().setTitle("Dirección Cliente");
+        AppExecutors executor=new AppExecutors();
+
+        direccionViewModel.getAddress(getActivity(),executor.diskIO(),codigocliente).observe(getActivity(), data -> {
+            if(data!=null){
+                listaDireccionClienteAdapter = new ListaDireccionClienteAdapter(getActivity(), ListaDireccionClienteDao.getInstance().getLeads(data));
+                lv_direccioncliente.setAdapter(listaDireccionClienteAdapter);
+            }else{
+                Toast.makeText(getContext(),"Actualiza tus parametros, este cliente no tiene direcciones", Toast.LENGTH_LONG).show();
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+
+            pd.dismiss();
+        });
 
         return v;
     }
@@ -127,51 +147,6 @@ public class DireccionClienteView extends Fragment {
         habilitar_direccioncliente = menu.findItem(R.id.habilitar_direccioncliente);
         super.onCreateOptionsMenu(menu, inflater);
 
-    }
-
-    public class ObtenerSQLiteDireccionCliente extends AsyncTask<String, Void, Object> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Cargando Direcciones", true, false);
-        }
-        @Override
-        protected Object doInBackground(String... arg0) {
-            ArrayList<ListaDireccionClienteEntity> listaDireccionClienteEntity=new ArrayList<>();
-            try {
-                DireccionClienteWS direccionClienteWS=new DireccionClienteWS(getContext());
-                listaDireccionClienteEntity=direccionClienteWS.getDClienteWS(
-                        SesionEntity.imei,
-                        codigocliente
-                );
-
-
-            } catch (Exception e) {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-            }
-            return listaDireccionClienteEntity;
-        }
-
-        protected void onPostExecute(Object result) {
-            getActivity().setTitle("Direccion Cliente");
-            ArrayList<ListaDireccionClienteEntity> Lista = (ArrayList<ListaDireccionClienteEntity>) result;
-            if(Lista.isEmpty())
-            {
-
-            }
-            else
-            {
-
-                listaDireccionClienteAdapter = new ListaDireccionClienteAdapter(getActivity(), ListaDireccionClienteDao.getInstance().getLeads(Lista));
-                lv_direccioncliente.setAdapter(listaDireccionClienteAdapter);
-
-
-            }
-            pd.dismiss();
-            Toast.makeText(getContext(), "Direccion Actualizada...", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
