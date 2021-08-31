@@ -75,7 +75,8 @@ public class ListaOrdenVentaDetalleDao {
                         Lista.get(i).getOrden_detalle_descuentocontado(),
                         Lista.get(i).isOrden_detalle_chk_descuentocontado(),
                         Lista.get(i).getOrden_detalle_terminopago_id(),
-                        Lista.get(i).isOrden_detalle_chk_descuentocontado_aplicado()
+                        Lista.get(i).isOrden_detalle_chk_descuentocontado_aplicado(),
+                        Lista.get(i).getOrden_detalle_porcentaje_descuento_maximo()
                 ));
             }
         }catch (Exception e)

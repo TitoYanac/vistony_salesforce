@@ -122,11 +122,12 @@ public class OrdenVentaDetalleView extends Fragment {
     }
 
     public static OrdenVentaDetalleView newInstanceAgregarProducto(Object objeto) {
-        Log.e("jpcm", "regreso here 1 de " + ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
+
         ordenVentaDetalleView.setArguments(b);
         ArrayList<ListaProductoEntity> listadoProductosConversion=new ArrayList<>();
         ListaOrdenVentaDetalleEntity ObjListaProductosEntity=new ListaOrdenVentaDetalleEntity();
@@ -151,7 +152,7 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_precio_unitario=listadoProductosConversion.get(i).getPreciobase();
             ObjListaProductosEntity.orden_detalle_gal=listadoProductosConversion.get(i).getGal();
             ObjListaProductosEntity.orden_detalle_monto_igv="0";
-            //Cambio
+            //
             ObjListaProductosEntity.orden_detalle_cantidad="";
             //
             ObjListaProductosEntity.orden_detalle_monto_descuento="0";
@@ -163,17 +164,16 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_gal_acumulado="0";
             ObjListaProductosEntity.orden_detalle_descuentocontado=descuentocontado;
             ObjListaProductosEntity.orden_detalle_terminopago_id=terminopago_id;
-            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-descuentocontado:"+String.valueOf(descuentocontado));
-            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-terminopago_id:"+String.valueOf(terminopago_id));
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo= listadoProductosConversion.get(i).getPorcentaje_descuento_max();
+
             listadoProductosAgregados.add(ObjListaProductosEntity);
         }
+
         hiloAgregarListaProductos.execute();
         return ordenVentaDetalleView;
     }
 
     public static OrdenVentaDetalleView newInstanceAgregarListaPromocionCabecera(Object objeto) {
-        //Log.e("jpcm", "regreso here 1 de " + ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);
@@ -183,10 +183,8 @@ public class OrdenVentaDetalleView extends Fragment {
         ArrayList<ListaPromocionCabeceraEntity> ListaPromocionCabeceraEntity = (ArrayList<ListaPromocionCabeceraEntity>) listaobjetos[0];
         ArrayList<ListaOrdenVentaDetalleEntity> ListaOrdenVentaDetalleEntity= (ArrayList<ListaOrdenVentaDetalleEntity>) listaobjetos[1];
 
-        for (int i=0;i<listadoProductosAgregados.size();i++)
-        {
-            if(listadoProductosAgregados.get(i).getOrden_detalle_item().equals(ListaOrdenVentaDetalleEntity.get(0).getOrden_detalle_item()))
-            {
+        for (int i=0;i<listadoProductosAgregados.size();i++){
+            if(listadoProductosAgregados.get(i).getOrden_detalle_item().equals(ListaOrdenVentaDetalleEntity.get(0).getOrden_detalle_item())){
                 listadoProductosAgregados.get(i).setOrden_detalle_lista_promocion_cabecera(ListaPromocionCabeceraEntity);
             }
         }
@@ -195,18 +193,15 @@ public class OrdenVentaDetalleView extends Fragment {
     }
 
     public static OrdenVentaDetalleView newInstanceActualizaLista(Object objeto) {
-        Log.e("jpcm", "regreso here 1 de " + ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);
         ArrayList<ListaOrdenVentaDetalleEntity> ListaOrdenVentaDetalleEntity= (ArrayList<ListaOrdenVentaDetalleEntity>) objeto;
 
-        for (int i=0;i<listadoProductosAgregados.size();i++)
-        {
-            if(listadoProductosAgregados.get(i).getOrden_detalle_item().equals(ListaOrdenVentaDetalleEntity.get(0).getOrden_detalle_item()))
-            {
+        for (int i=0;i<listadoProductosAgregados.size();i++){
+            if(listadoProductosAgregados.get(i).getOrden_detalle_item().equals(ListaOrdenVentaDetalleEntity.get(0).getOrden_detalle_item())){
                 listadoProductosAgregados.get(i).setOrden_detalle_promocion_habilitada(ListaOrdenVentaDetalleEntity.get(0).getOrden_detalle_promocion_habilitada());
             }
         }
@@ -221,9 +216,9 @@ public class OrdenVentaDetalleView extends Fragment {
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);
         int Position=(int) objeto;
-        Log.e("REOS", "antes remove listadoProductosAgregados.size():" + listadoProductosAgregados.size());
+
         listadoProductosAgregados.remove(Position);
-        Log.e("REOS", "despues remove listadoProductosAgregados.size():" + listadoProductosAgregados.size());
+
         for(int i=0;i<listadoProductosAgregados.size();i++)
         {
             listadoProductosAgregados.get(i).setOrden_detalle_item(String.valueOf(i+1));
@@ -237,11 +232,9 @@ public class OrdenVentaDetalleView extends Fragment {
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);
-        //int Position=(int) objeto;
-        //listadoProductosAgregados.remove(Position);
+
         ActualizarResumenMontos();
-//        hiloActualizarResumenMontos.execute();
-        //CargarEstadoItemsMenu();
+
         return ordenVentaDetalleView;
     }
     @Override
@@ -332,18 +325,17 @@ public class OrdenVentaDetalleView extends Fragment {
         {
             getActivity().setTitle("Orden Venta Detalle");
             listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
+
             lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
             hiloAgregarListaProductos =  new HiloAgregarListaProductos();
             FormulasController formulasController=new FormulasController(getContext());
             String [] listaTotalesPedidosCabecera=new String[4];
             ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
-            Log.e("REOS","OrdenVentaDetalleView-HiloAgregarListaProductos-listadoProductosAgregados.size(): "+listadoProductosAgregados.size());
+
             listaOrdenVentaDetalleEntities=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
-            Log.e("REOS","OrdenVentaDetalleView-HiloAgregarListaProductos-listaOrdenVentaDetalleEntities.size(): "+listaOrdenVentaDetalleEntities.size());
-            //listadoProductosAgregados=formulasController.ActualizaciondeConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
-            //String [] MontosTotales=formulasController.CalcularMontosPedidoCabecera(listaOrdenVentaDetalleEntities);
+
             listaTotalesPedidosCabecera=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities);
-            //listaTotalesPedidosCabecera=formulasController.CalcularMontosPedidoCabecera(listadoProductosAgregados);
+
             tv_orden_venta_detalle_subtotal.setText(String.valueOf(listaTotalesPedidosCabecera[0]));
             tv_orden_venta_detalle_descuento.setText(String.valueOf(listaTotalesPedidosCabecera[1]));
             tv_orden_venta_detalle_igv.setText(String.valueOf(listaTotalesPedidosCabecera[2]));
@@ -483,26 +475,23 @@ public class OrdenVentaDetalleView extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FormulasController formulasController=new FormulasController(getContext());
-                if(formulasController.ObtenerCantidadLineasListaOrdenVentaDetalleEntity(listadoProductosAgregados)>15)
-                {
-                    Toast.makeText(getContext(), "La Cantidad de Lineas, Supera las 15 Lineas!!! Revisar la Cantidad de Lineas", Toast.LENGTH_SHORT).show();
-                }else
-                {
-                    if (formulasController.ValidarMontoEnCero(listadoProductosAgregados)) {
-                        alertaValidacionMontoCero().show();
-                    } else {
-                        String Fragment = "OrdenVentaDetalleView";
-                        String accion = "ordenventacabecera";
-                        String compuesto = Fragment + "-" + accion;
-                        mListener.onFragmentInteraction(compuesto, listadoProductosAgregados);
-                        dialog.dismiss();
-                    }
+        dialogButton.setOnClickListener(v -> {
+            FormulasController formulasController=new FormulasController(getContext());
+            /*if(formulasController.ObtenerCantidadLineasListaOrdenVentaDetalleEntity(listadoProductosAgregados)>15)
+            {
+                Toast.makeText(getContext(), "La Cantidad de Lineas, Supera las 15 Lineas!!! Revisar la Cantidad de Lineas", Toast.LENGTH_SHORT).show();
+            }else
+            {*/
+                if (formulasController.ValidarMontoEnCero(listadoProductosAgregados)) {
+                    alertaValidacionMontoCero().show();
+                } else {
+                    String Fragment = "OrdenVentaDetalleView";
+                    String accion = "ordenventacabecera";
+                    String compuesto = Fragment + "-" + accion;
+                    mListener.onFragmentInteraction(compuesto, listadoProductosAgregados);
+                    dialog.dismiss();
                 }
-            }
+            //}
         });
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override

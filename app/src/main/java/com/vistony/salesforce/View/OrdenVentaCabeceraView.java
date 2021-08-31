@@ -329,13 +329,9 @@ public class OrdenVentaCabeceraView extends Fragment {
                     cliente_terminopago_id=listaClienteCabecera.get(l).getTerminopago_id();
                 }
 
-                for(int m=0;m<listaAgenciasqliteentity.size();m++)
-                {
-
+                for(int m=0;m<listaAgenciasqliteentity.size();m++){
                     historicoordenventa_agencia= listaAgenciasqliteentity.get(m).getAgencia();
-                    Log.e("REOS","OrdenVentaCabeceraView-OnCreate-listaHistoricoOrdenVentaEntity-agencia:"+agencia);
                 }
-
 
             }
             if(Listado !=null){

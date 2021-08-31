@@ -60,7 +60,7 @@ import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.DocumentoDeudaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaDetalleDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
@@ -111,7 +111,7 @@ public class CobranzaDetalleView extends Fragment {
     private String mParam2;
     static String TAG_1 = "text";
     String texto= null;
-    DocumentoDeudaSQLiteDao documentoDeudaSQLiteDao;
+    DocumentoSQLite documentoSQLite;
     int resultado=0,correlativorecibo=0,ultimocorrelativorecibo=0,correlativorecibows=0;
     private OnFragmentInteractionListener mListener;
     EnviarWSCobranzaDetalle enviarWSCobranzaDetalle;
@@ -218,7 +218,7 @@ public class CobranzaDetalleView extends Fragment {
         hiloVlidarQR = new HiloVlidarQR();
         listaClienteDetalleAdapterFragment =  new ArrayList<ListaClienteDetalleEntity>();
         documentPDFController = new DocumentPDFController();
-        documentoDeudaSQLiteDao = new DocumentoDeudaSQLiteDao(getContext());
+        documentoSQLite = new DocumentoSQLite(getContext());
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         listaCobranzaDetalleEntities = new ArrayList<CobranzaDetalleSQLiteEntity>();
         clienteSQlite = new ClienteSQlite(getContext());
@@ -1437,7 +1437,7 @@ public class CobranzaDetalleView extends Fragment {
     public int ActualizaDocumentoDeuda(String compania_id,String documento_id,String nuevo_saldo)
     {
         int resultado=0;
-        resultado=documentoDeudaSQLiteDao.ActualizaNuevoSaldo(compania_id,documento_id,nuevo_saldo);
+        resultado= documentoSQLite.ActualizaNuevoSaldo(compania_id,documento_id,nuevo_saldo);
         return resultado;
     }
 

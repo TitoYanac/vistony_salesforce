@@ -30,12 +30,8 @@ import android.widget.Toast;
 import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.Controller.Adapters.ListaDireccionClienteAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaDireccionClienteDao;
-import com.vistony.salesforce.Dao.Retrofit.DireccionViewModel;
-import com.vistony.salesforce.Dao.Retrofit.LoginViewModel;
-import com.vistony.salesforce.Entity.Adapters.ListaDireccionClienteEntity;
+import com.vistony.salesforce.Dao.Retrofit.DireccionRepository;
 import com.vistony.salesforce.R;
-
-import java.util.ArrayList;
 
 public class DireccionClienteView extends Fragment {
 
@@ -55,7 +51,7 @@ public class DireccionClienteView extends Fragment {
     private ProgressDialog pd;
     Context context;
 
-    private DireccionViewModel direccionViewModel;
+    private DireccionRepository direccionRepository;
 
     public DireccionClienteView() {
         // Required empty public constructor
@@ -97,7 +93,7 @@ public class DireccionClienteView extends Fragment {
         v =inflater.inflate(R.layout.fragment_direccion_cliente_view, container, false);
         lv_direccioncliente=(ListView)v.findViewById(R.id.lv_direccioncliente);
 
-        direccionViewModel =  new ViewModelProvider(this).get(DireccionViewModel.class);
+        direccionRepository =  new ViewModelProvider(this).get(DireccionRepository.class);
 
         pd = new ProgressDialog(getActivity());
         pd = ProgressDialog.show(getActivity(), "Por favor espere", "Cargando Direcciones", true, false);
@@ -105,7 +101,7 @@ public class DireccionClienteView extends Fragment {
         getActivity().setTitle("Dirección Cliente");
         AppExecutors executor=new AppExecutors();
 
-        direccionViewModel.getAddress(getActivity(),executor.diskIO(),codigocliente).observe(getActivity(), data -> {
+        direccionRepository.getAddress(getActivity(),executor.diskIO(),codigocliente).observe(getActivity(), data -> {
             if(data!=null){
                 listaDireccionClienteAdapter = new ListaDireccionClienteAdapter(getActivity(), ListaDireccionClienteDao.getInstance().getLeads(data));
                 lv_direccioncliente.setAdapter(listaDireccionClienteAdapter);

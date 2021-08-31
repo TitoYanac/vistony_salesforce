@@ -25,6 +25,17 @@ public class ListaPrecioDetalleEntity {
     @SerializedName("Type")
     private String tipo;
 
+    @SerializedName("DiscPrcnt")
+    private String porcentaje_descuento;
+
+    public String getPorcentaje_descuento() {
+        return porcentaje_descuento;
+    }
+
+    public void setPorcentaje_descuento(String porcentaje_descuento) {
+        this.porcentaje_descuento = porcentaje_descuento;
+    }
+
     public String getTipo() {
         return tipo;
     }

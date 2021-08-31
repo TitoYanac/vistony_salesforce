@@ -45,7 +45,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
-import com.vistony.salesforce.Dao.SQLite.DocumentoDeudaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteDetalleDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
@@ -87,7 +87,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     ArrayList<DocumentoDeudaSQLiteEntity> ArraylistDDeudaEntity;
     ArrayList<String> listaInformacion;
     ObtenerSQLiteDDeuda obtenerSQLiteDDeuda;
-    DocumentoDeudaSQLiteDao documentoDeudaSQLiteDao;
+    DocumentoSQLite documentoSQLite;
     SesionEntity sesionEntity;
     ListaClienteDetalleAdapter listaClienteDetalleAdapter;
     ListaClienteDetalleDao listaClienteDetalleDao;
@@ -173,8 +173,9 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         refreshMasterClient=v.findViewById(R.id.refreshClient);
 
         clienteRepository =  new ViewModelProvider(this.getActivity()).get(ClienteRepository.class);
+
         clienteRepository.updateInformationClient(imei,ruccliente,getContext()).observe(this.getActivity(), data -> {
-            switch(data){
+            /*switch(data){
                 case "if":
                     Toast.makeText(getContext(), "Documentos actualizados...", Toast.LENGTH_SHORT).show();
                     break;
@@ -184,7 +185,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
                 case "onFailure":
                     Toast.makeText(getContext(), "Revisar conección a internet...", Toast.LENGTH_SHORT).show();
                     break;
-            }
+            }*/
         });
 
 
@@ -258,7 +259,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //onCreateOptionsMenu();
-        documentoDeudaSQLiteDao = new DocumentoDeudaSQLiteDao(getContext());
+        documentoSQLite = new DocumentoSQLite(getContext());
         sesionEntity= new SesionEntity();
         texto=new String();
         setHasOptionsMenu(true);
@@ -298,7 +299,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         @Override
         protected String doInBackground(String... arg0) {
             try {
-                listaDDeudaEntity=documentoDeudaSQLiteDao.ObtenerDDeudaporcliente(compania_id,fuerzatrabajo_id,texto);
+                listaDDeudaEntity= documentoSQLite.ObtenerDDeudaporcliente(compania_id,fuerzatrabajo_id,texto);
             } catch (Exception e) {
                 // TODO: handle exception
                 System.out.println(e.getMessage());

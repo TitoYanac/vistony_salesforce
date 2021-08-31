@@ -13,6 +13,7 @@ public class ListaOrdenVentaDetalleEntity implements Serializable  {
     public String orden_detalle_precio_unitario;
     public String orden_detalle_montosubtotal;
     public String orden_detalle_porcentaje_descuento;
+    public String orden_detalle_porcentaje_descuento_maximo;
     public String orden_detalle_monto_descuento;
     public String orden_detalle_monto_igv;
     public String orden_detalle_montototallinea;
@@ -27,7 +28,7 @@ public class ListaOrdenVentaDetalleEntity implements Serializable  {
     public String orden_detalle_terminopago_id;
     public boolean orden_detalle_chk_descuentocontado_aplicado;
 
-    public ListaOrdenVentaDetalleEntity(String orden_detalle_item, String orden_detalle_producto_id, String orden_detalle_producto, String orden_detalle_umd, String orden_detalle_stock, String orden_detalle_cantidad, String orden_detalle_precio_unitario, String orden_detalle_montosubtotal, String orden_detalle_porcentaje_descuento, String orden_detalle_monto_descuento, String orden_detalle_monto_igv, String orden_detalle_montototallinea, ArrayList<ListaPromocionCabeceraEntity> orden_detalle_lista_promocion_cabecera, String orden_detalle_promocion_habilitada, String orden_detalle_gal, String orden_detalle_gal_acumulado, String orden_detalle_montosubtotalcondescuento, ArrayList<ListaOrdenVentaDetallePromocionEntity> orden_detalle_lista_orden_detalle_promocion, String orden_detalle_descuentocontado, boolean orden_detalle_chk_descuentocontado, String orden_detalle_terminopago_id, boolean orden_detalle_chk_descuentocontado_aplicado) {
+    public ListaOrdenVentaDetalleEntity(String orden_detalle_item, String orden_detalle_producto_id, String orden_detalle_producto, String orden_detalle_umd, String orden_detalle_stock, String orden_detalle_cantidad, String orden_detalle_precio_unitario, String orden_detalle_montosubtotal, String orden_detalle_porcentaje_descuento, String orden_detalle_monto_descuento, String orden_detalle_monto_igv, String orden_detalle_montototallinea, ArrayList<ListaPromocionCabeceraEntity> orden_detalle_lista_promocion_cabecera, String orden_detalle_promocion_habilitada, String orden_detalle_gal, String orden_detalle_gal_acumulado, String orden_detalle_montosubtotalcondescuento, ArrayList<ListaOrdenVentaDetallePromocionEntity> orden_detalle_lista_orden_detalle_promocion, String orden_detalle_descuentocontado, boolean orden_detalle_chk_descuentocontado, String orden_detalle_terminopago_id, boolean orden_detalle_chk_descuentocontado_aplicado,String orden_detalle_porcentaje_descuento_maximo) {
         this.orden_detalle_item = orden_detalle_item;
         this.orden_detalle_producto_id = orden_detalle_producto_id;
         this.orden_detalle_producto = orden_detalle_producto;
@@ -50,10 +51,19 @@ public class ListaOrdenVentaDetalleEntity implements Serializable  {
         this.orden_detalle_chk_descuentocontado = orden_detalle_chk_descuentocontado;
         this.orden_detalle_terminopago_id = orden_detalle_terminopago_id;
         this.orden_detalle_chk_descuentocontado_aplicado = orden_detalle_chk_descuentocontado_aplicado;
+        this.orden_detalle_porcentaje_descuento_maximo=orden_detalle_porcentaje_descuento_maximo;
     }
 
     public ListaOrdenVentaDetalleEntity() {
 
+    }
+
+    public String getOrden_detalle_porcentaje_descuento_maximo() {
+        return orden_detalle_porcentaje_descuento_maximo;
+    }
+
+    public void setOrden_detalle_porcentaje_descuento_maximo(String orden_detalle_porcentaje_descuento_maximo) {
+        this.orden_detalle_porcentaje_descuento_maximo = orden_detalle_porcentaje_descuento_maximo;
     }
 
     public boolean isOrden_detalle_chk_descuentocontado_aplicado() {

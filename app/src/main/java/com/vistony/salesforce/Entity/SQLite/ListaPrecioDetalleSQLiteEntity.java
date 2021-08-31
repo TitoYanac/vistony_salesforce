@@ -1,31 +1,23 @@
 package com.vistony.salesforce.Entity.SQLite;
 
 public class ListaPrecioDetalleSQLiteEntity {
-    public String compania_id;
-    //public String listaprecio_id;
-    public String contado;
-    public String credito;
-    public String producto_id;
-    public String producto;
-    public String umd;
-    public String gal;
-    public String typo;
-    public String u_vis_cashdscnt;
+    private String compania_id;
+    private String contado;
+    private String credito;
+    private String producto_id;
+    private String producto;
+    private String umd;
+    private String gal;
+    private String typo;
+    private String u_vis_cashdscnt;
+    private String porcentaje_descuento;
 
-
-    public ListaPrecioDetalleSQLiteEntity(String compania_id, String contado, String credito, String producto_id, String producto, String umd, String gal, String typo,String u_vis_cashdscnt) {
-        this.compania_id = compania_id;
-        this.contado = contado;
-        this.credito = credito;
-        this.producto_id = producto_id;
-        this.producto = producto;
-        this.umd = umd;
-        this.gal = gal;
-        this.typo = typo;
-        this.u_vis_cashdscnt = u_vis_cashdscnt;
+    public String getPorcentaje_descuento() {
+        return porcentaje_descuento;
     }
 
-    public ListaPrecioDetalleSQLiteEntity() {
+    public void setPorcentaje_descuento(String porcentaje_descuento) {
+        this.porcentaje_descuento = porcentaje_descuento;
     }
 
     public String getTypo() {

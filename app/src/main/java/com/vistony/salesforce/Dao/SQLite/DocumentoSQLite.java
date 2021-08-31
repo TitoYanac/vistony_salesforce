@@ -11,13 +11,13 @@ import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 
 import java.util.ArrayList;
 
-public class DocumentoDeudaSQLiteDao {
+public class DocumentoSQLite {
 
     SQLiteController sqLiteController;
     SQLiteDatabase bd;
     ArrayList<DocumentoDeudaSQLiteEntity> listaDDeudaentity;
 
-    public DocumentoDeudaSQLiteDao(Context context)
+    public DocumentoSQLite(Context context)
     {
         sqLiteController = new SQLiteController(context);
     }
@@ -48,8 +48,6 @@ public class DocumentoDeudaSQLiteDao {
             String saldo,
             String saldo_sin_procesar)
     {
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
 
         abrir();
         ContentValues registro = new ContentValues();

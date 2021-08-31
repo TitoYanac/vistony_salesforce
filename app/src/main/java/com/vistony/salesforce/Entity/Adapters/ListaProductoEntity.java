@@ -9,8 +9,9 @@ public class ListaProductoEntity {
     public String preciobase;
     public String precioigv;
     public String gal;
+    public String porcentaje_descuento_max;
 
-    public ListaProductoEntity(String producto_item_id, String producto_id, String producto, String umd, String stock, String preciobase, String precioigv, String gal) {
+    public ListaProductoEntity(String producto_item_id, String producto_id, String producto, String umd, String stock, String preciobase, String precioigv, String gal,String porcentaje_descuento_max) {
         this.producto_item_id = producto_item_id;
         this.producto_id = producto_id;
         this.producto = producto;
@@ -19,9 +20,18 @@ public class ListaProductoEntity {
         this.preciobase = preciobase;
         this.precioigv = precioigv;
         this.gal = gal;
+        this.porcentaje_descuento_max=porcentaje_descuento_max;
     }
 
     public ListaProductoEntity() {
+    }
+
+    public String getPorcentaje_descuento_max() {
+        return porcentaje_descuento_max;
+    }
+
+    public void setPorcentaje_descuento_max(String porcentaje_descuento_max) {
+        this.porcentaje_descuento_max = porcentaje_descuento_max;
     }
 
     public String getGal() {

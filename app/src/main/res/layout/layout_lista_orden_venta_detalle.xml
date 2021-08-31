@@ -67,7 +67,7 @@
                     android:id="@+id/tv_orden_detalle_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
+                    android:gravity="right"
                     android:textAppearance="?attr/textAppearanceListItem"
                     tools:text="Stock1" />
 
@@ -75,6 +75,7 @@
                     android:id="@+id/lbl_orden_detalle_cantidad"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
                     android:text="Cantidad:"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -114,7 +115,7 @@
                     android:id="@+id/tv_orden_detalle_galon_unitario"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
+                    android:gravity="right"
                     android:textAppearance="?attr/textAppearanceListItem"
                     tools:text="Gal Unit" />
 
@@ -122,6 +123,7 @@
                     android:id="@+id/lbl_orden_detalle_galon_acumulado"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
                     android:text="Gal Total:"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -150,7 +152,7 @@
                     android:id="@+id/tv_orden_detalle_precio"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
+                    android:gravity="right"
                     android:textAppearance="?attr/textAppearanceListItem"
                     tools:text="Precio1" />
 
@@ -158,6 +160,7 @@
                     android:id="@+id/lbl_porcentaje_descuento_contado"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
                     android:text="Desct %:"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -195,7 +198,7 @@
                     android:id="@+id/tv_orden_detalle_igv"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
+                    android:gravity="right"
                     android:textAppearance="?attr/textAppearanceListItem"
                     tools:text="IGV1" />
 

@@ -37,7 +37,6 @@ public class ListaPrecioDetalleSQLiteDao {
 
     public int InsertaListaPrecioDetalle (
             String compania_id,
-            //String listaprecio_id,
             String credito,
             String contado,
             String producto_id,
@@ -45,16 +44,13 @@ public class ListaPrecioDetalleSQLiteDao {
             String umd,
             String gal,
             String u_vis_cashdscnt,
-            String tipo
-    )
-
-    {
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
+            String tipo,
+            String porcentaje_descuento
+    ){
         abrir();
         ContentValues registro = new ContentValues();
         registro.put("compania_id",compania_id);
-        //registro.put("listaprecio_id",listaprecio_id);
+        registro.put("porcentaje_dsct",porcentaje_descuento);
         registro.put("credito",credito);
         registro.put("contado",contado);
         registro.put("producto_id",producto_id);
@@ -65,13 +61,11 @@ public class ListaPrecioDetalleSQLiteDao {
         registro.put("Tipo",tipo);
         bd.insert("listapreciodetalle",null,registro);
         bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return 1;
     }
 
     public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (String contado){
-        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
-        //SQLiteDatabase bd = admin.getWritableDatabase();
+
         arraylistaProductoEntity = new ArrayList<ListaProductoEntity>();
         ListaProductoEntity listaProductoEntity;
         abrir();
@@ -79,7 +73,7 @@ public class ListaPrecioDetalleSQLiteDao {
         try {
         if(contado.equals("1")) {
              fila = bd.rawQuery(
-                    "SELECT A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.contado,a.contado,a.gal  FROM listapreciodetalle A" +
+                    "SELECT A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.contado,a.contado,a.gal,a.porcentaje_dsct  FROM listapreciodetalle A" +
                             " LEFT JOIN stock B on " +
                             " A.compania_id=b.compania_id AND" +
                             " A.producto_id=b.producto_id AND" +
@@ -89,7 +83,7 @@ public class ListaPrecioDetalleSQLiteDao {
         }else
         {
             fila = bd.rawQuery(
-                    "SELECT A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.credito,a.credito,a.gal FROM listapreciodetalle A" +
+                    "SELECT A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.credito,a.credito,a.gal,a.porcentaje_dsct FROM listapreciodetalle A" +
                             " LEFT JOIN stock B ON " +
                             " A.compania_id=b.compania_id AND" +
                             " A.producto_id=b.producto_id AND" +
@@ -106,10 +100,11 @@ public class ListaPrecioDetalleSQLiteDao {
                 listaProductoEntity.setPreciobase(fila.getString(4));
                 listaProductoEntity.setPrecioigv(fila.getString(5));
                 listaProductoEntity.setGal(fila.getString(6));
+                listaProductoEntity.setPorcentaje_descuento_max(fila.getString(7));
+
                 arraylistaProductoEntity.add(listaProductoEntity);
             }
-        }catch (Exception e)
-        {
+        }catch (Exception e){
             System.out.println(e.getMessage());
         }
             bd.close();

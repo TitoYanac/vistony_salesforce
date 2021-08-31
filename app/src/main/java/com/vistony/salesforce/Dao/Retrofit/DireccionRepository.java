@@ -21,7 +21,7 @@ import java.util.concurrent.Executor;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class DireccionViewModel extends ViewModel{
+public class DireccionRepository extends ViewModel{
 
     private DireccionSQLite direccionSQLite;
     private MutableLiveData<ArrayList<ListaDireccionClienteEntity>> LDCliente= new MutableLiveData<>();

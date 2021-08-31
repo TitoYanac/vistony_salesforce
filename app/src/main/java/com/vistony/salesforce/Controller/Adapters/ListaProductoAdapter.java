@@ -1,5 +1,6 @@
 package com.vistony.salesforce.Controller.Adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,8 +86,7 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         araylistaProductoEntity= new ArrayList <ListaProductoEntity>();
 
         // Obtener inflater.
-        LayoutInflater inflater = (LayoutInflater) getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         final ListaProductoAdapter.ViewHolder holder;
 
@@ -125,25 +125,25 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         holder.tv_precio.setText(lead.getPreciobase());
         holder.tv_igv.setText(lead.getPrecioigv());
         holder.tv_gal.setText(lead.getGal());
-        holder.relativeListaProducto.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               ArrayList<ListaProductoEntity> arrayListaProductoEntity= new ArrayList<>();
-               ListaProductoEntity listaProductoEntity=new ListaProductoEntity();
-               listaProductoEntity.producto_id = lead.getProducto_id().toString();
-               listaProductoEntity.producto = lead.getProducto().toString();
-               listaProductoEntity.umd = lead.getUmd().toString();
-               listaProductoEntity.stock = lead.getStock().toString();
-               listaProductoEntity.preciobase = lead.getPreciobase().toString();
-               listaProductoEntity.precioigv = lead.getPrecioigv().toString();
-               listaProductoEntity.gal = lead.getGal().toString();
-               arrayListaProductoEntity.add(listaProductoEntity);
 
-               fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
-               FragmentTransaction transaction = fragmentManager.beginTransaction();
-               transaction.add(R.id.content_menu_view, ProductoView.newInstancia(arrayListaProductoEntity));
-           }
-       }
+        holder.relativeListaProducto.setOnClickListener(v -> {
+            ArrayList<ListaProductoEntity> arrayListaProductoEntity= new ArrayList<>();
+            ListaProductoEntity listaProductoEntity=new ListaProductoEntity();
+            listaProductoEntity.producto_id = lead.getProducto_id();
+            listaProductoEntity.producto = lead.getProducto();
+            listaProductoEntity.umd = lead.getUmd();
+            listaProductoEntity.stock = lead.getStock();
+            listaProductoEntity.preciobase = lead.getPreciobase();
+            listaProductoEntity.precioigv = lead.getPrecioigv();
+            listaProductoEntity.gal = lead.getGal();
+            listaProductoEntity.porcentaje_descuento_max = lead.getPorcentaje_descuento_max();
+
+            arrayListaProductoEntity.add(listaProductoEntity);
+
+            fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.content_menu_view, ProductoView.newInstancia(arrayListaProductoEntity));
+        }
 
         );
         return convertView;

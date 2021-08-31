@@ -91,14 +91,16 @@
                 android:text="Cantidad:"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
+
             <TextView
                 android:id="@+id/tv_cantidad__orden_venta"
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
-                android:textAlignment="center"
+                android:gravity="right"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
         </TableRow>
@@ -113,14 +115,16 @@
                 android:text="Monto:"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
+
             <TextView
                 android:id="@+id/tv_monto_orden_venta"
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:layout_marginRight="10dp"
                 android:layout_weight="4"
-                android:textAlignment="center"
+                android:gravity="right"
+                android:text="0"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
         </TableRow>

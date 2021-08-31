@@ -96,7 +96,6 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_producto_view, container, false);
         lv_producto=v.findViewById(R.id.lv_producto);
         cargarProductosSqlite(listaprecio_id);
@@ -111,8 +110,6 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
         listaProductoAdapter = new ListaProductoAdapter(getActivity(), ListaProductoDao.getInstance().getLeads(ListaProductoEntity));
         lv_producto.setAdapter(listaProductoAdapter);
 
-        //listcliente.setTextFilterEnabled(true);
-        //setupSearchView();
     }
 
     public interface OnFragmentInteractionListener {
@@ -126,8 +123,7 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new RuntimeException(context.toString()+ " must implement OnFragmentInteractionListener");
         }
     }
 

@@ -65,19 +65,15 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e("REOS","ListaOrdenVentaDetalleAdapter: Inicio");
-        // Obtener inflater.
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         ListaOrdenVentaDetalleAdapter.ViewHolder holder;
 
-        // ¿Ya se infló este view?
         if (null == convertView) {
 
             convertView = inflater.inflate(R.layout.layout_lista_orden_venta_detalle,parent,false);
 
             holder = new ListaOrdenVentaDetalleAdapter.ViewHolder();
-            // holder.lbl_documento = (TextView) convertView.findViewById(R.id.lbl_documento);
             holder.tv_orden_detalle_item = (TextView) convertView.findViewById(R.id.tv_orden_detalle_item);
             holder.tv_orden_detalle_producto = (TextView) convertView.findViewById(R.id.tv_orden_detalle_producto);
             holder.tv_orden_detalle_umd = (TextView) convertView.findViewById(R.id.tv_orden_detalle_umd);
@@ -90,7 +86,6 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
             holder.tv_orden_detalle_total = (TextView) convertView.findViewById(R.id.tv_orden_detalle_total);
             holder.tv_orden_detalle_galon_unitario = (TextView) convertView.findViewById(R.id.tv_orden_detalle_galon_unitario);
             holder.tv_orden_detalle_galon_acumulado = (TextView) convertView.findViewById(R.id.tv_orden_detalle_galon_acumulado);
-           // holder.lv_promociondetalle=(ListView) convertView.findViewById(R.id.lv_promociondetalle);
             holder.imv_consultar_promocion_cabecera=(ImageView) convertView.findViewById(R.id.imv_consultar_promocion_cabecera);
             holder.imv_eliminar_orden_venta_detalle=(ImageView) convertView.findViewById(R.id.imv_eliminar_orden_venta_detalle);
             holder.chk_descuento_contado=(CheckBox) convertView.findViewById(R.id.chk_descuento_contado);
@@ -98,7 +93,6 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
             holder.layout=(ViewGroup) convertView.findViewById(R.id.content);
 
             convertView.setTag(holder);
-           // holder.editDspPorcentaje.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -108,6 +102,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         holder.layout.removeAllViews();
         listaOrdenVentaDetalleEntities.add(lead);
         // Setup.
+
         DecimalFormat format = new DecimalFormat("#0.00");
         holder.tv_orden_detalle_item.setText(lead.getOrden_detalle_item()+")");
         holder.tv_orden_detalle_producto.setText(lead.getOrden_detalle_producto());
@@ -117,12 +112,15 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         holder.et_orden_detalle_cantidad.setText(lead.getOrden_detalle_cantidad());
 
         ////////////////////RECUPERAR PINTADO DE EDITtEXT DE DESCUENTO//////////////////////////////
+
         try{
             Double tempDsct = Double.valueOf(lead.getOrden_detalle_porcentaje_descuento());
-            if (tempDsct > 0 && tempDsct <= 5) {
+            Double tempDsctMax = Double.valueOf(lead.getOrden_detalle_porcentaje_descuento_maximo());
+
+            if (tempDsct > 0 && tempDsct <= tempDsctMax) {
                 holder.editDspPorcentaje.setBackgroundResource(R.drawable.borde_editext_ov_negro);
                 holder.editDspPorcentaje.setTextColor(ContextCompat.getColor(getContext(), R.color.Black));
-            } else if (tempDsct >= 5.1) {
+            } else if (tempDsct >= (tempDsctMax+0.1)) {
                 holder.editDspPorcentaje.setBackgroundResource(R.drawable.borde_editext_ov_rojo);
                 holder.editDspPorcentaje.setTextColor(ContextCompat.getColor(getContext(), R.color.Rojo_Vistony));
             }
@@ -243,26 +241,15 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                         holder.tv_porcentaje_descuento_contado.setText("0");
                     }
                 holder.tv_orden_detalle_total.setText(lead.getOrden_detalle_montosubtotal());
-                Log.e("REOS","ListaOrdenVentaDetalleAdapter:lead.getOrden_detalle_porcentaje_descuento-true"+lead.getOrden_detalle_porcentaje_descuento());
-                Log.e("REOS","ListaOrdenVentaDetalleAdapter:lead.getOrden_detalle_monto_descuento-true"+lead.getOrden_detalle_monto_descuento());
-                Log.e("REOS","ListaOrdenVentaDetalleAdapter:lead.getOrden_detalle_montosubtotal-true"+lead.getOrden_detalle_montosubtotal());
-                Log.e("REOS","ListaOrdenVentaDetalleAdapter:lead.getOrden_detalle_montosubtotalcondescuento-true"+lead.getOrden_detalle_montosubtotalcondescuento());
 
-                for(int i=0;i<OrdenVentaDetalleView.listadoProductosAgregados.size();i++)
-                {
-                    if (i == (Integer.parseInt(lead.getOrden_detalle_item()) - 1))
-                    {
-                        Log.e("REOS","ListaOrdenVentaDetalleAdapter:chk_descuentocontado-ingresoabucle");
+                for(int i=0;i<OrdenVentaDetalleView.listadoProductosAgregados.size();i++){
+                    if (i == (Integer.parseInt(lead.getOrden_detalle_item()) - 1)){
+
                         OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_porcentaje_descuento((lead.getOrden_detalle_porcentaje_descuento()));
                         OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_monto_descuento((lead.getOrden_detalle_monto_descuento()));
                         OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotal(lead.getOrden_detalle_montosubtotal());
                         OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotalcondescuento(lead.getOrden_detalle_montosubtotalcondescuento());
                         OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_chk_descuentocontado(lead.isOrden_detalle_chk_descuentocontado());
-                        Log.e("REOS","ListaOrdenVentaDetalleAdapter:OrdenVentaDetalleView.listadoProductosAgregados.get(i).getOrden_detalle_porcentaje_descuento: "+OrdenVentaDetalleView.listadoProductosAgregados.get(i).getOrden_detalle_porcentaje_descuento());
-                        Log.e("REOS","ListaOrdenVentaDetalleAdapter:OrdenVentaDetalleView.listadoProductosAgregados.get(i).getOrden_detalle_monto_descuento: "+OrdenVentaDetalleView.listadoProductosAgregados.get(i).getOrden_detalle_monto_descuento());
-                        Log.e("REOS","ListaOrdenVentaDetalleAdapter:OrdenVentaDetalleView.listadoProductosAgregados.get(i).getOrden_detalle_montosubtotal: "+OrdenVentaDetalleView.listadoProductosAgregados.get(i).getOrden_detalle_montosubtotal());
-                        Log.e("REOS","ListaOrdenVentaDetalleAdapter:OrdenVentaDetalleView.listadoProductosAgregados.get(i).getOrden_detalle_montosubtotalcondescuento: "+OrdenVentaDetalleView.listadoProductosAgregados.get(i).getOrden_detalle_montosubtotalcondescuento());
-                        Log.e("REOS","ListaOrdenVentaDetalleAdapter:OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_chk_descuentocontado: "+OrdenVentaDetalleView.listadoProductosAgregados.get(i).isOrden_detalle_chk_descuentocontado());
                     }
                 }
                 ActualizaListaOrdenDetallePromocion(lead);
@@ -273,7 +260,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     Drawable draw =  ContextCompat.getDrawable(getContext(),R.drawable.ic_baseline_card_giftcard_24);
                     holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
                     holder.imv_consultar_promocion_cabecera.setEnabled(false);
-                    //holder.chk_descuento_contado.setChecked(false);
+
                 }else{
                     Drawable draw =  ContextCompat.getDrawable(getContext(),R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
                     holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
@@ -433,26 +420,27 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     Toast.makeText(Context, "Es necesario ingresar primero la cantidad", Toast.LENGTH_LONG).show();
                 }else{
                      Double descuento = 0.00;
+                     Double descuentoMax = 0.00;
 
                     if (v.length() != 0) {
                         try{
                             descuento = Double.valueOf(v.getText().toString());
+                            descuentoMax = Double.valueOf(lead.getOrden_detalle_porcentaje_descuento_maximo());
                         }catch(Exception e){
-                            descuento = 0.00;
-
+                            e.printStackTrace();
                         }
                     }
 
                     if (descuento <= 99.9) {
-                        // itemChecked[position] = true;
 
-                        if (descuento > 0 && descuento <= 5) {
+
+                        if (descuento > 0 && descuento <= descuentoMax) {
                             holder.editDspPorcentaje.setBackgroundResource(R.drawable.borde_editext_ov_negro);
                             holder.editDspPorcentaje.setTextColor(ContextCompat.getColor(getContext(), R.color.Black));
-                        } else if (descuento >= 5.1) {
+                        } else if (descuento >= (descuentoMax+0.1)) {
                             holder.editDspPorcentaje.setBackgroundResource(R.drawable.borde_editext_ov_rojo);
                             holder.editDspPorcentaje.setTextColor(ContextCompat.getColor(getContext(), R.color.Rojo_Vistony));
-                            Toast.makeText(Context, "El porcentaje de descuento mayor al 5% esta sujeto a evaluación", Toast.LENGTH_LONG).show();
+                            Toast.makeText(Context, "El porcentaje de descuento mayor al "+descuentoMax+"% esta sujeto a evaluación", Toast.LENGTH_LONG).show();
                         }
 
                         lead.setOrden_detalle_porcentaje_descuento(""+descuento);

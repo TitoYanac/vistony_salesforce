@@ -2,30 +2,34 @@ package com.vistony.salesforce.Dao.Retrofit;
 
 import android.content.Context;
 
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Dao.SQLite.DocumentoDeudaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
+import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
+import com.vistony.salesforce.Entity.Adapters.ListaDireccionClienteEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.AddressEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DocumentoDeudaEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class DocumentoDeudaWS {
-    private DocumentoDeudaSQLiteDao documentoDeudaSQLiteDao;
-    private ArrayList<DocumentoDeudaSQLiteEntity> LDDeuda = new ArrayList<>();
-    private Context context;
+public class DocumentoRepository extends ViewModel {
+    private DocumentoSQLite documentoSQLite;
+    private MutableLiveData<ArrayList<DocumentoDeudaSQLiteEntity>> LDDeuda= new MutableLiveData<>();
 
-    public DocumentoDeudaWS(final Context context){
-        this.context=context;
-    }
-
-    public ArrayList<DocumentoDeudaSQLiteEntity> getDocumentoDeuda(String Imei){
+    /*
+    public ArrayList<DocumentoDeudaSQLiteEntity> getDocumentoDeuda(Context context,String Imei){
         Api api = Config.getClient().create(Api.class);
-        documentoDeudaSQLiteDao = new DocumentoDeudaSQLiteDao(context);
+        documentoSQLite = new DocumentoSQLite(context);
 
         Call<DocumentoDeudaEntityResponse> call = api.getDocumentoDeuda("https://graph.vistony.pe/DocumentoDeuda?imei="+Imei);
         try
@@ -56,5 +60,28 @@ public class DocumentoDeudaWS {
         }
 
         return LDDeuda;
+    }*/
+
+    public void addInvoices(Context context, List<InvoicesEntity> Lista, String companiCode, String customerCode) {
+        if(documentoSQLite==null){
+            documentoSQLite = new DocumentoSQLite(context);
+        }
+
+        for (int i = 0; i < Lista.size(); i++) {
+            documentoSQLite.InsertaDocumentoDeuda(
+                    Lista.get(i).getDocumentoId(),
+                    Lista.get(i).getDomicilioEmbarqueId(),
+                    companiCode,
+                    customerCode,
+                    SesionEntity.fuerzatrabajo_id,
+                    Lista.get(i).getFechaEmision(),
+                    Lista.get(i).getFechaVencimiento(),
+                    Lista.get(i).getNroFactura(),
+                    Lista.get(i).getMoneda(),
+                    Lista.get(i).getImporteFactura(),
+                    Lista.get(i).getSaldo(),
+                    Lista.get(i).getSaldoSinProcesar()
+            );
+        }
     }
 }

@@ -49,6 +49,7 @@ public class ListaProductoDao {
                         ,Lista.get(i).getPreciobase()
                         ,Lista.get(i).getPrecioigv()
                         ,Lista.get(i).getGal()
+                        ,Lista.get(i).getPorcentaje_descuento_max()
                 ));
             }
         }catch (Exception e)

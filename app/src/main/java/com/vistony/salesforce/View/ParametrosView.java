@@ -28,9 +28,8 @@ import com.vistony.salesforce.Dao.Retrofit.AgenciaWS;
 import com.vistony.salesforce.Dao.Retrofit.BancoRepository;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaCabeceraWS;
-import com.vistony.salesforce.Dao.Retrofit.DocumentoDeudaWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
-import com.vistony.salesforce.Dao.Retrofit.ListaPrecioDetalleWS;
+import com.vistony.salesforce.Dao.Retrofit.ListaPrecioRepository;
 import com.vistony.salesforce.Dao.Retrofit.ListaPromocionWS;
 import com.vistony.salesforce.Dao.Retrofit.PromocionCabeceraWS;
 import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleWS;
@@ -44,7 +43,7 @@ import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
-import com.vistony.salesforce.Dao.SQLite.DocumentoDeudaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Dao.Adapters.ListaParametrosDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
@@ -95,7 +94,7 @@ public class ParametrosView extends Fragment {
     public static ClienteSQlite clienteSQlite;
     private BancoSQLiteDAO bancoSQLiteDAO;
     private BancoSQLiteDAO bancoSQLiteDAO2;
-    private DocumentoDeudaSQLiteDao documentoDeudaSQLiteDao;
+    private DocumentoSQLite documentoSQLite;
     private CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao;
     private ObtenerWSParametros obtenerWSParametros;
     private SesionEntity sesionEntity;
@@ -173,7 +172,7 @@ public class ParametrosView extends Fragment {
         clienteSQlite = new ClienteSQlite(getContext());
         listaclientesqlSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
         bancoSQLiteDAO = new BancoSQLiteDAO(getContext());
-        documentoDeudaSQLiteDao = new DocumentoDeudaSQLiteDao(getContext());
+        documentoSQLite = new DocumentoSQLite(getContext());
         cobranzaCabeceraSQLiteDao = new CobranzaCabeceraSQLiteDao(getContext());
         parametrosSQLiteDao = new ParametrosSQLiteDao(getContext());
         terminoPagoSQLiteDao =  new TerminoPagoSQLiteDao(getContext());
@@ -758,8 +757,8 @@ public class ParametrosView extends Fragment {
                             parametrosSQLiteDao.ActualizaCantidadRegistros("2", "BANCOS", String.valueOf(CantBancos), getDateTime());
                         }
 
-                        ListaPrecioDetalleWS listaPrecioDetalleWS = new ListaPrecioDetalleWS(getContext());
-                        LPDetalle = listaPrecioDetalleWS.getListaPrecioDetalleWS(SesionEntity.imei);
+                        ListaPrecioRepository listaPrecioRepository = new ListaPrecioRepository(getContext());
+                        LPDetalle = listaPrecioRepository.getListaPrecioDetalleWS(SesionEntity.imei);
 
                         if (!(LPDetalle.isEmpty())) {
                             listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
@@ -804,14 +803,16 @@ public class ParametrosView extends Fragment {
                             parametrosSQLiteDao.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
                         }
 
-                        DocumentoDeudaWS documentoDeudaWS = new DocumentoDeudaWS(getContext());
-                        LDDeuda = documentoDeudaWS.getDocumentoDeuda(SesionEntity.imei);
+                        ////////////////////////////YA ESTA EN EL MAESTRO DE DOCUMENTOS/////////////
+                        /*
+                        DocumentoRepository documentoRepository = new DocumentoRepository();
+                        LDDeuda = documentoRepository.getDocumentoDeuda(getActivity(),SesionEntity.imei);
                         if (!(LDDeuda.isEmpty())) {
                             documentoDeudaSQLiteDao.LimpiarTablaDocumentoDeuda();
                             CantDocumentosDeuda = registrarDocumentoDeudaSQLite(LDDeuda);
                             parametrosSQLiteDao.ActualizaCantidadRegistros("3", "DOCUMENTOS", String.valueOf(CantDocumentosDeuda), getDateTime());
 
-                        }
+                        }*/
 
                     }
 
@@ -859,8 +860,8 @@ public class ParametrosView extends Fragment {
                         }
                     }
                     else if (argumento.equals("LISTA PRECIO")) {
-                        ListaPrecioDetalleWS listaPrecioDetalleWS = new ListaPrecioDetalleWS(getContext());
-                        LPDetalle = listaPrecioDetalleWS.getListaPrecioDetalleWS(SesionEntity.imei);
+                        ListaPrecioRepository listaPrecioRepository = new ListaPrecioRepository(getContext());
+                        LPDetalle = listaPrecioRepository.getListaPrecioDetalleWS(SesionEntity.imei);
 
                         if (!(LPDetalle.isEmpty())) {
                             listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
@@ -1125,12 +1126,12 @@ public class ParametrosView extends Fragment {
 
     public int registrarDocumentoDeudaSQLite(List<DocumentoDeudaSQLiteEntity> Lista)
     {
-        documentoDeudaSQLiteDao = new DocumentoDeudaSQLiteDao(getContext());
+        documentoSQLite = new DocumentoSQLite(getContext());
         int resultado=0;
         try {
 
             for (int i = 0; i < Lista.size(); i++) {
-                documentoDeudaSQLiteDao.InsertaDocumentoDeuda(
+                documentoSQLite.InsertaDocumentoDeuda(
                         Lista.get(i).getDocumento_id(),
                         Lista.get(i).getDomembaque_id(),
                         Lista.get(i).getCompania_id(),
@@ -1145,7 +1146,7 @@ public class ParametrosView extends Fragment {
                         Lista.get(i).getSaldo_sin_procesar()
                 );
             }
-            resultado=documentoDeudaSQLiteDao.ObtenerCantidadDocumentosDeuda();
+            resultado= documentoSQLite.ObtenerCantidadDocumentosDeuda();
         }catch (Exception e) {
             // TODO: handle exception
             System.out.println(e.getMessage());
@@ -1260,7 +1261,8 @@ public class ParametrosView extends Fragment {
                         Lista.get(i).getUmd(),
                         Lista.get(i).getGal(),
                         Lista.get(i).getU_vis_cashdscnt(),
-                        Lista.get(i).getTypo()
+                        Lista.get(i).getTypo(),
+                        Lista.get(i).getPorcentaje_descuento()
                 );
             }
             resultado=listaPrecioDetalleSQLiteDao.ObtenerCantidadListaPrecioDetalle();

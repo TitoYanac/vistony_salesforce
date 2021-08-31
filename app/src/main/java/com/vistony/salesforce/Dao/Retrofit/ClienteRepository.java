@@ -29,7 +29,8 @@ public class ClienteRepository extends ViewModel {
     private MutableLiveData<String> estado= new MutableLiveData<>();
     private Context context;
     private ClienteSQlite clienteSQlite;
-    private DireccionViewModel direccionViewModel;
+    private DireccionRepository direccionRepository;
+    private DocumentoRepository documentoRepository;
 
     public ClienteRepository(){}
 
@@ -63,14 +64,15 @@ public class ClienteRepository extends ViewModel {
                         ObjCliente.setRucdni(clienteEntityResponse.getCustomersEntity().get(i).getLicTradNum());
 
                         //Documentos
-                        if(clienteEntityResponse.getCustomersEntity().get(i).getInvoices().size()==0){
+                        if(clienteEntityResponse.getCustomersEntity().get(i).getInvoices() == null || clienteEntityResponse.getCustomersEntity().get(i).getInvoices().size()==0){
                             ObjCliente.setListInvoice(null);
                         }else{
                             List<InvoicesEntity> listaDocumentos=clienteEntityResponse.getCustomersEntity().get(i).getInvoices();
+                            ObjCliente.setListInvoice(listaDocumentos);
                         }
 
                         //Direcciones
-                        if(clienteEntityResponse.getCustomersEntity().get(i).getAddress().size()==0){
+                        if(clienteEntityResponse.getCustomersEntity().get(i).getAddress() == null || clienteEntityResponse.getCustomersEntity().get(i).getAddress().size()==0){
                             ObjCliente.setListAddress(null);
                         }else{
                             List<AddressEntity> listaDirecciones=clienteEntityResponse.getCustomersEntity().get(i).getAddress();
@@ -134,18 +136,32 @@ public class ClienteRepository extends ViewModel {
 
     public void addCustomer(List<ClienteSQLiteEntity> Lista){
         //DEbe ir dentro de la funcion getCustomers
-        clienteSQlite=new ClienteSQlite(context);
-        direccionViewModel =new DireccionViewModel();
+
+        if(clienteSQlite==null){
+            clienteSQlite=new ClienteSQlite(context);
+        }
+
+        if(direccionRepository==null){
+            direccionRepository =new DireccionRepository();
+        }
+
+        if(documentoRepository==null){
+            documentoRepository =new DocumentoRepository();
+        }
 
         for (int i = 0; i < Lista.size(); i++) {
 
+            //direcciones
             List<AddressEntity> addressCustomer=Lista.get(i).getListAddress();
             if(addressCustomer!=null){
-                direccionViewModel.addAddress(context,addressCustomer,Lista.get(i).getCompania_id(),Lista.get(i).getCliente_id());
+                direccionRepository.addAddress(context,addressCustomer,Lista.get(i).getCompania_id(),Lista.get(i).getCliente_id());
             }
 
-            //FLATA GUARDAR LOS DOCUMENTOS
-            //Lista.get(i).getListInvoice();
+            //documentos
+            List<InvoicesEntity> invoicesCustomer=Lista.get(i).getListInvoice();
+            if(invoicesCustomer!=null){
+                documentoRepository.addInvoices(context,invoicesCustomer,Lista.get(i).getCompania_id(),Lista.get(i).getCliente_id());
+            }
 
             clienteSQlite.InsertaCliente(
                 Lista.get(i).getCliente_id(),
