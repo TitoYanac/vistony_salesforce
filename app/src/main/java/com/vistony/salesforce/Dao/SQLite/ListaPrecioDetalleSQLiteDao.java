@@ -45,7 +45,9 @@ public class ListaPrecioDetalleSQLiteDao {
             String gal,
             String u_vis_cashdscnt,
             String tipo,
-            String porcentaje_descuento
+            String porcentaje_descuento,
+            String stock_almacen,
+            String stock_general
     ){
         abrir();
         ContentValues registro = new ContentValues();
@@ -59,57 +61,44 @@ public class ListaPrecioDetalleSQLiteDao {
         registro.put("gal",gal);
         registro.put("U_VIS_CashDscnt",u_vis_cashdscnt);
         registro.put("Tipo",tipo);
+        registro.put("stock_almacen",stock_almacen);
+        registro.put("stock_general",stock_general);
         bd.insert("listapreciodetalle",null,registro);
         bd.close();
         return 1;
     }
 
-    public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (String contado){
+    public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (String cardCode){
 
         arraylistaProductoEntity = new ArrayList<ListaProductoEntity>();
         ListaProductoEntity listaProductoEntity;
         abrir();
         Cursor fila=null;
+
         try {
-        if(contado.equals("1")) {
-             fila = bd.rawQuery(
-                    "SELECT A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.contado,a.contado,a.gal,a.porcentaje_dsct  FROM listapreciodetalle A" +
-                            " LEFT JOIN stock B on " +
-                            " A.compania_id=b.compania_id AND" +
-                            " A.producto_id=b.producto_id AND" +
-                            " A.umd=b.umd"
-                    , null);
+             fila = bd.rawQuery("SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen,IFNULL(stock_general,0) stock_general,contado,contado,gal,porcentaje_dsct" +
+                  " FROM listapreciodetalle  WHERE Tipo= (SELECT lista_precio FROM cliente WHERE cliente_id=? LIMIT 1);",new String [] {cardCode});
 
-        }else
-        {
-            fila = bd.rawQuery(
-                    "SELECT A.producto_id,A.producto,A.umd, IFNULL(b.stock,0) stock,a.credito,a.credito,a.gal,a.porcentaje_dsct FROM listapreciodetalle A" +
-                            " LEFT JOIN stock B ON " +
-                            " A.compania_id=b.compania_id AND" +
-                            " A.producto_id=b.producto_id AND" +
-                            " A.umd=b.umd"
-                    , null);
-
-        }
             while (fila.moveToNext()) {
                 listaProductoEntity = new ListaProductoEntity();
                 listaProductoEntity.setProducto_id(fila.getString(0));
                 listaProductoEntity.setProducto(fila.getString(1));
                 listaProductoEntity.setUmd(fila.getString(2));
-                listaProductoEntity.setStock(fila.getString(3));
-                listaProductoEntity.setPreciobase(fila.getString(4));
-                listaProductoEntity.setPrecioigv(fila.getString(5));
-                listaProductoEntity.setGal(fila.getString(6));
-                listaProductoEntity.setPorcentaje_descuento_max(fila.getString(7));
+                listaProductoEntity.setStock_almacen(fila.getString(3));
+                listaProductoEntity.setStock_general(fila.getString(4));
+                listaProductoEntity.setPreciobase(fila.getString(5));
+                listaProductoEntity.setPrecioigv(fila.getString(6));
+                listaProductoEntity.setGal(fila.getString(7));
+                listaProductoEntity.setPorcentaje_descuento_max(fila.getString(8));
 
                 arraylistaProductoEntity.add(listaProductoEntity);
             }
         }catch (Exception e){
             System.out.println(e.getMessage());
-        }
+        }finally {
             bd.close();
+        }
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return arraylistaProductoEntity;
     }
 
@@ -144,12 +133,9 @@ public class ListaPrecioDetalleSQLiteDao {
 
         return resultado;
     }
-
+/*
     public ArrayList<ListaProductoEntity> ObtenerProducto ()
     {
-        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
-        //SQLiteDatabase bd = admin.getWritableDatabase();
-
         ArrayList<ListaProductoEntity> arraylistaProducto = new ArrayList<ListaProductoEntity>();
         ListaProductoEntity istaProductoEntity;
         abrir();
@@ -183,7 +169,7 @@ public class ListaPrecioDetalleSQLiteDao {
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return arraylistaProducto;
     }
-
+*/
     public ArrayList<ListaPrecioDetalleSQLiteEntity> ObtenerListaPrecioDetalleporID (String producto_id)
     {
         ArrayList<ListaPrecioDetalleSQLiteEntity> arraylistaPreciodetalle = new ArrayList<>();

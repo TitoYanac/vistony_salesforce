@@ -16,13 +16,15 @@ import retrofit2.Response;
 public class HistoricoOrdenVentaWS {
     private ArrayList<ListaHistoricoOrdenVentaEntity> LHOrdenVenta =  new ArrayList<>();
     private Context context;
+
     public HistoricoOrdenVentaWS(final Context context){
         this.context=context;
     }
+
     public ArrayList<ListaHistoricoOrdenVentaEntity> getHistoricoOrdenVenta(String Imei){
 
         Api api = Config.getClient().create(Api.class);
-        Call<HistoricoOrdenVentaEntityResponse> call = api.getHistoricoOrdenVenta(""+Imei);
+        Call<HistoricoOrdenVentaEntityResponse> call = api.getHistoricoOrdenVenta("http://169.47.196.209/cl/api/SalesOrder",Imei,null);
 
         try{
             Response<HistoricoOrdenVentaEntityResponse> response= call.execute();

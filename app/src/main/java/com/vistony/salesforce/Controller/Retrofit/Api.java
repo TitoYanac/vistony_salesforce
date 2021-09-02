@@ -2,6 +2,7 @@ package com.vistony.salesforce.Controller.Retrofit;
 
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CatalogoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitaEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.AgenciaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
@@ -24,6 +25,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.RutaFuerzaTrabajoEntityR
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.StockEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.TerminoPagoEntityResponse;
+import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -105,9 +107,9 @@ public interface Api {
     //@GET
     //Call<DireccionClienteEntityResponse> getDireccionCliente (@Url String url);
 
-    @FormUrlEncoded
-    @POST("/RegistroVisita")
-    Call<Void> getVisita (@FieldMap HashMap<String, String> params);
+    //@FormUrlEncoded
+    @POST//("/RegistroVisita")
+    Call<VisitaEntity> sendVisit (@Url String url, @Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
     @GET
     Call<PromocionCabeceraEntityResponse> getPromomocionCabecera (@Url String url);
@@ -116,7 +118,7 @@ public interface Api {
     Call<PromocionDetalleEntityResponse> getPromomocionDetalle (@Url String url);
 
     @GET
-    Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Url String url);//revisar
+    Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Url String url,@Query("imei") String imei,@Query("fecha") String fecha);
 
     @GET
     Call<HistoricoCobranzaEntityResponse> getHistoricoCobranza (@Url String url);//revisar

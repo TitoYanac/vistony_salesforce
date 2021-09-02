@@ -38,7 +38,11 @@ public class OrdenVentaRepository extends ViewModel {
             public void onResponseSap(SalesOrderEntityResponse data) {
                 //Solo devolveremos uno, el envio masivo es trasnaprente
                 if(data.getSalesOrderEntity().get(0).getDocNum()==null){
-                    temp.setValue("Ocurrio un error al enviar la orden de venta");
+                    if(data.getSalesOrderEntity().get(0).getMessage().equals("Documento creado con flujo de aprobaciÃ³n")){
+                        temp.setValue(data.getSalesOrderEntity().get(0).getMessage());
+                    }else{
+                        temp.setValue("Ocurrio un error al enviar la orden de venta");
+                    }
                 }else{
                     temp.setValue("La orden de venta "+data.getSalesOrderEntity().get(0).getDocNum()+", fue registrada con éxito");
                 }
@@ -62,15 +66,19 @@ public class OrdenVentaRepository extends ViewModel {
                 if(data==null){
                     temp.setValue("No hay ordenes de venta pendientes de enviar");
                 }else{
+                    Log.e("JPCM","=>"+data.getSalesOrderEntity().get(0).getMessage());
                     if(data.getSalesOrderEntity().get(0).getDocNum()==null){
-                        temp.setValue("Ocurrio un error al enviar la orden de venta");
+                        if(data.getSalesOrderEntity().get(0).getMessage().equals("document created with approval flow")){
+                            temp.setValue(data.getSalesOrderEntity().get(0).getMessage());
+                        }else{
+                            temp.setValue("Ocurrio un error al enviar la orden de venta");
+                        }
                     }else{
                         //Solo devolveremos uno, el envio masivo es trasnaprente
                         temp.setValue("La orden de venta "+data.getSalesOrderEntity().get(0).getDocNum()+", fue registrada con éxito");
                     }
                 }
             }
-
             @Override
             public void onResponseErrorSap(String response) {
                 temp.setValue(response);
@@ -111,7 +119,7 @@ public class OrdenVentaRepository extends ViewModel {
         }else{
             json = "{ \"SalesOrders\":[" + json + "]}";
 
-            RequestBody jsonConvert = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),json);
+            RequestBody jsonConvert = RequestBody.create(json,MediaType.parse("application/json; charset=utf-8"));
 
             Config.getClient().create(Api.class).sendOrder("http://169.47.196.209/cl/api/SalesOrder",jsonConvert).enqueue(new Callback<SalesOrderEntityResponse>() {
                 @Override
@@ -122,15 +130,26 @@ public class OrdenVentaRepository extends ViewModel {
                     if(response.isSuccessful() && salesOrderEntityResponse!=null){
 
                         for (SalesOrderEntity data:salesOrderEntityResponse.getSalesOrderEntity()) {
+
+                            String statusSend="0";
+                            if(data.getDocEntry()==null){
+                                if(data.getMessage().equals("document created with approval flow")){
+                                    statusSend="1"; //set 1 por que si llego pero al estar en el flujo de aprovacion y no hay docEntry aun
+                                }
+                            }
+
+                            /*
                             ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
-                                    data.getSalesOrderID(),
-                                    (data.getDocEntry()==null)?"0":"1",
-                                    data.getDocNum(),
-                                    data.getMessage()
+                                data.getSalesOrderID(),
+                                statusSend,
+                                data.getDocNum(),
+                                data.getMessage()
                             );
+                            */
+
                         }
 
-                        callback.onResponseSap(salesOrderEntityResponse );
+                        callback.onResponseSap(salesOrderEntityResponse);
                     }else{
                         callback.onResponseErrorSap("Error "+response.code()+", "+response.message());
                     }

@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.text.NumberFormat;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -21,6 +22,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,6 +35,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -53,10 +57,12 @@ import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.LoginEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +70,7 @@ import java.util.Locale;
 import java.util.Map;
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
-import com.vistony.salesforce.Dao.Retrofit.LoginViewModel;
+import com.vistony.salesforce.Dao.Retrofit.LoginRepository;
 
 public class LoginView extends AppCompatActivity{
     public OmegaCenterIconButton btnlogin;
@@ -89,8 +95,18 @@ public class LoginView extends AppCompatActivity{
     private LocationManager locationManager;
     private AlertDialog alert = null;
     private String version = "";
-    private LoginViewModel loginViewModel;
+    private LoginRepository loginRepository;
     private SharedPreferences statusImei;
+
+    private static double redondearDecimales(double valorInicial, int numeroDecimales) {
+        double parteEntera, resultado;
+        resultado = valorInicial;
+        parteEntera = Math.floor(resultado);
+        resultado=(resultado-parteEntera)*Math.pow(10, numeroDecimales);
+        resultado=Math.round(resultado);
+        resultado=(resultado/Math.pow(10, numeroDecimales))+parteEntera;
+        return resultado;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +115,7 @@ public class LoginView extends AppCompatActivity{
         Locale locale = new Locale("ES", "PE");
         Locale.setDefault(locale);
         Configuration config = new Configuration();
-        config.locale = locale;
+        config.setLocale(locale);
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 
         this.setContentView(R.layout.activity_login);
@@ -130,10 +146,10 @@ public class LoginView extends AppCompatActivity{
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
 
-        loginViewModel =  new ViewModelProvider(this).get(LoginViewModel.class);
+        loginRepository =  new ViewModelProvider(this).get(LoginRepository.class);
         obtenerImei();
 
-        loginViewModel.getAndLoadUsers(Imei,getApplicationContext()).observe(LoginView.this, data -> {
+        loginRepository.getAndLoadUsers(Imei,getApplicationContext()).observe(LoginView.this, data -> {
             if(data==null){
                 Toast.makeText(context, "Ocurrio un error en la red", Toast.LENGTH_LONG).show();
             }else if(data.isEmpty()){
@@ -173,7 +189,7 @@ public class LoginView extends AppCompatActivity{
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
                     perfil = parent.getItemAtPosition(position).toString();
 
-                    ArrayList<String> companiaList = loginViewModel.getCompanies(perfil);
+                    ArrayList<String> companiaList = loginRepository.getCompanies(perfil);
 
                     ArrayAdapter<String> adapterCompania = new ArrayAdapter<String>(LoginView.this,R.layout.layout_custom_spinner,companiaList);
                     spncompania.setAdapter(adapterCompania);
@@ -189,7 +205,7 @@ public class LoginView extends AppCompatActivity{
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     Companiatext = spncompania.getSelectedItem().toString();
-                    ArrayList<String> usuarioList = loginViewModel.getUsers(perfil,Companiatext);
+                    ArrayList<String> usuarioList = loginRepository.getUsers(perfil,Companiatext);
 
                     ArrayAdapter<String> adapterUser = new ArrayAdapter<String>(LoginView.this,R.layout.layout_custom_spinner,usuarioList);
                     spnnombre.setAdapter(adapterUser);
@@ -285,7 +301,7 @@ public class LoginView extends AppCompatActivity{
                         Toast.makeText(context, "IMEI registrado", Toast.LENGTH_LONG).show();
                         Imei=textDImei.getText().toString();
 
-                        loginViewModel.getAndLoadUsers(Imei,getApplicationContext());
+                        loginRepository.getAndLoadUsers(Imei,getApplicationContext());
 
                     }else{
                         Toast.makeText(context, "Vuelva a presionar guardar para configurar su IMEI...", Toast.LENGTH_SHORT).show();
@@ -356,7 +372,7 @@ public class LoginView extends AppCompatActivity{
         btnlogin.setClickable(false);
 
         listaUsuariosqliteEntity.clear();
-        listaUsuariosqliteEntity= loginViewModel.loginUser(Companiatext,vendedortext);
+        listaUsuariosqliteEntity= loginRepository.loginUser(Companiatext,vendedortext);
 
         if(listaUsuariosqliteEntity!=null) {
             for(int g=0;g<listaUsuariosqliteEntity.size();g++){
@@ -383,6 +399,7 @@ public class LoginView extends AppCompatActivity{
                 Sesion.Impuesto=listaUsuariosqliteEntity.get(g).getImpuesto();
                 Sesion.TipoCambio=listaUsuariosqliteEntity.get(g).getTipoCambio();
                 Sesion.U_VIS_CashDscnt=listaUsuariosqliteEntity.get(g).getU_VIS_CashDscnt();
+                Sesion.FLOAG_STOCK=listaUsuariosqliteEntity.get(g).getFLAG_STOCK();
             }
 
             verificationVersion();

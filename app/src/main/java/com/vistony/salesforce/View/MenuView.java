@@ -1110,18 +1110,23 @@ public class MenuView extends AppCompatActivity
 
         if(tag.equals("OrdenVentaCabeceraView")){
 
-            if(tag2.equals("detalle"))
-            {
+            if(tag2.equals("detalle")){
+
                 String tagOrdenVentaCabeceraView="pedido";
                 OrdenVentaCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaCabeceraView);
                 ft.hide(OrdenVentaCabeceraFragment);
+
+                //String object=Lista[1];
+
+
                 ft.add(R.id.content_menu_view, OrdenVentaDetalleView.newInstance(Lista),tag2);
-                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+
                 ft.addToBackStack("po1p");
                 ft.commit();
+
             }
-            if(tag2.equals("terminopago"))
-            {
+
+            if(tag2.equals("terminopago")){
                 String tagOrdenVentaCabeceraView="pedido";
                 OrdenVentaCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaCabeceraView);
                 ft.hide(OrdenVentaCabeceraFragment);
@@ -1193,8 +1198,9 @@ public class MenuView extends AppCompatActivity
                 String tagOrdenVentaDetalleView="detalle";
                 OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
                 ft.hide(OrdenVentaDetalleFragment);
+
                 ft.add(R.id.content_menu_view, ProductoView.newInstance(Lista),tag2);
-                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+
                 ft.addToBackStack("po1p");
                 ft.commit();
             }
@@ -1231,6 +1237,7 @@ public class MenuView extends AppCompatActivity
                 Fragment ProductoViewFragment=new Fragment();
                 OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tag2);
                 ProductoViewFragment=getSupportFragmentManager().findFragmentByTag(tag3);
+
                 ft.remove(ProductoViewFragment);
                 ft.show(OrdenVentaDetalleFragment);
                 ft.addToBackStack("pop");

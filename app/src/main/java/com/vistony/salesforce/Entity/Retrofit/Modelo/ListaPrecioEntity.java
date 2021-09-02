@@ -2,7 +2,7 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ListaPrecioDetalleEntity {
+public class ListaPrecioEntity {
 
     @SerializedName("Cash")
     private String contado;
@@ -27,6 +27,28 @@ public class ListaPrecioDetalleEntity {
 
     @SerializedName("DiscPrcnt")
     private String porcentaje_descuento;
+
+    @SerializedName("WhsStock")
+    private String stock_almacen;
+
+    @SerializedName("StockTotal")
+    private String stock_general;
+
+    public String getStock_almacen() {
+        return stock_almacen;
+    }
+
+    public void setStock_almacen(String stock_almacen) {
+        this.stock_almacen = stock_almacen;
+    }
+
+    public String getStock_general() {
+        return stock_general;
+    }
+
+    public void setStock_general(String stock_general) {
+        this.stock_general = stock_general;
+    }
 
     public String getPorcentaje_descuento() {
         return porcentaje_descuento;

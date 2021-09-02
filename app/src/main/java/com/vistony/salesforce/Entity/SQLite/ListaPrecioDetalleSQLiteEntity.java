@@ -11,6 +11,24 @@ public class ListaPrecioDetalleSQLiteEntity {
     private String typo;
     private String u_vis_cashdscnt;
     private String porcentaje_descuento;
+    private String stock_almacen;
+    private String stock_general;
+
+    public String getStock_almacen() {
+        return stock_almacen;
+    }
+
+    public void setStock_almacen(String stock_almacen) {
+        this.stock_almacen = stock_almacen;
+    }
+
+    public String getStock_general() {
+        return stock_general;
+    }
+
+    public void setStock_general(String stock_general) {
+        this.stock_general = stock_general;
+    }
 
     public String getPorcentaje_descuento() {
         return porcentaje_descuento;

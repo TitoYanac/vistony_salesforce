@@ -24,11 +24,7 @@ import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProductoView#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ProductoView extends Fragment  implements SearchView.OnQueryTextListener {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -45,22 +41,15 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
     ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao;
     ListaProductoAdapter listaProductoAdapter;
     public static OnFragmentInteractionListener mListener;
-    static String listaprecio_id;
+    static String cardCode;
     private SearchView mSearchView;
+
     public ProductoView() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ProductoView.
-     */
-    // TODO: Rename and change types and number of parameters
-
     public static ProductoView newInstance(Object objeto) {
-        listaprecio_id=(String) objeto;
+        cardCode=(String) objeto;
         ListenerBackPress.setCurrentFragment("ProductoView");
         ProductoView productoView = new ProductoView();
         Bundle b = new Bundle();
@@ -98,18 +87,16 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         v= inflater.inflate(R.layout.fragment_producto_view, container, false);
         lv_producto=v.findViewById(R.id.lv_producto);
-        cargarProductosSqlite(listaprecio_id);
+        cargarProductosSqlite(cardCode);
 
         return v;
     }
 
-    private void cargarProductosSqlite(String listaprecio_id){
-
+    private void cargarProductosSqlite(String cardCode){
         ListaProductoEntity=new ArrayList<>();
-        ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(listaprecio_id);
+        ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(cardCode);
         listaProductoAdapter = new ListaProductoAdapter(getActivity(), ListaProductoDao.getInstance().getLeads(ListaProductoEntity));
         lv_producto.setAdapter(listaProductoAdapter);
-
     }
 
     public interface OnFragmentInteractionListener {

@@ -170,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="$0" />
 
             <TextView
                 android:id="@+id/tv_linea_credito"
@@ -179,7 +179,7 @@
                 android:layout_gravity="right"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="TextView" />
+                android:text="$0" />
         </LinearLayout>
 
         <ProgressBar
@@ -194,6 +194,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/chk_pedido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:text="" />
+
+                <TextView
+                    android:id="@+id/lbl_chk_pedido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:singleLine="true"
+                    android:text="Pedido"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -220,32 +242,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="62dp"
-                android:layout_marginRight="62dp"
-                android:orientation="horizontal">
-
-                <CheckBox
-                    android:id="@+id/chk_pedido"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:text="" />
-
-                <TextView
-                    android:id="@+id/lbl_chk_pedido"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:singleLine="true"
-                    android:text="Pedido"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
                 android:layout_gravity="right"
-                android:foregroundGravity="right"
                 android:gravity="right"
                 android:orientation="horizontal">
 
@@ -267,6 +264,7 @@
                     android:textAppearance="?attr/textAppearanceListItem" />
 
             </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

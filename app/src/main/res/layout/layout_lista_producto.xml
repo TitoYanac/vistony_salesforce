@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeListaProducto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?attr/listPreferredItemHeight"
@@ -8,63 +9,55 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingBottom="8dp"
-    android:id="@+id/relativeListaProducto"
-    >
+    android:paddingBottom="8dp">
+
     <TextView
         android:id="@+id/lbl_producto_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Codigo:" />
+        android:text="Codigo:"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
     <TextView
         android:id="@+id/tv_productoid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="00dp"
-        android:textStyle="bold"
+        android:layout_marginLeft="90dp"
+        android:layout_marginTop="0dp"
         android:text=""
         android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"
         tools:text="Producto_id1" />
 
     <TextView
         android:id="@+id/lbl_umd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="170dp"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="UMD:" />
+        android:layout_marginLeft="195dp"
+        android:text="UMD:"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_umd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="220dp"
+        android:layout_marginLeft="275dp"
         android:layout_marginTop="00dp"
-        android:textStyle="bold"
         android:text="UMD1"
-        android:textAppearance="?attr/textAppearanceListItem" />
-    <TextView
-        android:id="@+id/lbl_producto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="60dp"
-        android:text="Producto:"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_producto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="60dp"
-        android:textStyle="bold"
         android:text="Producto1"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/lbl_stock"
@@ -72,36 +65,38 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="40dp"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Stock:" />
+        android:text="Stock:"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_stock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="90dp"
         android:layout_marginTop="40dp"
-        android:textStyle="bold"
         android:text="Stock1"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/lbl_gal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="170dp"
-        android:layout_marginTop="40dp"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Galon:" />
+        android:layout_marginLeft="195dp"
+        android:layout_marginTop="20dp"
+        android:text="Galon:"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_gal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="220dp"
-        android:layout_marginTop="40dp"
-        android:textStyle="bold"
+        android:layout_marginLeft="275dp"
+        android:layout_marginTop="20dp"
         android:text="Galon1"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/lbl_precio"
         android:layout_width="wrap_content"
@@ -110,34 +105,35 @@
         android:layout_marginTop="20dp"
         android:text="Precio:"
         android:textAppearance="?attr/textAppearanceListItem" />
+
     <TextView
         android:id="@+id/tv_precio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="90dp"
         android:layout_marginTop="20dp"
-        android:textStyle="bold"
         android:text="Precio1"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/lbl_igv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="170dp"
-        android:layout_marginTop="60dp"
-        android:text="IGV:"
+        android:layout_marginLeft="195dp"
+        android:layout_marginTop="40dp"
+        android:text="Stock Gral:"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
+
     <TextView
         android:id="@+id/tv_igv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="220dp"
-        android:layout_marginTop="60dp"
-        android:textStyle="bold"
-        android:text="IGV1"
+        android:layout_marginLeft="275dp"
+        android:layout_marginTop="40dp"
+        android:text="0"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:visibility="invisible"
-        />
+        android:textStyle="bold"
+        android:visibility="invisible" />
 </RelativeLayout>

@@ -27,38 +27,18 @@ public class UsuarioSQLiteEntity {
     public String Impuesto;
     public String TipoCambio;
     public String U_VIS_CashDscnt;
+    public String FLAG_STOCK;
 
 
     public UsuarioSQLiteEntity() {
     }
 
-    public UsuarioSQLiteEntity(String compania_id, String fuerzatrabajo_id, String nombrecompania, String nombrefuerzatrabajo, String nombreUsuario, String usuario_id, String recibo, String chksesion, String online, String perfil, String chkbloqueopago, String listaprecio_id_1, String listaprecio_id_2, String planta, String almacen_id, String cogsacct, String u_vist_ctaingdcto, String documentsowner, String u_VIST_SUCUSU, String centroCosto, String unidadNegocio, String lineaProduccion, String impuesto_ID, String impuesto, String tipoCambio, String u_VIS_CashDscnt) {
-        this.compania_id = compania_id;
-        this.fuerzatrabajo_id = fuerzatrabajo_id;
-        this.nombrecompania = nombrecompania;
-        this.nombrefuerzatrabajo = nombrefuerzatrabajo;
-        this.nombreUsuario = nombreUsuario;
-        this.usuario_id = usuario_id;
-        this.recibo = recibo;
-        this.chksesion = chksesion;
-        this.online = online;
-        this.perfil = perfil;
-        this.chkbloqueopago = chkbloqueopago;
-        this.listaprecio_id_1 = listaprecio_id_1;
-        this.listaprecio_id_2 = listaprecio_id_2;
-        this.planta = planta;
-        this.almacen_id = almacen_id;
-        this.cogsacct = cogsacct;
-        this.u_vist_ctaingdcto = u_vist_ctaingdcto;
-        this.documentsowner = documentsowner;
-        U_VIST_SUCUSU = u_VIST_SUCUSU;
-        CentroCosto = centroCosto;
-        UnidadNegocio = unidadNegocio;
-        LineaProduccion = lineaProduccion;
-        Impuesto_ID = impuesto_ID;
-        Impuesto = impuesto;
-        TipoCambio = tipoCambio;
-        U_VIS_CashDscnt = u_VIS_CashDscnt;
+    public String getFLAG_STOCK() {
+        return FLAG_STOCK;
+    }
+
+    public void setFLAG_STOCK(String FLAG_STOCK) {
+        this.FLAG_STOCK = FLAG_STOCK;
     }
 
     public String getU_VIS_CashDscnt() {

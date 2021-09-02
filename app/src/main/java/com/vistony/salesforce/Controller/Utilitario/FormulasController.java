@@ -1,30 +1,35 @@
 package com.vistony.salesforce.Controller.Utilitario;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+
 import com.google.gson.Gson;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaDetalleWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
-import com.vistony.salesforce.Dao.Retrofit.VisitaWS;
+import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
-import com.vistony.salesforce.Dao.SQLite.VisitaSQLiteDAO;
+import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.ApprovalRequests;
 import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.DocumentLine;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -36,6 +41,7 @@ import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.Entity.View.TotalSalesOrder;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -43,56 +49,61 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 public class FormulasController {
     DecimalFormat format = new DecimalFormat("#0.00");
     Context Context;
+    private VisitaRepository visitaRepository;
+
     public FormulasController(Context context)
     {
         Context=context;
     }
 
-    public String CalcularMontoDescuento(String MontoTotalLineaSinIGV,String PorcentajeDescuento)
-    {
+    public String CalcularMontoDescuento(String MontoTotalLineaSinIGV,String PorcentajeDescuento) {
+        MontoTotalLineaSinIGV = MontoTotalLineaSinIGV.replace(",", ".");
+        PorcentajeDescuento = PorcentajeDescuento.replace(",", ".");
 
-        float MontoDescuento=0,factorConversion=0.01f;
-        MontoDescuento=Float.parseFloat(MontoTotalLineaSinIGV)*(Float.parseFloat(PorcentajeDescuento)*factorConversion);
+        double MontoDescuento=0,factorConversion=0.01;
+        MontoDescuento=Double.parseDouble(MontoTotalLineaSinIGV)*(Double.parseDouble(PorcentajeDescuento)*factorConversion);
         return format.format(MontoDescuento);
     }
 
-    public String CalcularMontoTotalconDescuento(String MontoTotalLineaSinDescuento,String MontoDescuento)
-    {
+    public String CalcularMontoTotalconDescuento(String MontoTotalLineaSinDescuento,String MontoDescuento){
+        MontoTotalLineaSinDescuento = MontoTotalLineaSinDescuento.replace(",", ".");
+        MontoDescuento = MontoDescuento.replace(",", ".");
 
-        float MontoTotalconDescuento=0;
-        MontoTotalconDescuento=Float.parseFloat(format.format(Float.parseFloat(MontoTotalLineaSinDescuento)))-Float.parseFloat(format.format(Float.parseFloat((MontoDescuento))));
+        double MontoTotalconDescuento=Double.parseDouble(MontoTotalLineaSinDescuento)-Double.parseDouble(MontoDescuento);
         return format.format(MontoTotalconDescuento);
     }
 
-    public String CalcularMontoTotalporLinea(String MontoSubTotalSinDescuento,String MontoDescuento,String MontoImpuesto)
-    {
+    public String CalcularMontoTotalporLinea(String MontoSubTotalSinDescuento,String MontoDescuento,String MontoImpuesto) {
 
-        float MontoTotalporLinea=0;
-        MontoTotalporLinea=(Float.parseFloat(format.format(Float.parseFloat(MontoSubTotalSinDescuento)))-Float.parseFloat(format.format(Float.parseFloat((MontoDescuento)))))+Float.parseFloat(format.format(Float.parseFloat((MontoImpuesto))));
+        MontoSubTotalSinDescuento = MontoSubTotalSinDescuento.replace(",", ".");
+        MontoDescuento = MontoDescuento.replace(",", ".");
+        MontoImpuesto = MontoImpuesto.replace(",", ".");
+
+        double MontoTotalporLinea=0;
+        MontoTotalporLinea=Double.parseDouble(MontoSubTotalSinDescuento)-Double.parseDouble(MontoDescuento)+Double.parseDouble(MontoImpuesto);
         return format.format(MontoTotalporLinea);
     }
 
-    public String CalcularMontoImpuestoPorLinea(String MontoSubtotal,String MontoDescuento,String Impuesto)
-    {
+    public String CalcularMontoImpuestoPorLinea(String MontoSubtotal,String MontoDescuento,String Impuesto){
 
-        float MontoImpuestoPorLinea=0,factorConversion=0.01f;
-        MontoImpuestoPorLinea=(Float.parseFloat(MontoSubtotal)-Float.parseFloat(MontoDescuento))*(factorConversion*Float.parseFloat(Impuesto));
+        MontoSubtotal = MontoSubtotal.replace(",", ".");
+        MontoDescuento = MontoDescuento.replace(",", ".");
+        Impuesto = Impuesto.replace(",", ".");
+
+        double MontoImpuestoPorLinea=0,factorConversion=0.01;
+        MontoImpuestoPorLinea=(Double.parseDouble(MontoSubtotal)-Double.parseDouble(MontoDescuento))*(factorConversion*Double.parseDouble(Impuesto));
         return format.format(MontoImpuestoPorLinea);
     }
-    public String CalcularMontoSubTotalporLinea(String PrecioUnitario,String Cantidad)
-    {
-
-        float MontoSubTotalPorLinea=0;
-        if(Cantidad.equals(""))
-        {
-            Cantidad="0";
-        }
-        MontoSubTotalPorLinea=(Float.parseFloat(format.format(Float.parseFloat(PrecioUnitario)))*Float.parseFloat(format.format(Float.parseFloat(Cantidad))));
+    public String CalcularMontoSubTotalporLinea(String PrecioUnitario,String Cantidad){
+        double MontoSubTotalPorLinea=0;
+        Cantidad=(Cantidad.equals(""))?"0":Cantidad;
+        MontoSubTotalPorLinea=Double.parseDouble(PrecioUnitario)*Integer.parseInt(Cantidad);
         return format.format(MontoSubTotalPorLinea);
     }
 
@@ -144,122 +155,32 @@ public class FormulasController {
         return String.valueOf(calculodescuento);
     }
 
-    /*
-    public String[] CalcularMontosPedidoCabecera_(ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity)
-    {
+    public TotalSalesOrder CalcularMontosPedidoCabeceraDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity){
 
-        Float Calculo=0f,CalculoSubTotal=0f,CalculoTotalIGV=0f,CalculoTotal=0f,CalculoPromocion=0f,CalculoTotalDescuento=0f,CalculoTotalPromocion=0f,CalculoTotalGalonaje=0f;
+        double Calculo=0.0,CalculoSubTotal=0.0,CalculoTotalIGV=0.0,CalculoTotal=0.0,CalculoPromocion=0.0,CalculoTotalDescuento=0.0,CalculoTotalPromocion=0.0,CalculoTotalGalonaje=0.0;
 
-        for(int i=0;i<listaOrdenVentaDetalleEntity.size();i++)
-        {
-            Calculo=Calculo+Float.parseFloat(listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_montosubtotal());
-            CalculoTotalGalonaje=CalculoTotalGalonaje+Float.parseFloat(listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_gal_acumulado());
-            if(!(listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_lista_promocion_cabecera()==null))
-            {
-                ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntity=new ArrayList<>();
-                listaPromocionCabeceraEntity=listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_lista_promocion_cabecera();
-
-                CalculoPromocion=CalculoPromocion+ObtenerCalculoPromocion(listaPromocionCabeceraEntity);
-                Log.e("REOS","FormulasController:CalcularMontosPedidoCabecera-Iteraccion "+String.valueOf(i) );
-                //CalculoPromocion=CalculoPromocion+ObtenerCalculoPromocionDetalle(listaPromocionCabeceraEntity,i);
-                Log.e("REOS","FormulasController:CalcularMontosPedidoCabecera-CalculoPromocion "+CalculoPromocion);
-                FormulasController formulasController=new FormulasController(Context);
-                String calculodescuento=formulasController.CalcularPorcentajeDescuentoPorLinea(
-                        listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_lista_promocion_cabecera(),
-
-
-                );
-                CalculoTotalDescuento=
-                        CalculoTotalDescuento+
-                                Float.parseFloat(formulasController.CalcularMontoDescuento(
-                                        //Variable 1 Monto Total Linea Sin IGV
-                                        listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_montosubtotal(),
-                                        //Variable 2  Porcentaje Descuento
-                                        (calculodescuento))
-                );
-            }
-        }
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabecera-CalculoPromocion "+CalculoPromocion);
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabecera-CalculoTotalDescuento "+CalculoTotalDescuento);
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabecera-CalculoTotalPromocion "+CalculoTotalPromocion);
-
-        //DecimalFormat format = new DecimalFormat("#0.00");
-        CalculoSubTotal=Float.valueOf(format.format(Calculo+CalculoPromocion));
-        CalculoTotalPromocion=Float.valueOf(format.format(CalculoPromocion+CalculoTotalDescuento));
-
-        CalculoTotalIGV=Float.valueOf(format.format((CalculoSubTotal-CalculoTotalPromocion)*0.18));
-        CalculoTotal=Float.valueOf(format.format((CalculoSubTotal-CalculoTotalPromocion)+CalculoTotalIGV));
-
-        String [] listacadena=new String[5];
-        listacadena[0]=String.valueOf(CalculoSubTotal);
-        listacadena[1]=String.valueOf(CalculoTotalPromocion);
-        listacadena[2]=String.valueOf(CalculoTotalIGV);
-        listacadena[3]=String.valueOf(CalculoTotal);
-        listacadena[4]=String.valueOf(CalculoTotalGalonaje);
-        return (listacadena);
-    }*/
-
-    public String[] CalcularMontosPedidoCabeceraDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity)
-    {
-
-        Float Calculo=0f,CalculoSubTotal=0f,CalculoTotalIGV=0f,CalculoTotal=0f,CalculoPromocion=0f,CalculoTotalDescuento=0f,CalculoTotalPromocion=0f,CalculoTotalGalonaje=0f;
-        String calculodescuento;
-        FormulasController formulasController=new FormulasController(Context);
-
-        /*
-        for(int i=0;i<listaOrdenVentaDetalleEntity.size();i++)
-        {
-            Calculo=Calculo+Float.parseFloat(listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_montosubtotal());
-            CalculoTotalGalonaje=CalculoTotalGalonaje+Float.parseFloat(listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_gal_acumulado());
-            if(!(listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_lista_promocion_cabecera()==null))
-            {
-                //ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntity=new ArrayList<>();
-                //listaPromocionCabeceraEntity=listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_lista_promocion_cabecera();
-
-                //CalculoPromocion=CalculoPromocion+ObtenerCalculoPromocion(listaPromocionCabeceraEntity);
-                Log.e("REOS","FormulasController:CalcularMontosPedidoCabecera-Iteraccion "+String.valueOf(i) );
-                //CalculoPromocion=CalculoPromocion+ObtenerCalculoPromocionDetalle(listaPromocionCabeceraEntity,i);
-                Log.e("REOS","FormulasController:CalcularMontosPedidoCabecera-CalculoPromocion "+CalculoPromocion);
-                //FormulasController formulasController=new FormulasController(Context);
-                //String calculodescuento=formulasController.CalcularPorcentajeDescuentoPorLinea(listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_lista_promocion_cabecera());
-                /*CalculoTotalDescuento=
-                        CalculoTotalDescuento+
-                                Float.parseFloat(formulasController.CalcularMontoDescuento(
-                                        //Variable 1 Monto Total Linea Sin IGV
-                                        listaOrdenVentaDetalleEntity.get(i).getOrden_detalle_montosubtotal(),
-                                        //Variable 2  Porcentaje Descuento
-                                        (calculodescuento))
-                                );
-
-
-            }
-        }*/
         Calculo=ObtenerCalculoMontoSubTotalOrdenDetallePromocion(listaOrdenVentaDetalleEntity);
         CalculoPromocion=ObtenerCalculoPromocionOrdenDetallePromocion(listaOrdenVentaDetalleEntity);
         CalculoTotalDescuento= ObtenerCalculoDescuentoOrdenDetallePromocion(listaOrdenVentaDetalleEntity);
         CalculoTotalGalonaje=ObtenerCalculoTotalGalonesOrdenDetallePromocion(listaOrdenVentaDetalleEntity);
 
-        CalculoSubTotal=Float.valueOf(format.format(Calculo));
-        CalculoTotalPromocion=Float.valueOf(format.format(CalculoPromocion+CalculoTotalDescuento));
-        CalculoTotalIGV=Float.valueOf(format.format((CalculoSubTotal-CalculoTotalPromocion)*0.19));
-        CalculoTotal=Float.valueOf(format.format((CalculoSubTotal-CalculoTotalPromocion)+CalculoTotalIGV));
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-CalculoSubTotal: "+CalculoSubTotal);
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-CalculoPromocion: "+CalculoPromocion);
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-CalculoTotalDescuento: "+CalculoTotalDescuento);
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-CalculoTotalIGV: "+CalculoTotalIGV);
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-CalculoTotal: "+CalculoTotal);
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-CalculoTotalGalonaje: "+CalculoTotalGalonaje);
-        String [] listacadena=new String[5];
-        listacadena[0]=String.valueOf(CalculoSubTotal);
-        listacadena[1]=String.valueOf(CalculoTotalPromocion);
-        listacadena[2]=String.valueOf(CalculoTotalIGV);
-        listacadena[3]=String.valueOf(CalculoTotal);
-        listacadena[4]=String.valueOf(CalculoTotalGalonaje);
-        return (listacadena);
+        CalculoSubTotal=Calculo;
+        //format.format(numero decimal) =>devuelve string
+        CalculoTotalPromocion=CalculoPromocion+CalculoTotalDescuento;
+        CalculoTotalIGV=(CalculoSubTotal-CalculoTotalPromocion)*0.19;
+        CalculoTotal=(CalculoSubTotal-CalculoTotalPromocion)+CalculoTotalIGV;
+
+        TotalSalesOrder totalSalesOrder=new TotalSalesOrder();
+        totalSalesOrder.setSubtotal(CalculoSubTotal);
+        totalSalesOrder.setDescuento(CalculoTotalPromocion);
+        totalSalesOrder.setIgv(CalculoTotalIGV);
+        totalSalesOrder.setTotal(CalculoTotal);
+        totalSalesOrder.setGalones(CalculoTotalGalonaje);
+
+        return (totalSalesOrder);
     }
-    public Float ObtenerCalculoTotalGalonesOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista)
-    {
-        Float CalculoIGV=0f;
+    public double ObtenerCalculoTotalGalonesOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista) {
+        double CalculoIGV=0.0;
         for(int i=0;i<Lista.size();i++)
         {
                 CalculoIGV=CalculoIGV+Float.parseFloat(Lista.get(i).getOrden_detalle_gal_acumulado());
@@ -270,13 +191,15 @@ public class FormulasController {
     public String CalcularMontoImpuestoOrdenDetallePromocionLinea(ListaOrdenVentaDetalleEntity lead)
     {
 
-        Float CalculoIGV=0f;
+        double CalculoIGV=0;
 
         if(lead.getOrden_detalle_lista_orden_detalle_promocion()!=null)
         {
-            for(int i=0;i<lead.getOrden_detalle_lista_orden_detalle_promocion().size();i++)
-            {
-                CalculoIGV=CalculoIGV+Float.parseFloat(lead.getOrden_detalle_lista_orden_detalle_promocion().get(i).getOrden_detalle_monto_igv());
+            for(int i=0;i<lead.getOrden_detalle_lista_orden_detalle_promocion().size();i++){
+                String asdas=lead.getOrden_detalle_lista_orden_detalle_promocion().get(i).getOrden_detalle_monto_igv();
+                asdas = asdas.replace(",", ".");
+
+                CalculoIGV=CalculoIGV+Double.parseDouble(asdas);
 
             }
         }
@@ -285,9 +208,9 @@ public class FormulasController {
         return format.format(CalculoIGV);
     }
 
-    public Float ObtenerCalculoPromocionOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista)
+    public double ObtenerCalculoPromocionOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista)
     {
-        Float CalculoPromocion=0f;
+        double CalculoPromocion=0;
         Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-Lista.size(): "+Lista.size());
         for(int i=0;i<Lista.size();i++)
         {
@@ -302,35 +225,33 @@ public class FormulasController {
         Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-ObtenerCalculoPromocionOrdenDetallePromocion-CalculoPromocion: "+CalculoPromocion);
         return CalculoPromocion;
     }
-    public Float ObtenerCalculoDescuentoOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista)
+    public double ObtenerCalculoDescuentoOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista)
     {
-        Float CalculoDescuento=0f;
+        double CalculoDescuento=0;
         for(int i=0;i<Lista.size();i++)
         {
-            if(Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())>0&&Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())<100)
-            {
-                Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-ObtenerCalculoDescuentoOrdenDetallePromocion-Lista.get(i).getOrden_detalle_monto_descuento(): "+Lista.get(i).getOrden_detalle_monto_descuento());
-                CalculoDescuento=CalculoDescuento+Float.parseFloat(Lista.get(i).getOrden_detalle_monto_descuento());
+            if(Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())>0&&Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())<100) {
+                String temp23=Lista.get(i).getOrden_detalle_monto_descuento();
+                temp23=temp23.replace(",",".");
+
+                CalculoDescuento=CalculoDescuento+Double.parseDouble(temp23);
             }
 
         }
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-ObtenerCalculoDescuentoOrdenDetallePromocion-CalculoDescuento: "+String.valueOf(CalculoDescuento));
         return CalculoDescuento;
     }
-    public Float ObtenerCalculoMontoSubTotalOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista)
-    {
-        Float CalculoMontoSubTotal=0f;
-        for(int i=0;i<Lista.size();i++)
-        {
-            Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-ObtenerCalculoMontoSubTotalOrdenDetallePromocion-Lista.get(i).getOrden_detalle_montosubtotal(): "+Lista.get(i).getOrden_detalle_montosubtotal());
-            CalculoMontoSubTotal=CalculoMontoSubTotal+Float.parseFloat(Lista.get(i).getOrden_detalle_montosubtotal());
+    public double ObtenerCalculoMontoSubTotalOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista){
+        double CalculoMontoSubTotal=0;
+        for(int i=0;i<Lista.size();i++){
+            String montoSubtotal=Lista.get(i).getOrden_detalle_montosubtotal();
+            montoSubtotal = montoSubtotal.replace(",", ".");
+
+            CalculoMontoSubTotal=CalculoMontoSubTotal+Double.parseDouble(montoSubtotal);
         }
-        Log.e("REOS","FormulasController:CalcularMontosPedidoCabeceraDetallePromocion-ObtenerCalculoMontoSubTotalOrdenDetallePromocion-CalculoMontoSubTotal: "+String.valueOf(CalculoMontoSubTotal));
         return CalculoMontoSubTotal;
     }
 
-    public Float ObtenerCalculoPromocion(ArrayList<ListaPromocionCabeceraEntity> Lista)
-    {
+    public Float ObtenerCalculoPromocion(ArrayList<ListaPromocionCabeceraEntity> Lista) {
         Float CalculoPromocion=0f;
         for(int i=0;i<Lista.size();i++)
         {
@@ -452,31 +373,33 @@ public class FormulasController {
             ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
             listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id());
 
-            for(int g=0;g<listaPrecioDetalleSQLiteEntities.size();g++)
-            {
+            for(int g=0;g<listaPrecioDetalleSQLiteEntities.size();g++){
                 producto=listaPrecioDetalleSQLiteEntities.get(g).getProducto();
             }
 
-            if(//listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_promocion_cabecera().isEmpty()||
-                    listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_promocion_cabecera()==null
-            )
-            {
+            if(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_promocion_cabecera()==null){
                 contador++;
+
+                String temp24=listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_precio_unitario();
+                Log.e("=>",temp24);
+
+                String temp25=listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_montototallinea();
+                Log.e("=>",temp25);
+
                 ordenVentaDetalleSQLiteDao.InsertaOrdenVentaDetalle(
                         SesionEntity.compania_id,
                         OrdenVenta_id,
-                        String.valueOf(contador),
-                        //String.valueOf(cantidadlistaOrdenVentaDetallepromocion),
+                        ""+contador,
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id(),
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_umd(),
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_cantidad(),
-                        String.valueOf(Float.valueOf(format.format(Float.valueOf(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_precio_unitario())))),
+                        ""+temp24,
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_montosubtotal(),
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_porcentaje_descuento(),
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_monto_descuento(),
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_monto_igv(),
-                        String.valueOf(format.format(Float.parseFloat(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_montototallinea()))),
-                        String.valueOf(contador),
+                        ""+temp25,
+                        ""+contador,
                         impuesto_id,
                         producto,
                         "",
@@ -486,24 +409,22 @@ public class FormulasController {
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_gal_acumulado(),
                         "10",
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_montosubtotalcondescuento(),
-                        String.valueOf(listaOrdenVentaDetalleEntity.get(j).isOrden_detalle_chk_descuentocontado())
-                        );
+                        ""+listaOrdenVentaDetalleEntity.get(j).isOrden_detalle_chk_descuentocontado()
+                );
+
                 //Empieza OrdenVentaDetallePromocion sin Lineas de Promocion
-                for(int g=0;g<listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().size();g++)
-                {
+                for(int g=0;g<listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().size();g++){
                     cantidadlistaOrdenVentaDetallepromocion++;
                     ordenVentaDetallePromocionSQLiteDao.InsertaOrdenVentaDetallePromocion(
                             SesionEntity.compania_id,
                             OrdenVenta_id,
                             String.valueOf(cantidadlistaOrdenVentaDetallepromocion),
-                            //listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_promocion_item(),
-                            //listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre(),
                             listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_producto_id(),
                             listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_umd(),
                             listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_cantidad(),
-                            String.valueOf(Float.valueOf(format.format(Float.valueOf(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_precio_unitario())))),
-                            //String.valueOf(Float.valueOf(format.format(Float.valueOf(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_precio_unitario())))),
-                            //String.valueOf(format.format(Float.valueOf(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_promocion_cabecera().get(k).getListaPromocionDetalleEntities().get(l).getPreciobase()))),
+                            ""+Convert.stringToDouble(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_precio_unitario()),
+                            //String.valueOf(Float.valueOf(format.format(Float.valueOf()))),
+
                             listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_montosubtotal(),
                             listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_porcentaje_descuento(),
                             listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_monto_descuento(),
@@ -550,8 +471,7 @@ public class FormulasController {
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_montosubtotalcondescuento()
                 );*/
 
-            }else
-                {
+            }else{
                         contador++;
                         int contadorpromocion=0;
                         contadorpromocion=contador;
@@ -702,22 +622,25 @@ public class FormulasController {
     }
 
     public String GenerayConvierteaJSONOV (String ordenventa_id,Context context){
-        String cadenaJSON="",metodoterminopago_id="";
+
+        String cadenaJSON="";
         OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(context);
         OrdenVentaDetallePromocionSQLiteDao ordenVentaDetallePromocionSQLiteDao=new OrdenVentaDetallePromocionSQLiteDao(context);
         ArrayList<OrdenVentaCabeceraSQLiteEntity> listaordenVentaCabeceraSQLiteEntity=new ArrayList<>();
         ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaordenVentaDetalleSQLiteEntity=new ArrayList<>();
         DocumentHeader documentHeader =null;
         ArrayList<DocumentLine> listadoDocumentLines =new ArrayList<>();
+
         DocumentLine documentLine;
         listaordenVentaCabeceraSQLiteEntity= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
         listaordenVentaDetalleSQLiteEntity=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
-        UsuarioSQLite usuarioSQLite =new UsuarioSQLite(context);
+
         Gson gson=new Gson();
 
         for(int i=0;i<listaordenVentaCabeceraSQLiteEntity.size();i++){
 
             documentHeader =new DocumentHeader();
+
             documentHeader.setCardCode(listaordenVentaCabeceraSQLiteEntity.get(i).getCliente_id());
             documentHeader.setComments(listaordenVentaCabeceraSQLiteEntity.get(i).getComentario());
             documentHeader.setDocCurrency(listaordenVentaCabeceraSQLiteEntity.get(i).getMoneda_id());
@@ -732,8 +655,6 @@ public class FormulasController {
 
             documentHeader.setPayToCode(listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id());
             documentHeader.setShipToCode(listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id());
-
-            //documentHeader.setTaxDate();
             documentHeader.setDocumentLines(null);
         }
 
@@ -751,8 +672,6 @@ public class FormulasController {
             //U_VIST_CTAINGDCTO="";
            // montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
 
-
-
                 documentLine =new DocumentLine();
                 documentLine.setCostingCode( SesionEntity.UnidadNegocio);
                 documentLine.setCostingCode2(SesionEntity.CentroCosto);
@@ -769,7 +688,19 @@ public class FormulasController {
             listadoDocumentLines.add(documentLine);
         }
 
+///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////////////////
         documentHeader.setDocumentLines(listadoDocumentLines);
+
+        ApprovalRequests requestDsct=new ApprovalRequests();
+        requestDsct.setApprovalTemplatesID("5");
+        requestDsct.setRemarks("Aprobar por favor");
+
+        List<ApprovalRequests> attrFlag=new ArrayList<ApprovalRequests>();
+        attrFlag.add(requestDsct);
+
+        documentHeader.setDocument_ApprovalRequests(attrFlag);
+        documentHeader.setDiscountPercent("0.2");
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
         cadenaJSON=gson.toJson(documentHeader);
         return cadenaJSON;
@@ -982,7 +913,8 @@ public class FormulasController {
                 listaOrdenVentaDetalle.orden_detalle_producto_id = ListaSQlite.get(i).getProducto_id();
                 listaOrdenVentaDetalle.orden_detalle_producto = ListaSQlite.get(i).getProducto();
                 listaOrdenVentaDetalle.orden_detalle_umd = ListaSQlite.get(i).getUmd();
-                listaOrdenVentaDetalle.orden_detalle_stock = "";
+                listaOrdenVentaDetalle.orden_detalle_stock_almacen = "";
+                listaOrdenVentaDetalle.orden_detalle_stock_general = "";
                 listaOrdenVentaDetalle.orden_detalle_cantidad = ListaSQlite.get(i).getCantidad();
                 listaOrdenVentaDetalle.orden_detalle_precio_unitario = ListaSQlite.get(i).getPreciounitario();
                 listaOrdenVentaDetalle.orden_detalle_montosubtotal = ListaSQlite.get(i).getMontosubtotal();
@@ -990,6 +922,7 @@ public class FormulasController {
                 listaOrdenVentaDetalle.orden_detalle_monto_descuento = ListaSQlite.get(i).getMontodescuento();
                 listaOrdenVentaDetalle.orden_detalle_monto_igv = ListaSQlite.get(i).getMontoimpuesto();
                 listaOrdenVentaDetalle.orden_detalle_montototallinea = ListaSQlite.get(i).getMontototallinea();
+
                 if(ListaSQlite.get(i).getPorcentajedescuento().equals("0"))
                 {
                     listaOrdenVentaDetalle.orden_detalle_lista_promocion_cabecera=null;
@@ -1130,9 +1063,10 @@ public class FormulasController {
         return resultado;
     }
 
-
-    public void RegistraVisita(String cliente_id, String direccion_id, String zona_id, String tipo, String motivo, String observacion, Context context,String latitud,String longitud)
+    public void RegistraVisita(String cliente_id, String direccion_id, String zona_id, String tipo, String motivo, String observacion, Context context, String latitud, String longitud)
     {
+        visitaRepository = new ViewModelProvider((ViewModelStoreOwner) context).get(VisitaRepository.class);
+
         SimpleDateFormat dateFormatFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         SimpleDateFormat dateFormathora = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
         SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -1144,25 +1078,26 @@ public class FormulasController {
 
         VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
         visita.setCompania_id(SesionEntity.compania_id);
-        visita.setCliente_id(cliente_id);
-        visita.setDireccion_id(direccion_id);
-        visita.setFecha_registro(FormatFecha.format(date));
-        visita.setHora_registro(dateFormathora.format(date));
-        visita.setZona_id(zona_id);
-        visita.setFuerzatrabajo_id(SesionEntity.fuerzatrabajo_id);
-        visita.setUsuario_id(SesionEntity.usuario_id);
+        visita.setCardCode(cliente_id);
+        visita.setAddress(direccion_id);
+        visita.setDate(FormatFecha.format(date));
+        visita.setHour(dateFormathora.format(date));
+        visita.setTerritory(zona_id);
+        visita.setSlpCode(SesionEntity.fuerzatrabajo_id);
+        visita.setUserId(SesionEntity.usuario_id);
         //visita.setTipo("03");
-        visita.setTipo(tipo);
+        visita.setType(tipo);
         //visita.setMotivo(spn_motivo_visita.getSelectedItem().toString());
-        visita.setMotivo(motivos1);
+        visita.setMotive(motivos1);
         //visita.setObservacion(textDescargo.getText().toString());
-        visita.setObservacion(observacion);
+        visita.setObservation(observacion);
         visita.setChkenviado("1");
         visita.setChkrecibido("0");
-        visita.setLatitud(latitud);
-        visita.setLongitud(longitud);
-        VisitaSQLiteDAO visitaSQLiteDAO=new VisitaSQLiteDAO(context);
-        visitaSQLiteDAO.InsertaVisita(visita);
+        visita.setLatitude(latitud);
+        visita.setLongitude(longitud);
+
+        VisitaSQLite visitaSQLite =new VisitaSQLite(context);
+        visitaSQLite.InsertaVisita(visita);
 
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(context);
 
@@ -1195,28 +1130,33 @@ public class FormulasController {
             );
         }
 
-        ConnectivityManager manager= (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);;
+        /*********************************/
+        /********************************* ENVIO DE VISITAS *********************************/
+        /*********************************/
+        visitaRepository.PostVisitaWS(visita,context).observe((LifecycleOwner) context, data -> {
+            Log.e("Jepicame","=>"+data);
+        });
+
+        //new ReenvioDeVisitas(context,visita).execute();
+
+        /*********************************/
+        /*********************************/
+        /*********************************/
+        /*
+        ConnectivityManager manager= (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
         if (networkInfo != null) {
             if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
 
 
-                /*********************************/
-                /********************************* ENVIO DE VISITAS *********************************/
-                /*********************************/
-                new ReenvioDeVisitas(context,visita).execute();
-
-                /*********************************/
-                /*********************************/
-                /*********************************/
-
-
             }
         }
+        */
     }
 
-    public static class ReenvioDeVisitas extends AsyncTask<Void, Void, Object> {
+/*
+    private static class ReenvioDeVisitas extends AsyncTask<Void, Void, Object> {
         private Context context;
         private VisitaSQLiteEntity visitaSQLiteEntity;
 
@@ -1230,44 +1170,32 @@ public class FormulasController {
 
             ArrayList<VisitaSQLiteEntity> listaVisitaSQLiteEntity = new ArrayList<>();
             String resultado="0";
-            //listaVisitaSQLiteEntity = visitaSQLiteDAO.ObtenerVisitas();
-            VisitaWS visitaWS = new VisitaWS(context);
 
-            //for(int j=0;j<listaVisitaSQLiteEntity.size();j++){
-            resultado=visitaWS.PostVisitaWS
-                        (
-                                        SesionEntity.imei,
-                                        visitaSQLiteEntity.getCliente_id(),
-                                        visitaSQLiteEntity.getDireccion_id(),
-                                        visitaSQLiteEntity.getFecha_registro(),
-                                        visitaSQLiteEntity.getHora_registro(),
-                                        visitaSQLiteEntity.getZona_id(),
-                                        visitaSQLiteEntity.getTipo(),
-                                        visitaSQLiteEntity.getMotivo(),
-                                        visitaSQLiteEntity.getObservacion(),
-                                        visitaSQLiteEntity.getLatitud(),
-                                        visitaSQLiteEntity.getLongitud()
+            VisitaRepository visitaRepository = new VisitaRepository();
+
+            resultado= visitaRepository.PostVisitaWS
+                        (visitaSQLiteEntity
                       );
             return resultado;
             }
             protected void onPostExecute(Object result){
                 String resultado=(String) result;
-                VisitaSQLiteDAO visitaSQLiteDAO=new VisitaSQLiteDAO(context);
+                VisitaSQLite visitaSQLite =new VisitaSQLite(context);
                 if(resultado.equals("1")){
-                    visitaSQLiteDAO.ActualizaEstadoWSVisita(
-                            visitaSQLiteEntity.getCliente_id(),
-                            visitaSQLiteEntity.getDireccion_id(),
+                    visitaSQLite.ActualizaEstadoWSVisita(
+                            visitaSQLiteEntity.getCardCode(),
+                            visitaSQLiteEntity.getAddress(),
                             visitaSQLiteEntity.getCompania_id(),
-                            visitaSQLiteEntity.getFuerzatrabajo_id(),
-                            visitaSQLiteEntity.getFecha_registro(),
-                            visitaSQLiteEntity.getHora_registro(),
-                            visitaSQLiteEntity.getTipo(),
-                            visitaSQLiteEntity.getMotivo()
+                            visitaSQLiteEntity.getSlpCode(),
+                            visitaSQLiteEntity.getDate(),
+                            visitaSQLiteEntity.getHour(),
+                            visitaSQLiteEntity.getType(),
+                            visitaSQLiteEntity.getMotive()
                     );
                 }
             }
         }
-
+*/
     public ArrayList<CobranzaDetalleSQLiteEntity> ObtenerListaConvertidaCobranzaDetalleSQLite (Context context,String Imei,String Compania_id,String usuario_id,String Recibo) {
         ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity=new ArrayList<>();
         ArrayList<ListaHistoricoCobranzaEntity> ListaHistoricoCobranzaEntity=new ArrayList<>();
@@ -1474,8 +1402,8 @@ public class FormulasController {
 
     }*/
 
-    public ArrayList<ListaOrdenVentaDetalleEntity> ConvertirListaOrdenVentaDetalleEntity(ArrayList<OrdenVentaDetalleSQLiteEntity> ListaRecibida)
-    {
+    public ArrayList<ListaOrdenVentaDetalleEntity> ConvertirListaOrdenVentaDetalleEntity(ArrayList<OrdenVentaDetalleSQLiteEntity> ListaRecibida){
+
         ArrayList<ListaOrdenVentaDetalleEntity> ListaOrdenVentaDetalleEntity=new ArrayList<>();
         ListaOrdenVentaDetalleEntity ObjlistaOrdenVentaDetalleEntity=new ListaOrdenVentaDetalleEntity();
         for(int i=0;i<ListaRecibida.size();i++)
@@ -1595,7 +1523,7 @@ public class FormulasController {
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto_id();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_umd();
-                    ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
+                    ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock_almacen=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_cantidad();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_precio_unitario();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montosubtotal();
@@ -1782,7 +1710,7 @@ public class FormulasController {
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_producto_id();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_producto();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_umd();
-                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_stock();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_stock_almacen();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_cantidad();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_precio_unitario();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_montosubtotal();
@@ -1882,7 +1810,7 @@ public class FormulasController {
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto_id();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_umd();
-                    ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
+                    ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock_almacen=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_cantidad();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_precio_unitario();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montosubtotal();
@@ -1963,7 +1891,7 @@ public class FormulasController {
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_producto_id();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_producto();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_umd();
-                ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_stock();
+                ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock_almacen=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_stock_almacen();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_cantidad();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_precio_unitario();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_montosubtotal();

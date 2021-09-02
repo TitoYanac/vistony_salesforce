@@ -332,15 +332,18 @@ public class PDFOrdenVenta extends AppCompatActivity {
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tblLineas.addCell(cellLineasDetalle);
+
                 /*cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getPreciounitario(),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblLineas.addCell(cellLineasDetalle);*/
+
                 cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getPorcentajedescuento(),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tblLineas.addCell(cellLineasDetalle);
-                cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getMontototallinea(),font3));
+
+                cellLineasDetalle = new PdfPCell(new Phrase(""+Convert.stringToDouble(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 tblLineas.addCell(cellLineasDetalle);
@@ -358,6 +361,7 @@ public class PDFOrdenVenta extends AppCompatActivity {
 
             PdfPTable tblResu = new PdfPTable(2);
             tblResu.setWidthPercentage(100);
+
             /*PdfPCell cellResu =  new PdfPCell(new Phrase("SubTotal:",font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -387,7 +391,8 @@ public class PDFOrdenVenta extends AppCompatActivity {
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase(total,font3));
+
+            cellResu = new PdfPCell(new Phrase(""+Convert.stringToDouble(total),font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tblResu.addCell(cellResu);

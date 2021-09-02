@@ -3,22 +3,27 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 import com.google.gson.annotations.SerializedName;
 
 public class HistoricoOrdenVentaEntity {
+
+
+    @SerializedName("DocNum")
+    private String docnum;
+
     @SerializedName("OrdenVenta_ERP_ID")
     private String ordenventa_erp_id;
 
-    @SerializedName("Cliente_ID")
+    @SerializedName("CardCode")
     private String cliente_id;
 
-    @SerializedName("RucDni")
+    @SerializedName("LicTradNum")
     private String rucdni;
 
-    @SerializedName("NombreCliente")
+    @SerializedName("CardName")
     private String nombrecliente;
 
-    @SerializedName("MontoTotalOrden")
+    @SerializedName("DocTotal")
     private String montototalorden;
 
-    @SerializedName("EstadoAprobacion")
+    @SerializedName("ApprovalStatus")
     private String estadoaprobacion;
 
     @SerializedName("ComentarioAprobacion")
@@ -26,9 +31,6 @@ public class HistoricoOrdenVentaEntity {
 
     @SerializedName("OrdenVenta_ID")
     private String ordenventa_id;
-
-    @SerializedName("DocNum")
-    private String docnum;
 
     public String getDocnum() {
         return docnum;

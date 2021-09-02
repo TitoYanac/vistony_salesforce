@@ -27,14 +27,6 @@
                 tools:text="1)" />
 
             <TextView
-                android:id="@+id/tv_orden_detalle_umd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textStyle="bold"
-                tools:text="UMD1" />
-
-            <TextView
                 android:id="@+id/tv_orden_detalle_producto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,24 +51,26 @@
                 <TextView
                     android:id="@+id/lbl_orden_detalle_stock"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Stock:"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Stock Alm"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_orden_detalle_stock"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="Stock1" />
+                    tools:text="0" />
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_cantidad"
                     android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:text="Cantidad:"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="7dp"
+                    android:text="Cantidad"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <EditText
@@ -107,30 +101,35 @@
                 <TextView
                     android:id="@+id/lbl_orden_detalle_galon_unitario"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gal Unit:"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Gal Unit"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_orden_detalle_galon_unitario"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="Gal Unit" />
+                    tools:text="00.0" />
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_galon_acumulado"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:text="Gal Total:"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:text="Gal Total"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_orden_detalle_galon_acumulado"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="right|center_vertical"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceListItem"
                     tools:text="Gal 100" />
@@ -144,24 +143,26 @@
                 <TextView
                     android:id="@+id/lbl_orden_detalle_precio"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pre Unit:"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Pre Unit"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_orden_detalle_precio"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="Precio1" />
+                    tools:text="00.0" />
 
                 <TextView
                     android:id="@+id/lbl_porcentaje_descuento_contado"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:text="Desct %:"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="7dp"
+                    android:text="Desct %"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <EditText
@@ -185,28 +186,33 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
                 android:gravity="center">
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_igv"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="IVA:"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="IVA"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_orden_detalle_igv"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="IGV1" />
+                    tools:text="00.0" />
 
                 <TextView
                     android:id="@+id/lbl_orden_detalle_porcentaje_descuento"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Dcto Prom%:"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="2.5dp"
+                    android:text="Stock Gral"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:visibility="invisible" />
 
@@ -217,7 +223,8 @@
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:visibility="invisible"
-                    tools:text="100%" />
+                    tools:text="0" />
+
             </TableRow>
 
             <TableRow
@@ -225,27 +232,30 @@
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <TextView
-                    android:id="@+id/lbl_orden_detalle_eliminar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:text="Borrar:"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold" />
-
                 <ImageView
                     android:id="@+id/imv_eliminar_orden_venta_detalle"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
 
                     app:srcCompat="@drawable/ic_delete_black_24dp" />
 
                 <TextView
+                    android:id="@+id/lbl_orden_detalle_eliminar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    tools:visibility="invisible" />
+
+                <TextView
                     android:id="@+id/lbl_orden_detalle_total"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:text="Total:"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="7dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:text="Total"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
 
@@ -253,15 +263,17 @@
                     android:id="@+id/tv_orden_detalle_total"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="right"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold"
-                    tools:text="Total1" />
+                    tools:text="00.0" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp">
 
                 <CheckBox
                     android:id="@+id/chk_descuento_contado"
@@ -304,7 +316,7 @@
             android:text="Resumen Promocion"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/content"
@@ -312,6 +324,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:background="@drawable/borde_cuadrado"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical"
+            tools:visibility="gone"></LinearLayout>
     </LinearLayout>
 </RelativeLayout>

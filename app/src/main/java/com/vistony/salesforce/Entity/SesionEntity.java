@@ -33,4 +33,5 @@ public class SesionEntity {
     public static String TipoCambio="";
     public static String contado="";
     public static String U_VIS_CashDscnt="";
+    public static String FLOAG_STOCK="";
 }

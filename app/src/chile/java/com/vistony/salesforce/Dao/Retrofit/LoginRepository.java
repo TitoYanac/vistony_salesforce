@@ -19,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginViewModel extends ViewModel{
+public class LoginRepository extends ViewModel{
     private UsuarioSQLite usuarioSQLite;
 
     private MutableLiveData<ArrayList<String>> profile= new MutableLiveData<>();
@@ -38,7 +38,7 @@ public class LoginViewModel extends ViewModel{
                     }
 
                 }else{
-                    Log.e("JEPICAME","=>"+response.code());
+                    Log.e("JEPICAME","=>"+response.code() +"\n=>"+imei);
                 }
 
                 profile.setValue(usuarioSQLite.ObtenerPerfiles());
@@ -47,6 +47,7 @@ public class LoginViewModel extends ViewModel{
 
             @Override
             public void onFailure(Call<LoginEntityResponse> call, Throwable t) {
+
                 usuarioSQLite = new UsuarioSQLite(context);
                 ArrayList<String> perfiles= usuarioSQLite.ObtenerPerfiles();
                 if(perfiles.size()>0){

@@ -1259,7 +1259,7 @@ public class CobranzaDetalleView extends Fragment {
                     "02",
                     "02-MOTIVO 02",
                     "Registro Cobranza",
-                    getContext(),
+                    getActivity(),
                     String.valueOf(latitude),
                     String.valueOf(longitude)
             );
@@ -1424,7 +1424,7 @@ public class CobranzaDetalleView extends Fragment {
                 "02",
                 "02-MOTIVO 02",
                 "Registro Cobranza",
-                getContext(),
+                getActivity(),
                 String.valueOf(latitude),
                 String.valueOf(longitude)
         );

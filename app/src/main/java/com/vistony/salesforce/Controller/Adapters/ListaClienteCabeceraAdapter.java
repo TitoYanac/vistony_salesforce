@@ -32,6 +32,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ClienteCabeceraView;
@@ -134,15 +135,17 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                     false);
 
             holder = new ListaClienteCabeceraAdapter.ViewHolder();
-            // holder.lbl_documento = (TextView) convertView.findViewById(R.id.lbl_documento);
+
             holder.tv_clienteid = (TextView) convertView.findViewById(R.id.tv_cliente_id);
             holder.tv_nombrecliente = (TextView) convertView.findViewById(R.id.tv_nombrecliente);
             holder.tv_saldo_cliente_cabecera = (TextView) convertView.findViewById(R.id.tv_saldo_cliente_cabecera);
+
             holder.tv_linea_credito_usado=convertView.findViewById(R.id.tv_linea_credito_usado);
+            holder.tv_linea_credito = (TextView) convertView.findViewById(R.id.tv_linea_credito);
+
             holder.imv_clientecabecera = (ImageView) convertView.findViewById(R.id.imv_cliente_cabecera);
             holder.tv_moneda = (TextView) convertView.findViewById(R.id.tv_moneda);
             holder.tv_categoria = (TextView) convertView.findViewById(R.id.tv_categoria);
-            holder.tv_linea_credito = (TextView) convertView.findViewById(R.id.tv_linea_credito);
             holder.chk_pedido = (CheckBox) convertView.findViewById(R.id.chk_pedido);
             holder.chk_cobranza = (CheckBox) convertView.findViewById(R.id.chk_cobranza);
             holder.chk_visita = (CheckBox) convertView.findViewById(R.id.chk_visita);
@@ -180,8 +183,13 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         }
 
         holder.tv_categoria.setText(lead.getCategoria());
-        holder.tv_linea_credito.setText(lead.getLinea_credito());
-        holder.tv_linea_credito_usado.setText(lead.getLinea_credito_usado());
+
+
+        //Mostrar linea de credito en moneda de acuerdo a la region
+        ///////////////////////////////////////////////////////////////////////////////////////
+        holder.tv_linea_credito.setText(Convert.currencyForView(Convert.stringToDouble(lead.getLinea_credito())));
+        holder.tv_linea_credito_usado.setText(Convert.currencyForView(Convert.stringToDouble(lead.getLinea_credito_usado())));
+        ///////////////////////////////////////////////////////////////////////////////////////
 
         if(lead.getLinea_credito().isEmpty() || lead.getLinea_credito()==null){
             holder.progressLineCredit.setMax(0);

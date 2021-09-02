@@ -35,40 +35,6 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_total_gal_acumulado;
     public String orden_cabecera_descuentocontado;
 
-    public ListaOrdenVentaCabeceraEntity(String orden_cabecera_compania_id, String orden_cabecera_id, String orden_cabecera_cliente_id, String orden_cabecera_domembarque_id, String orden_cabecera_terminopago_id, String orden_cabecera_fecha_creacion, String orden_cabecera_agencia_id, String orden_cabecera_moneda_id, String orden_cabecera_comentario, String orden_cabecera_almacen_id, String orden_cabecera_impuesto_id, String orden_cabecera_montosubtotal, String orden_cabecera_montodescuento, String orden_cabecera_montoimpuesto, String orden_cabecera_montototal, String orden_cabecera_fuerzatrabajo_id, String orden_cabecera_usuario_id, ArrayList<ListaOrdenVentaDetalleEntity> orden_cabecera_lista_orden_detalle, String orden_cabecera_planta, String orden_cabecera_lista_precio_id, String orden_cabecera_tipocambio, String orden_cabecera_fechatipocambio, String orden_cabecera_rucdni, String orden_cabecera_U_SYP_MDTD, String orden_cabecera_U_SYP_MDSD, String orden_cabecera_U_SYP_MDCD, String orden_cabecera_U_SYP_MDMT, String orden_cabecera_U_SYP_STATUS, String orden_cabecera_DocType, String orden_cabecera_total_gal_acumulado, String orden_cabecera_descuentocontado) {
-        this.orden_cabecera_compania_id = orden_cabecera_compania_id;
-        this.orden_cabecera_id = orden_cabecera_id;
-        this.orden_cabecera_cliente_id = orden_cabecera_cliente_id;
-        this.orden_cabecera_domembarque_id = orden_cabecera_domembarque_id;
-        this.orden_cabecera_terminopago_id = orden_cabecera_terminopago_id;
-        this.orden_cabecera_fecha_creacion = orden_cabecera_fecha_creacion;
-        this.orden_cabecera_agencia_id = orden_cabecera_agencia_id;
-        this.orden_cabecera_moneda_id = orden_cabecera_moneda_id;
-        this.orden_cabecera_comentario = orden_cabecera_comentario;
-        this.orden_cabecera_almacen_id = orden_cabecera_almacen_id;
-        this.orden_cabecera_impuesto_id = orden_cabecera_impuesto_id;
-        this.orden_cabecera_montosubtotal = orden_cabecera_montosubtotal;
-        this.orden_cabecera_montodescuento = orden_cabecera_montodescuento;
-        this.orden_cabecera_montoimpuesto = orden_cabecera_montoimpuesto;
-        this.orden_cabecera_montototal = orden_cabecera_montototal;
-        this.orden_cabecera_fuerzatrabajo_id = orden_cabecera_fuerzatrabajo_id;
-        this.orden_cabecera_usuario_id = orden_cabecera_usuario_id;
-        this.orden_cabecera_lista_orden_detalle = orden_cabecera_lista_orden_detalle;
-        this.orden_cabecera_planta = orden_cabecera_planta;
-        this.orden_cabecera_lista_precio_id = orden_cabecera_lista_precio_id;
-        this.orden_cabecera_tipocambio = orden_cabecera_tipocambio;
-        this.orden_cabecera_fechatipocambio = orden_cabecera_fechatipocambio;
-        this.orden_cabecera_rucdni = orden_cabecera_rucdni;
-        this.orden_cabecera_U_SYP_MDTD = orden_cabecera_U_SYP_MDTD;
-        this.orden_cabecera_U_SYP_MDSD = orden_cabecera_U_SYP_MDSD;
-        this.orden_cabecera_U_SYP_MDCD = orden_cabecera_U_SYP_MDCD;
-        this.orden_cabecera_U_SYP_MDMT = orden_cabecera_U_SYP_MDMT;
-        this.orden_cabecera_U_SYP_STATUS = orden_cabecera_U_SYP_STATUS;
-        this.orden_cabecera_DocType = orden_cabecera_DocType;
-        this.orden_cabecera_total_gal_acumulado = orden_cabecera_total_gal_acumulado;
-        this.orden_cabecera_descuentocontado = orden_cabecera_descuentocontado;
-    }
-
     public ListaOrdenVentaCabeceraEntity() {
     }
 

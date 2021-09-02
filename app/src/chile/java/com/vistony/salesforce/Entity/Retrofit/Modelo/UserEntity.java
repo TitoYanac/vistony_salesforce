@@ -70,7 +70,6 @@ public class UserEntity {
         Settings = settings;
     }
 
-
     @NonNull
     public String getU_vist_sucusu() {
         return u_vist_sucusu;

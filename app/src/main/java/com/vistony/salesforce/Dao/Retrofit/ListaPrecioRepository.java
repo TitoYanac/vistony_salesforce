@@ -41,6 +41,8 @@ public class ListaPrecioRepository {
                     ObjLPDetalle.setCompania_id(SesionEntity.compania_id);
                     ObjLPDetalle.setPorcentaje_descuento(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getPorcentaje_descuento());
                     ObjLPDetalle.setTypo(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getTipo());
+                    ObjLPDetalle.setStock_almacen(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getStock_almacen());
+                    ObjLPDetalle.setStock_general(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getStock_general());
 
                     LPDetalle.add(ObjLPDetalle);
                 }

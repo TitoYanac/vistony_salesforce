@@ -1,42 +1,59 @@
 package com.vistony.salesforce.Entity.SQLite;
 
+import com.google.gson.annotations.SerializedName;
+
 public class VisitaSQLiteEntity {
-    private String compania_id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,chkenviado,chkrecibido,latitud,longitud;
 
-    public VisitaSQLiteEntity(){}
+    @SerializedName("IdVisit")
+    private String idVisit;
 
-    public VisitaSQLiteEntity(String compania_id, String cliente_id, String direccion_id, String fecha_registro, String hora_registro, String zona_id, String fuerzatrabajo_id, String usuario_id, String tipo, String motivo, String observacion, String chkenviado, String chkrecibido, String latitud, String longitud) {
-        this.compania_id = compania_id;
-        this.cliente_id = cliente_id;
-        this.direccion_id = direccion_id;
-        this.fecha_registro = fecha_registro;
-        this.hora_registro = hora_registro;
-        this.zona_id = zona_id;
-        this.fuerzatrabajo_id = fuerzatrabajo_id;
-        this.usuario_id = usuario_id;
-        this.tipo = tipo;
-        this.motivo = motivo;
-        this.observacion = observacion;
-        this.chkenviado = chkenviado;
-        this.chkrecibido = chkrecibido;
-        this.latitud = latitud;
-        this.longitud = longitud;
+    private String CardCode;
+
+    private String Address;
+
+    private String Date;
+
+    private String Hour;
+
+    private String Territory;
+
+    private String SlpCode;
+
+    private String UserId;
+
+    private String Type;
+
+    private String Motive;
+
+    private String Observation;
+
+    private String Longitude;
+
+    private String Latitude;
+
+    private String compania_id;
+
+    private String chkenviado;
+
+    private String chkrecibido;
+
+    @SerializedName("Message")
+    private String Message;
+
+    public String getMessage() {
+        return Message;
     }
 
-    public String getLatitud() {
-        return latitud;
+    public void setMessage(String message) {
+        Message = message;
     }
 
-    public void setLatitud(String latitud) {
-        this.latitud = latitud;
+    public String getIdVisit() {
+        return idVisit;
     }
 
-    public String getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(String longitud) {
-        this.longitud = longitud;
+    public void setIdVisit(String idVisit) {
+        this.idVisit = idVisit;
     }
 
     public String getCompania_id() {
@@ -47,84 +64,84 @@ public class VisitaSQLiteEntity {
         this.compania_id = compania_id;
     }
 
-    public String getCliente_id() {
-        return cliente_id;
+    public String getCardCode() {
+        return CardCode;
     }
 
-    public void setCliente_id(String cliente_id) {
-        this.cliente_id = cliente_id;
+    public void setCardCode(String cardCode) {
+        CardCode = cardCode;
     }
 
-    public String getDireccion_id() {
-        return direccion_id;
+    public String getAddress() {
+        return Address;
     }
 
-    public void setDireccion_id(String direccion_id) {
-        this.direccion_id = direccion_id;
+    public void setAddress(String address) {
+        Address = address;
     }
 
-    public String getFecha_registro() {
-        return fecha_registro;
+    public String getDate() {
+        return Date;
     }
 
-    public void setFecha_registro(String fecha_registro) {
-        this.fecha_registro = fecha_registro;
+    public void setDate(String date) {
+        Date = date;
     }
 
-    public String getHora_registro() {
-        return hora_registro;
+    public String getHour() {
+        return Hour;
     }
 
-    public void setHora_registro(String hora_registro) {
-        this.hora_registro = hora_registro;
+    public void setHour(String hour) {
+        Hour = hour;
     }
 
-    public String getZona_id() {
-        return zona_id;
+    public String getTerritory() {
+        return Territory;
     }
 
-    public void setZona_id(String zona_id) {
-        this.zona_id = zona_id;
+    public void setTerritory(String territory) {
+        Territory = territory;
     }
 
-    public String getFuerzatrabajo_id() {
-        return fuerzatrabajo_id;
+    public String getSlpCode() {
+        return SlpCode;
     }
 
-    public void setFuerzatrabajo_id(String fuerzatrabajo_id) {
-        this.fuerzatrabajo_id = fuerzatrabajo_id;
+    public void setSlpCode(String slpCode) {
+        SlpCode = slpCode;
     }
 
-    public String getUsuario_id() {
-        return usuario_id;
+    public String getUserId() {
+        return UserId;
     }
 
-    public void setUsuario_id(String usuario_id) {
-        this.usuario_id = usuario_id;
+    public void setUserId(String userId) {
+        UserId = userId;
     }
 
-    public String getTipo() {
-        return tipo;
+    public String getType() {
+        return Type;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setType(String type) {
+        Type = type;
     }
 
-    public String getMotivo() {
-        return motivo;
+    public String getMotive() {
+        return Motive;
     }
 
-    public void setMotivo(String motivo) {
-        this.motivo = motivo;
+    public void setMotive(String motive) {
+        Motive = motive;
     }
 
-    public String getObservacion() {
-        return observacion;
+    public String getObservation() {
+        return Observation;
     }
 
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
+    public void setObservation(String observation) {
+        Observation = observation;
     }
 
     public String getChkenviado() {
@@ -141,5 +158,21 @@ public class VisitaSQLiteEntity {
 
     public void setChkrecibido(String chkrecibido) {
         this.chkrecibido = chkrecibido;
+    }
+
+    public String getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        Longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        Latitude = latitude;
     }
 }

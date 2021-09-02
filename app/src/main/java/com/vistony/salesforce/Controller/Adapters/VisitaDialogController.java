@@ -114,7 +114,7 @@ public class VisitaDialogController extends DialogFragment {
                            "03",
                            spn_motivo_visita.getSelectedItem().toString(),
                            textDescargo.getText().toString(),
-                           getContext(),
+                           getActivity(),
                            String.valueOf(latitude),
                            String.valueOf(longitude)
                    );

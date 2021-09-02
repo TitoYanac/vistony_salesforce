@@ -1,6 +1,7 @@
 package com.vistony.salesforce.View;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -23,27 +24,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaOrdenVentaDetalleDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.Entity.View.TotalSalesOrder;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OrdenVentaDetalleView#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class OrdenVentaDetalleView extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -69,6 +65,8 @@ public class OrdenVentaDetalleView extends Fragment {
     static Menu menu_variable;
     static String listaprecio_id,descuentocontado,terminopago_id;
     static Context context;
+    private ProgressDialog pd;
+
     public OrdenVentaDetalleView() {
         // Required empty public constructor
     }
@@ -82,8 +80,7 @@ public class OrdenVentaDetalleView extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static OrdenVentaDetalleView newInstanceEnviaListaPromocion (Object objeto) {
-        Log.e("jpcm", "regreso here 1 de " + ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
@@ -95,25 +92,33 @@ public class OrdenVentaDetalleView extends Fragment {
         return ordenVentaDetalleView;
     }
 
-    public static OrdenVentaDetalleView newInstance(Object objeto) {
-        String objetostring=(String) objeto;
+    public static OrdenVentaDetalleView newInstance(Object objeto){
 
-        String[] compuesto = objetostring.split("-");
-        if(compuesto[0]!=null||compuesto[1]!=null||compuesto[2]!=null)
-        {
-            listaprecio_id=compuesto[0];
-            descuentocontado=compuesto[1];
-            terminopago_id=compuesto[2];
+
+        String [] arrayObject= (String[]) objeto;
+
+        for(int i=0;i<arrayObject.length;i++){
+            Log.e("JEPICAME","=>"+arrayObject[i]);
         }
-        else
-        {
-            listaprecio_id=compuesto[0];
+
+        String objetostring=arrayObject[1];
+        String[] compuesto = objetostring.split("-");
+
+        if(compuesto.length==3){
+
+        }else{
+
+        }
+
+        if(compuesto[0]!=null||compuesto[1]!=null||compuesto[2]!=null){
+            listaprecio_id=arrayObject[0]; //codigocliente
+            descuentocontado=compuesto[0];
+            terminopago_id=compuesto[1];
+        }else{
+            listaprecio_id=arrayObject[0]; //codigocliente
             descuentocontado="false";
         }
 
-        Log.e("REOS", "OrdenVentaDetalleView-listaprecio_id:" + listaprecio_id);
-        Log.e("REOS", "OrdenVentaDetalleView-descuentocontado:" + descuentocontado);
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
@@ -144,17 +149,21 @@ public class OrdenVentaDetalleView extends Fragment {
             {
                 indice=String.valueOf(listadoProductosAgregados.size()+1);
             }
+
             ObjListaProductosEntity.orden_detalle_item=(indice);
             ObjListaProductosEntity.orden_detalle_producto_id=listadoProductosConversion.get(i).getProducto_id();
             ObjListaProductosEntity.orden_detalle_producto=listadoProductosConversion.get(i).getProducto();
             ObjListaProductosEntity.orden_detalle_umd=listadoProductosConversion.get(i).getUmd();
-            ObjListaProductosEntity.orden_detalle_stock=listadoProductosConversion.get(i).getStock();
+            ObjListaProductosEntity.orden_detalle_stock_almacen=listadoProductosConversion.get(i).getStock_almacen();
+            ObjListaProductosEntity.orden_detalle_stock_general=listadoProductosConversion.get(i).getStock_general();
             ObjListaProductosEntity.orden_detalle_precio_unitario=listadoProductosConversion.get(i).getPreciobase();
             ObjListaProductosEntity.orden_detalle_gal=listadoProductosConversion.get(i).getGal();
             ObjListaProductosEntity.orden_detalle_monto_igv="0";
             //
             ObjListaProductosEntity.orden_detalle_cantidad="";
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento="";
             //
+
             ObjListaProductosEntity.orden_detalle_monto_descuento="0";
             ObjListaProductosEntity.orden_detalle_montototallinea="0";
             ObjListaProductosEntity.orden_detalle_promocion_habilitada="0";
@@ -164,7 +173,9 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_gal_acumulado="0";
             ObjListaProductosEntity.orden_detalle_descuentocontado=descuentocontado;
             ObjListaProductosEntity.orden_detalle_terminopago_id=terminopago_id;
-            ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo= listadoProductosConversion.get(i).getPorcentaje_descuento_max();
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=listadoProductosConversion.get(i).getPorcentaje_descuento_max();
+            ObjListaProductosEntity.orden_detalle_stock_almacen=listadoProductosConversion.get(i).getStock_almacen();
+            ObjListaProductosEntity.orden_detalle_stock_general=listadoProductosConversion.get(i).getStock_general();
 
             listadoProductosAgregados.add(ObjListaProductosEntity);
         }
@@ -233,7 +244,7 @@ public class OrdenVentaDetalleView extends Fragment {
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);
 
-        ActualizarResumenMontos();
+        ActualizarResumenMontos(tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones);
 
         return ordenVentaDetalleView;
     }
@@ -253,9 +264,8 @@ public class OrdenVentaDetalleView extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
         setHasOptionsMenu(true);
         v= inflater.inflate(R.layout.fragment_orden_venta_detalle_view, container, false);
         fab_consulta_productos = v.findViewById(R.id.fab_consulta_productos);
@@ -265,18 +275,17 @@ public class OrdenVentaDetalleView extends Fragment {
         tv_orden_venta_detalle_igv = v.findViewById(R.id.tv_orden_venta_detalle_igv);
         tv_orden_venta_detalle_total = v.findViewById(R.id.tv_orden_venta_detalle_total);
         tv_orden_detalle_galones = v.findViewById(R.id.tv_orden_detalle_galones);
-        fab_consulta_productos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
 
+        fab_consulta_productos.setOnClickListener(view -> {
 
-                String Fragment="OrdenVentaDetalleView";
-                String accion="producto";
-                String compuesto=Fragment+"-"+accion;
-                String Objeto=listaprecio_id;
-                mListener.onFragmentInteraction(compuesto,Objeto);
-            }
+            String Fragment="OrdenVentaDetalleView";
+            String accion="producto";
+            String compuesto=Fragment+"-"+accion;
+            String Objeto=listaprecio_id;
+
+            Log.e("ASDASDASD","=>OrdenVentaDetalleView=>"+listaprecio_id);
+
+            mListener.onFragmentInteraction(compuesto,Objeto);
         });
 
         hiloAgregarListaProductos.execute();
@@ -309,6 +318,12 @@ public class OrdenVentaDetalleView extends Fragment {
     }
 
     private class HiloAgregarListaProductos extends AsyncTask<String, Void, Object> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(getActivity());
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Procesando...", true, false);
+        }
 
         @Override
         protected String doInBackground(String... arg0) {
@@ -321,79 +336,46 @@ public class OrdenVentaDetalleView extends Fragment {
             return "1";
         }
 
-        protected void onPostExecute(Object result)
-        {
+        protected void onPostExecute(Object result){
             getActivity().setTitle("Orden Venta Detalle");
             listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
 
             lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
             hiloAgregarListaProductos =  new HiloAgregarListaProductos();
-            FormulasController formulasController=new FormulasController(getContext());
-            String [] listaTotalesPedidosCabecera=new String[4];
-            ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
 
-            listaOrdenVentaDetalleEntities=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
+            ActualizarResumenMontos(tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones);
 
-            listaTotalesPedidosCabecera=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities);
-
-            tv_orden_venta_detalle_subtotal.setText(String.valueOf(listaTotalesPedidosCabecera[0]));
-            tv_orden_venta_detalle_descuento.setText(String.valueOf(listaTotalesPedidosCabecera[1]));
-            tv_orden_venta_detalle_igv.setText(String.valueOf(listaTotalesPedidosCabecera[2]));
-            tv_orden_venta_detalle_total.setText(String.valueOf(listaTotalesPedidosCabecera[3]));
-            tv_orden_detalle_galones.setText(String.valueOf(listaTotalesPedidosCabecera[4]));
             setHasOptionsMenu(true);
-
-
+            pd.dismiss();
         }
     }
 
-    static public void ActualizarResumenMontos()
-    {
+        //ESTA FUNCION MUESTRA EL CALCULADO EN ORDEN VENTA DETALLE, NO EN CABECERA
+      public static void ActualizarResumenMontos(TextView textSubTotal,TextView textSescuento,TextView textIgv,TextView textTotal,TextView textGalones){
         FormulasController formulasController=new FormulasController(context);
-        String [] listaTotalesPedidosCabecera=new String[4];
         ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
-        Log.e("REOS","OrdenVentaDetalleView-ActualizarResumenMontos-listadoProductosAgregados.size(): "+listadoProductosAgregados.size());
+
         listaOrdenVentaDetalleEntities=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
-        Log.e("REOS","OrdenVentaDetalleView-ActualizarResumenMontos-listaOrdenVentaDetalleEntities.size(): "+listaOrdenVentaDetalleEntities.size());
-        //String [] MontosTotales=formulasController.CalcularMontosPedidoCabecera(listaOrdenVentaDetalleEntities);
-        listaTotalesPedidosCabecera=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities);
-        //listadoProductosAgregados=formulasController.ActualizaciondeConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
-        //listaTotalesPedidosCabecera=formulasController.CalcularMontosPedidoCabecera(listadoProductosAgregados);
-        tv_orden_venta_detalle_subtotal.setText(String.valueOf(listaTotalesPedidosCabecera[0]));
-        tv_orden_venta_detalle_descuento.setText(String.valueOf(listaTotalesPedidosCabecera[1]));
-        tv_orden_venta_detalle_igv.setText(String.valueOf(listaTotalesPedidosCabecera[2]));
-        tv_orden_venta_detalle_total.setText(String.valueOf(listaTotalesPedidosCabecera[3]));
-        tv_orden_detalle_galones.setText(String.valueOf(listaTotalesPedidosCabecera[4]));
+        TotalSalesOrder salesOrder=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities);
+
+          textSubTotal.setText(Convert.currencyForView(salesOrder.getSubtotal()));
+          textSescuento.setText(Convert.currencyForView(salesOrder.getDescuento()));
+          textIgv.setText(Convert.currencyForView(salesOrder.getIgv()));
+          textTotal.setText(Convert.currencyForView(salesOrder.getTotal()));
+          textGalones.setText(""+ Convert.amountForTwoDecimal(salesOrder.getGalones()));
     }
 
     private class HiloActualizarResumenMontos extends AsyncTask<String, Void, Object> {
 
         @Override
         protected String doInBackground(String... arg0) {
-            try {
-            } catch (Exception e)
-            {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-            }
-            return "1";
+            return "true";
         }
 
-        protected void onPostExecute(Object result)
-        {
+        protected void onPostExecute(Object result){
 
             hiloActualizarResumenMontos =  new HiloActualizarResumenMontos();
-            FormulasController formulasController=new FormulasController(getContext());
-            String [] listaTotalesPedidosCabecera=new String[4];
-            ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
-            listaOrdenVentaDetalleEntities=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
-            listaTotalesPedidosCabecera=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities);
-            //listadoProductosAgregados=formulasController.ActualizaciondeConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
-            tv_orden_venta_detalle_subtotal.setText(String.valueOf(listaTotalesPedidosCabecera[0]));
-            tv_orden_venta_detalle_descuento.setText(String.valueOf(listaTotalesPedidosCabecera[1]));
-            tv_orden_venta_detalle_igv.setText(String.valueOf(listaTotalesPedidosCabecera[2]));
-            tv_orden_venta_detalle_total.setText(String.valueOf(listaTotalesPedidosCabecera[3]));
-            tv_orden_detalle_galones.setText(String.valueOf(listaTotalesPedidosCabecera[4]));
+            ActualizarResumenMontos(tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones);
             setHasOptionsMenu(true);
         }
     }

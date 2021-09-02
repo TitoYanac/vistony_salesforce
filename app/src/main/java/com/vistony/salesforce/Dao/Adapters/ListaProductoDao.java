@@ -40,17 +40,21 @@ public class ListaProductoDao {
         try {
             for( int i=0;i<Lista.size();i++)
             {
-                saveLead(new ListaProductoEntity(
-                        Lista.get(i).getProducto_item_id()
-                        ,Lista.get(i).getProducto_id()
-                        , Lista.get(i).getProducto()
-                        ,Lista.get(i).getUmd()
-                        ,Lista.get(i).getStock()
-                        ,Lista.get(i).getPreciobase()
-                        ,Lista.get(i).getPrecioigv()
-                        ,Lista.get(i).getGal()
-                        ,Lista.get(i).getPorcentaje_descuento_max()
-                ));
+                ListaProductoEntity listaProductoEntity=new ListaProductoEntity();
+
+                listaProductoEntity.setProducto_item_id(Lista.get(i).getProducto_item_id());
+                listaProductoEntity.setProducto_id(Lista.get(i).getProducto_id());
+                listaProductoEntity.setProducto(Lista.get(i).getProducto());
+                listaProductoEntity.setUmd(Lista.get(i).getUmd());
+                listaProductoEntity.setStock_almacen(Lista.get(i).getStock_almacen());
+                listaProductoEntity.setStock_general(Lista.get(i).getStock_general());
+                listaProductoEntity.setPreciobase(Lista.get(i).getPreciobase());
+                listaProductoEntity.setPrecioigv(Lista.get(i).getPrecioigv());
+                listaProductoEntity.setGal(Lista.get(i).getGal());
+                listaProductoEntity.setPorcentaje_descuento_max(Lista.get(i).getPorcentaje_descuento_max());
+
+
+                saveLead(listaProductoEntity);
             }
         }catch (Exception e)
         {

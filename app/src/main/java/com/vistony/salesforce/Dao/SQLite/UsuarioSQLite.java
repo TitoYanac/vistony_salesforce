@@ -62,6 +62,10 @@ public class UsuarioSQLite {
         //registro.put("U_VIS_CashDscnt",null);
         registro.put("Language",vendedor.getSettings().get(0).getLanguage());
         registro.put("Country",vendedor.getCountry());
+        registro.put("flag_stock",vendedor.getSettings().get(0).getOutStock());
+
+
+
         bd.insert("usuario",null,registro);
         bd.close();
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
@@ -190,7 +194,9 @@ public class UsuarioSQLite {
                     usuarioSQLiteEntity.setImpuesto(fila.getString(23));
                     usuarioSQLiteEntity.setTipoCambio(fila.getString(24));
                     usuarioSQLiteEntity.setU_VIS_CashDscnt(fila.getString(25));
+                    usuarioSQLiteEntity.setFLAG_STOCK(fila.getString(26));
                     listaDDeudaentity.add(usuarioSQLiteEntity);
+
                 } while (fila.moveToNext());
             }
 

@@ -59,6 +59,7 @@ import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEnti
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.Entity.View.TotalSalesOrder;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
@@ -69,6 +70,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+
+import static com.vistony.salesforce.View.OrdenVentaDetalleView.ActualizarResumenMontos;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -481,6 +484,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                 mListener.onFragmentInteraction(compuesto,Objeto);
             }
         });
+
         chk_descuento_contado.setOnClickListener(new View.OnClickListener(){
         @Override
         public void onClick(View v) {
@@ -571,26 +575,11 @@ public class OrdenVentaCabeceraView extends Fragment {
             return "1";
         }
 
-        protected void onPostExecute(Object result)
-        {
+        protected void onPostExecute(Object result){
             getActivity().setTitle("Orden Venta Cabecera");
-            FormulasController formulasController=new FormulasController(getContext());
-            String [] listaTotalesPedidosCabecera=new String[4];
-            formulasController=new FormulasController(getContext());
 
-            ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntyCopia=new ArrayList<>();
-            listaOrdenVentaDetalleEntyCopia=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listaOrdenVentaDetalleEntities);
-            //listaOrdenVentaDetalleEntyCopia=formulasController.ActualizaciondeConversionOrdenVentaCabeceraListaOrdenDetallePromocion(listaOrdenVentaDetalleEntities);
-            //String [] MontosTotales=formulasController.CalcularMontosPedidoCabecera(listaOrdenVentaDetalleEntities);
-            //String [] MontosTotales=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntyCopia);
-            //listaTotalesPedidosCabecera=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities);
-            listaTotalesPedidosCabecera=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntyCopia);
-            //listaTotalesPedidosCabecera=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities);
-            tv_orden_cabecera_subtotal.setText(String.valueOf(listaTotalesPedidosCabecera[0]));
-            tv_orden_cabecera_descuento.setText(String.valueOf(listaTotalesPedidosCabecera[1]));
-            tv_orden_cabecera_igv.setText(String.valueOf(listaTotalesPedidosCabecera[2]));
-            tv_orden_cabecera_total.setText(String.valueOf(listaTotalesPedidosCabecera[3]));
-            tv_orden_cabecera_galones.setText(String.valueOf(listaTotalesPedidosCabecera[4]));
+            ActualizarResumenMontos(tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones);
+
             hiloObtenerResumenOrdenVenta= new HiloObtenerResumenOrdenVenta();
             setHasOptionsMenu(true);
             if (getArguments().getString("FLAG") != null) {
@@ -775,11 +764,6 @@ public class OrdenVentaCabeceraView extends Fragment {
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*String Fragment="OrdenVentaCabeceraView";
-                String accion="detalle";
-                String compuesto=Fragment+"-"+accion;
-                String Objeto=contado;
-                mListener.onFragmentInteraction(compuesto,Objeto);*/
 
                 RegistrarOrdenVentaBD ();
                 Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
@@ -855,8 +839,8 @@ public class OrdenVentaCabeceraView extends Fragment {
         return  dialog;
     }
 
-    public void GenerarArchivoPDF ()
-    {
+    public void GenerarArchivoPDF() {
+
         ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabecera=new ArrayList<>();
         ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaOrdenVentaDetallePromocion=new ArrayList<>();
 
@@ -888,19 +872,13 @@ public class OrdenVentaCabeceraView extends Fragment {
         FormulasController formulasController=new FormulasController(getContext());
         ListaOrdenVentaCabeceraEntity listaOrdenVentaCabeceraEntity=new ListaOrdenVentaCabeceraEntity();
         GregorianCalendar calendario = new GregorianCalendar();
-        String //año,mes,dia,hora,min,segs,
-                horafecha,monedatotal,codigomoneda,descripcionmoneda;
-        /*año = String.valueOf(calendario.get(calendario.YEAR));
-        mes = String.valueOf(calendario.get(calendario.MONTH));
-        dia = String.valueOf(calendario.get(calendario.DAY_OF_MONTH));
-        hora = String.valueOf(calendario.get(calendario.HOUR_OF_DAY));
-        min = String.valueOf(calendario.get(calendario.MINUTE));
-        segs = String.valueOf(calendario.get(calendario.SECOND));*/
+        String monedatotal,codigomoneda,descripcionmoneda;
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         UsuarioSQLite usuarioSQLite =new UsuarioSQLite(getContext());
         listaprecio_id= usuarioSQLite.ObtenerListaPrecioUsuario(contado);
         SesionEntity.contado=contado;
-        Log.e("REOS","OrdenVentaCabeceraView-contado:"+SesionEntity.contado);
+
         ordenventa_id=formulasController.ObtenerFechaHoraCadena();
         monedatotal=spnmoneda.getSelectedItem().toString();
         String[] palabra = monedatotal.split("-");
@@ -925,29 +903,28 @@ public class OrdenVentaCabeceraView extends Fragment {
             listaOrdenVentaCabeceraEntity.orden_cabecera_impuesto_id=impuesto_id;
             formulasController=new FormulasController(getContext());
             ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntyCopia=new ArrayList<>();
-            //listaOrdenVentaDetalleEntyCopia=formulasController.ActualizaciondeConversionOrdenVentaCabeceraListaOrdenDetallePromocion(listaOrdenVentaDetalleEntities);
+
             listaOrdenVentaDetalleEntyCopia=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listaOrdenVentaDetalleEntities);
-            //String [] MontosTotales=formulasController.CalcularMontosPedidoCabecera(listaOrdenVentaDetalleEntities);
-            String [] MontosTotales=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntyCopia);
-            listaOrdenVentaCabeceraEntity.orden_cabecera_montosubtotal=MontosTotales[0];
-            listaOrdenVentaCabeceraEntity.orden_cabecera_montodescuento=MontosTotales[1];
-            listaOrdenVentaCabeceraEntity.orden_cabecera_montoimpuesto=MontosTotales[2];
-            listaOrdenVentaCabeceraEntity.orden_cabecera_montototal=MontosTotales[3];
+
+            TotalSalesOrder totalSalesOrder=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntyCopia);
+
+            listaOrdenVentaCabeceraEntity.orden_cabecera_montosubtotal=""+totalSalesOrder.getSubtotal();
+            listaOrdenVentaCabeceraEntity.orden_cabecera_montodescuento=""+totalSalesOrder.getDescuento();
+            listaOrdenVentaCabeceraEntity.orden_cabecera_montoimpuesto=""+totalSalesOrder.getIgv();
+            listaOrdenVentaCabeceraEntity.orden_cabecera_montototal=""+totalSalesOrder.getTotal();
+
             listaOrdenVentaCabeceraEntity.orden_cabecera_fuerzatrabajo_id=SesionEntity.fuerzatrabajo_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_usuario_id=SesionEntity.usuario_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_lista_orden_detalle=listaOrdenVentaDetalleEntities;
             listaOrdenVentaCabeceraEntity.orden_cabecera_planta=SesionEntity.planta_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_lista_precio_id=listaprecio_id;
 
-            if(codigomoneda.equals("S/"))
-            {
+            if(codigomoneda.equals("S/")){
                 listaOrdenVentaCabeceraEntity.orden_cabecera_tipocambio="1";
+            }else{
+                //Esperando que el Tipo de Cambio viaje hacia el Usuario
+                listaOrdenVentaCabeceraEntity.orden_cabecera_tipocambio="3";
             }
-            else
-                {
-                    //Esperando que el Tipo de Cambio viaje hacia el Usuario
-                    listaOrdenVentaCabeceraEntity.orden_cabecera_tipocambio="3";
-                }
 
             listaOrdenVentaCabeceraEntity.orden_cabecera_fechatipocambio=String.valueOf(sdf.format(calendario.getTime()));
             listaOrdenVentaCabeceraEntity.orden_cabecera_rucdni=rucdni;
@@ -957,7 +934,7 @@ public class OrdenVentaCabeceraView extends Fragment {
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDMT="01";
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_STATUS="V";
             listaOrdenVentaCabeceraEntity.orden_cabecera_DocType="I";
-            listaOrdenVentaCabeceraEntity.orden_cabecera_total_gal_acumulado=MontosTotales[4];
+            listaOrdenVentaCabeceraEntity.orden_cabecera_total_gal_acumulado=""+totalSalesOrder.getGalones();
             listaOrdenVentaCabeceraEntity.orden_cabecera_descuentocontado=cantidaddescuento;
 
             formulasController.RegistraVisita(
@@ -967,7 +944,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                     "01",
                     "01-MOTIVO 01",
                     "Registro Pedido",
-                    getContext(),
+                    getActivity(),
                     String.valueOf(latitude)  ,
                     String.valueOf(longitude)
             );
@@ -980,6 +957,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                 listaOrdenVentaCabeceraEntities,
                 listaOrdenVentaDetalleEntities
         );
+
         Drawable drawable = menu_variable.findItem(R.id.guardar_orden_venta).getIcon();
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.Black));
@@ -1181,34 +1159,34 @@ public class OrdenVentaCabeceraView extends Fragment {
         image.setImageResource(R.mipmap.logo_circulo);
 
 
-        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
-        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-        // if button is clicked, close the custom dialog
-        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        Button dialogButtonOK =dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel =  dialog.findViewById(R.id.dialogButtonCancel);
 
-                if(sp_cantidaddescuento.getSelectedItem()==null)
-                {
-                    cantidaddescuento="0";
-                }else
-                    {
-                        cantidaddescuento=sp_cantidaddescuento.getSelectedItem().toString();
-                    }
+        dialogButtonOK.setOnClickListener(v -> {
 
-                String Fragment="OrdenVentaCabeceraView";
-                String accion="detalle";
-                String compuesto=Fragment+"-"+accion;
-                Log.e("REOS","OrdenVentaCabeceraView.contado: "+contado);
-                Log.e("REOS","OrdenVentaCabeceraView.sp_cantidaddescuento.getSelectedItem().toString(): "+cantidaddescuento);
-                Log.e("REOS","OrdenVentaCabeceraView.chk_descuento_contado.isChecked(): "+String.valueOf(chk_descuento_contado.isChecked()));
-                //contado=sp_cantidaddescuento.getSelectedItem().toString();
-                String Objeto=contado+"-"+cantidaddescuento+"-"+cliente_terminopago_id;
-                Log.e("REOS","OrdenVentaCabeceraView.Objeto: "+Objeto);
-                mListener.onFragmentInteraction(compuesto,Objeto);
-                dialog.dismiss();
+            if(sp_cantidaddescuento.getSelectedItem()==null)
+            {
+                cantidaddescuento="0";
+            }else{
+                cantidaddescuento=sp_cantidaddescuento.getSelectedItem().toString();
             }
+
+            String Fragment="OrdenVentaCabeceraView";
+            String accion="detalle";
+            String compuesto=Fragment+"-"+accion;
+
+            ///////////AQui//////////////
+            Log.e("ASDASDASD","=>"+codigocliente);
+
+            String Objeto=cantidaddescuento+"-"+cliente_terminopago_id;
+
+            String [] arrayObject={codigocliente,Objeto};
+
+            String xddd=arrayObject[0];
+            dialog.dismiss();
+            mListener.onFragmentInteraction(compuesto,arrayObject);
         });
+
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1222,25 +1200,20 @@ public class OrdenVentaCabeceraView extends Fragment {
         return  dialog;
     }
 
-
+/*
     public AlertDialog alertaAbrirPedido() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Advertencia")
                 .setMessage("Esta Seguro de Abrir una Orden Nueva?")
-                .setPositiveButton("OK",
+                .setPositiveButton("OK",(dialog, which) -> {
 
-                        new DialogInterface.OnClickListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.O)
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String Fragment="OrdenVentaCabeceraView";
-                                String accion="detalle";
-                                String compuesto=Fragment+"-"+accion;
-                                String Objeto=contado;
-                                mListener.onFragmentInteraction(compuesto,Objeto);
+                            String Fragment="OrdenVentaCabeceraView";
+                            String accion="detalle";
+                            String compuesto=Fragment+"-"+accion;
+                            String Objeto=contado;
+                            mListener.onFragmentInteraction(compuesto,Objeto);
 
-                            }
                         })
                 .setNegativeButton("CANCELAR",
                         new DialogInterface.OnClickListener() {
@@ -1252,7 +1225,7 @@ public class OrdenVentaCabeceraView extends Fragment {
 
         return builder.create();
     }
-
+*/
     public void ObtenerDataSpinnerDescuentoContado()
     {
         values=new ArrayList<>();

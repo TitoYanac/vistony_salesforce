@@ -1,30 +1,16 @@
 package com.vistony.salesforce.Entity.Adapters;
 
 public class ListaProductoEntity {
-    public String producto_item_id;
-    public String producto_id;
-    public String producto;
-    public String umd;
-    public String stock;
-    public String preciobase;
-    public String precioigv;
-    public String gal;
-    public String porcentaje_descuento_max;
-
-    public ListaProductoEntity(String producto_item_id, String producto_id, String producto, String umd, String stock, String preciobase, String precioigv, String gal,String porcentaje_descuento_max) {
-        this.producto_item_id = producto_item_id;
-        this.producto_id = producto_id;
-        this.producto = producto;
-        this.umd = umd;
-        this.stock = stock;
-        this.preciobase = preciobase;
-        this.precioigv = precioigv;
-        this.gal = gal;
-        this.porcentaje_descuento_max=porcentaje_descuento_max;
-    }
-
-    public ListaProductoEntity() {
-    }
+    private String producto_item_id;
+    private String producto_id;
+    private String producto;
+    private String umd;
+    private String stock_general;
+    private String stock_almacen;
+    private String preciobase;
+    private String precioigv;
+    private String gal;
+    private String porcentaje_descuento_max;
 
     public String getPorcentaje_descuento_max() {
         return porcentaje_descuento_max;
@@ -74,12 +60,20 @@ public class ListaProductoEntity {
         this.umd = umd;
     }
 
-    public String getStock() {
-        return stock;
+    public String getStock_general() {
+        return stock_general;
     }
 
-    public void setStock(String stock) {
-        this.stock = stock;
+    public void setStock_general(String stock_general) {
+        this.stock_general = stock_general;
+    }
+
+    public String getStock_almacen() {
+        return stock_almacen;
+    }
+
+    public void setStock_almacen(String stock_almacen) {
+        this.stock_almacen = stock_almacen;
     }
 
     public String getPreciobase() {

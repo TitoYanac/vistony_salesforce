@@ -4,8 +4,6 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +34,7 @@ import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleWS;
 import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoRepository;
 import com.vistony.salesforce.Dao.Retrofit.StockWS;
 import com.vistony.salesforce.Dao.Retrofit.TerminoPagoWS;
+import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.BancoSQLiteDAO;
 import com.vistony.salesforce.Dao.SQLite.CatalogoSQLiteDao;
@@ -54,7 +53,6 @@ import com.vistony.salesforce.Dao.SQLite.RutaFuerzaTrabajoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.StockSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
-import com.vistony.salesforce.Dao.SQLite.VisitaSQLiteDAO;
 import com.vistony.salesforce.Dao.SQLite.ZonaSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
 import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
@@ -76,7 +74,6 @@ import com.vistony.salesforce.Entity.SQLite.RutaFuerzaTrabajoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaVendedorSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.StockSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.ListenerBackPress;
@@ -151,10 +148,7 @@ public class ParametrosView extends Fragment {
     ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity;
     private final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION=1;
     private OrdenVentaRepository ordenVentaRepository;
-
-    public ParametrosView() {
-        // Required empty public constructor
-    }
+    private VisitaRepository visitaRepository;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -223,41 +217,23 @@ public class ParametrosView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         getActivity().setTitle("Parametros");
+
         v = inflater.inflate(R.layout.fragment_parametros_view, container, false);
         listviewparametro = (ListView) v.findViewById(R.id.listparametro);
         fabdescargarparametros = (FloatingActionButton) v.findViewById(R.id.fabdescargarparametros);
 
         ordenVentaRepository = new ViewModelProvider(this).get(OrdenVentaRepository.class);
+        visitaRepository = new ViewModelProvider(this).get(VisitaRepository.class);
 
-        ///////////////// ENVIAR PEDIDOS
+        ///////////////////////////// ENVIAR PEDIDOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         ordenVentaRepository.salesOrderResend(getContext()).observe(getActivity(), data -> {
-            Log.e("jepicame","=>"+data);
+            Log.e("Jepicame","=>"+data);
         });
 
-        /*
-        OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(getContext());
-        ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabeceraSQLiteEntity = new ArrayList<>();
-        listaOrdenVentaCabeceraSQLiteEntity= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
-
-        for(int z=0;z<listaOrdenVentaCabeceraSQLiteEntity.size();z++){
-            String ordenVentaId=listaOrdenVentaCabeceraSQLiteEntity.get(z).getOrdenventa_id();
-            String JSON=EnviarNubeOV(ordenVentaId,getContext());
-
-            ordenVentaViewModel.sendSalesOrder(JSON).observe(getActivity(), data->{
-                if(data!=null){
-                    ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
-                            SesionEntity.compania_id,
-                            ordenVentaId,
-                            data[0],
-                            data[3],
-                            data[1]
-                    );
-                }else{
-
-                }
-            });
-        }*/
-
+        ///////////////////////////// ENVIAR VISITAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        visitaRepository.visitResend(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
 
         fabdescargarparametros.setOnClickListener(view -> {
             Object objeto=null,object2=null;
@@ -301,7 +277,7 @@ public class ParametrosView extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Cargando Parametros", true, false);
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Descargando Parametros", true, false);
         }
         @Override
         protected String doInBackground(String... arg0) {
@@ -375,59 +351,7 @@ public class ParametrosView extends Fragment {
                                     resultadoccabeceraenviows);
                         }
 
-                        /*********************************/
-                        /********************************* ENVIO DE VISITAS *********************************/
-                        /*********************************/
-
-                        VisitaSQLiteDAO visitaSQLiteDAO = new VisitaSQLiteDAO(getActivity());
-                        ArrayList<VisitaSQLiteEntity> listaVisitaSQLiteEntity = new ArrayList<>();
-                        listaVisitaSQLiteEntity = visitaSQLiteDAO.ObtenerVisitas();
-                        //VisitaWSDAO visitaWSDAO = new VisitaWSDAO(getActivity());
                         FormulasController formulasController=new FormulasController(getContext());
-                        for (int j = 0; j < listaVisitaSQLiteEntity.size(); j++) {
-
-                            ConnectivityManager manager= (ConnectivityManager) getContext().getSystemService(getContext().CONNECTIVITY_SERVICE);;
-                            NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-
-                            if (networkInfo != null) {
-                                if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-
-
-                                    /*********************************/
-                                    /********************************* ENVIO DE VISITAS *********************************/
-                                    /*********************************/
-                                    VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
-
-                                    visita.setCompania_id(listaVisitaSQLiteEntity.get(j).getCompania_id());
-                                    visita.setCliente_id(listaVisitaSQLiteEntity.get(j).getCliente_id());
-                                    visita.setDireccion_id(listaVisitaSQLiteEntity.get(j).getDireccion_id());
-                                    visita.setFecha_registro(listaVisitaSQLiteEntity.get(j).getFecha_registro());
-                                    visita.setHora_registro(listaVisitaSQLiteEntity.get(j).getHora_registro());
-                                    visita.setZona_id(listaVisitaSQLiteEntity.get(j).getZona_id());
-                                    visita.setFuerzatrabajo_id(listaVisitaSQLiteEntity.get(j).getFuerzatrabajo_id());
-                                    visita.setUsuario_id(listaVisitaSQLiteEntity.get(j).getUsuario_id());
-                                    visita.setTipo(listaVisitaSQLiteEntity.get(j).getTipo());
-                                    visita.setMotivo(listaVisitaSQLiteEntity.get(j).getMotivo());
-                                    visita.setObservacion(listaVisitaSQLiteEntity.get(j).getObservacion());
-                                    visita.setChkenviado(listaVisitaSQLiteEntity.get(j).getChkenviado());
-                                    visita.setChkrecibido(listaVisitaSQLiteEntity.get(j).getChkrecibido());
-                                    visita.setLatitud(listaVisitaSQLiteEntity.get(j).getLatitud());
-                                    visita.setLongitud(listaVisitaSQLiteEntity.get(j).getLongitud());
-
-                                    new FormulasController.ReenvioDeVisitas(getContext(),visita).execute();
-
-                                    /*********************************/
-                                    /*********************************/
-                                    /*********************************/
-
-
-                                }
-                            }
-
-                        }
-                        /*********************************/
-                        /*********************************/
-                        /*********************************/
 
                         //Envio de Cobranza Detalle Pendientes a WS
                         listaCobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendientesEnvioTotalWS(SesionEntity.compania_id, SesionEntity.usuario_id);
@@ -1262,13 +1186,16 @@ public class ParametrosView extends Fragment {
                         Lista.get(i).getGal(),
                         Lista.get(i).getU_vis_cashdscnt(),
                         Lista.get(i).getTypo(),
-                        Lista.get(i).getPorcentaje_descuento()
+                        Lista.get(i).getPorcentaje_descuento(),
+                        Lista.get(i).getStock_almacen(),
+                        Lista.get(i).getStock_general()
+
                 );
             }
             resultado=listaPrecioDetalleSQLiteDao.ObtenerCantidadListaPrecioDetalle();
         }catch (Exception e) {
-            // TODO: handle exception
-            System.out.println(e.getMessage());
+            Toast.makeText(getContext(), "Ocurrio un error al guardar la lista de precios", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
         return resultado;
     }

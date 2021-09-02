@@ -31,6 +31,9 @@ public class SettingsUserEntity {
     @SerializedName("TaxRate")
     private double taxRate;
 
+    @SerializedName("OutStock")
+    private String outStock;
+
     public String getTaxCode() {
         return taxCode;
     }
@@ -101,5 +104,13 @@ public class SettingsUserEntity {
 
     public void setCogsAcct(String cogsAcct) {
         this.cogsAcct = cogsAcct;
+    }
+
+    public String getOutStock() {
+        return outStock;
+    }
+
+    public void setOutStock(String outStock) {
+        this.outStock = outStock;
     }
 }

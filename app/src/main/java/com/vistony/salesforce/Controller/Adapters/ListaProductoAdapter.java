@@ -92,11 +92,8 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
 
         // ¿Ya se infló este view?
         if (null == convertView) {
-            //Si no existe, entonces inflarlo con image_list_view.xml
-            convertView = inflater.inflate(
-                    R.layout.layout_lista_producto,
-                    parent,
-                    false);
+
+            convertView = inflater.inflate(R.layout.layout_lista_producto,parent,false);
 
             holder = new ListaProductoAdapter.ViewHolder();
             // holder.lbl_documento = (TextView) convertView.findViewById(R.id.lbl_documento);
@@ -121,22 +118,26 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         holder.tv_productoid.setText(lead.getProducto_id());
         holder.tv_producto.setText(lead.getProducto());
         holder.tv_umd.setText(lead.getUmd());
-        holder.tv_stock.setText(lead.getStock());
         holder.tv_precio.setText(lead.getPreciobase());
-        holder.tv_igv.setText(lead.getPrecioigv());
+        //holder.tv_igv.setText(lead.getPrecioigv());
+        holder.tv_igv.setText(lead.getStock_general());
+        holder.tv_stock.setText(lead.getStock_almacen());
         holder.tv_gal.setText(lead.getGal());
 
         holder.relativeListaProducto.setOnClickListener(v -> {
             ArrayList<ListaProductoEntity> arrayListaProductoEntity= new ArrayList<>();
+
             ListaProductoEntity listaProductoEntity=new ListaProductoEntity();
-            listaProductoEntity.producto_id = lead.getProducto_id();
-            listaProductoEntity.producto = lead.getProducto();
-            listaProductoEntity.umd = lead.getUmd();
-            listaProductoEntity.stock = lead.getStock();
-            listaProductoEntity.preciobase = lead.getPreciobase();
-            listaProductoEntity.precioigv = lead.getPrecioigv();
-            listaProductoEntity.gal = lead.getGal();
-            listaProductoEntity.porcentaje_descuento_max = lead.getPorcentaje_descuento_max();
+
+            listaProductoEntity.setProducto_id(lead.getProducto_id());
+            listaProductoEntity.setProducto(lead.getProducto());
+            listaProductoEntity.setUmd(lead.getUmd());
+            listaProductoEntity.setStock_almacen(lead.getStock_almacen());
+            listaProductoEntity.setStock_general(lead.getStock_general());
+            listaProductoEntity.setPreciobase(lead.getPreciobase());
+            listaProductoEntity.setPrecioigv(lead.getPrecioigv()) ;
+            listaProductoEntity.setGal(lead.getGal());
+            listaProductoEntity.setPorcentaje_descuento_max(lead.getPorcentaje_descuento_max());
 
             arrayListaProductoEntity.add(listaProductoEntity);
 
