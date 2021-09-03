@@ -18,7 +18,7 @@ public class DocumentHeader {
     private String ShipToCode;
     private String TaxDate;
     private String DiscountPercent;
-    private List<ApprovalRequests> Document_ApprovalRequests;
+    private List<ApprovalRequest> document_ApprovalRequests;
     private List<DocumentLine> DocumentLines;
 
     public String getCardCode() {
@@ -149,11 +149,11 @@ public class DocumentHeader {
         DiscountPercent = discountPercent;
     }
 
-    public List<ApprovalRequests> getDocument_ApprovalRequests() {
-        return Document_ApprovalRequests;
+    public List<ApprovalRequest> getDocument_ApprovalRequests() {
+        return document_ApprovalRequests;
     }
 
-    public void setDocument_ApprovalRequests(List<ApprovalRequests> document_ApprovalRequests) {
-        Document_ApprovalRequests = document_ApprovalRequests;
+    public void setDocument_ApprovalRequests(List<ApprovalRequest> document_ApprovalRequests) {
+        this.document_ApprovalRequests = document_ApprovalRequests;
     }
 }

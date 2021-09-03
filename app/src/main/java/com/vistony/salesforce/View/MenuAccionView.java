@@ -392,24 +392,13 @@ public class MenuAccionView extends Fragment {
 
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-        // if button is clicked, close the custom dialog
-        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*String Fragment="OrdenVentaCabeceraView";
-                String accion="detalle";
-                String compuesto=Fragment+"-"+accion;
-                String Objeto=contado;
-                mListener.onFragmentInteraction(compuesto,Objeto);*/
 
-                dialog.dismiss();
-            }
+        dialogButtonOK.setOnClickListener(v -> {
+            dialog.dismiss();
         });
-        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
+
+        dialogButtonCancel.setOnClickListener(v -> {
+            dialog.dismiss();
         });
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

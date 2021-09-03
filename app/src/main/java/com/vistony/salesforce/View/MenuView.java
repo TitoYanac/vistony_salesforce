@@ -1116,9 +1116,6 @@ public class MenuView extends AppCompatActivity
                 OrdenVentaCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaCabeceraView);
                 ft.hide(OrdenVentaCabeceraFragment);
 
-                //String object=Lista[1];
-
-
                 ft.add(R.id.content_menu_view, OrdenVentaDetalleView.newInstance(Lista),tag2);
 
                 ft.addToBackStack("po1p");

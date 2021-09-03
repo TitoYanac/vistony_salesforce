@@ -19,46 +19,14 @@ import retrofit2.Response;
 public class VisitaRepository extends ViewModel {
     private VisitaSQLite visitaSQLite;
 
-    public MutableLiveData<String> PostVisitaWS(final VisitaSQLiteEntity visitasEntity,final Context context){
-        MutableLiveData<String> temp=new MutableLiveData<String>();
-
-        if(visitaSQLite==null){
-            visitaSQLite =new VisitaSQLite(context);
-        }
-
-        sendVisit(visitasEntity,context, new VisitCallback(){
-            @Override
-            public void onResponseSap(VisitaEntity data) {
-                if(data!=null){
-                    boolean status= visitaSQLite.ActualizaEstadoWSVisita(data);
-
-                    if(status){
-                        temp.setValue("El estado de la visita fue actualizada");
-                    }else{
-                        temp.setValue("El estado de la visita no fue actualizada");
-                    }
-                }else{
-                    temp.setValue("Ocurrio un error en el servidor");
-                }
-            }
-            @Override
-            public void onResponseErrorSap(String response) {
-                temp.setValue(response);
-            }
-        });
-
-        return temp;
-    }
-
     public MutableLiveData<String> visitResend(Context context){
         MutableLiveData<String> temp=new MutableLiveData<String>();
 
-        sendVisit(null,context, new VisitCallback(){
+        sendVisit(context, new VisitCallback(){
             @Override
             public void onResponseSap(VisitaEntity data) {
-                if(data!=null){
+                if(data!=null && data.getVisitas().size()>0){
                     boolean status= visitaSQLite.ActualizaEstadoWSVisita(data);
-
                     if(status){
                         temp.setValue("El estado de las visitas fue actualizado");
                     }else{
@@ -77,7 +45,7 @@ public class VisitaRepository extends ViewModel {
         return temp;
     }
 
-    private void sendVisit(final VisitaSQLiteEntity visitEntity, final Context context,final VisitCallback callback){
+    private void sendVisit(final Context context,final VisitCallback callback){
         String  json=null;
         Gson gson=new Gson();
 
@@ -85,15 +53,10 @@ public class VisitaRepository extends ViewModel {
             visitaSQLite =new VisitaSQLite(context);
         }
 
-        if(visitEntity==null){
-            ArrayList<VisitaSQLiteEntity> listVisit = visitaSQLite.ObtenerVisitas();
-            if(listVisit.size()>0){
-                json = gson.toJson(listVisit);
-                json = "{ \"Visits\":" + json + "}";
-            }
-        }else{
-            json = gson.toJson(visitEntity);
-            json = "{ \"Visits\":[" + json + "]}";
+        ArrayList<VisitaSQLiteEntity> listVisit = visitaSQLite.ObtenerVisitas();
+        if(listVisit!=null && listVisit.size()>0){
+            json = gson.toJson(listVisit);
+            json = "{ \"Visits\":" + json + "}";
         }
 
         if(json!=null){

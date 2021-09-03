@@ -23,8 +23,6 @@ public class VisitaSQLiteEntity {
 
     private String Type;
 
-    private String Motive;
-
     private String Observation;
 
     private String Longitude;
@@ -36,6 +34,9 @@ public class VisitaSQLiteEntity {
     private String chkenviado;
 
     private String chkrecibido;
+
+    @SerializedName("ErrorCode")
+    private String haveError;
 
     @SerializedName("Message")
     private String Message;
@@ -128,14 +129,6 @@ public class VisitaSQLiteEntity {
         Type = type;
     }
 
-    public String getMotive() {
-        return Motive;
-    }
-
-    public void setMotive(String motive) {
-        Motive = motive;
-    }
-
     public String getObservation() {
         return Observation;
     }
@@ -174,5 +167,13 @@ public class VisitaSQLiteEntity {
 
     public void setLatitude(String latitude) {
         Latitude = latitude;
+    }
+
+    public String getHaveError() {
+        return haveError;
+    }
+
+    public void setHaveError(String haveError) {
+        this.haveError = haveError;
     }
 }

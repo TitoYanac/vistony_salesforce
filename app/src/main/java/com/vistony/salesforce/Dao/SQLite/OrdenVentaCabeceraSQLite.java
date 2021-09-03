@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 
 import java.util.ArrayList;
 
@@ -68,12 +69,20 @@ public class OrdenVentaCabeceraSQLite {
             String DocType,
             String mensajeWS,
             String total_gal_acumulado,
-            String descuentocontado
-    )
-    {
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
-        abrir();
+            String descuentocontado){
+
+            abrir();
+
+            String dias_documento_vencido="0";
+            String igual_mayor_linea_credito="0";
+
+            Cursor fila = bd.rawQuery("SELECT CASE WHEN DueDays IS NULL THEN '0' ELSE DueDays END AS DueDays, (CAST('"+montototal+"' AS decimal)+CAST(linea_credito_usado AS decimal))>=CAST(linea_credito AS decimal) AS linea_validation FROM cliente WHERE cliente_id=? LIMIT 1",new String[]{cliente_id});
+
+            while (fila.moveToNext()){
+                dias_documento_vencido=fila.getString(0);
+                igual_mayor_linea_credito=fila.getString(1);
+            }
+
         ContentValues registro = new ContentValues();
         registro.put("compania_id",compania_id);
         registro.put("ordenventa_id",ordenventa_id);
@@ -109,9 +118,12 @@ public class OrdenVentaCabeceraSQLite {
         registro.put("mensajeWS",mensajeWS);
         registro.put("total_gal_acumulado",total_gal_acumulado);
         registro.put("descuentocontado",descuentocontado);
+        registro.put("dueDays_cliente",dias_documento_vencido);
+        registro.put("excede_lineacredito",igual_mayor_linea_credito);
+
         bd.insert("ordenventacabecera",null,registro);
         bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+
         return 1;
     }
 
@@ -249,63 +261,78 @@ public class OrdenVentaCabeceraSQLite {
         return resultado;
     }
 
-    public ArrayList<OrdenVentaCabeceraSQLiteEntity> ObtenerOrdenVentaCabeceraporID (String ordenventa_id)
-    {
+    public ArrayList<OrdenVentaCabeceraSQLiteEntity> ObtenerOrdenVentaCabeceraporID (String ordenventa_id){
         listaOrdenVentaCabeceraSQLiteEntity = new ArrayList<OrdenVentaCabeceraSQLiteEntity>();
         OrdenVentaCabeceraSQLiteEntity ordenVentaCabeceraSQLiteEntity;
-        abrir();
-        Cursor fila = bd.rawQuery(
-                "Select * from ordenventacabecera where ordenventa_id='"+ordenventa_id+"'",null);
+        try{
+            abrir();
+            Cursor fila = bd.rawQuery("SELECT compania_id,ordenventa_id,cliente_id,domembarque_id,terminopago_id," +
+                    "agencia_id,moneda_id,comentario,almacen_id,impuesto_id,montosubtotal,montodescuento,montoimpuesto,montototal,fuerzatrabajo_id," +
+                    "usuario_id,enviadoERP,recibidoERP,ordenventa_ERP_id,listaprecio_id,planta_id,fecharegistro,tipocambio,fechatipocambio,rucdni,DocType," +
+                    "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito" +
+                    " FROM ordenventacabecera WHERE ordenventa_id=? LIMIT 1",new String[]{ordenventa_id});
+            if (fila.moveToFirst()) {
+                do {
+                    ordenVentaCabeceraSQLiteEntity= new OrdenVentaCabeceraSQLiteEntity();
 
-        while (fila.moveToNext())
-        {
-            ordenVentaCabeceraSQLiteEntity= new OrdenVentaCabeceraSQLiteEntity();
-            ordenVentaCabeceraSQLiteEntity.setCompania_id(fila.getString(0));
-            ordenVentaCabeceraSQLiteEntity.setOrdenventa_id(fila.getString(1));
-            ordenVentaCabeceraSQLiteEntity.setCliente_id(fila.getString(2));
-            ordenVentaCabeceraSQLiteEntity.setDomembarque_id(fila.getString(3));
-            ordenVentaCabeceraSQLiteEntity.setTerminopago_id(fila.getString(4));
-            ordenVentaCabeceraSQLiteEntity.setAgencia_id(fila.getString(5));
-            ordenVentaCabeceraSQLiteEntity.setMoneda_id(fila.getString(6));
-            ordenVentaCabeceraSQLiteEntity.setComentario(fila.getString(7));
-            ordenVentaCabeceraSQLiteEntity.setAlmacen_id(fila.getString(8));
-            ordenVentaCabeceraSQLiteEntity.setImpuesto_id(fila.getString(9));
-            ordenVentaCabeceraSQLiteEntity.setMontosubtotal(fila.getString(10));
-            ordenVentaCabeceraSQLiteEntity.setMontodescuento(fila.getString(11));
-            ordenVentaCabeceraSQLiteEntity.setMontoimpuesto(fila.getString(12));
-            ordenVentaCabeceraSQLiteEntity.setMontototal(fila.getString(13));
-            ordenVentaCabeceraSQLiteEntity.setFuerzatrabajo_id(fila.getString(14));
-            ordenVentaCabeceraSQLiteEntity.setUsuario_id(fila.getString(15));
-            ordenVentaCabeceraSQLiteEntity.setEnviadoERP(fila.getString(16));
-            ordenVentaCabeceraSQLiteEntity.setRecibidoERP(fila.getString(17));
-            ordenVentaCabeceraSQLiteEntity.setOrdenventa_ERP_id(fila.getString(18));
-            ordenVentaCabeceraSQLiteEntity.setListaprecio_id(fila.getString(19));
-            ordenVentaCabeceraSQLiteEntity.setPlanta_id(fila.getString(20));
-            ordenVentaCabeceraSQLiteEntity.setFecharegistro(fila.getString(21));
-            ordenVentaCabeceraSQLiteEntity.setTipocambio(fila.getString(22));
-            ordenVentaCabeceraSQLiteEntity.setFechatipocambio(fila.getString(23));
-            ordenVentaCabeceraSQLiteEntity.setRucdni(fila.getString(24));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_MDTD(fila.getString(25));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_MDSD(fila.getString(26));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_MDCD(fila.getString(27));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_MDMT(fila.getString(28));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_STATUS(fila.getString(29));
-            ordenVentaCabeceraSQLiteEntity.setDocType(fila.getString(30));
-            ordenVentaCabeceraSQLiteEntity.setMensajeWS(fila.getString(31));
-            ordenVentaCabeceraSQLiteEntity.setTotal_gal_acumulado(fila.getString(32));
-            ordenVentaCabeceraSQLiteEntity.setDescuentocontado(fila.getString(33));
+                    ordenVentaCabeceraSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
+                    ordenVentaCabeceraSQLiteEntity.setOrdenventa_id(fila.getString(fila.getColumnIndex("ordenventa_id")));
+                    ordenVentaCabeceraSQLiteEntity.setCliente_id(fila.getString(fila.getColumnIndex("cliente_id")));
+                    ordenVentaCabeceraSQLiteEntity.setDomembarque_id(fila.getString(fila.getColumnIndex("domembarque_id")));
+                    ordenVentaCabeceraSQLiteEntity.setTerminopago_id(fila.getString(fila.getColumnIndex("terminopago_id")));
+                    ordenVentaCabeceraSQLiteEntity.setAgencia_id(fila.getString(fila.getColumnIndex("agencia_id")));
+                    ordenVentaCabeceraSQLiteEntity.setMoneda_id(fila.getString(fila.getColumnIndex("moneda_id")));
+                    ordenVentaCabeceraSQLiteEntity.setComentario(fila.getString(fila.getColumnIndex("comentario")));
+                    ordenVentaCabeceraSQLiteEntity.setAlmacen_id(fila.getString(fila.getColumnIndex("almacen_id")));
+                    ordenVentaCabeceraSQLiteEntity.setImpuesto_id(fila.getString(fila.getColumnIndex("impuesto_id")));
+                    ordenVentaCabeceraSQLiteEntity.setMontosubtotal(fila.getString(fila.getColumnIndex("montosubtotal")));
+                    ordenVentaCabeceraSQLiteEntity.setMontodescuento(fila.getString(fila.getColumnIndex("montodescuento")));
+                    ordenVentaCabeceraSQLiteEntity.setMontoimpuesto(fila.getString(fila.getColumnIndex("montoimpuesto")));
+                    ordenVentaCabeceraSQLiteEntity.setMontototal(fila.getString(fila.getColumnIndex("montototal")));
 
-            listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
+                    ordenVentaCabeceraSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+                    ordenVentaCabeceraSQLiteEntity.setUsuario_id(fila.getString(fila.getColumnIndex("usuario_id")));
+                    ordenVentaCabeceraSQLiteEntity.setEnviadoERP(fila.getString(fila.getColumnIndex("enviadoERP")));
+                    ordenVentaCabeceraSQLiteEntity.setRecibidoERP(fila.getString(fila.getColumnIndex("recibidoERP")));
+                    ordenVentaCabeceraSQLiteEntity.setOrdenventa_ERP_id(fila.getString(fila.getColumnIndex("ordenventa_ERP_id")));
+                    ordenVentaCabeceraSQLiteEntity.setListaprecio_id(fila.getString(fila.getColumnIndex("listaprecio_id")));
+                    ordenVentaCabeceraSQLiteEntity.setPlanta_id(fila.getString(fila.getColumnIndex("planta_id")));
+                    ordenVentaCabeceraSQLiteEntity.setFecharegistro(fila.getString(fila.getColumnIndex("fecharegistro")));
+                    ordenVentaCabeceraSQLiteEntity.setTipocambio(fila.getString(fila.getColumnIndex("tipocambio")));
+                    ordenVentaCabeceraSQLiteEntity.setFechatipocambio(fila.getString(fila.getColumnIndex("fechatipocambio")));
+                    ordenVentaCabeceraSQLiteEntity.setRucdni(fila.getString(fila.getColumnIndex("rucdni")));
+
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_MDTD(fila.getString(fila.getColumnIndex("compania_id")));
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_MDSD(fila.getString(fila.getColumnIndex("compania_id")));
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_MDCD(fila.getString(fila.getColumnIndex("compania_id")));
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_MDMT(fila.getString(fila.getColumnIndex("compania_id")));
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_STATUS(fila.getString(fila.getColumnIndex("compania_id")));
+
+                    ordenVentaCabeceraSQLiteEntity.setDocType(fila.getString(fila.getColumnIndex("DocType")));
+                    ordenVentaCabeceraSQLiteEntity.setMensajeWS(fila.getString(fila.getColumnIndex("mensajeWS")));
+                    ordenVentaCabeceraSQLiteEntity.setTotal_gal_acumulado(fila.getString(fila.getColumnIndex("total_gal_acumulado")));
+                    ordenVentaCabeceraSQLiteEntity.setDescuentocontado(fila.getString(fila.getColumnIndex("descuentocontado")));
+                    ordenVentaCabeceraSQLiteEntity.setDueDays(fila.getString(fila.getColumnIndex("dueDays_cliente")));
+                    ordenVentaCabeceraSQLiteEntity.setExcede_lineacredito(fila.getString(fila.getColumnIndex("excede_lineacredito")));
+
+                    listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
+                } while (fila.moveToNext());
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }finally {
+            bd.close();
         }
-        bd.close();
+
         return listaOrdenVentaCabeceraSQLiteEntity;
     }
 
     public int ActualizaResultadoOVenviada (String ordenventa_id, String estado,String ordenventa_id_erp,String mensajeWS)
     {
         int resultado=0;
-        abrir();
+
         try {
+            abrir();
             ContentValues registro = new ContentValues();
             registro.put("enviadoERP","1");
             registro.put("recibidoERP",estado);
@@ -357,58 +384,21 @@ public class OrdenVentaCabeceraSQLite {
     public ArrayList<String> ObtenerOrdenVentaCabeceraPendientesEnvioWS ()
     {
         ArrayList<String> listSalesOrder = new ArrayList<String>();
-        //OrdenVentaCabeceraSQLiteEntity ordenVentaCabeceraSQLiteEntity;
         abrir();
         try {
-        Cursor fila = bd.rawQuery("Select ordenventa_id  from ordenventacabecera where recibidoERP is null or recibidoERP='0' ",null);
+            Cursor fila = bd.rawQuery("Select ordenventa_id  from ordenventacabecera where recibidoERP is null or recibidoERP='0' ",null);
 
-        while (fila.moveToNext())
-        {
-            listSalesOrder.add(fila.getString(0));
-            /*ordenVentaCabeceraSQLiteEntity= new OrdenVentaCabeceraSQLiteEntity();
-            ordenVentaCabeceraSQLiteEntity.setCompania_id(fila.getString(0));
-            ordenVentaCabeceraSQLiteEntity.setOrdenventa_id(fila.getString(1));
-            ordenVentaCabeceraSQLiteEntity.setCliente_id(fila.getString(2));
-            ordenVentaCabeceraSQLiteEntity.setDomembarque_id(fila.getString(3));
-            ordenVentaCabeceraSQLiteEntity.setTerminopago_id(fila.getString(4));
-            ordenVentaCabeceraSQLiteEntity.setAgencia_id(fila.getString(5));
-            ordenVentaCabeceraSQLiteEntity.setMoneda_id(fila.getString(6));
-            ordenVentaCabeceraSQLiteEntity.setComentario(fila.getString(7));
-            ordenVentaCabeceraSQLiteEntity.setAlmacen_id(fila.getString(8));
-            ordenVentaCabeceraSQLiteEntity.setImpuesto_id(fila.getString(9));
-            ordenVentaCabeceraSQLiteEntity.setMontosubtotal(fila.getString(10));
-            ordenVentaCabeceraSQLiteEntity.setMontodescuento(fila.getString(11));
-            ordenVentaCabeceraSQLiteEntity.setMontoimpuesto(fila.getString(12));
-            ordenVentaCabeceraSQLiteEntity.setMontototal(fila.getString(13));
-            ordenVentaCabeceraSQLiteEntity.setFuerzatrabajo_id(fila.getString(14));
-            ordenVentaCabeceraSQLiteEntity.setUsuario_id(fila.getString(15));
-            ordenVentaCabeceraSQLiteEntity.setEnviadoERP(fila.getString(16));
-            ordenVentaCabeceraSQLiteEntity.setRecibidoERP(fila.getString(17));
-            ordenVentaCabeceraSQLiteEntity.setOrdenventa_ERP_id(fila.getString(18));
-            ordenVentaCabeceraSQLiteEntity.setListaprecio_id(fila.getString(19));
-            ordenVentaCabeceraSQLiteEntity.setPlanta_id(fila.getString(20));
-            ordenVentaCabeceraSQLiteEntity.setFecharegistro(fila.getString(21));
-            ordenVentaCabeceraSQLiteEntity.setTipocambio(fila.getString(22));
-            ordenVentaCabeceraSQLiteEntity.setFechatipocambio(fila.getString(23));
-            ordenVentaCabeceraSQLiteEntity.setRucdni(fila.getString(24));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_MDTD(fila.getString(25));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_MDSD(fila.getString(26));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_MDCD(fila.getString(27));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_MDMT(fila.getString(28));
-            ordenVentaCabeceraSQLiteEntity.setU_SYP_STATUS(fila.getString(29));
-            ordenVentaCabeceraSQLiteEntity.setDocType(fila.getString(30));
-            ordenVentaCabeceraSQLiteEntity.setMensajeWS(fila.getString(31));
-            ordenVentaCabeceraSQLiteEntity.setTotal_gal_acumulado(fila.getString(32));
-            ordenVentaCabeceraSQLiteEntity.setDescuentocontado(fila.getString(33));
-
-            listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);*/
-        }
-        }catch (Exception e)
-        {
+            while (fila.moveToNext())
+            {
+                listSalesOrder.add(fila.getString(0));
+            }
+        }catch (Exception e){
             System.out.println(e.getMessage());
             Log.e("REOS", "Exception "+e.toString() );
+        }finally {
+            bd.close();
         }
-        bd.close();
+
         return listSalesOrder;
     }
 

@@ -34,46 +34,24 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String DocType;
     public String mensajeWS;
     public String total_gal_acumulado;
-    public String  descuentocontado;
+    public String descuentocontado;
+    public String dueDays;
+    public String excede_lineacredito;
 
-    public OrdenVentaCabeceraSQLiteEntity(String compania_id, String ordenventa_id, String cliente_id, String domembarque_id, String terminopago_id, String agencia_id, String moneda_id, String comentario, String almacen_id, String impuesto_id, String montosubtotal, String montodescuento, String montoimpuesto, String montototal, String fuerzatrabajo_id, String usuario_id, String enviadoERP, String recibidoERP, String ordenventa_ERP_id, String listaprecio_id, String planta_id, String fecharegistro, String tipocambio, String fechatipocambio, String rucdni, String u_SYP_MDTD, String u_SYP_MDSD, String u_SYP_MDCD, String u_SYP_MDMT, String u_SYP_STATUS, String docType, String mensajeWS, String total_gal_acumulado, String descuentocontado) {
-        this.compania_id = compania_id;
-        this.ordenventa_id = ordenventa_id;
-        this.cliente_id = cliente_id;
-        this.domembarque_id = domembarque_id;
-        this.terminopago_id = terminopago_id;
-        this.agencia_id = agencia_id;
-        this.moneda_id = moneda_id;
-        this.comentario = comentario;
-        this.almacen_id = almacen_id;
-        this.impuesto_id = impuesto_id;
-        this.montosubtotal = montosubtotal;
-        this.montodescuento = montodescuento;
-        this.montoimpuesto = montoimpuesto;
-        this.montototal = montototal;
-        this.fuerzatrabajo_id = fuerzatrabajo_id;
-        this.usuario_id = usuario_id;
-        this.enviadoERP = enviadoERP;
-        this.recibidoERP = recibidoERP;
-        this.ordenventa_ERP_id = ordenventa_ERP_id;
-        this.listaprecio_id = listaprecio_id;
-        this.planta_id = planta_id;
-        this.fecharegistro = fecharegistro;
-        this.tipocambio = tipocambio;
-        this.fechatipocambio = fechatipocambio;
-        this.rucdni = rucdni;
-        U_SYP_MDTD = u_SYP_MDTD;
-        U_SYP_MDSD = u_SYP_MDSD;
-        U_SYP_MDCD = u_SYP_MDCD;
-        U_SYP_MDMT = u_SYP_MDMT;
-        U_SYP_STATUS = u_SYP_STATUS;
-        DocType = docType;
-        this.mensajeWS = mensajeWS;
-        this.total_gal_acumulado = total_gal_acumulado;
-        this.descuentocontado = descuentocontado;
+    public String getExcede_lineacredito() {
+        return excede_lineacredito;
     }
 
-    public OrdenVentaCabeceraSQLiteEntity() {
+    public void setExcede_lineacredito(String excede_lineacredito) {
+        this.excede_lineacredito = excede_lineacredito;
+    }
+
+    public String getDueDays() {
+        return dueDays;
+    }
+
+    public void setDueDays(String dueDays) {
+        this.dueDays = dueDays;
     }
 
     public String getDescuentocontado() {

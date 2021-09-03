@@ -31,37 +31,14 @@ public class ClienteSQLiteEntity {
     private String lista_precio;
     private List<AddressEntity> listAddress;
     private List<InvoicesEntity> listInvoice;
+    private String dueDays;
 
-
-    public ClienteSQLiteEntity(){
-
+    public String getDueDays() {
+        return dueDays;
     }
 
-    public ClienteSQLiteEntity(String cliente_id, String compania_id, String nombrecliente, String domembarque_id, String direccion, String zona_id, String orden, String zona, String rucdni, String moneda, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String impuesto_id, String impuesto, String tipocambio, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id,String lista_precio,List<AddressEntity> listAddress,List<InvoicesEntity> listInvoice) {
-        this.cliente_id = cliente_id;
-        this.compania_id = compania_id;
-        this.nombrecliente = nombrecliente;
-        this.domembarque_id = domembarque_id;
-        this.direccion = direccion;
-        this.zona_id = zona_id;
-        this.orden = orden;
-        this.zona = zona;
-        this.rucdni = rucdni;
-        this.moneda = moneda;
-        this.telefonofijo = telefonofijo;
-        this.telefonomovil = telefonomovil;
-        this.correo = correo;
-        this.ubigeo_id = ubigeo_id;
-        this.impuesto_id = impuesto_id;
-        this.impuesto = impuesto;
-        this.tipocambio = tipocambio;
-        this.categoria = categoria;
-        this.linea_credito = linea_credito;
-        this.linea_credito_usado=linea_credito_usado;
-        this.terminopago_id = terminopago_id;
-        this.lista_precio=lista_precio;
-        this.listAddress=listAddress;
-        this.listInvoice=listInvoice;
+    public void setDueDays(String dueDays) {
+        this.dueDays = dueDays;
     }
 
     public String getLista_precio() {

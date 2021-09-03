@@ -58,6 +58,7 @@ import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
 import com.vistony.salesforce.ListenerBackPress;
@@ -73,11 +74,6 @@ import java.util.Locale;
 
 import static com.vistony.salesforce.View.OrdenVentaDetalleView.ActualizarResumenMontos;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link OrdenVentaCabeceraView#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class OrdenVentaCabeceraView extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -158,7 +154,7 @@ public class OrdenVentaCabeceraView extends Fragment {
 
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
-        //ArrayList<String> Listado = new ArrayList<String>();
+
         Bundle b = new Bundle();
         ArrayList<ListaClienteCabeceraEntity> Lista = (ArrayList<ListaClienteCabeceraEntity>) objeto;
         b.putSerializable(TAG_1,Lista);
@@ -937,17 +933,16 @@ public class OrdenVentaCabeceraView extends Fragment {
             listaOrdenVentaCabeceraEntity.orden_cabecera_total_gal_acumulado=""+totalSalesOrder.getGalones();
             listaOrdenVentaCabeceraEntity.orden_cabecera_descuentocontado=cantidaddescuento;
 
-            formulasController.RegistraVisita(
-                    codigocliente,
-                    Listado.get(i).getDomembarque_id(),
-                    Listado.get(i).getZona_id(),
-                    "01",
-                    "01-MOTIVO 01",
-                    "Registro Pedido",
-                    getActivity(),
-                    String.valueOf(latitude)  ,
-                    String.valueOf(longitude)
-            );
+            VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
+            visita.setCardCode(codigocliente);
+            visita.setAddress(Listado.get(i).getDomembarque_id());
+            visita.setTerritory(Listado.get(i).getZona_id());
+            visita.setType("1");
+            visita.setObservation("Se genero un pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id());
+            visita.setLatitude(""+latitude);
+            visita.setLongitude(""+longitude);
+
+            formulasController.RegistraVisita(visita,getActivity());
 
         }
         listaOrdenVentaCabeceraEntities.add(listaOrdenVentaCabeceraEntity);

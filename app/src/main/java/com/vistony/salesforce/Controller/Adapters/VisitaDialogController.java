@@ -22,7 +22,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
+import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
+import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
@@ -99,34 +101,28 @@ public class VisitaDialogController extends DialogFragment {
             }
         });
 
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               if(textDescargo.getText().length()>0
-                       //&& textMotivo.getText().length()>0
-               ){
+        dialogButton.setOnClickListener(v -> {
+           if(textDescargo.getText().length()>0){
 
-                   FormulasController formulasController=new FormulasController(getContext());
-                   formulasController.RegistraVisita(
-                           cliente_id,
-                           direccion_id,
-                           zona_id,
-                           "03",
-                           spn_motivo_visita.getSelectedItem().toString(),
-                           textDescargo.getText().toString(),
-                           getActivity(),
-                           String.valueOf(latitude),
-                           String.valueOf(longitude)
-                   );
+               FormulasController formulasController=new FormulasController(getContext());
 
+               VisitaSQLiteEntity visitaNativa=new VisitaSQLiteEntity();
 
-                    Toast.makeText(getContext(), "Visita registrada...", Toast.LENGTH_SHORT).show();
+               visitaNativa.setCardCode(cliente_id);
+               visitaNativa.setAddress(direccion_id);
+               visitaNativa.setTerritory(zona_id);
+               visitaNativa.setType(""+(spn_motivo_visita.getSelectedItemPosition()+1));
+               visitaNativa.setObservation(textDescargo.getText().toString());
+               visitaNativa.setLatitude(""+latitude);
+               visitaNativa.setLongitude(""+longitude);
 
+               formulasController.RegistraVisita(visitaNativa,getActivity());
 
-                    dialog.dismiss();
-                }else{
-                    Toast.makeText(getContext(), "En necesario que llenen todos los CAMPOS!", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(getContext(), "Visita registrada...", Toast.LENGTH_SHORT).show();
+
+                dialog.dismiss();
+            }else{
+               textDescargo.setError("Es necesario llenar este campo");
             }
         });
 

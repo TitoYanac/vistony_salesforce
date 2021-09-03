@@ -36,7 +36,7 @@ public class OrdenVentaRepository extends ViewModel {
         sendSalesOrder(orderId,context, new SalesOrderCallback(){
             @Override
             public void onResponseSap(SalesOrderEntityResponse data) {
-                //Solo devolveremos uno, el envio masivo es trasnaprente
+                //Solo devolveremos uno, el envio masivo es transparente
                 if(data.getSalesOrderEntity().get(0).getDocNum()==null){
                     if(data.getSalesOrderEntity().get(0).getMessage().equals("Documento creado con flujo de aprobaciÃ³n")){
                         temp.setValue(data.getSalesOrderEntity().get(0).getMessage());
@@ -47,6 +47,14 @@ public class OrdenVentaRepository extends ViewModel {
                     temp.setValue("La orden de venta "+data.getSalesOrderEntity().get(0).getDocNum()+", fue registrada con éxito");
                 }
             }
+
+            /*
+            * linea de credito exece 0.2
+            * por centjae de desceunto 0.2
+            *  si la cantidad de dias e smayor a 5   =>0.2
+            *
+            * 0
+            * */
 
             @Override
             public void onResponseErrorSap(String response) {
@@ -104,9 +112,8 @@ public class OrdenVentaRepository extends ViewModel {
             listSalesOrders=ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
 
             if(listSalesOrders!=null && listSalesOrders.size()>0) {
-                for (int z = 0; z < listSalesOrders.size(); z++) {
-                    String ordenVentaId = listSalesOrders.get(z);
-                    json = json + EnviarNubeOV(ordenVentaId, context);
+                for (int i = 0; i < listSalesOrders.size(); i++) {
+                    json = json + EnviarNubeOV(/*OrdenVentaId*/listSalesOrders.get(i), context);
                 }
 
             }

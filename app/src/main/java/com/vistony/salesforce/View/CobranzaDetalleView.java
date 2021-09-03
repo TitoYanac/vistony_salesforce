@@ -68,6 +68,7 @@ import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
+import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -1252,19 +1253,16 @@ public class CobranzaDetalleView extends Fragment {
 
             }
 
-            formulasController.RegistraVisita(
-                    cliente_id_visita,
-                    domembarque_id_visita,
-                    zona_id_visita,
-                    "02",
-                    "02-MOTIVO 02",
-                    "Registro Cobranza",
-                    getActivity(),
-                    String.valueOf(latitude),
-                    String.valueOf(longitude)
-            );
+            VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
+            visita.setCardCode(cliente_id_visita);
+            visita.setAddress(domembarque_id_visita);
+            visita.setTerritory(zona_id_visita);
+            visita.setType("2");
+            visita.setObservation("Se genero una cobranza al documento "+Lista.get(i).getNrodocumento());
+            visita.setLatitude(""+latitude);
+            visita.setLongitude(""+longitude);
 
-            Log.e("REOS","DomEmbarque_ID: "+Lista.get(i).getDomembarque());
+            formulasController.RegistraVisita(visita,getActivity());
 
         }
 
@@ -1417,6 +1415,8 @@ public class CobranzaDetalleView extends Fragment {
                     SesionEntity.pagodirecto);
         }
 
+        /*GENERAR UN DEPOSITO GENERA UNA VISITA AL CLIENTE?????? */
+        /*
         formulasController.RegistraVisita(
                 cliente_id_visita,
                 domembarque_id_visita,
@@ -1427,7 +1427,8 @@ public class CobranzaDetalleView extends Fragment {
                 getActivity(),
                 String.valueOf(latitude),
                 String.valueOf(longitude)
-        );
+        );*/
+
         chk_bancarizado.setFocusable(false);
         chk_bancarizado.setClickable(false);
         return resultado;

@@ -1,14 +1,14 @@
 package com.vistony.salesforce.Entity;
 
-public class ApprovalRequests {
-    private String ApprovalTemplatesID;
+public class ApprovalRequest {
+    private int ApprovalTemplatesID;
     private String Remarks;
 
-    public String getApprovalTemplatesID() {
+    public int getApprovalTemplatesID() {
         return ApprovalTemplatesID;
     }
 
-    public void setApprovalTemplatesID(String approvalTemplatesID) {
+    public void setApprovalTemplatesID(int approvalTemplatesID) {
         ApprovalTemplatesID = approvalTemplatesID;
     }
 

@@ -1,9 +1,6 @@
 package com.vistony.salesforce.Controller.Utilitario;
 
-import android.app.Activity;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -29,7 +26,7 @@ import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
-import com.vistony.salesforce.Entity.ApprovalRequests;
+import com.vistony.salesforce.Entity.ApprovalRequest;
 import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.DocumentLine;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -312,16 +309,14 @@ public class FormulasController {
         return CalculoPromocion;
     }
 
-    public void RegistrarPedidoenBD (
-            ArrayList<ListaOrdenVentaCabeceraEntity> listaOrdenVentaCabeceraEntities,
-            ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity)
-    {
+    public void RegistrarPedidoenBD (ArrayList<ListaOrdenVentaCabeceraEntity> listaOrdenVentaCabeceraEntities,ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity) {
 
 
         String OrdenVenta_id="",impuesto_id="",producto="",almacen_id="";
         int cantidadlistaOrdenVentaDetallepromocion=0;
-        for(int i=0;i<listaOrdenVentaCabeceraEntities.size();i++)
-        {
+
+        for(int i=0;i<listaOrdenVentaCabeceraEntities.size();i++){
+
             OrdenVenta_id=listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_id();
             impuesto_id=listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_impuesto_id();
             almacen_id=listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_almacen_id();
@@ -621,45 +616,73 @@ public class FormulasController {
         return validacion;
     }
 
+    private ApprovalRequest addNodoApproval(final int code,final String message){
+        ApprovalRequest requestDsct=new ApprovalRequest();
+
+        requestDsct.setApprovalTemplatesID(code);
+        requestDsct.setRemarks(message);
+        return requestDsct;
+    }
+
     public String GenerayConvierteaJSONOV (String ordenventa_id,Context context){
 
         String cadenaJSON="";
         OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(context);
         OrdenVentaDetallePromocionSQLiteDao ordenVentaDetallePromocionSQLiteDao=new OrdenVentaDetallePromocionSQLiteDao(context);
-        ArrayList<OrdenVentaCabeceraSQLiteEntity> listaordenVentaCabeceraSQLiteEntity=new ArrayList<>();
+
         ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaordenVentaDetalleSQLiteEntity=new ArrayList<>();
-        DocumentHeader documentHeader =null;
         ArrayList<DocumentLine> listadoDocumentLines =new ArrayList<>();
 
-        DocumentLine documentLine;
-        listaordenVentaCabeceraSQLiteEntity= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
-        listaordenVentaDetalleSQLiteEntity=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
+        /**OBTIENE TODAS LAS ORDENES DE VENTA CON EL ID**/
+        //SOLO DEVOVLERA LA POSICION UNO POR QUE EL ID SOLO PERTENECE A UN OBJETO NO A UNA LISTA DE OBJETOS
+        OrdenVentaCabeceraSQLiteEntity ovCabecera= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id).get(0);
+        /**FIN**/
 
+        DocumentHeader documentHeader=new DocumentHeader();
         Gson gson=new Gson();
+        DocumentLine documentLine;
 
-        for(int i=0;i<listaordenVentaCabeceraSQLiteEntity.size();i++){
+        documentHeader.setCardCode(ovCabecera.getCliente_id());
+        documentHeader.setComments(ovCabecera.getComentario());
+        documentHeader.setDocCurrency(ovCabecera.getMoneda_id());
+        documentHeader.setDocDate(Convertirfechahoraafechanumerica(ovCabecera.getFecharegistro()));
+        documentHeader.setDocDueDate(Convertirfechahoraafechanumerica(ovCabecera.getFecharegistro()));
+        documentHeader.setDocType(ovCabecera.getDocType());
+        documentHeader.setU_VIS_SalesOrderID(ovCabecera.getOrdenventa_id());
+        documentHeader.setDocumentsOwner(SesionEntity.documentsowner);
+        documentHeader.setFederalTaxID(ovCabecera.getRucdni());
+        documentHeader.setPaymentGroupCode(ovCabecera.getTerminopago_id());
+        documentHeader.setSalesPersonCode(SesionEntity.fuerzatrabajo_id);
+        documentHeader.setPayToCode(ovCabecera.getDomembarque_id());
+        documentHeader.setShipToCode(ovCabecera.getDomembarque_id());
 
-            documentHeader =new DocumentHeader();
+        ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO/////////ALTO RIESGO ASUMIDO/////////
+        List<ApprovalRequest> attrFlag=new ArrayList<ApprovalRequest>();
 
-            documentHeader.setCardCode(listaordenVentaCabeceraSQLiteEntity.get(i).getCliente_id());
-            documentHeader.setComments(listaordenVentaCabeceraSQLiteEntity.get(i).getComentario());
-            documentHeader.setDocCurrency(listaordenVentaCabeceraSQLiteEntity.get(i).getMoneda_id());
-            documentHeader.setDocDate(Convertirfechahoraafechanumerica(listaordenVentaCabeceraSQLiteEntity.get(i).getFecharegistro()));
-            documentHeader.setDocDueDate(Convertirfechahoraafechanumerica(listaordenVentaCabeceraSQLiteEntity.get(i).getFecharegistro()));
-            documentHeader.setDocType(listaordenVentaCabeceraSQLiteEntity.get(i).getDocType());
-            documentHeader.setU_VIS_SalesOrderID(listaordenVentaCabeceraSQLiteEntity.get(i).getOrdenventa_id());
-            documentHeader.setDocumentsOwner(SesionEntity.documentsowner);
-            documentHeader.setFederalTaxID(listaordenVentaCabeceraSQLiteEntity.get(i).getRucdni());
-            documentHeader.setPaymentGroupCode(listaordenVentaCabeceraSQLiteEntity.get(i).getTerminopago_id());
-            documentHeader.setSalesPersonCode(SesionEntity.fuerzatrabajo_id);
-
-            documentHeader.setPayToCode(listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id());
-            documentHeader.setShipToCode(listaordenVentaCabeceraSQLiteEntity.get(i).getDomembarque_id());
-            documentHeader.setDocumentLines(null);
+        if(ovCabecera.getExcede_lineacredito().equals("1")){
+            ApprovalRequest nodo= addNodoApproval(6,"NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO");
+           attrFlag.add(nodo);
         }
 
-        for(int j=0;j<listaordenVentaDetalleSQLiteEntity.size();j++)
-        {
+        if(Integer.parseInt(ovCabecera.getDueDays())>5){
+            ApprovalRequest nodo= addNodoApproval(4,"NO CUMPLE CON LA VALIDACIÓN DE DOCUMENTOS VENCIDOS");
+            attrFlag.add(nodo);
+        }
+
+        if(attrFlag.size()>0){
+            /******************/
+            //Cuando cae en validaciones se envia 0.2 si o si, el  setApprovalTemplatesIDidentifica el tipo de validacion
+            documentHeader.setDiscountPercent("0.2");
+            /******************/
+        }
+
+        documentHeader.setDocument_ApprovalRequests(attrFlag);
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        listaordenVentaDetalleSQLiteEntity=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
+        for(int j=0;j<listaordenVentaDetalleSQLiteEntity.size();j++){
             String taxOnly="",taxCode="";
 
 
@@ -687,20 +710,7 @@ public class FormulasController {
 
             listadoDocumentLines.add(documentLine);
         }
-
-///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////////////////
         documentHeader.setDocumentLines(listadoDocumentLines);
-
-        ApprovalRequests requestDsct=new ApprovalRequests();
-        requestDsct.setApprovalTemplatesID("5");
-        requestDsct.setRemarks("Aprobar por favor");
-
-        List<ApprovalRequests> attrFlag=new ArrayList<ApprovalRequests>();
-        attrFlag.add(requestDsct);
-
-        documentHeader.setDocument_ApprovalRequests(attrFlag);
-        documentHeader.setDiscountPercent("0.2");
-        ////////////////////////////////////////////////////////////////////////////////////////////
 
         cadenaJSON=gson.toJson(documentHeader);
         return cadenaJSON;
@@ -1058,144 +1068,73 @@ public class FormulasController {
             Log.e("REOS",String.valueOf(e));
             resultado=0;
         }
-        Log.e("REOS","RegistraRutaVendedor "+String.valueOf(listaClienteCabeceraEntities.size()) );
-        Log.e("REOS","RegistraRutaVendedor "+String.valueOf(resultado) );
+
         return resultado;
     }
 
-    public void RegistraVisita(String cliente_id, String direccion_id, String zona_id, String tipo, String motivo, String observacion, Context context, String latitud, String longitud)
-    {
+    public void RegistraVisita(VisitaSQLiteEntity visita, Context context) {
         visitaRepository = new ViewModelProvider((ViewModelStoreOwner) context).get(VisitaRepository.class);
 
-        SimpleDateFormat dateFormatFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         SimpleDateFormat dateFormathora = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
         SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String[] motivos = motivo.split("-");
-        String motivos1,motivos2;
-        motivos1=motivos[0];
-        motivos2=motivos[1];
+
         Date date = new Date();
 
-        VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
+
+
         visita.setCompania_id(SesionEntity.compania_id);
-        visita.setCardCode(cliente_id);
-        visita.setAddress(direccion_id);
         visita.setDate(FormatFecha.format(date));
         visita.setHour(dateFormathora.format(date));
-        visita.setTerritory(zona_id);
         visita.setSlpCode(SesionEntity.fuerzatrabajo_id);
         visita.setUserId(SesionEntity.usuario_id);
-        //visita.setTipo("03");
-        visita.setType(tipo);
-        //visita.setMotivo(spn_motivo_visita.getSelectedItem().toString());
-        visita.setMotive(motivos1);
-        //visita.setObservacion(textDescargo.getText().toString());
-        visita.setObservation(observacion);
         visita.setChkenviado("1");
         visita.setChkrecibido("0");
-        visita.setLatitude(latitud);
-        visita.setLongitude(longitud);
 
-        VisitaSQLite visitaSQLite =new VisitaSQLite(context);
+        VisitaSQLite visitaSQLite = new VisitaSQLite(context);
         visitaSQLite.InsertaVisita(visita);
 
-        RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(context);
+        RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(context);
 
-
-        if(tipo.equals("01"))
-        {
-            rutaVendedorSQLiteDao.ActualizaChkPedidoRutaVendedor(
-                    cliente_id,
-                    direccion_id,
-                    SesionEntity.compania_id,
-                    String.valueOf(FormatFecha.format(date))
-            );
-        }
-        else if(tipo.equals("02"))
-        {
-            rutaVendedorSQLiteDao.ActualizaChkCobranzaRutaVendedor(
-                    cliente_id,
-                    direccion_id,
-                    SesionEntity.compania_id,
-                    String.valueOf(FormatFecha.format(date))
-            );
-        }
-        else if(tipo.equals("03"))
-        {
-            rutaVendedorSQLiteDao.ActualizaVisitaRutaVendedor(
-                    cliente_id,
-                    direccion_id,
-                    SesionEntity.compania_id,
-                    String.valueOf(FormatFecha.format(date))
-            );
+        switch(visita.getType()){
+            case "1":
+                rutaVendedorSQLiteDao.ActualizaChkPedidoRutaVendedor(
+                        visita.getCardCode(),
+                        visita.getAddress(),
+                        SesionEntity.compania_id,
+                        String.valueOf(FormatFecha.format(date))
+                );
+                break;
+            case "2":
+                rutaVendedorSQLiteDao.ActualizaChkCobranzaRutaVendedor(
+                        visita.getCardCode(),
+                        visita.getAddress(),
+                        SesionEntity.compania_id,
+                        String.valueOf(FormatFecha.format(date))
+                );
+                break;
+            default:
+                rutaVendedorSQLiteDao.ActualizaVisitaRutaVendedor(
+                        visita.getCardCode(),
+                        visita.getAddress(),
+                        SesionEntity.compania_id,
+                        String.valueOf(FormatFecha.format(date))
+                );
+                break;
         }
 
         /*********************************/
-        /********************************* ENVIO DE VISITAS *********************************/
+        /********************************* REENVIO DE VISITAS *********************************/
         /*********************************/
-        visitaRepository.PostVisitaWS(visita,context).observe((LifecycleOwner) context, data -> {
-            Log.e("Jepicame","=>"+data);
+        visitaRepository.visitResend(context).observe((LifecycleOwner) context, data -> {
+            Log.e("Jepicame", "=>" + data);
         });
 
-        //new ReenvioDeVisitas(context,visita).execute();
 
         /*********************************/
         /*********************************/
         /*********************************/
-        /*
-        ConnectivityManager manager= (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-
-        if (networkInfo != null) {
-            if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-
-
-            }
-        }
-        */
     }
 
-/*
-    private static class ReenvioDeVisitas extends AsyncTask<Void, Void, Object> {
-        private Context context;
-        private VisitaSQLiteEntity visitaSQLiteEntity;
-
-        public ReenvioDeVisitas(Context context,VisitaSQLiteEntity visitaSQLiteEntity) {
-            this.context = context;
-            this.visitaSQLiteEntity=visitaSQLiteEntity;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-
-            ArrayList<VisitaSQLiteEntity> listaVisitaSQLiteEntity = new ArrayList<>();
-            String resultado="0";
-
-            VisitaRepository visitaRepository = new VisitaRepository();
-
-            resultado= visitaRepository.PostVisitaWS
-                        (visitaSQLiteEntity
-                      );
-            return resultado;
-            }
-            protected void onPostExecute(Object result){
-                String resultado=(String) result;
-                VisitaSQLite visitaSQLite =new VisitaSQLite(context);
-                if(resultado.equals("1")){
-                    visitaSQLite.ActualizaEstadoWSVisita(
-                            visitaSQLiteEntity.getCardCode(),
-                            visitaSQLiteEntity.getAddress(),
-                            visitaSQLiteEntity.getCompania_id(),
-                            visitaSQLiteEntity.getSlpCode(),
-                            visitaSQLiteEntity.getDate(),
-                            visitaSQLiteEntity.getHour(),
-                            visitaSQLiteEntity.getType(),
-                            visitaSQLiteEntity.getMotive()
-                    );
-                }
-            }
-        }
-*/
     public ArrayList<CobranzaDetalleSQLiteEntity> ObtenerListaConvertidaCobranzaDetalleSQLite (Context context,String Imei,String Compania_id,String usuario_id,String Recibo) {
         ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity=new ArrayList<>();
         ArrayList<ListaHistoricoCobranzaEntity> ListaHistoricoCobranzaEntity=new ArrayList<>();

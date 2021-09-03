@@ -6,7 +6,7 @@ import java.util.List;
 
 /*Mismos attr fuerzaTrabajo con objtenerCliente*/
 
-public class CustomersEntity {
+public class ClienteEntity {
 
     @SerializedName("CardCode")
     private String clienteId;
@@ -61,6 +61,9 @@ public class CustomersEntity {
 
     @SerializedName("PriceList")
     private String lista_precio;
+
+    @SerializedName("DueDays")
+    private String diasVencidos;
 
     @SerializedName("Invoices")
     private List<InvoicesEntity> invoices;
@@ -139,31 +142,6 @@ public class CustomersEntity {
     public void setLinea_credito(String linea_credito) {
         this.linea_credito = linea_credito;
     }
-
-/*
-    public String getImpuesto_id() {
-        return impuesto_id;
-    }
-
-    public void setImpuesto_id(String impuesto_id) {
-        this.impuesto_id = impuesto_id;
-    }
-
-    public String getImpuesto() {
-        return impuesto;
-    }
-
-    public void setImpuesto(String impuesto) {
-        this.impuesto = impuesto;
-    }
-
-    public String getTipocambio() {
-        return tipocambio;
-    }
-
-    public void setTipocambio(String tipocambio) {
-        this.tipocambio = tipocambio;
-    }*/
 
     public String getClienteId() {
         return clienteId;
@@ -259,5 +237,13 @@ public class CustomersEntity {
 
     public void setUbigeoId(String ubigeoId) {
         this.ubigeoId = ubigeoId;
+    }
+
+    public String getDiasVencidos() {
+        return diasVencidos;
+    }
+
+    public void setDiasVencidos(String diasVencidos) {
+        this.diasVencidos = diasVencidos;
     }
 }

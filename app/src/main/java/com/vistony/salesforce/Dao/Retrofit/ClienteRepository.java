@@ -45,37 +45,37 @@ public class ClienteRepository extends ViewModel {
                 if(response.isSuccessful()) {
                     ClienteEntityResponse clienteEntityResponse=response.body();
 
-                    for(int i = 0; i<clienteEntityResponse.getCustomersEntity().size(); i++){
+                    for(int i = 0; i<clienteEntityResponse.getClienteEntity().size(); i++){
 
                         ClienteSQLiteEntity ObjCliente = new ClienteSQLiteEntity();
-                        ObjCliente.setCliente_id (clienteEntityResponse.getCustomersEntity().get(i).getClienteId());
-                        ObjCliente.setDomembarque_id (clienteEntityResponse.getCustomersEntity().get(i).getDomicilioEmbarque());
+                        ObjCliente.setCliente_id (clienteEntityResponse.getClienteEntity().get(i).getClienteId());
+                        ObjCliente.setDomembarque_id (clienteEntityResponse.getClienteEntity().get(i).getDomicilioEmbarque());
                         ObjCliente.setCompania_id (SesionEntity.compania_id);
-                        ObjCliente.setNombrecliente (clienteEntityResponse.getCustomersEntity().get(i).getNombre());
-                        ObjCliente.setDireccion (clienteEntityResponse.getCustomersEntity().get(i).getDireccion());
-                        ObjCliente.setOrden(clienteEntityResponse.getCustomersEntity().get(i).getOrdenVisita());
-                        ObjCliente.setZona_id(clienteEntityResponse.getCustomersEntity().get(i).getZonaId());
-                        ObjCliente.setZona(clienteEntityResponse.getCustomersEntity().get(i).getZona());
-                        ObjCliente.setMoneda(clienteEntityResponse.getCustomersEntity().get(i).getMoneda());
-                        ObjCliente.setTelefonofijo(clienteEntityResponse.getCustomersEntity().get(i).getTelefoFijo());
-                        ObjCliente.setTelefonomovil(clienteEntityResponse.getCustomersEntity().get(i).getTelefonoMovil());
-                        ObjCliente.setCorreo(clienteEntityResponse.getCustomersEntity().get(i).getCorreo());
-                        ObjCliente.setUbigeo_id(clienteEntityResponse.getCustomersEntity().get(i).getUbigeoId());
-                        ObjCliente.setRucdni(clienteEntityResponse.getCustomersEntity().get(i).getLicTradNum());
+                        ObjCliente.setNombrecliente (clienteEntityResponse.getClienteEntity().get(i).getNombre());
+                        ObjCliente.setDireccion (clienteEntityResponse.getClienteEntity().get(i).getDireccion());
+                        ObjCliente.setOrden(clienteEntityResponse.getClienteEntity().get(i).getOrdenVisita());
+                        ObjCliente.setZona_id(clienteEntityResponse.getClienteEntity().get(i).getZonaId());
+                        ObjCliente.setZona(clienteEntityResponse.getClienteEntity().get(i).getZona());
+                        ObjCliente.setMoneda(clienteEntityResponse.getClienteEntity().get(i).getMoneda());
+                        ObjCliente.setTelefonofijo(clienteEntityResponse.getClienteEntity().get(i).getTelefoFijo());
+                        ObjCliente.setTelefonomovil(clienteEntityResponse.getClienteEntity().get(i).getTelefonoMovil());
+                        ObjCliente.setCorreo(clienteEntityResponse.getClienteEntity().get(i).getCorreo());
+                        ObjCliente.setUbigeo_id(clienteEntityResponse.getClienteEntity().get(i).getUbigeoId());
+                        ObjCliente.setRucdni(clienteEntityResponse.getClienteEntity().get(i).getLicTradNum());
 
                         //Documentos
-                        if(clienteEntityResponse.getCustomersEntity().get(i).getInvoices() == null || clienteEntityResponse.getCustomersEntity().get(i).getInvoices().size()==0){
+                        if(clienteEntityResponse.getClienteEntity().get(i).getInvoices() == null || clienteEntityResponse.getClienteEntity().get(i).getInvoices().size()==0){
                             ObjCliente.setListInvoice(null);
                         }else{
-                            List<InvoicesEntity> listaDocumentos=clienteEntityResponse.getCustomersEntity().get(i).getInvoices();
+                            List<InvoicesEntity> listaDocumentos=clienteEntityResponse.getClienteEntity().get(i).getInvoices();
                             ObjCliente.setListInvoice(listaDocumentos);
                         }
 
                         //Direcciones
-                        if(clienteEntityResponse.getCustomersEntity().get(i).getAddress() == null || clienteEntityResponse.getCustomersEntity().get(i).getAddress().size()==0){
+                        if(clienteEntityResponse.getClienteEntity().get(i).getAddress() == null || clienteEntityResponse.getClienteEntity().get(i).getAddress().size()==0){
                             ObjCliente.setListAddress(null);
                         }else{
-                            List<AddressEntity> listaDirecciones=clienteEntityResponse.getCustomersEntity().get(i).getAddress();
+                            List<AddressEntity> listaDirecciones=clienteEntityResponse.getClienteEntity().get(i).getAddress();
 
                             for(AddressEntity direccion:listaDirecciones){
                                 if(direccion.getFuerzatrabajoid().equals(SesionEntity.fuerzatrabajo_id)){
@@ -90,13 +90,13 @@ public class ClienteRepository extends ViewModel {
                             ObjCliente.setListAddress(listaDirecciones);
                         }
 
-                        ObjCliente.setListInvoice(clienteEntityResponse.getCustomersEntity().get(i).getInvoices());
-                        ObjCliente.setCategoria(clienteEntityResponse.getCustomersEntity().get(i).getCategoria());
-                        ObjCliente.setLinea_credito(clienteEntityResponse.getCustomersEntity().get(i).getLinea_credito());
-                        ObjCliente.setLinea_credito_usado(clienteEntityResponse.getCustomersEntity().get(i).getlinea_credito_usado());
-                        ObjCliente.setTerminopago_id(clienteEntityResponse.getCustomersEntity().get(i).getTerminoPago_id());
-                        ObjCliente.setLista_precio(clienteEntityResponse.getCustomersEntity().get(i).getLista_precio());
-
+                        ObjCliente.setListInvoice(clienteEntityResponse.getClienteEntity().get(i).getInvoices());
+                        ObjCliente.setCategoria(clienteEntityResponse.getClienteEntity().get(i).getCategoria());
+                        ObjCliente.setLinea_credito(clienteEntityResponse.getClienteEntity().get(i).getLinea_credito());
+                        ObjCliente.setLinea_credito_usado(clienteEntityResponse.getClienteEntity().get(i).getlinea_credito_usado());
+                        ObjCliente.setTerminopago_id(clienteEntityResponse.getClienteEntity().get(i).getTerminoPago_id());
+                        ObjCliente.setLista_precio(clienteEntityResponse.getClienteEntity().get(i).getLista_precio());
+                        ObjCliente.setDueDays(clienteEntityResponse.getClienteEntity().get(i).getDiasVencidos());
                         //la funcion addCustomer  debe darse aqui!
                         LCliente.add(ObjCliente);
                     }
@@ -114,7 +114,7 @@ public class ClienteRepository extends ViewModel {
             @Override
             public void onResponse(Call<ClienteEntityResponse> call, Response<ClienteEntityResponse> response) {
                 //ClienteSQliteDAO clienteSQliteDAO= new ClienteSQliteDAO(context);
-                if(response.isSuccessful() && response.body().getCustomersEntity().size()>0){
+                if(response.isSuccessful() && response.body().getClienteEntity().size()>0){
                     /*usuarioSQLiteDao.LimpiarTablaUsuario();
                     for (int i = 0; i < response.body().getClienteEntity().size(); i++){
 
@@ -184,7 +184,8 @@ public class ClienteRepository extends ViewModel {
                 Lista.get(i).getLinea_credito(),
                 Lista.get(i).getLinea_credito_usado(),
                 Lista.get(i).getTerminopago_id(),
-                Lista.get(i).getLista_precio()
+                Lista.get(i).getLista_precio(),
+                    Lista.get(i).getDueDays()
             );
         }
     }

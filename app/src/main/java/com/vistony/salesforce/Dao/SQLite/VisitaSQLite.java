@@ -51,7 +51,6 @@ public class VisitaSQLite {
         registro.put("fuerzatrabajo_id",visita.getSlpCode());
         registro.put("usuario_id",visita.getUserId());
         registro.put("tipo",visita.getType());
-        registro.put("motivo",visita.getMotive());
         registro.put("observacion",visita.getObservation());
         registro.put("chkenviado",visita.getChkenviado());
         registro.put("chkrecibido",visita.getChkrecibido());
@@ -71,35 +70,37 @@ public class VisitaSQLite {
 
     public ArrayList<VisitaSQLiteEntity> ObtenerVisitas (){
         listaVisitaSQLiteEntity = new ArrayList<VisitaSQLiteEntity>();
-        abrir();
-        Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud FROM VISITA WHERE chkrecibido='0' ",null);
+        try {
+            abrir();
+            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud FROM VISITA WHERE chkrecibido='0' ", null);
 
-        if (fila.moveToFirst()) {
-            do {
-                VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
+            if (fila.moveToFirst()) {
+                do {
+                    VisitaSQLiteEntity visita = new VisitaSQLiteEntity();
 
-                visita.setIdVisit(fila.getString(fila.getColumnIndex("id")));
-                //visita.setCompania_id(fila.getString(1));
-                visita.setCardCode(fila.getString(fila.getColumnIndex("cliente_id")));
-                visita.setAddress(fila.getString(fila.getColumnIndex("direccion_id")));
-                visita.setDate(fila.getString(fila.getColumnIndex("fecha_registro")));
-                visita.setHour(fila.getString(fila.getColumnIndex("hora_registro")));
-                visita.setTerritory(fila.getString(fila.getColumnIndex("zona_id")));
-                visita.setSlpCode(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
-                visita.setUserId(fila.getString(fila.getColumnIndex("usuario_id")));
-                visita.setType(fila.getString(fila.getColumnIndex("tipo")));
-                visita.setMotive(fila.getString(fila.getColumnIndex("motivo")));
-                visita.setObservation(fila.getString(fila.getColumnIndex("observacion")));
-                //visita.setChkenviado(fila.getString(11));
-                //visita.setChkrecibido(fila.getString(12));
-                visita.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
-                visita.setLongitude(fila.getString(fila.getColumnIndex("longitud")));
+                    visita.setIdVisit(fila.getString(fila.getColumnIndex("id")));
+                    visita.setCardCode(fila.getString(fila.getColumnIndex("cliente_id")));
+                    visita.setAddress(fila.getString(fila.getColumnIndex("direccion_id")));
+                    visita.setDate(fila.getString(fila.getColumnIndex("fecha_registro")));
+                    visita.setHour(fila.getString(fila.getColumnIndex("hora_registro")));
+                    visita.setTerritory(fila.getString(fila.getColumnIndex("zona_id")));
+                    visita.setSlpCode(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+                    visita.setUserId(fila.getString(fila.getColumnIndex("usuario_id")));
+                    visita.setType(fila.getString(fila.getColumnIndex("tipo")));
+                    visita.setObservation(fila.getString(fila.getColumnIndex("observacion")));
+                    visita.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
+                    visita.setLongitude(fila.getString(fila.getColumnIndex("longitud")));
 
-                listaVisitaSQLiteEntity.add(visita);
-            } while (fila.moveToNext());
+                    listaVisitaSQLiteEntity.add(visita);
+                } while (fila.moveToNext());
+            }
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }finally {
+            bd.close();
         }
 
-        bd.close();
         return listaVisitaSQLiteEntity;
     }
 
@@ -115,19 +116,23 @@ public class VisitaSQLite {
     }
 
     public boolean ActualizaEstadoWSVisita (VisitaEntity data){
-        int acum=0,count=0;
+        int status=0;
 
         try {
             abrir();
-            count=data.getVisitas().size();
 
             for(VisitaSQLiteEntity visita:data.getVisitas()){
 
-                ContentValues registro = new ContentValues();
-                registro.put("chkrecibido","1");
+                if(visita.getHaveError().equals("0")){
+                    ContentValues registro = new ContentValues();
+                    registro.put("chkrecibido","1");
+                    registro.put("chkenviado","1");
 
-                Integer resultado = bd.update("visita",registro,"id=?",new String[]{visita.getIdVisit()});
-                acum=acum+resultado;
+                    bd.update("visita",registro,"id=?",new String[]{visita.getIdVisit()});
+                }else{
+                    status=status+1;
+                }
+
             }
 
         }catch (Exception e){
@@ -136,10 +141,10 @@ public class VisitaSQLite {
             bd.close();
         }
 
-        if(acum==count){
-            return true;
-        }else{
+        if(status!=0){
             return false;
+        }else{
+            return true;
         }
     }
 }

@@ -61,7 +61,8 @@ public class ClienteSQlite
             String linea_credito,
             String linea_credito_usado,
             String terminopago_id,
-            String lista_precio){
+            String lista_precio,
+            String diasVencidos){
 
         abrir();
         ContentValues registro = new ContentValues();
@@ -86,6 +87,7 @@ public class ClienteSQlite
         registro.put("linea_credito_usado",linea_credito_usado);
         registro.put("terminopago_id",terminopago_id);
         registro.put("lista_precio",lista_precio);
+        registro.put("DueDays",diasVencidos);
 
         bd.insert("cliente",null,registro);
         bd.close();

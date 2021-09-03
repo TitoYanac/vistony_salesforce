@@ -80,38 +80,39 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/lbl_motivo_visita"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:background="@android:color/white"
                 android:clickable="false"
                 android:ems="6"
-                android:gravity="center_horizontal"
+                android:gravity="center_horizontal|center_vertical"
                 android:scrollbars="vertical"
-                android:text="MOTIVO:"
+                android:text="MOTIVO"
+                android:textAlignment="center"
                 android:textColor="#000000"
                 android:textSize="15dp"
-                android:textStyle="bold"
 
-                />
+                android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spn_motivo_visita"
-                android:layout_width="match_parent"
+                style="@android:style/Widget.Holo.Light.Spinner"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/border"
-                android:gravity="center_horizontal|center_vertical"
                 android:entries="@array/motivo_visita"
+                android:gravity="center_horizontal|center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="5dp"
-                android:textSize="18dp"
                 android:spinnerMode="dropdown"
-                style="@android:style/Widget.Holo.Light.Spinner"
-                />
+                android:textSize="18dp" />
         </LinearLayout>
             <EditText
                 android:id="@+id/et_observaciones_visita"
