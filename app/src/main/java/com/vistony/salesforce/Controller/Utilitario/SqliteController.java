@@ -4,23 +4,47 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class SQLiteController extends SQLiteOpenHelper
-{
-    private SQLiteDatabase db=null;
-    public  SQLiteController instance ;
-    public  Context context;
-    private static final String __DATABASE = "dbcobranzas";
-    private static final int __VERSION = 1;
+public class BuildDataBase extends SQLiteOpenHelper {
 
-    public SQLiteController(Context context)
-    {
-        super(context,__DATABASE,null,__VERSION);
+    private SQLiteDatabase db=null;
+    private BuildDataBase instance = null;
+    private  Context context;
+
+    private static final String DATABASE_NAME = "dbcobranzas";
+    private static final int VERSION = 1;
+
+
+    public BuildDataBase(Context context){
+        super(context,DATABASE_NAME,null,VERSION);
         if (instance == null){
             instance = this;
             instance.context = context;
             instance.db = instance.getWritableDatabase();
         }
     }
+
+    public void close(){
+        instance.close();
+    }
+
+    public SQLiteDatabase getDb() {
+        return db;
+    }
+
+    public void setDb(SQLiteDatabase db) {
+        this.db = db;
+    }
+
+
+/*
+    public static synchronized BuildDataBase getInstance(Context context){
+        if(instance == null){
+            instance = new BuildDataBase(context);
+        }
+        return instance;
+    }*/
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         //Sistema
@@ -67,18 +91,13 @@ public class SQLiteController extends SQLiteOpenHelper
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < __VERSION)
-        {
+        if (oldVersion < VERSION){
             deleteDatabase(context);
         }
     }
 
-    public  static void deleteDatabase(Context mContext)
-    {
-
+    public  static void deleteDatabase(Context mContext){
         mContext.deleteDatabase("dbcobranzas");
-        //mContext.deleteDatabase("dbcobranzas");
-
     }
 
 
