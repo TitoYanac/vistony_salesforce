@@ -103,6 +103,10 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
         args.putString(ARG_PARAM1, String.valueOf(param1));
         fragment.setArguments(args);
         String Fragment="RutaVendedorView";
+
+        Log.e("JEPICAMEE","=> newInstancia");
+
+
         String accion="inicioRutaVendedorView";
         String compuesto=Fragment+"-"+accion;
         mListener.onFragmentInteraction(compuesto,param1);
@@ -117,7 +121,11 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
                  args.putString(ARG_PARAM1, String.valueOf(param1));
                  fragment.setArguments(args);
                     String Fragment="RutaVendedorView";
-                    String accion="inicioRutaVendedorView";
+
+        Log.e("JEPICAMEE","=> newInstanciaMenu");
+
+
+        String accion="inicioRutaVendedorView";
                  String compuesto=Fragment+"-"+accion;
                 if(mListener!=null) {
                     mListener.onFragmentInteraction(compuesto, param1);

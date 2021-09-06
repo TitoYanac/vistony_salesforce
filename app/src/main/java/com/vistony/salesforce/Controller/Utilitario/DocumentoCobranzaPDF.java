@@ -46,11 +46,9 @@ import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
-public class DocumentPDFController extends AppCompatActivity {
+public class DocumentoCobranzaPDF extends AppCompatActivity {
 
-    private final static String NOMBRE_DIRECTORIO = "MiPdf";
-    private final static String NOMBRE_DOCUMENTO = "prueba.pdf";
-    private final static String ETIQUETA_ERROR = "ERROR";
+    private final static String NOMBRE_DIRECTORIO = "Cobranza";
 
 
     @Override
@@ -120,9 +118,7 @@ public class DocumentPDFController extends AppCompatActivity {
                 , 1120
                 //PageSize.ARCH_A
         );
-        Document documento = new Document(
-                pagina
-        );
+        Document documento = new Document(pagina);
 
         try {
 
@@ -138,17 +134,10 @@ public class DocumentPDFController extends AppCompatActivity {
             Bitmap bitmapqr = barcodeEncoder.encodeBitmap(encData, BarcodeFormat.QR_CODE, 400, 400);
 
             ByteArrayOutputStream streamqr = new ByteArrayOutputStream();
-            Log.e("JPCM","Error a comprimir");
 
             bitmapqr.compress(Bitmap.CompressFormat.PNG, 100, streamqr);
             Image imagenqr = Image.getInstance(streamqr.toByteArray());
             imagenqr.setAlignment(Element.ALIGN_CENTER);
-
-
-
-
-            //image.setImageBitmap(bitmap);
-
 
             File f = crearFichero(recibo+".pdf");
 
@@ -177,20 +166,7 @@ public class DocumentPDFController extends AppCompatActivity {
             // aplicacion.
             Bitmap bitmap=null;
 
-            if(SesionEntity.compania_id.equals("C001"))
-            {
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
-            }
-            else if(SesionEntity.compania_id.equals("C011")) {
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_bluker_negro);
-            }
-            else if(SesionEntity.compania_id.equals("C013"))
-            {
-                //bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.rofalab_negro_300_90);
-                bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo_rofalab_negro2);
-            }else{
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
-            }
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100 ,stream);
@@ -202,39 +178,13 @@ public class DocumentPDFController extends AppCompatActivity {
             tblcliente.setWidthPercentage(100);
             PdfPCell cellTable = null;
 
-            if(SesionEntity.compania_id.equals("C001") )
-            {
+
                 cellTable=new PdfPCell(new Phrase(
-                        "\n R.U.C N° 20102306598 " +
-                                "Mz. B1 Lt. 1 - Parque Industrial de Ancón - Acompia " +
-                                "Central: (01) 5521325 E-mail: ventas@vistony.com   " +
+                        "\n R.U.T N° 764114914 " +
+                                "Panamericana Norte 19434 - Bodega 2 - Lampa - Chile " +
+                                "Central: (56) 952285492 E-mail: ventas.chile@vistony.com" +
                                 " Web: www.vistony.com"+
                                 "",font3));
-            }else if(SesionEntity.compania_id.equals("C011"))
-            {
-                cellTable= new PdfPCell(new Phrase(
-                        "\n R.U.C N° 20536335448 - " +
-                                "Mz. B1 Lt. 1 - Parque Industrial de Ancón - Acompia (Km. 46.5) LIMA - ANCÓN - " +
-                                "Central: (01) 5521325"+
-                                "",font3));
-            }else if(SesionEntity.compania_id.equals("C013"))
-            {
-                cellTable= new PdfPCell(new Phrase(
-                        "\n R.U.C N° 20601500605 - " +
-                                "Oficina Principal: Mz. D Lt. 3 La Calichera (Altura Km 46 Pan.Norte) Ancon - Lima - " +
-                                "Telf: 993088798 E-mail: rofalab@tolbrin.com"+
-                                "",font3));
-            }
-
-            else
-                {
-                    cellTable=new PdfPCell(new Phrase(
-                            "\n R.U.C N° 20102306598 " +
-                                    "Mz. B1 Lt. 1 - Parque Industrial de Ancón - Acompia " +
-                                    "Central: (01) 5521325 E-mail: lubricantes@vistony.com   " +
-                                    " Web: www.vistony.com"+
-                                    "",font3));
-                }
 
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -295,35 +245,35 @@ public class DocumentPDFController extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Importe         :S/.",font4));
+            cell = new PdfPCell(new Phrase("Importe         :",font4));
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             cell.disableBorderSide(Rectangle.BOX);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase(importe,font4));
+            cell = new PdfPCell(new Phrase(Convert.currencyForView(importe),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Saldo            :S/.",font4));
+            cell = new PdfPCell(new Phrase("Saldo            :",font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase(saldo,font4 ));
+            cell = new PdfPCell(new Phrase(Convert.currencyForView(saldo),font4 ));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Cobrado       :S/.",font4));
+            cell = new PdfPCell(new Phrase("Cobrado       :",font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase(cobrado,font4 ));
+            cell = new PdfPCell(new Phrase(Convert.currencyForView(cobrado),font4 ));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Nuevo Saldo:S/.",font4));
+            cell = new PdfPCell(new Phrase("Nuevo Saldo:",font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase(nuevo_saldo,font4));
+            cell = new PdfPCell(new Phrase(Convert.currencyForView(nuevo_saldo),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
@@ -333,20 +283,35 @@ public class DocumentPDFController extends AppCompatActivity {
             documento.add(imagenqr);
 
         } catch (DocumentException e) {
-
-            Log.e(ETIQUETA_ERROR, e.getMessage());
-
+            e.printStackTrace();
         } catch (IOException e) {
-
-            Log.e(ETIQUETA_ERROR, e.getMessage());
-
-        } catch (Exception e)
-        {
-            Log.e("JPCM","capturado->"+ e);
-        }
-        finally {
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }finally {
             // Cerramos el documento.
             documento.close();
+
+            ///////////////////ABRIR PDF////////////////////////
+
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator
+                    +NOMBRE_DIRECTORIO+File.separator+recibo+".pdf");
+
+            Uri  excelPath = FileProvider.getUriForFile(context, context.getPackageName(), file);
+
+            Intent target = new Intent(Intent.ACTION_VIEW);
+            target.setDataAndType(excelPath,"application/pdf");
+            target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            try {
+                context.startActivity(target);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(context, "Es necesario que instales algun visor de PDF", Toast.LENGTH_SHORT).show();
+            }
+
+            ///////////////////////////////////////////////////
+
         }
     }
 

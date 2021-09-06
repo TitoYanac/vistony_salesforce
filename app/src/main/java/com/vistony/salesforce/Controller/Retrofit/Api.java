@@ -1,6 +1,7 @@
 package com.vistony.salesforce.Controller.Retrofit;
 
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CatalogoEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitaEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.AgenciaEntityResponse;
@@ -39,6 +40,7 @@ import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
@@ -91,8 +93,11 @@ public interface Api {
     Call<SalesOrderEntityResponse> sendOrder (@Url String url, @Body RequestBody params);
 
     //@FormUrlEncoded
-    @POST("Collections")
-    Call<Void> sendCollection(@Body RequestBody params);
+    @POST//("Collections")
+    Call<CobranzaDetalleEntity> sendCollection(@Url String url, @Body RequestBody params);
+
+    @PATCH
+    Call<CobranzaDetalleEntity> updateCollection(@Url String url, @Body RequestBody params);
 
     @GET
     Call<DocumentoDeudaEntityResponse> getDocumentoDeuda (@Url String url);
@@ -117,7 +122,7 @@ public interface Api {
     @GET
     Call<PromocionDetalleEntityResponse> getPromomocionDetalle (@Url String url);
 
-    @GET
+    @POST
     Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Url String url,@Query("imei") String imei,@Query("fecha") String fecha);
 
     @GET
@@ -125,9 +130,10 @@ public interface Api {
 
 
 
-    @FormUrlEncoded
+    //@FormUrlEncoded
     @POST
-    Call<Void> sendDeposit (@Url String url,@FieldMap HashMap<String, String> params);
+    Call<Void> sendDeposit (@Url String url,@Body RequestBody params);
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -234,12 +234,10 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
                 RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(getContext());
                 ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntityconnoruta=new ArrayList<>();
                 String chk_ruta="0";
-                //formulasController.RegistrarRutaVendedor(listaClienteCabeceraEntities,fecha,"0");
-                //Evalua si RutaVendedor ya tiene clientes
+
                 fecha =dateFormat.format(date);
 
-                if(clienteagregado)
-                {
+                if(clienteagregado){
                     formulasController.RegistrarRutaVendedor(listaConsClienteCabeceraEntities, fecha, chk_ruta);
                     clienteagregado=false;
                 }

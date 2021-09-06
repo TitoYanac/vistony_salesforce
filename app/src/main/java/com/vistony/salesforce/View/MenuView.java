@@ -51,7 +51,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.vistony.salesforce.BuildConfig;
-import com.vistony.salesforce.Controller.BixolonPrinterController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
@@ -113,11 +112,9 @@ public class MenuView extends AppCompatActivity
         BuscarClienteView.OnFragmentInteractionListener,
         RutaVendedorNoRutaView.OnFragmentInteractionListener,
         DireccionClienteView.OnFragmentInteractionListener,
-        HojaDespachoView.OnFragmentInteractionListener,
         HistoricoOrdenVentaView.OnFragmentInteractionListener,
         PromocionDetalleView.OnFragmentInteractionListener,
         ConsStockView.OnFragmentInteractionListener,
-        HistoricoOrdenVentaEstadoView.OnFragmentInteractionListener,
         PromocionCabeceraEditarDescuentoView.OnFragmentInteractionListener
 
 {
@@ -145,6 +142,7 @@ public class MenuView extends AppCompatActivity
     Fragment historicoOrdenVentaFragment;
     Fragment PromocionCabeceraFragment;
     Fragment PromocionDetalleFragment;
+
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
     private File file = new File(ruta_fotos);
@@ -152,17 +150,11 @@ public class MenuView extends AppCompatActivity
     FragmentManager fragmentManager;
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
-    SimpleDateFormat dateFormat;
-    Date date;
-    String fecha;
-    private static BixolonPrinterController bxlPrinter = null;
-    private static Fragment currentFragment;
     ArrayList<ConfiguracionSQLEntity> listaConfiguracionEntity;
     ArrayList<ConfiguracionSQLEntity> arraylistConfiguracionentity;
     String correlativo="";
     ConfiguracionSQLiteDao configuracionSQLiteDao;
     BluetoothAdapter bluetoothAdapter;
-    ConfigImpresoraView configImpresoraView;
     public static Context context;
     ImageView imv_compania_menu;
     public static  String indicador="0";
@@ -291,8 +283,6 @@ public class MenuView extends AppCompatActivity
             imv_compania_menu.setImageResource(R.mipmap.rofalab304x90_2);
         }
 
-        bxlPrinter = new BixolonPrinterController(this);
-
         //Manejo de Perfiles
         if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
         {
@@ -315,7 +305,7 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_formularios).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
@@ -353,13 +343,6 @@ public class MenuView extends AppCompatActivity
 
         String compuesto=Fragment+"-"+accion;
         onFragmentInteraction(compuesto,"");
-    }
-
-    private Fragment getCurrentFragment(){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        String fragmentTag = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName();
-        Fragment currentFragment = fragmentManager.findFragmentByTag(fragmentTag);
-        return currentFragment;
     }
 
     @Override
@@ -562,39 +545,10 @@ public class MenuView extends AppCompatActivity
             }
 
 
-            /*if(ListenerBackPress.getCurrentFragment().equals("FormDetalleCobranzaCliente")){
-                ListenerBackPress.setCurrentFragment("FormListaDeudaCliente");
-            }else if(ListenerBackPress.getCurrentFragment().equals("HistoricoDepositoViewCobranzasDetails")){
-                Log.e("jpcm","no hay anda mas atraz");
-                super.onBackPressed();
-            }else{
-                ListenerBackPress.setCurrentFragment(null);
-            }*/
-
         }
-        /*else{
-            if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")){
-                onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-            }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("redirectToDepositoItem1")){
-                onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-            }else if(ListenerBackPress.getTemporaIdentityFragment().equals("HistoricoDepositoViewCobranzasDetails")){
-                onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-            }else if(ListenerBackPress.getTemporaIdentityFragment().equals("ConsultaHistoricoCobranzaa")){
-                onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-            }else if(ListenerBackPress.getTemporaIdentityFragment().equals("FormParametrosView")){
-                onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-            }
-        }*/
-
-
 
     }
 
-    public static BixolonPrinterController getPrinterInstance()
-    {
-        return bxlPrinter;
-    }
-///////////////////
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -676,9 +630,10 @@ public class MenuView extends AppCompatActivity
 
                 break;*/
             case R.id.nav_hoja_despacho:
-                contentFragment=new HojaDespachoView();
+                /*contentFragment=new HojaDespachoView();
                 fragmentSeleccionado=true;
-                TAG_FRAGMENT="config_print";
+                TAG_FRAGMENT="config_print";*/
+                Toast.makeText(context, "Vista no construida", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
@@ -795,63 +750,6 @@ public class MenuView extends AppCompatActivity
         return  dialog;
 }
 
-
-    public Dialog alertaUsuarioBloqueado() {
-        final Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.layout_dialog);
-        TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA");
-        final TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("Su usuario fue bloqueado por depositos sin conciliar, comunicarse con el area de creditos");
-        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        Drawable background = image.getBackground();
-        image.setImageResource(R.mipmap.logo_circulo);
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-        dialogButton.setText("OK");
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        return  dialog;
-    }
-    private Dialog alertarecibospendientes() {
-
-        final Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.layout_dialog);
-
-        TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA");
-
-        TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("Ud. cuenta con recibos de cobranzas pendientes, por favor verificar en CONSULTA COBRADO y realizar el deposito!");
-
-        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-
-
-        Drawable background = image.getBackground();
-        image.setImageResource(R.mipmap.logo_circulo);
-
-
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-        // if button is clicked, close the custom dialog
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-       return  dialog;
-    }
-
     @Override
     public void onFragmentInteraction(String Tag, Object Lista) {
 
@@ -883,6 +781,7 @@ public class MenuView extends AppCompatActivity
                 ClienteCabeceraView = getSupportFragmentManager().findFragmentByTag(tagClienteCabeceraView);
                 ft.remove(ClienteCabeceraView);
 
+                Log.e("JEPICAMEE","=> tag 2 es "+tagClienteCabeceraView);
                 ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("po1p");
                 ft.commit();
@@ -904,6 +803,8 @@ public class MenuView extends AppCompatActivity
                 String tagRutaVendedorView="nuevoinicioRutaVendedorView";
                 RutaVendedorView = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
                 ft.remove(RutaVendedorView);
+
+                Log.e("JEPICAMEE","=> tag 2 es "+tagRutaVendedorView);
 
                 ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("2pop");
@@ -1084,12 +985,12 @@ public class MenuView extends AppCompatActivity
 
             if(tag2.equals("pedido"))
             {
-                //String tagClienteCabeceraView="inicioClienteCabeceraView";
+
                 String tagRutaVendedorView="inicioRutaVendedorView";
                 MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
                 ft.remove(MenuAccionViewFragment);
                 ft.add(R.id.content_menu_view, OrdenVentaCabeceraView.newInstance(Lista),tag2);
-                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+
                 ft.addToBackStack("po1p");
                 ft.commit();
             }
@@ -1190,38 +1091,37 @@ public class MenuView extends AppCompatActivity
         }
 
         if(tag.equals("OrdenVentaDetalleView")){
-            if(tag2.equals("producto"))
-            {
-                String tagOrdenVentaDetalleView="detalle";
-                OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
-                ft.hide(OrdenVentaDetalleFragment);
+            String tagOrdenVentaDetalleView="detalle";
+            switch(tag2){
+                case "producto":
+                    OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
+                    ft.hide(OrdenVentaDetalleFragment);
+                    ft.add(R.id.content_menu_view, ProductoView.newInstance(Lista),tag2);
+                    ft.addToBackStack("po1p");
+                    ft.commit();
+                    break;
+                case "listadopromocion":
+                    OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
+                    ft.hide(OrdenVentaDetalleFragment);
+                    ft.add(R.id.content_menu_view, ListadoPromocionView.newInstance(Lista),tag2);
+                    //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                    ft.addToBackStack("po1p");
+                    ft.commit();
+                    break;
+                case "ordenventacabecera":
+                    tag2="pedido";
 
-                ft.add(R.id.content_menu_view, ProductoView.newInstance(Lista),tag2);
+                    OrdenVentaCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tag2);
 
-                ft.addToBackStack("po1p");
-                ft.commit();
-            }
-            if(tag2.equals("listadopromocion"))
-            {
-                String tagOrdenVentaDetalleView="detalle";
-                OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
-                ft.hide(OrdenVentaDetalleFragment);
-                ft.add(R.id.content_menu_view, ListadoPromocionView.newInstance(Lista),tag2);
-                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
-                ft.addToBackStack("po1p");
-                ft.commit();
-            }
-            if(tag2.equals("ordenventacabecera"))
-            {
-                String tagOrdenVentaDetalleView="detalle";
-                tag2="pedido";
-                OrdenVentaCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tag2);
-                OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
-                ft.hide(OrdenVentaDetalleFragment);
-                ft.show(OrdenVentaCabeceraFragment);
-                ft.addToBackStack("po1p");
-                ft.commit();
-                OrdenVentaCabeceraView.newInstanciaAgregarOrdenVentaDetalle(Lista);
+                    OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
+                    ft.hide(OrdenVentaDetalleFragment);
+
+                    ft.show(OrdenVentaCabeceraFragment);
+                    ft.addToBackStack("po1p");
+                    ft.commit();
+
+                    OrdenVentaCabeceraView.newInstanciaAgregarOrdenVentaDetalle(Lista);
+                    break;
             }
         }
 
@@ -1259,6 +1159,7 @@ public class MenuView extends AppCompatActivity
             {
                 String tagOrdenVentaDetalleView="detalle";
                 String tagPromocionCabeceraView="promociondetalle";
+
                 Fragment PromocionCabeceraView=new Fragment();
                 OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
                 PromocionCabeceraView=getSupportFragmentManager().findFragmentByTag(tagPromocionCabeceraView);
@@ -1266,6 +1167,7 @@ public class MenuView extends AppCompatActivity
                 ft.show(OrdenVentaDetalleFragment);
                 ft.addToBackStack("pop");
                 ft.commit();
+
                 OrdenVentaDetalleView.newInstanceAgregarListaPromocionCabecera(Lista);
             }
             if(tag2.equals("editar_detalle"))
@@ -1304,7 +1206,7 @@ public class MenuView extends AppCompatActivity
                 PromocionDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagPromocionDetalleView);
                 ft.remove(PromocionDetalleFragment);
                 ft.show(PromocionCabeceraFragment);
-                //ft.add(R.id.content_menu_view, OrdenVentaCabeceraView.newInstanceHistoricoOrdenVenta(Lista),tagOrdenVentaCabeceraView);
+
                 PromocionCabeceraView.newInstanceEditarPromocionDetalle(Lista);
                 ft.addToBackStack("po1p");
                 ft.commit();
@@ -1334,7 +1236,7 @@ public class MenuView extends AppCompatActivity
             }
             if(tag2.equals("Consulta_Orden_Venta_Estado"))
             {
-                contentFragment=new HistoricoOrdenVentaEstadoView();
+                //contentFragment=new HistoricoOrdenVentaEstadoView();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();

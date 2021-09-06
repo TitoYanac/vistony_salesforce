@@ -13,7 +13,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.NumberFormat;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -36,7 +35,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -45,7 +43,7 @@ import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Controller.Utilitario.UpdateApp;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.VersionViewModel;
@@ -61,13 +59,13 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
+
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
 import com.vistony.salesforce.Dao.Retrofit.LoginRepository;
@@ -243,7 +241,7 @@ public class LoginView extends AppCompatActivity{
         try{
             pInfo = context.getPackageManager().getPackageInfo(getPackageName(), 0);
             version = pInfo.versionName;
-            SQLiteController db = new SQLiteController(getApplicationContext());
+            SqliteController db = new SqliteController(getApplicationContext());
             viewVersion.setText("vs:"+version+" db:"+db.getWritableDatabase().getVersion());
 
         } catch (PackageManager.NameNotFoundException e) {

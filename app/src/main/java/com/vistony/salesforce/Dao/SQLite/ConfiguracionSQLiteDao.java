@@ -6,30 +6,30 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 
 import java.util.ArrayList;
 
 public class ConfiguracionSQLiteDao {
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<ConfiguracionSQLEntity> listaConfiguracionSQLiteEntity;
 
     public ConfiguracionSQLiteDao(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        bd = sqLiteController.getWritableDatabase();
+        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
+        bd = sqliteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        sqLiteController.close();
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
     }
 
 
@@ -129,7 +129,7 @@ public class ConfiguracionSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("secuenciarecibos",correlativo);
             //registro.put("precio",pre);
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("configuracion",registro,null,null);
 
             /*Cursor fila = bd.rawQuery(
@@ -164,7 +164,7 @@ public class ConfiguracionSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("vinculaimpresora",vinculo);
             //registro.put("precio",pre);
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("configuracion",registro,null,null);
 
             /*Cursor fila = bd.rawQuery(

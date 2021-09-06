@@ -121,8 +121,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         ArraylistaClienteCabeceraEntity= new ArrayList <ListaClienteCabeceraEntity>();
 
         // Obtener inflater.
-        LayoutInflater inflater = (LayoutInflater) getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         final ListaClienteCabeceraAdapter.ViewHolder holder;
 
@@ -166,7 +165,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         // Setup.
         holder.tv_clienteid.setText(lead.getCliente_id());
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
-        holder.tv_saldo_cliente_cabecera.setText(lead.getSaldo());
+        holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));
         switch(lead.getMoneda()){
             case "S/":
                 holder.tv_moneda.setText("Soles");
@@ -187,8 +186,8 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
 
         //Mostrar linea de credito en moneda de acuerdo a la region
         ///////////////////////////////////////////////////////////////////////////////////////
-        holder.tv_linea_credito.setText(Convert.currencyForView(Convert.stringToDouble(lead.getLinea_credito())));
-        holder.tv_linea_credito_usado.setText(Convert.currencyForView(Convert.stringToDouble(lead.getLinea_credito_usado())));
+        holder.tv_linea_credito.setText(Convert.currencyForView(lead.getLinea_credito()));
+        holder.tv_linea_credito_usado.setText(Convert.currencyForView(lead.getLinea_credito_usado()));
         ///////////////////////////////////////////////////////////////////////////////////////
 
         if(lead.getLinea_credito().isEmpty() || lead.getLinea_credito()==null){
@@ -203,9 +202,6 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                 holder.progressLineCredit.setProgress(Math.round(Float.parseFloat(""+lead.getLinea_credito_usado())));
             }
         }
-
-
-
 
 
         if(!(lead.getChk_visita()==null||lead.getChk_pedido()==null||lead.getChk_pedido()==null))
@@ -236,6 +232,11 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                listaClienteCabeceraEntity.setImvclientecabecera ( lead.getImvclientecabecera());
                listaClienteCabeceraEntity.setMoneda(lead.getMoneda());
                listaClienteCabeceraEntity.setDomembarque_id(lead.getDomembarque_id());
+               listaClienteCabeceraEntity.setDomfactura_id(lead.getDomfactura_id());
+
+                    Log.e("JEPICAMEE","=> embarque "+lead.getDomembarque_id());
+                    Log.e("JEPICAMEE","=> factura "+lead.getDomfactura_id());
+
                listaClienteCabeceraEntity.setImpuesto_id(lead.getImpuesto_id());
                listaClienteCabeceraEntity.setImpuesto_id(lead.getImpuesto_id());
                listaClienteCabeceraEntity.setRucdni(lead.getRucdni());

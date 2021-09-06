@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricoOrdenVentaAdapter;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoOrdenVentaDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoOrdenVentaWS;
@@ -36,6 +37,8 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,7 +66,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
     Button btnconsultarfecha;
     ListView listviewhistoricoordenventa;
     private static DatePickerDialog oyenteSelectorFecha;
-    private  int diaov,mesov,añoov;
+    private  int diaov,mesov,ANOV;
     private SearchView mSearchView;
     HiloObtenerHistoricoOrdenVenta hiloObtenerHistoricoOrdenVenta;
     ListaHistoricoOrdenVentaAdapter listaHistoricoOrdenVentaAdapter;
@@ -148,9 +151,9 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                 final Calendar c1 = Calendar.getInstance();
                 diaov = c1.get(Calendar.DAY_OF_MONTH);
                 mesov = c1.get(Calendar.MONTH);
-                añoov = c1.get(Calendar.YEAR);
+                ANOV = c1.get(Calendar.YEAR);
                 oyenteSelectorFecha = new DatePickerDialog(getContext(),this,
-                        añoov,
+                        ANOV,
                         mesov,
                         diaov
                 );
@@ -237,16 +240,12 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                 FormulasController formulasController=new FormulasController(getContext());
 
                 //Consulta Webservice Historico Orden Venta
-                listaHistoricoOrdenVentaEntities=historicoOrdenVentaWS.getHistoricoOrdenVenta(
-                        SesionEntity.imei
-                       /*,SesionEntity.compania_id,
-                        SesionEntity.fuerzatrabajo_id,
-                        tv_fecha_historico_orden_venta.getText().toString()*/);
-                Log.e("REOS","TamañoLista"+listaHistoricoOrdenVentaEntities.size());
+                listaHistoricoOrdenVentaEntities=historicoOrdenVentaWS.getHistoricoOrdenVenta( SesionEntity.imei,tv_fecha_historico_orden_venta.getText().toString());
+
                 //Registra en listadepuracion1
                     for (int g = 0; g < listaHistoricoOrdenVentaEntities.size(); g++) {
 
-                        listadepuracion1.add(listaHistoricoOrdenVentaEntities.get(g).getOrdenventa_id());
+                        listadepuracion1.add(listaHistoricoOrdenVentaEntities.get(g).getSalesOrderID());
                     }
 
                 //Consulta SQLite Orden Venta Cabecera
@@ -255,7 +254,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                             SesionEntity.fuerzatrabajo_id,
                             SesionEntity.compania_id
                     );
-                Log.e("REOS","HistoricoOrdenVenta-listaOrdenVentaSQLite.size()"+listaOrdenVentaSQLite.size());
+
                 //Registra en listadepuracion2
                     for (int i = 0; i < listaOrdenVentaSQLite.size(); i++) {
 
@@ -263,56 +262,51 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                     }
 
                 //Evalua listas
-                Log.e("REOS","ListaDepuracion1-"+listadepuracion1.size());
-                Log.e("REOS","ListaDepuracion2-"+listadepuracion2.size());
                     if (!(listadepuracion1.size() == listadepuracion2.size())) {
 
                         listadepuracion2.removeAll(listadepuracion1);
 
                         for (int k = 0; k < listadepuracion2.size(); k++) {
-                            //Log.e("REOS","ListaDepuracion2PostRemoveAll"+listadepuracion2.size());
                             for (int l = 0; l < listaOrdenVentaSQLite.size(); l++) {
-                                //Log.e("REOS","listaOrdenVentaSQLite"+listaOrdenVentaSQLite.size());
+
                                 if (listadepuracion2.get(k).equals(listaOrdenVentaSQLite.get(l).getOrdenventa_id())) {
                                     String nombrecliente="";
                                     ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
                                     ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity=new ArrayList<>();
                                     listaClienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(listaOrdenVentaSQLite.get(l).getCliente_id(),SesionEntity.compania_id);
-                                    for(int w=0;w<listaClienteSQLiteEntity.size();w++)
-                                    {
+
+                                    for(int w=0;w<listaClienteSQLiteEntity.size();w++){
                                         nombrecliente=listaClienteSQLiteEntity.get(w).getNombrecliente();
                                     }
 
                                     ListaHistoricoOrdenVentaEntity listaHOV = new ListaHistoricoOrdenVentaEntity();
 
+                                    //listaHOV.ordenventa_id = listaOrdenVentaSQLite.get(l).getOrdenventa_id();
+                                    listaHOV.setCardCode(listaOrdenVentaSQLite.get(l).getCliente_id());
+                                    listaHOV.setLicTradNum(listaOrdenVentaSQLite.get(l).getRucdni());
+                                    listaHOV.setCardName(nombrecliente);
+                                    listaHOV.setDocTotal(listaOrdenVentaSQLite.get(l).getMontototal());
 
-                                    listaHOV.ordenventa_id = listaOrdenVentaSQLite.get(l).getOrdenventa_id();
-                                    listaHOV.cliente_id = listaOrdenVentaSQLite.get(l).getCliente_id();
-                                    listaHOV.rucdni = listaOrdenVentaSQLite.get(l).getRucdni();
-                                    listaHOV.nombrecliente = nombrecliente;
-                                    listaHOV.montototalorden = listaOrdenVentaSQLite.get(l).getMontototal();
-                                    listaHOV.estadoaprobacion = "Pendiente";
-                                    listaHOV.comentarioaprobacion = "";
-                                    listaHOV.ordenventa_erp_id = listaOrdenVentaSQLite.get(l).getOrdenventa_id();
-                                    listaHOV.comentariows = listaOrdenVentaSQLite.get(l).getMensajeWS();
-                                    if(listaOrdenVentaSQLite.get(l).getRecibidoERP().equals("1"))
-                                    {
+                                    Log.e("MontoTotal","=>"+listaOrdenVentaSQLite.get(l).getMontototal());
+
+                                    listaHOV.setApprovalStatus("Pendiente");
+                                    //listaHOV.comentarioaprobacion = "";
+                                    listaHOV.setSalesOrderID(listaOrdenVentaSQLite.get(l).getOrdenventa_id());
+                                    //listaHOV.set = listaOrdenVentaSQLite.get(l).getMensajeWS();
+
+                                    /*if(listaOrdenVentaSQLite.get(l).getRecibidoERP().equals("1")){
                                         listaHOV.recepcionERPOV = true;
-                                        //listaHOV.ordenventa_erp_id = listaOrdenVentaSQLite.get(l).getOrdenventa_ERP_id();
+                                        listaHOV.ordenventa_erp_id = listaOrdenVentaSQLite.get(l).getOrdenventa_ERP_id();
+                                    }else{
+                                        listaHOV.recepcionERPOV = false;
+                                        listaHOV.ordenventa_erp_id = listaOrdenVentaSQLite.get(l).getOrdenventa_id();
                                     }
-                                    else
-                                        {
-                                            listaHOV.recepcionERPOV = false;
-                                            //listaHOV.ordenventa_erp_id = listaOrdenVentaSQLite.get(l).getOrdenventa_id();
-                                        }
-                                    if(listaOrdenVentaSQLite.get(l).getEnviadoERP().equals("1"))
-                                    {
+
+                                    if(listaOrdenVentaSQLite.get(l).getEnviadoERP().equals("1")){
                                         listaHOV.envioERPOV = true;
-                                    }
-                                    else
-                                    {
+                                    }else{
                                         listaHOV.envioERPOV = false;
-                                    }
+                                    }*/
 
                                     listaHistoricoOrdenVentaEntities.add(listaHOV);
                                 }
@@ -321,42 +315,31 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                         }
                     }
 
-                /*listaHistoricoOrdenVenta=historicoOrdenVentaWS.getHistoricoOrdenVenta(
-                        SesionEntity.imei,
-                        SesionEntity.compania_id,
-                        SesionEntity.fuerzatrabajo_id,
-                        tv_fecha_historico_orden_venta.getText().toString());*/
-                //Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-listaHistoricoOrdenVentaEntities.size()"+listaHistoricoOrdenVentaEntities.size());
-            } catch (Exception e)
-            {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-                Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-Error:"+e.toString());
+            } catch (Exception e){
+                e.printStackTrace();
             }
-            Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-listaHistoricoOrdenVentaEntities.size()"+listaHistoricoOrdenVentaEntities.size());
             return listaHistoricoOrdenVentaEntities;
         }
 
         protected void onPostExecute(Object result)
         {
             ArrayList<ListaHistoricoOrdenVentaEntity> Lista = (ArrayList<ListaHistoricoOrdenVentaEntity>) result;
-            if (Lista.isEmpty())
-            {
-                Toast.makeText(getContext(), "Error en la Consulta", Toast.LENGTH_SHORT).show();
-            }else
-                {
-                    float monto_orden_venta=0f;
-                    listaHistoricoOrdenVentaAdapter = new ListaHistoricoOrdenVentaAdapter(getActivity(),
-                            ListaHistoricoOrdenVentaDao.getInstance().getLeads(Lista));
-                    listviewhistoricoordenventa.setAdapter(listaHistoricoOrdenVentaAdapter);
-                    Toast.makeText(getContext(), "Ordenes de Venta Obtenidas Correctamente", Toast.LENGTH_SHORT).show();
-                    for(int i=0;i<Lista.size();i++)
-                    {
-                        monto_orden_venta=monto_orden_venta+Float.parseFloat(Lista.get(i).getMontototalorden());
-                    }
-                    tv_cantidad__orden_venta.setText(String.valueOf(Lista.size()));
-                    tv_monto_orden_venta.setText(String.valueOf(monto_orden_venta));
+            if (Lista.isEmpty()){
+                Toast.makeText(getContext(), "No hay datos disponibles", Toast.LENGTH_SHORT).show();
+            }else{
+                listaHistoricoOrdenVentaAdapter = new ListaHistoricoOrdenVentaAdapter(getActivity(), ListaHistoricoOrdenVentaDao.getInstance().getLeads(Lista));
+                listviewhistoricoordenventa.setAdapter(listaHistoricoOrdenVentaAdapter);
+
+                BigDecimal monto_total_orden_venta=new BigDecimal(0);
+                for(int i=0;i<Lista.size();i++){
+                    monto_total_orden_venta=monto_total_orden_venta.add(new BigDecimal(Lista.get(i).getDocTotal()));
                 }
+                tv_cantidad__orden_venta.setText(String.valueOf(Lista.size()));
+                tv_monto_orden_venta.setText(Convert.currencyForView(monto_total_orden_venta.setScale(3, RoundingMode.HALF_UP).toString()));
+
+                Toast.makeText(getContext(), "Ordenes de Venta Obtenidas Correctamente", Toast.LENGTH_SHORT).show();
+
+            }
             pd.dismiss();
         }
     }

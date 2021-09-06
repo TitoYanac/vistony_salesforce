@@ -37,6 +37,7 @@ public class Utilitario {
         chk.setClickable(false);
     }
 
+    /* como se convierte el mapa a json, los nulos no se envian y no se necita esto
     public static boolean validationNotNull(HashMap hashMap){
         boolean status=true;
 
@@ -48,6 +49,6 @@ public class Utilitario {
         }
         return status;
     }
-
+*/
 
 }

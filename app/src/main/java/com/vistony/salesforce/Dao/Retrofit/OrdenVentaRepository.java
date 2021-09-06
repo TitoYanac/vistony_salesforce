@@ -35,27 +35,13 @@ public class OrdenVentaRepository extends ViewModel {
 
         sendSalesOrder(orderId,context, new SalesOrderCallback(){
             @Override
-            public void onResponseSap(SalesOrderEntityResponse data) {
-                //Solo devolveremos uno, el envio masivo es transparente
-                if(data.getSalesOrderEntity().get(0).getDocNum()==null){
-                    if(data.getSalesOrderEntity().get(0).getMessage().equals("Documento creado con flujo de aprobaciÃ³n")){
-                        temp.setValue(data.getSalesOrderEntity().get(0).getMessage());
-                    }else{
-                        temp.setValue("Ocurrio un error al enviar la orden de venta");
-                    }
+            public void onResponseSap(ArrayList<String> data) {
+                if(data==null){
+                    temp.setValue("No hay ordenes de venta pendientes de enviar");
                 }else{
-                    temp.setValue("La orden de venta "+data.getSalesOrderEntity().get(0).getDocNum()+", fue registrada con éxito");
+                    temp.setValue(data.get(0));
                 }
             }
-
-            /*
-            * linea de credito exece 0.2
-            * por centjae de desceunto 0.2
-            *  si la cantidad de dias e smayor a 5   =>0.2
-            *
-            * 0
-            * */
-
             @Override
             public void onResponseErrorSap(String response) {
                 temp.setValue(response);
@@ -70,21 +56,11 @@ public class OrdenVentaRepository extends ViewModel {
 
         sendSalesOrder(null,context, new SalesOrderCallback(){
             @Override
-            public void onResponseSap(SalesOrderEntityResponse data) {
+            public void onResponseSap(ArrayList<String> data) {
                 if(data==null){
                     temp.setValue("No hay ordenes de venta pendientes de enviar");
                 }else{
-                    Log.e("JPCM","=>"+data.getSalesOrderEntity().get(0).getMessage());
-                    if(data.getSalesOrderEntity().get(0).getDocNum()==null){
-                        if(data.getSalesOrderEntity().get(0).getMessage().equals("document created with approval flow")){
-                            temp.setValue(data.getSalesOrderEntity().get(0).getMessage());
-                        }else{
-                            temp.setValue("Ocurrio un error al enviar la orden de venta");
-                        }
-                    }else{
-                        //Solo devolveremos uno, el envio masivo es trasnaprente
-                        temp.setValue("La orden de venta "+data.getSalesOrderEntity().get(0).getDocNum()+", fue registrada con éxito");
-                    }
+                   temp.setValue(data.get(0));
                 }
             }
             @Override
@@ -135,28 +111,40 @@ public class OrdenVentaRepository extends ViewModel {
                     SalesOrderEntityResponse salesOrderEntityResponse=response.body();
 
                     if(response.isSuccessful() && salesOrderEntityResponse!=null){
+                        ArrayList<String> responseData=new ArrayList<>();
 
-                        for (SalesOrderEntity data:salesOrderEntityResponse.getSalesOrderEntity()) {
+                        for (SalesOrderEntity respuesta:salesOrderEntityResponse.getSalesOrderEntity()) {
+                            if(respuesta.getErrorCode().equals("0")){//se envio
+                                if(respuesta.getDocEntry()==null && respuesta.getDocNum()==null){//pasa por flujo de aprobacion
+                                    ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
+                                            respuesta.getSalesOrderID(),
+                                            "1",
+                                            respuesta.getDocNum(),
+                                            respuesta.getMessage()
+                                    );
+                                    responseData.add("La orden de venta "+respuesta.getSalesOrderID()+", pasara por un flujo de aprobación");
+                                }else{//pasa por flujo automatico
+                                    ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
+                                            respuesta.getSalesOrderID(),
+                                        "1",
+                                            respuesta.getDocNum(),
+                                            respuesta.getMessage()
+                                    );
 
-                            String statusSend="0";
-                            if(data.getDocEntry()==null){
-                                if(data.getMessage().equals("document created with approval flow")){
-                                    statusSend="1"; //set 1 por que si llego pero al estar en el flujo de aprovacion y no hay docEntry aun
+                                    responseData.add("La orden de venta "+respuesta.getDocNum()+", fue aceptado en SAP");
                                 }
+                            }else{//tiene error
+                                ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
+                                        respuesta.getSalesOrderID(),
+                                        "0",
+                                        respuesta.getDocNum(),
+                                        respuesta.getMessage()
+                                );
+                                responseData.add("La orden de venta "+respuesta.getSalesOrderID()+", tiene un error");
                             }
-
-                            /*
-                            ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
-                                data.getSalesOrderID(),
-                                statusSend,
-                                data.getDocNum(),
-                                data.getMessage()
-                            );
-                            */
-
                         }
 
-                        callback.onResponseSap(salesOrderEntityResponse);
+                        callback.onResponseSap(responseData);
                     }else{
                         callback.onResponseErrorSap("Error "+response.code()+", "+response.message());
                     }
@@ -174,6 +162,6 @@ public class OrdenVentaRepository extends ViewModel {
 }
 
 interface SalesOrderCallback {
-    void onResponseSap(SalesOrderEntityResponse response);
+    void onResponseSap(ArrayList<String> response);
     void onResponseErrorSap(String response);
 }

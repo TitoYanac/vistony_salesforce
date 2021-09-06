@@ -162,13 +162,14 @@
         android:layout_marginTop="140dp"
         android:clickable="false"
         android:text="" />
+
     <TextView
         android:id="@+id/lbl_envio_orden_venta_comentario_ws"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="250dp"
         android:layout_marginTop="120dp"
-        android:text="Ver Error"
+        android:text="Respuesta"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <ImageView

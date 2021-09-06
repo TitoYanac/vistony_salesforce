@@ -8,32 +8,34 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitaEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class VisitaSQLite {
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<VisitaSQLiteEntity> listaVisitaSQLiteEntity;
 
     public VisitaSQLite(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
 
     public void abrir(){
         Log.i("SQLite", "Se abre conexion a la base de datos desde " + this.getClass().getName());
-        bd = sqLiteController.getWritableDatabase();
+        bd = sqliteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
         Log.i("SQLite", "Se cierra conexion a la base de datos desde " + this.getClass().getName());
-        sqLiteController.close();
+        sqliteController.close();
     }
 
 
@@ -42,6 +44,8 @@ public class VisitaSQLite {
 
         abrir();
         ContentValues registro = new ContentValues();
+        //registro.put("id", UUID.randomUUID().toString());
+        registro.put("id", FormulasController.ObtenerFechaHoraCadena());
         registro.put("compania_id",visita.getCompania_id());
         registro.put("cliente_id",visita.getCardCode());
         registro.put("direccion_id",visita.getAddress());
@@ -60,12 +64,6 @@ public class VisitaSQLite {
         bd.insert("visita",null,registro);
         bd.close();
         return 1;
-    }
-
-    public void updateEnviado(@NonNull String fecha,@NonNull String user_id){
-        abrir();
-        bd.execSQL("UPDATE visita SET enviado='1' WHERE fecha='"+fecha+"' AND user_id='"+user_id+"';");
-        bd.close();
     }
 
     public ArrayList<VisitaSQLiteEntity> ObtenerVisitas (){
@@ -104,47 +102,32 @@ public class VisitaSQLite {
         return listaVisitaSQLiteEntity;
     }
 
-    public int LimpiarTablaVisita ()
-    {
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
+    public int LimpiarTablaVisita (){
         abrir();
-        // bd.insert("documentodeuda",null,);
+
         bd.execSQL("delete from visita");
         bd.close();
         return 1;
     }
 
-    public boolean ActualizaEstadoWSVisita (VisitaEntity data){
+    public int ActualizaResultadoVisitaEnviada (String idVisita){
         int status=0;
 
         try {
             abrir();
 
-            for(VisitaSQLiteEntity visita:data.getVisitas()){
+            ContentValues registro = new ContentValues();
+            registro.put("chkrecibido","1");
+            registro.put("chkenviado","1");
 
-                if(visita.getHaveError().equals("0")){
-                    ContentValues registro = new ContentValues();
-                    registro.put("chkrecibido","1");
-                    registro.put("chkenviado","1");
-
-                    bd.update("visita",registro,"id=?",new String[]{visita.getIdVisit()});
-                }else{
-                    status=status+1;
-                }
-
-            }
-
+            bd.update("visita",registro,"id=?",new String[]{idVisita});
+            status=1;
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }finally {
             bd.close();
         }
 
-        if(status!=0){
-            return false;
-        }else{
-            return true;
-        }
+        return status;
     }
 }

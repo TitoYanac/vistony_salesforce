@@ -12,10 +12,10 @@ public class AgenciaEntity {
     @SerializedName("ZipCode")
     private String ubigeo_id;
 
-    @SerializedName("RUC")
+    @SerializedName("LicTradNum")
     private String ruc;
 
-    @SerializedName("Direccion")
+    @SerializedName("Street")
     private String direccion;
 
     public String getRuc() {

@@ -49,7 +49,7 @@ import java.util.GregorianCalendar;
 
 import harmony.java.awt.Color;
 
-public class PDFOrdenVenta extends AppCompatActivity {
+public class DocumentoPedidoPDF extends AppCompatActivity {
 
     private final static String NOMBRE_DIRECTORIO = "OrdenVenta";
     private final static String ETIQUETA_ERROR = "ERROR";
@@ -94,34 +94,19 @@ public class PDFOrdenVenta extends AppCompatActivity {
     public void generarPdf(Context context, ArrayList<OrdenVentaCabeceraSQLiteEntity> ListaOrdenVentaCabecera, ArrayList<OrdenVentaDetallePromocionSQLiteEntity> ListaOrdenVentaDetalle ) {
         File f;
         String cliente_id="",nombrecliente="",direccion="",fechaemision="",terminopago="",subtotal="",igv="",descuento="",total="",ordenventa_id="",ordenventa_erp_id="",vendedor="",moneda="";
-                ;
-        ClienteSQlite clienteSQlite =new ClienteSQlite(context);
-        TerminoPagoSQLiteDao terminoPagoSQLiteDao=new TerminoPagoSQLiteDao(context);
-        ArrayList<ClienteSQLiteEntity> listaClienteSQLite=new ArrayList<>();
-        ArrayList<TerminoPagoSQLiteEntity> listaTerminoPago=new ArrayList<>();
 
         for(int i=0;i<ListaOrdenVentaCabecera.size();i++){
 
+
             ordenventa_id=ListaOrdenVentaCabecera.get(i).getOrdenventa_id();
             ordenventa_erp_id=ListaOrdenVentaCabecera.get(i).getOrdenventa_ERP_id();
-            //vendedor=SesionEntity.fuerzatrabajo_id+" "+SesionEntity.nombrefuerzadetrabajo;
-            cliente_id=ListaOrdenVentaCabecera.get(i).getCliente_id();
-            listaClienteSQLite= clienteSQlite.ObtenerDatosCliente(cliente_id,SesionEntity.compania_id);
-            for(int j=0;j<listaClienteSQLite.size();j++){
+            direccion=ListaOrdenVentaCabecera.get(i).getDomembarque_text();
+            cliente_id=ListaOrdenVentaCabecera.get(i).getRucdni();
 
-                nombrecliente=listaClienteSQLite.get(j).getNombrecliente();
-                direccion=listaClienteSQLite.get(j).getDireccion();
-            }
 
-            listaTerminoPago=terminoPagoSQLiteDao.ObtenerTerminoPagoporID
-                    (ListaOrdenVentaCabecera.get(i).getTerminopago_id(),SesionEntity.compania_id);
+            nombrecliente=ListaOrdenVentaCabecera.get(i).getCliente_text();
+            terminopago=ListaOrdenVentaCabecera.get(i).getTerminopago_text();
             fechaemision=ListaOrdenVentaCabecera.get(i).getFecharegistro();
-            for(int g=0;g<listaTerminoPago.size();g++)
-            {
-                terminopago=listaTerminoPago.get(g).getTerminopago();
-            }
-
-
             subtotal=ListaOrdenVentaCabecera.get(i).getMontosubtotal();
             igv=ListaOrdenVentaCabecera.get(i).getMontoimpuesto();
             descuento=ListaOrdenVentaCabecera.get(i).getMontodescuento();
@@ -203,19 +188,23 @@ public class PDFOrdenVenta extends AppCompatActivity {
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
+
             //cellgneral = new PdfPCell(new Phrase(ordenventa_id,font3));
-            cellgneral = new PdfPCell(new Phrase(ordenventa_erp_id,font3));
+            cellgneral = new PdfPCell(new Phrase((ordenventa_erp_id==null||ordenventa_erp_id.equals("")?ordenventa_id:ordenventa_erp_id),font3));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
+
             cellgneral = new PdfPCell(new Phrase("RUT:",font3));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
+
             cellgneral = new PdfPCell(new Phrase(cliente_id,font3 ));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
+
             cellgneral = new PdfPCell(new Phrase("Nombres:",font3 ));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -224,10 +213,12 @@ public class PDFOrdenVenta extends AppCompatActivity {
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
+
             cellgneral = new PdfPCell(new Phrase("Direccion:",font3 ));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
+
             cellgneral = new PdfPCell(new Phrase(direccion,font3 ));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -268,8 +259,6 @@ public class PDFOrdenVenta extends AppCompatActivity {
 
             documento.add(tblgeneral);
 
-
-
             PdfPTable tblDetalle = new PdfPTable(1);
             tblDetalle.setWidthPercentage(100);
             PdfPCell cellineas = null;
@@ -279,8 +268,8 @@ public class PDFOrdenVenta extends AppCompatActivity {
             tblDetalle.addCell(cellineas);
             documento.add(tblDetalle);
 
-            //float[] columnWidths = {1.5f, 6f, 1.5f,2f,2f,2f};
-            float[] columnWidths = {1f,2.5f, 9f,1.5f,1.5f,2f};
+            float[] columnWidths = {1f,10f,1.5f,2.5f,3.5f};
+
             PdfPTable tblLineas = new PdfPTable(columnWidths);
             tblLineas.setWidthPercentage(100);
             PdfPCell cellLineasDetalle = null;
@@ -288,29 +277,35 @@ public class PDFOrdenVenta extends AppCompatActivity {
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblLineas.addCell(cellLineasDetalle);
+
+            /*
             cellLineasDetalle = new PdfPCell(new Phrase("Codigo",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tblLineas.addCell(cellLineasDetalle);
+            tblLineas.addCell(cellLineasDetalle);*/
+
             cellLineasDetalle = new PdfPCell(new Phrase("Producto",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
-            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblLineas.addCell(cellLineasDetalle);
+
             cellLineasDetalle = new PdfPCell(new Phrase("Cant.",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
-            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblLineas.addCell(cellLineasDetalle);
+
             /*cellLineasDetalle = new PdfPCell(new Phrase("P.Unit",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblLineas.addCell(cellLineasDetalle);;*/
+
             cellLineasDetalle = new PdfPCell(new Phrase("% Desc",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
-            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblLineas.addCell(cellLineasDetalle);
             cellLineasDetalle = new PdfPCell(new Phrase("Total",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
-            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tblLineas.addCell(cellLineasDetalle);
 
             for(int l=0;l<ListaOrdenVentaDetalle.size();l++)
@@ -319,15 +314,20 @@ public class PDFOrdenVenta extends AppCompatActivity {
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblLineas.addCell(cellLineasDetalle);
+
+                /*
                 cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getProducto_id(),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
-                tblLineas.addCell(cellLineasDetalle);
-                cellLineasDetalle = new PdfPCell(new Phrase(
-                         ListaOrdenVentaDetalle.get(l).getProducto(),font3));
+                tblLineas.addCell(cellLineasDetalle);*/
+
+                String compuesto=ListaOrdenVentaDetalle.get(l).getProducto_id()+" "+ListaOrdenVentaDetalle.get(l).getProducto()+" ["+Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getPreciounitario())+"]";
+
+                cellLineasDetalle = new PdfPCell(new Phrase(compuesto,font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblLineas.addCell(cellLineasDetalle);
+
                 cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getCantidad(),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -343,7 +343,8 @@ public class PDFOrdenVenta extends AppCompatActivity {
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tblLineas.addCell(cellLineasDetalle);
 
-                cellLineasDetalle = new PdfPCell(new Phrase(""+Convert.stringToDouble(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
+                cellLineasDetalle = new PdfPCell(new Phrase(""+Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontosubtotal()),font3));
+                //cellLineasDetalle = new PdfPCell(new Phrase(""+Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 tblLineas.addCell(cellLineasDetalle);
@@ -362,37 +363,42 @@ public class PDFOrdenVenta extends AppCompatActivity {
             PdfPTable tblResu = new PdfPTable(2);
             tblResu.setWidthPercentage(100);
 
-            /*PdfPCell cellResu =  new PdfPCell(new Phrase("SubTotal:",font3));
+            PdfPCell cellResu =  new PdfPCell(new Phrase("SubTotal:",font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase(subtotal,font3));
+
+            cellResu = new PdfPCell(new Phrase(Convert.currencyForView(subtotal),font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tblResu.addCell(cellResu);
+
             cellResu = new PdfPCell(new Phrase("Descuento:",font3));
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
             cellResu.disableBorderSide(Rectangle.BOX);
             tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase(descuento,font3));
-            cellResu.disableBorderSide(Rectangle.BOX);
-            cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase("IGV:",font3));
-            cellResu.disableBorderSide(Rectangle.BOX);
-            cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
-            tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase(igv,font3));
-            cellResu.disableBorderSide(Rectangle.BOX);
-            cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            tblResu.addCell(cellResu);*/
 
-            PdfPCell cellResu = new PdfPCell(new Phrase("TOTAL ORDEN VENTA:",font3));
+            cellResu = new PdfPCell(new Phrase(Convert.currencyForView(descuento),font3));
+            cellResu.disableBorderSide(Rectangle.BOX);
+            cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            tblResu.addCell(cellResu);
+
+            cellResu = new PdfPCell(new Phrase("IVA:",font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblResu.addCell(cellResu);
 
-            cellResu = new PdfPCell(new Phrase(""+Convert.stringToDouble(total),font3));
+            cellResu = new PdfPCell(new Phrase(Convert.currencyForView(igv),font3));
+            cellResu.disableBorderSide(Rectangle.BOX);
+            cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            tblResu.addCell(cellResu);
+
+            cellResu = new PdfPCell(new Phrase("TOTAL ORDEN VENTA:",font3));
+            cellResu.disableBorderSide(Rectangle.BOX);
+            cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblResu.addCell(cellResu);
+
+            cellResu = new PdfPCell(new Phrase(""+Convert.currencyForView(total),font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tblResu.addCell(cellResu);
@@ -410,8 +416,8 @@ public class PDFOrdenVenta extends AppCompatActivity {
 
             Log.e(ETIQUETA_ERROR, e.getMessage());
 
-        } catch (Exception e)
-        {
+        } catch (Exception e){
+            e.printStackTrace();
             Log.e("JPCM","capturado->"+ e);
         }
         finally {

@@ -6,30 +6,30 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.RutaFuerzaTrabajoSQLiteEntity;
 
 import java.util.ArrayList;
 
 public class RutaFuerzaTrabajoSQLiteDao {
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<RutaFuerzaTrabajoSQLiteEntity> listaRutaFuerzaTrabajoSQLiteEntity;
 
     public RutaFuerzaTrabajoSQLiteDao(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        bd = sqLiteController.getWritableDatabase();
+        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
+        bd = sqliteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        sqLiteController.close();
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
     }
 
 
@@ -177,7 +177,7 @@ public class RutaFuerzaTrabajoSQLiteDao {
 
             ContentValues registro = new ContentValues();
             registro.put("fechainicioruta",fechainicioruta);
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutafuerzatrabajo",registro,"compania_id='"+compania_id+"' and zona_id='"+zona_id+"' and dia='"+dia+"'" ,null);
             bd.close();
         }catch (Exception e)

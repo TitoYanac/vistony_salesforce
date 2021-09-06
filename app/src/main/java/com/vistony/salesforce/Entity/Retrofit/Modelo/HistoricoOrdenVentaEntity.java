@@ -4,12 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 public class HistoricoOrdenVentaEntity {
 
-
     @SerializedName("DocNum")
     private String docnum;
 
-    @SerializedName("OrdenVenta_ERP_ID")
-    private String ordenventa_erp_id;
+    @SerializedName("SalesOrderID")
+    private String ordenventa_id;
 
     @SerializedName("CardCode")
     private String cliente_id;
@@ -26,11 +25,8 @@ public class HistoricoOrdenVentaEntity {
     @SerializedName("ApprovalStatus")
     private String estadoaprobacion;
 
-    @SerializedName("ComentarioAprobacion")
+    @SerializedName("ApprovalCommentary")
     private String comentarioaprobacion;
-
-    @SerializedName("OrdenVenta_ID")
-    private String ordenventa_id;
 
     public String getDocnum() {
         return docnum;
@@ -46,14 +42,6 @@ public class HistoricoOrdenVentaEntity {
 
     public void setOrdenventa_id(String ordenventa_id) {
         this.ordenventa_id = ordenventa_id;
-    }
-
-    public String getOrdenventa_erp_id() {
-        return ordenventa_erp_id;
-    }
-
-    public void setOrdenventa_erp_id(String ordenventa_erp_id) {
-        this.ordenventa_erp_id = ordenventa_erp_id;
     }
 
     public String getCliente_id() {

@@ -4,17 +4,18 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class CobranzaDetalleEntity {
 
-    @SerializedName("InsertCobranzaDResult")
-    private String Resultado;
+    @SerializedName("Collections")
+    private List<CobranzaItemEntity> cobranzaItem;
 
-    @NonNull
-    public String getResultado() {
-        return Resultado;
+    public List<CobranzaItemEntity> getCobranzaItem() {
+        return cobranzaItem;
     }
 
-    public void setResultado(@NonNull String resultado) {
-        Resultado = resultado;
+    public void setCobranzaItem(List<CobranzaItemEntity> cobranzaItem) {
+        this.cobranzaItem = cobranzaItem;
     }
 }

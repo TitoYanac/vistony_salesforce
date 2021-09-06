@@ -3,130 +3,76 @@ package com.vistony.salesforce.Entity.Adapters;
 import java.io.Serializable;
 
 public class ListaHistoricoOrdenVentaEntity implements Serializable {
-    public String ordenventa_erp_id;
-    public String cliente_id;
-    public String rucdni;
-    public String nombrecliente;
-    public String montototalorden;
-    public String estadoaprobacion;
-    public String comentarioaprobacion;
-    public String ordenventa_id;
-    public boolean recepcionERPOV;
-    public String comentariows;
-    public boolean envioERPOV;
-    public String docnum;
+    public String SalesOrderID;
+    public String CardCode;
+    public String LicTradNum;
+    public String CardName;
+    public String DocTotal;
+    public String ApprovalStatus;
+    public String ApprovalCommentary;
+    public String DocNum;
 
-    public ListaHistoricoOrdenVentaEntity(String ordenventa_erp_id, String cliente_id, String rucdni, String nombrecliente, String montototalorden, String estadoaprobacion, String comentarioaprobacion, String ordenventa_id, boolean recepcionERPOV, String comentariows, boolean envioERPOV, String docnum) {
-        this.ordenventa_erp_id = ordenventa_erp_id;
-        this.cliente_id = cliente_id;
-        this.rucdni = rucdni;
-        this.nombrecliente = nombrecliente;
-        this.montototalorden = montototalorden;
-        this.estadoaprobacion = estadoaprobacion;
-        this.comentarioaprobacion = comentarioaprobacion;
-        this.ordenventa_id = ordenventa_id;
-        this.recepcionERPOV = recepcionERPOV;
-        this.comentariows = comentariows;
-        this.envioERPOV = envioERPOV;
-        this.docnum = docnum;
+    public String getSalesOrderID() {
+        return SalesOrderID;
     }
 
-    public ListaHistoricoOrdenVentaEntity() {
+    public void setSalesOrderID(String salesOrderID) {
+        SalesOrderID = salesOrderID;
     }
 
-    public String getDocnum() {
-        return docnum;
+    public String getCardCode() {
+        return CardCode;
     }
 
-    public void setDocnum(String docnum) {
-        this.docnum = docnum;
+    public void setCardCode(String cardCode) {
+        CardCode = cardCode;
     }
 
-    public String getComentariows() {
-        return comentariows;
+    public String getLicTradNum() {
+        return LicTradNum;
     }
 
-    public void setComentariows(String comentariows) {
-        this.comentariows = comentariows;
+    public void setLicTradNum(String licTradNum) {
+        LicTradNum = licTradNum;
     }
 
-    public boolean isEnvioERPOV() {
-        return envioERPOV;
+    public String getCardName() {
+        return CardName;
     }
 
-    public void setEnvioERPOV(boolean envioERPOV) {
-        this.envioERPOV = envioERPOV;
+    public void setCardName(String cardName) {
+        CardName = cardName;
     }
 
-    public boolean isRecepcionERPOV() {
-        return recepcionERPOV;
+    public String getDocTotal() {
+        return DocTotal;
     }
 
-    public void setRecepcionERPOV(boolean recepcionERPOV) {
-        this.recepcionERPOV = recepcionERPOV;
+    public void setDocTotal(String docTotal) {
+        DocTotal = docTotal;
     }
 
-    public String getOrdenventa_id() {
-        return ordenventa_id;
+    public String getApprovalStatus() {
+        return ApprovalStatus;
     }
 
-    public void setOrdenventa_id(String ordenventa_id) {
-        this.ordenventa_id = ordenventa_id;
+    public void setApprovalStatus(String approvalStatus) {
+        ApprovalStatus = approvalStatus;
     }
 
-    public String getOrdenventa_erp_id() {
-        return ordenventa_erp_id;
+    public String getApprovalCommentary() {
+        return ApprovalCommentary;
     }
 
-    public void setOrdenventa_erp_id(String ordenventa_erp_id) {
-        this.ordenventa_erp_id = ordenventa_erp_id;
+    public void setApprovalCommentary(String approvalCommentary) {
+        ApprovalCommentary = approvalCommentary;
     }
 
-    public String getCliente_id() {
-        return cliente_id;
+    public String getDocNum() {
+        return DocNum;
     }
 
-    public void setCliente_id(String cliente_id) {
-        this.cliente_id = cliente_id;
-    }
-
-    public String getRucdni() {
-        return rucdni;
-    }
-
-    public void setRucdni(String rucdni) {
-        this.rucdni = rucdni;
-    }
-
-    public String getNombrecliente() {
-        return nombrecliente;
-    }
-
-    public void setNombrecliente(String nombrecliente) {
-        this.nombrecliente = nombrecliente;
-    }
-
-    public String getMontototalorden() {
-        return montototalorden;
-    }
-
-    public void setMontototalorden(String montototalorden) {
-        this.montototalorden = montototalorden;
-    }
-
-    public String getEstadoaprobacion() {
-        return estadoaprobacion;
-    }
-
-    public void setEstadoaprobacion(String estadoaprobacion) {
-        this.estadoaprobacion = estadoaprobacion;
-    }
-
-    public String getComentarioaprobacion() {
-        return comentarioaprobacion;
-    }
-
-    public void setComentarioaprobacion(String comentarioaprobacion) {
-        this.comentarioaprobacion = comentarioaprobacion;
+    public void setDocNum(String docNum) {
+        DocNum = docNum;
     }
 }

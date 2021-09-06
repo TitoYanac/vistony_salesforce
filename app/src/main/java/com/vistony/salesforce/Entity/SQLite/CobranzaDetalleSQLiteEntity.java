@@ -6,6 +6,7 @@ public class CobranzaDetalleSQLiteEntity {
     public String cobranza_id;
     public String cliente_id;
     public String documento_id;
+    public String documento_entry;
     public String compania_id;
     public String importedocumento;
     public String saldodocumento;
@@ -28,12 +29,15 @@ public class CobranzaDetalleSQLiteEntity {
     public String chkanulado;
     public String pagodirecto;
     public String pagopos;
+    public String sap_code;
 
-    public CobranzaDetalleSQLiteEntity(String id, String cobranza_id, String cliente_id, String documento_id, String compania_id, String importedocumento, String saldodocumento, String nuevosaldodocumento, String saldocobrado, String fechacobranza, String recibo, String nrofactura, String chkqrvalidado, String chkbancarizado, String motivoanulacion, String usuario_id, String chkwsrecibido, String banco_id, String chkwsdepositorecibido, String comentario, String chkwsupdate, String chkdepositado, String chkwsqrvalidado, String chkanulado, String pagodirecto, String pagopos) {
+    public CobranzaDetalleSQLiteEntity(String id, String cobranza_id, String cliente_id, String documento_id, String documento_entry,String compania_id, String importedocumento, String saldodocumento, String nuevosaldodocumento, String saldocobrado, String fechacobranza, String recibo, String nrofactura, String chkqrvalidado, String chkbancarizado, String motivoanulacion, String usuario_id, String chkwsrecibido, String banco_id, String chkwsdepositorecibido, String comentario, String chkwsupdate, String chkdepositado, String chkwsqrvalidado, String chkanulado, String pagodirecto, String pagopos,String sap_code) {
+        this.sap_code=sap_code;
         this.id = id;
         this.cobranza_id = cobranza_id;
         this.cliente_id = cliente_id;
         this.documento_id = documento_id;
+        this.documento_entry = documento_entry;
         this.compania_id = compania_id;
         this.importedocumento = importedocumento;
         this.saldodocumento = saldodocumento;
@@ -60,6 +64,14 @@ public class CobranzaDetalleSQLiteEntity {
 
     public CobranzaDetalleSQLiteEntity() {
 
+    }
+
+    public String getDocumento_entry() {
+        return documento_entry;
+    }
+
+    public void setDocumento_entry(String documento_entry) {
+        this.documento_entry = documento_entry;
     }
 
     public String getPagopos() {
@@ -270,5 +282,11 @@ public class CobranzaDetalleSQLiteEntity {
         this.recibo = recibo;
     }
 
+    public String getSap_code() {
+        return sap_code;
+    }
 
+    public void setSap_code(String sap_code) {
+        this.sap_code = sap_code;
+    }
 }

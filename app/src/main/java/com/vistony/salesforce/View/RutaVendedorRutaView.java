@@ -82,7 +82,6 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        obtenerSQLiteRutaFuerzaTrabajo=new ObtenerSQLiteRutaFuerzaTrabajo();
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -92,8 +91,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_ruta_vendedor_ruta_view, container, false);
         listrutavendedorruta=v.findViewById(R.id.listrutavendedorruta);
@@ -115,8 +113,8 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Calculando Ruta de Trabajo", true, false);
+            pd = new ProgressDialog(getContext());
+            pd = ProgressDialog.show(getContext(), "Por favor espere", "Calculando Ruta de Trabajo", true, false);
         }
 
         @Override
@@ -132,11 +130,6 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                 fecha =dateFormat.format(date);
                 listaRutaFuerzaTrabajoSQLiteEntity=rutaFuerzaTrabajoSQLiteDaoO.ObtenerRutaFuerzaTrabajoPorFecha(fecha);
 
-
-                Log.e("JPCM","tiwne dataaaaa "+fecha);
-                Log.e("JPCM","tiwne dataaaaa "+listaRutaFuerzaTrabajoSQLiteEntity.size());
-
-
                 if(listaRutaFuerzaTrabajoSQLiteEntity==null || listaRutaFuerzaTrabajoSQLiteEntity.isEmpty() || listaRutaFuerzaTrabajoSQLiteEntity.size()==0){
                     getActivity().runOnUiThread(() -> {
                         Toast.makeText(getActivity(), "No hay ruta de trabajo para el dia de hoy", Toast.LENGTH_SHORT).show();
@@ -145,8 +138,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
 
 
             } catch (Exception e) {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
+               e.printStackTrace();
             }
             return listaRutaFuerzaTrabajoSQLiteEntity;
         }
@@ -156,27 +148,26 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
             String zona_id="";
             ArrayList<RutaFuerzaTrabajoSQLiteEntity>Lista=(ArrayList<RutaFuerzaTrabajoSQLiteEntity>) result;
             ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntities=new ArrayList<>();
+
             RutaFuerzaTrabajoSQLiteDao rutaFuerzaTrabajoSQLiteDaoO=new RutaFuerzaTrabajoSQLiteDao(getContext());
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date date = new Date();
             RutaFuerzaTrabajoSQLiteDao rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(getContext());
 
             //Evalua si la lista obtenida por fecha tiene data y si la tabla tiene registros
-            if(Lista.isEmpty()&&rutaFuerzaTrabajoSQLiteDaoO.ObtenerCantidadRutaFuerzaTrabajo()>0)
-            {
-                Log.e("REOS","ListaVacia&Cantidad>0");
+            if(Lista.isEmpty()&&rutaFuerzaTrabajoSQLiteDaoO.ObtenerCantidadRutaFuerzaTrabajo()>0){
 
+                Log.e("REOS","Entro if");
                 //Carga Data
                 String fecha =dateFormat.format(date);
                 Lista=rutaFuerzaTrabajoSQLiteDao.ObtenerRutaFuerzaTrabajoFechaMenor(fecha);
 
                 //Evalua si la lista no esta vacia
-                while (!(Lista.isEmpty()))
-                {
+                while (!(Lista.isEmpty())){
 
                     String fechainicioruta="",fecharutaactualizada="";
                     Date fechainiciorutadate;
-
 
                     //recorre la lista
                     for(int i=0;i<Lista.size();i++)
@@ -195,16 +186,12 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     }
 
 
-
                     //Obtiene lista menor con fecha actual
                     Lista=rutaFuerzaTrabajoSQLiteDao.ObtenerRutaFuerzaTrabajoFechaMenor(fecha);
                 }
-
-                //obtenerSQLiteRutaFuerzaTrabajo= new ObtenerSQLiteRutaFuerzaTrabajo();
-                //obtenerSQLiteRutaFuerzaTrabajo.execute();
-
-
             }else{
+
+                Log.e("REOS","entro else");
                     //recorre lista para obtener codigo de Zona
                     for(int i=0;i<Lista.size();i++)
                     {
@@ -214,7 +201,9 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     //Declaracion Variables
                     ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntityconruta=new ArrayList<>();
                     ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
+
                     RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(getContext());
+
                     FormulasController formulasController=new FormulasController(getContext());
                     String chk_ruta="1";
                     //Obtiene Clientes con zona del dia
@@ -222,9 +211,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
 
                     //Evalua si RutaVendedor ya tiene clientes
                     listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(fecha,chk_ruta,getContext());
-                    if(listaClienteCabeceraEntityconruta.isEmpty())
-                    {
-
+                    if(listaClienteCabeceraEntityconruta.isEmpty()){
                         formulasController.RegistrarRutaVendedor(listaClienteCabeceraEntities,fecha,chk_ruta);
                         listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(fecha,chk_ruta,getContext());
                     }
@@ -279,19 +266,19 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         }
 
         public  String  sumarDiasAFecha(Date fecha, int dias){
-            String año,mes,dia,fechaActualizada;
-            int mescalendario,añocalendario,diacalendario;
+            String year,mes,dia,fechaActualizada;
+            int mescalendario,yearcalendario,diacalendario;
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(fecha);
             calendar.add(Calendar.DAY_OF_YEAR, dias);
 
-            añocalendario = calendar.get(calendar.YEAR);
+            yearcalendario = calendar.get(calendar.YEAR);
             mescalendario = calendar.get(calendar.MONTH);
             diacalendario = calendar.get(calendar.DAY_OF_MONTH);
 
             mes=String.valueOf(mescalendario+1);
             dia=String.valueOf(diacalendario);
-            año=String.valueOf(añocalendario);
+            year=String.valueOf(yearcalendario);
             if(mes.length()==1)
             {
                 mes='0'+mes;
@@ -301,7 +288,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                 dia='0'+dia;
             }
 
-            fechaActualizada=(año + "-" + mes + "-" + dia);
+            fechaActualizada=(year + "-" + mes + "-" + dia);
 
 
             return fechaActualizada;
@@ -330,8 +317,10 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText;
-        listaClienteCabeceraAdapter.filter(text);
+        if(listaClienteCabeceraAdapter!=null) {
+            listaClienteCabeceraAdapter.filter(newText);
+        }
+
         return true;
     }
 

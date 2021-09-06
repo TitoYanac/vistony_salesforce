@@ -57,7 +57,7 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
     Button btnconsultarfechafacturas;
     ListView listviewhistoricofacturas;
     private static DatePickerDialog oyenteSelectorFecha;
-    private  int diahf,meshf,añohf;
+    private  int diahf,meshf,yearF;
     private SearchView mSearchView;
     HiloObtenerHistoricoFacturas hiloObtenerHistoricoFacturas;
     ListaHistoricoFacturasAdapter listaHistoricoFacturasAdapter;
@@ -121,9 +121,9 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
                 final Calendar c1 = Calendar.getInstance();
                 diahf = c1.get(Calendar.DAY_OF_MONTH);
                 meshf = c1.get(Calendar.MONTH);
-                añohf = c1.get(Calendar.YEAR);
+                yearF = c1.get(Calendar.YEAR);
                 oyenteSelectorFecha = new DatePickerDialog(getContext(),this,
-                        añohf,
+                        yearF,
                         meshf,
                         diahf
                 );

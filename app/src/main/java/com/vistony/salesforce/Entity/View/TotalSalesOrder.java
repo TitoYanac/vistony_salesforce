@@ -1,49 +1,49 @@
 package com.vistony.salesforce.Entity.View;
 
 public class TotalSalesOrder {
-    private double subtotal;
-    private double igv;
-    private double total;
-    private double descuento;
-    private double galones;
+    private String subtotal;
+    private String igv;
+    private String total;
+    private String descuento;
+    private String galones;
 
-    public double getSubtotal() {
+    public String getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(double subtotal) {
+    public void setSubtotal(String subtotal) {
         this.subtotal = subtotal;
     }
 
-    public double getIgv() {
+    public String getIgv() {
         return igv;
     }
 
-    public void setIgv(double igv) {
+    public void setIgv(String igv) {
         this.igv = igv;
     }
 
-    public double getTotal() {
+    public String getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(String total) {
         this.total = total;
     }
 
-    public double getDescuento() {
+    public String getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(double descuento) {
+    public void setDescuento(String descuento) {
         this.descuento = descuento;
     }
 
-    public double getGalones() {
+    public String getGalones() {
         return galones;
     }
 
-    public void setGalones(double galones) {
+    public void setGalones(String galones) {
         this.galones = galones;
     }
 }

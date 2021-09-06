@@ -14,7 +14,10 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +34,10 @@ import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.Controller.Adapters.ListaDireccionClienteAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaDireccionClienteDao;
 import com.vistony.salesforce.Dao.Retrofit.DireccionRepository;
+import com.vistony.salesforce.Entity.Adapters.DireccionCliente;
 import com.vistony.salesforce.R;
+
+import java.util.ArrayList;
 
 public class DireccionClienteView extends Fragment {
 
@@ -39,13 +45,13 @@ public class DireccionClienteView extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    ListView lv_direccioncliente;
-    // TODO: Rename and change types of parameters
+
+    RecyclerView lv_direccioncliente;
+
     private String mParam1;
     private String mParam2;
     View v;
     public static OnFragmentInteractionListener mListener;
-    ListaDireccionClienteAdapter listaDireccionClienteAdapter;
     static String codigocliente="";
     static MenuItem habilitar_direccioncliente;
     private ProgressDialog pd;
@@ -66,12 +72,12 @@ public class DireccionClienteView extends Fragment {
         return fragment;
     }
 
-    public static DireccionClienteView newInstanceDevuelveDireccion(Object ListaDireccionCliente) {
+    public static DireccionClienteView newInstanceDevuelveDireccion(DireccionCliente direccionSelecionada) {
         DireccionClienteView fragment = new DireccionClienteView();
         String Fragment="DireccionClienteView";
         String accion="nuevadireccion";
         String compuesto=Fragment+"-"+accion;
-        mListener.onFragmentInteraction(compuesto,ListaDireccionCliente);
+        mListener.onFragmentInteraction(compuesto,direccionSelecionada);
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -91,7 +97,9 @@ public class DireccionClienteView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         v =inflater.inflate(R.layout.fragment_direccion_cliente_view, container, false);
-        lv_direccioncliente=(ListView)v.findViewById(R.id.lv_direccioncliente);
+
+        lv_direccioncliente=v.findViewById(R.id.lv_direccioncliente);
+        lv_direccioncliente.setLayoutManager(new LinearLayoutManager(getContext()));
 
         direccionRepository =  new ViewModelProvider(this).get(DireccionRepository.class);
 
@@ -101,9 +109,9 @@ public class DireccionClienteView extends Fragment {
         getActivity().setTitle("Dirección Cliente");
         AppExecutors executor=new AppExecutors();
 
-        direccionRepository.getAddress(getActivity(),executor.diskIO(),codigocliente).observe(getActivity(), data -> {
-            if(data!=null){
-                listaDireccionClienteAdapter = new ListaDireccionClienteAdapter(getActivity(), ListaDireccionClienteDao.getInstance().getLeads(data));
+        direccionRepository.getAddress(getActivity(),executor.diskIO(),codigocliente).observe(getActivity(), direcciones -> {
+            if(direcciones!=null){
+                ListaDireccionClienteAdapter listaDireccionClienteAdapter = new ListaDireccionClienteAdapter(direcciones,getContext());
                 lv_direccioncliente.setAdapter(listaDireccionClienteAdapter);
             }else{
                 Toast.makeText(getContext(),"Actualiza tus parametros, este cliente no tiene direcciones", Toast.LENGTH_LONG).show();
@@ -115,6 +123,7 @@ public class DireccionClienteView extends Fragment {
 
         return v;
     }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String tag,Object dato);

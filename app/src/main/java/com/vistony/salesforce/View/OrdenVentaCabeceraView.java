@@ -1,10 +1,12 @@
 package com.vistony.salesforce.View;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,12 +15,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -40,7 +40,7 @@ import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
-import com.vistony.salesforce.Controller.Utilitario.PDFOrdenVenta;
+import com.vistony.salesforce.Controller.Utilitario.DocumentoPedidoPDF;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
@@ -49,7 +49,7 @@ import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
-import com.vistony.salesforce.Entity.Adapters.ListaDireccionClienteEntity;
+import com.vistony.salesforce.Entity.Adapters.DireccionCliente;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
@@ -76,14 +76,12 @@ import static com.vistony.salesforce.View.OrdenVentaDetalleView.ActualizarResume
 
 public class OrdenVentaCabeceraView extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private static String TAG_1 = "text";
     private static String TAG="HistoricoOrdenVenta";
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
     View v;
@@ -91,7 +89,7 @@ public class OrdenVentaCabeceraView extends Fragment {
     OnFragmentInteractionListener mListener;
     String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag;
     static String cliente_terminopago,cliente_terminopago_id;
-    static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,domembarque_id,direccion,contado,ordenventa_id;
+    static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones;
     static EditText et_comentario;
     static TextView tv_terminopago,tv_orden_venta_agencia,tv_direccion;
@@ -105,8 +103,12 @@ public class OrdenVentaCabeceraView extends Fragment {
     static Context context;
     static ArrayList<AgenciaSQLiteEntity> ListaAgencia=new ArrayList<>();
     static ArrayList<TerminoPagoSQLiteEntity> ListaTerminoPago=new ArrayList<>();
+
+    /*
     static ArrayList<ListaDireccionClienteEntity> ListaDireccionCliente=new ArrayList<>();
-    //HiloObtenerTerminoPago hiloObtenerTerminoPago=new HiloObtenerTerminoPago();
+
+    private DireccionCliente direccionSelecionada;*/
+
     HiloObtenerAgencia hiloObtenerAgencia=new HiloObtenerAgencia();
     static Spinner sp_cantidaddescuento,spnmoneda;
     private ProgressDialog pd;
@@ -127,18 +129,12 @@ public class OrdenVentaCabeceraView extends Fragment {
     List<String> values;
     String cantidaddescuento,historicoOVcantidaddescuento;
     private OrdenVentaRepository ordenVentaRepository;
+    private static DireccionCliente direccionSelecionada;
     
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment OrdenVentaView.
-     */
-    // TODO: Rename and change types and number of parameters
     public static OrdenVentaCabeceraView newInstanceHistoricoOrdenVenta(Object objeto,String flag) {
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
         Bundle b = new Bundle();
@@ -165,32 +161,23 @@ public class OrdenVentaCabeceraView extends Fragment {
     }
 
     public static OrdenVentaCabeceraView newInstanciaTerminoPago(Object objeto) {
-
-        Log.e("jpcm","regreso here 1 de "+ ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
-        //ArrayList<String> Listado = new ArrayList<String>();
 
         Bundle b = new Bundle();
         ListaTerminoPago = (ArrayList<TerminoPagoSQLiteEntity>) objeto;
-        for(int i=0;i<ListaTerminoPago.size();i++)
-        {
+        for(int i=0;i<ListaTerminoPago.size();i++){
+
             terminopago_id=ListaTerminoPago.get(i).getTerminopago_id().toString();
             terminopago=ListaTerminoPago.get(i).getTerminopago().toString();
             contado=ListaTerminoPago.get(i).getContado().toString();
             SesionEntity.contado=contado;
             cliente_terminopago_id=terminopago_id;
-            if(terminopago_id.equals("-1"))
-            {
+            if(terminopago_id.equals("-1")){
                 chk_descuento_contado.setEnabled(true);
-                //sp_cantidaddescuento.setClickable(true);
-            }else
-            {
+            }else{
                 chk_descuento_contado.setEnabled(false);
-                //sp_cantidaddescuento.setClickable(false);
             }
-            Log.e("REOS","OrdenVentaCabeceraView-contado:"+SesionEntity.contado);
         }
         tv_terminopago.setText(terminopago);
         return ordenVentaView;
@@ -198,29 +185,21 @@ public class OrdenVentaCabeceraView extends Fragment {
 
     public static OrdenVentaCabeceraView newInstanciaNuevaDireccion(Object objeto) {
 
-        Log.e("jpcm","regreso here 1 de "+ ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+        Log.e("XASD","paso por aqui direccion");
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
-        //ArrayList<String> Listado = new ArrayList<String>();
-        Bundle b = new Bundle();
-        ListaDireccionCliente = (ArrayList<ListaDireccionClienteEntity>) objeto;
-        for(int i=0;i<ListaDireccionCliente.size();i++)
-        {
-            domembarque_id=ListaDireccionCliente.get(i).getDomembarque_id().toString();
-            direccion=ListaDireccionCliente.get(i).getDireccion().toString();
-        }
-        tv_direccion.setText(direccion);
+
+        direccionSelecionada=(DireccionCliente)objeto;
+        tv_direccion.setText(direccionSelecionada.getDireccion());
 
         return ordenVentaView;
     }
+
     public static OrdenVentaCabeceraView newInstanciaAgencia(Object objeto) {
 
-        Log.e("jpcm","regreso here 1 de "+ ListenerBackPress.getCurrentFragment());
-        //ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
-        //ArrayList<String> Listado = new ArrayList<String>();
+
         Bundle b = new Bundle();
         ListaAgencia = (ArrayList<AgenciaSQLiteEntity>) objeto;
         for(int i=0;i<ListaAgencia.size();i++)
@@ -261,48 +240,56 @@ public class OrdenVentaCabeceraView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        
         context=getContext();
         
         hiloObtenerResumenOrdenVenta=new HiloObtenerResumenOrdenVenta();
-        //hiloObtenerTerminoPago=new HiloObtenerTerminoPago();
+
         hiloObtenerAgencia=new HiloObtenerAgencia();
-        //hiloObtenerTerminoPago.execute();
+
         listaTerminopago=new ArrayList<>();
         terminoPagoSQLiteDao=new TerminoPagoSQLiteDao(getContext());
         listaOrdenVentaCabeceraEntities=new ArrayList<>();
         listaOrdenVentaDetalleEntities=new ArrayList<>();
         hiloObtenerAgencia.execute();
         values=new ArrayList<String>();
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
             listaHistoricoOrdenVentaEntity = (ArrayList<ListaHistoricoOrdenVentaEntity>)(getArguments().getSerializable(TAG));
             Listado= (ArrayList<ListaClienteCabeceraEntity>)getArguments().getSerializable(TAG_1);
+
+
             Flag=getArguments().getString("FLAG");
-            if(listaHistoricoOrdenVentaEntity!=null)
-            {
+
+            if(listaHistoricoOrdenVentaEntity!=null){
 
                 listaOrdenVentaCabecera=new ArrayList<>();
                 listaOrdenVentaDetalle=new ArrayList<>();
                 ArrayList<ListaClienteCabeceraEntity> listaClienteCabecera=new ArrayList<>();
+
                 ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
                 AgenciaSQLiteDao agenciaSQLiteDao=new AgenciaSQLiteDao(getContext());
                 ArrayList<AgenciaSQLiteEntity> listaAgenciasqliteentity=new ArrayList<>();
-                //String ordenventa_id="";
-                for(int j=0;j<listaHistoricoOrdenVentaEntity.size();j++)
-                {
-                    ordenventa_id=listaHistoricoOrdenVentaEntity.get(j).getOrdenventa_id();
 
-
+                for(int j=0;j<listaHistoricoOrdenVentaEntity.size();j++){
+                    ordenventa_id=listaHistoricoOrdenVentaEntity.get(j).getSalesOrderID();
                 }
+
                 FormulasController formulasController=new FormulasController(getContext());
                 listaOrdenVentaCabecera=formulasController.ObtenerOrdenVentaCaberaSQLiteporID(getContext(),ordenventa_id);
                 listaOrdenVentaDetalle=formulasController.ObtenerOrdenVentaDetalleSQLiteporID(getContext(),ordenventa_id);
+
                 listaOrdenVentaDetalleEntities=formulasController.ConvertirListaOrdenVentaDetalleEntity(listaOrdenVentaDetalle);
-                for(int g=0;g<listaOrdenVentaCabecera.size();g++)
-                {
+
+                //////////////////////////////////////
+                //////////////////////////////////////
+                //////////////////////////////////////
+
+                for(int g=0;g<listaOrdenVentaCabecera.size();g++){
                     listaClienteCabecera= clienteSQlite.ObtenerClienteporClienteID(listaOrdenVentaCabecera.get(g).getCliente_id());
+
                     comentario=listaOrdenVentaCabecera.get(g).getComentario();
                     galonesAcum=listaOrdenVentaCabecera.get(g).getTotal_gal_acumulado();
                     subtotalAcum=listaOrdenVentaCabecera.get(g).getMontosubtotal();
@@ -310,9 +297,11 @@ public class OrdenVentaCabeceraView extends Fragment {
                     impuestosAcum=listaOrdenVentaCabecera.get(g).getMontoimpuesto();
                     totalAcum=listaOrdenVentaCabecera.get(g).getMontototal();
                     confirmationRequestErp=listaOrdenVentaCabecera.get(g).getRecibidoERP().equals("1")?true:false;
+
                     listaAgenciasqliteentity= agenciaSQLiteDao.ObtenerAgencia_porID(
                             listaOrdenVentaCabecera.get(g).getAgencia_id()
                     );
+
                     historicoOVcantidaddescuento=listaOrdenVentaCabecera.get(g).getDescuentocontado();
                 }
 
@@ -321,6 +310,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                     nombrecliente=listaClienteCabecera.get(l).getNombrecliente();
                     codigocliente=listaClienteCabecera.get(l).getCliente_id();
                     direccioncliente=listaClienteCabecera.get(l).getDireccion();
+
                     moneda=listaClienteCabecera.get(l).getMoneda();
                     impuesto_id=listaClienteCabecera.get(l).getImpuesto_id();
                     impuesto=listaClienteCabecera.get(l).getImpuesto();
@@ -333,49 +323,45 @@ public class OrdenVentaCabeceraView extends Fragment {
                 }
 
             }
+
             if(Listado !=null){
-                Log.e("jpcm","ESTA  lISTADO TINENE DATA "+Listado.size());
-                //  Listado=mParam1;
-                for(int i=0;i<Listado.size();i++)
-                {
+
+                for(int i=0;i<Listado.size();i++){
                     nombrecliente=Listado.get(i).getNombrecliente();
                     codigocliente=Listado.get(i).getCliente_id();
+
                     direccioncliente=Listado.get(i).getDireccion();
+
                     moneda=Listado.get(i).getMoneda();
                     impuesto_id=Listado.get(i).getImpuesto_id();
                     impuesto=Listado.get(i).getImpuesto();
                     rucdni= Listado.get(i).getRucdni();
                     cliente_terminopago_id=Listado.get(i).getTerminopago_id();
                 }
-                //textorecuperado=texto;
-                //Log.e("ID :", "" + texto.toString());
             }else{
                 Log.e("jpcm","ESTA NULO lISTADO");
             }
         }
 
 
-        /*
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             Log.e("REOS","MenuAccionView: No tiene ACCESS_FINE_LOCATION ");
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
 
         } else {
             Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
-            // We have already permission to use the location
             try {
                 gpsController =  new GPSController(getContext());
                 mLocation = gpsController.getLocation(mLocation);
                 latitude = mLocation.getLatitude();
                 longitude= mLocation.getLongitude();
-            }catch (Exception e)
-            {
-
+            }catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
-        */
+
 
 
     }
@@ -443,9 +429,10 @@ public class OrdenVentaCabeceraView extends Fragment {
         btn_detalle_orden_venta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
-                //alertaAbrirPedido().show();
 
+                btn_detalle_orden_venta.setEnabled(false);
+                btn_detalle_orden_venta.setClickable(false);
+                alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
             }
         });
         btn_consultar_termino_pago.setOnClickListener(new View.OnClickListener() {
@@ -659,15 +646,13 @@ public class OrdenVentaCabeceraView extends Fragment {
 
                 for(int i=0;i<listaHistoricoOrdenVentaEntity.size();i++){
 
-                    if(listaHistoricoOrdenVentaEntity.get(i).isRecepcionERPOV()==true)
-                    {
+                    if(listaHistoricoOrdenVentaEntity.get(i).getDocNum()!=null || !listaHistoricoOrdenVentaEntity.get(i).getDocNum().equals("")){
                         Drawable drawable2 = menu_variable.findItem(R.id.enviar_erp).getIcon();
                         drawable2 = DrawableCompat.wrap(drawable2);
                         DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.Black));
                         menu_variable.findItem(R.id.enviar_erp).setIcon(drawable2);
                         enviar_erp.setEnabled(false);
-                    }else
-                        {
+                    }else{
                             Drawable drawable2 = menu_variable.findItem(R.id.enviar_erp).getIcon();
                             drawable2 = DrawableCompat.wrap(drawable2);
                             DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.white));
@@ -747,31 +732,20 @@ public class OrdenVentaCabeceraView extends Fragment {
         TextView textMsj = dialog.findViewById(R.id.tv_texto);
         textMsj.setText(texto);
 
-        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        ImageView image = dialog.findViewById(R.id.image);
 
-
-        Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
 
 
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-        // if button is clicked, close the custom dialog
-        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                RegistrarOrdenVentaBD ();
-                Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
+        dialogButtonOK.setOnClickListener(v -> {
+            RegistrarOrdenVentaBD ();
+            Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         });
-        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        dialogButtonCancel.setOnClickListener(v -> dialog.dismiss());
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -846,8 +820,8 @@ public class OrdenVentaCabeceraView extends Fragment {
         listaOrdenVentaCabecera= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
         listaOrdenVentaDetallePromocion=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
 
-        PDFOrdenVenta pdfOrdenVenta=new PDFOrdenVenta();
-        pdfOrdenVenta.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
+        DocumentoPedidoPDF documentoPedidoPdf =new DocumentoPedidoPDF();
+        documentoPedidoPdf.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
         //TOAST DE ARCHIVOC READO ESTA EN EL generarPdf
 
         Drawable drawable = menu_variable.findItem(R.id.enviar_erp).getIcon();
@@ -889,7 +863,10 @@ public class OrdenVentaCabeceraView extends Fragment {
             listaOrdenVentaCabeceraEntity.orden_cabecera_compania_id= SesionEntity.compania_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_id=ordenventa_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_cliente_id=codigocliente;
-            listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id=Listado.get(i).getDomembarque_id();
+
+            listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id=(direccionSelecionada==null)?Listado.get(i).getDomembarque_id():direccionSelecionada.getDomembarque_id();//  Listado.get(i).getDomembarque_id();
+            listaOrdenVentaCabeceraEntity.orden_cabecera_domfactura_id=Listado.get(i).getDomfactura_id();
+
             listaOrdenVentaCabeceraEntity.orden_cabecera_fecha_creacion=String.valueOf(sdf.format(calendario.getTime()));
             listaOrdenVentaCabeceraEntity.orden_cabecera_terminopago_id=cliente_terminopago_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_agencia_id=agencia_id;
@@ -897,6 +874,7 @@ public class OrdenVentaCabeceraView extends Fragment {
             listaOrdenVentaCabeceraEntity.orden_cabecera_comentario=et_comentario.getText().toString();
             listaOrdenVentaCabeceraEntity.orden_cabecera_almacen_id=SesionEntity.almacen_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_impuesto_id=impuesto_id;
+
             formulasController=new FormulasController(getContext());
             ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntyCopia=new ArrayList<>();
 
@@ -904,6 +882,7 @@ public class OrdenVentaCabeceraView extends Fragment {
 
             TotalSalesOrder totalSalesOrder=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntyCopia);
 
+            /*AQUI SE ASIGNA LOSDATOS PARA LA CABECERA*/
             listaOrdenVentaCabeceraEntity.orden_cabecera_montosubtotal=""+totalSalesOrder.getSubtotal();
             listaOrdenVentaCabeceraEntity.orden_cabecera_montodescuento=""+totalSalesOrder.getDescuento();
             listaOrdenVentaCabeceraEntity.orden_cabecera_montoimpuesto=""+totalSalesOrder.getIgv();
@@ -924,34 +903,35 @@ public class OrdenVentaCabeceraView extends Fragment {
 
             listaOrdenVentaCabeceraEntity.orden_cabecera_fechatipocambio=String.valueOf(sdf.format(calendario.getTime()));
             listaOrdenVentaCabeceraEntity.orden_cabecera_rucdni=rucdni;
-            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDTD="";
-            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDSD="";
-            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDCD="";
-            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDMT="01";
-            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_STATUS="V";
             listaOrdenVentaCabeceraEntity.orden_cabecera_DocType="I";
             listaOrdenVentaCabeceraEntity.orden_cabecera_total_gal_acumulado=""+totalSalesOrder.getGalones();
             listaOrdenVentaCabeceraEntity.orden_cabecera_descuentocontado=cantidaddescuento;
 
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);
-            visita.setAddress(Listado.get(i).getDomembarque_id());
-            visita.setTerritory(Listado.get(i).getZona_id());
+            visita.setAddress(listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id);
             visita.setType("1");
-            visita.setObservation("Se genero un pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id());
+            visita.setObservation("Se genero el pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id()+" para la dirección "+Listado.get(i).getDireccion());
             visita.setLatitude(""+latitude);
             visita.setLongitude(""+longitude);
 
             formulasController.RegistraVisita(visita,getActivity());
 
         }
+
         listaOrdenVentaCabeceraEntities.add(listaOrdenVentaCabeceraEntity);
 
         formulasController = new FormulasController(getContext());
-        formulasController.RegistrarPedidoenBD(
-                listaOrdenVentaCabeceraEntities,
-                listaOrdenVentaDetalleEntities
-        );
+
+        ///////////GUARDA LA ORDEN DE VENTA\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+
+        formulasController.RegistrarPedidoenBD(listaOrdenVentaCabeceraEntities,listaOrdenVentaDetalleEntities);
+
+
+
+        /////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         Drawable drawable = menu_variable.findItem(R.id.guardar_orden_venta).getIcon();
         drawable = DrawableCompat.wrap(drawable);
@@ -1108,10 +1088,8 @@ public class OrdenVentaCabeceraView extends Fragment {
             try {
                 AgenciaSQLiteDao agenciaSQLiteDao=new AgenciaSQLiteDao(getContext());
                 listaAgenciaSQLiteEntity=agenciaSQLiteDao.ObtenerAgencia();
-            } catch (Exception e)
-            {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
+            } catch (Exception e){
+                e.printStackTrace();
             }
             return listaAgenciaSQLiteEntity;
         }
@@ -1121,19 +1099,22 @@ public class OrdenVentaCabeceraView extends Fragment {
             ArrayList<AgenciaSQLiteEntity> Lista= (ArrayList<AgenciaSQLiteEntity>) result;
             for(int i=0;i<Lista.size();i++)
             {
-                if(Lista.get(i).getAgencia().equals("VISTONY S.A.C."))
-                {
+                if(Lista.get(i).getAgencia_id().equals("P764114914")){
                     agencia_id=Lista.get(i).getAgencia_id();
                     agencia=Lista.get(i).getAgencia();
                     tv_orden_venta_agencia.setText(agencia);
+                    break;
+                }else{
+                    agencia_id=Lista.get(i).getAgencia_id();
+                    agencia=Lista.get(i).getAgencia();
+                    tv_orden_venta_agencia.setText(agencia);
+                    break;
                 }
             }
 
             if(listaHistoricoOrdenVentaEntity!=null)
             {
-
                 tv_orden_venta_agencia.setText(historicoordenventa_agencia);
-                Log.e("REOS","OrdenVentaCabeceraView-OnCreateView-listaHistoricoOrdenVentaEntity-IngresoySeteo:"+agencia);
             }
 
         }
@@ -1143,14 +1124,13 @@ public class OrdenVentaCabeceraView extends Fragment {
 
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.layout_dialog_advertencia);
+        dialog.setCanceledOnTouchOutside(false);
 
         TextView textMsj = dialog.findViewById(R.id.tv_texto);
         textMsj.setText(texto);
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
 
-
-        Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
 
 
@@ -1171,22 +1151,22 @@ public class OrdenVentaCabeceraView extends Fragment {
             String compuesto=Fragment+"-"+accion;
 
             ///////////AQui//////////////
-            Log.e("ASDASDASD","=>"+codigocliente);
 
             String Objeto=cantidaddescuento+"-"+cliente_terminopago_id;
 
             String [] arrayObject={codigocliente,Objeto};
 
-            String xddd=arrayObject[0];
             dialog.dismiss();
             mListener.onFragmentInteraction(compuesto,arrayObject);
+
+            btn_detalle_orden_venta.setEnabled(true);
+            btn_detalle_orden_venta.setClickable(true);
         });
 
-        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
+        dialogButtonCancel.setOnClickListener(v -> {
+            dialog.dismiss();
+            btn_detalle_orden_venta.setEnabled(true);
+            btn_detalle_orden_venta.setClickable(true);
         });
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1195,32 +1175,6 @@ public class OrdenVentaCabeceraView extends Fragment {
         return  dialog;
     }
 
-/*
-    public AlertDialog alertaAbrirPedido() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Advertencia")
-                .setMessage("Esta Seguro de Abrir una Orden Nueva?")
-                .setPositiveButton("OK",(dialog, which) -> {
-
-                            String Fragment="OrdenVentaCabeceraView";
-                            String accion="detalle";
-                            String compuesto=Fragment+"-"+accion;
-                            String Objeto=contado;
-                            mListener.onFragmentInteraction(compuesto,Objeto);
-
-                        })
-                .setNegativeButton("CANCELAR",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-
-        return builder.create();
-    }
-*/
     public void ObtenerDataSpinnerDescuentoContado()
     {
         values=new ArrayList<>();

@@ -27,13 +27,13 @@ public class ComisionesWS {
             String Imei,
             String Compania_ID,
             String FuerzaTrabajo_ID,
-            String Año,
+            String ano,
             String Periodo
 
     ){
         Api api = Config.getClient().create(Api.class);
 
-        Call<ComisionesEntityResponse> call = api.getComisiones("https://graph.vistony.pe/Comision?imei="+Imei+"&anio="+Año+"&mes="+Periodo);
+        Call<ComisionesEntityResponse> call = api.getComisiones("https://graph.vistony.pe/Comision?imei="+Imei+"&anio="+ano+"&mes="+Periodo);
 
         try
         {

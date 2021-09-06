@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Entity.Adapters.ListaCobranzaCabeceraEntity;
 import com.vistony.salesforce.R;
 
@@ -56,14 +57,16 @@ public class ListaCobranzaCabeceraAdapter extends ArrayAdapter<ListaCobranzaCabe
         // Setup.
         holder.tv_cliente.setText(lead.getCliente_id());
         holder.tv_documento.setText(lead.getNrodocumento());
-        holder.tv_importe.setText(lead.getSaldocobrado());
+        holder.tv_importe.setText((lead!=null && !lead.equals(""))?Convert.currencyForView(lead.getSaldocobrado()):"$0");
+
+
         holder.imvdetalle.setOnClickListener(new View.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(View v) {
-                                                     String Texto="VALERIA";
-                                                     String Texto1=Texto;
-                                                 }
-                                             }
+             @Override
+             public void onClick(View v) {
+                 String Texto="VALERIA";
+                 String Texto1=Texto;
+             }
+         }
 
         );
 

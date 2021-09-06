@@ -6,30 +6,27 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.UserEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 
-import org.xbill.DNS.NULLRecord;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class UsuarioSQLite {
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
 
     public UsuarioSQLite(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
     public void abrir(){
-        bd = sqLiteController.getWritableDatabase();
+        bd = sqliteController.getWritableDatabase();
         Log.i("SQLite", "Se abre conexion sqlite desde "+this.getClass().getName());
     }
 
     public void cerrar(){
-        sqLiteController.close();
+        sqliteController.close();
     }
 
     public int InsertaUsuario (UserEntity vendedor){
@@ -82,7 +79,7 @@ public class UsuarioSQLite {
             registro.put("online",1);
             registro.put("chksesion",1);
 
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("usuario",registro,"nombrecompania like '%"+CompanyName+"%' and nombrefuerzatrabajo like '%"+nombrefuerzatrabajo+"%'" ,null);
             cerrar();
         }catch (Exception e){
@@ -223,7 +220,7 @@ public class UsuarioSQLite {
             ContentValues registro = new ContentValues();
             registro.put("recibo",recibo);
             //registro.put("precio",pre);
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("usuario",registro,"",null);
 
             /*Cursor fila = bd.rawQuery(

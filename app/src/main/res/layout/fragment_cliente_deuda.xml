@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Total Deuda S/.:"
+                android:text="Total Deuda:"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -84,7 +84,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="false">
+            android:focusable="false"
+            tools:visibility="gone">
 
             <TextView
                 android:id="@+id/lbl_monto_cliente_cabecera_dolares"

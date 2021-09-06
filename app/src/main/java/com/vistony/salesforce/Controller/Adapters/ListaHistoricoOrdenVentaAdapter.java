@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.R;
@@ -62,12 +63,9 @@ public class ListaHistoricoOrdenVentaAdapter extends ArrayAdapter<ListaHistorico
         {
             for(ListaHistoricoOrdenVentaEntity wp: arrayList)
             {
-                if(wp.getNombrecliente().toLowerCase(Locale.getDefault()).contains(charText))
-                {
+                if(wp.getCardName().toLowerCase(Locale.getDefault()).contains(charText)){
                     Listanombres.add(wp);
-                }
-                else if(wp.getCliente_id().toLowerCase(Locale.getDefault()).contains(charText))
-                {
+                }else if(wp.getCardName().toLowerCase(Locale.getDefault()).contains(charText)){
                     Listanombres.add(wp);
                 }
 
@@ -103,11 +101,7 @@ public class ListaHistoricoOrdenVentaAdapter extends ArrayAdapter<ListaHistorico
 
         // ¿Ya se infló este view?
         if (null == convertView) {
-            //Si no existe, entonces inflarlo con image_list_view.xml
-            convertView = inflater.inflate(
-                    R.layout.layout_lista_historico_orden_venta,
-                    parent,
-                    false);
+            convertView = inflater.inflate(R.layout.layout_lista_historico_orden_venta,parent,false);
 
             holder = new ListaHistoricoOrdenVentaAdapter.ViewHolder();
             holder.tv_orden_venta_ERP_id = (TextView) convertView.findViewById(R.id.tv_orden_venta_ERP_id);
@@ -129,33 +123,26 @@ public class ListaHistoricoOrdenVentaAdapter extends ArrayAdapter<ListaHistorico
         final ListaHistoricoOrdenVentaEntity lead = getItem(position);
 
         // Setup.
-        holder.tv_orden_venta_ERP_id.setText(lead.getDocnum());
-        holder.tv_rucdnni.setText(lead.getRucdni());
-        holder.tv_nombrecliente.setText(lead.getNombrecliente());
-        holder.tv_monto_historico_orden_venta.setText(lead.getMontototalorden());
-        holder.tv_estado_historico_orden_venta.setText(lead.getEstadoaprobacion());
-        holder.tv_monto_historico_orden_venta.setText(lead.getMontototalorden());
+        holder.tv_orden_venta_ERP_id.setText((lead.getDocNum()==null||lead.getDocNum().equals(""))?lead.getSalesOrderID():lead.getSalesOrderID());
+        holder.tv_rucdnni.setText(lead.getLicTradNum());
+        holder.tv_nombrecliente.setText(lead.getCardName());
+        holder.tv_estado_historico_orden_venta.setText(lead.getApprovalStatus());
+        holder.tv_monto_historico_orden_venta.setText(Convert.currencyForView(lead.getDocTotal()));
 
-        if(lead.getComentarioaprobacion().isEmpty())
-        {
+        if(lead.getApprovalCommentary()==null||lead.getApprovalCommentary().isEmpty()){
             holder.imv_historico_orden_venta_cometario_aprob.setEnabled(false);
-            //holder.imv_historico_orden_venta_cometario_aprob.setVisibility(View.INVISIBLE);
+        }else{
+            holder.imv_historico_orden_venta_cometario_aprob.setEnabled(true);
         }
-        else
-            {
-                holder.imv_historico_orden_venta_cometario_aprob.setEnabled(true);
-                //holder.imv_historico_orden_venta_cometario_aprob.setVisibility(View.VISIBLE);
-
-            }
 
         holder.imv_historico_orden_venta_cometario_aprob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertamostrarcomentario("Comentario Aprobacion",lead.getComentarioaprobacion()).show();
+                alertamostrarcomentario("Comentario Aprobacion",lead.getApprovalCommentary()).show();
             }
         });
 
-        if(lead.getComentariows().isEmpty())
+        if(lead.getApprovalCommentary()==null||lead.getApprovalCommentary().isEmpty())
         {
             holder.imv_historico_orden_venta_cometario_aprob.setEnabled(false);
             //holder.imv_historico_orden_venta_cometario_aprob.setVisibility(View.INVISIBLE);
@@ -170,29 +157,21 @@ public class ListaHistoricoOrdenVentaAdapter extends ArrayAdapter<ListaHistorico
         holder.imv_historico_orden_venta_cometario_ws.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertamostrarcomentario("Comentario Ws",lead.getComentariows()).show();
+                alertamostrarcomentario("Comentario Ws",lead.getApprovalCommentary()).show();
             }
         });
 
-        if(lead.isRecepcionERPOV())
-        {
+        if(lead.getDocNum()!=null){
             holder.chk_recibido_orden_venta_ERP.setChecked(true);
-        }
-        else
-            {
-                holder.chk_recibido_orden_venta_ERP.setChecked(false);
-            }
-        if(lead.isEnvioERPOV())
-        {
             holder.chk_envio_orden_venta_ERP.setChecked(true);
-        }
-        else
-        {
+        }else{
+            holder.chk_recibido_orden_venta_ERP.setChecked(false);
             holder.chk_envio_orden_venta_ERP.setChecked(false);
         }
 
+
         holder.imv_flecha_historico_orden_venta.setOnClickListener(v -> {
-            if(formulasController.ValidarOrdenVentaIDSQLite(getContext() ,lead.getOrdenventa_id())){
+            if(formulasController.ValidarOrdenVentaIDSQLite(getContext() ,lead.getSalesOrderID())){
                 fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 ArrayList<ListaHistoricoOrdenVentaEntity> Lista = new ArrayList<>();
@@ -216,7 +195,7 @@ public class ListaHistoricoOrdenVentaAdapter extends ArrayAdapter<ListaHistorico
         textTitle.setText(Titulo);
 
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText(Comentario);
+        textMsj.setText((Comentario==null)?"Sin Comentario":Comentario);
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
 

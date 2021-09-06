@@ -5,30 +5,30 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 
 import java.util.ArrayList;
 
 public class CompaniaSQLiteDAO {
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity;
 
     public CompaniaSQLiteDAO(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        bd = sqLiteController.getWritableDatabase();
+        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
+        bd = sqliteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        sqLiteController.close();
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
     }
 
 

@@ -62,7 +62,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
     private String [] Indices;
     //private int [] colors = new int []{Color.BLUE};
     private int [] colors;
-    Spinner spnaño,spnmes;
+    Spinner spnano,spnmes;
     public static com.omega_r.libs.OmegaCenterIconButton btn_comisiones_consultar;
     ListView listviewdetallecomisiones;
     ListaComisionesDetalleAdapter listaComisionesDetalleAdapter;
@@ -107,7 +107,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_comisiones_view, container, false);
         barChart=(BarChart) v.findViewById(R.id.barChart);
-        spnaño=(Spinner) v.findViewById(R.id.spnaño);
+        spnano=(Spinner) v.findViewById(R.id.spnano);
         spnmes=(Spinner) v.findViewById(R.id.spnmes);
         listviewdetallecomisiones=(ListView) v.findViewById(R.id.listviewdetallecomisiones);
         btn_comisiones_consultar= v.findViewById(R.id.btn_comisiones_consultar);
@@ -288,17 +288,16 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
             ComisionesWS comisionesWS=new ComisionesWS(getContext());
             ArrayList<ComisionesSQLiteEntity> listaComisionesSQLiteEntity=new ArrayList<>();
             String[] mes = spnmes.getSelectedItem().toString().split("-");
-            String mes1,mes2,año;
+            String mes1,mes2,ano;
             mes1=mes[0];
             mes2=mes[1];
-            año=spnaño.getSelectedItem().toString();
+            ano=spnano.getSelectedItem().toString();
             try {
-                Log.e("REOS","ComisionesView:Call:"+SesionEntity.imei+"-"+SesionEntity.compania_id+"-"+SesionEntity.fuerzatrabajo_id+"-"+mes1+"-"+spnaño.getSelectedItem().toString());
                 listaComisionesSQLiteEntity=comisionesWS.getComisiones(
                         SesionEntity.imei,
                         SesionEntity.compania_id,
                         SesionEntity.fuerzatrabajo_id,
-                        año,
+                        ano,
                         mes1
                 );
             } catch (Exception e)

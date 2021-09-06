@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaVendedorSQLiteEntity;
@@ -15,26 +15,26 @@ import java.util.ArrayList;
 
 public class RutaVendedorSQLiteDao {
 
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<RutaVendedorSQLiteEntity> listaRutaVendedorSQLiteEntity;
     Context context;
 
     public RutaVendedorSQLiteDao(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
         this.context=context;
     }
     public void abrir(){
         Log.i("SQLite", "Se abre conexion sqlite desde "+this.getClass().getName());
-        bd = sqLiteController.getWritableDatabase();
+        bd = sqliteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        sqLiteController.close();
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
     }
 
 
@@ -43,6 +43,7 @@ public class RutaVendedorSQLiteDao {
              String compania_id,
              String nombrecliente,
              String domembarque_id,
+             String domfactura_id,
              String direccion,
              String zona_id,
              String ordenvisita,
@@ -182,8 +183,10 @@ public class RutaVendedorSQLiteDao {
         {
             ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity=new ArrayList<>();
             ClienteSQlite clienteSQlite =new ClienteSQlite(context);
+
             String terminopago_id="";
             String linea_credito_usado="";
+            String domfactura_id="";
 
             listaClienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(fila.getString(0),fila.getString(2));
 
@@ -191,13 +194,17 @@ public class RutaVendedorSQLiteDao {
             {
                 terminopago_id=listaClienteSQLiteEntity.get(i).getTerminopago_id();
                 linea_credito_usado=listaClienteSQLiteEntity.get(i).getLinea_credito_usado();
+                domfactura_id=listaClienteSQLiteEntity.get(i).getDomfactura_id();
             }
 
 
 
             ObjListaClienteCabeceraEntity= new ListaClienteCabeceraEntity();
             ObjListaClienteCabeceraEntity.setCliente_id(fila.getString(0));
+
             ObjListaClienteCabeceraEntity.setDomembarque_id(fila.getString(1));
+            ObjListaClienteCabeceraEntity.setDomfactura_id(domfactura_id);
+
             ObjListaClienteCabeceraEntity.setCompania_id(fila.getString(2));
             ObjListaClienteCabeceraEntity.setNombrecliente(fila.getString(3));
             ObjListaClienteCabeceraEntity.setDireccion(fila.getString(4));
@@ -263,7 +270,7 @@ public class RutaVendedorSQLiteDao {
 
             ContentValues registro = new ContentValues();
             registro.put("chk_visita","1");
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' and  domembarque_id='"+domembarque_id+"' and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
         }catch (Exception e)
@@ -284,7 +291,7 @@ public class RutaVendedorSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("chk_pedido","1");
             registro.put("chk_visita","1");
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' and  domembarque_id='"+domembarque_id+"' and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
         }catch (Exception e)
@@ -304,7 +311,7 @@ public class RutaVendedorSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("chk_cobranza","1");
             registro.put("chk_visita","1");
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' and  domembarque_id='"+domembarque_id+"' and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
         }catch (Exception e)

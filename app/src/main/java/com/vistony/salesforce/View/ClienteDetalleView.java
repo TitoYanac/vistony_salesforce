@@ -44,6 +44,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
@@ -55,6 +56,8 @@ import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -72,7 +75,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    TextView output,tv_nombrecliente,tv_ruccliente,tv_cantidad_cliente_detalle,tv_monto_cliente_detalle,tv_monto_cliente_detalle_dolares;
+    TextView output,tv_nombrecliente,tv_ruccliente,tv_cantidad_cliente_detalle,tv_monto_cliente_detalle;
     View v;
     private static String TAG_1 = "text";
     static String texto;
@@ -169,7 +172,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         fab = (FloatingActionButton) v.findViewById(R.id.fabagregar);
         tv_cantidad_cliente_detalle = (TextView) v.findViewById(R.id.tv_cantidad_cliente_detalle);
         tv_monto_cliente_detalle = (TextView) v.findViewById(R.id.tv_monto_cliente_detalle);
-        tv_monto_cliente_detalle_dolares = (TextView) v.findViewById(R.id.tv_monto_cliente_detalle_dolares);
+
         refreshMasterClient=v.findViewById(R.id.refreshClient);
 
         clienteRepository =  new ViewModelProvider(this.getActivity()).get(ClienteRepository.class);
@@ -264,7 +267,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         texto=new String();
         setHasOptionsMenu(true);
 
-        getActivity().setTitle("Documento Deuda");
+        getActivity().setTitle("Documento Con Deuda");
         if (getArguments() != null) {
 
           Listado= (ArrayList<ListaClienteCabeceraEntity>)getArguments().getSerializable(TAG_1);
@@ -301,8 +304,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
             try {
                 listaDDeudaEntity= documentoSQLite.ObtenerDDeudaporcliente(compania_id,fuerzatrabajo_id,texto);
             } catch (Exception e) {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
             return "1";
         }
@@ -310,30 +312,38 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         protected void onPostExecute(Object result) {
             String cantidad="",monto="";
             int cantidad_documento=0;
-            float monto_cliente_detalle=0,monto_cliente_detalle_dolares=0;
-            DecimalFormat format =  new DecimalFormat("#0.00");
-            cantidad_documento=listaDDeudaEntity.size();
-            cantidad=String.valueOf(cantidad_documento);
-            tv_cantidad_cliente_detalle.setText(cantidad);
 
-            for(int i=0;i<listaDDeudaEntity.size();i++)
-            {
-                if(listaDDeudaEntity.get(i).getMoneda().equals("S/"))
-                {
-                    monto_cliente_detalle=monto_cliente_detalle+Float.parseFloat(listaDDeudaEntity.get(i).getSaldo());
-                }
-                else if(listaDDeudaEntity.get(i).getMoneda().equals("US$"))
-                {
-                    monto_cliente_detalle_dolares=monto_cliente_detalle_dolares+Float.parseFloat(listaDDeudaEntity.get(i).getSaldo());
-                }
+            BigDecimal  monto_cliente_detalle=new BigDecimal("0");
+            BigDecimal  monto_cliente_detalle_dolares=new BigDecimal("0");
+
+            cantidad_documento=listaDDeudaEntity.size();
+            tv_cantidad_cliente_detalle.setText(""+cantidad_documento);
+
+            for(int i=0;i<listaDDeudaEntity.size();i++){
+
+               /* switch (listaDDeudaEntity.get(i).getMoneda()){
+                    case "S/":
+                        monto_cliente_detalle.add(new BigDecimal(listaDDeudaEntity.get(i).getSaldo())).setScale(3, RoundingMode.HALF_UP);
+                        break;
+                    case "US$":
+                        monto_cliente_detalle_dolares.add(new BigDecimal(listaDDeudaEntity.get(i).getSaldo())).setScale(3, RoundingMode.HALF_UP);
+                        break;
+                    default:*/
+                        monto_cliente_detalle=monto_cliente_detalle.add(new BigDecimal(listaDDeudaEntity.get(i).getSaldo()));
+                        Log.e("Monto","=>>"+listaDDeudaEntity.get(i).getSaldo());
+                        Log.e("Monto","=>"+monto_cliente_detalle.toString());
+                  /*      break;
+                }*/
             }
-            tv_monto_cliente_detalle_dolares.setText(String.valueOf(monto_cliente_detalle_dolares));
-            tv_monto_cliente_detalle.setText(String.valueOf(monto_cliente_detalle));
+
+            Log.e("Monto","=>"+monto_cliente_detalle.toString());
+
+            tv_monto_cliente_detalle.setText(Convert.currencyForView(monto_cliente_detalle.setScale(3, RoundingMode.HALF_UP).toString()));
+
             pd = ProgressDialog.show(getContext(), "Por favor espere", "Consultando el acceso", true, false);
-            //obtenerLista();
+
             listaClienteDetalleDao = new ListaClienteDetalleDao();
             pd.cancel();
-            //ArrayAdapter adaptador= new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,listaInformacion);
 
             listaClienteDetalleAdapter = new ListaClienteDetalleAdapter(getActivity(),ListaClienteDetalleDao.getInstance().getLeads(listaDDeudaEntity));
             //listaClienteDetalleAdapter = new ListaClienteDetalleAdapter(getActivity(),listaDDeudaEntity);

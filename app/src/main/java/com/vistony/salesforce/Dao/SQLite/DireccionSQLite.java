@@ -6,33 +6,20 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
-import com.vistony.salesforce.Entity.Adapters.ListaDireccionClienteEntity;
+import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Entity.Adapters.DireccionCliente;
 import com.vistony.salesforce.Entity.SQLite.DireccionClienteSQLiteEntity;
 
 import java.util.ArrayList;
 
 public class DireccionSQLite {
-    SQLiteController sqLiteController;
-    SQLiteDatabase bd;
-    ArrayList<DireccionClienteSQLiteEntity> listaDireccionClienteSQLiteEntity;
+    private ArrayList<DireccionClienteSQLiteEntity> listaDireccionClienteSQLiteEntity;
 
-    public DireccionSQLite(Context context)
-    {
-        sqLiteController = new SQLiteController(context);
+    public DireccionSQLite(Context context){
+
+        DataBaseManager.initializeInstance(new SqliteController(context));
     }
-
-    private void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        bd = sqLiteController.getWritableDatabase();
-    }
-
-    private void cerrar()
-    {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        sqLiteController.close();
-    }
-
 
     public int InsertaDireccionCliente (
             String compania_id,
@@ -46,7 +33,8 @@ public class DireccionSQLite {
 
     )
     {
-        abrir();
+        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
         ContentValues registro = new ContentValues();
         registro.put("compania_id",compania_id);
         registro.put("cliente_id",cliente_id);
@@ -57,53 +45,68 @@ public class DireccionSQLite {
         registro.put("fuerzatrabajo_id",fuerzatrabajo_id);
         registro.put("nombrefuerzatrabajo",nombrefuerzatrabajo);
 
-        bd.insert("direccioncliente",null,registro);
-        bd.close();
+        sqlite.insert("direccioncliente",null,registro);
+        DataBaseManager.getInstance().closeDatabase();
+
         return 1;
     }
 
-    public ArrayList<ListaDireccionClienteEntity> getListAddress(String cliente_id){
-        ArrayList<ListaDireccionClienteEntity> LDCliente = new ArrayList<>();
+    public ArrayList<DireccionCliente> getListAddress(String cliente_id){
+        ArrayList<DireccionCliente> LDCliente = new ArrayList<>();
 
-        abrir();
-        Cursor fila = bd.rawQuery(
-                "SELECT cliente_id,domembarque_id,direccion,zona_id,zona,nombrefuerzatrabajo FROM direccioncliente WHERE cliente_id= '"+cliente_id+"'",null);
+        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
 
-        if (fila.moveToFirst()) {
+        try {
+
+            Cursor fila = sqlite.rawQuery("SELECT DISTINCT cliente_id,domembarque_id,direccion,zona_id,zona,nombrefuerzatrabajo FROM direccioncliente WHERE cliente_id=?", new String[]{cliente_id});
+
             if (fila.moveToFirst()) {
-                do {
-                    ListaDireccionClienteEntity ObjDCliente = new ListaDireccionClienteEntity();
-                    ObjDCliente.setCliente_id(fila.getString(fila.getColumnIndex("cliente_id")));
-                    ObjDCliente.setDomembarque_id(fila.getString(fila.getColumnIndex("domembarque_id")));
-                    ObjDCliente.setDireccion(fila.getString(fila.getColumnIndex("direccion")));
-                    ObjDCliente.setZona_id(fila.getString(fila.getColumnIndex("zona_id")));
-                    ObjDCliente.setZona(fila.getString(fila.getColumnIndex("zona")));
-                    ObjDCliente.setNombrefuerzatrabajo(fila.getString(fila.getColumnIndex("nombrefuerzatrabajo")));
+                if (fila.moveToFirst()) {
+                    do {
+                        DireccionCliente ObjDCliente = new DireccionCliente();
+                        ObjDCliente.setCliente_id(fila.getString(fila.getColumnIndex("cliente_id")));
+                        ObjDCliente.setDomembarque_id(fila.getString(fila.getColumnIndex("domembarque_id")));
+                        ObjDCliente.setDireccion(fila.getString(fila.getColumnIndex("direccion")));
+                        ObjDCliente.setZona_id(fila.getString(fila.getColumnIndex("zona_id")));
+                        ObjDCliente.setZona(fila.getString(fila.getColumnIndex("zona")));
+                        ObjDCliente.setNombrefuerzatrabajo(fila.getString(fila.getColumnIndex("nombrefuerzatrabajo")));
 
-                    LDCliente.add(ObjDCliente);
-                } while (fila.moveToNext());
+                        LDCliente.add(ObjDCliente);
+                    } while (fila.moveToNext());
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
         }
 
-        bd.close();
         return LDCliente;
     }
 
-    public int LimpiarTablaDireccionCliente ()
-    {
-        abrir();
-        bd.execSQL("delete from direccioncliente ");
-        bd.close();
-        return 1;
+    public int LimpiarTablaDireccionCliente(){
+        int status=0;
+        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
+        try{
+            sqlite.execSQL("DELETE FROM direccioncliente");
+            status=1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
+
+        return status;
     }
 
     public int ObtenerCantidadDireccionCliente ()
     {
         int resultado=0;
 
-        abrir();
+        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
         try {
-            Cursor fila = bd.rawQuery(
+            Cursor fila = sqlite.rawQuery(
                     "Select count(compania_id) from direccioncliente",null);
 
             while (fila.moveToNext())
@@ -111,12 +114,11 @@ public class DireccionSQLite {
                 resultado= Integer.parseInt(fila.getString(0));
 
             }
-        }catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
         }
-
-        bd.close();
 
         return resultado;
     }

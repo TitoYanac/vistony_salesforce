@@ -129,14 +129,14 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         // Setup.
         holder.tv_clienteid.setText(lead.getCliente_id());
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
-        holder.tv_saldo_cliente_cabecera.setText(lead.getSaldo());
+        holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));
         holder.tv_moneda.setText(lead.getMoneda());
         holder.tv_categoria.setText(lead.getCategoria());
 
         //Mostrar linea de credito en moneda de acuerdo a la region
         ///////////////////////////////////////////////////////////////////////////////////////
-        holder.tv_linea_credito.setText(Convert.currencyForView(Convert.stringToDouble(lead.getLinea_credito())));
-        holder.tv_linea_credito_usado.setText(Convert.currencyForView(Convert.stringToDouble(lead.getLinea_credito_usado())));
+        holder.tv_linea_credito.setText(Convert.currencyForView(lead.getLinea_credito()));
+        holder.tv_linea_credito_usado.setText(Convert.currencyForView(lead.getLinea_credito_usado()));
         ///////////////////////////////////////////////////////////////////////////////////////
 
 

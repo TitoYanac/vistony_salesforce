@@ -490,7 +490,7 @@ public class ConfigImpresoraView extends Fragment implements RadioGroup.OnChecke
             case R.id.btnPruebaPrinter:
                 String strData = "Vistony moviendo el futuro!!!" + "\n\n\n\n\n\n";
                 int alignment=0, attribute = 0;
-                MenuView.getPrinterInstance().printText(strData, alignment, attribute, 1);
+                //MenuView.getPrinterInstance().printText(strData, alignment, attribute, 1);
                 break;
         }
     }
@@ -540,6 +540,7 @@ public class ConfigImpresoraView extends Fragment implements RadioGroup.OnChecke
                    // address = editTextIPAddress.getText().toString();
                 }
 
+                /* SE COMENTO PARA CHILE, YA QUE NO LO USARA
                 try {
 
 
@@ -554,6 +555,7 @@ public class ConfigImpresoraView extends Fragment implements RadioGroup.OnChecke
                 }catch (Throwable x){
                     Log.e("ERROR FATAL IMPRESORA","En la clase"+getClass().getName()+" "+x.getMessage());
                 }
+                */
             }
         }).start();
     }

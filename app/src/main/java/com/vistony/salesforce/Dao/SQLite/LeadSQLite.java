@@ -6,30 +6,30 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.LeadEntity;
 import com.vistony.salesforce.Entity.SQLite.DireccionClienteSQLiteEntity;
 
 import java.util.ArrayList;
 
 public class LeadSQLite {
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<DireccionClienteSQLiteEntity> listaDireccionClienteSQLiteEntity;
 
     public LeadSQLite(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
     private void abrir(){
         Log.i("SQLite", "Se abre conexion a la base de datos desde " + this.getClass().getName());
-        bd = sqLiteController.getWritableDatabase();
+        bd = sqliteController.getWritableDatabase();
     }
 
     private void cerrar()
     {
         Log.i("SQLite", "Se cierra conexion desde " + this.getClass().getName());
-        sqLiteController.close();
+        sqliteController.close();
     }
 
     public int addLead(
@@ -87,7 +87,7 @@ public class LeadSQLite {
             ContentValues registro = new ContentValues();
             registro.put("recibido_api",1);
 
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("lead",registro,"fecha like '%"+fecha+"%' and razon_social like '%"+razon_social+"%' and recibido_api=0" ,null);
             cerrar();
         }catch (Exception e){

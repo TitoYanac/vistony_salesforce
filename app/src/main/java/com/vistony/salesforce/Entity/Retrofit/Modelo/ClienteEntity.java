@@ -17,8 +17,8 @@ public class ClienteEntity {
     @SerializedName("LicTradNum")
     private String LicTradNum;
 
-    @SerializedName("ShipToCode")
-    private String domicilioEmbarque;
+    @SerializedName("PayToCode")
+    private String domicilioFactura;
 
     @SerializedName("CardName")
     private String nombre;
@@ -159,12 +159,12 @@ public class ClienteEntity {
         this.direccion = direccion;
     }
 
-    public String getDomicilioEmbarque() {
-        return domicilioEmbarque;
+    public String getDomicilioFactura() {
+        return domicilioFactura;
     }
 
-    public void setDomicilioEmbarque(String domicilioEmbarque) {
-        this.domicilioEmbarque = domicilioEmbarque;
+    public void setDomicilioFactura(String domicilioFactura) {
+        this.domicilioFactura = domicilioFactura;
     }
 
     public String getNombre() {

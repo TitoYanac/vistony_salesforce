@@ -1,5 +1,6 @@
 package com.vistony.salesforce.Dao.Retrofit;
 
+import android.content.Context;
 import android.os.Environment;
 
 import androidx.lifecycle.LiveData;
@@ -28,11 +29,13 @@ import retrofit2.Response;
 public class BackupWS {
     private MutableLiveData<Object> status= new MutableLiveData<>();
 
-    public LiveData<Object> sendSqlite(String imei){
+    public LiveData<Object> sendSqlite(String imei, Context context){
 
-        File file = new File(Environment.getDataDirectory(),"/data/com.vistony.salesforce/databases/dbcobranzas");
+
+        File file = new File(Environment.getDataDirectory(),"/data/"+context.getPackageName()+"/databases/dbcobranzas");
         Api api = Config.getClient().create(Api.class);
-        RequestBody requestBody=RequestBody.create(MediaType.parse("multipart/form-data"),file);
+        RequestBody requestBody=RequestBody.create(file,MediaType.parse("multipart/form-data"));
+
         final String endPoint="https://reclamos.vistonyapp.com/backup/sqlite";
 
         api.sendBackup(endPoint,MultipartBody.Part.createFormData("file",(imei==null?"sinImei":imei),requestBody)).enqueue(new Callback<ResponseBody>(){

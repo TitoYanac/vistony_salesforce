@@ -2,6 +2,7 @@ package com.vistony.salesforce.Entity.SQLite;
 
 public class DocumentoDeudaSQLiteEntity {
     public String documento_id;
+    public String documento_entry;
     public String compania_id;
     public String cliente_id;
     public String fuerzatrabajo_id;
@@ -14,8 +15,9 @@ public class DocumentoDeudaSQLiteEntity {
     public String saldo;
     public String saldo_sin_procesar;
 
-    public DocumentoDeudaSQLiteEntity(String documento_id, String compania_id, String cliente_id, String domembarque_id, String nrofactura, String fuerzatrabajo_id, String fechaemision, String fechavencimiento, String moneda, String importefactura, String saldo, String saldo_sin_procesar) {
+    public DocumentoDeudaSQLiteEntity(String documento_id,String documento_entry, String compania_id, String cliente_id, String domembarque_id, String nrofactura, String fuerzatrabajo_id, String fechaemision, String fechavencimiento, String moneda, String importefactura, String saldo, String saldo_sin_procesar) {
         this.documento_id = documento_id;
+        this.documento_entry = documento_entry;
         this.compania_id = compania_id;
         this.cliente_id = cliente_id;
         this.nrofactura = nrofactura;
@@ -31,6 +33,18 @@ public class DocumentoDeudaSQLiteEntity {
 
     public DocumentoDeudaSQLiteEntity()
     {
+    }
+
+    public String getDocumento_entry() {
+        return documento_entry;
+    }
+
+    public void setDocumento_entry(String documento_entry) {
+        this.documento_entry = documento_entry;
+    }
+
+    public String getDomembarque_id() {
+        return domembarque_id;
     }
 
     public String getDomembaque_id() {

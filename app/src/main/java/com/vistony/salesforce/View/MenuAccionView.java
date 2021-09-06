@@ -92,6 +92,15 @@ public class MenuAccionView extends Fragment {
         Bundle b = new Bundle();
         ArrayList<ListaClienteCabeceraEntity> Lista = (ArrayList<ListaClienteCabeceraEntity>) objeto;
 
+
+        for(int s=0;s<Lista.size();s++){
+            Log.e("JEPICAMEE","=>"+Lista.get(s).getDireccion());
+            Log.e("JEPICAMEE","=>"+Lista.get(s).getDomembarque_id());
+            Log.e("JEPICAMEE","=>"+Lista.get(s).getDomfactura_id());
+            Log.e("JEPICAMEE","=>"+Lista.get(s).getCliente_id());
+            Log.e("JEPICAMEE","=>"+Lista.get(s).getZona_id());
+        }
+
         b.putSerializable(ARG_PARAM,Lista);
 
         menuAccionView.setArguments(b);
@@ -154,9 +163,6 @@ public class MenuAccionView extends Fragment {
 
 
         if (getArguments() != null) {
-            //Listado = getArguments().(ARG_PARAM);
-            //mParam2 = getArguments().getString(ARG_PARAM); //Key is Cliente y contiene nombre del cliente
-
             getActivity().setTitle(Listado.get(0).getNombrecliente());
         }
     }
@@ -169,67 +175,42 @@ public class MenuAccionView extends Fragment {
         cv_cobranza=v.findViewById(R.id.cv_cobranza);
         cv_visita=v.findViewById(R.id.cv_visita);
         setHasOptionsMenu(true);
+
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         /********/
-        cv_pedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                String Fragment="MenuAccionView";
-                String accion="pedido";
-                String compuesto=Fragment+"-"+accion;
-                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+        cv_pedido.setOnClickListener(v -> {
+            String Fragment="MenuAccionView";
+            String accion="pedido";
+            String compuesto=Fragment+"-"+accion;
+            mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+        });
+
+        cv_cobranza.setOnClickListener(v -> {
+
+            validar=CobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
+            if(validar>0){
+                alertarecibospendientes().show();
+            }else{
+                alertatiporecibos().show();
             }
         });
 
-        cv_cobranza.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                date = new Date();
-                fecha =dateFormat.format(date);
+        cv_visita.setOnClickListener(v -> {
+            ConnectivityManager manager= (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);;
+            NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-                validar=CobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id,fecha);
-                if(validar>0){
-                    //Toast.makeText(this, "Ud. cuenta con Recibos Pendientes de Deposito, favor de completar el Proceso de Deposito", Toast.LENGTH_LONG).show();
-                    alertarecibospendientes().show();
-                }else{
-                    /*SesionEntity.pagodirecto="0";
-                    contentFragment = new RutaVendedorView();
-                    fragment = "RutaVendedorView";
-                    accion = "nuevoinicioRutaVendedorView";
-                    compuesto = fragment + "-" + accion;
-                    object = null;
-                    onFragmentInteraction(compuesto, object);
-                    Log.e("jpcm","Entramos aqui");*/
-                    alertatiporecibos().show();
-                }
-
-                //String Fragment="MenuAccionView";
-                //String accion="cobranza";
-                //String compuesto=Fragment+"-"+accion;
-                //mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
-            }
-        });
-
-        cv_visita.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ConnectivityManager manager= (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);;
-                NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-
-                if (networkInfo != null) {
-                    if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                        DialogFragment dialogFragment = new VisitaDialogController(objetoMenuAccionView);
-                        dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
-                    } else {
-                        Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
-                    }
-                }else{
+            if (networkInfo != null) {
+                if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                    DialogFragment dialogFragment = new VisitaDialogController(objetoMenuAccionView);
+                    dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
+                } else {
                     Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
                 }
-                //alertaAdvertencia("La Opcion Aun no Esta Habilitada",getContext()).show();
+            }else{
+                Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
             }
+            //alertaAdvertencia("La Opcion Aun no Esta Habilitada",getContext()).show();
         });
         return v;
     }

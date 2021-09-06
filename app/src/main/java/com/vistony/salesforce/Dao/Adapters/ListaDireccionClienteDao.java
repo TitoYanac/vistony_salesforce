@@ -2,7 +2,7 @@ package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
 
-import com.vistony.salesforce.Entity.Adapters.ListaDireccionClienteEntity;
+import com.vistony.salesforce.Entity.Adapters.DireccionCliente;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ public class ListaDireccionClienteDao {
     Context context;
 
     public static ListaDireccionClienteDao repository = new ListaDireccionClienteDao();
-    public HashMap<String, ListaDireccionClienteEntity> leads = new HashMap<>();
+    public HashMap<String, DireccionCliente> leads = new HashMap<>();
 
     public static ListaDireccionClienteDao getInstance() {
         return repository;
@@ -23,17 +23,16 @@ public class ListaDireccionClienteDao {
 
     }
 
-    private void saveLead(ListaDireccionClienteEntity lead) {
+    private void saveLead(DireccionCliente lead) {
         leads.put(lead.getDomembarque_id(), lead);
     }
 
-    public List<ListaDireccionClienteEntity> getLeads(ArrayList<ListaDireccionClienteEntity> Lista) {
+    public List<DireccionCliente> getLeads(ArrayList<DireccionCliente> Lista) {
         Lista.size();
 
         try {
-            for( int i=0;i<Lista.size();i++)
-            {
-                saveLead(new ListaDireccionClienteEntity(
+            for( int i=0;i<Lista.size();i++){
+                saveLead(new DireccionCliente(
                         Lista.get(i).getCliente_id()
                         , Lista.get(i).getDomembarque_id()
                         , Lista.get(i).getDireccion()
@@ -43,9 +42,8 @@ public class ListaDireccionClienteDao {
                         , Lista.get(i).getFuerzatrabajo_id()
                 ));
             }
-        }catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return new ArrayList<>(leads.values());
     }

@@ -6,31 +6,31 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
 
 import java.util.ArrayList;
 
 public class OrdenVentaDetalleSQLiteDao {
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<OrdenVentaDetalleSQLiteEntity> listaOrdenVentaDetalleSQLiteEntity;
 
     public OrdenVentaDetalleSQLiteDao(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
 
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        bd = sqLiteController.getWritableDatabase();
+        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
+        bd = sqliteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        sqLiteController.close();
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
     }
 
 
@@ -58,8 +58,7 @@ public class OrdenVentaDetalleSQLiteDao {
             String U_SYP_FECAT07,
             String montosubtotalcondescuento,
             String chk_descuentocontado
-    )
-    {
+    ){
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
         // SQLiteDatabase bd = admin.getWritableDatabase();
         abrir();
@@ -173,7 +172,7 @@ public class OrdenVentaDetalleSQLiteDao {
         OrdenVentaDetalleSQLiteEntity ordenVentaDetalleSQLiteEntity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select * from ordenventadetalle where ordenventa_id='"+ordenventa_id+"'",null);
+                "Select * from ordenventadetalle where ordenventa_id=?",new String[]{ordenventa_id});
 
         while (fila.moveToNext())
         {

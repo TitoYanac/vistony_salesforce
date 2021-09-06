@@ -7,7 +7,9 @@ import com.google.gson.Gson;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitaEntity;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import java.util.ArrayList;
 import okhttp3.MediaType;
@@ -24,16 +26,11 @@ public class VisitaRepository extends ViewModel {
 
         sendVisit(context, new VisitCallback(){
             @Override
-            public void onResponseSap(VisitaEntity data) {
-                if(data!=null && data.getVisitas().size()>0){
-                    boolean status= visitaSQLite.ActualizaEstadoWSVisita(data);
-                    if(status){
-                        temp.setValue("El estado de las visitas fue actualizado");
-                    }else{
-                        temp.setValue("El estado de las visitas no fue actualizado");
-                    }
+            public void onResponseSap(ArrayList<String> data) {
+                if(data==null){
+                    temp.setValue("No hay ordenes de venta pendientes de enviar");
                 }else{
-                    temp.setValue("Ocurrio un error en el servidor");
+                    temp.setValue(data.get(0));
                 }
             }
             @Override
@@ -64,8 +61,23 @@ public class VisitaRepository extends ViewModel {
             Config.getClient().create(Api.class).sendVisit("http://169.47.196.209/cl/api/Visit",jsonRequest).enqueue(new Callback<VisitaEntity>() {
                 @Override
                 public void onResponse(Call<VisitaEntity> call, Response<VisitaEntity> response) {
-                    if(response.isSuccessful()){
-                        callback.onResponseSap(response.body());
+
+                    VisitaEntity visitas=response.body();
+
+                    if(response.isSuccessful() && visitas!=null){
+                        ArrayList<String> responseData=new ArrayList<>();
+
+                        for (VisitaSQLiteEntity respuesta:visitas.getVisitas()) {
+                            if(respuesta.getHaveError().equals("0")){//se envio
+                               responseData.add("La visita fue aceptado en SAP");
+                                visitaSQLite.ActualizaResultadoVisitaEnviada(respuesta.getIdVisit());
+
+                            }else{//tiene error
+                                responseData.add("La visita no fue aceptado en SAP");
+                            }
+                        }
+
+                        callback.onResponseSap(responseData);
                     }else{
                         callback.onResponseErrorSap(response.message());
                     }
@@ -83,6 +95,6 @@ public class VisitaRepository extends ViewModel {
 }
 
 interface VisitCallback {
-    void onResponseSap(VisitaEntity visitaEntity);
+    void onResponseSap(ArrayList<String> response);
     void onResponseErrorSap(String response);
 }

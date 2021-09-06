@@ -20,12 +20,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaParametrosAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.Retrofit.AgenciaWS;
 import com.vistony.salesforce.Dao.Retrofit.BancoRepository;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
-import com.vistony.salesforce.Dao.Retrofit.CobranzaCabeceraWS;
+import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.ListaPrecioRepository;
 import com.vistony.salesforce.Dao.Retrofit.ListaPromocionWS;
@@ -130,7 +131,7 @@ public class ParametrosView extends Fragment {
     static List<DireccionClienteSQLiteEntity> LDCliente;
     static List<HojaDespachoSQLiteEntity> LHDespacho;
     List<ClienteSQLiteEntity> LclientesqlSQLiteEntity;
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SimpleDateFormat dateFormat;
     Date date;
     String fecha;
@@ -197,7 +198,7 @@ public class ParametrosView extends Fragment {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
-        sqLiteController =  new SQLiteController(getContext());
+        sqliteController =  new SqliteController(getContext());
         usuarioSQLite = new UsuarioSQLite(getContext());
         listaUsuarioSQLiteEntity = new ArrayList<UsuarioSQLiteEntity>();
         listaUsuarioSQLiteEntity = usuarioSQLite.ObtenerUsuarioSesion();
@@ -314,13 +315,13 @@ public class ParametrosView extends Fragment {
                         for (int j = 0; j < listaCobranzaCabeceraSQLiteEntity.size(); j++) {
                             String resultadoccabeceraenviows = "0";
 
-                            CobranzaCabeceraWS cobranzaCabeceraWS=new CobranzaCabeceraWS(getContext());
+                            DepositoRepository depositoRepository =new DepositoRepository(getContext());
 
                             //int resultado=0;
 
                             Log.e("JEPICAME","SE EEJCUTA EL PostCobranzaCabeceraWS EN PARAMETROS");
 
-                            resultadoccabeceraenviows=cobranzaCabeceraWS.PostCobranzaCabeceraWS
+                            resultadoccabeceraenviows= depositoRepository.PostCobranzaCabeceraWS
                             (
                                 SesionEntity.imei,
                                 "CREATE",
@@ -396,7 +397,7 @@ public class ParametrosView extends Fragment {
                                         cobranzaDetalleSQLiteEntity.comentario = listaCobranzaDetalleSQLiteEntity.get(j).getComentario();
                                         cobranzaDetalleSQLiteEntity.pagodirecto = listaCobranzaDetalleSQLiteEntity.get(j).getPagodirecto();
 
-                                        resultado=formulasController.EnviarReciboWsRetrofit(
+                                        resultado= CobranzaRepository.EnviarReciboWsRetrofit(
                                                 cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
                                                         listaCobranzaDetalleSQLiteEntity.get(j).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
                                                 getContext(),
@@ -454,10 +455,8 @@ public class ParametrosView extends Fragment {
 
                                         ListaCobranzaDetalleSQLiteEntity.add(cobranzaDetalleSQLiteEntity);
                                         String resultadoWS="0";
-                                        /*resultado = cobranzaDetalleWSDao.enviarRecibo(ListaCobranzaDetalleSQLiteEntity, SesionEntity.imei, SesionEntity.usuario_id,
-                                                listaCobranzaDetalleSQLiteEntity.get(j).getComentario(), SesionEntity.fuerzatrabajo_id);*/
-                                        formulasController=new FormulasController(getContext());
-                                        resultado=formulasController.EnviarReciboWsRetrofit(
+
+                                        resultado=CobranzaRepository.EnviarReciboWsRetrofit(
                                                 cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
                                                         listaCobranzaDetalleSQLiteEntity.get(j).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
                                                 getContext(),"CREATE","0","0","0","0");
@@ -522,8 +521,8 @@ public class ParametrosView extends Fragment {
                                 nuevalista.add(cobranzaDetalleSQLiteEntity);
 
                                 String resultado="0";
-                                formulasController=new FormulasController(getContext());
-                                chkwsdepositorecibido=formulasController.EnviarReciboWsRetrofit(
+
+                                chkwsdepositorecibido=CobranzaRepository.EnviarReciboWsRetrofit(
                                         cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(listaCobranzaDetalleSQLiteEntity.get(j).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
                                         getContext(),
                                         "UPDATE",
@@ -581,7 +580,7 @@ public class ParametrosView extends Fragment {
                             //        , SesionEntity.imei, SesionEntity.usuario_id, listaQRvalidadosPendientes.get(l).getComentario(), SesionEntity.fuerzatrabajo_id, listaQRvalidadosPendientes.get(l).getBanco_id());
                             formulasController=new FormulasController(getContext());
 
-                            resultadowsqrvalidado=formulasController.EnviarReciboWsRetrofit(
+                            resultadowsqrvalidado=CobranzaRepository.EnviarReciboWsRetrofit(
                                     cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(listaQRvalidadosPendientes.get(l).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
                                     getContext(),
                                     "UPDATE",
@@ -617,7 +616,7 @@ public class ParametrosView extends Fragment {
 
                         for (int j = 0; j < listaCobranzaDetalleSQLiteEntity2.size(); j++) {
 
-                            reswsliberadetalle=formulasController.EnviarReciboWsRetrofit(
+                            reswsliberadetalle=CobranzaRepository.EnviarReciboWsRetrofit(
                                     cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
                                             listaCobranzaDetalleSQLiteEntity2.get(j).getRecibo(),
                                             SesionEntity.compania_id,
@@ -660,7 +659,7 @@ public class ParametrosView extends Fragment {
                             parametrosSQLiteDao.InsertaParametros("2", "BANCOS", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("3", "DOCUMENTOS", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("4", "RUTA VENDEDOR", "0", getDateTime());
-                            parametrosSQLiteDao.InsertaParametros("5", "TERMINO PAGO", "0", getDateTime());
+                            parametrosSQLiteDao.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
                             parametrosSQLiteDao.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
                             parametrosSQLiteDao.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("8", "STOCK", "0", getDateTime());
@@ -694,7 +693,6 @@ public class ParametrosView extends Fragment {
                         LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
 
                         if (!LclientesqlSQLiteEntity.isEmpty()) {
-                            clienteSQlite.LimpiarTablaCliente();
                             CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
                             parametrosSQLiteDao.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), getDateTime());
                         }
@@ -705,7 +703,7 @@ public class ParametrosView extends Fragment {
                         if (!(LTPago.isEmpty())) {
                             terminoPagoSQLiteDao.LimpiarTablaTerminoPago();
                             CantTerminoPago = registrarTerminoPagoSQLite(LTPago);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("5", "TERMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("5", "TÉRMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
 
                         }
 
@@ -745,9 +743,8 @@ public class ParametrosView extends Fragment {
                         ClienteRepository clienteRepository = new ClienteRepository();
                         LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
                         if (!(LclientesqlSQLiteEntity.isEmpty())) {
-                            clienteSQlite.LimpiarTablaCliente();
-                            //CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-                            //parametrosSQLiteDao.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, fecha2);
+                            CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
                         }
 
                     }
@@ -760,14 +757,14 @@ public class ParametrosView extends Fragment {
                             parametrosSQLiteDao.ActualizaCantidadRegistros("2", "BANCOS", String.valueOf(CantBancos), getDateTime());
                         }
                     }
-                    else if (argumento.equals("TERMINO PAGO")) {
+                    else if (argumento.equals("TÉRMINO PAGO")) {
                         TerminoPagoWS terminoPagoWS = new TerminoPagoWS(getContext());
                         LTPago = terminoPagoWS.getTerminoPagoWS(SesionEntity.imei);
 
                         if (!(LTPago.isEmpty())) {
                             terminoPagoSQLiteDao.LimpiarTablaTerminoPago();
                             CantTerminoPago = registrarTerminoPagoSQLite(LTPago);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("5", "TERMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
+                            parametrosSQLiteDao.ActualizaCantidadRegistros("5", "TÉRMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
 
                         }
 
@@ -1047,7 +1044,7 @@ public class ParametrosView extends Fragment {
 
 
     }
-
+/*  COMENTADO 05/09/201 08:23AM
     public int registrarDocumentoDeudaSQLite(List<DocumentoDeudaSQLiteEntity> Lista)
     {
         documentoSQLite = new DocumentoSQLite(getContext());
@@ -1067,19 +1064,19 @@ public class ParametrosView extends Fragment {
                         Lista.get(i).getMoneda(),
                         Lista.get(i).getImportefactura(),
                         Lista.get(i).getSaldo(),
-                        Lista.get(i).getSaldo_sin_procesar()
+                        Lista.get(i).getSaldo_sin_procesar(),
+                        Lista.get(i).getD
                 );
             }
             resultado= documentoSQLite.ObtenerCantidadDocumentosDeuda();
         }catch (Exception e) {
-            // TODO: handle exception
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return resultado;
 
 
     }
-
+*/
     /*public int registrarRutaVendedorSQLite(List<RutaVendedorSQLiteEntity> Lista)
     {
         rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
@@ -1352,31 +1349,6 @@ public class ParametrosView extends Fragment {
                 );
             }
             resultado=catalogoSQLiteDao.ObtenerCantidadCatalogos();
-        }catch (Exception e) {
-            // TODO: handle exception
-            System.out.println(e.getMessage());
-        }
-        return resultado;
-    }
-    public int registrarDireccionClienteSQLite(List<DireccionClienteSQLiteEntity> Lista)
-    {
-        direccionSQLite = new DireccionSQLite(getContext());
-        int resultado=0;
-        try {
-
-            for (int i = 0; i < Lista.size(); i++) {
-                direccionSQLite.InsertaDireccionCliente(
-                        Lista.get(i).getCompania_id(),
-                        Lista.get(i).getCliente_id(),
-                        Lista.get(i).getDomembarque_id(),
-                        Lista.get(i).getDireccion(),
-                        Lista.get(i).getZona_id(),
-                        Lista.get(i).getZona(),
-                        Lista.get(i).getFuerzatrabajo_id(),
-                        Lista.get(i).getNombrefuerzatrabajo()
-                );
-            }
-            resultado= direccionSQLite.ObtenerCantidadDireccionCliente();
         }catch (Exception e) {
             // TODO: handle exception
             System.out.println(e.getMessage());

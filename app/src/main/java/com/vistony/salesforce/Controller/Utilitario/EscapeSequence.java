@@ -1,4 +1,4 @@
-package com.vistony.salesforce.Controller;
+package com.vistony.salesforce.Controller.Utilitario;
 
 public final class EscapeSequence {
 	

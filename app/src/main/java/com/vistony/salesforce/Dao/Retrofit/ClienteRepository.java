@@ -7,7 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.AddressEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
@@ -15,6 +17,8 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.SeguridadEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.View.RutaVendedorRutaView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -49,13 +53,9 @@ public class ClienteRepository extends ViewModel {
 
                         ClienteSQLiteEntity ObjCliente = new ClienteSQLiteEntity();
                         ObjCliente.setCliente_id (clienteEntityResponse.getClienteEntity().get(i).getClienteId());
-                        ObjCliente.setDomembarque_id (clienteEntityResponse.getClienteEntity().get(i).getDomicilioEmbarque());
                         ObjCliente.setCompania_id (SesionEntity.compania_id);
                         ObjCliente.setNombrecliente (clienteEntityResponse.getClienteEntity().get(i).getNombre());
-                        ObjCliente.setDireccion (clienteEntityResponse.getClienteEntity().get(i).getDireccion());
                         ObjCliente.setOrden(clienteEntityResponse.getClienteEntity().get(i).getOrdenVisita());
-                        ObjCliente.setZona_id(clienteEntityResponse.getClienteEntity().get(i).getZonaId());
-                        ObjCliente.setZona(clienteEntityResponse.getClienteEntity().get(i).getZona());
                         ObjCliente.setMoneda(clienteEntityResponse.getClienteEntity().get(i).getMoneda());
                         ObjCliente.setTelefonofijo(clienteEntityResponse.getClienteEntity().get(i).getTelefoFijo());
                         ObjCliente.setTelefonomovil(clienteEntityResponse.getClienteEntity().get(i).getTelefonoMovil());
@@ -97,6 +97,10 @@ public class ClienteRepository extends ViewModel {
                         ObjCliente.setTerminopago_id(clienteEntityResponse.getClienteEntity().get(i).getTerminoPago_id());
                         ObjCliente.setLista_precio(clienteEntityResponse.getClienteEntity().get(i).getLista_precio());
                         ObjCliente.setDueDays(clienteEntityResponse.getClienteEntity().get(i).getDiasVencidos());
+                        ObjCliente.setDomfactura_id(clienteEntityResponse.getClienteEntity().get(i).getDomicilioFactura());
+
+
+
                         //la funcion addCustomer  debe darse aqui!
                         LCliente.add(ObjCliente);
                     }
@@ -149,8 +153,13 @@ public class ClienteRepository extends ViewModel {
             documentoRepository =new DocumentoRepository();
         }
 
-        for (int i = 0; i < Lista.size(); i++) {
+        //////////////////////////////LIMPIAR //////////////////////////////////////
+        clienteSQlite.LimpiarTablasNodos();
+        ////////////////////////////////////////////////////////////////////////////////////////////
 
+        clienteSQlite.InsertaCliente(Lista);
+
+        for (int i = 0; i < Lista.size(); i++) {
             //direcciones
             List<AddressEntity> addressCustomer=Lista.get(i).getListAddress();
             if(addressCustomer!=null){
@@ -162,32 +171,8 @@ public class ClienteRepository extends ViewModel {
             if(invoicesCustomer!=null){
                 documentoRepository.addInvoices(context,invoicesCustomer,Lista.get(i).getCompania_id(),Lista.get(i).getCliente_id());
             }
-
-            clienteSQlite.InsertaCliente(
-                Lista.get(i).getCliente_id(),
-                Lista.get(i).getDomembarque_id(),
-                Lista.get(i).getCompania_id(),
-                Lista.get(i).getNombrecliente(),
-                Lista.get(i).getDireccion(),
-                Lista.get(i).getZona_id(),
-                Lista.get(i).getOrden(),
-                Lista.get(i).getZona(),
-                Lista.get(i).getRucdni(),
-                Lista.get(i).getMoneda(),
-                Lista.get(i).getTelefonofijo(),
-                Lista.get(i).getTelefonomovil(),
-                Lista.get(i).getUbigeo_id(),
-                Lista.get(i).getImpuesto_id(),
-                Lista.get(i).getImpuesto(),
-                Lista.get(i).getTipocambio(),
-                Lista.get(i).getCategoria(),
-                Lista.get(i).getLinea_credito(),
-                Lista.get(i).getLinea_credito_usado(),
-                Lista.get(i).getTerminopago_id(),
-                Lista.get(i).getLista_precio(),
-                    Lista.get(i).getDueDays()
-            );
         }
+
     }
 
     public Integer countCustomer(){

@@ -70,9 +70,12 @@
                 android:textSize="24dp">
             </TextView>
         </TableRow>
+
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            tools:visibility="gone">
+
             <TextView
                 android:id="@+id/lbl_monto_cliente_cabecera_dolares"
                 style="@android:style/TextAppearance.Widget.TextView"
@@ -81,8 +84,8 @@
                 android:layout_marginLeft="10dp"
                 android:text="Total Deuda $ :"
                 android:textColor="@color/white"
-                android:textSize="24dp">
-            </TextView>
+                android:textSize="24dp"></TextView>
+
             <TextView
                 android:id="@+id/tv_monto_cliente_cabecera_dolares"
                 style="@android:style/TextAppearance.Widget.TextView"
@@ -91,8 +94,7 @@
                 android:layout_weight="4"
                 android:text="0"
                 android:textColor="@color/white"
-                android:textSize="24dp">
-            </TextView>
+                android:textSize="24dp"></TextView>
         </TableRow>
     </TableLayout>
 

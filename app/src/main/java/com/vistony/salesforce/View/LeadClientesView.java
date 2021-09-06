@@ -3,13 +3,10 @@ package com.vistony.salesforce.View;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,24 +15,16 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Looper;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,38 +32,23 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Dao.Retrofit.LeadClienteViewModel;
 import com.vistony.salesforce.Entity.SesionEntity;
-import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-
-import io.sentry.Sentry;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -125,7 +99,7 @@ public class LeadClientesView extends Fragment {
 
         dialog = new Dialog(getActivity());
 
-        v = inflater.inflate(R.layout.fragment_agregar_cliente_view, container, false);
+        v = inflater.inflate(R.layout.fragment_lead_cliente_view, container, false);
 
         floatingButtonTakePhoto = v.findViewById(R.id.floatingButtonTakePhoto);
         imageViewPhoto = v.findViewById(R.id.imageViewPhoto);

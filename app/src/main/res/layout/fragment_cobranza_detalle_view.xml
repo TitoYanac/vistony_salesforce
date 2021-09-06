@@ -77,6 +77,7 @@
                     android:clickable="false"
                     android:focusable="false"
                     android:text="" />
+
                 <TextView
                     android:id="@+id/tv_vacio"
                     android:layout_width="wrap_content"
@@ -84,7 +85,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="Pago POS"
                     android:visibility="invisible"
-                    />
+                    tools:visibility="gone" />
 
                 <CheckBox
                     android:id="@+id/chk_vacio"
@@ -93,8 +94,9 @@
                     android:checked="false"
                     android:clickable="false"
                     android:focusable="false"
+                    android:text=""
                     android:visibility="invisible"
-                    android:text="" />
+                    tools:visibility="gone" />
             </TableRow>
 
             <TableRow
@@ -130,12 +132,14 @@
                     android:clickable="false"
                     android:focusable="false"
                     android:text="" />
+
                 <TextView
                     android:id="@+id/tv_pago_pos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Pago POS" />
+                    android:text="Pago POS"
+                    tools:visibility="gone" />
 
                 <CheckBox
                     android:id="@+id/chk_pago_pos"
@@ -144,7 +148,8 @@
                     android:checked="false"
                     android:clickable="false"
                     android:focusable="false"
-                    android:text="" />
+                    android:text=""
+                    tools:visibility="gone" />
             </TableRow>
 
         </TableLayout>
@@ -202,7 +207,7 @@
             android:layout_height="55dp"
             android:layout_marginTop="6dp"
             android:background="@android:color/transparent"
-            android:digits="0123456789."
+            android:digits="0123456789"
             android:ems="9"
             android:hint="0.00"
             android:inputType="number"

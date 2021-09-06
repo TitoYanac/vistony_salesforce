@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Entity.Adapters.ListaCobranzaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaConsDepositoEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -113,11 +114,10 @@ public class ListaConsDepositoAdapter extends
         holder.tv_recibo.setText(lead.getRecibo());
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
         holder.tv_nrodocumento.setText(lead.getNrodocumento());
-        holder.tv_importe.setText(lead.getImporte());
-        holder.tv_cobrado.setText(lead.getCobrado());
-        holder.tv_saldo.setText(lead.getSaldo());
-        holder.tv_nuevo_saldo.setText(lead.getNuevosaldo());
-        //holder.tv_fecha.setText(lead.getFechacobranza());
+        holder.tv_importe.setText( Convert.currencyForView(lead.getImporte()));
+        holder.tv_cobrado.setText(Convert.currencyForView(lead.getCobrado()));
+        holder.tv_saldo.setText(Convert.currencyForView(lead.getSaldo()));
+        holder.tv_nuevo_saldo.setText(Convert.currencyForView(lead.getNuevosaldo()));
 
         if(lead.getTv_txtbancarizado().equals("1"))
         {

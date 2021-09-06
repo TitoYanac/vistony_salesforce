@@ -57,6 +57,7 @@ public class ListaClienteCabeceraDao {
                         ,1
                         ,Lista.get(i).getMoneda()
                         ,Lista.get(i).getDomembarque_id()
+                        ,Lista.get(i).getDomfactura_id()
                         ,Lista.get(i).getImpuesto_id()
                         ,Lista.get(i).getImpuesto()
                         ,Lista.get(i).getRucdni()
@@ -81,9 +82,8 @@ public class ListaClienteCabeceraDao {
                         ,Lista.get(i).getLista_precio()
                 ));
             }
-        }catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return
                 new ArrayList<>(leads.values());

@@ -7,6 +7,7 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_id;
     public String orden_cabecera_cliente_id;
     public String orden_cabecera_domembarque_id;
+    public String orden_cabecera_domfactura_id;
     public String orden_cabecera_terminopago_id;
     public String orden_cabecera_fecha_creacion;
     public String orden_cabecera_agencia_id;
@@ -26,16 +27,19 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_tipocambio;
     public String orden_cabecera_fechatipocambio;
     public String orden_cabecera_rucdni;
-    public String orden_cabecera_U_SYP_MDTD;
-    public String orden_cabecera_U_SYP_MDSD;
-    public String orden_cabecera_U_SYP_MDCD;
-    public String orden_cabecera_U_SYP_MDMT;
-    public String orden_cabecera_U_SYP_STATUS;
     public String orden_cabecera_DocType;
     public String orden_cabecera_total_gal_acumulado;
     public String orden_cabecera_descuentocontado;
 
     public ListaOrdenVentaCabeceraEntity() {
+    }
+
+    public String getOrden_cabecera_domfactura_id() {
+        return orden_cabecera_domfactura_id;
+    }
+
+    public void setOrden_cabecera_domfactura_id(String orden_cabecera_domfactura_id) {
+        this.orden_cabecera_domfactura_id = orden_cabecera_domfactura_id;
     }
 
     public String getOrden_cabecera_descuentocontado() {
@@ -76,46 +80,6 @@ public class ListaOrdenVentaCabeceraEntity {
 
     public void setOrden_cabecera_rucdni(String orden_cabecera_rucdni) {
         this.orden_cabecera_rucdni = orden_cabecera_rucdni;
-    }
-
-    public String getOrden_cabecera_U_SYP_MDTD() {
-        return orden_cabecera_U_SYP_MDTD;
-    }
-
-    public void setOrden_cabecera_U_SYP_MDTD(String orden_cabecera_U_SYP_MDTD) {
-        this.orden_cabecera_U_SYP_MDTD = orden_cabecera_U_SYP_MDTD;
-    }
-
-    public String getOrden_cabecera_U_SYP_MDSD() {
-        return orden_cabecera_U_SYP_MDSD;
-    }
-
-    public void setOrden_cabecera_U_SYP_MDSD(String orden_cabecera_U_SYP_MDSD) {
-        this.orden_cabecera_U_SYP_MDSD = orden_cabecera_U_SYP_MDSD;
-    }
-
-    public String getOrden_cabecera_U_SYP_MDCD() {
-        return orden_cabecera_U_SYP_MDCD;
-    }
-
-    public void setOrden_cabecera_U_SYP_MDCD(String orden_cabecera_U_SYP_MDCD) {
-        this.orden_cabecera_U_SYP_MDCD = orden_cabecera_U_SYP_MDCD;
-    }
-
-    public String getOrden_cabecera_U_SYP_MDMT() {
-        return orden_cabecera_U_SYP_MDMT;
-    }
-
-    public void setOrden_cabecera_U_SYP_MDMT(String orden_cabecera_U_SYP_MDMT) {
-        this.orden_cabecera_U_SYP_MDMT = orden_cabecera_U_SYP_MDMT;
-    }
-
-    public String getOrden_cabecera_U_SYP_STATUS() {
-        return orden_cabecera_U_SYP_STATUS;
-    }
-
-    public void setOrden_cabecera_U_SYP_STATUS(String orden_cabecera_U_SYP_STATUS) {
-        this.orden_cabecera_U_SYP_STATUS = orden_cabecera_U_SYP_STATUS;
     }
 
     public String getOrden_cabecera_DocType() {

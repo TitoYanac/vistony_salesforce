@@ -18,7 +18,6 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 
 /*
 import android.support.v4.app.Fragment;
@@ -50,12 +49,13 @@ import androidx.fragment.app.Fragment;
 
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
-import com.vistony.salesforce.Controller.Utilitario.DocumentPDFController;
+import com.vistony.salesforce.Controller.Utilitario.DocumentoCobranzaPDF;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaCobranzaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
-import com.vistony.salesforce.Dao.Retrofit.CobranzaCabeceraWS;
+import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
+import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -68,14 +68,12 @@ import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
-import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
-import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -101,7 +99,7 @@ public class CobranzaDetalleView extends Fragment {
     Date date;
     String fecha,et_cobrado,chkqrvalidado,recibo_generado;
     static public String recibo;
-    DocumentPDFController documentPDFController;
+    DocumentoCobranzaPDF documentoCobranzaPDF;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -218,7 +216,7 @@ public class CobranzaDetalleView extends Fragment {
         super.onCreate(savedInstanceState);
         hiloVlidarQR = new HiloVlidarQR();
         listaClienteDetalleAdapterFragment =  new ArrayList<ListaClienteDetalleEntity>();
-        documentPDFController = new DocumentPDFController();
+        documentoCobranzaPDF = new DocumentoCobranzaPDF();
         documentoSQLite = new DocumentoSQLite(getContext());
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         listaCobranzaDetalleEntities = new ArrayList<CobranzaDetalleSQLiteEntity>();
@@ -592,11 +590,10 @@ public class CobranzaDetalleView extends Fragment {
                 } else if (chkqrvalidado.equals("True")) {
                     chk_validacionqr.setChecked(true);
                 }
-                if(Estadopagopos.equals("1")){
+
+                if(Estadopagopos!=null && Estadopagopos.equals("1")){
                     chk_pago_pos.setChecked(true);
-                }
-                else
-                {
+                }else{
                     chk_pago_pos.setChecked(false);
                 }
 
@@ -828,12 +825,13 @@ public class CobranzaDetalleView extends Fragment {
                 }
         }
 
-
+/*
        listaConfiguracionSQLEntity=configuracionSQLiteDao.ObtenerConfiguracion();
         for(int i=0;i<listaConfiguracionSQLEntity.size();i++)
         {
             vinculaimpresora=listaConfiguracionSQLEntity.get(i).getVinculaimpresora();
-        }
+        }*/
+        vinculaimpresora="1"; ///para chile no se requiere impresora
 
         if(vinculaimpresora.equals("0"))
         {
@@ -851,15 +849,6 @@ public class CobranzaDetalleView extends Fragment {
 
         @Override
         protected String doInBackground(String... arg0) {
-            try {
-
-                //llenarlista(listaClienteDetalleAdapter.ArraylistaClienteDetalleEntity);
-
-            } catch (Exception e)
-            {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-            }
             return "1";
         }
 
@@ -956,20 +945,16 @@ public class CobranzaDetalleView extends Fragment {
                                         //generarpdf.setEnabled(true);
                                         Toast.makeText(getContext(), "Impresora No Vinculada - Favor de Vincular para proseguir", Toast.LENGTH_SHORT).show();
                                     }else{
-
-
-                                            //resultado=GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment);
-                                            if(SesionEntity.pagopos.equals("1"))
-                                            {
-                                                resultado=GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment,"Cobranza/Deposito");
-                                            }
-                                            if(SesionEntity.pagopos.equals("0"))
-                                            {
-                                                resultado=GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment,"Cobranza");
+                                            switch(SesionEntity.pagopos){
+                                                case "1":
+                                                    resultado=GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment,"Cobranza/Deposito");
+                                                    break;
+                                                case "0":
+                                                    resultado=GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment,"Cobranza");
+                                                    break;
                                             }
 
-                                            if(resultado>0)
-                                            {
+                                            if(resultado>0){
                                                 guardar.setEnabled(false);
                                                 //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
                                                 Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
@@ -1027,66 +1012,62 @@ public class CobranzaDetalleView extends Fragment {
                 .setMessage("Esta Seguro de Generar el Archivo PDF?")
                 .setPositiveButton("OK",
 
-                        new DialogInterface.OnClickListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.O)
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                        (dialog, which) -> {
 
-                                if(listaClienteDetalleAdapterFragment.size()>0)
+                            if(listaClienteDetalleAdapterFragment.size()>0)
+                            {
+                               // SesionEntity.imagen="R"+recibo;
+                               // fecha =obtenerFechaYHoraActual();
+
+
+
+                                /*
+                                //documentPDFController.showPdfFile(recibo+".pdf",getContext());
+                                File file = new File(Environment
+                                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                                        NOMBRE_DIRECTORIO);
+                               String Cadenafile="";
+                                Cadenafile=String.valueOf(file);
+                                String ruta=Cadenafile+"/"+recibo+".pdf";*/
+
+
+                              // MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
+                               String correlativo="";
+                                ConfiguracionSQLiteDao configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
+                                ArrayList<ConfiguracionSQLEntity> arraylistconfiguracion =  new ArrayList<ConfiguracionSQLEntity>();
+                               arraylistconfiguracion=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
+
+                                for(int i=0;i<arraylistconfiguracion.size();i++)
                                 {
-                                    SesionEntity.imagen="R"+recibo;
-                                   // fecha =obtenerFechaYHoraActual();
-                                    Log.e("jpcm","seimrpe se ejecuta esto antes de");
-                                    documentPDFController.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha);
-                                    Toast.makeText(getContext(), "Se creo tu archivo pdf", Toast.LENGTH_SHORT).show();
-
-                                    //documentPDFController.showPdfFile(recibo+".pdf",getContext());
-                                    File file = new File(Environment
-                                            .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                                            NOMBRE_DIRECTORIO);
-                                   String Cadenafile="";
-                                    Cadenafile=String.valueOf(file);
-                                    String ruta=Cadenafile+"/"+recibo+".pdf";
-                                   MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
-                                   String correlativo="";
-                                    ConfiguracionSQLiteDao configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
-                                    ArrayList<ConfiguracionSQLEntity> arraylistconfiguracion =  new ArrayList<ConfiguracionSQLEntity>();
-                                   arraylistconfiguracion=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
-
-                                    for(int i=0;i<arraylistconfiguracion.size();i++)
-                                    {
-                                       correlativo=arraylistconfiguracion.get(i).getSecuenciarecibos();
-                                    }
-
-
-                                    configuracionSQLiteDao.ActualizaCorrelativo(String.valueOf(Integer.parseInt(correlativo)-1));
-                                    Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
-                                    drawable = DrawableCompat.wrap(drawable);
-                                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.white));
-                                    menu_variable.findItem(R.id.validarqr).setIcon(drawable);
-                                    Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                                    drawable2 = DrawableCompat.wrap(drawable2);
-                                    DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.Black));
-                                    menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-
-                                    validarqr.setEnabled(true);
+                                   correlativo=arraylistconfiguracion.get(i).getSecuenciarecibos();
                                 }
-                                else
-                                    {
-                                        Toast.makeText(getContext(), "No se creo el archivo pdf", Toast.LENGTH_SHORT).show();
-                                    }
+
+                                configuracionSQLiteDao.ActualizaCorrelativo(String.valueOf(Integer.parseInt(correlativo)-1));
+
+                                /* btn item validar QR se queda en disabled
+                                Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
+                                drawable = DrawableCompat.wrap(drawable);
+                                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.white));
+                                menu_variable.findItem(R.id.validarqr).setIcon(drawable);*/
+
+                                Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                                drawable2 = DrawableCompat.wrap(drawable2);
+                                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.Black));
+                                menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+
+                                //validarqr.setEnabled(false); no aplica validar qr
 
 
-                               //
+                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha);
+                                Toast.makeText(getContext(), "Se creo tu archivo pdf", Toast.LENGTH_SHORT).show();
 
+                            }else{
+                                Toast.makeText(getContext(), "No se creo el archivo pdf", Toast.LENGTH_SHORT).show();
                             }
                         })
                 .setNegativeButton("CANCELAR",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //listener.onNegativeButtonClick();
-                            }
+                        (dialog, which) -> {
+                            //listener.onNegativeButtonClick();
                         });
 
         return builder.create();
@@ -1140,141 +1121,8 @@ public class CobranzaDetalleView extends Fragment {
         void onFragmentInteraction(String TAG, Object data);
     }
 
-    public int GuardarCobranzaSQLite_(ArrayList<ListaClienteDetalleEntity> Lista)
-    {
-        int resultado=0,recibows=0;
-        String tag="",tag2="";
 
-
-        cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
-        correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(SesionEntity.compania_id,SesionEntity.usuario_id);
-
-
-       String[] separada = SesionEntity.recibo.split("R");
-        if(SesionEntity.recibo.equals("0"))
-        {
-            tag2=SesionEntity.recibo;
-        }
-        else
-            {
-                if(separada.length>1)
-                {
-                    tag=separada[0];
-                    tag2=separada[1];
-                }
-                else
-                {
-                    tag=separada[0];
-                }
-            }
-
-            if(tag.equals(""))
-            {
-                tag="0";
-            }
-
-
-        recibows=Integer.parseInt(tag);
-        if(correlativorecibo>=recibows)
-        {
-            ultimocorrelativorecibo=correlativorecibo;
-        }
-        else
-            {
-                ultimocorrelativorecibo=recibows;
-            }
-
-        String bancarizado="";
-        if(chk_bancarizado.isChecked())
-        {
-            bancarizado="1";
-        }
-        else
-            {
-                bancarizado="0";
-            }
-
-        for(int i=0;i<Lista.size();i++)
-        {
-            recibo=String.valueOf(ultimocorrelativorecibo+1);
-            resultado=cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
-                    "1",
-                    String.valueOf(Lista.get(i).getCliente_id()),
-                    String.valueOf(Lista.get(i).getDocumento_id()),
-                    SesionEntity.compania_id,
-                    String.valueOf(Lista.get(i).getImporte()),
-                    String.valueOf(Lista.get(i).getSaldo()),
-                    String.valueOf(Lista.get(i).getNuevo_saldo()),
-                    String.valueOf(Lista.get(i).getCobrado()),
-                    //fechaCobro
-                    fecha,
-                    recibo,
-                    String.valueOf(Lista.get(i).getNrodocumento()),
-                    SesionEntity.fuerzatrabajo_id,
-                    bancarizado,
-                    "0",
-                    SesionEntity.usuario_id,
-                  //  comentario+"-"+SesionEntity.serialnumber,
-                    SesionEntity.serialnumber,
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    SesionEntity.pagodirecto,
-                    SesionEntity.pagopos
-                    );
-
-
-            ActualizaDocumentoDeuda(SesionEntity.compania_id,
-                    String.valueOf(Lista.get(i).getDocumento_id()),
-                    String.valueOf(Lista.get(i).getNuevo_saldo()));
-
-            //SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            //Date date = new Date();
-
-            FormulasController formulasController=new FormulasController(getContext());
-
-            if (!chkpagoadelantado.isChecked())
-            {
-                ArrayList<ClienteSQLiteEntity> listaclientesqlSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
-                ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
-                listaclientesqlSQLiteEntity= clienteSQlite.ObtenerDatosCliente(String.valueOf(Lista.get(i).getCliente_id()),
-                        String.valueOf(SesionEntity.compania_id));
-                for(int j=0;j<listaclientesqlSQLiteEntity.size();j++)
-                {
-                    zona_id_visita=listaclientesqlSQLiteEntity.get(j).getZona_id();
-                }
-                Log.e("REOS","CobranzaDetalleView: "+zona_id_visita);
-                        cliente_id_visita=Lista.get(i).getCliente_id();
-                        domembarque_id_visita=Lista.get(i).getDomembarque();
-                        //zona_id_visita=Lista.get(i).getZona_id();
-
-            }
-
-            VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
-            visita.setCardCode(cliente_id_visita);
-            visita.setAddress(domembarque_id_visita);
-            visita.setTerritory(zona_id_visita);
-            visita.setType("2");
-            visita.setObservation("Se genero una cobranza al documento "+Lista.get(i).getNrodocumento());
-            visita.setLatitude(""+latitude);
-            visita.setLongitude(""+longitude);
-
-            formulasController.RegistraVisita(visita,getActivity());
-
-        }
-
-        chk_bancarizado.setFocusable(false);
-        chk_bancarizado.setClickable(false);
-
-
-        return resultado;
-
-    }
-
-    public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista,String tipoCobranza)
+    public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza)
     {
         int resultado=0,recibows=0;
         String tag="",tag2="";
@@ -1332,7 +1180,7 @@ public class CobranzaDetalleView extends Fragment {
             for (int i = 0; i < Lista.size(); i++) {
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
-                        "1",
+                        FormulasController.ObtenerFechaHoraCadena(),
                         String.valueOf(Lista.get(i).getCliente_id()),
                         String.valueOf(Lista.get(i).getDocumento_id()),
                         SesionEntity.compania_id,
@@ -1348,7 +1196,7 @@ public class CobranzaDetalleView extends Fragment {
                         bancarizado,
                         "0",
                         SesionEntity.usuario_id,
-                        comentario + "-" + SesionEntity.serialnumber,
+                        comentario,
                         "0",
                         "0",
                         "0",
@@ -1372,7 +1220,7 @@ public class CobranzaDetalleView extends Fragment {
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 sumacobrado=String.valueOf(Lista.get(i).getCobrado());
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
-                        SesionEntity.fuerzatrabajo_id+recibo,
+                        FormulasController.ObtenerFechaHoraCadena(),
                         String.valueOf(Lista.get(i).getCliente_id()),
                         String.valueOf(Lista.get(i).getDocumento_id()),
                         SesionEntity.compania_id,
@@ -1387,7 +1235,7 @@ public class CobranzaDetalleView extends Fragment {
                         bancarizado,
                         "0",
                         SesionEntity.usuario_id,
-                        comentario + "-" + SesionEntity.serialnumber,
+                        comentario,
                         "1",
                         "0",
                         "BCPMN",
@@ -1403,7 +1251,7 @@ public class CobranzaDetalleView extends Fragment {
                         String.valueOf(Lista.get(i).getNuevo_saldo()));
 
             }
-            hiloEnviarWSCobranzaCabecera = new HiloEnviarWSCobranzaCabecera();
+            hiloEnviarWSCobranzaCabecera = new CobranzaDetalleView.HiloEnviarWSCobranzaCabecera();
             hiloEnviarWSCobranzaCabecera.execute(
                     SesionEntity.fuerzatrabajo_id+recibo,
                     "BCPMN",
@@ -1459,7 +1307,7 @@ public class CobranzaDetalleView extends Fragment {
                     //      ,SesionEntity.imei,SesionEntity.usuario_id,comentario+"-"+SesionEntity.serialnumber,SesionEntity.fuerzatrabajo_id);
                     //Nuevo Envio de Cobranza De
 
-                    resultadoenviows=formulasController.EnviarReciboWsRetrofit(
+                    resultadoenviows= CobranzaRepository.EnviarReciboWsRetrofit(
                             cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
                             getContext(),
                             "CREATE",
@@ -1633,8 +1481,7 @@ public class CobranzaDetalleView extends Fragment {
             String resultado="0";
             try {
 
-                FormulasController formulasController=new FormulasController(getContext());
-                resultado=formulasController.EnviarReciboWsRetrofit(
+                resultado=CobranzaRepository.EnviarReciboWsRetrofit(
                         cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
                         getContext(),
                         "UPDATE",
@@ -1645,21 +1492,8 @@ public class CobranzaDetalleView extends Fragment {
                 );
                 resultadowsqrvalidado=String.valueOf(resultado);
 
-
-
-
-
-                //if((!resultadoenviows.equals("0")))
-               // {
-                //    Toast.makeText(getContext(), "Se Envio al Sistema Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-               // }else
-               // {
-                //    Toast.makeText(getContext(), "No Se Envio al Sistema Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-               // }
-            } catch (Exception e)
-            {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
+            } catch (Exception e){
+               e.printStackTrace();
             }
             return resultadowsqrvalidado;
         }
@@ -1768,7 +1602,7 @@ public class CobranzaDetalleView extends Fragment {
                 String comentario="",resultadoccabeceraenviows="";
                 int ValidaSQLite=0;
                 CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao=new CobranzaCabeceraSQLiteDao(getContext());
-                CobranzaCabeceraWS cobranzaCabeceraWS=new CobranzaCabeceraWS(getContext());
+                DepositoRepository depositoRepository =new DepositoRepository(getContext());
                 ValidaSQLite=cobranzaCabeceraSQLiteDao.InsertaCobranzaCabecera(
                         arg0[0],
                         SesionEntity.usuario_id,
@@ -1785,7 +1619,7 @@ public class CobranzaDetalleView extends Fragment {
                 );
 
                 resultadoccabeceraenviows=
-                        cobranzaCabeceraWS.PostCobranzaCabeceraWS
+                        depositoRepository.PostCobranzaCabeceraWS
                                 (
                                         SesionEntity.imei,
                                         SesionEntity.compania_id,

@@ -51,8 +51,9 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaCobranzaCabeceraAdapter;
-import com.vistony.salesforce.Controller.Utilitario.FormulasController;
-import com.vistony.salesforce.Dao.Retrofit.CobranzaCabeceraWS;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
+import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.SQLite.BancoSQLiteDAO;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -67,6 +68,8 @@ import com.vistony.salesforce.R;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -128,6 +131,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     static CheckBox chkbancarizado,chkdepositodirecto;
     static ArrayList<ListaConsDepositoEntity> listaAdd= new ArrayList<ListaConsDepositoEntity>();
     String Grupo="",Sumacobrado="";
+    BigDecimal sumacobrado;
     public static Menu menu_variable;
     private final int  MY_PERMISSIONS_REQUEST_CAMERA=0;
     String mCurrentPhotoPath="";
@@ -517,7 +521,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         {
             listaCobranzaCabeceraAdapter = new ListaCobranzaCabeceraAdapter(getActivity(), ListaCobranzaCabeceraDao.getInstance().getLeads(listaConsDepositoAdapterFragment,getContext()));
             listViewCobranzaCabecera.setAdapter(listaCobranzaCabeceraAdapter);
-            txtsumacobrado.setText(String.valueOf(ObtenerTotalCobrado(listaConsDepositoAdapterFragment)));
+            txtsumacobrado.setText(Convert.currencyForView(ObtenerTotalCobrado(listaConsDepositoAdapterFragment)));
             obtenerLista = new ObtenerListaCobranzas();
 
         }
@@ -531,15 +535,14 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         spnbanco.setAdapter(Combonombresbanco);
     }
 
-    public float ObtenerTotalCobrado(ArrayList<ListaConsDepositoEntity> Lista)
-    {
-        float sumacobrado=0;
+    public String ObtenerTotalCobrado(ArrayList<ListaConsDepositoEntity> Lista){
+        sumacobrado=new BigDecimal("0");
         for(int i=0;i<Lista.size();i++)
         {
-            sumacobrado=sumacobrado+Float.valueOf(Lista.get(i).getCobrado());
+            sumacobrado=sumacobrado.add(new BigDecimal(Lista.get(i).getCobrado()));
         }
 
-        return sumacobrado;
+        return sumacobrado.setScale(3, RoundingMode.HALF_UP).toString();
     }
     /*
     @Override
@@ -651,12 +654,10 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         switch (item.getItemId()) {
             case R.id.agregar_foto_deposito:
                 alertaFotoDeposito().show();
-
-                Toast.makeText(getContext(), "Selecione una opción...", Toast.LENGTH_SHORT).show();
-
                 return true;
             case R.id.abrir:
-                alertaAbrirDeposito().show();
+                item.setEnabled(false);
+                alertaAbrirDeposito(item).show();
                 return true;
             case R.id.guardar_deposito:
                 String tipo="0";
@@ -768,16 +769,11 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 Log.e("log,",""+ex);
             }
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce" , photoFile);
+                Uri photoURI = FileProvider.getUriForFile(getContext(), getContext().getPackageName() , photoFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 getActivity().startActivityForResult(intent, 21);
             }
-
-
-        }
-
-        else
-        {
+        }else{
             estado=0;
             Toast.makeText(getContext(), "Abrir el Deposito Antes de Realizar la Foto", Toast.LENGTH_SHORT).show();
         }
@@ -836,10 +832,11 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         return formattedDate;
     }
 
-    public Dialog alertaAbrirDeposito() {
+    public Dialog alertaAbrirDeposito(MenuItem item) {
 
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.layout_alert_dialog);
+        dialog.setCanceledOnTouchOutside(false);
 
         TextView textTitle = dialog.findViewById(R.id.text);
         textTitle.setText("CONFIRMACIÓN!");
@@ -887,6 +884,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     mListener.onFragmentInteraction(compuesto,object);
                 }
                 dialog.dismiss();
+
+                item.setEnabled(true);
             }
         });
 
@@ -895,6 +894,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                item.setEnabled(true);
             }
         });
 
@@ -953,10 +953,10 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                         );
                     }
                     //int resultado=0;
-                            CobranzaCabeceraWS cobranzaCabeceraWS=new CobranzaCabeceraWS(getContext());
+                            DepositoRepository depositoRepository =new DepositoRepository(getContext());
 
                             resultadoccabeceraenviows=
-                            cobranzaCabeceraWS.PostCobranzaCabeceraWS
+                            depositoRepository.PostCobranzaCabeceraWS
                                     (
                                             SesionEntity.imei,
                                             "CREATE",
@@ -966,7 +966,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                                             etgrupo.getText().toString(),
                                             SesionEntity.usuario_id,
                                             fecha,
-                                            txtsumacobrado.getText().toString(),
+                                            sumacobrado.setScale(3,RoundingMode.HALF_UP).toString(),
                                             "Pendiente",
                                             "0",
                                             SesionEntity.fuerzatrabajo_id,
@@ -983,11 +983,11 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     {
                         String chkwsdepositorecibido="0";
                         listaCobranzaDetalleEntity=new ArrayList<CobranzaDetalleSQLiteEntity>();
-                        //listaCobranzaDetalleEntity=cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(listaConsDepositoAdapterFragment.get(i).getRecibo(),SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
-                        //chkwsdepositorecibido=cobranzaDetalleWSDao.ActualizarRecibo(listaCobranzaDetalleEntity,SesionEntity.imei,SesionEntity.usuario_id,listaCobranzaDetalleEntity.get(0).getComentario(),SesionEntity.fuerzatrabajo_id,Banco);
 
-                        FormulasController formulasController=new FormulasController(getContext());
-                        chkwsdepositorecibido=formulasController.EnviarReciboWsRetrofit(
+                        //SE REENVIA EL RECIBO AHI VA EL PATCH
+                        chkwsdepositorecibido= CobranzaRepository.sendPatch(cobranzaDetalleSQLiteDao.getSapCode(listaConsDepositoAdapterFragment.get(i).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),etgrupo.getText().toString(),Banco);
+
+                        /*chkwsdepositorecibido= CobranzaRepository.EnviarReciboWsRetrofit(
                                 cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(listaConsDepositoAdapterFragment.get(i).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
                                 getContext(),
                                 "UPDATE",
@@ -995,7 +995,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                                 "0",
                                 Banco,
                                 "1"
-                        );
+                        );*/
                         //resultadowsqrvalidado=String.valueOf(resultado);
 
                     }

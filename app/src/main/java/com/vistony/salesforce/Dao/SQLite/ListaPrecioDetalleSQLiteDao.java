@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 
@@ -14,24 +14,24 @@ import java.util.ArrayList;
 
 public class ListaPrecioDetalleSQLiteDao {
 
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<ListaProductoEntity> arraylistaProductoEntity;
 
     public ListaPrecioDetalleSQLiteDao(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        bd = sqLiteController.getWritableDatabase();
+        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
+        bd = sqliteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        sqLiteController.close();
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
     }
 
 
@@ -76,7 +76,8 @@ public class ListaPrecioDetalleSQLiteDao {
         Cursor fila=null;
 
         try {
-             fila = bd.rawQuery("SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen,IFNULL(stock_general,0) stock_general,contado,contado,gal,porcentaje_dsct" +
+             fila = bd.rawQuery("SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen,IFNULL(stock_general,0) stock_general," +
+                     "contado,contado,gal,porcentaje_dsct" +
                   " FROM listapreciodetalle  WHERE Tipo= (SELECT lista_precio FROM cliente WHERE cliente_id=? LIMIT 1);",new String [] {cardCode});
 
             while (fila.moveToNext()) {
@@ -94,7 +95,7 @@ public class ListaPrecioDetalleSQLiteDao {
                 arraylistaProductoEntity.add(listaProductoEntity);
             }
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }finally {
             bd.close();
         }

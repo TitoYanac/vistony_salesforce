@@ -6,13 +6,9 @@
     tools:context=".View.DireccionClienteView">
 
     <!-- TODO: Update blank fragment layout -->
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lv_direccioncliente"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="65dp"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="0.5dp"
-        android:indicatorLeft="?android:drawableLeft"></ListView>
+        android:layout_height="match_parent" />
 
 </FrameLayout>

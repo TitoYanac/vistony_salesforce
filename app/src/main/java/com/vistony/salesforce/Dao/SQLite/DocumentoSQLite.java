@@ -6,33 +6,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 
 import java.util.ArrayList;
 
 public class DocumentoSQLite {
 
-    SQLiteController sqLiteController;
-    SQLiteDatabase bd;
-    ArrayList<DocumentoDeudaSQLiteEntity> listaDDeudaentity;
+    private ArrayList<DocumentoDeudaSQLiteEntity> listaDDeudaentity;
 
-    public DocumentoSQLite(Context context)
-    {
-        sqLiteController = new SQLiteController(context);
+    public DocumentoSQLite(Context context){
+        DataBaseManager.initializeInstance(new SqliteController(context));
     }
-    public void abrir(){
-        Log.i("SQLite", "Se abre conexion desde " + this.getClass().getName() );
-        bd = sqLiteController.getWritableDatabase();
-    }
-
-    /** Cierra conexion a la base ade datos */
-    public void cerrar()
-    {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        sqLiteController.close();
-    }
-
 
     public int InsertaDocumentoDeuda (
             String documento_id,
@@ -46,10 +32,12 @@ public class DocumentoSQLite {
             String moneda,
             String importefactura,
             String saldo,
-            String saldo_sin_procesar)
+            String saldo_sin_procesar,
+            String doc_entry)
     {
 
-        abrir();
+        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
         ContentValues registro = new ContentValues();
         registro.put("documento_id",documento_id);
         registro.put("domembarque_id",domembarque_id);
@@ -63,48 +51,48 @@ public class DocumentoSQLite {
         registro.put("importefactura",importefactura);
         registro.put("saldo",saldo);
         registro.put("saldo_sin_procesar",saldo_sin_procesar);
+        registro.put("doc_entry",doc_entry);
 
 
-        bd.insert("documentodeuda",null,registro);
-        bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        sqlite.insert("documentodeuda",null,registro);
+
+        DataBaseManager.getInstance().closeDatabase();
+
         return 1;
     }
 
-    public ArrayList<DocumentoDeudaSQLiteEntity> ObtenerDDeudaporcliente (String compania_id, String fuerzatrabajo_id, String cliente_id)
-    {
+    public ArrayList<DocumentoDeudaSQLiteEntity> ObtenerDDeudaporcliente (String compania_id, String fuerzatrabajo_id, String cliente_id) {
+
+        listaDDeudaentity = new ArrayList<DocumentoDeudaSQLiteEntity>();
+        DocumentoDeudaSQLiteEntity documentoDeudaSQLiteEntity;
+
         try {
-            listaDDeudaentity = new ArrayList<DocumentoDeudaSQLiteEntity>();
-            DocumentoDeudaSQLiteEntity documentoDeudaSQLiteEntity;
-            abrir();
-            Cursor fila = bd.rawQuery(
-                    //"Select * from documentodeuda where compania_id='" + compania_id + "' and fuerzatrabajo_id='" + fuerzatrabajo_id + "' and cliente_id='" + cliente_id + "'", null);
-            "Select * from documentodeuda where compania_id='" + compania_id + "' and fuerzatrabajo_id='" + fuerzatrabajo_id + "' and cliente_id='" + cliente_id + "' order by fechaemision ASC", null);
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            Cursor fila = sqlite.rawQuery("Select * from documentodeuda where compania_id=? and fuerzatrabajo_id=? and cliente_id=? order by fechaemision ASC", new String[]{compania_id,fuerzatrabajo_id,cliente_id});
 
             while (fila.moveToNext()) {
                 documentoDeudaSQLiteEntity = new DocumentoDeudaSQLiteEntity();
-                documentoDeudaSQLiteEntity.setDocumento_id(fila.getString(0));
-                documentoDeudaSQLiteEntity.setDomembarque_id(fila.getString(1));
-                documentoDeudaSQLiteEntity.setCompania_id(fila.getString(2));
-                documentoDeudaSQLiteEntity.setCliente_id(fila.getString(3));
-                documentoDeudaSQLiteEntity.setFuerzatrabajo_id(fila.getString(4));
-                documentoDeudaSQLiteEntity.setFechaemision(fila.getString(5));
-                documentoDeudaSQLiteEntity.setFechavencimiento(fila.getString(6));
-                documentoDeudaSQLiteEntity.setNrofactura(fila.getString(7));
-                documentoDeudaSQLiteEntity.setMoneda(fila.getString(8));
-                documentoDeudaSQLiteEntity.setImportefactura(fila.getString(9));
-                documentoDeudaSQLiteEntity.setSaldo(fila.getString(10));
-                documentoDeudaSQLiteEntity.setSaldo_sin_procesar(fila.getString(11));
+                documentoDeudaSQLiteEntity.setDocumento_id(fila.getString(fila.getColumnIndex("documento_id")));
+                documentoDeudaSQLiteEntity.setDomembarque_id(fila.getString(fila.getColumnIndex("domembarque_id")));
+                documentoDeudaSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
+                documentoDeudaSQLiteEntity.setCliente_id(fila.getString(fila.getColumnIndex("cliente_id")));
+                documentoDeudaSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+                documentoDeudaSQLiteEntity.setFechaemision(fila.getString(fila.getColumnIndex("fechaemision")));
+                documentoDeudaSQLiteEntity.setFechavencimiento(fila.getString(fila.getColumnIndex("fechavencimiento")));
+                documentoDeudaSQLiteEntity.setNrofactura(fila.getString(fila.getColumnIndex("nrofactura")));
+                documentoDeudaSQLiteEntity.setMoneda(fila.getString(fila.getColumnIndex("moneda")));
+                documentoDeudaSQLiteEntity.setImportefactura(fila.getString(fila.getColumnIndex("importefactura")));
+                documentoDeudaSQLiteEntity.setSaldo(fila.getString(fila.getColumnIndex("saldo")));
+                documentoDeudaSQLiteEntity.setSaldo_sin_procesar(fila.getString(fila.getColumnIndex("saldo_sin_procesar")));
+                documentoDeudaSQLiteEntity.setDocumento_entry(fila.getString(fila.getColumnIndex("doc_entry")));
                 listaDDeudaentity.add(documentoDeudaSQLiteEntity);
             }
 
-            bd.close();
-        }catch (Exception e)
-        {
-            bd.close();
-            System.out.println(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
         }
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return listaDDeudaentity;
 
     }
@@ -112,42 +100,32 @@ public class DocumentoSQLite {
     public int ActualizaNuevoSaldo (String compania_id, String documento_id, String nuevo_saldo)
     {
         int resultado=0;
-        abrir();
+
         try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
 
             ContentValues registro = new ContentValues();
             registro.put("saldo",nuevo_saldo);
-            bd = sqLiteController.getWritableDatabase();
-            resultado = bd.update("documentodeuda",registro,"documento_id='"+documento_id+"'"+" and compania_id='"+compania_id+"'" ,null);
-            bd.close();
-        }catch (Exception e)
-        {
-            bd.close();
-            System.out.println(e.getMessage());
 
+            resultado = sqlite.update("documentodeuda",registro,"documento_id='"+documento_id+"'"+" and compania_id='"+compania_id+"'" ,null);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
         }
+
         return resultado;
     }
 
-    public int LimpiarTablaDocumentoDeuda ()
-    {
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
-        abrir();
-       // bd.insert("documentodeuda",null,);
-        bd.execSQL("delete from documentodeuda ");
-        bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
-        return 1;
-    }
-
+/*
     public int ObtenerCantidadDocumentosDeuda ()
     {
         int resultado=0;
 
-        abrir();
         try {
-            Cursor fila = bd.rawQuery(
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            Cursor fila = sqlite.rawQuery(
                     "Select count(documento_id) from documentodeuda",null);
 
             while (fila.moveToNext())
@@ -155,14 +133,13 @@ public class DocumentoSQLite {
                 resultado= Integer.parseInt(fila.getString(0));
 
             }
-        }catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
         }
 
-        bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return resultado;
     }
-
+*/
 }

@@ -1,6 +1,6 @@
 package com.vistony.salesforce.Entity.Adapters;
 
-public class ListaDireccionClienteEntity {
+public class DireccionCliente {
     public String cliente_id;
     public String domembarque_id;
     public String direccion;
@@ -9,7 +9,7 @@ public class ListaDireccionClienteEntity {
     public String nombrefuerzatrabajo;
     public String fuerzatrabajo_id;
 
-    public ListaDireccionClienteEntity(String cliente_id, String domembarque_id, String direccion, String zona_id, String zona, String nombrefuerzatrabajo, String fuerzatrabajo_id) {
+    public DireccionCliente(String cliente_id, String domembarque_id, String direccion, String zona_id, String zona, String nombrefuerzatrabajo, String fuerzatrabajo_id) {
         this.cliente_id = cliente_id;
         this.domembarque_id = domembarque_id;
         this.direccion = direccion;
@@ -19,7 +19,7 @@ public class ListaDireccionClienteEntity {
         this.fuerzatrabajo_id = fuerzatrabajo_id;
     }
 
-    public ListaDireccionClienteEntity() {
+    public DireccionCliente() {
     }
 
     public String getFuerzatrabajo_id() {

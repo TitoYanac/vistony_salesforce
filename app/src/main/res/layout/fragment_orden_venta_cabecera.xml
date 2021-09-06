@@ -114,7 +114,8 @@
                     android:background="@drawable/borde_cuadrado"
                     android:enabled="true"
                     android:hint=""
-                    android:text="Direccion1:"
+                    android:gravity="center"
+                    android:text="@string/tag_select"
                     android:textSize="20dp" />
 
                 <ImageButton
@@ -187,7 +188,7 @@
                     android:enabled="true"
                     android:gravity="center"
                     android:hint=""
-                    android:text="CONTRA ENTREGA"
+                    android:text="@string/tag_select"
                     android:textAlignment="center"
                     android:textSize="20dp" />
 
@@ -261,7 +262,7 @@
                     android:enabled="true"
                     android:gravity="center"
                     android:hint=""
-                    android:text="VISTONY S.A.C."
+                    android:text="@string/tag_select"
                     android:textAlignment="center"
                     android:textSize="20dp" />
 

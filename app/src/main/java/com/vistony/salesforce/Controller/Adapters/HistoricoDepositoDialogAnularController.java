@@ -22,8 +22,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.vistony.salesforce.Controller.Utilitario.FormulasController;
-import com.vistony.salesforce.Dao.Retrofit.CobranzaCabeceraWS;
+import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
+import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -193,10 +193,10 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                         fechadiferido=anioemision+"-"+mesemision+"-"+diaemision;
 
                     }
-                    CobranzaCabeceraWS cobranzaCabeceraWS=new CobranzaCabeceraWS(getContext());
+                    DepositoRepository depositoRepository =new DepositoRepository(getContext());
                     //int resultado=0;
 
-                    reswsanuladep= cobranzaCabeceraWS.PostCobranzaCabeceraWS(
+                    reswsanuladep= depositoRepository.PostCobranzaCabeceraWS(
                             SesionEntity.imei,
                             "UPDATE",
                             SesionEntity.compania_id,
@@ -243,7 +243,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                 arrayListCobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporDeposito(Deposito_id, SesionEntity.compania_id);
                 Log.e("REOS","HistoricoDepositoDialogAnularController-arrayListCobranzaDetalleSQLiteEntity:"+arrayListCobranzaDetalleSQLiteEntity.size());
                 for (int j = 0; j < arrayListCobranzaDetalleSQLiteEntity.size(); j++) {
-                    FormulasController formulasController=new FormulasController(getContext());
+                    //FormulasController formulasController=new FormulasController(getContext());
                     String resultado="0";
 
                     //Antiguo Envio de Cobranza Detalle WS - SOAP
@@ -251,7 +251,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                     //      ,SesionEntity.imei,SesionEntity.usuario_id,comentario+"-"+SesionEntity.serialnumber,SesionEntity.fuerzatrabajo_id);
                     //Nuevo Envio de Cobranza De
 
-                    resultado=formulasController.EnviarReciboWsRetrofit(
+                    resultado= CobranzaRepository.EnviarReciboWsRetrofit(
                             cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
                                     arrayListCobranzaDetalleSQLiteEntity.get(j).getRecibo(),
                                     SesionEntity.compania_id,

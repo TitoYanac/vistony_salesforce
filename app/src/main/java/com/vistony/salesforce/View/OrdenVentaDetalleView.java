@@ -255,7 +255,7 @@ public class OrdenVentaDetalleView extends Fragment {
         hiloAgregarListaProductos = new HiloAgregarListaProductos();
         hiloActualizarResumenMontos = new HiloActualizarResumenMontos();
         context=getContext();
-        getActivity().setTitle("Orden Venta Detalle");
+        getActivity().setTitle("Orden De Venta");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -448,7 +448,7 @@ public class OrdenVentaDetalleView extends Fragment {
         final TextView textMsj = dialog.findViewById(R.id.textViewMsj_orden_venta_detalle);
         textMsj.setText("Seguro de Finalizar el Ingreso de Lineas?");
         ImageView image = (ImageView) dialog.findViewById(R.id.image_orden_venta_detalle);
-        Drawable background = image.getBackground();
+
         image.setImageResource(R.mipmap.logo_circulo);
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK_orden_venta_detalle);
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel_orden_venta_detalle);
@@ -459,22 +459,19 @@ public class OrdenVentaDetalleView extends Fragment {
 
         dialogButton.setOnClickListener(v -> {
             FormulasController formulasController=new FormulasController(getContext());
-            /*if(formulasController.ObtenerCantidadLineasListaOrdenVentaDetalleEntity(listadoProductosAgregados)>15)
-            {
-                Toast.makeText(getContext(), "La Cantidad de Lineas, Supera las 15 Lineas!!! Revisar la Cantidad de Lineas", Toast.LENGTH_SHORT).show();
-            }else
-            {*/
-                if (formulasController.ValidarMontoEnCero(listadoProductosAgregados)) {
-                    alertaValidacionMontoCero().show();
-                } else {
-                    String Fragment = "OrdenVentaDetalleView";
-                    String accion = "ordenventacabecera";
-                    String compuesto = Fragment + "-" + accion;
-                    mListener.onFragmentInteraction(compuesto, listadoProductosAgregados);
-                    dialog.dismiss();
-                }
-            //}
+            if (formulasController.ValidarMontoEnCero(listadoProductosAgregados)) {
+                alertaValidacionMontoCero().show();
+            } else {
+
+                String Fragment = "OrdenVentaDetalleView";
+                String accion = "ordenventacabecera";
+                String compuesto = Fragment + "-" + accion;
+                mListener.onFragmentInteraction(compuesto, listadoProductosAgregados);
+
+                dialog.dismiss();
+            }
         });
+
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -23,7 +23,7 @@ public class ListaHistoricoOrdenVentaDao {
     }
 
     private void saveLead(ListaHistoricoOrdenVentaEntity lead) {
-        leads.put(lead.getOrdenventa_erp_id(), lead);
+        leads.put(lead.getDocNum(), lead);
     }
 
     public List<ListaHistoricoOrdenVentaEntity> getLeads(ArrayList<ListaHistoricoOrdenVentaEntity> Lista) {
@@ -32,27 +32,25 @@ public class ListaHistoricoOrdenVentaDao {
             leads.clear();
         }
         try {
-            for( int i=0;i<Lista.size();i++)
-            {
-                saveLead(new ListaHistoricoOrdenVentaEntity(
-                        Lista.get(i).getOrdenventa_erp_id()
-                        ,Lista.get(i).getCliente_id()
-                        ,Lista.get(i).getRucdni()
-                        ,Lista.get(i).getNombrecliente()
-                        , Lista.get(i).getMontototalorden()
-                        , Lista.get(i).getEstadoaprobacion()
-                        , Lista.get(i).getComentarioaprobacion()
-                        ,Lista.get(i).getOrdenventa_id()
-                        ,Lista.get(i).isRecepcionERPOV()
-                        ,Lista.get(i).getComentariows()
-                        ,Lista.get(i).isEnvioERPOV()
-                        ,Lista.get(i).getDocnum()
+            for( int i=0;i<Lista.size();i++){
+                ListaHistoricoOrdenVentaEntity temp=new ListaHistoricoOrdenVentaEntity();
+                       // Lista.get(i).getDocNum()
+                temp.setCardCode(Lista.get(i).getCardCode());
+                temp.setLicTradNum(Lista.get(i).getLicTradNum());
+                temp.setCardName(Lista.get(i).getCardName());
+                temp.setDocTotal(Lista.get(i).getDocTotal());
+                temp.setApprovalStatus(Lista.get(i).getApprovalStatus());
+                 temp.setApprovalCommentary(Lista.get(i).getApprovalCommentary());
+                 temp.setSalesOrderID(Lista.get(i).getSalesOrderID());
+                     //   ,Lista.get(i).isRecepcionERPOV()
+                       // ,Lista.get(i).getComentariows()
+                       // ,Lista.get(i).isEnvioERPOV()
+                        temp.setDocNum(Lista.get(i).getDocNum());
 
-                ));
+                saveLead(temp);
             }
-        }catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return new ArrayList<>(leads.values());
     }

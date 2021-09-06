@@ -6,7 +6,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoOrdenVentaEntity;
 import java.util.List;
 
 public class HistoricoOrdenVentaEntityResponse {
-    @SerializedName("Pedidos_Leer_OrdenVentaCResult")
+    @SerializedName("SalesOrder")
     private List<HistoricoOrdenVentaEntity> historicoOrdenVentaEntity;
 
     public void HistoricoOrdenVentaEntityResponse(List<HistoricoOrdenVentaEntity> historicoOrdenVentaEntity) {

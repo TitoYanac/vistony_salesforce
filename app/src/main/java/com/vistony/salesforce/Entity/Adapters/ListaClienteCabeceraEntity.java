@@ -10,6 +10,7 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private int imvclientecabecera;
     private String moneda;
     private String domembarque_id;
+    private String domfactura_id;
     private String impuesto_id;
     private String impuesto;
     private String rucdni;
@@ -33,7 +34,7 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String fecharuta;
     private String lista_precio;
 
-    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String linea_credito_usado,   String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta,String lista_precio) {
+    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id,String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String linea_credito_usado,   String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta,String lista_precio) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -41,6 +42,7 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.imvclientecabecera = imvclientecabecera;
         this.moneda = moneda;
         this.domembarque_id = domembarque_id;
+        this.domfactura_id=domfactura_id;
         this.impuesto_id = impuesto_id;
         this.impuesto = impuesto;
         this.rucdni = rucdni;
@@ -63,6 +65,15 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.chk_ruta = chk_ruta;
         this.fecharuta = fecharuta;
         this.lista_precio=lista_precio;
+    }
+
+
+    public String getDomfactura_id() {
+        return domfactura_id;
+    }
+
+    public void setDomfactura_id(String domfactura_id) {
+        this.domfactura_id = domfactura_id;
     }
 
     public String getLista_precio() {

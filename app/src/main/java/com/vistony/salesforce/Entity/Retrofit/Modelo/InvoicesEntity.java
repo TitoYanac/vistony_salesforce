@@ -6,10 +6,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class InvoicesEntity {
 
-    /*
-    @SerializedName("CardCode")
-    private String clienteId;*/
-
     @SerializedName("DocEntry")
     private String docEntry;
 
@@ -39,16 +35,6 @@ public class InvoicesEntity {
 
     @SerializedName("RawBalance")
     private String saldoSinProcesar;
-/*
-    @NonNull
-    public String getClienteId() {
-        return clienteId;
-    }
-
-    public void setClienteId(@NonNull String clienteId) {
-        this.clienteId = clienteId;
-    }
-*/
 
     public String getDocEntry() {
         return docEntry;

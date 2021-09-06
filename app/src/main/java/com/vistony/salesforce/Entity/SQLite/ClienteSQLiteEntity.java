@@ -11,6 +11,7 @@ public class ClienteSQLiteEntity {
     private String compania_id;
     private String nombrecliente;
     private String domembarque_id;
+    private String domfactura_id;
     private String direccion;
     private String zona_id;
     private String orden;
@@ -127,6 +128,14 @@ public class ClienteSQLiteEntity {
 
     public void setDomembarque_id(String domembarque_id) {
         this.domembarque_id = domembarque_id;
+    }
+
+    public String getDomfactura_id() {
+        return domfactura_id;
+    }
+
+    public void setDomfactura_id(String domfactura_id) {
+        this.domfactura_id = domfactura_id;
     }
 
     public String getDireccion() {

@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.View.MenuView;
 
@@ -15,25 +15,25 @@ import java.util.ArrayList;
 public class CobranzaCabeceraSQLiteDao {
 
     private MenuView menuView;
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<CobranzaCabeceraSQLiteEntity> listaCobranzaCabeceraSQLiteEntity;
 
     public CobranzaCabeceraSQLiteDao(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
     public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqLiteController.getDatabaseName() );
+        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
 
-        bd = sqLiteController.getWritableDatabase();
+        bd = sqliteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqLiteController.getDatabaseName() );
-        sqLiteController.close();
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
     }
 
     public int InsertaCobranzaCabecera (String cobranza_id,String usuario_id,String cobrador_id,String banco_id,String compania_id
@@ -92,7 +92,7 @@ public class CobranzaCabeceraSQLiteDao {
             registro.put("chkwsanulado",chkwsanulado);
             registro.put("comentarioanulado",comentarioanulado);
             //registro.put("precio",pre);
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzacabecera",registro,"cobranza_id='"+cobranza_id+"'"+" and compania_id='"+compania_id+"'"+" and fuerzatrabajo_id='"+fuerzatrabajo_id+"'"  ,null);
 
             /*Cursor fila = bd.rawQuery(
@@ -172,7 +172,7 @@ public class CobranzaCabeceraSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("chkwsrecibido",chkwsrecibido);
             //registro.put("precio",pre);
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzacabecera",registro,"cobranza_id='"+cobranza_id+"'"+" and compania_id='"+compania_id+"'"+" and fuerzatrabajo_id='"+fuerzatrabajo_id+"'"  ,null);
 
             /*Cursor fila = bd.rawQuery(
@@ -255,7 +255,7 @@ public class CobranzaCabeceraSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("chkwsanulado",chkwsanulado);
             //registro.put("precio",pre);
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzacabecera",registro,"cobranza_id='"+cobranza_id+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'"  ,null);
 
             /*Cursor fila = bd.rawQuery(
@@ -385,7 +385,7 @@ public class CobranzaCabeceraSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("cobranza_id",cobranza_id_update);
             //registro.put("precio",pre);
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzacabecera",registro,"cobranza_id='"+cobranza_id+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'"  ,null);
 
             /*Cursor fila = bd.rawQuery(

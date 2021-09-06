@@ -16,6 +16,17 @@ public class SalesOrderEntity {
     @SerializedName("SalesOrderID")
     private String SalesOrderID;
 
+    @SerializedName("ErrorCode")
+    private String errorCode;
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
     public String getDocEntry() {
         return DocEntry;
     }

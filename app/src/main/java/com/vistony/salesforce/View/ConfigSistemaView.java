@@ -32,7 +32,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Dao.Retrofit.BackupWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
@@ -41,7 +41,6 @@ import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.ListenerBackPress;
@@ -149,7 +148,7 @@ public class ConfigSistemaView extends Fragment{
         cvsincronizar.setOnClickListener(v -> AlertaSincronizarDialog().show());
         clearTemp.setOnClickListener(v->{
             File fdelete = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"OrdenVenta");
-            File fdelete2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"MiPdf");
+            File fdelete2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"Cobranza");
             if (fdelete.isDirectory()){
                 String[] children = fdelete.list();
                 for (int i = 0; i < children.length; i++)
@@ -206,13 +205,13 @@ public class ConfigSistemaView extends Fragment{
             progress.show();
 
             BackupWS xd=new BackupWS();
-            xd.sendSqlite(SesionEntity.imei).observe(getActivity(), data -> {
+            xd.sendSqlite(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
                 progress.dismiss();
 
                 if(data.getClass().getName().equals("java.lang.String")){
                     Toast.makeText(getContext(), data.toString(), Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getContext(), "Analisis en proceso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Analisis enviado al servidor", Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -683,8 +682,8 @@ public class ConfigSistemaView extends Fragment{
                 Alerta(tipo).show();
             }else
             {
-                SQLiteController sqLiteController= new SQLiteController(getContext());
-                sqLiteController.deleteDatabase(getContext());
+                SqliteController sqliteController = new SqliteController(getContext());
+                sqliteController.deleteDatabase(getContext());
                 System.exit(0);
 
                 //Toast.makeText(getContext(), "Base de datos eliminada!!", Toast.LENGTH_SHORT).show();

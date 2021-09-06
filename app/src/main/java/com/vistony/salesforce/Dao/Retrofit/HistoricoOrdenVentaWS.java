@@ -21,10 +21,10 @@ public class HistoricoOrdenVentaWS {
         this.context=context;
     }
 
-    public ArrayList<ListaHistoricoOrdenVentaEntity> getHistoricoOrdenVenta(String Imei){
+    public ArrayList<ListaHistoricoOrdenVentaEntity> getHistoricoOrdenVenta(String Imei,String fecha){
 
         Api api = Config.getClient().create(Api.class);
-        Call<HistoricoOrdenVentaEntityResponse> call = api.getHistoricoOrdenVenta("http://169.47.196.209/cl/api/SalesOrder",Imei,null);
+        Call<HistoricoOrdenVentaEntityResponse> call = api.getHistoricoOrdenVenta("http://169.47.196.209/cl/api/SalesOrder",Imei,fecha);
 
         try{
             Response<HistoricoOrdenVentaEntityResponse> response= call.execute();
@@ -32,20 +32,17 @@ public class HistoricoOrdenVentaWS {
                 HistoricoOrdenVentaEntityResponse historicoOrdenVentaEntityResponse=response.body();
 
                 for(int i=0;i<historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().size();i++){
-                    ListaHistoricoOrdenVentaEntity ObjLHOrdenVenta = new ListaHistoricoOrdenVentaEntity();
-                    ObjLHOrdenVenta.ordenventa_erp_id = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getOrdenventa_erp_id();
-                    ObjLHOrdenVenta.cliente_id = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getCliente_id();
-                    ObjLHOrdenVenta.rucdni   = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getRucdni();
-                    ObjLHOrdenVenta.nombrecliente= historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getNombrecliente();
-                    ObjLHOrdenVenta.montototalorden = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getMontototalorden();
-                    ObjLHOrdenVenta.estadoaprobacion = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getEstadoaprobacion();
-                    ObjLHOrdenVenta.comentarioaprobacion="";
-                    ObjLHOrdenVenta.comentariows = "Orden Registrada con Exito";
-                    ObjLHOrdenVenta.recepcionERPOV = true;
-                    ObjLHOrdenVenta.envioERPOV = true;
-                    ObjLHOrdenVenta.docnum = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getDocnum();
 
-                        ObjLHOrdenVenta.ordenventa_id=historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getOrdenventa_id();
+                    ListaHistoricoOrdenVentaEntity ObjLHOrdenVenta = new ListaHistoricoOrdenVentaEntity();
+
+                    ObjLHOrdenVenta.setCardCode(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getCliente_id());
+                    ObjLHOrdenVenta.setCardCode(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getRucdni());
+                    ObjLHOrdenVenta.setCardName(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getNombrecliente());
+                    ObjLHOrdenVenta.setDocTotal(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getMontototalorden());
+                    ObjLHOrdenVenta.setApprovalStatus(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getEstadoaprobacion());
+                    ObjLHOrdenVenta.setApprovalCommentary(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getComentarioaprobacion());
+                    ObjLHOrdenVenta.setDocNum(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getDocnum());
+                    ObjLHOrdenVenta.setSalesOrderID(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getOrdenventa_id());
 
                     LHOrdenVenta.add(ObjLHOrdenVenta);
                 }
@@ -53,9 +50,8 @@ public class HistoricoOrdenVentaWS {
 
         }catch (Exception e){
             e.printStackTrace();
-            Log.e("REOS","HistoricoOrdenVentaWS-Error: "+e.toString());
         }
-        Log.e("REOS","HistoricoOrdenVentaWS:LHOrdenVenta.size():"+LHOrdenVenta.size());
+
         return LHOrdenVenta;
     }
     public ArrayList<ListaHistoricoOrdenVentaEntity> getHistoricoOrdenVentaEstado(
@@ -80,24 +76,22 @@ public class HistoricoOrdenVentaWS {
             Response<HistoricoOrdenVentaEntityResponse> response= call.execute();
             if(response.isSuccessful()) {
                 HistoricoOrdenVentaEntityResponse historicoOrdenVentaEntityResponse=response.body();
-                //Log.e("REOS","ListaInternaWebService"+historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().size());
+
                 for(int i=0;i<historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().size();i++){
                     ListaHistoricoOrdenVentaEntity ObjLHOrdenVenta = new ListaHistoricoOrdenVentaEntity();
-                    ObjLHOrdenVenta.ordenventa_erp_id = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getOrdenventa_erp_id();
-                    ObjLHOrdenVenta.cliente_id = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getCliente_id();
-                    ObjLHOrdenVenta.rucdni   = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getRucdni();
-                    ObjLHOrdenVenta.nombrecliente= historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getNombrecliente();
-                    ObjLHOrdenVenta.montototalorden = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getMontototalorden();
-                    ObjLHOrdenVenta.estadoaprobacion = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getEstadoaprobacion();
-                    ObjLHOrdenVenta.comentarioaprobacion="";
-                    ObjLHOrdenVenta.comentariows = "Orden Registrada con Exito";
-                    ObjLHOrdenVenta.recepcionERPOV = true;
-                    ObjLHOrdenVenta.envioERPOV = true;
-                    //if(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getOrdenventa_id().equals(""))
-                    //{
-                    ObjLHOrdenVenta.ordenventa_id=historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getOrdenventa_erp_id();
-                    // }
-                    Log.e("REOS","OrdenVenta_Id"+historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getOrdenventa_erp_id());
+                    ObjLHOrdenVenta.setDocNum(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getDocnum());
+                    ObjLHOrdenVenta.setCardCode(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getCliente_id());
+                    ObjLHOrdenVenta.setLicTradNum(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getRucdni());
+                    ObjLHOrdenVenta.setCardName(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getNombrecliente());
+                    ObjLHOrdenVenta.setDocTotal(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getMontototalorden());
+                   // ObjLHOrdenVenta.estadoaprobacion = historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getEstadoaprobacion();
+                    //ObjLHOrdenVenta.comentarioaprobacion="";
+                    //ObjLHOrdenVenta.comentariows = "Orden Registrada con Exito";
+                    //ObjLHOrdenVenta.recepcionERPOV = true;
+                    //ObjLHOrdenVenta.envioERPOV = true;
+
+                    ObjLHOrdenVenta.setSalesOrderID(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getOrdenventa_id());
+
                     LHOrdenVenta.add(ObjLHOrdenVenta);
                 }
             }

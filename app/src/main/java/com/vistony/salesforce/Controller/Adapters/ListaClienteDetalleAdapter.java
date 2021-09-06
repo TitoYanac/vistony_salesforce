@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.R;
 
@@ -55,8 +56,7 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
 
         //Toast.makeText(context, "la position xdd "+position, Toast.LENGTH_SHORT).show();
         // Obtener inflater.
-        LayoutInflater inflater = (LayoutInflater) getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         final ViewHolder holder;
 
@@ -117,8 +117,8 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
                 //lead.getFechavencimiento()
                 fechavencimiento
         );
-        holder.tv_importe.setText(lead.getImporte());
-        holder.tv_saldo.setText(lead.getSaldo());
+        holder.tv_importe.setText(Convert.currencyForView(lead.getImporte()));
+        holder.tv_saldo.setText(Convert.currencyForView(lead.getSaldo()));
         holder.tv_moneda_cliente_detalle.setText(lead.getMoneda());
 
         holder.xd.setOnClickListener(new View.OnClickListener() {

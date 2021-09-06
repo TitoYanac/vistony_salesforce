@@ -31,6 +31,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 import com.vistony.salesforce.Controller.Adapters.ListaConsDepositoAdapter;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaConsDepositoDao;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -39,6 +40,8 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -195,23 +198,13 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
 
         tv_cantidad_consdeposito.setText(String.valueOf(ArraylistaConsDepositoEntity.size()));
 
-        float monto=0;
-        DecimalFormat format =  new DecimalFormat("#0.00");
+        BigDecimal monto=new BigDecimal("0");
 
-        for(int j=0;j<ArraylistaConsDepositoEntity.size();j++)
-        {
-            monto=monto+Float.parseFloat(ArraylistaConsDepositoEntity.get(j).getCobrado());
+        for(int j=0;j<ArraylistaConsDepositoEntity.size();j++){
+            monto=monto.add(new BigDecimal(ArraylistaConsDepositoEntity.get(j).getCobrado()));
         }
 
-        tv_monto_consdeposito.setText(String.valueOf(format.format(monto)));
-
-        //b.putString(ARG_PARAM1, String.valueOf(objeto));
-        //fragment.setArguments(args);
-        //String Fragment="ConsDepositoView";
-        //Variable=Dato;
-       // FragmentFinal=Fragment+"-"+Variable;
-        //mListener.onFragmentInteraction(FragmentFinal,objeto);
-
+        tv_monto_consdeposito.setText(Convert.currencyForView(monto.setScale(3, RoundingMode.HALF_UP).toString()));
 
         return consDepositoView;
 

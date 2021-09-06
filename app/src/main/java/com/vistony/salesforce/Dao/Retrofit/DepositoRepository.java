@@ -5,16 +5,19 @@ import android.content.Context;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class CobranzaCabeceraWS {
+public class DepositoRepository {
     private Context context;
     static String resultado="0";
 
-    public CobranzaCabeceraWS(final Context context){
+    public DepositoRepository(final Context context){
         this.context=context;
     }
 
@@ -42,25 +45,28 @@ public class CobranzaCabeceraWS {
 
         HashMap<String, String> params = new HashMap<>();
 
-        params.put("Imei", Imei);
-        params.put("CrudType", TipoCrud);
+        //params.put("Imei", Imei);
+        //params.put("CrudType", TipoCrud);
         params.put("CompanyCode", Compania_ID);
         params.put("BankID", Banco_ID);
-        params.put("IncomeType", TipoIngreso);
-        params.put("DepositID", Deposito_ID);
-        params.put("DepositDate", FechaDeposito);
+        params.put("IncomeType", (TipoIngreso.equals("Deposito"))?"DE":"CH");
+        params.put("Deposit", Deposito_ID);//numero de operacion
+        params.put("Date", FechaDeposito);
         params.put("DeferredDate", FechaDiferida);
-        params.put("Banking", Bancarizacion);
-        params.put("UserCode", Usuario_ID);
+        params.put("Banking",(Bancarizacion.equals("0"))?"N":"Y" );
+        params.put("UserID", Usuario_ID);
         params.put("SlpCode",FuerzaTrabajo_ID);
-        params.put("DepositAmount", MontoDeposito);
-        params.put("Status", Estado);
-        params.put("Commentary", Comentario);
-        params.put("CancellationReason", MotivoAnulacion);
-        params.put("DirectDeposit", DepositoDirecto);
-        params.put("POSPay", PagoPOS);
+        params.put("AmountDeposit", MontoDeposito);
+        params.put("Status", (Estado.equals("Pendiente"))?"P":"P");
+        params.put("Comments", Comentario);
+        params.put("CancelReason", MotivoAnulacion);
+        params.put("DirectDeposit", (DepositoDirecto.equals("0"))?"N":"Y");
+        params.put("POSPay", (PagoPOS.equals("0"))?"N":"Y");
 
-        Call call = api.sendDeposit("https://graph.vistony.pe/deposit",params);
+        RequestBody json = RequestBody.create("{ \"Deposits\":["+(new JSONObject(params)).toString()+"]}",okhttp3.MediaType.parse("application/json; charset=utf-8"));
+
+
+        Call call = api.sendDeposit("http://169.47.196.209/cl/api/Deposits",json);
 
         try{
             Response response= call.execute();

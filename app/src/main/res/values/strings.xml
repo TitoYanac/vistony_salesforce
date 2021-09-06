@@ -9,6 +9,7 @@
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings" translatable="false">Settings</string>
     <string name="add" translatable="false">Buscar</string>
+    <string name="tag_select" translatable="false">&lt;SELECCIONAR&gt;</string>
     <string name="send" translatable="false">Enviar</string>
     <string name="UR" translatable="false">Pago Adelantado</string>
     <string name="CHK" translatable="false">Cheque</string>

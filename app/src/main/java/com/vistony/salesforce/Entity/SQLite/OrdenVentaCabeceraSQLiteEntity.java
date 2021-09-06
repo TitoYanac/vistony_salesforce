@@ -4,9 +4,18 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String compania_id;
     public String ordenventa_id;
     public String cliente_id;
+    public String cliente_text;
     public String domembarque_id;
+    public String domfactura_id;
+    public String domembarque_text;
     public String terminopago_id;
+    public String terminopago_text;
+
     public String agencia_id;
+    public String U_VIS_AgencyRUC;
+    public String U_VIS_AgencyName;
+    public String U_VIS_AgencyDir;
+
     public String moneda_id;
     public String comentario;
     public String almacen_id;
@@ -26,17 +35,44 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String tipocambio;
     public String fechatipocambio;
     public String rucdni;
-    public String U_SYP_MDTD;
-    public String U_SYP_MDSD;
-    public String U_SYP_MDCD;
-    public String U_SYP_MDMT;
-    public String U_SYP_STATUS;
     public String DocType;
     public String mensajeWS;
     public String total_gal_acumulado;
     public String descuentocontado;
     public String dueDays;
     public String excede_lineacredito;
+
+    public String getCliente_text() {
+        return cliente_text;
+    }
+
+    public void setCliente_text(String cliente_text) {
+        this.cliente_text = cliente_text;
+    }
+
+    public String getTerminopago_text() {
+        return terminopago_text;
+    }
+
+    public void setTerminopago_text(String terminopago_text) {
+        this.terminopago_text = terminopago_text;
+    }
+
+    public String getDomembarque_text() {
+        return domembarque_text;
+    }
+
+    public void setDomembarque_text(String domembarque_text) {
+        this.domembarque_text = domembarque_text;
+    }
+
+    public String getDomfactura_id() {
+        return domfactura_id;
+    }
+
+    public void setDomfactura_id(String domfactura_id) {
+        this.domfactura_id = domfactura_id;
+    }
 
     public String getExcede_lineacredito() {
         return excede_lineacredito;
@@ -102,44 +138,28 @@ public class OrdenVentaCabeceraSQLiteEntity {
         this.rucdni = rucdni;
     }
 
-    public String getU_SYP_MDTD() {
-        return U_SYP_MDTD;
+    public String getU_VIS_AgencyRUC() {
+        return U_VIS_AgencyRUC;
     }
 
-    public void setU_SYP_MDTD(String u_SYP_MDTD) {
-        U_SYP_MDTD = u_SYP_MDTD;
+    public void setU_VIS_AgencyRUC(String u_VIS_AgencyRUC) {
+        U_VIS_AgencyRUC = u_VIS_AgencyRUC;
     }
 
-    public String getU_SYP_MDSD() {
-        return U_SYP_MDSD;
+    public String getU_VIS_AgencyName() {
+        return U_VIS_AgencyName;
     }
 
-    public void setU_SYP_MDSD(String u_SYP_MDSD) {
-        U_SYP_MDSD = u_SYP_MDSD;
+    public void setU_VIS_AgencyName(String u_VIS_AgencyName) {
+        U_VIS_AgencyName = u_VIS_AgencyName;
     }
 
-    public String getU_SYP_MDCD() {
-        return U_SYP_MDCD;
+    public String getU_VIS_AgencyDir() {
+        return U_VIS_AgencyDir;
     }
 
-    public void setU_SYP_MDCD(String u_SYP_MDCD) {
-        U_SYP_MDCD = u_SYP_MDCD;
-    }
-
-    public String getU_SYP_MDMT() {
-        return U_SYP_MDMT;
-    }
-
-    public void setU_SYP_MDMT(String u_SYP_MDMT) {
-        U_SYP_MDMT = u_SYP_MDMT;
-    }
-
-    public String getU_SYP_STATUS() {
-        return U_SYP_STATUS;
-    }
-
-    public void setU_SYP_STATUS(String u_SYP_STATUS) {
-        U_SYP_STATUS = u_SYP_STATUS;
+    public void setU_VIS_AgencyDir(String u_VIS_AgencyDir) {
+        U_VIS_AgencyDir = u_VIS_AgencyDir;
     }
 
     public String getDocType() {

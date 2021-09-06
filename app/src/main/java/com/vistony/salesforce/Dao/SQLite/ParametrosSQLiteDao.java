@@ -6,30 +6,30 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.SQLiteController;
+import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.ParametrosSQLiteEntity;
 
 import java.util.ArrayList;
 
 public class ParametrosSQLiteDao {
-    SQLiteController sqLiteController;
+    SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<ParametrosSQLiteEntity> listaParametrosSQLiteEntity;
 
     public ParametrosSQLiteDao(Context context)
     {
-        sqLiteController = new SQLiteController(context);
+        sqliteController = new SqliteController(context);
     }
     public void abrir(){
         Log.i("SQLite", "Se abre conexion a la base de datos desde " + this.getClass().getName() );
-        bd = sqLiteController.getWritableDatabase();
+        bd = sqliteController.getWritableDatabase();
     }
 
     /** Cierra conexion a la base de datos */
     public void cerrar()
     {
         Log.i("SQLite", "Se cierra conexion a la base de datos " + this.getClass().getName());
-        sqLiteController.close();
+        sqliteController.close();
     }
 
 
@@ -117,7 +117,7 @@ public class ParametrosSQLiteDao {
             registro.put("fechacarga",fechacarga);
             //registro.put("hash",hash);
             //registro.put("precio",pre);
-            bd = sqLiteController.getWritableDatabase();
+            bd = sqliteController.getWritableDatabase();
             resultado = bd.update("parametros",registro,"parametro_id='"+id+"'"+" and nombreparametro='"+nombreparametro+"'" ,null);
 
             /*Cursor fila = bd.rawQuery(

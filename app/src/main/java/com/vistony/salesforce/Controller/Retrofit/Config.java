@@ -17,9 +17,9 @@ public class Config {
         try{
             if(client==null) {
                 client = new OkHttpClient.Builder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.MINUTES)
+                .writeTimeout(60, TimeUnit.MINUTES)
+                .readTimeout(60, TimeUnit.MINUTES)
                 .retryOnConnectionFailure(true)
                 .proxy(Proxy.NO_PROXY)
                 //.connectionPool(new ConnectionPool(10,15,TimeUnit.SECONDS))
