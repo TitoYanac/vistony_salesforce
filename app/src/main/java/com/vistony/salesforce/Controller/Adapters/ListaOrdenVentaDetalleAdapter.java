@@ -337,7 +337,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                                     lead.getOrden_detalle_monto_descuento()
                             );
 
-                            lead.setOrden_detalle_montototallinea(formulasController.suma(xd1,lead.getOrden_detalle_monto_igv()));
+
+                          lead.setOrden_detalle_montototallinea(formulasController.suma(xd1,lead.getOrden_detalle_monto_igv()));
 
                             ////////////////////////////////////////////////////////////////////////
                             OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotal(lead.getOrden_detalle_montosubtotal());
@@ -352,6 +353,15 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                             OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_gal_acumulado(String.valueOf(holder.tv_orden_detalle_galon_acumulado.getText()));
                         }
                     }
+                    /////////////////////////////////////////////////////////////CALCULO MONTOS TOTALES//////////////////////////////////////
+                    ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity= new ArrayList<>();
+                    listaOrdenVentaDetalleEntity.add(lead);
+
+                   // fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+                   // FragmentTransaction transaction = fragmentManager.beginTransaction();
+                   // transaction.replace(R.id.content_menu_view, ordenVentaDetalleView.newInstanceActualizaLista(listaOrdenVentaDetalleEntity));
+                    ordenVentaDetalleView.newInstanceActualizaLista(listaOrdenVentaDetalleEntity);
+                    ActualizaListaOrdenDetallePromocion(lead);
                 }
             }
 

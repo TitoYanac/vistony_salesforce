@@ -37,7 +37,7 @@ public class UpdateApp {
             ruta.mkdirs();
         }
 
-        Config.getClient().create(Api.class).getNewApk("http://169.47.196.209/cl/api/version?v="+nameFile).enqueue(new Callback<ResponseBody>() {
+        Config.getClient().create(Api.class).getNewApk(nameFile).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

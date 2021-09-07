@@ -23,7 +23,7 @@ public class BancoRepository {
 
     public ArrayList<BancoSQLiteEntity> getBancoWS(String Imei){
         Api api = Config.getClient().create(Api.class);
-        Call<BancoEntityResponse> call = api.getBanco("http://169.47.196.209/cl/api/Banks",Imei);
+        Call<BancoEntityResponse> call = api.getBanco(Imei);
         try
         {
             Response<BancoEntityResponse> response= call.execute();

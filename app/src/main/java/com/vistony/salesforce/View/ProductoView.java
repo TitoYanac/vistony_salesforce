@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.vistony.salesforce.Controller.Adapters.ListaDireccionClienteAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaProductoAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaProductoDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
@@ -57,7 +59,7 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
         return productoView;
     }
 
-    public static ProductoView newInstancia(Object objeto) {
+    public static ProductoView newInstancia(ListaProductoEntity objeto) {
         ListenerBackPress.setCurrentFragment("ProductoView");
         ProductoView productoView = new ProductoView();
         Bundle b = new Bundle();
@@ -94,9 +96,17 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
 
     private void cargarProductosSqlite(String cardCode){
         ListaProductoEntity=new ArrayList<>();
+
+
         ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(cardCode);
-        listaProductoAdapter = new ListaProductoAdapter(getActivity(), ListaProductoDao.getInstance().getLeads(ListaProductoEntity));
-        lv_producto.setAdapter(listaProductoAdapter);
+
+        if(ListaProductoEntity==null || ListaProductoEntity.size()<0){
+            Toast.makeText(getContext(),"Actualiza tus parametros, no hay productos disponibles", Toast.LENGTH_LONG).show();
+            getActivity().getSupportFragmentManager().popBackStack();
+        }else{
+            listaProductoAdapter = new ListaProductoAdapter(getActivity(), ListaProductoDao.getInstance().getLeads(ListaProductoEntity));
+            lv_producto.setAdapter(listaProductoAdapter);
+        }
     }
 
     public interface OnFragmentInteractionListener {

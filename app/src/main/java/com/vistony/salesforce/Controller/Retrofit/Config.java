@@ -1,6 +1,10 @@
 
 package com.vistony.salesforce.Controller.Retrofit;
 
+import android.util.Log;
+
+import com.vistony.salesforce.BuildConfig;
+
 import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
 
@@ -27,16 +31,18 @@ public class Config {
                 .build();
             }
 
-            if(retrofit==null){
+           if(retrofit==null){
                 retrofit = new Retrofit.Builder()
-                .baseUrl("https://graph.vistony.pe")
+                .baseUrl("http://169.47.196.209/")
                 .addConverterFactory(GsonConverterFactory.create()).client(client)
                 .build();
+
+               // Log.e("BASE_URL","=>"+BuildConfig.BASE_URL);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
-        
+
         return retrofit;
     }
 

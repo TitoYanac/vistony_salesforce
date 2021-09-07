@@ -96,16 +96,6 @@ public class LoginView extends AppCompatActivity{
     private LoginRepository loginRepository;
     private SharedPreferences statusImei;
 
-    private static double redondearDecimales(double valorInicial, int numeroDecimales) {
-        double parteEntera, resultado;
-        resultado = valorInicial;
-        parteEntera = Math.floor(resultado);
-        resultado=(resultado-parteEntera)*Math.pow(10, numeroDecimales);
-        resultado=Math.round(resultado);
-        resultado=(resultado/Math.pow(10, numeroDecimales))+parteEntera;
-        return resultado;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,7 +165,7 @@ public class LoginView extends AppCompatActivity{
         /********/
 
         ObtenerVideo();
-        bluetoothAdapter.enable();
+        //bluetoothAdapter.enable();
         turnGPSOn();
 
         //String android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),Settings.Secure.ANDROID_ID);
@@ -242,7 +232,7 @@ public class LoginView extends AppCompatActivity{
             pInfo = context.getPackageManager().getPackageInfo(getPackageName(), 0);
             version = pInfo.versionName;
             SqliteController db = new SqliteController(getApplicationContext());
-            viewVersion.setText("vs:"+version+" db:"+db.getWritableDatabase().getVersion());
+            viewVersion.setText("vs:"+version+" db:"+db.getWritableDatabase().getVersion()+" "+((BuildConfig.BUILD_TYPE.equals("debug"))?"test":BuildConfig.BUILD_TYPE));
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -275,16 +265,17 @@ public class LoginView extends AppCompatActivity{
             final Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
             final Button dialogButtonExit =  dialog.findViewById(R.id.dialogButtonCancel);
 
-            dialogButton.setText("GUARDAR");
-            dialogButtonExit.setText("VER IMEI");
+            dialogButton.setText("INGRESAR");
+            dialogButtonExit.setText("VER CÓDIGO");
 
-          //  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             image.setBackground(new ColorDrawable(Color.TRANSPARENT));
 
             dialog.show();
 
             dialogButtonExit.setOnClickListener(v -> {
                 Intent i = new Intent(Settings.ACTION_DEVICE_INFO_SETTINGS);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             });
 
@@ -296,17 +287,17 @@ public class LoginView extends AppCompatActivity{
                         editor.apply();
 
                         dialog.dismiss();
-                        Toast.makeText(context, "IMEI registrado", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Código registrado", Toast.LENGTH_LONG).show();
                         Imei=textDImei.getText().toString();
 
                         loginRepository.getAndLoadUsers(Imei,getApplicationContext());
 
                     }else{
-                        Toast.makeText(context, "Vuelva a presionar guardar para configurar su IMEI...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Vuelva a presionar guardar para ingresar...", Toast.LENGTH_SHORT).show();
                         temp=1;
                     }
                 }else{
-                    Toast.makeText(context, "Error al escribir IMEI...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Error al escribir el código de activación...", Toast.LENGTH_SHORT).show();
                 }
             });
         }

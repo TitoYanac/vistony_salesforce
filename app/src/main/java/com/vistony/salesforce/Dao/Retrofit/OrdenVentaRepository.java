@@ -104,7 +104,7 @@ public class OrdenVentaRepository extends ViewModel {
 
             RequestBody jsonConvert = RequestBody.create(json,MediaType.parse("application/json; charset=utf-8"));
 
-            Config.getClient().create(Api.class).sendOrder("http://169.47.196.209/cl/api/SalesOrder",jsonConvert).enqueue(new Callback<SalesOrderEntityResponse>() {
+            Config.getClient().create(Api.class).sendOrder(jsonConvert).enqueue(new Callback<SalesOrderEntityResponse>() {
                 @Override
                 public void onResponse(Call<SalesOrderEntityResponse> call, Response<SalesOrderEntityResponse> response) {
 

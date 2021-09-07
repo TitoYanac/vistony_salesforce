@@ -29,9 +29,20 @@ public class VersionViewModel {
     public MutableLiveData<Object> getVs(String imei,String version,Context context){
         SharedPreferences statusImei = context.getSharedPreferences("imeiRegister", Context.MODE_PRIVATE);
 
-        String endPoint="http://169.47.196.209/cl/api/version?imei="+imei+"&token="+md5(context.getPackageName());
+        String endPoint="http://169.47.196.209/test";
+
         if(BuildConfig.FLAVOR.equals("india")){
-            endPoint="http://169.47.196.209/v1.0/api/version?imei="+imei+"&app="+md5(context.getPackageName());
+            endPoint="http://169.47.196.209/v1.0/api/version?imei="+imei+"&app="+md5(context.getPackageName()); // lod e la india es el lead y esta en SAP DB peru
+        }else if(BuildConfig.FLAVOR.equals("chile")){
+            switch(BuildConfig.BUILD_TYPE){
+                case "release":
+                    endPoint="http://169.47.196.209/cl/api/version?imei="+imei+"&token="+md5(context.getPackageName()+"."+BuildConfig.BUILD_TYPE);
+                    break;
+                case "develop":
+                case "debug":
+                    endPoint="http://169.47.196.209/cl.test/api/version?imei="+imei+"&token="+md5(context.getPackageName()+"."+BuildConfig.BUILD_TYPE);
+                    break;
+            }
         }
 
         Config.getClient().create(Api.class).getVs(endPoint).enqueue(new Callback<VersionEntity>() {

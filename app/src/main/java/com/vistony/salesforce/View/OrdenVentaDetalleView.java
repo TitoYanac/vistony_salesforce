@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.lowagie.text.List;
 import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
@@ -81,7 +82,7 @@ public class OrdenVentaDetalleView extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static OrdenVentaDetalleView newInstanceEnviaListaPromocion (Object objeto) {
 
-        ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+        ListenerBackPress.setCurrentFragment("OrdenVentaDetalleView");
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);
@@ -119,7 +120,7 @@ public class OrdenVentaDetalleView extends Fragment {
             descuentocontado="false";
         }
 
-        ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+        ListenerBackPress.setCurrentFragment("OrdenVentaDetalleView");
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);
@@ -128,36 +129,36 @@ public class OrdenVentaDetalleView extends Fragment {
 
     public static OrdenVentaDetalleView newInstanceAgregarProducto(Object objeto) {
 
-        ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+        ListenerBackPress.setCurrentFragment("OrdenVentaDetalleView");
+        ListenerBackPress.setTemporaIdentityFragment("cestoCompra");
 
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
 
         ordenVentaDetalleView.setArguments(b);
-        ArrayList<ListaProductoEntity> listadoProductosConversion=new ArrayList<>();
+        //ArrayList<ListaProductoEntity> listadoProductosConversion=new ArrayList<>();
         ListaOrdenVentaDetalleEntity ObjListaProductosEntity=new ListaOrdenVentaDetalleEntity();
-        listadoProductosConversion=(ArrayList<ListaProductoEntity>)objeto;
-        String indice="0";
-        for (int i=0;i<listadoProductosConversion.size();i++)
-        {
-            if(listadoProductosAgregados.isEmpty())
-            {
+        ListaProductoEntity productoAgregado=(ListaProductoEntity)objeto;
 
+        //listadoProductosConversion=(ArrayList<ListaProductoEntity>)objeto;
+
+        String indice="0";
+        //for (int i=0;i<listadoProductosConversion.size();i++)
+        //{
+            if(listadoProductosAgregados.isEmpty()){
                 indice="1";
-            }
-            else
-            {
+            }else{
                 indice=String.valueOf(listadoProductosAgregados.size()+1);
             }
 
             ObjListaProductosEntity.orden_detalle_item=(indice);
-            ObjListaProductosEntity.orden_detalle_producto_id=listadoProductosConversion.get(i).getProducto_id();
-            ObjListaProductosEntity.orden_detalle_producto=listadoProductosConversion.get(i).getProducto();
-            ObjListaProductosEntity.orden_detalle_umd=listadoProductosConversion.get(i).getUmd();
-            ObjListaProductosEntity.orden_detalle_stock_almacen=listadoProductosConversion.get(i).getStock_almacen();
-            ObjListaProductosEntity.orden_detalle_stock_general=listadoProductosConversion.get(i).getStock_general();
-            ObjListaProductosEntity.orden_detalle_precio_unitario=listadoProductosConversion.get(i).getPreciobase();
-            ObjListaProductosEntity.orden_detalle_gal=listadoProductosConversion.get(i).getGal();
+            ObjListaProductosEntity.orden_detalle_producto_id=productoAgregado.getProducto_id();
+            ObjListaProductosEntity.orden_detalle_producto=productoAgregado.getProducto();
+            ObjListaProductosEntity.orden_detalle_umd=productoAgregado.getUmd();
+            ObjListaProductosEntity.orden_detalle_stock_almacen=productoAgregado.getStock_almacen();
+            ObjListaProductosEntity.orden_detalle_stock_general=productoAgregado.getStock_general();
+            ObjListaProductosEntity.orden_detalle_precio_unitario=productoAgregado.getPreciobase();
+            ObjListaProductosEntity.orden_detalle_gal=productoAgregado.getGal();
             ObjListaProductosEntity.orden_detalle_monto_igv="0";
             //
             ObjListaProductosEntity.orden_detalle_cantidad="";
@@ -173,12 +174,12 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_gal_acumulado="0";
             ObjListaProductosEntity.orden_detalle_descuentocontado=descuentocontado;
             ObjListaProductosEntity.orden_detalle_terminopago_id=terminopago_id;
-            ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=listadoProductosConversion.get(i).getPorcentaje_descuento_max();
-            ObjListaProductosEntity.orden_detalle_stock_almacen=listadoProductosConversion.get(i).getStock_almacen();
-            ObjListaProductosEntity.orden_detalle_stock_general=listadoProductosConversion.get(i).getStock_general();
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=productoAgregado.getPorcentaje_descuento_max();
+            ObjListaProductosEntity.orden_detalle_stock_almacen=productoAgregado.getStock_almacen();
+            ObjListaProductosEntity.orden_detalle_stock_general=productoAgregado.getStock_general();
 
             listadoProductosAgregados.add(ObjListaProductosEntity);
-        }
+        //}
 
         hiloAgregarListaProductos.execute();
         return ordenVentaDetalleView;
@@ -205,7 +206,7 @@ public class OrdenVentaDetalleView extends Fragment {
 
     public static OrdenVentaDetalleView newInstanceActualizaLista(Object objeto) {
 
-        ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+        ListenerBackPress.setCurrentFragment("OrdenVentaDetalleView");
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);
@@ -223,6 +224,8 @@ public class OrdenVentaDetalleView extends Fragment {
     }
 
     public static OrdenVentaDetalleView newInstanceEliminaLineaOrdenVenta(Object objeto) {
+        ListenerBackPress.setTemporaIdentityFragment("rutaVendedor");
+
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);

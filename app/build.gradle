@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            storeFile file('C:\\Users\\Vistony\\Downloads\\KeyPublic\\keyStore.jks')
+            storePassword 'keyStore.jks'
+            keyPassword 'keyStore.jks'
+            keyAlias 'SalesForce'
+        }
+    }
+
     compileSdkVersion 28
     buildToolsVersion "29.0.3"
         defaultConfig {
@@ -8,12 +17,16 @@ android {
             minSdkVersion 24
             targetSdkVersion 28
             versionCode 1
-            versionName "2.1.0"
+            versionName "0.0.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             multiDexEnabled true
             ndk {
                 abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
             }
+
+            manifestPlaceholders = [appName:"Vistony Sales Force Test"]
+            buildConfigField('String' , 'BASE_ENDPOINT', '"/cl.test/api"')
+            signingConfig  signingConfigs.config
     }
     buildTypes {
         release {
@@ -21,24 +34,21 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable false
-        }
-        develop {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            debuggable true
+            buildConfigField('String' , 'BASE_ENDPOINT', '"/cl/api"')
+            manifestPlaceholders = [appName:"Vistony Sales Force"]
         }
     }
 
     flavorDimensions "country"
     productFlavors{
+
         india{
             applicationIdSuffix ".india"
             buildConfigField('String' , 'IMEI_DEFAULT', '"355691112769630"')
             minSdkVersion 23
             targetSdkVersion 28
             versionCode 1
-            versionName "0.0.1"
+            versionName "2.1.0"
         }
         chile{
             applicationIdSuffix ".chile"
@@ -47,12 +57,13 @@ android {
         }
     }
 
+    /*
     variantFilter { variant ->
         def names = variant.buildType.name
-        if (names!="debug" /*&& names.contains("demo")*/) {
+        if (names!="debug" && names.contains("demo")) {
             setIgnore(true)
         }
-    }
+    }*/
 
     sourceSets {
         india {

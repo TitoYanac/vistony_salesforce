@@ -58,7 +58,7 @@ public class VisitaRepository extends ViewModel {
 
         if(json!=null){
             RequestBody jsonRequest = RequestBody.create(json,MediaType.parse("application/json; charset=utf-8"));
-            Config.getClient().create(Api.class).sendVisit("http://169.47.196.209/cl/api/Visit",jsonRequest).enqueue(new Callback<VisitaEntity>() {
+            Config.getClient().create(Api.class).sendVisit(jsonRequest).enqueue(new Callback<VisitaEntity>() {
                 @Override
                 public void onResponse(Call<VisitaEntity> call, Response<VisitaEntity> response) {
 

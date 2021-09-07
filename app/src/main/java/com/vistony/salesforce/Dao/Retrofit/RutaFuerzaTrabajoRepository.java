@@ -25,7 +25,7 @@ public class RutaFuerzaTrabajoRepository {
     public ArrayList<RutaFuerzaTrabajoSQLiteEntity> getRutaFuerzaTrabajoWS(String Imei){
         Api api = Config.getClient().create(Api.class);
 
-        Call<RutaFuerzaTrabajoEntityResponse> call = api.getRutaFuerzaTrabajo("http://169.47.196.209/cl/api/WorkPath",Imei);
+        Call<RutaFuerzaTrabajoEntityResponse> call = api.getRutaFuerzaTrabajo(Imei);
 
         try{
             Response<RutaFuerzaTrabajoEntityResponse> response= call.execute();

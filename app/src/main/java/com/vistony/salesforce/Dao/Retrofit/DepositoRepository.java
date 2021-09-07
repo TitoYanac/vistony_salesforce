@@ -66,7 +66,7 @@ public class DepositoRepository {
         RequestBody json = RequestBody.create("{ \"Deposits\":["+(new JSONObject(params)).toString()+"]}",okhttp3.MediaType.parse("application/json; charset=utf-8"));
 
 
-        Call call = api.sendDeposit("http://169.47.196.209/cl/api/Deposits",json);
+        Call call = api.sendDeposit(json);
 
         try{
             Response response= call.execute();

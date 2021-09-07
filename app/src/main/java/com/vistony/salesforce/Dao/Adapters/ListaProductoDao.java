@@ -58,7 +58,7 @@ public class ListaProductoDao {
             }
         }catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return new ArrayList<>(leads.values());
     }

@@ -91,9 +91,9 @@ public class ClienteSQlite {
 
         arraylistaClienteSQLiteEntity = new ArrayList<ListaClienteCabeceraEntity>();
         ListaClienteCabeceraEntity clienteentity;
-        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
 
         try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
             Cursor fila = sqlite.rawQuery(
                 "Select " +
                         "b.cliente_id,b.nombrecliente,b.direccion,SUM(saldo),a.moneda,b.domembarque_id,b.impuesto_id,b.impuesto,b.categoria,b.linea_credito,b.linea_credito_usado,b.terminopago_id " +

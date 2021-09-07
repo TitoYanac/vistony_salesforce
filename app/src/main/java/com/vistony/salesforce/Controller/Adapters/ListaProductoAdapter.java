@@ -27,7 +27,6 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
     private List<ListaProductoEntity> Listanombres =null;
     LayoutInflater inflater;
     private ArrayList<ListaProductoEntity> arrayList;
-    private FragmentManager fragmentManager;
 
     public ListaProductoAdapter(android.content.Context context, List<ListaProductoEntity> objects) {
         super(context, 0, objects);
@@ -125,7 +124,7 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         holder.tv_gal.setText(lead.getGal());
 
         holder.relativeListaProducto.setOnClickListener(v -> {
-            ArrayList<ListaProductoEntity> arrayListaProductoEntity= new ArrayList<>();
+            //ArrayList<ListaProductoEntity> arrayListaProductoEntity= new ArrayList<>();
 
             ListaProductoEntity listaProductoEntity=new ListaProductoEntity();
 
@@ -139,11 +138,13 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
             listaProductoEntity.setGal(lead.getGal());
             listaProductoEntity.setPorcentaje_descuento_max(lead.getPorcentaje_descuento_max());
 
-            arrayListaProductoEntity.add(listaProductoEntity);
+           // arrayListaProductoEntity.add(listaProductoEntity);
 
-            fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+           /* FragmentManager fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.content_menu_view, ProductoView.newInstancia(arrayListaProductoEntity));
+            transaction.add(R.id.content_menu_view, ProductoView.newInstancia(arrayListaProductoEntity));*/
+
+            ProductoView.newInstancia(listaProductoEntity);
         }
 
         );

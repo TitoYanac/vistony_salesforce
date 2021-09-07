@@ -43,7 +43,7 @@ public class ClienteRepository extends ViewModel {
     }
 
     public ArrayList<ClienteSQLiteEntity>getCustomers(String Imei){
-        Call<ClienteEntityResponse> call = Config.getClient().create(Api.class).getCliente("http://169.47.196.209/cl/api/customers",Imei);
+        Call<ClienteEntityResponse> call = Config.getClient().create(Api.class).getCliente(Imei);
         try{
             Response<ClienteEntityResponse> response= call.execute();
                 if(response.isSuccessful()) {

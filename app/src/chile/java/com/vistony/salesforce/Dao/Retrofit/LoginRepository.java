@@ -26,7 +26,7 @@ public class LoginRepository extends ViewModel{
 
     public MutableLiveData<ArrayList<String>> getAndLoadUsers(final String imei,final Context context){
 
-        Config.getClient().create(Api.class).getUsers("http://169.47.196.209/cl/api/Users",imei).enqueue(new Callback<LoginEntityResponse>() {
+        Config.getClient().create(Api.class).getUsers(imei).enqueue(new Callback<LoginEntityResponse>() {
             @Override
             public void onResponse(Call<LoginEntityResponse> call, Response<LoginEntityResponse> response) {
 
@@ -38,7 +38,7 @@ public class LoginRepository extends ViewModel{
                     }
 
                 }else{
-                    Log.e("JEPICAME","=>"+response.code() +"\n=>"+imei);
+                    Log.e("EndPoint","=>"+response.raw().request().url());
                 }
 
                 profile.setValue(usuarioSQLite.ObtenerPerfiles());

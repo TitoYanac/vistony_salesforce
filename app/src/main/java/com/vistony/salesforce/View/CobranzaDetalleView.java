@@ -74,6 +74,8 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -82,7 +84,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class CobranzaDetalleView extends Fragment {
-    ListaClienteDetalleAdapter listaClienteDetalleAdapter;
+    //ListaClienteDetalleAdapter listaClienteDetalleAdapter;
     ArrayList<ListaClienteDetalleEntity> listaClienteDetalleAdapterFragment;
     ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleEntities;
     ListaCobranzaDetalleAdapter listaCobranzaDetalleAdapter;
@@ -93,19 +95,20 @@ public class CobranzaDetalleView extends Fragment {
     EditText et_cobrado_edit;
     View v;
     ObtenerWSCobranzaDetalle obtenerWSCobranzaDetalle;
-    float cobrado=0,nuevo_saldo=0,saldo=0;
+
+    BigDecimal cobrado,nuevo_saldo,saldo;
+
+   // float cobrado=0,nuevo_saldo=0,saldo=0;
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
-    SimpleDateFormat dateFormat;
-    Date date;
+
     String fecha,et_cobrado,chkqrvalidado,recibo_generado;
     static public String recibo;
     DocumentoCobranzaPDF documentoCobranzaPDF;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private final static String NOMBRE_DOCUMENTO = "prueba.pdf";
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
     static String TAG_1 = "text";
@@ -414,158 +417,108 @@ public class CobranzaDetalleView extends Fragment {
 
         }
 
-        imbaceptar.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View view) {
-                                                int p=0;
-                                              int total=0;
-                                              for (int i = 0; i < et_cobrado_edit.getText().toString().length(); i++){
-                                                  char  letra;
+        imbaceptar.setOnClickListener(view -> {
+            String saldo_evaluar="0";
+            if (!chkpagoadelantado.isChecked())
+            {
+                for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++) {
+                    saldo_evaluar = listaClienteDetalleAdapterFragment.get(i).saldo;
+                }
+            }
 
-                                                  letra=et_cobrado_edit.getText().toString().charAt(i);
-                                                  if(letra=='.')
-                                                  {
-                                                    p++;
+            BigDecimal montoIngresado=new BigDecimal(et_cobrado_edit.getText().toString());
 
-                                                  }
-                                                  else
-                                                      {
-                                                          total=total+Integer.parseInt(String.valueOf(""+letra));
-                                                      }
-
-                                                  //Tratamiento del caracter
-                                              }
-
-                                              String saldo_evaluar="0";
-                                              if (!chkpagoadelantado.isChecked())
-                                              {
-                                                  for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++) {
-                                                      saldo_evaluar = listaClienteDetalleAdapterFragment.get(i).saldo;
-                                                  }
-                                              }
-
-                                              if(et_cobrado_edit.getText().toString().equals("")||et_cobrado_edit.getText().toString().equals(".")
-                                              ||et_cobrado_edit.getText().toString().equals(" ")||(p>1)||(Float.parseFloat(et_cobrado_edit.getText().toString())>Float.parseFloat(saldo_evaluar)&&!chkpagoadelantado.isChecked())
-                                              )
-                                              {
-                                                  et_cobrado_edit.setText("0");
-                                                  Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
-                                                }
-                                              else
-                                                  {
+            if(!(montoIngresado.compareTo(BigDecimal.ZERO)>0)){
+                et_cobrado_edit.setText(null);
+                Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
+              }else{
 
 
-                                                  DecimalFormat format = new DecimalFormat("#0.00");
-                                                  if (Float.parseFloat(et_cobrado_edit.getText().toString()) >= 1) {
-//150169
+                    BigDecimal montoCobrado=new BigDecimal(et_cobrado_edit.getText().toString());
+
+                        Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
+                        drawable = DrawableCompat.wrap(drawable);
+                        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
+                        menu_variable.findItem(R.id.guardar).setIcon(drawable);
+                        guardar.setEnabled(true);
+
+                        if (chkpagoadelantado.isChecked()) {
+                            for (int j = 0; j < listaClienteDetalleAdapterFragment.size(); j++) {
+
+                                cobrado=montoCobrado;
+                               // cobrado = Float.parseFloat(montoCobrado.setScale(3, RoundingMode.HALF_UP).toString());
+
+                                listaClienteDetalleAdapterFragment.get(j).setCobrado(cobrado.setScale(3,RoundingMode.HALF_UP).toString());
+                                listaClienteDetalleAdapterFragment.get(j).setSaldo(String.valueOf("0"));
+                                listaClienteDetalleAdapterFragment.get(j).setNuevo_saldo(String.valueOf("0"));
+                                listaClienteDetalleAdapterFragment.get(j).setImporte("0");
+                                listaClienteDetalleAdapterFragment.get(j).setFechaemision("0");
+                                listaClienteDetalleAdapterFragment.get(j).setFechavencimiento("0");
+                                listaClienteDetalleAdapterFragment.get(j).setDireccion("0");
+                                listaClienteDetalleAdapterFragment.get(j).setNrodocumento("0");
+                                listaClienteDetalleAdapterFragment.get(j).setDocumento_id("0");
+                                cliente_id_visita=listaClienteDetalleAdapterFragment.get(j).getCliente_id();
+                                domembarque_id_visita=listaClienteDetalleAdapterFragment.get(j).getDomembarque();
+                                zona_id_visita=listaClienteDetalleAdapterFragment.get(j).getZona_id();
+
+                            }
+                            obtenerWSCobranzaDetalle = new ObtenerWSCobranzaDetalle();
+                            obtenerWSCobranzaDetalle.execute();
 
 
-                                                      String newSaldo=String.valueOf(format.format(Float.parseFloat(et_cobrado_edit.getText().toString())));
-                                                      String loQueQuieroBuscar = ",";
-                                                      String[] palabras = loQueQuieroBuscar.split("\\s+");
+                        } else {
 
-                                                      boolean notHaveComa=true;
-                                                      for (String palabra : palabras) {
-                                                          if (newSaldo.contains(palabra)) {
-                                                              notHaveComa=false;
-                                                          }
-                                                      }
+                            for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++) {
 
-                                                      if(notHaveComa){
+                                String cobranza = "";
 
-                                                          Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
-                                                          drawable = DrawableCompat.wrap(drawable);
-                                                          DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
-                                                          menu_variable.findItem(R.id.guardar).setIcon(drawable);
-                                                          guardar.setEnabled(true);
+                                if (et_cobrado_edit.getText().toString().equals("")) {
+                                    cobranza = "0";
+                                } else if (et_cobrado_edit.getText().toString().equals(".")) {
+                                    cobranza = "0";
+                                } else {
+                                    cobranza = et_cobrado_edit.getText().toString();
+                                }
 
-                                                          if (chkpagoadelantado.isChecked()) {
-                                                              for (int j = 0; j < listaClienteDetalleAdapterFragment.size(); j++) {
-                                                                  cobrado = Float.parseFloat(et_cobrado_edit.getText().toString());
-                                                                  listaClienteDetalleAdapterFragment.get(j).setCobrado(String.valueOf(cobrado));
-                                                                  listaClienteDetalleAdapterFragment.get(j).setSaldo(String.valueOf("0"));
-                                                                  listaClienteDetalleAdapterFragment.get(j).setNuevo_saldo(String.valueOf("0"));
-                                                                  listaClienteDetalleAdapterFragment.get(j).setImporte("0");
-                                                                  listaClienteDetalleAdapterFragment.get(j).setFechaemision("0");
-                                                                  listaClienteDetalleAdapterFragment.get(j).setFechavencimiento("0");
-                                                                  listaClienteDetalleAdapterFragment.get(j).setDireccion("0");
-                                                                  listaClienteDetalleAdapterFragment.get(j).setNrodocumento("0");
-                                                                  listaClienteDetalleAdapterFragment.get(j).setDocumento_id("0");
-                                                                  cliente_id_visita=listaClienteDetalleAdapterFragment.get(j).getCliente_id();
-                                                                  domembarque_id_visita=listaClienteDetalleAdapterFragment.get(j).getDomembarque();
-                                                                  zona_id_visita=listaClienteDetalleAdapterFragment.get(j).getZona_id();
+                                cobrado=new BigDecimal(cobranza);
+                                saldo=new BigDecimal(listaClienteDetalleAdapterFragment.get(i).getSaldo());
 
-                                                              }
-                                                              obtenerWSCobranzaDetalle = new ObtenerWSCobranzaDetalle();
-                                                              obtenerWSCobranzaDetalle.execute();
+                                listaClienteDetalleAdapterFragment.get(i).setSaldo(saldo.setScale(0,RoundingMode.HALF_UP).toString());
+                                if (cobrado.compareTo(saldo) <= 0) {
+                                    listaClienteDetalleAdapterFragment.get(i).setCobrado(cobrado.setScale(0,RoundingMode.HALF_UP).toString());
+                                    nuevo_saldo = saldo.subtract(cobrado);
 
+                                    /*if (nuevo_saldo == .00) {
+                                        nuevo_saldo = 0;
+                                    }*/
 
-                                                          } else {
+                                    listaClienteDetalleAdapterFragment.get(i).setNuevo_saldo(nuevo_saldo.setScale(3,RoundingMode.HALF_UP).toString());
+                                    /*if (cobrado > 3500) {
+                                        chk_bancarizado.setChecked(true);
+                                    }*/
 
-                                                              for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++) {
+                                } else {
+                                    Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
 
-                                                                  String cobranza = "";
-                                                                  //cobrado=Integer.parseInt(listaClienteDetalleAdapterFragment.get(i).getCobrado());
-                                                                  if (et_cobrado_edit.getText().toString().equals("")) {
-                                                                      cobranza = "0";
-                                                                  } else if (et_cobrado_edit.getText().toString().equals(".")) {
-                                                                      cobranza = "0";
-                                                                  } else {
-                                                                      cobranza = et_cobrado_edit.getText().toString();
-                                                                  }
-                                                                  cobrado = Float.parseFloat(cobranza);
-                                                                  saldo = Float.parseFloat(listaClienteDetalleAdapterFragment.get(i).getSaldo());
-                                                                  listaClienteDetalleAdapterFragment.get(i).setSaldo(format.format(saldo));
-                                                                  if (cobrado <= saldo && cobrado > 0) {
-                                                                      listaClienteDetalleAdapterFragment.get(i).setCobrado(String.valueOf(format.format(cobrado)));
-                                                                      nuevo_saldo = saldo - cobrado;
-                                                                      //Object object=format.format(nuevo_saldo);
-                                                                      //nuevo_saldo=Float.valueOf() ;
-                                                                      if (nuevo_saldo == .00) {
-                                                                          nuevo_saldo = 0;
-                                                                      }
+                                }
+                                obtenerWSCobranzaDetalle = new ObtenerWSCobranzaDetalle();
+                                obtenerWSCobranzaDetalle.execute();
+                            }
+                        }
 
-
-
-                                                                      listaClienteDetalleAdapterFragment.get(i).setNuevo_saldo(String.valueOf(format.format(nuevo_saldo)));
-                                                                  /*if (cobrado > 3500) {
-                                                                      chk_bancarizado.setChecked(true);
-                                                                  }*/
-
-                                                                  } else {
-                                                                      Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
-
-                                                                  }
-                                                                  obtenerWSCobranzaDetalle = new ObtenerWSCobranzaDetalle();
-                                                                  obtenerWSCobranzaDetalle.execute();
-                                                              }
-                                                          }
-                                                      }else{
-                                                          changeFormatKeyboard().show();
-                                                      }
-
-
-
-
-                                                  } else {
-                                                      Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
-                                                  }
-
-                                              }
-                                          }
-
-                                      }
+            }
+        }
         );
         imbcancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++)
-                {
-                    et_cobrado_edit.setText(String.valueOf("0"));
+                for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++){
+                    et_cobrado_edit.setText(null);
                     listaClienteDetalleAdapterFragment.get(i).setCobrado(String.valueOf("0"));
                     listaClienteDetalleAdapterFragment.get(i).setNuevo_saldo(String.valueOf("0"));
                 }
+
                 Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
@@ -639,16 +592,11 @@ public class CobranzaDetalleView extends Fragment {
             @Override
             public void onClick(View v) {
                 boolean estado=chk_bancarizado.isChecked();
-                 if(chk_bancarizado.isChecked())
-                 {
-
+                 if(chk_bancarizado.isChecked()){
                      createSimpleDialog(estado).show();
+                 }else{
+                    createSimpleDialog(estado).show();
                  }
-                 else
-                     {
-
-                         createSimpleDialog(estado).show();
-                     }
 
             }});
 
@@ -726,6 +674,7 @@ public class CobranzaDetalleView extends Fragment {
     public AlertDialog createSimpleDialog(final boolean estado) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(true);
         if(estado)
         {
             builder.setTitle("Advertencia")
@@ -782,13 +731,13 @@ public class CobranzaDetalleView extends Fragment {
 
 
         if (getArguments() != null) {
-            if(!(Listado==null))
-            {
+            if(!(Listado==null)){
                 guardar.setEnabled(false);
                 generarpdf.setEnabled(true);
                 validarqr.setEnabled(true);
                 Drawable drawable = menu.findItem(R.id.guardar).getIcon();
                 drawable = DrawableCompat.wrap(drawable);
+
                 DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
                 menu.findItem(R.id.guardar).setIcon(drawable);
                 Drawable drawable2 = menu.findItem(R.id.generarpdf).getIcon();
@@ -804,9 +753,7 @@ public class CobranzaDetalleView extends Fragment {
                 et_cobrado_edit.setEnabled(false);
                 imbcomentariorecibo.setEnabled(false);
 
-            }
-            else
-                {
+            }else{
                     comentario="";
             Drawable drawable = menu.findItem(R.id.guardar).getIcon();
             drawable = DrawableCompat.wrap(drawable);
@@ -825,12 +772,6 @@ public class CobranzaDetalleView extends Fragment {
                 }
         }
 
-/*
-       listaConfiguracionSQLEntity=configuracionSQLiteDao.ObtenerConfiguracion();
-        for(int i=0;i<listaConfiguracionSQLEntity.size();i++)
-        {
-            vinculaimpresora=listaConfiguracionSQLEntity.get(i).getVinculaimpresora();
-        }*/
         vinculaimpresora="1"; ///para chile no se requiere impresora
 
         if(vinculaimpresora.equals("0"))
@@ -852,8 +793,7 @@ public class CobranzaDetalleView extends Fragment {
             return "1";
         }
 
-        protected void onPostExecute(Object result)
-        {
+        protected void onPostExecute(Object result){
             listaCobranzaDetalleAdapter = new ListaCobranzaDetalleAdapter(getActivity(), ListaCobranzaDetalleDao.getInstance().getLeads(listaClienteDetalleAdapterFragment));
             listViewCobranzaDetalle.setAdapter(listaCobranzaDetalleAdapter);
 
@@ -896,8 +836,6 @@ public class CobranzaDetalleView extends Fragment {
         switch (item.getItemId()) {
 
             case R.id.guardar:
-                //fecha =obtenerFechaYHoraActual();
-                //alertaGuardarCobranza().show();
                 if(SesionEntity.fuerzatrabajo_id==null && SesionEntity.nombrefuerzadetrabajo==null && SesionEntity.compania_id==null){
                 //if(true){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -914,6 +852,7 @@ public class CobranzaDetalleView extends Fragment {
                     builder.show();
                 }else{
                     fecha =obtenerFechaYHoraActual();
+                    guardar.setEnabled(false);
                     alertaGuardarCobranza().show();
                 }
                 return false;
@@ -998,7 +937,7 @@ public class CobranzaDetalleView extends Fragment {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //listener.onNegativeButtonClick();
+                                guardar.setEnabled(true);
                             }
                         });
 
@@ -1294,19 +1233,10 @@ public class CobranzaDetalleView extends Fragment {
 
         @Override
         protected String doInBackground(String... arg1) {
-            //String argumento1=arg1[0];
             String resultadoenviows="0";
             try {
 
-                if(Conexion.equals("1"))
-                {
-                    FormulasController formulasController=new FormulasController(getContext());
-
-                    //Antiguo Envio de Cobranza Detalle WS - SOAP
-                    //resultadoenviows=cobranzaDetalleWSDao.enviarRecibo(cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id)
-                    //      ,SesionEntity.imei,SesionEntity.usuario_id,comentario+"-"+SesionEntity.serialnumber,SesionEntity.fuerzatrabajo_id);
-                    //Nuevo Envio de Cobranza De
-
+                if(Conexion.equals("1")){
                     resultadoenviows= CobranzaRepository.EnviarReciboWsRetrofit(
                             cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
                             getContext(),
@@ -1318,17 +1248,9 @@ public class CobranzaDetalleView extends Fragment {
                     );
 
                 }
-               /* else if(Conexion.equals("0"))
-                {
-                    //Toast.makeText(getContext(), "Se guardo Correctamente la Cobranza, pero no se Envio a la Nube", Toast.LENGTH_SHORT).show();
-                }*/
 
-
-
-            } catch (Exception e)
-            {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
+            } catch (Exception e){
+                e.printStackTrace();
             }
             return String.valueOf(resultadoenviows);
         }
@@ -1336,9 +1258,10 @@ public class CobranzaDetalleView extends Fragment {
         protected void onPostExecute(Object result)
         {
             try {
-                    if(result.equals("1"))
-                    {
-                        cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
+                    if(result.equals("1")){
+                        //actualzia el estado a uno pero ni bien se envia a la web service se actualiza
+                        //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
+
                         Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
                         drawable = DrawableCompat.wrap(drawable);
                         DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));

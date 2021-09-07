@@ -240,8 +240,9 @@ public class MenuView extends AppCompatActivity
         //findViewById( R.id.tv_fuerzatrabajo_id_navheader);
         tv_nombrefuerzatrabajo_navheader=(TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_nombrefuerzatrabajo_navheader);
-        tv_correlativo_navheader=(TextView)
-                navigationView.getHeaderView(0).findViewById(R.id.tv_correlativo_navheader);
+
+        //tv_correlativo_navheader=(TextView)navigationView.getHeaderView(0).findViewById(R.id.tv_correlativo_navheader);
+
         //tv_conexion_navheader=(TextView)
         //        navigationView.getHeaderView(0).findViewById(R.id.tv_Conexion_navheader);
         imv_compania_menu=(ImageView)
@@ -272,7 +273,7 @@ public class MenuView extends AppCompatActivity
 
         tv_fuerzatrabajo_id_navheader.setText(String.valueOf(SesionEntity.fuerzatrabajo_id));
         tv_nombrefuerzatrabajo_navheader.setText(String.valueOf(SesionEntity.nombrefuerzadetrabajo));
-        tv_correlativo_navheader.setText(String.valueOf(correlativo));
+//      tv_correlativo_navheader.setText(String.valueOf(correlativo));
 
         if(SesionEntity.compania_id.equals("C011"))
         {
@@ -526,8 +527,11 @@ public class MenuView extends AppCompatActivity
                         super.onBackPressed();
                     }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("TieneLineas")){
                         Toast.makeText(getApplicationContext(), "No es posible retroceder por que tiene productos agregados", Toast.LENGTH_LONG).show();
+                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("cestoCompra")){
+                        //Toast.makeText(context, "segura que desea salir y eliminar los productos agregados, mostrar dialog", Toast.LENGTH_SHORT).show();
+                        //super.onBackPressed();
                     }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("rutaVendedor")){
-                        super.onBackPressed();
+                        super.onBackPressed(); //carro de compras vacio y puede retroceder fresh
                     }
                     break;
                 case "ProductoView":
@@ -633,7 +637,7 @@ public class MenuView extends AppCompatActivity
                 /*contentFragment=new HojaDespachoView();
                 fragmentSeleccionado=true;
                 TAG_FRAGMENT="config_print";*/
-                Toast.makeText(context, "Vista no construida", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "Vista no construida", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
@@ -1137,7 +1141,7 @@ public class MenuView extends AppCompatActivity
 
                 ft.remove(ProductoViewFragment);
                 ft.show(OrdenVentaDetalleFragment);
-                ft.addToBackStack("pop");
+               // ft.addToBackStack("pop");
                 ft.commit();
                 OrdenVentaDetalleView.newInstanceAgregarProducto(Lista);
             }

@@ -181,13 +181,15 @@ public class CobranzaDetalleSQLiteDao {
         return listaCobranzaDetalleSQLiteEntity;
     }
 
-    public int updateStatusCodeSap(String itemId,String code,String induvis_id){
+    public int updateStatusCodeSap(String itemId,String code,String induvis_id,String message,String status){
         int resultado=0;
 
         try{
 
             ContentValues registro = new ContentValues();
             registro.put("sap_code",code);
+            registro.put("mensajeWS",message);
+            registro.put("chkwsrecibido",status);
             bd = sqliteController.getWritableDatabase();
             resultado=bd.update("cobranzadetalle",registro,"cobranza_id=? and compania_id=?" ,new String[]{itemId, induvis_id});
             bd.close();
@@ -555,17 +557,11 @@ public class CobranzaDetalleSQLiteDao {
 
             ContentValues registro = new ContentValues();
             registro.put("chkwsrecibido",chkwsrecibido);
-            //registro.put("precio",pre);
+
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
 
-            /*Cursor fila = bd.rawQuery(
-                    "update cobranzadetalle set cobranza_id = '"+cobranza_id+ "'" +
-                            //+ ",chkdepositado = '"+chkdepositado+"'"+
-                            " where recibo= '"+recibo+"'"
-                            //+ " and compania_id= '"+compania_id+"'"
-                    ,null);
-            */
+
 
             //resultado=1;
             bd.close();

@@ -288,7 +288,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                     listaHOV.setDocTotal(listaOrdenVentaSQLite.get(l).getMontototal());
 
                                     Log.e("MontoTotal","=>"+listaOrdenVentaSQLite.get(l).getMontototal());
-
+                                    listaHOV.setApprovalCommentary(listaOrdenVentaSQLite.get(l).getMensajeWS());
                                     listaHOV.setApprovalStatus("Pendiente");
                                     //listaHOV.comentarioaprobacion = "";
                                     listaHOV.setSalesOrderID(listaOrdenVentaSQLite.get(l).getOrdenventa_id());

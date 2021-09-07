@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
@@ -14,26 +15,11 @@ import java.util.ArrayList;
 
 public class ListaPrecioDetalleSQLiteDao {
 
-    SqliteController sqliteController;
-    SQLiteDatabase bd;
     ArrayList<ListaProductoEntity> arraylistaProductoEntity;
 
-    public ListaPrecioDetalleSQLiteDao(Context context)
-    {
-        sqliteController = new SqliteController(context);
+    public ListaPrecioDetalleSQLiteDao(Context context){
+        DataBaseManager.initializeInstance(new SqliteController(context));
     }
-    public void abrir(){
-        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
-        bd = sqliteController.getWritableDatabase();
-    }
-
-    /** Cierra conexion a la base de datos */
-    public void cerrar()
-    {
-        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
-        sqliteController.close();
-    }
-
 
     public int InsertaListaPrecioDetalle (
             String compania_id,
@@ -49,7 +35,8 @@ public class ListaPrecioDetalleSQLiteDao {
             String stock_almacen,
             String stock_general
     ){
-        abrir();
+        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
         ContentValues registro = new ContentValues();
         registro.put("compania_id",compania_id);
         registro.put("porcentaje_dsct",porcentaje_descuento);
@@ -63,8 +50,9 @@ public class ListaPrecioDetalleSQLiteDao {
         registro.put("Tipo",tipo);
         registro.put("stock_almacen",stock_almacen);
         registro.put("stock_general",stock_general);
-        bd.insert("listapreciodetalle",null,registro);
-        bd.close();
+        sqlite.insert("listapreciodetalle",null,registro);
+
+        DataBaseManager.getInstance().closeDatabase();
         return 1;
     }
 
@@ -72,11 +60,12 @@ public class ListaPrecioDetalleSQLiteDao {
 
         arraylistaProductoEntity = new ArrayList<ListaProductoEntity>();
         ListaProductoEntity listaProductoEntity;
-        abrir();
         Cursor fila=null;
 
         try {
-             fila = bd.rawQuery("SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen,IFNULL(stock_general,0) stock_general," +
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
+             fila = sqlite.rawQuery("SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen,IFNULL(stock_general,0) stock_general," +
                      "contado,contado,gal,porcentaje_dsct" +
                   " FROM listapreciodetalle  WHERE Tipo= (SELECT lista_precio FROM cliente WHERE cliente_id=? LIMIT 1);",new String [] {cardCode});
 
@@ -95,9 +84,10 @@ public class ListaPrecioDetalleSQLiteDao {
                 arraylistaProductoEntity.add(listaProductoEntity);
             }
         }catch (Exception e){
+            Log.e("ErrorSqlite","=>"+e.getMessage());
             e.printStackTrace();
         }finally {
-            bd.close();
+            DataBaseManager.getInstance().closeDatabase();
         }
 
         return arraylistaProductoEntity;
@@ -105,9 +95,9 @@ public class ListaPrecioDetalleSQLiteDao {
 
     public int LimpiarTablaListaPrecioDetalle ()
     {
-        abrir();
-        bd.execSQL("delete from listapreciodetalle");
-        bd.close();
+        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+        sqlite.execSQL("delete from listapreciodetalle");
+        DataBaseManager.getInstance().closeDatabase();
         return 1;
     }
 
@@ -115,9 +105,9 @@ public class ListaPrecioDetalleSQLiteDao {
     {
         int resultado=0;
 
-        abrir();
         try {
-            Cursor fila = bd.rawQuery(
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            Cursor fila = sqlite.rawQuery(
                     "Select count(compania_id) from listapreciodetalle",null);
 
             while (fila.moveToNext())
@@ -127,10 +117,11 @@ public class ListaPrecioDetalleSQLiteDao {
             }
         }catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
         }
 
-        bd.close();
 
         return resultado;
     }
@@ -175,9 +166,11 @@ public class ListaPrecioDetalleSQLiteDao {
     {
         ArrayList<ListaPrecioDetalleSQLiteEntity> arraylistaPreciodetalle = new ArrayList<>();
         ListaPrecioDetalleSQLiteEntity listaPrecioDetalleEntity;
-        abrir();
+
         try {
-            Cursor fila = bd.rawQuery(
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
+            Cursor fila = sqlite.rawQuery(
                     "Select  * from listapreciodetalle where producto_id='"+producto_id+"'"  ,null);
 
             while (fila.moveToNext())
@@ -193,25 +186,27 @@ public class ListaPrecioDetalleSQLiteDao {
                 arraylistaPreciodetalle.add(listaPrecioDetalleEntity);
 
             }
-        }catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
         }
-        bd.close();
+
         return arraylistaPreciodetalle;
     }
 
     public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalleporProducto (String contado,String producto_id)
     {
-        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
-        //SQLiteDatabase bd = admin.getWritableDatabase();
+
         arraylistaProductoEntity = new ArrayList<ListaProductoEntity>();
         ListaProductoEntity listaProductoEntity;
-        abrir();
+
         Cursor fila=null;
         try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
             if(contado.equals("1")) {
-                fila = bd.rawQuery(
+                fila = sqlite.rawQuery(
                         "Select IFNULL(a.contado,0) precio   from listapreciodetalle A" +
                                 " left join stock B on " +
                                 " A.compania_id=b.compania_id and" +
@@ -222,7 +217,7 @@ public class ListaPrecioDetalleSQLiteDao {
 
             }else
             {
-                fila = bd.rawQuery(
+                fila = sqlite.rawQuery(
                         "Select IFNULL(a.credito,0) precio from listapreciodetalle A" +
                                 " left join stock B on " +
                                 " A.compania_id=b.compania_id and" +
@@ -237,13 +232,12 @@ public class ListaPrecioDetalleSQLiteDao {
                   listaProductoEntity.setPreciobase(fila.getString(0));
                 arraylistaProductoEntity.add(listaProductoEntity);
             }
-        }catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
         }
-        bd.close();
 
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return arraylistaProductoEntity;
     }
 }

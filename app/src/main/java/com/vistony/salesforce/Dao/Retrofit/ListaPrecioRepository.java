@@ -24,7 +24,7 @@ public class ListaPrecioRepository {
 
     public ArrayList<ListaPrecioDetalleSQLiteEntity> getListaPrecioDetalleWS(String Imei){
         Api api = Config.getClient().create(Api.class);
-        Call<ListaPrecioDetalleEntityResponse> call = api.getListaPrecioDetalle("http://169.47.196.209/cl/api/pricelist",Imei);
+        Call<ListaPrecioDetalleEntityResponse> call = api.getListaPrecioDetalle(Imei);
         try{
             Response<ListaPrecioDetalleEntityResponse> response= call.execute();
             if(response.isSuccessful()) {

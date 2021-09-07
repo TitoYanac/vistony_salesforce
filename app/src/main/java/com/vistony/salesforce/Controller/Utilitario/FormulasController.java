@@ -3,6 +3,7 @@ package com.vistony.salesforce.Controller.Utilitario;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
@@ -65,12 +66,12 @@ public class FormulasController {
 
     public String suma(String num1,String num2){
         num1=(num1.equals("")||num1==null)?"0":num1;
-        num2=(num2.equals("")||num1==null)?"0":num2;
+        num2=(num2.equals("")||num2==null)?"0":num2;
 
         BigDecimal temp1=new BigDecimal(num1);
         BigDecimal rpta=temp1.add(new BigDecimal(num2));
 
-        return rpta.toString();
+        return rpta.setScale(3, RoundingMode.HALF_UP).toString();
     }
 
     public String CalcularMontoTotalconDescuento(String MontoTotalLineaSinDescuento,String MontoDescuento){

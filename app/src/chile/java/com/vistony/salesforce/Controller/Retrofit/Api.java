@@ -1,5 +1,6 @@
 package com.vistony.salesforce.Controller.Retrofit;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CatalogoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
@@ -50,37 +51,37 @@ import retrofit2.http.Url;
 
 public interface Api {
     //@Headers("Content-Type: application/json")
-    @GET("/Users")
+    @GET(BuildConfig.BASE_ENDPOINT+"/Users")
     Call<LoginEntityResponse> getUsers(@Query("imei") String imei);
 
     @GET //EndPoint de acuerdo al FLAVOR
     Call<VersionEntity> getVs(@Url String url);
 
-    @GET("/version")
+    @GET(BuildConfig.BASE_ENDPOINT+"/version")
     Call<ResponseBody> getNewApk(@Query("v") String version);
 
-    @GET("/Banks")
+    @GET(BuildConfig.BASE_ENDPOINT+"/Banks")
     Call<BancoEntityResponse> getBanco(@Query("imei") String imei);
 
-    @GET("/customers")
+    @GET(BuildConfig.BASE_ENDPOINT+"/customers")
     Call<ClienteEntityResponse> getCliente (@Query("imei") String imei);
 
-    @GET("/customers")
+    @GET(BuildConfig.BASE_ENDPOINT+"/customers")
     Call<ClienteEntityResponse> getClienteInformation (@Query("imei") String imei,@Query("cliente") String cliente);
 
-    @GET("/WorkPath")
+    @GET(BuildConfig.BASE_ENDPOINT+"/WorkPath")
     Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Query("imei") String imei);
 
-    @GET("/pricelist")
+    @GET(BuildConfig.BASE_ENDPOINT+"/pricelist")
     Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Query("imei") String imei);
 
-    @POST("/SalesOrder")
+    @POST(BuildConfig.BASE_ENDPOINT+"/SalesOrder")
     Call<SalesOrderEntityResponse> sendOrder(@Body RequestBody params);
 
-    @POST("/Collections")
+    @POST(BuildConfig.BASE_ENDPOINT+"/Collections")
     Call<CobranzaDetalleEntity> sendCollection( @Body RequestBody params);
 
-    @PATCH("/Collections/{codeSap}")
+    @PATCH(BuildConfig.BASE_ENDPOINT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollection(@Path("codeSap") String codeSap, @Body RequestBody params);
 
     @Multipart
@@ -90,19 +91,19 @@ public interface Api {
     @GET
     Call<List<CatalogoEntity>> getCatalog(@Url String pathUrl);
 
-    @GET("/agencies")
+    @GET(BuildConfig.BASE_ENDPOINT+"/agencies")
     Call<AgenciaEntityResponse> getAgencia (@Query("imei") String imei);
 
-    @GET("/PaymentTerms")
+    @GET(BuildConfig.BASE_ENDPOINT+"/PaymentTerms")
     Call<TerminoPagoEntityResponse> getTerminoPago (@Query("imei") String imei);
 
-    @POST("/Visit")
+    @POST(BuildConfig.BASE_ENDPOINT+"/Visit")
     Call<VisitaEntity> sendVisit (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
-    @POST("/SalesOrder")
+    @POST(BuildConfig.BASE_ENDPOINT+"/SalesOrder")
     Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Query("imei") String imei,@Query("fecha") String fecha);
 
-    @POST("/Deposits")
+    @POST(BuildConfig.BASE_ENDPOINT+"/Deposits")
     Call<Void> sendDeposit (@Body RequestBody params);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

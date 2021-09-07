@@ -60,7 +60,7 @@ public class CobranzaRepository {
             String PagoPOS
     ){
         Api api = Config.getClient().create(Api.class);
-
+        int acumResul=0;
         HashMap<String, String> params = new HashMap<>();
 
         params.put("BankID","");
@@ -87,7 +87,7 @@ public class CobranzaRepository {
 
         RequestBody json = RequestBody.create("{ \"Collections\":["+(new JSONObject(params)).toString()+"]}",okhttp3.MediaType.parse("application/json; charset=utf-8"));
 
-        Call<CobranzaDetalleEntity> call = api.sendCollection("http://169.47.196.209/cl/api/Collections",json);
+        Call<CobranzaDetalleEntity> call = api.sendCollection(json);
         try{
             Response response= call.execute();
             //sap_code
@@ -98,19 +98,25 @@ public class CobranzaRepository {
 
                 for(CobranzaItemEntity cobranza:cobranzas.getCobranzaItem()){
                     if(cobranza.getErrorCode().equals("0") && cobranza.getCode()!=null){
-                        cobranzasqlite.updateStatusCodeSap(Detalle_Item,cobranza.getCode(),Compania_ID);
+                        cobranzasqlite.updateStatusCodeSap(cobranza.getItemDetail(),cobranza.getCode(),Compania_ID,cobranza.getMessage(),"1");
+                    }else{
+                        acumResul=acumResul+1;
+                        cobranzasqlite.updateStatusCodeSap(cobranza.getItemDetail(),cobranza.getCode(),Compania_ID,cobranza.getMessage(),"0");
                     }
                 }
-
-                resultado = "1";
             }else{
-                resultado = "0";
+                acumResul=acumResul+1;
             }
         }catch (Exception e){
             e.printStackTrace();
-            resultado="0";
+            acumResul=acumResul+1;
         }
-        return resultado;
+
+        if(acumResul==0){
+            return "1";
+        }else{
+            return "0";
+        }
     }
 
     public static String sendPatch(String codeSap,String codeOperation,String codeBank){
@@ -124,8 +130,7 @@ public class CobranzaRepository {
 
 
         RequestBody json = RequestBody.create((new JSONObject(params)).toString(),okhttp3.MediaType.parse("application/json; charset=utf-8"));
-
-        Call<CobranzaDetalleEntity> call = api.updateCollection("http://169.47.196.209/cl/api/Collections/"+codeSap,json);
+        Call<CobranzaDetalleEntity> call = api.updateCollection(codeSap,json);
         try{
             Response response= call.execute();
             //sap_code

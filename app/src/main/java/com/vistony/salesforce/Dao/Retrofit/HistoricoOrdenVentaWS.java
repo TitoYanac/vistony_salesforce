@@ -24,7 +24,7 @@ public class HistoricoOrdenVentaWS {
     public ArrayList<ListaHistoricoOrdenVentaEntity> getHistoricoOrdenVenta(String Imei,String fecha){
 
         Api api = Config.getClient().create(Api.class);
-        Call<HistoricoOrdenVentaEntityResponse> call = api.getHistoricoOrdenVenta("http://169.47.196.209/cl/api/SalesOrder",Imei,fecha);
+        Call<HistoricoOrdenVentaEntityResponse> call = api.getHistoricoOrdenVenta(Imei,fecha);
 
         try{
             Response<HistoricoOrdenVentaEntityResponse> response= call.execute();

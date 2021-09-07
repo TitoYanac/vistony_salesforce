@@ -28,6 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -38,6 +39,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoPedidoPDF;
@@ -218,6 +220,10 @@ public class OrdenVentaCabeceraView extends Fragment {
 
         listaOrdenVentaDetalleEntities=(ArrayList<ListaOrdenVentaDetalleEntity>) objeto;
         hiloObtenerResumenOrdenVenta.execute();
+
+        /*SE DEBE PODER EDITAR AUN, POR QUE NO SE GUARDA*/
+
+
         tv_terminopago.setEnabled(false);
         btn_consultar_termino_pago.setEnabled(false);
         chk_descuento_contado.setEnabled(false);
@@ -226,6 +232,7 @@ public class OrdenVentaCabeceraView extends Fragment {
         sp_cantidaddescuento.setEnabled(false);
         sp_cantidaddescuento.setClickable (false);
 
+
         Utilitario.disabledButtton(btn_detalle_orden_venta);
         Utilitario.disabledImageButtton(btn_consultar_direccion);
         Utilitario.disabledImageButtton(btn_consultar_termino_pago);
@@ -233,12 +240,15 @@ public class OrdenVentaCabeceraView extends Fragment {
         Utilitario.disabledSpinner(spnmoneda);
         //Utilitario.disabledEditText(et_comentario);
         Utilitario.disabledCheckBox(chk_descuento_contado);
+
+
         return ordenVentaView;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         context=getContext();
         
@@ -586,16 +596,24 @@ public class OrdenVentaCabeceraView extends Fragment {
                 }
 
                 tv_orden_cabecera_galones.setText(galonesAcum);
-                tv_orden_cabecera_subtotal.setText(subtotalAcum);
-                tv_orden_cabecera_descuento.setText(descuentoAcum);
-                tv_orden_cabecera_igv.setText(impuestosAcum);
-                tv_orden_cabecera_total.setText(totalAcum);
+                tv_orden_cabecera_subtotal.setText(Convert.currencyForView(subtotalAcum));
+                tv_orden_cabecera_descuento.setText(Convert.currencyForView(descuentoAcum));
+                tv_orden_cabecera_igv.setText(Convert.currencyForView(impuestosAcum));
+                tv_orden_cabecera_total.setText(Convert.currencyForView(totalAcum));
+
+
                 Utilitario.disabledButtton(btn_detalle_orden_venta);
                 Utilitario.disabledImageButtton(btn_consultar_direccion);
                 Utilitario.disabledImageButtton(btn_consultar_termino_pago);
                 Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia);
                 Utilitario.disabledSpinner(spnmoneda);
+
+                if(et_comentario.getText().length()==0){
+                    et_comentario.setHint("Sin comentario");
+                }
+
                 Utilitario.disabledEditText(et_comentario);
+
                 Utilitario.disabledCheckBox(chk_descuento_contado);
                 break;
             default:
@@ -646,10 +664,11 @@ public class OrdenVentaCabeceraView extends Fragment {
 
                 for(int i=0;i<listaHistoricoOrdenVentaEntity.size();i++){
 
-                    if(listaHistoricoOrdenVentaEntity.get(i).getDocNum()!=null || !listaHistoricoOrdenVentaEntity.get(i).getDocNum().equals("")){
+                    if(listaHistoricoOrdenVentaEntity!=null || !listaHistoricoOrdenVentaEntity.get(i).getDocNum().equals("")){
                         Drawable drawable2 = menu_variable.findItem(R.id.enviar_erp).getIcon();
                         drawable2 = DrawableCompat.wrap(drawable2);
                         DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.Black));
+
                         menu_variable.findItem(R.id.enviar_erp).setIcon(drawable2);
                         enviar_erp.setEnabled(false);
                     }else{

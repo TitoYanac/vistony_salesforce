@@ -36,12 +36,10 @@ public class ListaCobranzaDetalleAdapter extends ArrayAdapter<ListaCobranzaDetal
         final ListaCobranzaDetalleAdapter.ViewHolder holder;
 
         // ¿Ya se infló este view?
+        // ¿Ya se infló este view?
         if (null == convertView) {
-            //Si no existe, entonces inflarlo con image_list_view.xml
-            convertView = inflater.inflate(
-                    R.layout.layout_lista_cobranza_detalle,
-                    parent,
-                    false);
+
+            convertView = inflater.inflate(R.layout.layout_lista_cobranza_detalle,parent,false);
 
             holder = new ListaCobranzaDetalleAdapter.ViewHolder();
             // holder.lbl_documento = (TextView) convertView.findViewById(R.id.lbl_documento);
@@ -66,38 +64,6 @@ public class ListaCobranzaDetalleAdapter extends ArrayAdapter<ListaCobranzaDetal
         holder.et_saldo.setText((lead.getSaldo()==null)?"$0":Convert.currencyForView(lead.getSaldo()));
         holder.et_cobrado.setText((lead.getCobrado()==null)?"$0":Convert.currencyForView(lead.getCobrado()));
         holder.et_nuevosaldo.setText((lead.getNuevosaldo()==null)?" $0":Convert.currencyForView(lead.getNuevosaldo()));
-;
-        //imv_comentario.setOnClickListener(this);{
-
-
-       /* final View finalConvertView = convertView;
-        holder.imbcomentariorecibo .setOnClickListener(new View.OnClickListener() {
-                                              @Override
-                                              public void onClick(View view) {
-                                                  //Toast.makeText(getContext(), "Soy el comentario", Toast.LENGTH_SHORT).show();
-                                                  android.support.v4.app.DialogFragment dialogFragment = new CobranzaDetalleDialogController();
-                                                  dialogFragment.show(
-                                                          ((FragmentActivity) finalConvertView.getContext()).getSupportFragmentManager()
-                                                          ,"un dialogo");
-                                              }
-                                          }
-        );*/
-        //holder.et_saldo.setFocusable(false);
-        //holder.et_saldo.setEnabled(false);
-        //holder.et_nuevosaldo.setFocusable(false);
-        //holder.et_nuevosaldo.setEnabled(false);
-       /* holder.imvdetalle.setOnClickListener(new View.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(View v) {
-                                                     String Texto="VALERIA";
-                                                     String Texto1=Texto;
-                                                 }
-                                             }
-
-        );
-*/
-
-        //Glide.with(getContext()).load(lead.getImage()).into(holder.avatar);
 
         return convertView;
     }
