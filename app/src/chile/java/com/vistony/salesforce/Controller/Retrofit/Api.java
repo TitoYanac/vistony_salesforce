@@ -39,6 +39,7 @@ import retrofit2.http.Body;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -48,73 +49,68 @@ import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 public interface Api {
+    //@Headers("Content-Type: application/json")
+    @GET("/Users")
+    Call<LoginEntityResponse> getUsers(@Query("imei") String imei);
 
-    @GET //("/user")
-    Call<LoginEntityResponse> getUsers(@Url String url,@Query("imei") String imei);
+    @GET //EndPoint de acuerdo al FLAVOR
+    Call<VersionEntity> getVs(@Url String url);
 
-    @GET //("/version")
-    Call<VersionEntity> getVs(@Url String url/*, @Query("imei") String imei,@Query("token") String token*/);
+    @GET("/version")
+    Call<ResponseBody> getNewApk(@Query("v") String version);
 
-    @GET //("/customers")
-    Call<ClienteEntityResponse> getCliente (@Url String url,@Query("imei") String imei);
+    @GET("/Banks")
+    Call<BancoEntityResponse> getBanco(@Query("imei") String imei);
+
+    @GET("/customers")
+    Call<ClienteEntityResponse> getCliente (@Query("imei") String imei);
 
     @GET("/customers")
     Call<ClienteEntityResponse> getClienteInformation (@Query("imei") String imei,@Query("cliente") String cliente);
 
-    //@FormUrlEncoded
-    //@Multipart
-    //@POST //, @Part HashMap<String, String> params @Body
-    @POST //("/customers")
-    Call<Void> sendLead(@Url String url,@Body RequestBody params);
+    @GET("/WorkPath")
+    Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Query("imei") String imei);
 
+    @GET("/pricelist")
+    Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Query("imei") String imei);
 
-    @GET("/agencies")
-    Call<AgenciaEntityResponse> getAgencia (@Query("imei") String imei);
+    @POST("/SalesOrder")
+    Call<SalesOrderEntityResponse> sendOrder(@Body RequestBody params);
 
-    @GET//("/banks")
-    Call<BancoEntityResponse> getBanco(@Url String url,@Query("imei") String imei);
+    @POST("/Collections")
+    Call<CobranzaDetalleEntity> sendCollection( @Body RequestBody params);
 
-    @GET("/TerminoPago")
-    Call<TerminoPagoEntityResponse> getTerminoPago (@Query("imei") String imei);
-
-    @GET//("/Stock")
-    Call<StockEntityResponse> getStock (@Url String url,@Query("imei") String imei);
-
-    @GET("/TipoListaPromo")
-    Call<ListaPromocionEntityResponse> getListaPromocion (@Query("imei") String imei);
-
-    @GET//("/RutaTrabajo")
-    Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Url String url,@Query("imei") String imei);
-
-    @GET//("/PriceLists")
-    Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Url String url,@Query("imei") String imei);
-
-    @POST//("/RegistrarOV")
-    Call<SalesOrderEntityResponse> sendOrder (@Url String url, @Body RequestBody params);
-
-    //@FormUrlEncoded
-    @POST//("Collections")
-    Call<CobranzaDetalleEntity> sendCollection(@Url String url, @Body RequestBody params);
-
-    @PATCH
-    Call<CobranzaDetalleEntity> updateCollection(@Url String url, @Body RequestBody params);
-
-    @GET
-    Call<DocumentoDeudaEntityResponse> getDocumentoDeuda (@Url String url);
+    @PATCH("/Collections/{codeSap}")
+    Call<CobranzaDetalleEntity> updateCollection(@Path("codeSap") String codeSap, @Body RequestBody params);
 
     @Multipart
     @POST
-    Call<ResponseBody> sendBackup(@Url String pathUrl, @Part MultipartBody.Part fileSqlite);
+    Call<ResponseBody> sendBackup(@Url String url, @Part MultipartBody.Part fileSqlite);
 
     @GET
     Call<List<CatalogoEntity>> getCatalog(@Url String pathUrl);
 
-    //@GET
-    //Call<DireccionClienteEntityResponse> getDireccionCliente (@Url String url);
+    @GET("/agencies")
+    Call<AgenciaEntityResponse> getAgencia (@Query("imei") String imei);
 
-    //@FormUrlEncoded
-    @POST//("/RegistroVisita")
-    Call<VisitaEntity> sendVisit (@Url String url, @Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
+    @GET("/PaymentTerms")
+    Call<TerminoPagoEntityResponse> getTerminoPago (@Query("imei") String imei);
+
+    @POST("/Visit")
+    Call<VisitaEntity> sendVisit (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
+
+    @POST("/SalesOrder")
+    Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Query("imei") String imei,@Query("fecha") String fecha);
+
+    @POST("/Deposits")
+    Call<Void> sendDeposit (@Body RequestBody params);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @GET
     Call<PromocionCabeceraEntityResponse> getPromomocionCabecera (@Url String url);
@@ -122,29 +118,26 @@ public interface Api {
     @GET
     Call<PromocionDetalleEntityResponse> getPromomocionDetalle (@Url String url);
 
-    @POST
-    Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Url String url,@Query("imei") String imei,@Query("fecha") String fecha);
+    @POST //("/customers")
+    Call<Void> sendLead(@Url String url,@Body RequestBody params);
+
+    //@GET
+    //Call<DocumentoDeudaEntityResponse> getDocumentoDeuda (@Url String url);
 
     @GET
     Call<HistoricoCobranzaEntityResponse> getHistoricoCobranza (@Url String url);//revisar
 
+    @GET//("/Stock")
+    Call<StockEntityResponse> getStock (@Url String url,@Query("imei") String imei);
 
+    @GET("/TipoListaPromo")
+    Call<ListaPromocionEntityResponse> getListaPromocion (@Query("imei") String imei);
 
-    //@FormUrlEncoded
-    @POST
-    Call<Void> sendDeposit (@Url String url,@Body RequestBody params);
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //@GET
+    //Call<DireccionClienteEntityResponse> getDireccionCliente (@Url String url);
 
     @GET
-    Call<ResponseBody> getNewApk(@Url String url);
-
-
+    Call<ComisionesEntityResponse> getComisiones (@Url String url);
 
     @GET("/AppVistonySalesTestNew/ServicioApp.svc/LeerCobranzaC/{Imei},{Compania_ID},{FechaDepositoIni},{FechaDepositoFin},{Fuerzatrabajo_ID}")
     Call<HistoricoDepositoEntityResponse> getHistoricoDeposito (@Path("Imei") String Imei,@Path("Compania_ID") String CompaniaID,@Path("FechaDepositoIni") String FechaDepositoIni,@Path("FechaDepositoFin") String FechaDepositoFin,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID);
@@ -156,23 +149,13 @@ public interface Api {
     @GET("/AppVistonySalesTestNew/ServicioApp.svc/LeerCobranzaRecibo/{Imei},{Compania_ID},{Usuario_ID},{Recibo}")
     Call<HistoricoCobranzaUnidadEntityResponse> getHistoricoCobranzaIndividual (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Usuario_ID") String Usuario_ID,@Path("Recibo") String Recibo);
 
-
-
-    @GET
-    Call<ComisionesEntityResponse> getComisiones (@Url String url);
-
-
-
     //@GET("/v3/410aace1-0575-4b4a-8090-c497576b4f0b") //Pruebas Mockups Pedidos
     @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_OrdenVentaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaOrdenVenta}")
     Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVentaEstado (@Query("Imei") String Imei, @Query("Compania_ID") String Compania_ID, @Query("Fuerzatrabajo_ID") String Fuerzatrabajo_ID, @Query("FechaOrdenVentaInicio") String FechaOrdenVentaInicio, @Query("FechaOrdenVentaFinal") String FechaOrdenVentaFinal);
     //Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Path("Imei") String Imei, @Path("Compania_ID") String Compania_ID, @Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID, @Path("FechaOrdenVenta") String FechaOrdenVenta);
 
-
     @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
     Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);
-
-
 
     @GET("/v3/4263f10d-0aa3-43aa-a97f-6382e333c08f")//Pruebas Mockups Pedidos
     Call<HistoricoFacturasLineasNoFacturadasEntityResponse> getHistoricoFacturaLineasNoFacturadas (
