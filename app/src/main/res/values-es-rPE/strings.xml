@@ -11,7 +11,7 @@
     <string name="lead_cliente">Generar oportunidad</string>
     <string name="title_activity_maps">Mapa</string>
     <string name="razon_social">Razón social</string>
-    <string name="ruc">Número de RUC</string>
+    <string name="ruc">RUC</string>
     <string name="nombre_comercial">Nombre comercial</string>
     <string name="numero_telefono">Número de telefono</string>
     <string name="numero_celular">Número de celular</string>
@@ -37,4 +37,8 @@
     <string name="dialog_btn_cancelar">CANCELAR</string>
     <string name="dialog_text">¿Esta seguro de salir de la aplicación?</string>
     <string name="menu_tag">Opciones del sistema</string>
+    <string name="tax_code">IGV</string>
+    <string name="zone">Zona</string>
+    <string name="head_zone">Zona:</string>
+    <string name="EnablePrint">Habilitar Impresora</string>
 </resources>

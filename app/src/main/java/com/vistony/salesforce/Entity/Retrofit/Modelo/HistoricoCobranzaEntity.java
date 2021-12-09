@@ -80,6 +80,17 @@ public class HistoricoCobranzaEntity {
     @SerializedName("UserCode")
     private String usuario_id;
 
+    @SerializedName("Code")
+    private String codesap;
+
+    public String getCodesap() {
+        return codesap;
+    }
+
+    public void setCodesap(String codesap) {
+        this.codesap = codesap;
+    }
+
     public String getPagopos() {
         return pagopos;
     }

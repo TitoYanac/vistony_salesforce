@@ -32,7 +32,7 @@ public class ListaHistoricoDepositoDao {
 
 
     private void saveLead(ListaHistoricoDepositoEntity lead) {
-        leads.put(lead.getDeposito_id(), lead);
+        leads.put(lead.getDeposito_id()+lead.getMontodeposito(), lead);
     }
 
     public List<ListaHistoricoDepositoEntity> getLeads(ArrayList<ListaHistoricoDepositoEntity> Lista) {
@@ -53,7 +53,7 @@ public class ListaHistoricoDepositoDao {
                     conciliado=true;
                 }
 
-                String dia="",mes="",anio="",fecha="";
+                /*String dia="",mes="",anio="",fecha="";
                 String[] separada = Lista.get(i).getFechadeposito().split("/");
                     if(separada.length>1)
                     {
@@ -66,7 +66,7 @@ public class ListaHistoricoDepositoDao {
                 {
                     anio=separada2[0];
                 }
-              fecha=anio+"-"+mes+"-"+dia;
+              fecha=anio+"-"+mes+"-"+dia;*/
                 saveLead(new ListaHistoricoDepositoEntity(
                         Lista.get(i).getBancarizacion()
                         ,Lista.get(i).getBanco_id()
@@ -74,8 +74,8 @@ public class ListaHistoricoDepositoDao {
                         , Lista.get(i).getCompania_id()
                         , Lista.get(i).getDeposito_id()
                         , Lista.get(i).getEstado()
-                        //, Lista.get(i).getFechadeposito()
-                        ,fecha
+                        , Lista.get(i).getFechadeposito()
+                        //,fecha
                         ,Lista.get(i).getFechadiferida()
                         , Lista.get(i).getFuerzatrabajo_id()
                         , Lista.get(i).getMontodeposito()
@@ -85,6 +85,8 @@ public class ListaHistoricoDepositoDao {
                         , conciliado
                         ,Lista.get(i).getImvdetalle()
                         ,Lista.get(i).getDepositodirecto()
+                        ,Lista.get(i).getBankname()
+                        ,Lista.get(i).getCode()
                 )
                 );
             }

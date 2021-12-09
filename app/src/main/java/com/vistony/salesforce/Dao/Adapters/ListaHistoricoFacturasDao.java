@@ -51,6 +51,7 @@ public class ListaHistoricoFacturasDao {
                         , Lista.get(i).getMotivoestadodespacho()
                         ,Lista.get(i).getTerminopago()
                         ,Lista.get(i).getTipo_factura()
+                        ,Lista.get(i).getTelefonochofer()
                 ));
             }
         }catch (Exception e)

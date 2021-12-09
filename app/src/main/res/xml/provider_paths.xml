@@ -4,6 +4,8 @@
    <!--
     <external-path name="RECIBOS" path="Android/data/com.vistony.cobranzas_app/files/Pictures" />
     -->
+
     <external-path name="RECIBOS" path="." />
+
     <external-cache-path name="cache_download" path="download"/>
  </paths>

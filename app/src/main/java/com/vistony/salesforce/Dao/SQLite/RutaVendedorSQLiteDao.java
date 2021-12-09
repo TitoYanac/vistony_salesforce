@@ -5,11 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaVendedorSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
 
@@ -99,6 +101,8 @@ public class RutaVendedorSQLiteDao {
             registro.put("chk_ruta", chk_ruta);
             registro.put("fecharuta", fecharuta);
             registro.put("saldomn", saldomn);
+            registro.put("slpCode", SesionEntity.fuerzatrabajo_id);
+            registro.put("userCode", SesionEntity.usuario_id);
 
 
             bd.insert("rutavendedor", null, registro);
@@ -170,14 +174,16 @@ public class RutaVendedorSQLiteDao {
         return listaRutaVendedorSQLiteEntity;
     }
 
-    public ArrayList<ListaClienteCabeceraEntity> ObtenerRutaVendedorPorFecha (String fecharuta,String chk_ruta,Context context)
-    {
-        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
-        //SQLiteDatabase bd = admin.getWritableDatabase();
+    public ArrayList<ListaClienteCabeceraEntity> ObtenerRutaVendedorPorFecha (String checkRuta,Context context){
+
         ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntity=new ArrayList<>();
         ListaClienteCabeceraEntity ObjListaClienteCabeceraEntity;
         abrir();
-        Cursor fila = bd.rawQuery("Select * from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chk_ruta+"'",null);
+
+        Cursor fila = bd.rawQuery("SELECT * FROM rutavendedor WHERE fecharuta=" +
+                //"date('now','localtime') " +
+                " strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))" +
+                "AND chk_ruta=? AND slpCode=?",new String[]{checkRuta,SesionEntity.fuerzatrabajo_id});
 
         while (fila.moveToNext())
         {
@@ -187,22 +193,21 @@ public class RutaVendedorSQLiteDao {
             String terminopago_id="";
             String linea_credito_usado="";
             String domfactura_id="";
+            String ShipToCode="";
 
             listaClienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(fila.getString(0),fila.getString(2));
 
-            for(int i=0;i<listaClienteSQLiteEntity.size();i++)
-            {
+            for(int i=0;i<listaClienteSQLiteEntity.size();i++){
                 terminopago_id=listaClienteSQLiteEntity.get(i).getTerminopago_id();
                 linea_credito_usado=listaClienteSQLiteEntity.get(i).getLinea_credito_usado();
                 domfactura_id=listaClienteSQLiteEntity.get(i).getDomfactura_id();
+                ShipToCode=listaClienteSQLiteEntity.get(i).getDomembarque_id();
             }
-
-
 
             ObjListaClienteCabeceraEntity= new ListaClienteCabeceraEntity();
             ObjListaClienteCabeceraEntity.setCliente_id(fila.getString(0));
 
-            ObjListaClienteCabeceraEntity.setDomembarque_id(fila.getString(1));
+            ObjListaClienteCabeceraEntity.setDomembarque_id(ShipToCode);
             ObjListaClienteCabeceraEntity.setDomfactura_id(domfactura_id);
 
             ObjListaClienteCabeceraEntity.setCompania_id(fila.getString(2));
@@ -222,30 +227,32 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setTipocambio(fila.getString(16));
             ObjListaClienteCabeceraEntity.setCategoria(fila.getString(17));
             ObjListaClienteCabeceraEntity.setLinea_credito(fila.getString(18));
+
             ObjListaClienteCabeceraEntity.setLinea_credito_usado(linea_credito_usado);
             ObjListaClienteCabeceraEntity.setTerminopago_id(terminopago_id);
+
             ObjListaClienteCabeceraEntity.setChk_visita(fila.getString(20));
             ObjListaClienteCabeceraEntity.setChk_pedido(fila.getString(21));
             ObjListaClienteCabeceraEntity.setChk_cobranza(fila.getString(22));
             ObjListaClienteCabeceraEntity.setChk_ruta(fila.getString(23));
             ObjListaClienteCabeceraEntity.setFecharuta(fila.getString(24));
             ObjListaClienteCabeceraEntity.setSaldo(fila.getString(25));
+
             listaClienteCabeceraEntity.add(ObjListaClienteCabeceraEntity);
         }
 
         bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return listaClienteCabeceraEntity;
     }
 
-    public int ObtenerCantidadRutaVendedor ()
+    public int ObtenerCantidadRutaVendedor (String fecharuta,String chkruta)
     {
         int resultado=0;
 
         abrir();
         try {
             Cursor fila = bd.rawQuery(
-                    "Select count(Cliente_id) from rutavendedor",null);
+                    "Select count(Cliente_id) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"'",null);
 
             while (fila.moveToNext())
             {
@@ -258,7 +265,73 @@ public class RutaVendedorSQLiteDao {
         }
 
         bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        return resultado;
+    }
+
+
+    public int ObtenerCantidadVisitadosRutaVendedor (String fecharuta,String chkruta)
+    {
+        int resultado=0;
+
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select count(Cliente_id) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and chk_visita='1'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
+        return resultado;
+    }
+
+    public int ObtenerCantidadCobranzaRutaVendedor (String fecharuta,String chkruta)
+    {
+        int resultado=0;
+
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select count(Cliente_id) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and chk_cobranza='1'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
+        return resultado;
+    }
+
+    public int ObtenerCantidadPedidoRutaVendedor (String fecharuta,String chkruta)
+    {
+        int resultado=0;
+
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select count(Cliente_id) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and chk_pedido='1'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
         return resultado;
     }
 
@@ -282,7 +355,13 @@ public class RutaVendedorSQLiteDao {
         return resultado;
     }
 
-    public int ActualizaChkPedidoRutaVendedor (String cliente_id, String domembarque_id, String compania_id,String fecharuta)
+    public int ActualizaChkPedidoRutaVendedor (
+            String cliente_id,
+            String domembarque_id,
+            String compania_id,
+            String fecharuta,
+            String salesorderamount
+            )
     {
         int resultado=0;
         abrir();
@@ -291,6 +370,7 @@ public class RutaVendedorSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("chk_pedido","1");
             registro.put("chk_visita","1");
+            registro.put("salesorderamount",salesorderamount);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' and  domembarque_id='"+domembarque_id+"' and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
@@ -302,7 +382,14 @@ public class RutaVendedorSQLiteDao {
         }
         return resultado;
     }
-    public int ActualizaChkCobranzaRutaVendedor (String cliente_id, String domembarque_id, String compania_id,String fecharuta)
+    public int ActualizaChkCobranzaRutaVendedor (
+            String cliente_id,
+            String domembarque_id,
+            String compania_id,
+            String fecharuta,
+            String collectionamount
+
+    )
     {
         int resultado=0;
         abrir();
@@ -311,6 +398,7 @@ public class RutaVendedorSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("chk_cobranza","1");
             registro.put("chk_visita","1");
+            registro.put("collectionamount",collectionamount);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' and  domembarque_id='"+domembarque_id+"' and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
@@ -319,6 +407,57 @@ public class RutaVendedorSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
             resultado=0;
+        }
+        return resultado;
+    }
+
+    public float ObtenerMontoPedidoRutaVendedor (
+            String compania_id,
+            String fecharuta,
+            String chkruta
+
+    )
+    {
+        float resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(SUM(salesorderamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and chk_pedido='1' and compania_id='"+compania_id+"'" ,null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Float.parseFloat (fila.getString(0));
+
+            }
+        }catch (Exception e)
+        {
+            Log.e("REOS","RutaVendedorSQLiteDao-ObtenerMontoPedidoRutaVendedor-e"+e.toString());
+            System.out.println(e.getMessage());
+        }
+        return resultado;
+    }
+
+    public float ObtenerMontoCobranzaRutaVendedor (
+            String compania_id,
+            String fecharuta,
+            String chkruta
+
+    )
+    {
+        float resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(SUM(collectionamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and chk_cobranza='1' and compania_id='"+compania_id+"'" ,null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Float.parseFloat (fila.getString(0));
+
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
         }
         return resultado;
     }

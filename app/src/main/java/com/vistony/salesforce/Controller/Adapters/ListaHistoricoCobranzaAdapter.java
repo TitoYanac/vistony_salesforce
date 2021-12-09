@@ -1,12 +1,17 @@
 package com.vistony.salesforce.Controller.Adapters;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -124,6 +129,8 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
             holder.imv_anular_historico_cobranza = (ImageView) convertView.findViewById(R.id.imv_anular_historico_cobranza);
             holder.imv_flecha_historico_cobranza = (ImageView) convertView.findViewById(R.id.imv_flecha_historico_cobranza);
             holder.chk_validacionqrhistoricocobranza = (CheckBox) convertView.findViewById(R.id.chk_validacionqrhistoricocobranza);
+            holder.imv_historico_cobranza_respuesta_ws = (ImageView) convertView.findViewById(R.id.imv_historico_cobranza_respuesta_ws);
+
             holder.chk_wsrecibido = (CheckBox) convertView.findViewById(R.id.chk_wsrecibido);
             //holder.chk_cobranzaconciliada = (CheckBox) convertView.findViewById(R.id.chk_cobranzaconciliada);
             convertView.setTag(holder);
@@ -136,20 +143,28 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
         DecimalFormat format = new DecimalFormat("#0.00");
 
         holder.tv_nombrecliente_cobranza.setText(lead.getCliente_nombre());
-        holder.tv_fecha_cobranza.setText(lead.getDeposito_id());
+        if(lead.getBanco_id().equals(""))
+        {
+            holder.tv_fecha_cobranza.setText("");
+        }else
+            {
+                holder.tv_fecha_cobranza.setText(lead.getDeposito_id());
+            }
+
         holder.tv_recibo.setText(lead.getRecibo());
-        holder.tv_monto_cobrado.setText(lead.getMontocobrado());
+        holder.tv_monto_cobrado.setText(format.format(Double.parseDouble(lead.getMontocobrado())));
         holder.tv_documento_cobrado.setText(lead.getNro_documento());
         holder.tv_estado_historico_cobranza.setText(lead.getEstado());
 
-        if (lead.getChkwsrecibido().equals("1")) {
+
+        if (lead.getChkwsrecibido().equals("Y")) {
             holder.chk_wsrecibido.setChecked(true);
         } else {
             holder.chk_wsrecibido.setChecked(false);
         }
 
 
-        if (lead.getEstadoqr().equals("True")||lead.getEstadoqr().equals("1")) {
+        if (lead.getEstadoqr().equals("True")||lead.getEstadoqr().equals("1")||lead.getEstadoqr().equals("Y")) {
             holder.chk_validacionqrhistoricocobranza.setChecked(true);
         } else {
             holder.chk_validacionqrhistoricocobranza.setChecked(false);
@@ -191,6 +206,13 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
             }
         });
 
+        holder.imv_historico_cobranza_respuesta_ws.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertamostrarcomentario("Comentario Ws",lead.getMensajeWS()).show();
+            }
+        });
+
         return convertView;
     }
 
@@ -209,6 +231,7 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
         ImageView imv_flecha_historico_cobranza;
         CheckBox chk_validacionqrhistoricocobranza;
         CheckBox chk_wsrecibido;
+        ImageView imv_historico_cobranza_respuesta_ws;
     }
 
     public AlertDialog createSimpleDialog(final String recibo) {
@@ -238,6 +261,40 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
 
         return builder.create();
     }
+
+    private Dialog alertamostrarcomentario(String Titulo, String Comentario) {
+
+        final Dialog dialog = new Dialog(Context);
+        dialog.setContentView(R.layout.layout_dialog);
+
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText(Titulo);
+
+        TextView textMsj = dialog.findViewById(R.id.textViewMsj);
+        textMsj.setText((Comentario==null)?"Sin Comentario":Comentario);
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+
+
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
 
 }
 

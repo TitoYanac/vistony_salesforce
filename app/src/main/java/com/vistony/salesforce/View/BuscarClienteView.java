@@ -53,6 +53,7 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
     ListaConsClienteCabeceraAdapter listaConsClienteCabeceraAdapter;
     SearchView mSearchView;
     private ClienteRepository clienteRepository;
+    static public String Flujo="";
 
     public BuscarClienteView() {
         // Required empty public constructor
@@ -68,6 +69,7 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
      */
     // TODO: Rename and change types and number of parameters
     public static BuscarClienteView newInstance(String param1, String param2) {
+        Flujo="";
         BuscarClienteView fragment = new BuscarClienteView();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -85,6 +87,67 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
         {
             mListener.onFragmentInteraction(compuesto, param1);
         }
+        return fragment;
+    }
+
+    public static BuscarClienteView newInstanciaHistoricContainerSale(Object param1) {
+        BuscarClienteView fragment = new BuscarClienteView();
+        Flujo=(String) param1;
+        return fragment;
+    }
+
+    public static BuscarClienteView newInstanciaEnviarClienteHistoricContainerSale(Object param1) {
+        BuscarClienteView fragment = new BuscarClienteView();
+        String Fragment="HistoricContainerSaleView";
+        String accion="recibircliente";
+        String compuesto=Fragment+"-"+accion;
+        if(mListener!=null)
+        {
+            mListener.onFragmentInteraction(compuesto, param1);
+        }
+        return fragment;
+    }
+    public static BuscarClienteView newInstanciaEnviarClienteHistoricContainerSKU(Object param1) {
+        BuscarClienteView fragment = new BuscarClienteView();
+        String Fragment="HistoricContainerSaleView";
+        String accion="recibirclienteSKU";
+        String compuesto=Fragment+"-"+accion;
+        if(mListener!=null)
+        {
+            mListener.onFragmentInteraction(compuesto, param1);
+        }
+        return fragment;
+    }
+
+    public static BuscarClienteView newInstanciaEnviarClienteQuotasPerCustomer(Object param1) {
+        BuscarClienteView fragment = new BuscarClienteView();
+        String Fragment="ConsClienteView";
+        String accion="agregarquotaspercustomer";
+        String compuesto=Fragment+"-"+accion;
+        if(mListener!=null)
+        {
+            mListener.onFragmentInteraction(compuesto, param1);
+        }
+        return fragment;
+    }
+
+    public static BuscarClienteView newInstanciaEnviarClienteQuotasPerCustomerDialog(Object param1) {
+        BuscarClienteView fragment = new BuscarClienteView();
+        String Fragment="ConsClienteView";
+        String accion="agregarquotaspercustomerDialog";
+        String compuesto=Fragment+"-"+accion;
+        if(mListener!=null)
+        {
+            mListener.onFragmentInteraction(compuesto, param1);
+        }
+        return fragment;
+    }
+
+    public static BuscarClienteView newInstanceFlujoNoRuta(Object object) {
+        BuscarClienteView fragment = new BuscarClienteView();
+        Bundle args = new Bundle();
+        Flujo="";
+        fragment.setArguments(args);
         return fragment;
     }
 

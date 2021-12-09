@@ -47,6 +47,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
@@ -54,7 +55,7 @@ import com.vistony.salesforce.Controller.Adapters.ListaCobranzaCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
-import com.vistony.salesforce.Dao.SQLite.BancoSQLiteDAO;
+import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaCabeceraDao;
@@ -96,7 +97,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     View v;
     public static EditText etgrupo;
     List<String> listabanco;
-    BancoSQLiteDAO bancoSQLiteDAO;
+    BancoSQLite bancoSQLite;
     List <String> Nombresbanco;
     ArrayAdapter<String> Combonombresbanco;
     static List<BancoSQLiteEntity> listabancosqliteentity;
@@ -138,6 +139,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     private final int REQUEST_IMAGE_CAPTURE =1;
     public static int estado=0;
     private ProgressDialog pd;
+    private DepositoRepository depositoRepository;
+    private CobranzaRepository cobranzaRepository;
+
     public CobranzaCabeceraView() {
         // Required empty public constructor
     }
@@ -175,11 +179,11 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         int bancarizados=0,depositodirecto=0;
         for(int k=0;k<Lista.size();k++)
         {
-            if(Lista.get(k).getTv_txtbancarizado().equals("1"))
+            if(Lista.get(k).getTv_txtbancarizado().equals("Y"))
             {
                 bancarizados++;
             }
-            if(Lista.get(k).getTv_txtpagodirecto().equals("1"))
+            if(Lista.get(k).getTv_txtpagodirecto().equals("Y"))
             {
                 depositodirecto++;
             }
@@ -238,15 +242,15 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
 
         listabanco = new ArrayList<>();
-        bancoSQLiteDAO = new BancoSQLiteDAO(getContext());
+        bancoSQLite = new BancoSQLite(getContext());
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         Nombresbanco = new ArrayList<>();
         listabancosqliteentity = new ArrayList<BancoSQLiteEntity>();
         listaCobranzaDetalleEntity =  new ArrayList<CobranzaDetalleSQLiteEntity>();
         listaConsDepositoAdapterFragment =  new ArrayList<ListaConsDepositoEntity>();
         //listaClienteDetalleAdapter.ArraylistaClienteDetalleEntity.size();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        dataFormatToday = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        //dataFormatToday = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         ListaTipo = new ArrayList<String>();
 
         obtenerLista =new ObtenerListaCobranzas();
@@ -296,7 +300,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
         spntipo.setAdapter(adapter);
         txtfecha.setText(fecha);
-        tv_fechacobrocheque_edit.setText(dataFormatToday.format(date));
+        tv_fechacobrocheque_edit.setText(dateFormat.format(date));
+        //tv_fechacobrocheque_edit.setText(dataFormatToday.format(date));
         fab = (FloatingActionButton) v.findViewById(R.id.fabagregar);
 
         if(listaConsDepositoAdapterFragment.isEmpty())
@@ -346,8 +351,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                             }
                         }
                         ArrayList<BancoSQLiteEntity> listaBancoSQLiteEntity = new ArrayList<BancoSQLiteEntity>();
-                        BancoSQLiteDAO bancoSQLiteDAO=new BancoSQLiteDAO(getContext());
-                        listaBancoSQLiteEntity=bancoSQLiteDAO.ObtenerBancoporCombo(SesionEntity.compania_id,banco);
+                        BancoSQLite bancoSQLite =new BancoSQLite(getContext());
+                        listaBancoSQLiteEntity= bancoSQLite.ObtenerBancoporCombo(SesionEntity.compania_id,banco);
 
                         for(int j=0;j<listaBancoSQLiteEntity.size();j++)
                         {
@@ -475,7 +480,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         @Override
         protected String doInBackground(String... arg0) {
             try {
-                listabancosqliteentity = bancoSQLiteDAO.ObtenerBanco();
+                listabancosqliteentity = bancoSQLite.ObtenerBanco();
             } catch (Exception e)
             {
                 // TODO: handle exception
@@ -712,33 +717,33 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                                 guardar_deposito.setEnabled(false);
                                 if(chkbancarizado.isChecked())
                                 {
-                                    bancarizado="1";
+                                    bancarizado="Y";
                                 }else
                                 {
-                                    bancarizado="0";
+                                    bancarizado="N";
                                 }
                                 if(chkdepositodirecto.isChecked())
                                 {
-                                    depositodirecto="1";
+                                    depositodirecto="Y";
                                 }else
                                 {
-                                    depositodirecto="0";
+                                    depositodirecto="N";
                                 }
 
                                 if(imv_calendario_cheque.getVisibility()==View.VISIBLE)
                                 {
 
-                                    fechadiferida=tv_fechacobrocheque_edit.getText().toString()+" 00:00:00";
+                                    fechadiferida=tv_fechacobrocheque_edit.getText().toString();
 
                                 }
                                 else
                                 {
-                                    //fechadiferida="1900/01/01 00:00:00";
-                                    fechadiferida="1900-01-01 00:00:00";
+                                    fechadiferida="19000101";
                                 }
+                                GuardarDepositoVincularRecibos();
 
-                                EnviarWSCobranzaCabecera enviarWSCobranzaCabecera = new EnviarWSCobranzaCabecera();
-                                enviarWSCobranzaCabecera.execute();
+                                //EnviarWSCobranzaCabecera enviarWSCobranzaCabecera = new EnviarWSCobranzaCabecera();
+                                //enviarWSCobranzaCabecera.execute();
 
 
 
@@ -756,6 +761,64 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
         return builder.create();
     }
+
+    private void GuardarDepositoVincularRecibos()
+    {
+
+        depositoRepository = new ViewModelProvider(getActivity()).get(DepositoRepository.class);
+        cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
+            int ValidaSQLite=0;
+            ValidaSQLite=cobranzaCabeceraSQLiteDao.InsertaCobranzaCabecera(
+                    Grupo,
+                    SesionEntity.usuario_id,
+                    SesionEntity.fuerzatrabajo_id,
+                    Banco,
+                    SesionEntity.compania_id,
+                    sumacobrado.setScale(3,RoundingMode.HALF_UP).toString(),
+                    tipo,
+                    bancarizado,
+                    fechadiferida,
+                    fecha,
+                    depositodirecto,
+                    "N"
+            );
+
+            if(ValidaSQLite==1)
+            {
+                for (int i = 0; i < listaConsDepositoAdapterFragment.size(); i++)
+                {
+                    cobranzaDetalleSQLiteDao.ActualizaCobranzaDetalle(
+                            Grupo,
+                            listaConsDepositoAdapterFragment.get(i).getRecibo(),
+                            SesionEntity.compania_id,
+                            Banco
+                    );
+                }
+            }
+
+        etgrupo.setEnabled(false);
+        txtfecha.setEnabled(false);
+        spnbanco.setEnabled(false);
+        spnbanco.setClickable(false);
+
+        Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
+        String fragment = "", accion = "", compuesto = "";
+        fragment = "CobranzaCabeceraView";
+        accion = "nuevoinicio";
+        compuesto = fragment + "-" + accion;
+        Object object = null;
+        mListener.onFragmentInteraction(compuesto, object);
+
+        ///////////////////////////// ENVIAR DEPOSITOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame", "=>" + data);
+        });
+        ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
+        cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
+    }
+
 
     private void camaraTomar(){
         if(txtfecha.isEnabled())
@@ -923,20 +986,25 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 String comentario="";
                 int ValidaSQLite=0;
 
-                Log.e("jpcm","jpcm error en el formato de la fecha diferida "+fechadiferida);
+
+                /*if(Banco.equals("SCTO1"))
+                {
+                    Grupo=Grupo+ FormulasController.ObtenerFechaHoraCadena();
+                }*/
+
                 ValidaSQLite=cobranzaCabeceraSQLiteDao.InsertaCobranzaCabecera(
                         Grupo,
                         SesionEntity.usuario_id,
                         SesionEntity.fuerzatrabajo_id,
                         Banco,
                         SesionEntity.compania_id,
-                        Sumacobrado,
+                        sumacobrado.setScale(3,RoundingMode.HALF_UP).toString(),
                         tipo,
                         bancarizado,
                         fechadiferida,
                         fecha,
                         depositodirecto,
-                        "0"
+                        "N"
                 );
 
                 if(ValidaSQLite==1)
@@ -956,26 +1024,26 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                             DepositoRepository depositoRepository =new DepositoRepository(getContext());
 
                             resultadoccabeceraenviows=
-                            depositoRepository.PostCobranzaCabeceraWS
-                                    (
-                                            SesionEntity.imei,
-                                            "CREATE",
-                                            SesionEntity.compania_id,
-                                            Banco,
-                                            tipo,
-                                            etgrupo.getText().toString(),
-                                            SesionEntity.usuario_id,
-                                            fecha,
-                                            sumacobrado.setScale(3,RoundingMode.HALF_UP).toString(),
-                                            "Pendiente",
-                                            "0",
-                                            SesionEntity.fuerzatrabajo_id,
-                                            bancarizado,
-                                            fechadiferida,
-                                            "0",
-                                            depositodirecto,
-                                            "0"
-                                    );
+                                    depositoRepository.PostCobranzaCabeceraWS
+                                            (
+                                                    SesionEntity.imei,
+                                                    "CREATE",
+                                                    SesionEntity.compania_id,
+                                                    Banco,
+                                                    tipo,
+                                                    etgrupo.getText().toString(),
+                                                    SesionEntity.usuario_id,
+                                                    fecha,
+                                                    sumacobrado.setScale(3,RoundingMode.HALF_UP).toString(),
+                                                    "Pendiente",
+                                                    "",
+                                                    SesionEntity.fuerzatrabajo_id,
+                                                    bancarizado,
+                                                    fechadiferida,
+                                                    "",
+                                                    depositodirecto,
+                                                    "N"
+                                            );
 
 
                     //resultadoccabeceraenviows=String.valueOf(resultado);
@@ -985,8 +1053,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                         listaCobranzaDetalleEntity=new ArrayList<CobranzaDetalleSQLiteEntity>();
 
                         //SE REENVIA EL RECIBO AHI VA EL PATCH
-                        chkwsdepositorecibido= CobranzaRepository.sendPatch(cobranzaDetalleSQLiteDao.getSapCode(listaConsDepositoAdapterFragment.get(i).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),etgrupo.getText().toString(),Banco);
-
+                        //chkwsdepositorecibido= CobranzaRepository.sendPatch(cobranzaDetalleSQLiteDao.getSapCode(listaConsDepositoAdapterFragment.get(i).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),etgrupo.getText().toString(),Banco);
+                        chkwsdepositorecibido= CobranzaRepository.sendPatch(cobranzaDetalleSQLiteDao.getSapCode(listaConsDepositoAdapterFragment.get(i).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),etgrupo.getText().toString(),Banco,listaConsDepositoAdapterFragment.get(i).getRecibo());
                         /*chkwsdepositorecibido= CobranzaRepository.EnviarReciboWsRetrofit(
                                 cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(listaConsDepositoAdapterFragment.get(i).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
                                 getContext(),
@@ -1001,7 +1069,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     }
 
 
-                    cobranzaCabeceraSQLiteDao.ActualizarCobranzaCabeceraWS(Grupo,SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id,resultadoccabeceraenviows);
+                    cobranzaCabeceraSQLiteDao.ActualizarCobranzaCabeceraWS(Grupo,SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id,resultadoccabeceraenviows,"","");
             }
                 Log.e("jpcm","------->"+fechadiferida);
             } catch (Exception e)

@@ -30,8 +30,11 @@ public class ListaHistoricoCobranzaEntity implements Serializable {
     public String chkwsrecibido;
     public String depositodirecto;
     public String pagopos;
+    public String codesap;
+    public String mensajeWS;
+    public String horacobranza;
 
-    public ListaHistoricoCobranzaEntity(String bancarizacion, String banco_id, String cliente_id, String cliente_nombre, String comentario, String compania_id, String deposito_id, String detalle_item, String documento_id, String estado, String estadoqr, String fechacobranza, String fechadeposito, String fuerzatrabajo_id, String importedocumento, String montocobrado, String motivoanulacion, String nro_documento, String nuevosaldodocumento, String recibo, String saldodocumento, String tipoingreso, String usuario_id, boolean chkconciliado, String chkwsrecibido, String depositodirecto, String pagopos) {
+    public ListaHistoricoCobranzaEntity(String bancarizacion, String banco_id, String cliente_id, String cliente_nombre, String comentario, String compania_id, String deposito_id, String detalle_item, String documento_id, String estado, String estadoqr, String fechacobranza, String fechadeposito, String fuerzatrabajo_id, String importedocumento, String montocobrado, String motivoanulacion, String nro_documento, String nuevosaldodocumento, String recibo, String saldodocumento, String tipoingreso, String usuario_id, boolean chkconciliado, String chkwsrecibido, String depositodirecto, String pagopos, String codesap, String mensajeWS, String horacobranza) {
         this.bancarizacion = bancarizacion;
         this.banco_id = banco_id;
         this.cliente_id = cliente_id;
@@ -59,9 +62,36 @@ public class ListaHistoricoCobranzaEntity implements Serializable {
         this.chkwsrecibido = chkwsrecibido;
         this.depositodirecto = depositodirecto;
         this.pagopos = pagopos;
+        this.codesap = codesap;
+        this.mensajeWS = mensajeWS;
+        this.horacobranza = horacobranza;
     }
 
     public ListaHistoricoCobranzaEntity() {
+    }
+
+    public String getMensajeWS() {
+        return mensajeWS;
+    }
+
+    public void setMensajeWS(String mensajeWS) {
+        this.mensajeWS = mensajeWS;
+    }
+
+    public String getHoracobranza() {
+        return horacobranza;
+    }
+
+    public void setHoracobranza(String horacobranza) {
+        this.horacobranza = horacobranza;
+    }
+
+    public String getCodesap() {
+        return codesap;
+    }
+
+    public void setCodesap(String codesap) {
+        this.codesap = codesap;
     }
 
     public String getPagopos() {

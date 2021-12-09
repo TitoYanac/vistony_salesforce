@@ -123,6 +123,21 @@ public class ListadoPromocionView extends Fragment {
         return listadoPromocionView;
     }
 
+    public static ListadoPromocionView newInstanceRecibePromocionConsultaStock(Object objeto) {
+        ListadoPromocionView fragment = new ListadoPromocionView();
+        Bundle b = new Bundle();
+        //Object[] listaobjetos=new Object[2];
+        //listaobjetos=(Object[]) objeto;
+        ArrayList<PromocionCabeceraSQLiteEntity> Lista = (ArrayList<PromocionCabeceraSQLiteEntity>) objeto;
+        Log.e("REOS", "ListadoPromocionView:Lista.size(): " + Lista.size());
+        //listaOrdenVentaDetalleEntities= (ArrayList<ListaOrdenVentaDetalleEntity>) listaobjetos[1];
+        //Log.e("REOS", "ListadoPromocionView:listaOrdenVentaDetalleEntities.size(): " + listaOrdenVentaDetalleEntities.size());
+        //Lista.size();
+        b.putSerializable(TAG_1,Lista);
+        fragment.setArguments(b);
+        return fragment;
+    }
+
 
 
 

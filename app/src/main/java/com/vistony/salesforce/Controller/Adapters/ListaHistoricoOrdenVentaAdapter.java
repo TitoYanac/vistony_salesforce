@@ -129,6 +129,24 @@ public class ListaHistoricoOrdenVentaAdapter extends ArrayAdapter<ListaHistorico
         holder.tv_estado_historico_orden_venta.setText(lead.getApprovalStatus());
         holder.tv_monto_historico_orden_venta.setText(Convert.currencyForView(lead.getDocTotal()));
 
+
+        if(lead.isRecepcionERPOV())
+        {
+            holder.chk_recibido_orden_venta_ERP.setChecked(true);
+        }
+        else
+        {
+            holder.chk_recibido_orden_venta_ERP.setChecked(false);
+        }
+        if(lead.isEnvioERPOV())
+        {
+            holder.chk_envio_orden_venta_ERP.setChecked(true);
+        }
+        else
+        {
+            holder.chk_envio_orden_venta_ERP.setChecked(false);
+        }
+
         if(lead.getApprovalCommentary()==null||lead.getApprovalCommentary().isEmpty()){
             holder.imv_historico_orden_venta_cometario_aprob.setEnabled(false);
         }else{
@@ -157,17 +175,17 @@ public class ListaHistoricoOrdenVentaAdapter extends ArrayAdapter<ListaHistorico
         holder.imv_historico_orden_venta_cometario_ws.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertamostrarcomentario("Comentario Ws",lead.getApprovalCommentary()).show();
+                alertamostrarcomentario("Comentario Ws",lead.getComentariows()).show();
             }
         });
 
-        if(lead.getDocNum()!=null){
+        /*if(lead.getDocNum()!=null){
             holder.chk_recibido_orden_venta_ERP.setChecked(true);
             holder.chk_envio_orden_venta_ERP.setChecked(true);
         }else{
             holder.chk_recibido_orden_venta_ERP.setChecked(false);
             holder.chk_envio_orden_venta_ERP.setChecked(false);
-        }
+        }*/
 
 
         holder.imv_flecha_historico_orden_venta.setOnClickListener(v -> {

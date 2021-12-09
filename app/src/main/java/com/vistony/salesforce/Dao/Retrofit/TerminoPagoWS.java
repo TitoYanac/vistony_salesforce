@@ -37,13 +37,15 @@ public class TerminoPagoWS {
                     ObjTerminoPago.terminopago_id = terminoPagoEntityResponse.getTerminoPagoEntity().get(i).getTerminopago_id();
                     ObjTerminoPago.terminopago = terminoPagoEntityResponse.getTerminoPagoEntity().get(i).getTerminopago();
                     ObjTerminoPago.compania_id = SesionEntity.compania_id;
+
                     if(terminoPagoEntityResponse.getTerminoPagoEntity().get(i).getContado().equals("True"))
                     {
                         ObjTerminoPago.contado="1";
                     }else
-                        {
-                            ObjTerminoPago.contado="0";
-                        }
+                    {
+                        ObjTerminoPago.contado="0";
+                    }
+
                     //ObjTerminoPago.contado = terminoPagoEntityResponse.getTerminoPagoEntity().get(i).getContado();
                     ObjTerminoPago.dias_vencimiento = terminoPagoEntityResponse.getTerminoPagoEntity().get(i).getDias_vencimiento();
                     LTPago.add(ObjTerminoPago);

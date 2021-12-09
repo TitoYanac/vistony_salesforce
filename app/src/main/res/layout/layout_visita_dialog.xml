@@ -78,10 +78,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+            <TextView
+                 android:id="@+id/lbl_motivo_visita"
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:layout_gravity="center_horizontal"
+                 android:background="@android:color/white"
+                 android:clickable="false"
+                 android:ems="6"
+                 android:gravity="center_horizontal|center_vertical"
+                 android:scrollbars="vertical"
+                 android:text="MOTIVOS:"
+                 android:textAlignment="center"
+                 android:textColor="#000000"
+                 android:textSize="15dp"
+                android:layout_marginLeft="120dp"
+     android:textStyle="bold" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
+           <!-- <TextView
                 android:id="@+id/lbl_motivo_visita"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -96,81 +116,107 @@
                 android:textColor="#000000"
                 android:textSize="15dp"
 
-                android:textStyle="bold" />
+                android:textStyle="bold" />-->
 
-            <Spinner
+           <!-- <Spinner
                 android:id="@+id/spn_motivo_visita"
                 style="@android:style/Widget.Holo.Light.Spinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/border"
-                android:entries="@array/motivo_visita"
                 android:gravity="center_horizontal|center_vertical"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="5dp"
                 android:spinnerMode="dropdown"
-                android:textSize="18dp" />
-        </LinearLayout>
-            <EditText
-                android:id="@+id/et_observaciones_visita"
+                android:textSize="18dp" />-->
+            <!--<Spinner
+                android:id="@+id/spn_motivo_visita"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:spinnerMode="dropdown"
+                android:textAlignment="gravity"
+                style="@android:style/Widget.Holo.Spinner"
+                />-->
+            <!--<Spinner
+                android:id="@+id/spn_motivo_visita"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lines="6"
-                android:layout_margin="10dp"
-                android:background="@drawable/border"
-                android:gravity="center_horizontal|center_vertical"
-                android:hint="  Ingrese sus observaciones"
-                android:paddingLeft="10dp"
-                android:paddingTop="5dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="5dp"
-                android:textSize="18dp" />
-
-            <LinearLayout
+                android:layout_marginTop="0dp"
+                android:layout_weight="4"
+                android:spinnerMode="dropdown"
+                android:popupBackground="#E6000000"
+                android:textAlignment="gravity"
+                style="@android:style/Widget.Holo.DropDownItem.Spinner"
+                android:textColor="@color/Black"
+                android:textSize="10dp"
+                />-->
+            <Spinner
+                android:id="@+id/spn_motivo_visita"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@android:color/white"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:weightSum="2">
 
-                <Button
-                    android:id="@+id/dialogButtonCancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/custom_border_button"
-                    android:text="CANCELAR"
-                    android:textColor="#0957C3" />
+                />
+</LinearLayout>
+<EditText
+    android:id="@+id/et_observaciones_visita"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:lines="6"
+    android:layout_margin="10dp"
+    android:background="@drawable/border"
+    android:gravity="center_horizontal|center_vertical"
+    android:hint="  Ingrese sus observaciones"
+    android:paddingLeft="10dp"
+    android:paddingTop="5dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="5dp"
+    android:textSize="18dp" />
 
-                <Button
-                    android:id="@+id/dialogButtonOK"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/custom_border_button"
-                    android:text="REGISTRAR"
-                    android:textColor="#0957C3" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@android:color/white"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:weightSum="2">
 
-            </LinearLayout>
+    <Button
+        android:id="@+id/dialogButtonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_weight="1"
+        android:background="@drawable/custom_border_button"
+        android:text="CANCELAR"
+        android:textColor="#0957C3" />
 
-        </LinearLayout>
+    <Button
+        android:id="@+id/dialogButtonOK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:background="@drawable/custom_border_button"
+        android:text="REGISTRAR"
+        android:textColor="#0957C3" />
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="5dp"
-            android:src="@mipmap/logo" />
-    </FrameLayout>
+</LinearLayout>
+
+</LinearLayout>
+
+<ImageView
+android:id="@+id/image"
+android:layout_width="match_parent"
+android:layout_height="100dp"
+android:layout_gravity="center|top"
+android:layout_marginTop="5dp"
+android:src="@mipmap/logo" />
+</FrameLayout>
 
 
 </LinearLayout>

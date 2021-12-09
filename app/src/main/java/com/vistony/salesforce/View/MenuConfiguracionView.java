@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
@@ -66,8 +68,19 @@ public class MenuConfiguracionView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.fragment_menu_configuracion, container, false);
+        switch (BuildConfig.FLAVOR){
+            case "chile":
+            case "ecuador":
+            case "bolivia":
+                v= inflater.inflate(R.layout.fragment_menu_configuracion_induvis, container, false);
+                break;
+            case "peru":
+                v= inflater.inflate(R.layout.fragment_menu_configuracion, container, false);
+                break;
+        }
+
         cv_configuracion_datos=v.findViewById(R.id.cv_configuracion_datos);
         cv_configuracion_impresora=v.findViewById(R.id.cv_configuracion_impresora);
         cv_confiracion_sistema=v.findViewById(R.id.cv_confiracion_sistema);
@@ -100,6 +113,14 @@ public class MenuConfiguracionView extends Fragment {
                 mListener.onFragmentInteraction(compuesto,"");
             }
         });
+
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            if(SesionEntity.Print.equals("N"))
+            {
+                cv_configuracion_impresora.setVisibility(View.GONE);
+            }
+        }
         return v;
     }
 

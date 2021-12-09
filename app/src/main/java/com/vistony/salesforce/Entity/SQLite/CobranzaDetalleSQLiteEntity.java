@@ -30,9 +30,10 @@ public class CobranzaDetalleSQLiteEntity {
     public String pagodirecto;
     public String pagopos;
     public String sap_code;
+    public String mensajews;
+    public String horacobranza;
 
-    public CobranzaDetalleSQLiteEntity(String id, String cobranza_id, String cliente_id, String documento_id, String documento_entry,String compania_id, String importedocumento, String saldodocumento, String nuevosaldodocumento, String saldocobrado, String fechacobranza, String recibo, String nrofactura, String chkqrvalidado, String chkbancarizado, String motivoanulacion, String usuario_id, String chkwsrecibido, String banco_id, String chkwsdepositorecibido, String comentario, String chkwsupdate, String chkdepositado, String chkwsqrvalidado, String chkanulado, String pagodirecto, String pagopos,String sap_code) {
-        this.sap_code=sap_code;
+    public CobranzaDetalleSQLiteEntity(String id, String cobranza_id, String cliente_id, String documento_id, String documento_entry, String compania_id, String importedocumento, String saldodocumento, String nuevosaldodocumento, String saldocobrado, String fechacobranza, String recibo, String nrofactura, String chkqrvalidado, String chkbancarizado, String motivoanulacion, String usuario_id, String chkwsrecibido, String banco_id, String chkwsdepositorecibido, String comentario, String chkwsupdate, String chkdepositado, String chkwsqrvalidado, String chkanulado, String pagodirecto, String pagopos, String sap_code, String mensajews, String horacobranza) {
         this.id = id;
         this.cobranza_id = cobranza_id;
         this.cliente_id = cliente_id;
@@ -60,10 +61,29 @@ public class CobranzaDetalleSQLiteEntity {
         this.chkanulado = chkanulado;
         this.pagodirecto = pagodirecto;
         this.pagopos = pagopos;
+        this.sap_code = sap_code;
+        this.mensajews = mensajews;
+        this.horacobranza = horacobranza;
     }
 
     public CobranzaDetalleSQLiteEntity() {
 
+    }
+
+    public String getMensajews() {
+        return mensajews;
+    }
+
+    public void setMensajews(String mensajews) {
+        this.mensajews = mensajews;
+    }
+
+    public String getHoracobranza() {
+        return horacobranza;
+    }
+
+    public void setHoracobranza(String horacobranza) {
+        this.horacobranza = horacobranza;
     }
 
     public String getDocumento_entry() {

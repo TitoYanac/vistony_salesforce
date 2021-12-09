@@ -10,6 +10,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,12 +23,15 @@ import androidx.fragment.app.DialogFragment;
 
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
-import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
+import com.vistony.salesforce.Dao.SQLite.MotivoVisitaSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
+import com.vistony.salesforce.Entity.SQLite.MotivoVisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class VisitaDialogController extends DialogFragment {
     String cliente_id,direccion_id,zona_id;
@@ -35,6 +39,8 @@ public class VisitaDialogController extends DialogFragment {
     private Location mLocation;
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
+    List<String> values;
+    ArrayAdapter<String> combomotivovisita;
 
     public VisitaDialogController(Object Objetos)
     {
@@ -50,6 +56,9 @@ public class VisitaDialogController extends DialogFragment {
 
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
+        ArrayList<MotivoVisitaSQLiteEntity> listamotivovisitasqliteentity=new ArrayList<>();
+        MotivoVisitaSQLiteDao motivoVisitaSQLiteDao=new MotivoVisitaSQLiteDao(getContext());
+        values=new ArrayList<>();
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.layout_visita_dialog);
@@ -73,6 +82,18 @@ public class VisitaDialogController extends DialogFragment {
         //textMotivo.setSingleLine(false);
         //textMotivo.setGravity(Gravity.LEFT | Gravity.TOP);
         //textMotivo.setHorizontalScrollBarEnabled(false);
+        listamotivovisitasqliteentity=motivoVisitaSQLiteDao.ObtenerMotivoVisita(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
+        for(int j=0;j<listamotivovisitasqliteentity.size();j++)
+        {
+            Log.e("REOS","VisitaDialogController-onCreateDialog-listamotivovisitasqliteentity.get(j).getMotivovisita_id():"+listamotivovisitasqliteentity.get(j).getType());
+            //valores[i]=String.valueOf(i+1);
+            if(!listamotivovisitasqliteentity.get(j).getCode().equals("01")&&!listamotivovisitasqliteentity.get(j).getCode().equals("02"))
+            {
+                Log.e("REOS","VisitaDialogController-onCreateDialog-listamotivovisitasqliteentity.get(j).getMotivovisita_id()-dentrodelif:"+listamotivovisitasqliteentity.get(j).getType());
+                values.add(listamotivovisitasqliteentity.get(j).getCode() + "-" + listamotivovisitasqliteentity.get(j).getName());
+            }
+        }
+        combomotivovisita=new ArrayAdapter<>(getContext(),R.layout.support_simple_spinner_dropdown_item,values);
 
         final EditText textDescargo = dialog.findViewById(R.id.et_observaciones_visita);
 
@@ -83,7 +104,7 @@ public class VisitaDialogController extends DialogFragment {
 
         //Spinner spn_tipo_visita= dialog.findViewById(R.id.spn_tipo_visita);
         Spinner spn_motivo_visita= dialog.findViewById(R.id.spn_motivo_visita);
-
+        spn_motivo_visita.setAdapter(combomotivovisita);
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonExit = (Button) dialog.findViewById(R.id.dialogButtonCancel);
         // if button is clicked, close the custom dialog
@@ -103,7 +124,11 @@ public class VisitaDialogController extends DialogFragment {
 
         dialogButton.setOnClickListener(v -> {
            if(textDescargo.getText().length()>0){
-
+               String motivo=spn_motivo_visita.getSelectedItem().toString();
+               String[] motivos = motivo.split("-");
+               String type,name;
+               type=motivos[0];
+               name=motivos[1];
                FormulasController formulasController=new FormulasController(getContext());
 
                VisitaSQLiteEntity visitaNativa=new VisitaSQLiteEntity();
@@ -111,12 +136,12 @@ public class VisitaDialogController extends DialogFragment {
                visitaNativa.setCardCode(cliente_id);
                visitaNativa.setAddress(direccion_id);
                visitaNativa.setTerritory(zona_id);
-               visitaNativa.setType(""+(spn_motivo_visita.getSelectedItemPosition()+1));
+               visitaNativa.setType(type);
                visitaNativa.setObservation(textDescargo.getText().toString());
                visitaNativa.setLatitude(""+latitude);
                visitaNativa.setLongitude(""+longitude);
 
-               formulasController.RegistraVisita(visitaNativa,getActivity());
+               formulasController.RegistraVisita(visitaNativa,getActivity(),"0");
 
                 Toast.makeText(getContext(), "Visita registrada...", Toast.LENGTH_SHORT).show();
 

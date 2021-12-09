@@ -38,7 +38,7 @@ public class ListaPromocionWS {
                     ObjLPromocion.lista_promocion_id = listaPromocionEntityResponse.getListaPromocionEntity().get(i).getLista_promocion_id();
                     ObjLPromocion.lista_promocion = listaPromocionEntityResponse.getListaPromocionEntity().get(i).getLista_promocion();
                     ObjLPromocion.compania_id = SesionEntity.compania_id;
-                    //ObjLPromocion.u_vis_cashdscnt = listaPromocionEntityResponse.getListaPromocionEntity().get(i).getU_vis_cashdscnt();
+                    ObjLPromocion.u_vis_cashdscnt = listaPromocionEntityResponse.getListaPromocionEntity().get(i).getCashDscnt();
                     LPromocion.add(ObjLPromocion);
                 }
             }

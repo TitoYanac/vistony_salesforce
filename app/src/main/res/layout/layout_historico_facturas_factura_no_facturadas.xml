@@ -43,12 +43,13 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_background_alert"
                 android:orientation="vertical">
+
                 <ListView
-                    android:background="@drawable/custom_background_alert"
                     android:id="@+id/lv_historico_factura_lineas_no_facturadas"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:layout_marginBottom="65dp"
+                    android:background="@drawable/custom_background_alert"
                     android:divider="@android:color/darker_gray"
                     android:dividerHeight="0.5dp"
                     android:indicatorLeft="?android:drawableLeft"></ListView>

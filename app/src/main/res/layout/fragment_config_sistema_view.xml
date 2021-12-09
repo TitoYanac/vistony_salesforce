@@ -137,13 +137,13 @@
                             android:layout_height="64dp"
                             android:background="@drawable/cerclebackgroundpurple"
                             android:padding="10dp"
-                            android:src="@drawable/ic_delete_sweep_black_24dp" />
+                            android:src="@drawable/ic_print_black_24dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="@string/DeleteCajaChica"
+                            android:text="@string/EnablePrint"
                             android:textStyle="bold" />
 
 

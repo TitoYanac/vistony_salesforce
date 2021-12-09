@@ -34,6 +34,17 @@ public class ListaPrecioEntity {
     @SerializedName("StockTotal")
     private String stock_general;
 
+    @SerializedName("CashDscnt")
+    private String cashdscnt;
+
+    public String getCashdscnt() {
+        return cashdscnt;
+    }
+
+    public void setCashdscnt(String cashdscnt) {
+        this.cashdscnt = cashdscnt;
+    }
+
     public String getStock_almacen() {
         return stock_almacen;
     }

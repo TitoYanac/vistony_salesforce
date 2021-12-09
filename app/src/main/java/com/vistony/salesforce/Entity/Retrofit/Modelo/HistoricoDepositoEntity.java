@@ -5,48 +5,83 @@ import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 
 public class HistoricoDepositoEntity {
-
-    @SerializedName("Bancarizacion")
+    //Peru
+    //@SerializedName("Bancarizacion")
+    @SerializedName("U_VIS_Banking")
     private String bancarizacion;
 
-    @SerializedName("Banco_ID")
+    @SerializedName("U_VIS_BankID")
+    //@SerializedName("Banco_ID")
     private String banco_id;
 
-    @SerializedName("Comentario")
+    @SerializedName("U_VIS_Comments")
+    //@SerializedName("Comentario")
     private String comentario;
 
     @SerializedName("Compania_ID")
     private String compania_id;
 
-    @SerializedName("DepositoDirecto")
+    @SerializedName("U_VIS_DirectDeposit")
+    //@SerializedName("DepositoDirecto")
     private String depositodirecto;
 
-    @SerializedName("Deposito_ID")
+    @SerializedName("U_VIS_Deposit")
+    //@SerializedName("Deposito_ID")
     private String deposito_id;
 
-    @SerializedName("Estado")
+    @SerializedName("U_VIS_Status")
+    //@SerializedName("Estado")
     private String estado;
 
-    @SerializedName("FechaDeposito")
+    @SerializedName("U_VIS_Date")
+    //@SerializedName("FechaDeposito")
     private String fechadeposito;
 
-    @SerializedName("FechaDiferida")
+    @SerializedName("U_VIS_DeferredDate")
+    //@SerializedName("FechaDiferida")
     private String fechadiferida;
 
-    @SerializedName("FuerzaTrabajo_ID")
+    @SerializedName("U_VIS_SlpCode")
+    //@SerializedName("FuerzaTrabajo_ID")
     private String fuerzaTrabajo_id;
 
-    @SerializedName("MontoDeposito")
+    @SerializedName("U_VIS_AmountDeposit")
+    //@SerializedName("MontoDeposito")
     private String montodeposito;
 
-    @SerializedName("MotivoAnulacion")
+    @SerializedName("U_VIS_CancelReason")
+    //@SerializedName("MotivoAnulacion")
     private String motivoanulacion;
 
-    @SerializedName("TipoIngreso")
+    @SerializedName("U_VIS_IncomeType")
+    //@SerializedName("TipoIngreso")
     private String tipoingreso;
 
-    @SerializedName("Usuario_ID")
+    @SerializedName("U_VIS_UserID")
+    //@SerializedName("Usuario_ID")
     private String usuario_id;
+
+    @SerializedName("BankName")
+    private String bankname;
+
+    @SerializedName("Code")
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getBankname() {
+        return bankname;
+    }
+
+    public void setBankname(String bankname) {
+        this.bankname = bankname;
+    }
 
     @NonNull
     public String getBancarizacion() {

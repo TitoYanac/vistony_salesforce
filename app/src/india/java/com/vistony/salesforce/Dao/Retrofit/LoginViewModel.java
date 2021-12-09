@@ -7,9 +7,7 @@ import android.widget.Toast;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.LoginEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 

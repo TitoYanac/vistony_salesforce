@@ -46,6 +46,7 @@
     <string name="DineroCobradoView" translatable="false">Dinero Cobrado</string>
     <string name="AsistenciaCamionView" translatable="false">Camion</string>
     <string name="clearTemp" translatable="false">Liberar espacio</string>
+    <string name="EnablePrint">Habilitar Impresora</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
@@ -59,7 +60,7 @@
     <string name="lead_cliente">Lead Generation</string>
     <string name="title_activity_maps">Map</string>
     <string name="razon_social">Razón Social</string>
-    <string name="ruc">GST Number</string>
+    <string name="ruc">RUC</string>
     <string name="nombre_comercial">Tradename</string>
     <string name="numero_telefono">Phone Number</string>
     <string name="numero_celular">Cell phone number</string>
@@ -85,4 +86,7 @@
     <string name="dialog_btn_cancelar">Cancel</string>
     <string name="dialog_text">Are you sure to exit the application?</string>
     <string name="menu_tag">Opciones del sistema</string>
+    <string name="tax_code">tax code</string>
+    <string name="zone">Zona</string>
+    <string name="head_zone">Zona:</string>
 </resources>

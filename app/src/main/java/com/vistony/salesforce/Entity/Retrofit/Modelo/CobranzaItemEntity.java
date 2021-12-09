@@ -18,6 +18,38 @@ public class CobranzaItemEntity {
     @SerializedName("Message")
     private String message;
 
+    @SerializedName("Number")
+    private String recibo;
+
+    @SerializedName("BankID")
+    private String bankid;
+
+    @SerializedName("Deposit")
+    private String deposit;
+
+    public String getRecibo() {
+        return recibo;
+    }
+
+    public void setRecibo(String recibo) {
+        this.recibo = recibo;
+    }
+
+    public String getBankid() {
+        return bankid;
+    }
+
+    public void setBankid(String bankid) {
+        this.bankid = bankid;
+    }
+
+    public String getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(String deposit) {
+        this.deposit = deposit;
+    }
 
     public String getItemDetail() {
         return itemDetail;

@@ -37,4 +37,8 @@
     <string name="dialog_btn_cancelar">CANCEL</string>
     <string name="dialog_text">Are you sure to exit the application?</string>
     <string name="menu_tag">"System options "</string>
+    <string name="tax_code">tax code</string>
+    <string name="zone">Zone</string>
+    <string name="head_zone">Zone:</string>
+    <string name="EnablePrint">Enable Print</string>
 </resources>

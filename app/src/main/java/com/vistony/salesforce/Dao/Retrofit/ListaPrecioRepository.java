@@ -43,7 +43,7 @@ public class ListaPrecioRepository {
                     ObjLPDetalle.setTypo(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getTipo());
                     ObjLPDetalle.setStock_almacen(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getStock_almacen());
                     ObjLPDetalle.setStock_general(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getStock_general());
-
+                    ObjLPDetalle.setU_vis_cashdscnt(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity().get(i).getCashdscnt());
                     LPDetalle.add(ObjLPDetalle);
                 }
             }

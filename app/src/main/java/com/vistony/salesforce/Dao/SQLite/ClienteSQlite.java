@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import io.sentry.Sentry;
+
 public class ClienteSQlite {
     private ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity;
     private ArrayList<ListaClienteCabeceraEntity> arraylistaClienteSQLiteEntity;
@@ -63,29 +65,25 @@ public class ClienteSQlite {
         return 1;
     }
 
+    public static String getPaymentGroupCode(String cardCode){
+        String terminoPago=null;
 
-/*
-    public ArrayList<ClienteSQLiteEntity> ObtenerCliente (){
-        listaClienteSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
-        ClienteSQLiteEntity clienteentity;
+        try {
 
-        Cursor fila = sqlite.rawQuery(
-                "Select cliente_id,nombrecliente,direccion from cliente",null);
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            Cursor fila = sqlite.rawQuery("SELECT terminopago_id FROM cliente WHERE cliente_id =? LIMIT 1; ",new String[]{cardCode});
 
-        while (fila.moveToNext())
-        {
-            clienteentity= new ClienteSQLiteEntity();
-            clienteentity.setCliente_id(fila.getString(0));
-            clienteentity.setNombrecliente(fila.getString(1));
-            clienteentity.setDireccion(fila.getString(2));
-            listaClienteSQLiteEntity.add(clienteentity);
+            while (fila.moveToNext())
+            {
+                terminoPago=fila.getString(0);
+            }
+        }catch (Exception e){
+            Sentry.captureMessage(e.getMessage());
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
         }
-
-                    DataBaseManager.getInstance().closeDatabase();
-
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
-        return listaClienteSQLiteEntity;
-    }*/
+        return terminoPago;
+    }
 
     public ArrayList<ListaClienteCabeceraEntity> ObtenerClienteDeuda (){
 
@@ -254,7 +252,7 @@ public class ClienteSQlite {
     public ArrayList<ListaClienteCabeceraEntity> ObtenerClientes (){
 
         arraylistaClienteSQLiteEntity = new ArrayList<ListaClienteCabeceraEntity>();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         Date date = new Date();
         String fecha =dateFormat.format(date);
         ListaClienteCabeceraEntity clienteentity;
@@ -279,7 +277,7 @@ public class ClienteSQlite {
                 clienteentity.setNombrecliente(fila.getString(2));
                 clienteentity.setDomembarque_id(fila.getString(3));
                 clienteentity.setDomfactura_id(fila.getString(23));
-                Log.e("DomFactura","=>"+fila.getString(23));
+
                 clienteentity.setDireccion(fila.getString(4));
                 clienteentity.setZona_id(fila.getString(5));
                 clienteentity.setOrdenvisita(fila.getString(6));
@@ -399,21 +397,26 @@ public class ClienteSQlite {
         return arraylistaClienteSQLiteEntity;
     }
 */
-    public ArrayList<ListaClienteCabeceraEntity> ObtenerClientePorZonaCompleto(String zona_id) {
+    public ArrayList<ListaClienteCabeceraEntity> ObtenerClientePorZonaCompleto() {
         arraylistaClienteSQLiteEntity = new ArrayList<ListaClienteCabeceraEntity>();
         ListaClienteCabeceraEntity clienteentity;
-        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
 
         try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
             Cursor fila = sqlite.rawQuery(
-                    "Select " +
-                            "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0) " +
-                            "from cliente a " +
-                            "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
-                            " a.compania_id=b.compania_id " +
-                            "and a.cliente_id=b.cliente_id " +
-                            "where a.zona_id='"+zona_id+"' "+
-                            "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id",null);
+                    "SELECT DISTINCT a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,d.zona_id,a.ordenvisita,a.zona," +
+                            "a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio," +
+                            "a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0) from cliente a" +
+                            " LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
+                            " a.compania_id=b.compania_id and a.cliente_id=b.cliente_id " +
+                            "INNER JOIN (SELECT compania_id,cliente_id,zona_id FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id) d ON a.compania_id=d.compania_id " +
+                            "and a.cliente_id=d.cliente_id WHERE d.zona_id IN (SELECT zona_id FROM rutafuerzatrabajo WHERE fechainicioruta=" +
+                            //"date('now') " +
+                            " strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))" +
+                            "AND estado='ACTIVO') GROUP BY a.cliente_id," +
+                            "a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,d.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id," +
+                            "a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id;",null);
 
             while (fila.moveToNext())
             {
@@ -440,6 +443,66 @@ public class ClienteSQlite {
                 clienteentity.setLinea_credito_usado(fila.getString(19));
                 clienteentity.setTerminopago_id(fila.getString(20));
                 clienteentity.setSaldo(fila.getString(21));
+                arraylistaClienteSQLiteEntity.add(clienteentity);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
+
+        return arraylistaClienteSQLiteEntity;
+    }
+
+
+    public ArrayList<ListaClienteCabeceraEntity> ObtenerClientesConsulta (){
+
+        arraylistaClienteSQLiteEntity = new ArrayList<ListaClienteCabeceraEntity>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        Date date = new Date();
+        String fecha =dateFormat.format(date);
+        ListaClienteCabeceraEntity clienteentity;
+        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
+        try {
+            Cursor fila = sqlite.rawQuery(
+                    "Select " +
+                            "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
+                            "a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lista_precio" +
+                            ",a.domfactura_id FROM cliente a " +
+                            "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
+                            " a.compania_id=b.compania_id " +
+                            "and a.cliente_id=b.cliente_id "  +
+                            "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.domfactura_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id",null);
+
+            while (fila.moveToNext())
+            {
+                clienteentity= new ListaClienteCabeceraEntity();
+                clienteentity.setCliente_id(fila.getString(0));
+                clienteentity.setCompania_id(fila.getString(1));
+                clienteentity.setNombrecliente(fila.getString(2));
+                clienteentity.setDomembarque_id(fila.getString(3));
+                clienteentity.setDomfactura_id(fila.getString(23));
+
+                clienteentity.setDireccion(fila.getString(4));
+                clienteentity.setZona_id(fila.getString(5));
+                clienteentity.setOrdenvisita(fila.getString(6));
+                clienteentity.setZona(fila.getString(7));
+                clienteentity.setRucdni(fila.getString(8));
+                clienteentity.setMoneda(fila.getString(9));
+                clienteentity.setTelefonofijo(fila.getString(10));
+                clienteentity.setTelefonomovil(fila.getString(11));
+                clienteentity.setCorreo(fila.getString(12));
+                clienteentity.setUbigeo_id(fila.getString(13));
+                clienteentity.setImpuesto_id(fila.getString(14));
+                clienteentity.setImpuesto(fila.getString(15));
+                clienteentity.setTipocambio(fila.getString(16));
+                clienteentity.setCategoria(fila.getString(17));
+                clienteentity.setLinea_credito(fila.getString(18));
+                clienteentity.setLinea_credito_usado(fila.getString(19));
+                clienteentity.setTerminopago_id(fila.getString(20));
+                clienteentity.setSaldo(fila.getString(21));
+                clienteentity.setLista_precio(fila.getString(21));
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }
         }catch (Exception e){

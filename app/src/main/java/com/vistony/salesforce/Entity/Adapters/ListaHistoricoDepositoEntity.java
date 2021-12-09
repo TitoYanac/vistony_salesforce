@@ -19,27 +19,11 @@ public class ListaHistoricoDepositoEntity  implements Serializable {
     public boolean checkbox;
     public int imvdetalle;
     public String depositodirecto;
+    public String bankname;
+    public String code;
 
-    public ListaHistoricoDepositoEntity(
-            String bancarizacion,
-            String banco_id,
-            String comentario,
-            String compania_id,
-            String deposito_id,
-            String estado,
-            String fechadeposito,
-            String fechadiferida,
-            String fuerzatrabajo_id,
-            String montodeposito,
-            String motivoanulacion,
-            String tipoingreso,
-            String usuario_id,
-            boolean checkbox,
-            int imvdetalle,
-            String depositodirecto
-
-    ) {
-        this.bancarizacion=bancarizacion;
+    public ListaHistoricoDepositoEntity(String bancarizacion, String banco_id, String comentario, String compania_id, String deposito_id, String estado, String fechadeposito, String fechadiferida, String fuerzatrabajo_id, String montodeposito, String motivoanulacion, String tipoingreso, String usuario_id, boolean checkbox, int imvdetalle, String depositodirecto, String bankname, String code) {
+        this.bancarizacion = bancarizacion;
         this.banco_id = banco_id;
         this.comentario = comentario;
         this.compania_id = compania_id;
@@ -54,10 +38,28 @@ public class ListaHistoricoDepositoEntity  implements Serializable {
         this.usuario_id = usuario_id;
         this.checkbox = checkbox;
         this.imvdetalle = imvdetalle;
-        this.depositodirecto=depositodirecto;
+        this.depositodirecto = depositodirecto;
+        this.bankname = bankname;
+        this.code = code;
     }
 
     public ListaHistoricoDepositoEntity() {
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getBankname() {
+        return bankname;
+    }
+
+    public void setBankname(String bankname) {
+        this.bankname = bankname;
     }
 
     public String getDepositodirecto() {

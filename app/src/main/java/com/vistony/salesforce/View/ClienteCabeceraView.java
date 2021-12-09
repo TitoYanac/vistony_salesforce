@@ -70,7 +70,7 @@ public class ClienteCabeceraView extends Fragment /*implements SearchView.OnQuer
     TextView tv_cantidad_cliente_cabecera,tv_monto_cliente_cabecera,tv_monto_cliente_cabecera_dolares;
     int cantidad_cliente_cabecera,monto_cliente_cabecera;
     private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=2;
-    ConfigImpresoraView configImpresoraView;
+    //ConfigImpresoraView configImpresoraView;
 
 
 
@@ -122,7 +122,6 @@ public class ClienteCabeceraView extends Fragment /*implements SearchView.OnQuer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         clienteSQlite = new ClienteSQlite(getContext());
-        menuView = new MenuView();
 
 
         setHasOptionsMenu(true);
@@ -149,14 +148,14 @@ public class ClienteCabeceraView extends Fragment /*implements SearchView.OnQuer
         }
 
 
-            if ((vinculaimpresora.equals("0"))) {
+            /*if ((vinculaimpresora.equals("0"))) {
             configImpresoraView = new ConfigImpresoraView();
             configImpresoraView.OpenPrinter(
                     //MenuView.indicador
                     "0"
                     , getContext());
             SesionEntity.loginSesion = "1";
-        }
+        }*/
         MenuView.indicador="3";
 
 

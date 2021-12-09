@@ -19,26 +19,14 @@ public class CobranzaCabeceraSQLiteEntity {
     public String chkwsanulado;
     public String pagodirecto;
     public String pagopos;
+    public String bankname;
 
-    public CobranzaCabeceraSQLiteEntity(String cobranza_id, String usuario_id, String cobrador_id, String banco_id, String compania_id, String totalmontocobrado, String chkdepositado, String chkanulado, String fuerzatrabajo_id, String tipoingreso, String chkbancarizado, String fechadiferido, String chkwsrecibido, String fechadeposito, String comentarioanulado, String chkwsanulado, String pagodirecto, String pagopos) {
-        this.cobranza_id = cobranza_id;
-        this.usuario_id = usuario_id;
-        this.cobrador_id = cobrador_id;
-        this.banco_id = banco_id;
-        this.compania_id = compania_id;
-        this.totalmontocobrado = totalmontocobrado;
-        this.chkdepositado = chkdepositado;
-        this.chkanulado = chkanulado;
-        this.fuerzatrabajo_id = fuerzatrabajo_id;
-        this.tipoingreso = tipoingreso;
-        this.chkbancarizado = chkbancarizado;
-        this.fechadiferido = fechadiferido;
-        this.chkwsrecibido = chkwsrecibido;
-        this.fechadeposito = fechadeposito;
-        this.comentarioanulado = comentarioanulado;
-        this.chkwsanulado = chkwsanulado;
-        this.pagodirecto = pagodirecto;
-        this.pagopos = pagopos;
+    public String getBankname() {
+        return bankname;
+    }
+
+    public void setBankname(String bankname) {
+        this.bankname = bankname;
     }
 
     public String getPagopos() {

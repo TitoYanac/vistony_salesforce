@@ -9,29 +9,31 @@ tools:context=".View.PromocionCabeceraView">
     android:id="@+id/mapLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="100dp"
     android:orientation="vertical"
+    android:weightSum="5"
     >
     <ListView
         android:id="@+id/lv_listapromociones"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_weight="5"
         >
     </ListView>
-</LinearLayout>
+
 
 <TableLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="@color/Rojo_Vistony"
+    android:layout_weight="1"
 
     >
 
     <TableRow
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/Rojo_Vistony"
+        >
 
         <TextView
             android:id="@+id/lbl_cantidad_disponible"
@@ -62,7 +64,9 @@ tools:context=".View.PromocionCabeceraView">
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/Rojo_Vistony"
+        >
 
         <TextView
             android:id="@+id/lbl_cantidad_promocion"
@@ -88,7 +92,9 @@ tools:context=".View.PromocionCabeceraView">
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/Rojo_Vistony"
+        >
 
         <TextView
             android:id="@+id/lbl_cantidad_pendiente"
@@ -113,5 +119,5 @@ tools:context=".View.PromocionCabeceraView">
 
     </TableRow>
 </TableLayout>
-
+</LinearLayout>
 </FrameLayout>

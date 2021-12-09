@@ -1,19 +1,33 @@
 package com.vistony.salesforce.View;
 
+import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
+import static com.vistony.salesforce.Entity.SesionEntity.FLAG_BACKUP;
+
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -21,7 +35,9 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaParametrosAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
+import com.vistony.salesforce.Dao.Retrofit.MotivoVisitaWS;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.Retrofit.AgenciaWS;
 import com.vistony.salesforce.Dao.Retrofit.BancoRepository;
@@ -30,6 +46,7 @@ import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.ListaPrecioRepository;
 import com.vistony.salesforce.Dao.Retrofit.ListaPromocionWS;
+import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.Retrofit.PromocionCabeceraWS;
 import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleWS;
 import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoRepository;
@@ -37,7 +54,7 @@ import com.vistony.salesforce.Dao.Retrofit.StockWS;
 import com.vistony.salesforce.Dao.Retrofit.TerminoPagoWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.BancoSQLiteDAO;
+import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
 import com.vistony.salesforce.Dao.SQLite.CatalogoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
@@ -47,7 +64,8 @@ import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Dao.Adapters.ListaParametrosDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.ParametrosSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.MotivoVisitaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaFuerzaTrabajoSQLiteDao;
@@ -60,7 +78,6 @@ import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.BancoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CatalogoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.DireccionClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
@@ -68,6 +85,7 @@ import com.vistony.salesforce.Entity.Adapters.ListaParametrosEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.MotivoVisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ParametrosSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
@@ -76,7 +94,6 @@ import com.vistony.salesforce.Entity.SQLite.RutaVendedorSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.StockSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
-import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 import java.text.SimpleDateFormat;
@@ -85,13 +102,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class ParametrosView extends Fragment {
+public class
+ParametrosView extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private View v;
     private ListView listviewparametro;
     public static ClienteSQlite clienteSQlite;
-    private BancoSQLiteDAO bancoSQLiteDAO;
-    private BancoSQLiteDAO bancoSQLiteDAO2;
+    private BancoSQLite bancoSQLite;
+    private BancoSQLite bancoSQLite2;
     private DocumentoSQLite documentoSQLite;
     private CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao;
     private ObtenerWSParametros obtenerWSParametros;
@@ -104,6 +122,7 @@ public class ParametrosView extends Fragment {
     private PromocionCabeceraSQLiteDao promocionCabeceraSQLiteDao;
     private PromocionDetalleSQLiteDao promocionDetalleSQLiteDao;
     private RutaFuerzaTrabajoSQLiteDao rutaFuerzaTrabajoSQLiteDao;
+    private MotivoVisitaSQLiteDao motivoVisitaSQLiteDao;
     private CatalogoSQLiteDao catalogoSQLiteDao;
     private DireccionSQLite direccionSQLite;
     private ZonaSQLiteDao zonaSQLiteDao;
@@ -130,6 +149,7 @@ public class ParametrosView extends Fragment {
     static List<CatalogoSQLiteEntity> LCatalogo;
     static List<DireccionClienteSQLiteEntity> LDCliente;
     static List<HojaDespachoSQLiteEntity> LHDespacho;
+    static List<MotivoVisitaSQLiteEntity> LMVisita;
     List<ClienteSQLiteEntity> LclientesqlSQLiteEntity;
     SqliteController sqliteController;
     SimpleDateFormat dateFormat;
@@ -138,11 +158,8 @@ public class ParametrosView extends Fragment {
     ListaParametrosAdapter listaParametrosAdapter;
     ListaParametrosEntity listaParametrosEntity;
     ArrayList<ListaParametrosEntity> arraylistaparametrosentity;
-    ParametrosSQLiteEntity parametrosSQLiteEntity;
-    ParametrosSQLiteDao parametrosSQLiteDao;
+    ParametrosSQLite parametrosSQLite;
     FloatingActionButton fabdescargarparametros;
-    ConfigImpresoraView configImpresoraView;
-    ArrayList<UsuarioSQLiteEntity> listaUsuarioSQLiteEntity;
     UsuarioSQLite usuarioSQLite;
     String conexion="";
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
@@ -150,6 +167,12 @@ public class ParametrosView extends Fragment {
     private final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION=1;
     private OrdenVentaRepository ordenVentaRepository;
     private VisitaRepository visitaRepository;
+    private DepositoRepository depositoRepository;
+    private CobranzaRepository cobranzaRepository;
+    private BackupRepository backupRepository;
+    private BancoRepository bancoRepository;
+    private PriceListRepository priceListRepository;
+    MenuItem seleccionar_todo;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -166,10 +189,10 @@ public class ParametrosView extends Fragment {
         sesionEntity =  new SesionEntity();
         clienteSQlite = new ClienteSQlite(getContext());
         listaclientesqlSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
-        bancoSQLiteDAO = new BancoSQLiteDAO(getContext());
+        bancoSQLite = new BancoSQLite(getContext());
         documentoSQLite = new DocumentoSQLite(getContext());
         cobranzaCabeceraSQLiteDao = new CobranzaCabeceraSQLiteDao(getContext());
-        parametrosSQLiteDao = new ParametrosSQLiteDao(getContext());
+        parametrosSQLite = new ParametrosSQLite(getContext());
         terminoPagoSQLiteDao =  new TerminoPagoSQLiteDao(getContext());
         agenciaSQLiteDao  = new AgenciaSQLiteDao(getContext());
         listaPrecioDetalleSQLiteDao =  new ListaPrecioDetalleSQLiteDao(getContext());
@@ -178,6 +201,7 @@ public class ParametrosView extends Fragment {
         promocionCabeceraSQLiteDao =  new PromocionCabeceraSQLiteDao(getContext());
         promocionDetalleSQLiteDao = new PromocionDetalleSQLiteDao(getContext());
         catalogoSQLiteDao=new CatalogoSQLiteDao(getContext());
+        motivoVisitaSQLiteDao = new MotivoVisitaSQLiteDao(getContext());
         direccionSQLite =new DireccionSQLite(getContext());
         obtenerWSParametros =  new ObtenerWSParametros();
         LCliente= new ArrayList<ClienteSQLiteEntity>();
@@ -191,6 +215,7 @@ public class ParametrosView extends Fragment {
         LPromocionDetalle = new ArrayList<>();
         LCatalogo= new ArrayList<>();
         LDCliente = new ArrayList<>();
+        LMVisita = new ArrayList<>();
         zonaSQLiteDao = new ZonaSQLiteDao(getContext());
         obtenerPametros();
         LclientesqlSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
@@ -200,12 +225,11 @@ public class ParametrosView extends Fragment {
         fecha =dateFormat.format(date);
         sqliteController =  new SqliteController(getContext());
         usuarioSQLite = new UsuarioSQLite(getContext());
-        listaUsuarioSQLiteEntity = new ArrayList<UsuarioSQLiteEntity>();
-        listaUsuarioSQLiteEntity = usuarioSQLite.ObtenerUsuarioSesion();
+
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(getContext());
 
-        if(BuildConfig.FLAVOR.equals("chile")){
+        if(!BuildConfig.FLAVOR.equals("india")){ //la india por el app de lead no carga parametros
             obtenerWSParametros.execute("Todos");
         }
 
@@ -218,23 +242,134 @@ public class ParametrosView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
         getActivity().setTitle("Parametros");
-
+        setHasOptionsMenu(true);
         v = inflater.inflate(R.layout.fragment_parametros_view, container, false);
-        listviewparametro = (ListView) v.findViewById(R.id.listparametro);
-        fabdescargarparametros = (FloatingActionButton) v.findViewById(R.id.fabdescargarparametros);
+        listviewparametro = v.findViewById(R.id.listparametro);
+        fabdescargarparametros = v.findViewById(R.id.fabdescargarparametros);
 
-        ordenVentaRepository = new ViewModelProvider(this).get(OrdenVentaRepository.class);
-        visitaRepository = new ViewModelProvider(this).get(VisitaRepository.class);
+        ordenVentaRepository = new ViewModelProvider(getActivity()).get(OrdenVentaRepository.class);
+        visitaRepository = new ViewModelProvider(getActivity()).get(VisitaRepository.class);
+        depositoRepository = new ViewModelProvider(getActivity()).get(DepositoRepository.class);
+        cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
+        backupRepository = new ViewModelProvider(getActivity()).get(BackupRepository.class);
+        bancoRepository = new ViewModelProvider(getActivity()).get(BancoRepository.class);
+        priceListRepository = new ViewModelProvider(getActivity()).get(PriceListRepository.class);
 
+        listaParametrosEntity = new ListaParametrosEntity();
+        arraylistaparametrosentity = new ArrayList<ListaParametrosEntity>();
+        ArrayList<ParametrosSQLiteEntity> listaparametrosSQLiteEntity = new ArrayList<>();
+        FormulasController formulasController=new FormulasController(getContext());
+
+        //CARGA DE MAESTROS
+        listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
+        switch (BuildConfig.FLAVOR){
+
+            case "ecuador":
+            case "chile":
+                if (listaparametrosSQLiteEntity.isEmpty()) {
+                    parametrosSQLite.LimpiarParametros();
+                    parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
+                    //parametrosSQLiteDao.InsertaParametros("3", "DOCUMENTOS", "0", getDateTime());
+                    //parametrosSQLiteDao.InsertaParametros("4", "RUTA VENDEDOR", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
+                    //parametrosSQLiteDao.InsertaParametros("8", "STOCK", "0", getDateTime());
+                    //parametrosSQLiteDao.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
+                    //parametrosSQLiteDao.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
+                    //parametrosSQLiteDao.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
+                    //parametrosSQLiteDao.InsertaParametros("13", "CATALOGO", "0", getDateTime());
+                    //parametrosSQLiteDao.InsertaParametros("14", "DIRECCION CLIENTE", "0", getDateTime());
+                    //parametrosSQLiteDao.InsertaParametros("15", "HOJA DESPACHO", "0", getDateTime());
+                }
+                break;
+            case "peru":
+            case "bolivia":
+                if (listaparametrosSQLiteEntity.isEmpty()) {
+                    parametrosSQLite.LimpiarParametros();
+                    parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
+                    //parametrosSQLite.InsertaParametros("8", "STOCK", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                }
+                if(parametrosSQLite.ObtenerCantidadParametroID("18")==0)
+                {
+                parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                }
+                break;
+        }
+
+        /////////////////////Sincronizar Recibos Pendientes de Depositar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        cobranzaRepository.SynchronizedepositedPendingCollection(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
+
+        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        cobranzaRepository.UndepositedPendingCollection(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
+
+        ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
+        cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
         ///////////////////////////// ENVIAR PEDIDOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         ordenVentaRepository.salesOrderResend(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame", "=>" + data);
+        });
+        ///////////////////////////// ENVIAR VISITAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        visitaRepository.visitResend(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame", "=>" + data);
+        });
+        ///////////////////////////// ENVIAR DEPOSITOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame", "=>" + data);
+        });
+
+        ///////////////////////////// ENVIAR COBRANZAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //cobranzaRepository.depositResend(getContext()).observe(getActivity(), data -> {
+        //    Log.e("Jepicame","=>"+data);
+        //});
+
+        ///////////////////////////// BACKUP SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        if(FLAG_BACKUP.equals("")){
+            backupRepository.sendSqlite(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame","=>"+data);
+            });
+        }
+        ////////////////////////SINCRONIZACION ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        cobranzaRepository.Synchronizevoidedreceipts(getContext(),SesionEntity.imei).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
+        ///////////////////////////// BANCO SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        bancoRepository.getAndInsertBank(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
         });
 
-        ///////////////////////////// ENVIAR VISITAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        visitaRepository.visitResend(getContext()).observe(getActivity(), data -> {
+        ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        depositoRepository.UpdatedepositStatus(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame", "=>" + data);
+        });
+        ////////////////////////ENVIAR RECIBOS DESVINCULADOS DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        cobranzaRepository.ReceiptDetachedDeposit(getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
         });
+
+        ///////////////////////////// PRICE LIST \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        priceListRepository.getAddAllPriceList(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
+
 
         fabdescargarparametros.setOnClickListener(view -> {
             Object objeto=null,object2=null;
@@ -242,7 +377,7 @@ public class ParametrosView extends Fragment {
             objeto=listaParametrosAdapter.ObtenerListaParametros();
 
             arraylistaparametrosentity = (ArrayList<ListaParametrosEntity>) objeto;
-            String [] valores=new String[]{"","","","","","","","","","","","","","",""};
+            String [] valores=new String[]{"","","","","","","","","","","","","","","",""};
             int p=0;
             for(int i=0;i<arraylistaparametrosentity.size();i++){
                 if(arraylistaparametrosentity.get(i).isChkparametro()){
@@ -252,10 +387,8 @@ public class ParametrosView extends Fragment {
                 }
             }
 
-
             obtenerWSParametros =  new ObtenerWSParametros();
             obtenerWSParametros.execute(valores);
-
 
         });
 
@@ -267,11 +400,7 @@ public class ParametrosView extends Fragment {
         return v;
     }
 
-    private String getDateTime(){
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
-        Date date2 = new Date();
-        return dateFormat2.format(date2);
-    }
+
     private class ObtenerWSParametros extends AsyncTask<String, Void, String> {
         String argumento="";
         @Override
@@ -285,7 +414,7 @@ public class ParametrosView extends Fragment {
             try {
                 int CantClientes=0,CantBancos=0,CantDocumentosDeuda=0,CantRutaVendedor=0,CantTerminoPago=0,
                         CantAgencia=0,CantListaPrecioDetalle=0,CantStock=0,CantListaPromocion=0,CantPromocionCabecera=0,
-                CantPromocionDetalle=0,CantRutaFuerzaTrabajo=0,CantCatalogo=0,CantDireccionCliente=0,CantHojaDespacho=0;
+                CantPromocionDetalle=0,CantRutaFuerzaTrabajo=0,CantCatalogo=0,CantDireccionCliente=0,CantHojaDespacho=0,CantMotivoVisita=0;
 
 
                 for(int i=0;i<arg0.length;i++) {
@@ -293,68 +422,16 @@ public class ParametrosView extends Fragment {
                     if (argumento.equals("Todos")) {
 
                         /*SINCRONIZAR AL CARGAR PARAMETROS*/
-                        String resultadocantidadcobranzadetalle;
+                        /*String resultadocantidadcobranzadetalle;
                         CobranzaDetalleSQLiteDao cantidadregistroscobranzadetalle = new CobranzaDetalleSQLiteDao(getContext());
                         resultadocantidadcobranzadetalle = cantidadregistroscobranzadetalle.ObtenerCantidadCobranzaDetalle(SesionEntity.usuario_id, SesionEntity.compania_id);
                         if (resultadocantidadcobranzadetalle.equals("0")) {
                             ObtenerRecibosPendientes();
-                        }
+                        }*/
                         /*FIN*/
 
-
-                        listaCobranzaDetalleSQLiteEntity = new ArrayList<>();
-                        listaParametrosEntity = new ListaParametrosEntity();
-                        arraylistaparametrosentity = new ArrayList<ListaParametrosEntity>();
-                        ArrayList<ParametrosSQLiteEntity> listaparametrosSQLiteEntity = new ArrayList<>();
-                        ArrayList<CobranzaCabeceraSQLiteEntity> listaCobranzaCabeceraSQLiteEntity = new ArrayList<>();
-                        CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao = new CobranzaCabeceraSQLiteDao(getContext());
-                        listaCobranzaCabeceraSQLiteEntity =
-                                cobranzaCabeceraSQLiteDao.ObtenerCobranzaCabeceraPendientesWS(SesionEntity.compania_id, SesionEntity.usuario_id);
-
-                        //Envio de Cabecera a WsService
-                        for (int j = 0; j < listaCobranzaCabeceraSQLiteEntity.size(); j++) {
-                            String resultadoccabeceraenviows = "0";
-
-                            DepositoRepository depositoRepository =new DepositoRepository(getContext());
-
-                            //int resultado=0;
-
-                            Log.e("JEPICAME","SE EEJCUTA EL PostCobranzaCabeceraWS EN PARAMETROS");
-
-                            resultadoccabeceraenviows= depositoRepository.PostCobranzaCabeceraWS
-                            (
-                                SesionEntity.imei,
-                                "CREATE",
-                                SesionEntity.compania_id,
-                                listaCobranzaCabeceraSQLiteEntity.get(j).getBanco_id(),
-                                listaCobranzaCabeceraSQLiteEntity.get(j).getTipoingreso(),
-                                listaCobranzaCabeceraSQLiteEntity.get(j).getCobranza_id(),
-                                SesionEntity.usuario_id,
-                                listaCobranzaCabeceraSQLiteEntity.get(j).getFechadeposito(),
-                                listaCobranzaCabeceraSQLiteEntity.get(j).getTotalmontocobrado(),
-                                "Pendiente",
-                                "0",
-                                SesionEntity.fuerzatrabajo_id,
-                                listaCobranzaCabeceraSQLiteEntity.get(j).getChkbancarizado(),
-                                listaCobranzaCabeceraSQLiteEntity.get(j).getFechadiferido(),
-                                "0",
-                                listaCobranzaCabeceraSQLiteEntity.get(j).getPagodirecto(),
-                                "0"
-                            );
-
-
-
-                            //resultadoccabeceraenviows=String.valueOf(resultado);
-
-                            cobranzaCabeceraSQLiteDao.ActualizarCobranzaCabeceraWS(listaCobranzaCabeceraSQLiteEntity.get(j).getCobranza_id(),
-                                    listaCobranzaCabeceraSQLiteEntity.get(j).getCompania_id(),
-                                    listaCobranzaCabeceraSQLiteEntity.get(j).getFuerzatrabajo_id(),
-                                    resultadoccabeceraenviows);
-                        }
-
-                        FormulasController formulasController=new FormulasController(getContext());
-
                         //Envio de Cobranza Detalle Pendientes a WS
+                        /* = new ArrayList<>();
                         listaCobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendientesEnvioTotalWS(SesionEntity.compania_id, SesionEntity.usuario_id);
 
 
@@ -362,10 +439,8 @@ public class ParametrosView extends Fragment {
                             for (int j = 0; j < listaCobranzaDetalleSQLiteEntity.size(); j++) {
                                 String resultado = "0";
                                 List<CobranzaDetalleSQLiteEntity> listaleercobranza = new ArrayList<>();
-                                /*listaleercobranza = cobranzaDetalleWSDao.LeerCobranzaRecibo(SesionEntity.imei, SesionEntity.compania_id
-                                        , SesionEntity.usuario_id, listaCobranzaDetalleSQLiteEntity.get(j).getRecibo().toString()
-                                );*/
-                                listaleercobranza=formulasController.ObtenerListaConvertidaCobranzaDetalleSQLite(
+
+                                listaleercobranza=null;/*formulasController.ObtenerListaConvertidaCobranzaDetalleSQLite(
                                         getContext(),
                                         SesionEntity.imei,
                                         SesionEntity.compania_id,
@@ -373,8 +448,7 @@ public class ParametrosView extends Fragment {
                                         listaCobranzaDetalleSQLiteEntity.get(j).getRecibo()
                                 );
 
-                                HistoricoCobranzaWS historicoCobranzaWS=new HistoricoCobranzaWS(getContext());
-                                if (listaleercobranza.isEmpty()) {
+                                if (listaleercobranza==null||listaleercobranza.isEmpty()) {
                                     if (listaCobranzaDetalleSQLiteEntity.get(j).getCobranza_id().equals("1")) {
                                         String resultadoWS="0";
                                         ArrayList<CobranzaDetalleSQLiteEntity> ListaCobranzaDetalleSQLiteEntity = new ArrayList<>();
@@ -413,7 +487,7 @@ public class ParametrosView extends Fragment {
 
                                             /*listaleercobranza = cobranzaDetalleWSDao.LeerCobranzaRecibo(SesionEntity.imei, SesionEntity.compania_id
                                                     , SesionEntity.usuario_id, listaCobranzaDetalleSQLiteEntity.get(j).getRecibo().toString()
-                                            );*/
+                                            );
 
                                             listaleercobranza=formulasController.ObtenerListaConvertidaCobranzaDetalleSQLite(
                                                     getContext(),
@@ -489,241 +563,120 @@ public class ParametrosView extends Fragment {
 
 
                             }
-                        }
-
-                        //Envio Cobranza Detalle a WS (Parcial)
-                        ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity = new ArrayList<>();
-                        listaCobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendientesEnvioParcial(SesionEntity.compania_id, SesionEntity.usuario_id);
-                        if (!(listaCobranzaDetalleSQLiteEntity.isEmpty())) {
-
-                            for (int j = 0; j < listaCobranzaDetalleSQLiteEntity.size(); j++) {
-                                String chkwsdepositorecibido = "0";
-                                ArrayList<CobranzaDetalleSQLiteEntity> nuevalista = new ArrayList<>();
-                                CobranzaDetalleSQLiteEntity cobranzaDetalleSQLiteEntity = new CobranzaDetalleSQLiteEntity();
-
-                                cobranzaDetalleSQLiteEntity.id = listaCobranzaDetalleSQLiteEntity.get(j).getId();
-                                cobranzaDetalleSQLiteEntity.cobranza_id = listaCobranzaDetalleSQLiteEntity.get(j).getCobranza_id();
-                                cobranzaDetalleSQLiteEntity.cliente_id = listaCobranzaDetalleSQLiteEntity.get(j).getCliente_id();
-                                cobranzaDetalleSQLiteEntity.compania_id = listaCobranzaDetalleSQLiteEntity.get(j).getCompania_id();
-                                cobranzaDetalleSQLiteEntity.documento_id = listaCobranzaDetalleSQLiteEntity.get(j).getDocumento_id();
-                                cobranzaDetalleSQLiteEntity.fechacobranza = listaCobranzaDetalleSQLiteEntity.get(j).getFechacobranza();
-                                cobranzaDetalleSQLiteEntity.importedocumento = listaCobranzaDetalleSQLiteEntity.get(j).getImportedocumento();
-                                cobranzaDetalleSQLiteEntity.saldocobrado = listaCobranzaDetalleSQLiteEntity.get(j).getSaldocobrado();
-                                cobranzaDetalleSQLiteEntity.nuevosaldodocumento = listaCobranzaDetalleSQLiteEntity.get(j).getNuevosaldodocumento();
-                                cobranzaDetalleSQLiteEntity.recibo = listaCobranzaDetalleSQLiteEntity.get(j).getRecibo();
-                                cobranzaDetalleSQLiteEntity.saldodocumento = listaCobranzaDetalleSQLiteEntity.get(j).getSaldodocumento();
-                                cobranzaDetalleSQLiteEntity.chkbancarizado = listaCobranzaDetalleSQLiteEntity.get(j).getChkbancarizado();
-                                cobranzaDetalleSQLiteEntity.motivoanulacion = listaCobranzaDetalleSQLiteEntity.get(j).getMotivoanulacion();
-                                cobranzaDetalleSQLiteEntity.chkqrvalidado = listaCobranzaDetalleSQLiteEntity.get(j).getChkqrvalidado();
-                                cobranzaDetalleSQLiteEntity.banco_id = listaCobranzaDetalleSQLiteEntity.get(j).getBanco_id();
-                                cobranzaDetalleSQLiteEntity.comentario = listaCobranzaDetalleSQLiteEntity.get(j).getComentario();
-                                cobranzaDetalleSQLiteEntity.pagodirecto = listaCobranzaDetalleSQLiteEntity.get(j).getPagodirecto();
-                                nuevalista.add(cobranzaDetalleSQLiteEntity);
-
-                                String resultado="0";
-
-                                chkwsdepositorecibido=CobranzaRepository.EnviarReciboWsRetrofit(
-                                        cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(listaCobranzaDetalleSQLiteEntity.get(j).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
-                                        getContext(),
-                                        "UPDATE",
-                                        "0",
-                                        listaCobranzaDetalleSQLiteEntity.get(j).getComentario(),
-                                        listaCobranzaDetalleSQLiteEntity.get(j).getBanco_id(),
-                                        "1"
-                                );
-                                //chkwsdepositorecibido=String.valueOf(resultado);
-
-                                if (chkwsdepositorecibido.equals("1")) {
-                                    cobranzaDetalleSQLiteDao.ActualizaConexionWSDepositoCobranzaDetalle(
-                                            cobranzaDetalleSQLiteEntity.recibo,
-                                            SesionEntity.compania_id,
-                                            SesionEntity.usuario_id,
-                                            chkwsdepositorecibido
-                                    );
-                                }
-
-                            }
-
-
-                        }
-
-                        //Envio de QRValidados Pendientes
-                        ArrayList<CobranzaDetalleSQLiteEntity> listaQRvalidadosPendientes = new ArrayList<>();
-                        listaQRvalidadosPendientes = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleQRValidadoWS(SesionEntity.compania_id, SesionEntity.usuario_id);
-
-                        for (int l = 0; l < listaQRvalidadosPendientes.size(); l++) {
-                            String resultadowsqrvalidado = "0";
-                            CobranzaDetalleSQLiteEntity cobranzaDetalleSQLiteEntity = new CobranzaDetalleSQLiteEntity();
-                            ArrayList<CobranzaDetalleSQLiteEntity> listadoCobranzaDetalleSQLiteEntity = new ArrayList<>();
-
-                            cobranzaDetalleSQLiteEntity.id = listaQRvalidadosPendientes.get(l).getId();
-                            cobranzaDetalleSQLiteEntity.cobranza_id = listaQRvalidadosPendientes.get(l).getCobranza_id();
-                            cobranzaDetalleSQLiteEntity.cliente_id = listaQRvalidadosPendientes.get(l).getCliente_id();
-                            cobranzaDetalleSQLiteEntity.compania_id = listaQRvalidadosPendientes.get(l).getCompania_id();
-                            cobranzaDetalleSQLiteEntity.documento_id = listaQRvalidadosPendientes.get(l).getDocumento_id();
-                            cobranzaDetalleSQLiteEntity.fechacobranza = listaQRvalidadosPendientes.get(l).getFechacobranza();
-                            cobranzaDetalleSQLiteEntity.importedocumento = listaQRvalidadosPendientes.get(l).getImportedocumento();
-                            cobranzaDetalleSQLiteEntity.saldocobrado = listaQRvalidadosPendientes.get(l).getSaldocobrado();
-                            cobranzaDetalleSQLiteEntity.nuevosaldodocumento = listaQRvalidadosPendientes.get(l).getNuevosaldodocumento();
-                            cobranzaDetalleSQLiteEntity.recibo = listaQRvalidadosPendientes.get(l).getRecibo();
-                            cobranzaDetalleSQLiteEntity.saldodocumento = listaQRvalidadosPendientes.get(l).getSaldodocumento();
-                            cobranzaDetalleSQLiteEntity.chkbancarizado = listaQRvalidadosPendientes.get(l).getChkbancarizado();
-                            cobranzaDetalleSQLiteEntity.motivoanulacion = listaQRvalidadosPendientes.get(l).getMotivoanulacion();
-                            cobranzaDetalleSQLiteEntity.chkqrvalidado = listaQRvalidadosPendientes.get(l).getChkqrvalidado();
-                            cobranzaDetalleSQLiteEntity.banco_id = listaQRvalidadosPendientes.get(l).getBanco_id();
-                            cobranzaDetalleSQLiteEntity.comentario = listaQRvalidadosPendientes.get(l).getComentario();
-                            cobranzaDetalleSQLiteEntity.pagodirecto = listaQRvalidadosPendientes.get(l).getPagodirecto();
-
-                            listadoCobranzaDetalleSQLiteEntity.add(cobranzaDetalleSQLiteEntity);
-
-                            //resultadowsqrvalidado = cobranzaDetalleWSDao.ActualizarRecibo(listadoCobranzaDetalleSQLiteEntity
-                            //        , SesionEntity.imei, SesionEntity.usuario_id, listaQRvalidadosPendientes.get(l).getComentario(), SesionEntity.fuerzatrabajo_id, listaQRvalidadosPendientes.get(l).getBanco_id());
-                            formulasController=new FormulasController(getContext());
-
-                            resultadowsqrvalidado=CobranzaRepository.EnviarReciboWsRetrofit(
-                                    cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(listaQRvalidadosPendientes.get(l).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
-                                    getContext(),
-                                    "UPDATE",
-                                    "0",
-                                    listaQRvalidadosPendientes.get(l).getComentario(),
-                                    listaQRvalidadosPendientes.get(l).getBanco_id(),
-                                    "1"
-                            );
-
-
-                            if (resultadowsqrvalidado.equals("1")) {
-                                cobranzaDetalleSQLiteDao.ActualizaWSQRValidadoCobranzaDetalle(
-                                        listaQRvalidadosPendientes.get(l).getRecibo(),
-                                        SesionEntity.compania_id,
-                                        SesionEntity.usuario_id,
-                                        resultadowsqrvalidado
-                                );
-                            }
-                        }
-
-                        //Envio de Documentos Anulados Pendientes
-                        ArrayList<CobranzaCabeceraSQLiteEntity> listaCobranzaCabeceraSQLiteEntity2 = new ArrayList<>();
-                        listaCobranzaCabeceraSQLiteEntity2 = cobranzaCabeceraSQLiteDao.ObtenerCobranzaCabeceraPendientesAnulacionWS(SesionEntity.compania_id, SesionEntity.usuario_id);
-                        String reswsanuladep = "0";
-                        int resultadocabecera = 0;
-                        for (int y = 0; y < listaCobranzaCabeceraSQLiteEntity2.size(); y++) {
-                            String motivoanulacion = listaCobranzaCabeceraSQLiteEntity2.get(y).getComentarioanulado();
-
-                        }
-                        ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity2 = new ArrayList<>();
-                        listaCobranzaDetalleSQLiteEntity2 = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleActualizacionPendiente(SesionEntity.usuario_id, SesionEntity.compania_id);
-                        String reswsliberadetalle = "0";
-
-                        for (int j = 0; j < listaCobranzaDetalleSQLiteEntity2.size(); j++) {
-
-                            reswsliberadetalle=CobranzaRepository.EnviarReciboWsRetrofit(
-                                    cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
-                                            listaCobranzaDetalleSQLiteEntity2.get(j).getRecibo(),
-                                            SesionEntity.compania_id,
-                                            SesionEntity.fuerzatrabajo_id),
-                                    getContext(),
-                                    "UPDATE",
-                                    "1",
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getComentario(),
-                                    listaCobranzaDetalleSQLiteEntity2.get(j).getBanco_id(),
-                                    "0"
-                            );
-
-                            if (reswsliberadetalle.equals("1")) {
-                                cobranzaDetalleSQLiteDao.ActualizaWSCobranzaDetalle(
-                                        listaCobranzaDetalleSQLiteEntity2.get(j).getRecibo(),
-                                        listaCobranzaDetalleSQLiteEntity2.get(j).getCompania_id(),
-                                        listaCobranzaDetalleSQLiteEntity2.get(j).getUsuario_id(),
-                                        "0",
-                                        listaCobranzaDetalleSQLiteEntity2.get(j).getCobranza_id(),
-                                        listaCobranzaDetalleSQLiteEntity2.get(j).getBanco_id(),
-                                        listaCobranzaDetalleSQLiteEntity2.get(j).getChkdepositado(),
-                                        //listaCobranzaDetalleSQLiteEntity2.get(j).getChkwsdepositorecibido()
-                                        "0"
-
-                                );
-
-                            }
-
-                        }
-
-
-
-
+                        }*/
 
                         //CARGA DE MAESTROS
-                        listaparametrosSQLiteEntity = parametrosSQLiteDao.ObtenerParametros();
+                        /*listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
                         if (listaparametrosSQLiteEntity.isEmpty()) {
-                            parametrosSQLiteDao.LimpiarParametros();
-                            parametrosSQLiteDao.InsertaParametros("1", "CLIENTES", "0", getDateTime());
-                            parametrosSQLiteDao.InsertaParametros("2", "BANCOS", "0", getDateTime());
+                            parametrosSQLite.LimpiarParametros();
+                            parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("3", "DOCUMENTOS", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("4", "RUTA VENDEDOR", "0", getDateTime());
-                            parametrosSQLiteDao.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
-                            parametrosSQLiteDao.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
-                            parametrosSQLiteDao.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("8", "STOCK", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
-                            parametrosSQLiteDao.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("13", "CATALOGO", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("14", "DIRECCION CLIENTE", "0", getDateTime());
                             //parametrosSQLiteDao.InsertaParametros("15", "HOJA DESPACHO", "0", getDateTime());
+                        }*/
+
+                        ClienteRepository clienteRepository;
+                        ListaPrecioRepository listaPrecioRepository;
+                        // bancoRepository.getAndInsertBank(SesionEntity.imei,getContext());
+                        switch (BuildConfig.FLAVOR){
+                            case "india":
+                            case "ecuador":
+                            case "chile":
+                                 clienteRepository = new ClienteRepository();
+                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
+
+                                if (!LclientesqlSQLiteEntity.isEmpty()) {
+                                    CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
+                                    parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), getDateTime());
+                                }
+
+                                TerminoPagoWS terminoPagoWS = new TerminoPagoWS(getContext());
+                                LTPago = terminoPagoWS.getTerminoPagoWS(SesionEntity.imei);
+
+                                if (!(LTPago.isEmpty())) {
+                                    terminoPagoSQLiteDao.LimpiarTablaTerminoPago();
+                                    CantTerminoPago = registrarTerminoPagoSQLite(LTPago);
+                                    parametrosSQLite.ActualizaCantidadRegistros("5", "TÉRMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
+
+                                }
+
+                                AgenciaWS agenciaWS = new AgenciaWS(getContext());
+                                LAgencia = agenciaWS.getAgenciaWS(SesionEntity.imei);
+
+                                if (!(LAgencia.isEmpty())) {
+                                    agenciaSQLiteDao.LimpiarTablaAgencia();
+                                    CantAgencia = registrarAgenciaSQLite(LAgencia);
+                                    parametrosSQLite.ActualizaCantidadRegistros("6", "AGENCIAS", String.valueOf(CantAgencia), getDateTime());
+                                }
+
+                                listaPrecioRepository = new ListaPrecioRepository(getContext());
+                                LPDetalle = listaPrecioRepository.getListaPrecioDetalleWS(SesionEntity.imei);
+
+                                if (!(LPDetalle.isEmpty())) {
+                                    listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
+                                    CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
+                                    parametrosSQLite.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
+                                }
+
+                                RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
+                                LRutaFuerzaTrabajo = rutaFuerzaTrabajoRepository.getRutaFuerzaTrabajoWS(SesionEntity.imei);
+                                if (LRutaFuerzaTrabajo!=null) {
+                                    rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo();
+                                    CantRutaFuerzaTrabajo = registrarRutaFuerzaTrabajoSQLite(LRutaFuerzaTrabajo);
+                                    parametrosSQLite.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
+                                }
+                                MotivoVisitaWS motivoVisitaWS = new MotivoVisitaWS(getContext());
+                                LMVisita = motivoVisitaWS.getMotivoVisitaWS (SesionEntity.imei, SesionEntity.compania_id);
+                                if (!(LMVisita.isEmpty())) {
+                                    motivoVisitaSQLiteDao.LimpiarTablaMotivoVisita();
+                                    CantMotivoVisita = registrarMotivoVisita(LMVisita);
+                                    parametrosSQLite.ActualizaCantidadRegistros("17", "MOTIVO VISITA", String.valueOf(CantMotivoVisita), getDateTime());
+                                }
+                                break;
+                            case "peru":
+                                 clienteRepository = new ClienteRepository();
+                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
+
+                                if (!LclientesqlSQLiteEntity.isEmpty()) {
+                                    CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
+                                    parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), getDateTime());
+                                }
+
+                                break;
+                            case "bolivia":
+                                 clienteRepository = new ClienteRepository();
+                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
+
+                                if (!LclientesqlSQLiteEntity.isEmpty()) {
+                                    CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
+                                    parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), getDateTime());
+                                }
+                                listaPrecioRepository = new ListaPrecioRepository(getContext());
+                                LPDetalle = listaPrecioRepository.getListaPrecioDetalleWS(SesionEntity.imei);
+
+                                if (!(LPDetalle.isEmpty())) {
+                                    listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
+                                    CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
+                                    parametrosSQLite.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
+                                }
+                                break;
                         }
 
-                        BancoRepository bancoRepository = new BancoRepository(getContext());
-                        LBanco = bancoRepository.getBancoWS(SesionEntity.imei);
-                        if (!(LBanco.isEmpty())) {
-                            bancoSQLiteDAO.LimpiarTablaBanco();
-                            CantBancos = registrarBancoSQLite(LBanco);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("2", "BANCOS", String.valueOf(CantBancos), getDateTime());
-                        }
-
-                        ListaPrecioRepository listaPrecioRepository = new ListaPrecioRepository(getContext());
-                        LPDetalle = listaPrecioRepository.getListaPrecioDetalleWS(SesionEntity.imei);
-
-                        if (!(LPDetalle.isEmpty())) {
-                            listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
-                            CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
-                        }
-
-                        ClienteRepository clienteRepository = new ClienteRepository();
-                        LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
-
-                        if (!LclientesqlSQLiteEntity.isEmpty()) {
-                            CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), getDateTime());
-                        }
-
-                        TerminoPagoWS terminoPagoWS = new TerminoPagoWS(getContext());
-                        LTPago = terminoPagoWS.getTerminoPagoWS(SesionEntity.imei);
-
-                        if (!(LTPago.isEmpty())) {
-                            terminoPagoSQLiteDao.LimpiarTablaTerminoPago();
-                            CantTerminoPago = registrarTerminoPagoSQLite(LTPago);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("5", "TÉRMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
-
-                        }
-
-                        AgenciaWS agenciaWS = new AgenciaWS(getContext());
-                        LAgencia = agenciaWS.getAgenciaWS(SesionEntity.imei);
-
-                        if (!(LAgencia.isEmpty())) {
-                            agenciaSQLiteDao.LimpiarTablaAgencia();
-                            CantAgencia = registrarAgenciaSQLite(LAgencia);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("6", "AGENCIAS", String.valueOf(CantAgencia), getDateTime());
-                        }
 
 
-                        RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
-                        LRutaFuerzaTrabajo = rutaFuerzaTrabajoRepository.getRutaFuerzaTrabajoWS(SesionEntity.imei);
-                        if (LRutaFuerzaTrabajo!=null) {
-                            rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo();
-                            CantRutaFuerzaTrabajo = registrarRutaFuerzaTrabajoSQLite(LRutaFuerzaTrabajo);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
-                        }
+
+
 
                         ////////////////////////////YA ESTA EN EL MAESTRO DE DOCUMENTOS/////////////
                         /*
@@ -744,18 +697,12 @@ public class ParametrosView extends Fragment {
                         LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
                         if (!(LclientesqlSQLiteEntity.isEmpty())) {
                             CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
                         }
 
                     }
                     else if (argumento.equals("BANCOS")) {
-                        BancoRepository bancoRepository = new BancoRepository(getContext());
-                        LBanco = bancoRepository.getBancoWS(SesionEntity.imei);
-                        if (!(LBanco.isEmpty())) {
-                            bancoSQLiteDAO.LimpiarTablaBanco();
-                            CantBancos = registrarBancoSQLite(LBanco);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("2", "BANCOS", String.valueOf(CantBancos), getDateTime());
-                        }
+                        bancoRepository.getAndInsertBank(SesionEntity.imei,getContext());
                     }
                     else if (argumento.equals("TÉRMINO PAGO")) {
                         TerminoPagoWS terminoPagoWS = new TerminoPagoWS(getContext());
@@ -764,7 +711,7 @@ public class ParametrosView extends Fragment {
                         if (!(LTPago.isEmpty())) {
                             terminoPagoSQLiteDao.LimpiarTablaTerminoPago();
                             CantTerminoPago = registrarTerminoPagoSQLite(LTPago);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("5", "TÉRMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("5", "TÉRMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
 
                         }
 
@@ -777,7 +724,7 @@ public class ParametrosView extends Fragment {
                         if (!(LAgencia.isEmpty())) {
                             agenciaSQLiteDao.LimpiarTablaAgencia();
                             CantAgencia = registrarAgenciaSQLite(LAgencia);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("6", "AGENCIAS", String.valueOf(CantAgencia), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("6", "AGENCIAS", String.valueOf(CantAgencia), getDateTime());
                         }
                     }
                     else if (argumento.equals("LISTA PRECIO")) {
@@ -787,7 +734,7 @@ public class ParametrosView extends Fragment {
                         if (!(LPDetalle.isEmpty())) {
                             listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
                             CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
                         }
                     }
                     else if (argumento.equals("STOCK")) {
@@ -797,7 +744,7 @@ public class ParametrosView extends Fragment {
                         if (!(LStock.isEmpty())) {
                             stockSQLiteDao.LimpiarTablaStock();
                             CantStock = registrarStockSQLite(LStock);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("8", "STOCK", String.valueOf(CantStock), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("8", "STOCK", String.valueOf(CantStock), getDateTime());
                         }
                     }
                     else if (argumento.equals("LISTA PROMOCION")) {
@@ -807,7 +754,7 @@ public class ParametrosView extends Fragment {
                     if (!(LPromocion.isEmpty())) {
                         listaPromocionSQLiteDao.LimpiarTablaListaPromocion();
                         CantListaPromocion = registrarListaPromocionSQLite(LPromocion);
-                        parametrosSQLiteDao.ActualizaCantidadRegistros("9", "LISTA PROMOCION", String.valueOf(CantListaPromocion), getDateTime());
+                        parametrosSQLite.ActualizaCantidadRegistros("9", "LISTA PROMOCION", String.valueOf(CantListaPromocion), getDateTime());
                     }
                     }
                     else if (argumento.equals("PROMOCION CABECERA")) {
@@ -818,7 +765,7 @@ public class ParametrosView extends Fragment {
                         if (!(LPCabecera.isEmpty())) {
                             promocionCabeceraSQLiteDao.LimpiarTablaPromocionCabecera();
                             CantPromocionCabecera = registrarPromocionCabeceraSQLite(LPCabecera);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("10", "PROMOCION CABECERA", String.valueOf(CantPromocionCabecera), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("10", "PROMOCION CABECERA", String.valueOf(CantPromocionCabecera), getDateTime());
                         }
                     }
                     else if (argumento.equals("PROMOCION DETALLE")) {
@@ -827,7 +774,7 @@ public class ParametrosView extends Fragment {
                         if (!(LPromocionDetalle.isEmpty())) {
                             promocionDetalleSQLiteDao.LimpiarTablaPromocionDetalle();
                             CantPromocionDetalle = registrarPromocionDetalleSQLite(LPromocionDetalle);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("11", "PROMOCION DETALLE", String.valueOf(CantPromocionDetalle), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("11", "PROMOCION DETALLE", String.valueOf(CantPromocionDetalle), getDateTime());
                         }
                     }
                     else if (argumento.equals("RUTA FUERZATRABAJO")) {
@@ -839,11 +786,32 @@ public class ParametrosView extends Fragment {
                         if (!(LRutaFuerzaTrabajo.isEmpty())) {
                             rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo();
                             CantRutaFuerzaTrabajo = registrarRutaFuerzaTrabajoSQLite(LRutaFuerzaTrabajo);
-                            parametrosSQLiteDao.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
                         }
+                    }else if (argumento.equals("MOTIVO VISITA")) {
+                        MotivoVisitaWS motivoVisitaWS = new MotivoVisitaWS(getContext());
+                        LMVisita = motivoVisitaWS.getMotivoVisitaWS (SesionEntity.imei, SesionEntity.compania_id);
+                        Log.e("REOS","ParametrosView.CargaParametroIndividual-LMVisita.size(): "+LMVisita.size());
+                        if (!(LMVisita.isEmpty())) {
+                            motivoVisitaSQLiteDao.LimpiarTablaMotivoVisita();
+                            CantMotivoVisita = registrarMotivoVisita(LMVisita);
+                            parametrosSQLite.ActualizaCantidadRegistros("17", "MOTIVO VISITA", String.valueOf(CantMotivoVisita), getDateTime());
+                        }
+
+                }else if (argumento.equals("MOTIVO VISITA")) {
+                    MotivoVisitaWS motivoVisitaWS = new MotivoVisitaWS(getContext());
+                    LMVisita = motivoVisitaWS.getMotivoVisitaWS (SesionEntity.imei, SesionEntity.compania_id);
+                    Log.e("REOS","ParametrosView.CargaParametroIndividual-LMVisita.size(): "+LMVisita.size());
+                    if (!(LMVisita.isEmpty())) {
+                        motivoVisitaSQLiteDao.LimpiarTablaMotivoVisita();
+                        CantMotivoVisita = registrarMotivoVisita(LMVisita);
+                        parametrosSQLite.ActualizaCantidadRegistros("17", "MOTIVO VISITA", String.valueOf(CantMotivoVisita), getDateTime());
                     }
+                }else if (argumento.equals("PRICE LIST")) {
+
 
                     }
+                }
 
             } catch (Exception e){
                 e.printStackTrace();
@@ -856,27 +824,22 @@ public class ParametrosView extends Fragment {
         {
             getActivity().setTitle("Parametros");
             ArrayList<ParametrosSQLiteEntity> listaparametrosSQlentity = new ArrayList<ParametrosSQLiteEntity>();
-            listaparametrosSQlentity=parametrosSQLiteDao.ObtenerParametros();
+            listaparametrosSQlentity= parametrosSQLite.ObtenerParametros();
 
-            listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQlentity));
+            listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQlentity,false));
             listviewparametro.setAdapter(listaParametrosAdapter);
-
-
-
 
             pd.dismiss();
             Toast.makeText(getContext(), "Parametros Actualizados...", Toast.LENGTH_SHORT).show();
-
 
         }
 
         protected void ObtenerRecibosPendientes() {
             ArrayList<ListaHistoricoCobranzaEntity> ListaCobranzaDetalleSQLiteEntity = new ArrayList<>();
-            //HistoricoCobranzaWSDao historicoCobranzaWSDao = new HistoricoCobranzaWSDao();
-
-            //ListaCobranzaDetalleSQLiteEntity = historicoCobranzaWSDao.obtenerHistoricoCobranzaPendiente(SesionEntity.imei, SesionEntity.compania_id, "", "", "Pendiente_Deposito", "01-01-0001", SesionEntity.usuario_id, "");
+            CobranzaRepository cobranzaRepository=new CobranzaRepository(getContext());
+            //            //ListaCobranzaDetalleSQLiteEntity = historicoCobranzaWSDao.obtenerHistoricoCobranzaPendiente(SesionEntity.imei, SesionEntity.compania_id, "", "", "Pendiente_Deposito", "01-01-0001", SesionEntity.usuario_id, "");
             HistoricoCobranzaWS historicoCobranzaWS=new HistoricoCobranzaWS(getContext());
-            ListaCobranzaDetalleSQLiteEntity = historicoCobranzaWS.getHistoricoCobranza
+            ListaCobranzaDetalleSQLiteEntity = cobranzaRepository.getHistoricoCobranza
                     (
                             SesionEntity.imei,
                             //SesionEntity.compania_id,
@@ -889,6 +852,7 @@ public class ParametrosView extends Fragment {
                             "PENDIENTE_DEPOSITO"
                             //SesionEntity.fuerzatrabajo_id,
                             //"''"
+                            ,""
                     );
             if (!ListaCobranzaDetalleSQLiteEntity.isEmpty()) {
                 //resultado="1";
@@ -925,48 +889,19 @@ public class ParametrosView extends Fragment {
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getBanco_id(),
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getChkwsrecibido(),
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getEstadoqr(),
-                                        "0",
+                                        "N",
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getDepositodirecto(),
-                                        ListaCobranzaDetalleSQLiteEntity.get(i).getPagopos()
+                                        ListaCobranzaDetalleSQLiteEntity.get(i).getPagopos(),
+                                        ListaCobranzaDetalleSQLiteEntity.get(i).getCodesap(),
+                                        "",
+                                        ""
                                 );
                     }
                 }
             }
-
-        }
-
-
-
-    }
-
-
-
-
-    // TODO: Rename method, update argument and hook method into UI event
-   /* public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }*/
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        ListenerBackPress.setCurrentFragment("FormParametrosView");
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-*/
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -985,16 +920,6 @@ public class ParametrosView extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String tag,Object dato);
@@ -1022,29 +947,33 @@ public class ParametrosView extends Fragment {
 
         return clienteRepository.countCustomer();
     }
-
-    public int registrarBancoSQLite(List<BancoSQLiteEntity> Lista)
+    public int registrarMotivoVisita(List<MotivoVisitaSQLiteEntity> Lista)
     {
-        bancoSQLiteDAO2 = new BancoSQLiteDAO(getContext());
+        motivoVisitaSQLiteDao = new MotivoVisitaSQLiteDao(getContext());
         int resultado=0;
         try {
 
             for (int i = 0; i < Lista.size(); i++) {
-                bancoSQLiteDAO2.InsertaBanco(
-                        Lista.get(i).getBanco_id(),
+                motivoVisitaSQLiteDao.InsertaMotivoVisita(
                         Lista.get(i).getCompania_id(),
-                        Lista.get(i).getNombrebanco());
+                        Lista.get(i).getFuerzatrabajo_id(),
+                        Lista.get(i).getUsuario_id(),
+                        Lista.get(i).getCode(),
+                        Lista.get(i).getName(),
+                        Lista.get(i).getType()
+
+                );
             }
-            resultado=bancoSQLiteDAO2.ObtenerCantidadBancos();
+            resultado=motivoVisitaSQLiteDao.ObtenerCantidadMotivoVisita();
         }catch (Exception e) {
             // TODO: handle exception
             System.out.println(e.getMessage());
         }
         return resultado;
-
-
     }
-/*  COMENTADO 05/09/201 08:23AM
+
+
+/*  COMENTADO 05/09/21 08:23AM
     public int registrarDocumentoDeudaSQLite(List<DocumentoDeudaSQLiteEntity> Lista)
     {
         documentoSQLite = new DocumentoSQLite(getContext());
@@ -1334,29 +1263,6 @@ public class ParametrosView extends Fragment {
         return resultado;
     }
 
-    public int registrarCatalogoSQLite(List<CatalogoSQLiteEntity> Lista)
-    {
-        catalogoSQLiteDao = new CatalogoSQLiteDao(getContext());
-        int resultado=0;
-        try {
-
-            for (int i = 0; i < Lista.size(); i++) {
-                catalogoSQLiteDao.InsertaCatalogo(
-                        Lista.get(i).getCompania_id(),
-                        Lista.get(i).getCatalogo_id(),
-                        Lista.get(i).getCatalogo(),
-                        Lista.get(i).getRuta()
-                );
-            }
-            resultado=catalogoSQLiteDao.ObtenerCantidadCatalogos();
-        }catch (Exception e) {
-            // TODO: handle exception
-            System.out.println(e.getMessage());
-        }
-        return resultado;
-    }
-
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
@@ -1406,6 +1312,63 @@ public class ParametrosView extends Fragment {
 
     }
 
+
+    public void ObtenerParametrosCheck()
+    {
+        ArrayList<ParametrosSQLiteEntity> listaparametrosSQlentity = new ArrayList<ParametrosSQLiteEntity>();
+        listaparametrosSQlentity= parametrosSQLite.ObtenerParametros();
+
+        listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQlentity,true));
+        listviewparametro.setAdapter(listaParametrosAdapter);
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.menu_parametros, menu);
+        seleccionar_todo = menu.findItem(R.id.seleccionar_todo);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.seleccionar_todo:
+                alertaSeleccionarTodo("Esta Seguro de Seleccionar Todos los parametros?").show();
+                return false;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private Dialog alertaSeleccionarTodo(String texto) {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_advertencia);
+
+        TextView textMsj = dialog.findViewById(R.id.tv_texto);
+        textMsj.setText(texto);
+
+        ImageView image = dialog.findViewById(R.id.image);
+
+        image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+
+        dialogButtonOK.setOnClickListener(v -> {
+            ObtenerParametrosCheck();
+            dialog.dismiss();
+        });
+        dialogButtonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
 
 
 }

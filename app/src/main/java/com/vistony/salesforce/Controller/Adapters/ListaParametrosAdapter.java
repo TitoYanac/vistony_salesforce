@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.vistony.salesforce.Entity.Adapters.ListaParametrosEntity;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.View.ParametrosView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,6 +90,8 @@ public class ListaParametrosAdapter  extends ArrayAdapter<ListaParametrosEntity>
         }
 
         );
+
+
 
         return convertView;
     }

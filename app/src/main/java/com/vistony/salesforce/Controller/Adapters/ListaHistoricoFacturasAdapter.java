@@ -162,7 +162,8 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
                         lead.getNombrechofer(),
                         lead.getFechaprogramaciondespacho(),
                         lead.getEstadodespacho(),
-                        lead.getMotivoestadodespacho()
+                        lead.getMotivoestadodespacho(),
+                        lead.getTelefonochofer()
                 ).show();
             }
         });
@@ -222,7 +223,15 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
         return  dialog;
     }
 
-    private Dialog alertamostrardespacho(String titulo,String nrofactura,String nombrechofer,String fechaprogramaciondespacho,String estadodespacho,String motivoestado) {
+    private Dialog alertamostrardespacho(
+            String titulo,
+            String nrofactura,
+            String nombrechofer,
+            String fechaprogramaciondespacho,
+            String estadodespacho,
+            String motivoestado,
+            String telefono
+    ) {
 
         final Dialog dialog = new Dialog(Context);
         dialog.setContentView(R.layout.layout_dialog_historico_facturas_despacho);
@@ -233,6 +242,7 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
         TextView tv_historico_facturas_despacho_fechaprogramaciondespacho = dialog.findViewById(R.id.tv_historico_facturas_despacho_fechaprogramaciondespacho);
         TextView tv_historico_facturas_despacho_estadodespacho = dialog.findViewById(R.id.tv_historico_facturas_despacho_estadodespacho);
         TextView tv_historico_facturas_despacho_motivoestado = dialog.findViewById(R.id.tv_historico_facturas_despacho_motivoestado);
+        TextView tv_historico_facturas_despacho_telefono = dialog.findViewById(R.id.tv_historico_facturas_despacho_telefono);
         ImageView imv_historico_facturacion_despacho_historial = dialog.findViewById(R.id.imv_historico_facturacion_despacho_historial);
 
 
@@ -242,7 +252,7 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
         tv_historico_facturas_despacho_fechaprogramaciondespacho.setText(fechaprogramaciondespacho);
         tv_historico_facturas_despacho_estadodespacho.setText(estadodespacho);
         tv_historico_facturas_despacho_motivoestado.setText(motivoestado);
-
+        tv_historico_facturas_despacho_telefono.setText(telefono);
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
 
 

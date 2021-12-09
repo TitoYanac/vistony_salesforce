@@ -10,11 +10,9 @@ import androidx.annotation.NonNull;
 
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitaEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class VisitaSQLite {
     SqliteController sqliteController;

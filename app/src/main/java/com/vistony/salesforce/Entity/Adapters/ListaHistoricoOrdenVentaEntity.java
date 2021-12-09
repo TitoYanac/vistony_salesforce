@@ -11,6 +11,35 @@ public class ListaHistoricoOrdenVentaEntity implements Serializable {
     public String ApprovalStatus;
     public String ApprovalCommentary;
     public String DocNum;
+    public boolean recepcionERPOV;
+    public String comentariows;
+    public boolean envioERPOV;
+
+
+
+    public boolean isRecepcionERPOV() {
+        return recepcionERPOV;
+    }
+
+    public void setRecepcionERPOV(boolean recepcionERPOV) {
+        this.recepcionERPOV = recepcionERPOV;
+    }
+
+    public String getComentariows() {
+        return comentariows;
+    }
+
+    public void setComentariows(String comentariows) {
+        this.comentariows = comentariows;
+    }
+
+    public boolean isEnvioERPOV() {
+        return envioERPOV;
+    }
+
+    public void setEnvioERPOV(boolean envioERPOV) {
+        this.envioERPOV = envioERPOV;
+    }
 
     public String getSalesOrderID() {
         return SalesOrderID;

@@ -80,6 +80,9 @@ public class ListaHistoricoCobranzaDao {
                         ,Lista.get(i).getChkwsrecibido()
                         ,Lista.get(i).getDepositodirecto()
                         ,Lista.get(i).getPagopos()
+                        ,Lista.get(i).getCodesap()
+                        ,Lista.get(i).getMensajeWS()
+                        ,Lista.get(i).getHoracobranza()
                 ));
             }
         }catch (Exception e)

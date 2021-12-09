@@ -6,7 +6,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoFacturasEntity;
 import java.util.List;
 
 public class HistoricoFacturasEntityResponse {
-    @SerializedName("Pedidos_Leer_FacturaCResult")
+    @SerializedName("Documents")
     //@SerializedName("data")
 
     private List<HistoricoFacturasEntity> historicoFacturasEntity;

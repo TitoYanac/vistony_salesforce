@@ -35,7 +35,7 @@ public class LeadClienteViewModel extends ViewModel {
 
         temp.setValue("init");
         insertLeadSqlite(params,context);
-        RequestBody requestBody=RequestBody.create(MediaType.parse("application/json; charset=utf-8"),("{ \"Leads\":["+new JSONObject(params).toString()+"]}"));
+        RequestBody requestBody=RequestBody.create(("{ \"Leads\":["+new JSONObject(params).toString()+"]}"),MediaType.parse("application/json; charset=utf-8"));
         Config.getClient().create(Api.class).sendLead("http://169.47.196.209/v1.0/api/customers",requestBody).enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {

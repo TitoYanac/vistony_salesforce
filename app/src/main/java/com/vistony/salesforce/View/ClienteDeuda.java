@@ -54,7 +54,7 @@ public class ClienteDeuda extends Fragment implements SearchView.OnQueryTextList
     TextView tv_cantidad_cliente_cabecera,tv_monto_cliente_cabecera,tv_monto_cliente_cabecera_dolares;
     int cantidad_cliente_cabecera;
     private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=2;
-    ConfigImpresoraView configImpresoraView;
+    //ConfigImpresoraView configImpresoraView;
 
     public ClienteDeuda() {
         // Required empty public constructor

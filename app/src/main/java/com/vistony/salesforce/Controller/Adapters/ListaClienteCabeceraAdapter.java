@@ -1,10 +1,6 @@
 package com.vistony.salesforce.Controller.Adapters;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 /*
@@ -19,13 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -135,6 +129,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
 
             holder = new ListaClienteCabeceraAdapter.ViewHolder();
 
+           
             holder.tv_clienteid = (TextView) convertView.findViewById(R.id.tv_cliente_id);
             holder.tv_nombrecliente = (TextView) convertView.findViewById(R.id.tv_nombrecliente);
             holder.tv_saldo_cliente_cabecera = (TextView) convertView.findViewById(R.id.tv_saldo_cliente_cabecera);
@@ -163,6 +158,11 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         final ListaClienteCabeceraEntity lead = getItem(position);
 
         // Setup.
+
+        Log.e("Percona=>","====================");
+        Log.e("Percona=>",""+lead.getCliente_id());
+        Log.e("Percona=>","====================");
+
         holder.tv_clienteid.setText(lead.getCliente_id());
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
         holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));

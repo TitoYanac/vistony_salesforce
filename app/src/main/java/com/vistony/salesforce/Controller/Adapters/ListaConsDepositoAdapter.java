@@ -119,7 +119,7 @@ public class ListaConsDepositoAdapter extends
         holder.tv_saldo.setText(Convert.currencyForView(lead.getSaldo()));
         holder.tv_nuevo_saldo.setText(Convert.currencyForView(lead.getNuevosaldo()));
 
-        if(lead.getTv_txtbancarizado().equals("1"))
+        if(lead.getTv_txtbancarizado().equals("Y"))
         {
             holder.tv_txtbancarizado.setText("SI");
         }
@@ -128,7 +128,7 @@ public class ListaConsDepositoAdapter extends
                 holder.tv_txtbancarizado.setText("NO");
             }
 
-        if(lead.getTv_txtpagodirecto().equals("1"))
+        if(lead.getTv_txtpagodirecto().equals("Y"))
         {
             holder.tv_txtpagodirecto.setText("SI");
         }
@@ -169,7 +169,7 @@ public class ListaConsDepositoAdapter extends
                                                                  ArraylistaConsDepositoEntity.get(j).setCheckbox(true);
                                                              }
                                                              //evalua si tiene el check y el recibo es bancarizado
-                                                             if(ArraylistaConsDepositoEntity.get(j).isCheckbox()&&ArraylistaConsDepositoEntity.get(j).getTv_txtbancarizado().equals("1")
+                                                             if(ArraylistaConsDepositoEntity.get(j).isCheckbox()&&ArraylistaConsDepositoEntity.get(j).getTv_txtbancarizado().equals("Y")
                                                              )
                                                              {
                                                                  //validacheck="1";
@@ -177,15 +177,15 @@ public class ListaConsDepositoAdapter extends
                                                                  cantbancarizado++;
 
                                                              }
-                                                             if(ArraylistaConsDepositoEntity.get(j).getTv_txtpagodirecto().equals("1")&&ArraylistaConsDepositoEntity.get(j).isCheckbox()
+                                                             if(ArraylistaConsDepositoEntity.get(j).getTv_txtpagodirecto().equals("Y")&&ArraylistaConsDepositoEntity.get(j).isCheckbox()
                                                                  //&&ArraylistaConsDepositoEntity.get(j).isCheckbox()
                                                              )
                                                              {
                                                                  cantpagodirecto++;
                                                              }
                                                              else if(
-                                                                     ArraylistaConsDepositoEntity.get(j).getTv_txtbancarizado().equals("0")
-                                                                             && ArraylistaConsDepositoEntity.get(j).getTv_txtpagodirecto().equals("0")
+                                                                     ArraylistaConsDepositoEntity.get(j).getTv_txtbancarizado().equals("N")
+                                                                             && ArraylistaConsDepositoEntity.get(j).getTv_txtpagodirecto().equals("N")
                                                                              &&ArraylistaConsDepositoEntity.get(j).isCheckbox()
                                                              )
                                                              {
@@ -200,7 +200,7 @@ public class ListaConsDepositoAdapter extends
                                                          for(int l=0;l<ArraylistaConsDepositoEntity.size();l++)
                                                          {
                                                              //evalua si tiene el check y el recibo no es bancarizado, de ser positivo aumenta a p
-                                                             if(ArraylistaConsDepositoEntity.get(l).isCheckbox()&& ArraylistaConsDepositoEntity.get(l).getTv_txtbancarizado().equals("0")
+                                                             if(ArraylistaConsDepositoEntity.get(l).isCheckbox()&& ArraylistaConsDepositoEntity.get(l).getTv_txtbancarizado().equals("N")
                                                              )
                                                              {
                                                                  cantcobrosnobancarizados++;

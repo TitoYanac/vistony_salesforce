@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPromocionEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PromocionCabeceraEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -29,8 +30,8 @@ public class PromocionCabeceraWS {
     public ArrayList<PromocionCabeceraSQLiteEntity> getPromocionCabeceraWS(String Imei){
         Api api = Config.getClient().create(Api.class);
 
-        Call<PromocionCabeceraEntityResponse> call = api.getPromomocionCabecera("https://graph.vistony.pe/ListaPromoC?imei="+Imei);
-
+        //Call<PromocionCabeceraEntityResponse> call = api.getPromomocionCabecera("https://graph.vistony.pe/ListaPromoC?imei="+Imei);
+        Call<PromocionCabeceraEntityResponse> call = api.getPromomocionCabecera(Imei);
         try
         {
             Response<PromocionCabeceraEntityResponse> response= call.execute();

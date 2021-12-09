@@ -3,13 +3,12 @@ package com.vistony.salesforce.Dao.Retrofit;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import com.google.gson.JsonSyntaxException;
 import com.vistony.salesforce.BuildConfig;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Controller.Retrofit.Api;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 import org.json.JSONException;
 import java.io.IOException;
@@ -29,20 +28,21 @@ public class VersionViewModel {
     public MutableLiveData<Object> getVs(String imei,String version,Context context){
         SharedPreferences statusImei = context.getSharedPreferences("imeiRegister", Context.MODE_PRIVATE);
 
-        String endPoint="http://169.47.196.209/test";
+        String endPoint="http://169.47.196.209";
 
-        if(BuildConfig.FLAVOR.equals("india")){
-            endPoint="http://169.47.196.209/v1.0/api/version?imei="+imei+"&app="+md5(context.getPackageName()); // lod e la india es el lead y esta en SAP DB peru
-        }else if(BuildConfig.FLAVOR.equals("chile")){
-            switch(BuildConfig.BUILD_TYPE){
-                case "release":
-                    endPoint="http://169.47.196.209/cl/api/version?imei="+imei+"&token="+md5(context.getPackageName()+"."+BuildConfig.BUILD_TYPE);
-                    break;
-                case "develop":
-                case "debug":
-                    endPoint="http://169.47.196.209/cl.test/api/version?imei="+imei+"&token="+md5(context.getPackageName()+"."+BuildConfig.BUILD_TYPE);
-                    break;
-            }
+        switch(BuildConfig.FLAVOR){
+            case "india":
+                endPoint=endPoint+"/v1.0/api/version?imei="+imei+"&app="+md5(context.getPackageName()); //India es el lead y esta en SAP DB peru backup
+                break;
+            case "chile":
+            case "ecuador":
+            case "bolivia":
+            case "peru":
+                String hashMd5=context.getPackageName()+"."+BuildConfig.BUILD_TYPE;
+                Log.e("El hash ess","=>"+hashMd5);
+                endPoint=endPoint+BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/version?imei="+imei+"&token="+md5(hashMd5);
+                Log.e("REOS","VersionViewModel-getVs-endPoint:"+endPoint);
+                break;
         }
 
         Config.getClient().create(Api.class).getVs(endPoint).enqueue(new Callback<VersionEntity>() {

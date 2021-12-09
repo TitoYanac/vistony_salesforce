@@ -72,8 +72,7 @@
                 <TextView
                     android:id="@+id/tv_historico_facturas_despacho_nombrechofer"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_height="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginLeft="120dp"
                     android:textStyle="bold"
@@ -135,6 +134,24 @@
                     android:textStyle="bold"
                     android:text="Motivo1"
                     android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/lbl_historico_facturas_despacho_telefono"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginLeft="20dp"
+                    android:text="Telefono:"
+                    android:textSize="18dp" />
+                <TextView
+                    android:id="@+id/tv_historico_facturas_despacho_telefono"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    android:layout_marginLeft="120dp"
+                    android:textStyle="bold"
+                    android:text="Telefono1"
+                    android:textSize="18dp" />
 
                 <ImageView
                     android:id="@+id/imv_historico_facturacion_despacho_historial"
@@ -142,6 +159,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="220dp"
                     android:layout_marginTop="60dp"
+                    android:visibility="invisible"
                     app:srcCompat="@drawable/ic_baseline_article_24" />
 
             </RelativeLayout>

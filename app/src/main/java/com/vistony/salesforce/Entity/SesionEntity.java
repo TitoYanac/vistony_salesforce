@@ -10,11 +10,9 @@ public class SesionEntity {
     public static String usuario_id="";
     public static String recibo="";
     public static String imagen="";
-    public static String loginSesion="";
-    public static String listaConsDeposito="";
+    public static String loginSesion="0";
+    public static String listaConsDeposito="0";
     public static String pagodirecto="";
-    public static String urlFormMicrosft="";
-    public static String eliminarBD="0";
     public static String serialnumber="";
     public static int resultado=0;
     public static String planta_id="";
@@ -30,8 +28,16 @@ public class SesionEntity {
     public static String LineaProduccion="";
     public static String Impuesto_ID="";
     public static String Impuesto="";
-    public static String TipoCambio="";
     public static String contado="";
     public static String U_VIS_CashDscnt="";
-    public static String FLOAG_STOCK="";
+    public static String FLAG_STOCK="";
+    public static String FLAG_BACKUP="";
+    public static String quotation="N";
+    public static String rate="0";
+    public static String TipoListaPrecio="";
+    public static String Print="";
+    public static String activecurrency="";
+    public static String flagquerystock ="N";
+    public static String formhabilPrint ="N";
 }
+

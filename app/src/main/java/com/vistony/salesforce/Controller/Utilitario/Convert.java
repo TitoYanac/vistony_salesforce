@@ -3,19 +3,55 @@ package com.vistony.salesforce.Controller.Utilitario;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Locale;
-
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
+import android.util.Log;
+
+import com.vistony.salesforce.BuildConfig;
 
 public class Convert {
+
+    public static String getTotaLine(String subTotal,String procentajeDsct,String impuesto) {
+
+        subTotal=(subTotal.equals("0")||subTotal==null)?"0":subTotal;
+        procentajeDsct=(procentajeDsct.equals("0")||procentajeDsct==null)?"0":procentajeDsct;
+        impuesto=(impuesto.equals("0")||impuesto==null)?"0":impuesto;
+
+        BigDecimal sbTotal=new BigDecimal(subTotal);
+        BigDecimal dsct=new BigDecimal(procentajeDsct);
+        BigDecimal impt=new BigDecimal(impuesto);
+
+        impt=impt.divide(new BigDecimal("100"));
+        dsct=dsct.divide(new BigDecimal("100"));
+
+        sbTotal=sbTotal.subtract(sbTotal.multiply(dsct));
+        impt=sbTotal.multiply(impt);
+
+
+        return sbTotal.add(impt).setScale(3,RoundingMode.HALF_UP).toString();
+
+    }
 
     public static String currencyForView(String amount){
        if(amount.equals("")){
            amount="0";
        }
-
+       Locale locale=null;
        BigDecimal amountRedonded=new BigDecimal(amount).setScale(3, RoundingMode.HALF_UP);
-        return NumberFormat.getCurrencyInstance(new Locale("ES","CL")).format(amountRedonded);
+        switch (BuildConfig.FLAVOR){
+            case "chile":
+            case "ecuador":
+                locale=new Locale("ES","EC");
+                break;
+            case "peru":
+                locale=new Locale("ES","PE");
+                break;
+            case "bolivia":
+                locale=new Locale("ES","BO");
+
+            break;
+        }
+        return NumberFormat.getCurrencyInstance(locale).format(amountRedonded);
     }
 
     public static double stringToDouble(String amount){
@@ -50,11 +86,19 @@ public class Convert {
 
         resultado= Double.parseDouble(amount);
 
-
         parteEntera = Math.floor(resultado);
         resultado=(resultado-parteEntera)*Math.pow(10, numeroDecimales);
         resultado=Math.round(resultado);
         resultado=(resultado/Math.pow(10, numeroDecimales))+parteEntera;
         return resultado;
+    }
+
+    public static String numberForView(String amount){
+        if(amount.equals("")){
+            amount="0";
+        }
+        Locale locale=null;
+        BigDecimal amountRedonded=new BigDecimal(amount).setScale(0, RoundingMode.HALF_UP);
+        return amountRedonded.toString();
     }
 }

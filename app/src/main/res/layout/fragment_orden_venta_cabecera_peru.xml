@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConsDepositoView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.HistoricoCobranzaView">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                >
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_ruc"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="RUC"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_ruc"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:background="@drawable/borde_cuadrado"
+                        android:text="RUC1:"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="20dp" />
+
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_cliente"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="CLIENTE"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_cliente"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="Cliente1:"
+                        android:background="@drawable/borde_cuadrado"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="20dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_direccion"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="DIRECCIÓN"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_direccion"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="Direccion1:"
+                        android:background="@drawable/borde_cuadrado"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="20dp" />
+                    <ImageButton
+                        android:id="@+id/btn_consultar_direccion"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@color/Rojo_Vistony"
+                        android:src="@drawable/ic_search_white_24dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_moneda"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="MONEDA"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <Spinner
+                        android:id="@+id/spnmoneda"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_weight="4"
+                        android:entries="@array/Moneda_Peru"
+                        android:textAlignment="gravity"
+                        android:spinnerMode="dropdown"
+                        style="@android:style/Widget.Holo.Light.Spinner"
+                        />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_terminopago"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="TÉRMINO PAGO"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/tv_orden_venta_terminopago"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="CONTRA ENTREGA"
+                        android:gravity="center"
+                        android:background="@drawable/borde_cuadrado"
+                        android:layout_gravity="center_horizontal"
+                        android:textAlignment="center"
+                        android:textSize="20dp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_consultar_termino_pago"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@color/Rojo_Vistony"
+                        android:src="@drawable/ic_search_white_24dp" />
+
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <CheckBox
+                        android:id="@+id/chk_descuento_contado"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="false"
+                        android:hint=""
+                        android:text="DESCUENTO POR CONTADO"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                    <!--<Spinner
+                        android:id="@+id/sp_cantidaddescuento"
+                        android:layout_width="70dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="2"
+                        android:textAlignment="gravity"
+                        android:spinnerMode="dropdown"
+                        android:enabled="false"
+                        android:clickable="false"
+                        style="@android:style/Widget.Holo.Light.Spinner"
+                        />-->
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_agencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="AGENCIA"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/tv_orden_venta_agencia"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:gravity="center"
+                        android:text="VISTONY S.A.C."
+                        android:textAlignment="center"
+                        android:background="@drawable/borde_cuadrado"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="20dp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_orden_venta_consultar_agencia"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@color/Rojo_Vistony"
+                        android:src="@drawable/ic_search_white_24dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_comentario"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="COMENTARIO"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        android:textAlignment="center"
+                        />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/et_comentario"
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint="Ingrese Comentario"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/borde_cuadrado"
+                        android:textSize="20dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.omega_r.libs.OmegaCenterIconButton
+                        android:id="@+id/btn_detalle_orden_venta"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:text="DETALLE"
+                        android:background="@drawable/custom_border_button_red"
+                        android:drawableLeft="@drawable/ic_baseline_format_list_numbered_24"
+                        android:textColor="@color/white"
+                        android:textSize="20dp" />
+                </TableRow>
+            </TableLayout>
+
+
+
+
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimary"
+                android:focusable="false">
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/lbl_orden_cabecera_galonaje"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:focusable="false"
+                        android:text="Galones:"
+                        android:textColor="@color/white"
+                        android:textSize="24dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tv_orden_cabecera_galones"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:focusable="false"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"
+                        android:textSize="24dp"></TextView>
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/lbl_orden_cabecera_subtotal"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:focusable="false"
+                        android:text="SubTotal:    S/."
+                        android:textColor="@color/white"
+                        android:textSize="24dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tv_orden_cabecera_subtotal"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:focusable="false"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"
+                        android:textSize="24dp"></TextView>
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/lbl_orden_cabecera_descuento"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:focusable="false"
+                        android:text="Descuento: S/."
+                        android:textColor="@color/white"
+                        android:textSize="24dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tv_orden_cabecera_descuento"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:focusable="false"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"
+                        android:textSize="24dp"></TextView>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false">
+
+                    <TextView
+                        android:id="@+id/lbl_orden_cabecera_igv"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:focusable="false"
+                        android:text="IGV:              S/."
+                        android:textColor="@color/white"
+                        android:textSize="24dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tv_orden_cabecera_igv"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:focusable="false"
+                        android:textAlignment="center"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="24dp"></TextView>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="false">
+
+                    <TextView
+                        android:id="@+id/lbl_orden_cabecera_total"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:focusable="false"
+                        android:text="Total:           S/."
+                        android:textColor="@color/white"
+                        android:textSize="24dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tv_orden_cabecera_total"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:textAlignment="center"
+                        android:focusable="false"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="24dp"></TextView>
+
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

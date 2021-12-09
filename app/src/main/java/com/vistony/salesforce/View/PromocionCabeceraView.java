@@ -28,6 +28,7 @@ import com.vistony.salesforce.Dao.Adapters.ListaPromocionCabeceraDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
@@ -333,6 +334,20 @@ public class PromocionCabeceraView extends Fragment {
         fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceDesactivarVincular(""));
+
+        if(SesionEntity.flagquerystock.equals("Y"))
+        {
+            Drawable drawable = menu_variable.findItem(R.id.vincular).getIcon();
+            drawable = DrawableCompat.wrap(drawable);
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.white));
+            menu_variable.findItem(R.id.vincular).setIcon(drawable);
+            menu_variable.findItem(R.id.vincular).setEnabled(true);
+            Drawable drawable2 = menu_variable.findItem(R.id.deshacer).getIcon();
+            drawable2 = DrawableCompat.wrap(drawable2);
+            DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.Black));
+            menu_variable.findItem(R.id.deshacer).setIcon(drawable2);
+            menu_variable.findItem(R.id.deshacer).setEnabled(false);
+        }
         super.onCreateOptionsMenu(menu, inflater);
 
     }
@@ -341,16 +356,26 @@ public class PromocionCabeceraView extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.vincular:
-
-                String Fragment="PromocionCabeceraView";
-                String accion="listapromocioncabecera";
-                String compuesto=Fragment+"-"+accion;
-                Object [] listaobjetos=new Object[2];
-                listaobjetos[0]=listaPromocionCabeceraEntities;
-                Log.e("REOS", "PromocionCabeceraView:listaPromocionCabeceraEntities.size()" + listaPromocionCabeceraEntities.size());
-                listaobjetos[1]=listaOrdenVentaDetalleEntities;
-                Log.e("REOS", "PromocionCabeceraView:listaOrdenVentaDetalleEntities.size()" + listaOrdenVentaDetalleEntities.size());
-                mListener.onFragmentInteraction(compuesto,listaobjetos);
+                if(SesionEntity.flagquerystock.equals("N"))
+                {
+                    String Fragment = "PromocionCabeceraView";
+                    String accion = "listapromocioncabecera";
+                    String compuesto = Fragment + "-" + accion;
+                    Object[] listaobjetos = new Object[2];
+                    listaobjetos[0] = listaPromocionCabeceraEntities;
+                    Log.e("REOS", "PromocionCabeceraView:listaPromocionCabeceraEntities.size()" + listaPromocionCabeceraEntities.size());
+                    listaobjetos[1] = listaOrdenVentaDetalleEntities;
+                    Log.e("REOS", "PromocionCabeceraView:listaOrdenVentaDetalleEntities.size()" + listaOrdenVentaDetalleEntities.size());
+                    mListener.onFragmentInteraction(compuesto, listaobjetos);
+                }
+                else if(SesionEntity.flagquerystock.equals("Y"))
+                {
+                    String Fragment = "ConsultaStockView";
+                    String accion = "mostrarConsultaStock";
+                    String compuesto = Fragment + "-" + accion;
+                    String Objeto="";
+                    mListener.onFragmentInteraction(compuesto, Objeto);
+                }
                 return false;
             case R.id.deshacer:
                 Listado=ListadoInicial;

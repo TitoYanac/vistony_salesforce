@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,9 +32,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
 import com.vistony.salesforce.Controller.Adapters.VisitaDialogController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
+import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
+import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -67,12 +71,13 @@ public class MenuAccionView extends Fragment {
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     LocationManager locationManager;
-
+    static String CardCode;
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
     String fecha;
     CobranzaDetalleSQLiteDao CobranzaDetalleSQLiteDao;
+    KardexPagoRepository kardexPagoRepository;
     public MenuAccionView() {
         // Required empty public constructor
     }
@@ -99,6 +104,7 @@ public class MenuAccionView extends Fragment {
             Log.e("JEPICAMEE","=>"+Lista.get(s).getDomfactura_id());
             Log.e("JEPICAMEE","=>"+Lista.get(s).getCliente_id());
             Log.e("JEPICAMEE","=>"+Lista.get(s).getZona_id());
+            CardCode=Lista.get(s).getCliente_id();
         }
 
         b.putSerializable(ARG_PARAM,Lista);
@@ -180,10 +186,21 @@ public class MenuAccionView extends Fragment {
         /********/
 
         cv_pedido.setOnClickListener(v -> {
-            String Fragment="MenuAccionView";
-            String accion="pedido";
-            String compuesto=Fragment+"-"+accion;
-            mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+
+            switch (BuildConfig.FLAVOR){
+                case "chile":
+                case "peru":
+                case "ecuador":
+                    String Fragment="MenuAccionView";
+                    String accion="pedido";
+                    String compuesto=Fragment+"-"+accion;
+                    mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                    SesionEntity.quotation="N";
+                    break;
+                case "bolivia":
+                    alertatipoventa().show();
+                    break;
+            }
         });
 
         cv_cobranza.setOnClickListener(v -> {
@@ -252,12 +269,25 @@ public class MenuAccionView extends Fragment {
     private Dialog alertatiporecibos() {
 
         final Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
-        CardView cv_cobranza_ordinaria,cv_cobranza_deposito_directo,cv_cobranza_pago_pos;
+        switch (BuildConfig.FLAVOR) {
+
+            case "chile":
+            case "ecuador":
+            case "bolivia":
+                dialog.setContentView(R.layout.layout_dialog_tipo_cobranza_induvis);
+                break;
+            case "peru":
+                dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
+                break;
+        }
+
+
+        CardView cv_cobranza_ordinaria,cv_cobranza_deposito_directo,cv_cobranza_pago_pos,cv_cobranza_kardex_pago;
         cv_cobranza_ordinaria=dialog.findViewById(R.id.cv_cobranza_ordinaria);
         cv_cobranza_deposito_directo=dialog.findViewById(R.id.cv_cobranza_deposito_directo);
         cv_cobranza_pago_pos=dialog.findViewById(R.id.cv_cobranza_pago_pos);
-
+        cv_cobranza_kardex_pago=dialog.findViewById(R.id.cv_cobranza_kardex_pago);
+        kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
 
         TextView textTitle = dialog.findViewById(R.id.text);
         textTitle.setText("Elija Tipo de Cobranza:");
@@ -277,8 +307,8 @@ public class MenuAccionView extends Fragment {
                 String accion="cobranza";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
-                SesionEntity.pagodirecto="0";
-                SesionEntity.pagopos="0";
+                SesionEntity.pagodirecto="N";
+                SesionEntity.pagopos="N";
                 dialog.dismiss();
             }
         });
@@ -290,8 +320,8 @@ public class MenuAccionView extends Fragment {
                 String accion="cobranza";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
-                SesionEntity.pagodirecto="1";
-                SesionEntity.pagopos="0";
+                SesionEntity.pagodirecto="Y";
+                SesionEntity.pagopos="N";
                 dialog.dismiss();
             }
         });
@@ -303,9 +333,19 @@ public class MenuAccionView extends Fragment {
                 String accion="cobranza";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
-                SesionEntity.pagodirecto="0";
-                SesionEntity.pagopos="1";
+                SesionEntity.pagodirecto="N";
+                SesionEntity.pagopos="Y";
                 dialog.dismiss();
+            }
+        });
+        cv_cobranza_kardex_pago.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /////////////////////Sincronizar Recibos Pendientes de Depositar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                kardexPagoRepository.getKardexPago(SesionEntity.imei, CardCode,getContext()).observe(getActivity(), data -> {
+                    Log.e("Jepicame","=>"+data);
+                });
+
             }
         });
         /*Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
@@ -382,6 +422,46 @@ public class MenuAccionView extends Fragment {
             dialog.dismiss();
         });
 
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
+    private Dialog alertatipoventa() {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_tipo_venta);
+        CardView cv_tipo_cotizacion,cv_tipo_ordenventa;
+        cv_tipo_cotizacion=dialog.findViewById(R.id.cv_tipo_cotizacion);
+        cv_tipo_ordenventa=dialog.findViewById(R.id.cv_tipo_ordenventa);
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText("Elija Tipo de Venta:");
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        cv_tipo_cotizacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Fragment="MenuAccionView";
+                String accion="pedido";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                SesionEntity.quotation="Y";
+                dialog.dismiss();
+            }
+        });
+        cv_tipo_ordenventa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Fragment="MenuAccionView";
+                String accion="pedido";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                SesionEntity.quotation="N";
+                dialog.dismiss();
+            }
+        });
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 

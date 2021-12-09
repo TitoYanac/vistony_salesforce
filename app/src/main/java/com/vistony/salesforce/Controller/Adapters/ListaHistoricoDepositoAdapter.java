@@ -33,6 +33,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -143,13 +144,14 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         DecimalFormat format =  new DecimalFormat("#0.00");
         // Setup.
         holder.tv_deposito_id.setText(lead.getDeposito_id());
-        holder.tv_monto.setText(format.format(Float.parseFloat(lead.getMontodeposito())));
+       // holder.tv_monto.setText(format.format(Float.parseFloat(lead.getMontodeposito())));
+        holder.tv_monto.setText(Convert.currencyForView((lead.getMontodeposito())));
         holder.tv_estado.setText(lead.getEstado());
-        holder.tv_banco.setText(lead.getBanco_id());
+        holder.tv_banco.setText(lead.getBankname());
         holder.tv_fecha_deposito.setText(lead.getFechadeposito());
         holder.tv_tipo_ingreso.setText(lead.getTipoingreso());
 
-        String[] sourceSplitefechadiferida= lead.getFechadiferida().split(" ");
+        /*String[] sourceSplitefechadiferida= lead.getFechadiferida().split(" ");
         String  FechaDiferida="";
             if(sourceSplitefechadiferida.length>1)
             {
@@ -163,19 +165,15 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         final String anioemision= sourceSplitemision2[0];
         String mesemision= sourceSplitemision2[1];
         String diaemision= sourceSplitemision2[2];
-        String fechadiferida=diaemision+"-"+mesemision+"-"+anioemision;
-        holder.tv_fecha_diferida.setText(fechadiferida);
+        String fechadiferida=diaemision+"-"+mesemision+"-"+anioemision;*/
+        //holder.tv_fecha_diferida.setText(fechadiferida);
+        holder.tv_fecha_diferida.setText(lead.getFechadiferida());
         //holder.chkdepositado.setChecked(lead.isCheckbox());
         final View finalConvertView = convertView;
         holder.imv_anular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getContext(), "click", Toast.LENGTH_LONG).show();
-
-
-
-
-
                         if(lead.getEstado().equals("CONCILIADO")) {
                             Toast.makeText(getContext(), "No se puede Anular un Deposito - Conciliado", Toast.LENGTH_LONG).show();
                         }else if(lead.getEstado().equals("Anulado")){
@@ -232,6 +230,7 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         holder.imv_flecha_historico_deposito.setOnClickListener(new View.OnClickListener() {
                                                  @Override
                                                  public void onClick(View v) {
+                                                     Log.e("REOS","ListaHistoricoDepositoAdapter-holder.imv_flecha_historico_deposito.Oncreate-ingreso");
                                                      //String Texto="VALERIA";
                                                      //String Texto1=Texto;
                                                      if(lead.getEstado().equals("Anulado"))

@@ -25,6 +25,7 @@ import android.widget.Button;
 
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ import androidx.fragment.app.Fragment;
 
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
-import com.vistony.salesforce.Dao.Retrofit.BackupWS;
+import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -127,7 +128,7 @@ public class ConfigSistemaView extends Fragment{
         }*/
 
         deletecajachica=v.findViewById(R.id.deletecajachica);
-        ArrayList<UsuarioSQLiteEntity> listausuariosqliteentity = new ArrayList<>();
+        /*ArrayList<UsuarioSQLiteEntity> listausuariosqliteentity = new ArrayList<>();
         listausuariosqliteentity= usuarioSQLite.ObtenerUsuarioBlockPay();
 
         if(listausuariosqliteentity.size()>0){
@@ -138,7 +139,18 @@ public class ConfigSistemaView extends Fragment{
             }
         }else{
             deletecajachica.setVisibility(View.VISIBLE);
+        }*/
+        if(SesionEntity.formhabilPrint.equals("Y"))
+        {
+            deletecajachica.setVisibility(View.VISIBLE);
         }
+        else
+            {
+                deletecajachica.setVisibility(View.GONE);
+            }
+
+        deletecajachica.setOnClickListener(v -> AlertaEnablePrint().show());
+
 
         cveliminar = v.findViewById(R.id.cveliminar);
         cvsincronizar =v.findViewById(R.id.cvsincronizar);
@@ -167,7 +179,7 @@ public class ConfigSistemaView extends Fragment{
             Toast.makeText(getContext(), "Proceso terminado...", Toast.LENGTH_SHORT).show();
 
         });
-        deletecajachica.setOnClickListener(v -> {
+        /*deletecajachica.setOnClickListener(v -> {
             String validarblockpay="";
             int validar=0;
             ArrayList<UsuarioSQLiteEntity> listausuariosqliteentity1 = new ArrayList<>();
@@ -188,7 +200,7 @@ public class ConfigSistemaView extends Fragment{
                     AlertaEliminarDialog().show();
                     break;
             }
-        });
+        });*/
 
         String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -204,8 +216,8 @@ public class ConfigSistemaView extends Fragment{
             progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
             progress.show();
 
-            BackupWS xd=new BackupWS();
-            xd.sendSqlite(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            BackupRepository xd=new BackupRepository();
+            xd.sendSqlite(getContext()).observe(getActivity(), data -> {
                 progress.dismiss();
 
                 if(data.getClass().getName().equals("java.lang.String")){
@@ -869,5 +881,55 @@ public class ConfigSistemaView extends Fragment{
 
 
 
+    }
+
+    public Dialog AlertaEnablePrint() {
+
+        String mensaje="";
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.layout_dialog_enable_print);
+
+        TextView textTitle = dialog.findViewById(R.id.title);
+        textTitle.setText("IMPORTANTE!!!");
+        TextView textmsm = dialog.findViewById(R.id.tv_mensaje);
+        textmsm.setText("Seleccione el Estado de la Impresora:");
+
+        Switch sw_enanle_print = dialog.findViewById(R.id.sw_enanle_print);
+
+        if(SesionEntity.Print.equals("Y"))
+        {
+            sw_enanle_print.setChecked(true);
+        }else
+            {
+                sw_enanle_print.setChecked(false);
+            }
+
+        sw_enanle_print.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String statusSwitch1, statusSwitch2;
+                if (sw_enanle_print.isChecked()) {
+                    SesionEntity.Print="Y";
+                    Toast.makeText(getContext(), "Impresora Habilitada", Toast.LENGTH_LONG).show(); // display the current state for switch's
+                }else
+                    {
+                        SesionEntity.Print="N";
+                        Toast.makeText(getContext(), "Impresora DesHabilitada", Toast.LENGTH_LONG).show(); // display the current state for switch's
+                }
+
+            }
+        });
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        dialogButton.setText("ACEPTAR");
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialogButton.setOnClickListener(v -> dialog.dismiss());
+        return  dialog;
     }
 }

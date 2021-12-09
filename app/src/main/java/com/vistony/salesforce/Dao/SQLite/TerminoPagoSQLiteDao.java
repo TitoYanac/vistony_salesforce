@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
 
@@ -66,10 +67,14 @@ public class TerminoPagoSQLiteDao {
         listaTerminoPagoSQLiteEntity = new ArrayList<TerminoPagoSQLiteEntity>();
         TerminoPagoSQLiteEntity terminoPagoSQLiteEntity;
         abrir();
-        Cursor fila = bd.rawQuery(
-                "Select * from terminopago " +
-                        " where compania_id= '"+compania_id+"' and   (CAST(dias_vencimiento AS INTEGER)) <= (CAST('"+dias_vencimiento+"'AS INTEGER)) "
-                        ,null);
+
+        String query="Select * from terminopago where compania_id= '"+compania_id+"' and   (CAST(dias_vencimiento AS INTEGER)) <= (CAST('"+dias_vencimiento+"' AS INTEGER))";
+
+        if(BuildConfig.FLAVOR.equals("ecuador")){
+            query="Select * from terminopago";
+        }
+
+        Cursor fila = bd.rawQuery(query,null);
 
         while (fila.moveToNext())
         {

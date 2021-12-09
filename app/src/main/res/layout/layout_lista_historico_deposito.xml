@@ -33,7 +33,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <TextView
+                    android:id="@+id/lbl_banco"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Banco"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    tools:text="Banco" />
+
+                <TextView
+                    android:id="@+id/tv_banco"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    tools:text="" />
+            </TableRow>
 
             <TableRow
                 android:layout_width="wrap_content"
@@ -124,28 +145,7 @@
                     tools:text="1900-01-01" />
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/lbl_banco"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Banco"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold"
-                    tools:text="Banco" />
-
-                <TextView
-                    android:id="@+id/tv_banco"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold"
-                    tools:text="" />
-            </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"

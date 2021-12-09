@@ -7,7 +7,6 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
@@ -15,7 +14,6 @@ import androidx.core.content.FileProvider;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.R;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -32,6 +30,7 @@ import retrofit2.Response;
 public class UpdateApp {
     public UpdateApp(OmegaCenterIconButton btnlogin, String nameFile, Context context){
         btnlogin.setText("Descargando...");
+
         File  ruta = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"SalesForce");
         if(!ruta.exists()) {
             ruta.mkdirs();
@@ -40,18 +39,21 @@ public class UpdateApp {
         Config.getClient().create(Api.class).getNewApk(nameFile).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
 
+                if (response.isSuccessful()) {
                     InputStream apkFile =  response.body().byteStream();
                     btnlogin.setText("Actualizando...");
                     try {
+
                         creaArchivo(Environment.getExternalStorageDirectory()+ File.separator+"Download"+File.separator+"SalesForce"+File.separator+nameFile+".apk",apkFile);
                         intallApk(nameFile,context);
-                    } catch (Exception e) {
-                        btnlogin.setText("Error al instalar...");
-                        btnlogin.setEnabled(true);
-                        btnlogin.setClickable(true);
-                    }
+
+                        } catch (Exception e) {
+                             e.printStackTrace();
+                            btnlogin.setText("Error al instalar...");
+                            btnlogin.setEnabled(true);
+                            btnlogin.setClickable(true);
+                        }
 
                 }else{
                      btnlogin.setText("Error Desconocido "+response.code());

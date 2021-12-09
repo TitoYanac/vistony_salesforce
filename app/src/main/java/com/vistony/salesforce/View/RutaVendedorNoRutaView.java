@@ -81,16 +81,22 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
         return fragment;
     }
 
+
     public static RutaVendedorNoRutaView newInstanceRecibeCliente (Object object) {
         RutaVendedorNoRutaView fragment = new RutaVendedorNoRutaView();
         Bundle args = new Bundle();
         listaConsClienteCabeceraEntities=(ArrayList<ListaClienteCabeceraEntity>) object;
         ListaClienteCabeceraEntity listaClienteCabeceraEntity;
+
         for(int i=0;i<listaConsClienteCabeceraEntities.size();i++)
         {
             listaClienteCabeceraEntity = new ListaClienteCabeceraEntity();
             listaClienteCabeceraEntity.setCliente_id(listaConsClienteCabeceraEntities.get(i).getCliente_id());
             listaClienteCabeceraEntity.setNombrecliente(listaConsClienteCabeceraEntities.get(i).getNombrecliente());
+
+            Log.e("PERCONA=>",listaClienteCabeceraEntity.getNombrecliente());
+            Log.e("PERCONA=>","+++++++++++++++");
+
             listaClienteCabeceraEntity.setDireccion(listaConsClienteCabeceraEntities.get(i).getDireccion());
             listaClienteCabeceraEntity.setMoneda( listaConsClienteCabeceraEntities.get(i).getMoneda());
             listaClienteCabeceraEntity.setDomembarque_id(listaConsClienteCabeceraEntities.get(i).getDomembarque_id());
@@ -144,6 +150,7 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
 
         obtenerRutaVendedorNoRuta=new ObtenerRutaVendedorNoRuta();
         obtenerRutaVendedorNoRuta.execute();
+
         fabagregarclientenoruta.setOnClickListener(view -> {
             String Fragment="RutaVendedorNorutaView";
             String accion="agregarClienteNoRuta";
@@ -217,51 +224,50 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
                 });
 
             } catch (Exception e) {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
+                Log.e("Percona","asdasdasda ERRR!!");
+               e.printStackTrace();
             }
             return "";
         }
 
         protected void onPostExecute(Object result)
         {
-                String fecha="";
-                Log.e("REOS","se cargo no ruta vendedorrr");
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            try {
+                String fecha = "";
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
                 Date date = new Date();
 
-                FormulasController formulasController=new FormulasController(getContext());
-                RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(getContext());
-                ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntityconnoruta=new ArrayList<>();
-                String chk_ruta="0";
+                FormulasController formulasController = new FormulasController(getContext());
+                RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
+                ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntityconnoruta = new ArrayList<>();
+                String chk_ruta = "0";
 
-                fecha =dateFormat.format(date);
-
-                if(clienteagregado){
+                fecha = dateFormat.format(date);
+                if (clienteagregado) {
                     formulasController.RegistrarRutaVendedor(listaConsClienteCabeceraEntities, fecha, chk_ruta);
-                    clienteagregado=false;
+                    clienteagregado = false;
+                }else{
+                    Log.e("PERCONA","CAYO EN EL ELSEEEEE");
                 }
 
-                listaClienteCabeceraEntityconnoruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(fecha,chk_ruta,getContext());
+                listaClienteCabeceraEntityconnoruta = rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta, getContext());
+                Log.e("PERCONA","6666666 "+listaClienteCabeceraEntityconnoruta.size());
+
 
                 listaClienteCabeceraAdapter = new ListaClienteCabeceraAdapter(getActivity(), ListaClienteCabeceraDao.getInstance().getLeads(listaClienteCabeceraEntityconnoruta));
                 listrutavendedornoruta.setAdapter(listaClienteCabeceraAdapter);
-                obtenerRutaVendedorNoRuta=new ObtenerRutaVendedorNoRuta();
+                obtenerRutaVendedorNoRuta = new ObtenerRutaVendedorNoRuta();
 
 
-                int visita=0,pedido=0,cobranza=0;
-                for(int i=0;i<listaClienteCabeceraEntityconnoruta.size();i++)
-                {
-                    if(listaClienteCabeceraEntityconnoruta.get(i).getChk_visita().equals("1"))
-                    {
+                int visita = 0, pedido = 0, cobranza = 0;
+                for (int i = 0; i < listaClienteCabeceraEntityconnoruta.size(); i++) {
+                    if (listaClienteCabeceraEntityconnoruta.get(i).getChk_visita().equals("1")) {
                         visita++;
                     }
-                    if(listaClienteCabeceraEntityconnoruta.get(i).getChk_pedido().equals("1"))
-                    {
+                    if (listaClienteCabeceraEntityconnoruta.get(i).getChk_pedido().equals("1")) {
                         pedido++;
                     }
-                    if(listaClienteCabeceraEntityconnoruta.get(i).getChk_cobranza().equals("1"))
-                    {
+                    if (listaClienteCabeceraEntityconnoruta.get(i).getChk_cobranza().equals("1")) {
                         cobranza++;
                     }
                 }
@@ -270,12 +276,16 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
                 tv_cantidad_cliente_no_ruta_cobranza.setText(String.valueOf(cobranza));
                 tv_cantidad_cliente_no_ruta_pedido.setText(String.valueOf(pedido));
 
-            getActivity().runOnUiThread(() -> {
-                fabagregarclientenoruta.setEnabled(true);
-                fabagregarclientenoruta.setBackground(ContextCompat.getDrawable(context,R.drawable.custom_border_button_red));
-            });
+                getActivity().runOnUiThread(() -> {
+                    fabagregarclientenoruta.setEnabled(true);
+                    fabagregarclientenoruta.setBackground(ContextCompat.getDrawable(context, R.drawable.custom_border_button_red));
+                });
 
 
+            }catch(Exception e){
+                Log.e("ASDASD=>","ASDA");
+                e.printStackTrace();
+            }
         }
     }
 

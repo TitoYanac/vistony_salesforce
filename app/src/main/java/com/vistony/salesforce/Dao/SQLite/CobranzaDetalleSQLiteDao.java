@@ -6,16 +6,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Entity.Retrofit.JSON.CollectionEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoCobranzaEntity;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
-import com.vistony.salesforce.View.MenuView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.sentry.Sentry;
 
 public class CobranzaDetalleSQLiteDao {
-    private MenuView menuView;
     SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity;
@@ -35,7 +41,7 @@ public class CobranzaDetalleSQLiteDao {
         Log.i("SQLite", "Se cierra conexion a la base de datos desde" + this.getClass().getName() );
         sqliteController.close();
     }
-    public String ObtenerCantidadCobranzaDetalle (String usuario_id,String Compania_id)
+    public String ObtenerCantidadCobranzaDetalle (String usuario_id,String compania_id)
     {
         //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
         //SQLiteDatabase bd = admin.getWritableDatabase();
@@ -44,7 +50,7 @@ public class CobranzaDetalleSQLiteDao {
         try {
 
             Cursor fila = bd.rawQuery(
-                    "Select IFNULL(COUNT(recibo),0) cantidad from cobranzadetalle " ,null);
+                    "Select IFNULL(COUNT(recibo),0) cantidad from cobranzadetalle  where usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"'" ,null);
 
             while (fila.moveToNext())
             {
@@ -84,7 +90,10 @@ public class CobranzaDetalleSQLiteDao {
                                        String chkwsqrvalidado,
                                        String chkwsdepositorecibido,
                                        String pagodirecto,
-                                       String pagopos
+                                       String pagopos,
+                                       String sap_code,
+                                       String mensajeWS,
+                                       String horacobranza
     )
     {
         int resultado;
@@ -105,8 +114,8 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("recibo", recibo);
             registro.put("nrofactura", nrofactura);
             registro.put("chkdepositado",chkdepositado);
-            registro.put("chkqrvalidado","1");
-            registro.put("chkanulado","0");
+            registro.put("chkqrvalidado",chkqrvalidado);
+            registro.put("chkanulado","N");
             registro.put("fuerzatrabajo_id",fuerzatrabajo_id);
             registro.put("chkbancarizado",bancarizado);
             registro.put("motivoanulacion",motivoanulacion);
@@ -116,9 +125,12 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("chkwsdepositorecibido",chkwsdepositorecibido);
             registro.put("chkwsqrvalidado",chkwsqrvalidado);
             registro.put("comentario",comentario);
-            registro.put("chkwsupdate","0");
+            registro.put("chkwsupdate","N");
             registro.put("pagodirecto",pagodirecto);
             registro.put("pagopos",pagopos);
+            registro.put("sap_code",sap_code);
+            registro.put("mensajeWS",mensajeWS);
+            registro.put("horacobranza",horacobranza);
             bd.insert("cobranzadetalle", null, registro);
 
             resultado=1;
@@ -133,6 +145,48 @@ public class CobranzaDetalleSQLiteDao {
         return resultado;
     }
 
+    public int addCollection (HistoricoCobranzaEntityResponse historicoCobranzaEntityResponse)
+    {
+        abrir();
+
+        for (int i = 0; i < historicoCobranzaEntityResponse.getHistoricoCobranza().size(); i++) {
+            ContentValues registro = new ContentValues();
+            registro.put("cobranza_id", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getDeposito_id());
+            registro.put("cliente_id", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getCliente_id());
+            registro.put("documento_id", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getDocumento_id());
+            registro.put("compania_id", SesionEntity.compania_id);
+            registro.put("importedocumento", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getImportedocumento());
+            registro.put("saldodocumento", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getSaldodocumento());
+            registro.put("nuevosaldodocumento", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getNuevosaldodocumento());
+            registro.put("saldocobrado", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getMontocobrado());
+            registro.put("fechacobranza", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza());
+            registro.put("recibo", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getRecibo());
+            registro.put("nrofactura", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getNro_documento());
+            registro.put("chkdepositado","N");
+            registro.put("chkqrvalidado",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getEstadoqr());
+            registro.put("chkanulado","N");
+            registro.put("fuerzatrabajo_id",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFuerzatrabajo_id());
+            registro.put("chkbancarizado",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getBancarizacion());
+            registro.put("motivoanulacion",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getMotivoanulacion());
+            registro.put("usuario_id",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getUsuario_id());
+            registro.put("chkwsrecibido","Y");
+            registro.put("banco_id",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getBanco_id());
+            registro.put("chkwsdepositorecibido","N");
+            registro.put("chkwsqrvalidado",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getEstadoqr());
+            registro.put("comentario",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getComentario());
+            registro.put("chkwsupdate","N");
+            registro.put("pagodirecto",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getDepositodirecto());
+            registro.put("pagopos",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getPagopos());
+            registro.put("sap_code",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getCodesap());
+            registro.put("mensajeWS","Recibo Registrado Correctamente");
+            registro.put("horacobranza",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza());
+            bd.insert("cobranzadetalle", null, registro);
+        }
+
+        bd.close();
+        return 1;
+    }
+
     public ArrayList<CobranzaDetalleSQLiteEntity> ObtenerCobranzaDetalleporFecha (String fecha,String compania_id,String usuario_id,String recibos_agregados,String fuerzatrabajo_id)
     {
         //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
@@ -142,8 +196,8 @@ public class CobranzaDetalleSQLiteDao {
         abrir();
         try {
             String query="Select * from cobranzadetalle" +
-                    " where fechacobranza LIKE '"+fecha+"%'" +" and chkdepositado='0' and chkanulado='0' and usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"' and recibo not in ("+recibos_agregados+")"
-                    + " and chkqrvalidado='1' and fuerzatrabajo_id='"+fuerzatrabajo_id+"'";
+                    " where fechacobranza LIKE '"+fecha+"%'" +" and chkdepositado='N' and chkanulado='N' and usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"' and recibo not in ("+recibos_agregados+")"
+                    + " and chkqrvalidado='Y' and fuerzatrabajo_id='"+fuerzatrabajo_id+"'";
 
             Log.e("jpcm","print query-> "+query);
             Cursor fila = bd.rawQuery(query ,null);
@@ -167,6 +221,9 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setBanco_id(fila.getString(20));
                 cobdetalleentity.setPagodirecto(fila.getString(27));
                 cobdetalleentity.setPagopos(fila.getString(28));
+                cobdetalleentity.setSap_code(fila.getString(29));
+                cobdetalleentity.setMensajews(fila.getString(30));
+                cobdetalleentity.setHoracobranza(fila.getString(31));
                 //cobdetalleentity.setCompania_id(fila.getString(3));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
@@ -213,7 +270,7 @@ public class CobranzaDetalleSQLiteDao {
 
             ContentValues registro = new ContentValues();
             registro.put("cobranza_id",cobranza_id);
-            registro.put("chkdepositado","1");
+            registro.put("chkdepositado","Y");
             registro.put("banco_id",banco_id);
             //registro.put("precio",pre);
             bd = sqliteController.getWritableDatabase();
@@ -232,6 +289,38 @@ public class CobranzaDetalleSQLiteDao {
         return resultado;
     }
 
+
+    public int UpdateCollectionDeposit (String cobranza_id, String recibo, String compania_id,String banco_id)
+    {
+        int resultado=0;
+        String chkdepositado="1";
+        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
+        // SQLiteDatabase bd = admin.getWritableDatabase();
+        abrir();
+        try {
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-cobranza_id: "+cobranza_id);
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-recibo: "+recibo);
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-compania_id: "+compania_id);
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-banco_id: "+banco_id);
+            ContentValues registro = new ContentValues();
+            registro.put("chkwsdepositorecibido","Y");
+            registro.put("chkwsqrvalidado","Y");
+            //registro.put("precio",pre);
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'" ,null);
+            resultado=1;
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-error: "+e.toString());
+            resultado=0;
+        }
+
+        bd.close();
+        return resultado;
+    }
 
     public int ObtenerID ()
     {
@@ -263,7 +352,7 @@ public class CobranzaDetalleSQLiteDao {
 
 
     public String getSapCode(String Recibo,String Compania_id,String fuerzatrabajo_id){
-       String rpta="";
+        String rpta="";
         try {
             abrir();
             Cursor fila = bd.rawQuery(
@@ -315,6 +404,8 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setPagopos(fila.getString(fila.getColumnIndex("pagopos")));
                 cobdetalleentity.setDocumento_entry(fila.getString(fila.getColumnIndex("documentoentry")));
                 cobdetalleentity.setSap_code(fila.getString(fila.getColumnIndex("sap_code")));
+                cobdetalleentity.setMensajews(fila.getString(fila.getColumnIndex("mensajeWS")));
+                cobdetalleentity.setHoracobranza(fila.getString(fila.getColumnIndex("horacobranza")));
 
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
@@ -340,8 +431,8 @@ public class CobranzaDetalleSQLiteDao {
         try {
 
             ContentValues registro = new ContentValues();
-            registro.put("cobranza_id","1");
-            registro.put("chkdepositado","0");
+            registro.put("cobranza_id","Y");
+            registro.put("chkdepositado","N");
             //registro.put("precio",pre);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzadetalle",registro,"cobranza_id='"+cobranza_id+"'"+" and compania_id='"+compania_id+"'"+" and fuerzatrabajo_id='"+fuerzatrabajo_id+"'" ,null);
@@ -404,8 +495,9 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setComentario(fila.getString(23));
                 cobdetalleentity.setPagodirecto(fila.getString(27));
                 cobdetalleentity.setPagopos(fila.getString(28));
-                //cobdetalleentity.setCompania_id(fila.getString(3));
-                //cobdetalleentity.setCompania_id(fila.getString(3));
+                cobdetalleentity.setSap_code(fila.getString(29));
+                cobdetalleentity.setMensajews(fila.getString(30));
+                cobdetalleentity.setHoracobranza(fila.getString(31));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
 
@@ -430,7 +522,7 @@ public class CobranzaDetalleSQLiteDao {
         try {
 
             ContentValues registro = new ContentValues();
-            registro.put("chkanulado","1");
+            registro.put("chkanulado","Y");
             //registro.put("precio",pre);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and fuerzatrabajo_id='"+fuerzatrabajo_id+"'" ,null);
@@ -465,7 +557,7 @@ public class CobranzaDetalleSQLiteDao {
         try {
 
             ContentValues registro = new ContentValues();
-            registro.put("chkqrvalidado","1");
+            registro.put("chkqrvalidado","Y");
             //registro.put("precio",pre);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and fuerzatrabajo_id='"+fuerzatrabajo_id+"'" ,null);
@@ -516,18 +608,21 @@ public class CobranzaDetalleSQLiteDao {
             abrir();
             Cursor fila = bd.rawQuery(
                     "Select  count(recibo) cantidad from cobranzadetalle  where compania_id= '"+compania_id+"' " +
-                            "and fuerzatrabajo_id='"+fuerzatrabajo_id+"' and (fechacobranza< DATE('now','-10 day')) and chkdepositado='0' and chkanulado='0'"
-                             ,null);
+                            //Cambio para Peru
+                            //--------------------------------
+                            //"and fuerzatrabajo_id='"+fuerzatrabajo_id+"' and (fechacobranza< DATE('now','-10 day')) and chkdepositado='0' and chkanulado='0'"
+                            " and fuerzatrabajo_id='"+fuerzatrabajo_id+"' and (fechacobranza< strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))-"+Induvis.getMaximoDiasDeposito()+") and chkdepositado='N' and chkanulado='N'"
+                    //--------------------------------
+                    ,null);
 
             while (fila.moveToNext()){
                 recibo = Integer.parseInt(fila.getString(0));
             }
 
-
-
             bd.close();
         }catch (Exception e){
-           e.printStackTrace();
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-VerificaRecibosPendientesDeposito-e: "+e.toString());
+            e.printStackTrace();
         }
 
         bd.close();
@@ -576,22 +671,12 @@ public class CobranzaDetalleSQLiteDao {
         return resultado;
     }
 
-    public ArrayList<CobranzaDetalleSQLiteEntity> ObtenerCobranzaDetallePendientesEnvioTotalWS (String compania_id,String usuario_id)
-    {
-        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
-        //SQLiteDatabase bd = admin.getWritableDatabase();
+    public ArrayList<CobranzaDetalleSQLiteEntity> ObtenerCobranzaDetallePendientesEnvioTotalWS (String compania_id,String usuario_id){
         listaCobranzaDetalleSQLiteEntity = new ArrayList<CobranzaDetalleSQLiteEntity>();
         CobranzaDetalleSQLiteEntity cobdetalleentity;
         abrir();
         try {
-            Cursor fila = bd.rawQuery(
-                    "Select * from cobranzadetalle" +
-                            " where chkwsrecibido='0' " +
-                            //" and chkwsdepositorecibido='0'" +
-                            //" and chkwsrecibido='1'" +
-                            " and compania_id='"+compania_id+"'" +
-                            " and usuario_id='"+usuario_id+"'"
-                    ,null);
+            Cursor fila = bd.rawQuery("Select * from cobranzadetalle where chkwsrecibido=? and compania_id=? and usuario_id=?",new String[]{"N",compania_id,usuario_id});
 
             while (fila.moveToNext())
             {
@@ -615,21 +700,23 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setComentario(fila.getString(23));
                 cobdetalleentity.setPagodirecto(fila.getString(27));
                 cobdetalleentity.setPagopos(fila.getString(28));
+                cobdetalleentity.setSap_code(fila.getString(29));
+                cobdetalleentity.setMensajews(fila.getString(30));
+                cobdetalleentity.setHoracobranza(fila.getString(31));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
 
+
+        }catch (Exception e){
+            Sentry.captureMessage(e.getMessage());
+        }finally {
             bd.close();
-        }catch (Exception e)
-        {
-            // TODO: handle exception
-            System.out.println(e.getMessage());
         }
 
-        bd.close();
         return listaCobranzaDetalleSQLiteEntity;
     }
 
-    public ArrayList<CobranzaDetalleSQLiteEntity> ObtenerCobranzaDetallePendientesEnvioParcial (String compania_id,String usuario_id)
+    public ArrayList<CobranzaDetalleSQLiteEntity> ObtenerCobranzaDetallePendienteEnvioEstadoDepositados (String compania_id,String usuario_id)
     {
         //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
         //SQLiteDatabase bd = admin.getWritableDatabase();
@@ -639,9 +726,9 @@ public class CobranzaDetalleSQLiteDao {
         try {
             Cursor fila = bd.rawQuery(
                     "Select * from cobranzadetalle" +
-                            " where chkwsrecibido='1' " +
-                            " and chkwsdepositorecibido='0'" +
-                            " and cobranza_id<>'1'" +
+                            " where chkdepositado='Y' " +
+                            " and chkwsdepositorecibido='N'" +
+                            " and cobranza_id<>''" +
                             " and compania_id='"+compania_id+"'" +
                             " and usuario_id='"+usuario_id+"'"
                     ,null);
@@ -667,6 +754,9 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setComentario(fila.getString(23));
                 cobdetalleentity.setPagodirecto(fila.getString(27));
                 cobdetalleentity.setPagopos(fila.getString(28));
+                cobdetalleentity.setSap_code(fila.getString(29));
+                cobdetalleentity.setMensajews(fila.getString(30));
+                cobdetalleentity.setHoracobranza(fila.getString(31));
                 //cobdetalleentity.setCompania_id(fila.getString(3));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
@@ -686,27 +776,12 @@ public class CobranzaDetalleSQLiteDao {
     public int ActualizaConexionWSDepositoCobranzaDetalle (String recibo, String compania_id,String usuario_id,String chkwsdepositorecibido)
     {
         int resultado=0;
-        String chkdepositado="1";
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
         abrir();
         try {
-
             ContentValues registro = new ContentValues();
             registro.put("chkwsdepositorecibido",chkwsdepositorecibido);
-            //registro.put("precio",pre);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
-
-            /*Cursor fila = bd.rawQuery(
-                    "update cobranzadetalle set cobranza_id = '"+cobranza_id+ "'" +
-                            //+ ",chkdepositado = '"+chkdepositado+"'"+
-                            " where recibo= '"+recibo+"'"
-                            //+ " and compania_id= '"+compania_id+"'"
-                    ,null);
-            */
-
-            //resultado=1;
             bd.close();
         }catch (Exception e)
         {
@@ -714,7 +789,6 @@ public class CobranzaDetalleSQLiteDao {
             System.out.println(e.getMessage());
             resultado=0;
         }
-
         bd.close();
         return resultado;
     }
@@ -729,7 +803,7 @@ public class CobranzaDetalleSQLiteDao {
         try {
             Cursor fila = bd.rawQuery(
                     "Select * from cobranzadetalle" +
-                            " where fechacobranza like '"+fecha+"%'" +" and fuerzatrabajo_id= '"+fuerzatrabajo_id+"'" +" and compania_id= '"+compania_id+"' and chkanulado='0'"
+                            " where fechacobranza like '"+fecha+"%'" +" and fuerzatrabajo_id= '"+fuerzatrabajo_id+"'" +" and compania_id= '"+compania_id+"' and chkanulado='N'"
                     ,null);
             while (fila.moveToNext())
             {
@@ -753,6 +827,9 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setComentario(fila.getString(23));
                 cobdetalleentity.setPagodirecto(fila.getString(27));
                 cobdetalleentity.setPagopos(fila.getString(28));
+                cobdetalleentity.setSap_code(fila.getString(29));
+                cobdetalleentity.setMensajews(fila.getString(30));
+                cobdetalleentity.setHoracobranza(fila.getString(31));
                 //cobdetalleentity.setCompania_id(fila.getString(3));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
@@ -767,7 +844,7 @@ public class CobranzaDetalleSQLiteDao {
         return listaCobranzaDetalleSQLiteEntity;
     }
 
-    public ArrayList<CobranzaDetalleSQLiteEntity> ObtenerCobranzaDetalleQRValidadoWS (String compania_id,String usuario_id)
+    public ArrayList<CobranzaDetalleSQLiteEntity> ObtenerCobranzaDetallePendienteEnvioEstadoQR (String compania_id,String usuario_id)
     {
         listaCobranzaDetalleSQLiteEntity = new ArrayList<CobranzaDetalleSQLiteEntity>();
         CobranzaDetalleSQLiteEntity cobdetalleentity;
@@ -775,7 +852,7 @@ public class CobranzaDetalleSQLiteDao {
         try {
             Cursor fila = bd.rawQuery(
                     "Select * from cobranzadetalle" +
-                            " where usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"' and chkwsqrvalidado='0' and chkqrvalidado='1'"
+                            " where usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"' and chkwsqrvalidado='N' and chkqrvalidado='Y'"
                     // " and chkqrvalidado='1'"
                     //+  " and chkwsrecibido='1'"
                     ,null);
@@ -801,6 +878,9 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setComentario(fila.getString(23));
                 cobdetalleentity.setPagodirecto(fila.getString(27));
                 cobdetalleentity.setPagopos(fila.getString(28));
+                cobdetalleentity.setSap_code(fila.getString(29));
+                cobdetalleentity.setMensajews(fila.getString(30));
+                cobdetalleentity.setHoracobranza(fila.getString(31));
                 //cobdetalleentity.setCompania_id(fila.getString(3));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
@@ -844,6 +924,7 @@ public class CobranzaDetalleSQLiteDao {
         {
             // TODO: handle exception
             System.out.println(e.getMessage());
+            Log.e("REOS","CobranzaDetalleSQLiteDao-ActualizaWSQRValidadoCobranzaDetalle-error: "+e.toString());
             resultado=0;
         }
 
@@ -863,7 +944,7 @@ public class CobranzaDetalleSQLiteDao {
             abrir();
             Cursor fila = bd.rawQuery(
                     "Select * from cobranzadetalle" +
-                            " where usuario_id= '"+usuario_id+"'" +" and compania_id='"+Compania_id+"' and chkwsupdate='1' " ,null);
+                            " where usuario_id= '"+usuario_id+"'" +" and compania_id='"+Compania_id+"' and chkwsupdate='Y' " ,null);
 
             while (fila.moveToNext())
             {
@@ -891,8 +972,9 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setComentario(fila.getString(23));
                 cobdetalleentity.setPagodirecto(fila.getString(27));
                 cobdetalleentity.setPagopos(fila.getString(28));
-                //cobdetalleentity.setCompania_id(fila.getString(3));
-                //cobdetalleentity.setCompania_id(fila.getString(3));
+                cobdetalleentity.setSap_code(fila.getString(29));
+                cobdetalleentity.setMensajews(fila.getString(30));
+                cobdetalleentity.setHoracobranza(fila.getString(31));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
 
@@ -971,7 +1053,7 @@ public class CobranzaDetalleSQLiteDao {
             bd.close();
         }catch (Exception e)
         {
-           Log.e("jpcm",""+e);
+            Log.e("jpcm",""+e);
         }
 
         bd.close();
@@ -1018,7 +1100,7 @@ public class CobranzaDetalleSQLiteDao {
             abrir();
             Cursor fila = bd.rawQuery(
                     "Select * from cobranzadetalle" +
-                            " where usuario_id= '"+usuario_id+"'" +" and compania_id='"+Compania_id+"' and chkdepositado='0' and chkanulado='0'" ,null);
+                            " where usuario_id= '"+usuario_id+"'" +" and compania_id='"+Compania_id+"' and chkdepositado='N' and chkanulado='N'" ,null);
 
             while (fila.moveToNext())
             {
@@ -1073,7 +1155,7 @@ public class CobranzaDetalleSQLiteDao {
             abrir();
             Cursor fila = bd.rawQuery(
                     "Select * from cobranzadetalle" +
-                            " where usuario_id= '"+usuario_id+"'" +" and compania_id='"+Compania_id+"' and chkwsrecibido='0' and cobranza_id='1'" ,null);
+                            " where usuario_id= '"+usuario_id+"'" +" and compania_id='"+Compania_id+"' and chkwsrecibido='N' and cobranza_id='Y'" ,null);
 
             while (fila.moveToNext())
             {
@@ -1101,8 +1183,9 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setComentario(fila.getString(23));
                 cobdetalleentity.setPagodirecto(fila.getString(27));
                 cobdetalleentity.setPagopos(fila.getString(28));
-                //cobdetalleentity.setCompania_id(fila.getString(3));
-                //cobdetalleentity.setCompania_id(fila.getString(3));
+                cobdetalleentity.setSap_code(fila.getString(29));
+                cobdetalleentity.setMensajews(fila.getString(30));
+                cobdetalleentity.setHoracobranza(fila.getString(31));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
 
@@ -1117,5 +1200,243 @@ public class CobranzaDetalleSQLiteDao {
         return listaCobranzaDetalleSQLiteEntity;
     }
 
+    public int SincronizarEstadoAnuladoCobranzaDetalle (List<HistoricoCobranzaEntity> listreceipts)
+    {
+        int resultado=0;
+        abrir();
+        try {
+            for(int i=0;i<listreceipts.size();i++)
+            {
+                Log.e("REOS","CobranzaDetalleSQLiteDao-SincronizarEstadoAnuladoCobranzaDetalle-listreceipts.get(i).getMotivoanulacion()-"+listreceipts.get(i).getMotivoanulacion());
+                Log.e("REOS","CobranzaDetalleSQLiteDao-SincronizarEstadoAnuladoCobranzaDetalle-listreceipts.get(i).getRecibo()"+listreceipts.get(i).getRecibo());
+                Log.e("REOS","CobranzaDetalleSQLiteDao-SincronizarEstadoAnuladoCobranzaDetalle-listreceipts.get(i).getCompania_id()-"+ SesionEntity.compania_id);
+                Log.e("REOS","CobranzaDetalleSQLiteDao-SincronizarEstadoAnuladoCobranzaDetalle-listreceipts.get(i).getUsuario_id()-"+listreceipts.get(i).getUsuario_id());
+                ContentValues registro = new ContentValues();
+                registro.put("chkanulado","Y");
+                registro.put("motivoanulacion",listreceipts.get(i).getMotivoanulacion());
+                bd = sqliteController.getWritableDatabase();
+                resultado = bd.update("cobranzadetalle",registro,"recibo='"+listreceipts.get(i).getRecibo()+"'"+" and compania_id='"+SesionEntity.compania_id+"'"+" and usuario_id='"+listreceipts.get(i).getUsuario_id()+"'" ,null);
+            }
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS","CobranzaDetalleSQLiteDao-SincronizarEstadoAnuladoCobranzaDetalle-Error:-"+e.toString());
 
+            resultado=0;
+        }
+
+        bd.close();
+        return  resultado;
+    }
+
+    public ArrayList<CollectionEntity> ObtenerCobranzaDetallePendientesFormatoJSON (String compania_id, String usuario_id)
+    {
+        ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
+        CollectionEntity collectionEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select   a.cobranza_id as ItemDetail,"  +
+                            "a.cliente_id as CardCode, " +
+                            "a.documento_id as DocNum, " +
+                            "a.importedocumento as DocTotal, " +
+                            "a.saldodocumento as Balance, " +
+                            "a.nuevosaldodocumento as NewBalance," +
+                            "a.saldocobrado as AmountCharged," +
+                            "a.fechacobranza as IncomeDate," +
+                            "a.recibo as Receip, " +
+                            "a.nrofactura as CancelReason, " +
+                            "a.chkqrvalidado as QRStatus, " +
+                            "a.fuerzatrabajo_id as SlpCode, " +
+                            "a.chkbancarizado as Banking, " +
+                            "a.usuario_id as UserID, " +
+                            "a.banco_id as BankID, " +
+                            "a.comentario as Commentary, " +
+                            "a.pagodirecto as DirectDeposit, " +
+                            "a.pagopos as POSPay, " +
+                            "a.horacobranza as IncomeTime," +
+                            "IFNULL((Select IFNULL(doc_entry,0 )FROM documentodeuda WHERE documento_id=a.documento_id),0) AS documentoentry " +
+                            " from cobranzadetalle a " +
+                            " where chkwsrecibido='N' " +
+                            //" and chkwsdepositorecibido='0'" +
+                            //" and chkwsrecibido='1'" +
+                            " and compania_id='"+compania_id+"'" +
+                            " and usuario_id='"+usuario_id+"'"
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+
+                collectionEntity= new CollectionEntity();
+                collectionEntity.setItemDetail(fila.getString(fila.getColumnIndex("ItemDetail")));
+                collectionEntity.setCardCode(fila.getString(fila.getColumnIndex("CardCode")));
+                collectionEntity.setDocNum(fila.getString(fila.getColumnIndex("DocNum")));
+                collectionEntity.setDocTotal(fila.getString(fila.getColumnIndex("DocTotal")));
+                collectionEntity.setBalance(fila.getString(fila.getColumnIndex("Balance")));
+                collectionEntity.setNewBalance(fila.getString(fila.getColumnIndex("NewBalance")));
+                collectionEntity.setAmountCharged(fila.getString(fila.getColumnIndex("AmountCharged")));
+                collectionEntity.setIncomeDate(fila.getString(fila.getColumnIndex("IncomeDate")));
+                collectionEntity.setReceip(fila.getString(fila.getColumnIndex("Receip")));
+                collectionEntity.setQRStatus(fila.getString(fila.getColumnIndex("QRStatus")));
+                collectionEntity.setBanking(fila.getString(fila.getColumnIndex("Banking")));
+                collectionEntity.setCancelReason(fila.getString(fila.getColumnIndex("CancelReason")));
+                collectionEntity.setBankID(fila.getString(fila.getColumnIndex("BankID")));
+                collectionEntity.setCommentary(fila.getString(fila.getColumnIndex("Commentary")));
+                collectionEntity.setDirectDeposit(fila.getString(fila.getColumnIndex("DirectDeposit")));
+                collectionEntity.setPOSPay(fila.getString(fila.getColumnIndex("POSPay")));
+                collectionEntity.setIncomeTime(Induvis.getTimeSAP(BuildConfig.FLAVOR,fila.getString(fila.getColumnIndex("IncomeTime"))));
+                collectionEntity.setStatus("P");
+                collectionEntity.setDeposit("");
+                collectionEntity.setUserID(fila.getString(fila.getColumnIndex("UserID")));
+                collectionEntity.setSlpCode(fila.getString(fila.getColumnIndex("SlpCode")));
+                collectionEntity.setDocEntryFT(fila.getString(fila.getColumnIndex("documentoentry")));
+                listCollectionEntity.add(collectionEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+
+        bd.close();
+        return listCollectionEntity;
+    }
+
+    public ArrayList<CollectionEntity> ObtenerCobranzaDetallePendienteEnvioEstadoDepositadosJSON (String compania_id,String usuario_id)
+    {
+
+        ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
+        CollectionEntity collectionEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select sap_code,cobranza_id,banco_id,recibo,chkqrvalidado from cobranzadetalle" +
+                            " where chkdepositado='Y' " +
+                            " and chkwsdepositorecibido='N'" +
+                            " and cobranza_id<>''" +
+                            " and compania_id='"+compania_id+"'" +
+                            " and usuario_id='"+usuario_id+"'"
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                collectionEntity= new CollectionEntity();
+                collectionEntity.setCode(fila.getString(0));
+                collectionEntity.setDeposit(fila.getString(1));
+                collectionEntity.setBankID(fila.getString(2));
+                collectionEntity.setReceip(fila.getString(3));
+                collectionEntity.setQRStatus(fila.getString(4));
+                listCollectionEntity.add(collectionEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+
+        bd.close();
+        return listCollectionEntity;
+    }
+    public ArrayList<CollectionEntity> ObtenerCobranzaDetallePendienteEnvioEstadoQRJSON (String compania_id,String usuario_id)
+    {
+        ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
+        CollectionEntity collectionEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select sap_code,cobranza_id,banco_id,recibo,chkqrvalidado from cobranzadetalle" +
+                            " where usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"' and chkwsqrvalidado='N' and chkqrvalidado='Y'"
+                    ,null);
+            while (fila.moveToNext())
+            {
+                collectionEntity= new CollectionEntity();
+                collectionEntity.setCode(fila.getString(0));
+                collectionEntity.setDeposit(fila.getString(1));
+                collectionEntity.setBankID(fila.getString(2));
+                collectionEntity.setReceip(fila.getString(3));
+                collectionEntity.setQRStatus(fila.getString(4));
+                listCollectionEntity.add(collectionEntity);
+            }
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+
+        bd.close();
+        return listCollectionEntity;
+    }
+
+    public ArrayList<CollectionEntity> UpdateRecibosDesvinculadosDepositoJSON (String compania_id,String usuario_id)
+    {
+
+        ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
+        CollectionEntity collectionEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select sap_code,cobranza_id,banco_id,recibo,chkqrvalidado from cobranzadetalle" +
+                            " where chkwsupdate='Y'" +
+                            " and compania_id='"+compania_id+"'" +
+                            " and usuario_id='"+usuario_id+"'"
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                collectionEntity= new CollectionEntity();
+                collectionEntity.setCode(fila.getString(0));
+                collectionEntity.setDeposit(fila.getString(1));
+                collectionEntity.setBankID(fila.getString(2));
+                collectionEntity.setReceip(fila.getString(3));
+                collectionEntity.setQRStatus(fila.getString(4));
+                listCollectionEntity.add(collectionEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+
+        bd.close();
+        return listCollectionEntity;
+    }
+
+    public int UpdateCollectionDetachedDeposit (String cobranza_id, String recibo, String compania_id,String banco_id)
+    {
+        int resultado=0;
+        String chkdepositado="1";
+        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
+        // SQLiteDatabase bd = admin.getWritableDatabase();
+        abrir();
+        try {
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-cobranza_id: "+cobranza_id);
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-recibo: "+recibo);
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-compania_id: "+compania_id);
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-banco_id: "+banco_id);
+            ContentValues registro = new ContentValues();
+            registro.put("chkwsupdate","N");
+            //registro.put("precio",pre);
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'" ,null);
+            resultado=1;
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-ActualizaCobranzaDetalle-error: "+e.toString());
+            resultado=0;
+        }
+        bd.close();
+        return resultado;
+    }
 }

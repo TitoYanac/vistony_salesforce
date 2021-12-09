@@ -23,7 +23,7 @@ public class ListaHistoricoOrdenVentaDao {
     }
 
     private void saveLead(ListaHistoricoOrdenVentaEntity lead) {
-        leads.put(lead.getDocNum(), lead);
+        leads.put(lead.getSalesOrderID(), lead);
     }
 
     public List<ListaHistoricoOrdenVentaEntity> getLeads(ArrayList<ListaHistoricoOrdenVentaEntity> Lista) {
@@ -42,11 +42,9 @@ public class ListaHistoricoOrdenVentaDao {
                 temp.setApprovalStatus(Lista.get(i).getApprovalStatus());
                  temp.setApprovalCommentary(Lista.get(i).getApprovalCommentary());
                  temp.setSalesOrderID(Lista.get(i).getSalesOrderID());
-                     //   ,Lista.get(i).isRecepcionERPOV()
-                       // ,Lista.get(i).getComentariows()
-                       // ,Lista.get(i).isEnvioERPOV()
-                        temp.setDocNum(Lista.get(i).getDocNum());
-
+                 temp.setRecepcionERPOV(Lista.get(i).isRecepcionERPOV());
+                 temp.setEnvioERPOV(Lista.get(i).isEnvioERPOV());
+                 temp.setComentariows(Lista.get(i).getComentariows());
                 saveLead(temp);
             }
         }catch (Exception e){

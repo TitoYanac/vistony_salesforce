@@ -3,53 +3,66 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 import com.google.gson.annotations.SerializedName;
 
 public class HistoricoFacturasEntity {
-    @SerializedName("OrdenVenta_ERP_ID")
+    @SerializedName("SalesOrderID")
     private String ordenventa_erp_id;
 
-    @SerializedName("MontoImporteOrdenVenta")
+    @SerializedName("")
     private String montoimporteordenventa;
 
-    @SerializedName("Cliente_ID")
+    @SerializedName("CardCode")
     private String cliente_id;
 
-    @SerializedName("RucDni")
+    @SerializedName("LicTradNum")
     private String rucdni;
 
-    @SerializedName("NombreCliente")
+    @SerializedName("CardName")
     private String nombrecliente;
 
-    @SerializedName("Documento_ID")
+    @SerializedName("DocNum")
     private String documento_id;
 
-    @SerializedName("NroFactura")
+    @SerializedName("LegalNumber")
     private String nrofactura;
 
-    @SerializedName("FechaEmisionFactura")
+    @SerializedName("TaxDate")
     private String fechaemisionfactura;
 
-    @SerializedName("MontoImporteFactura")
+    @SerializedName("DocTotal")
     private String montoimportefactura;
 
-    @SerializedName("MontoSaldoFactura")
+    @SerializedName("Balance")
     private String montosaldofactura;
 
-    @SerializedName("NombreChofer")
+    @SerializedName("Driver")
     private String nombrechofer;
 
-    @SerializedName("FechaProgramacionDespacho")
+    @SerializedName("DeliveryDate")
     private String fechaprogramaciondespacho;
 
-    @SerializedName("EstadoDespacho")
+    @SerializedName("DeliveryStatus")
     private String estadodespacho;
 
     @SerializedName("MotivoEstadoDespacho")
     private String motivoestadodespacho;
 
-    @SerializedName("TerminoPago")
+    @SerializedName("PymntGroup")
     private String terminopago;
 
     @SerializedName("Tipo_Factura")
     private String tipo_factura;
+
+    @SerializedName("Mobile")
+    private String telefonochofer;
+
+
+
+    public String getTelefonochofer() {
+        return telefonochofer;
+    }
+
+    public void setTelefonochofer(String telefonochofer) {
+        this.telefonochofer = telefonochofer;
+    }
 
     public String getTipo_factura() {
         return tipo_factura;

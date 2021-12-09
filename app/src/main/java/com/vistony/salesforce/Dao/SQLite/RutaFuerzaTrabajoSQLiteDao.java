@@ -104,24 +104,23 @@ public class RutaFuerzaTrabajoSQLiteDao {
                 resultado= Integer.parseInt(fila.getString(0));
 
             }
-        }catch (Exception e)
-        {
-            System.out.println(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
         bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return resultado;
     }
 
-    public ArrayList<RutaFuerzaTrabajoSQLiteEntity> ObtenerRutaFuerzaTrabajoPorFecha (String fechainicioruta)
+    public ArrayList<RutaFuerzaTrabajoSQLiteEntity> ObtenerRutaFuerzaTrabajoPorFecha ()
     {
         listaRutaFuerzaTrabajoSQLiteEntity = new ArrayList<RutaFuerzaTrabajoSQLiteEntity>();
         RutaFuerzaTrabajoSQLiteEntity rutaFuerzaTrabajoSQLiteEntity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select * from rutafuerzatrabajo where fechainicioruta='"+fechainicioruta+"'",null);
-
+                "Select * from rutafuerzatrabajo where fechainicioruta= strftime('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))"
+                ,null);
+        Log.e("REOS", "RutaFuerzaTrabajoSQLiteDao-ObtenerRutaFuerzaTrabajoPorFecha-fila.toString(): "+fila.toString());
+        Log.e("REOS", "RutaFuerzaTrabajoSQLiteDao-ObtenerRutaFuerzaTrabajoPorFecha-rawQuery.size(): "+bd.toString());
         while (fila.moveToNext())
         {
             rutaFuerzaTrabajoSQLiteEntity= new RutaFuerzaTrabajoSQLiteEntity();
@@ -134,19 +133,22 @@ public class RutaFuerzaTrabajoSQLiteDao {
             rutaFuerzaTrabajoSQLiteEntity.setEstado(fila.getString(6));
             listaRutaFuerzaTrabajoSQLiteEntity.add(rutaFuerzaTrabajoSQLiteEntity);
         }
-
+        Log.e("REOS", "RutaFuerzaTrabajoSQLiteDao-ObtenerRutaFuerzaTrabajoPorFecha-listaRutaFuerzaTrabajoSQLiteEntity.size(): "+listaRutaFuerzaTrabajoSQLiteEntity.size());
         bd.close();
         return listaRutaFuerzaTrabajoSQLiteEntity;
     }
 
-    public ArrayList<RutaFuerzaTrabajoSQLiteEntity> ObtenerRutaFuerzaTrabajoFechaMenor (String fechainicioruta)
+    public ArrayList<RutaFuerzaTrabajoSQLiteEntity> ObtenerRutaFuerzaTrabajoFechaMenor ()
     {
         listaRutaFuerzaTrabajoSQLiteEntity = new ArrayList<RutaFuerzaTrabajoSQLiteEntity>();
         RutaFuerzaTrabajoSQLiteEntity rutaFuerzaTrabajoSQLiteEntity;
         abrir();
         try {
             Cursor fila = bd.rawQuery(
-                    "Select * from rutafuerzatrabajo  where fechainicioruta<'" + fechainicioruta + "'", null);
+                    "Select * from rutafuerzatrabajo  where fechainicioruta<" +
+                     //       "date('now','localtime')"
+                    " strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))"
+                    , null);
 
             while (fila.moveToNext()) {
                 rutaFuerzaTrabajoSQLiteEntity = new RutaFuerzaTrabajoSQLiteEntity();
@@ -186,6 +188,27 @@ public class RutaFuerzaTrabajoSQLiteDao {
             System.out.println(e.getMessage());
 
         }
+        return resultado;
+    }
+
+    public String ObtenerZonaRutaFuerzaTrabajo (String fecha)
+    {
+        String resultado="";
+
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select zona from rutafuerzatrabajo where fechainicioruta='"+fecha+"'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= (fila.getString(0));
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        bd.close();
         return resultado;
     }
 

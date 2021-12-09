@@ -22,8 +22,7 @@ public class AgenciaWS {
     }
 
     public ArrayList<AgenciaSQLiteEntity> getAgenciaWS(String Imei){
-        Api api = Config.getClient().create(Api.class);
-        Call<AgenciaEntityResponse> call = api.getAgencia(Imei);
+        Call<AgenciaEntityResponse> call = Config.getClient().create(Api.class).getAgencia(Imei);
         try
         {
             Response<AgenciaEntityResponse> response= call.execute();

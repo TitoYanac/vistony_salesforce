@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vistony Sales Force</string>
+    <string name="BotonPrincipalLogin">Iniciar sesión</string>
+    <string name="SalirDrawer">Salir</string>
+    <string name="conectado">Conectando...</string>
+    <string name="sinInfo">Sin Información</string>
+    <string name="Ingresando">Ingresando...</string>
+    <string name="ficha_tecnica">Ficha técnica</string>
+    <string name="reclamo_clientes">Reclamo de clientes</string>
+    <string name="lead_cliente">Generar oportunidad</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="razon_social">Razón social</string>
+    <string name="ruc">RUC</string>
+    <string name="nombre_comercial">Nombre comercial</string>
+    <string name="numero_telefono">Número de telefono</string>
+    <string name="numero_celular">Número de celular</string>
+    <string name="persona_contacto">Persona de contacto</string>
+    <string name="email">Correo electrónico</string>
+    <string name="web">Pagina web</string>
+    <string name="coordenadas">Coordenadas...</string>
+    <string name="comentario">Comentario</string>
+    <string name="enviar_lead">Enviar lead</string>
+    <string name="head_codigo">Codigo</string>
+    <string name="head_usuario">Usuario</string>
+    <string name="menu_configuracion">Configuración</string>
+    <string name="menu_formulario">Formulario</string>
+    <string name="menu_salir">Salir</string>
+    <string name="head_conexion">Conexión</string>
+    <string name="head_secuencia">Secuencia</string>
+    <string name="menu_ruta_vendedor">Ruta vendedor</string>
+    <string name="menu_deposito">Deposito</string>
+    <string name="menu_consultas">Consultas</string>
+    <string name="menu_comisiones">Comisiones</string>
+    <string name="dialog_advertencia">ADVERTENCIA</string>
+    <string name="dialog_btn_salir">SALIR</string>
+    <string name="dialog_btn_cancelar">CANCELAR</string>
+    <string name="dialog_text">¿Esta seguro de salir de la aplicación?</string>
+    <string name="menu_tag">Opciones del sistema</string>
+    <string name="tax_code">IVA</string>
+    <string name="head_zone">Zona:</string>
+    <string name="zone">Zona</string>
+    <string name="EnablePrint">Habilitar Impresora</string>
+</resources>

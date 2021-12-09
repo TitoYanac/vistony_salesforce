@@ -3,7 +3,6 @@ package com.vistony.salesforce.View;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -143,9 +142,6 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
             Toast.makeText(getActivity(), "No hay termino de pago,", Toast.LENGTH_SHORT).show();
             getActivity().getSupportFragmentManager().popBackStack();
         }
-
-        //listcliente.setTextFilterEnabled(true);
-        //setupSearchView();
     }
 
     public interface OnFragmentInteractionListener {

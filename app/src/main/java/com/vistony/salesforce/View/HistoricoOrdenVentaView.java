@@ -255,6 +255,8 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                             SesionEntity.compania_id
                     );
 
+                Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-listaOrdenVentaSQLite.size():"+listaOrdenVentaSQLite.size());
+
                 //Registra en listadepuracion2
                     for (int i = 0; i < listaOrdenVentaSQLite.size(); i++) {
 
@@ -262,7 +264,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                     }
 
                 //Evalua listas
-                    if (!(listadepuracion1.size() == listadepuracion2.size())) {
+                    if ((listadepuracion1.size() < listadepuracion2.size())) {
 
                         listadepuracion2.removeAll(listadepuracion1);
 
@@ -292,23 +294,23 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                     listaHOV.setApprovalStatus("Pendiente");
                                     //listaHOV.comentarioaprobacion = "";
                                     listaHOV.setSalesOrderID(listaOrdenVentaSQLite.get(l).getOrdenventa_id());
-                                    //listaHOV.set = listaOrdenVentaSQLite.get(l).getMensajeWS();
+                                    listaHOV.setComentariows(listaOrdenVentaSQLite.get(l).getMensajeWS());
 
-                                    /*if(listaOrdenVentaSQLite.get(l).getRecibidoERP().equals("1")){
+                                    Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-listaOrdenVentaSQLite.get(l).getRecibidoERP():"+listaOrdenVentaSQLite.get(l).getRecibidoERP());
+                                    if(listaOrdenVentaSQLite.get(l).getRecibidoERP().equals("1")){
                                         listaHOV.recepcionERPOV = true;
-                                        listaHOV.ordenventa_erp_id = listaOrdenVentaSQLite.get(l).getOrdenventa_ERP_id();
                                     }else{
                                         listaHOV.recepcionERPOV = false;
-                                        listaHOV.ordenventa_erp_id = listaOrdenVentaSQLite.get(l).getOrdenventa_id();
                                     }
-
+                                    Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-listaOrdenVentaSQLite.get(l).getEnviadoERP():"+listaOrdenVentaSQLite.get(l).getEnviadoERP());
                                     if(listaOrdenVentaSQLite.get(l).getEnviadoERP().equals("1")){
                                         listaHOV.envioERPOV = true;
                                     }else{
                                         listaHOV.envioERPOV = false;
-                                    }*/
+                                    }
 
                                     listaHistoricoOrdenVentaEntities.add(listaHOV);
+                                    Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-listaHistoricoOrdenVentaEntities:"+listaHistoricoOrdenVentaEntities.size());
                                 }
                             }
 

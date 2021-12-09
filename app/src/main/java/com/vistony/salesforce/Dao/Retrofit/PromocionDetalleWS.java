@@ -27,7 +27,7 @@ public class PromocionDetalleWS {
     public ArrayList<PromocionDetalleSQLiteEntity> getPromocionDetalleWS(String Imei){
         Api api = Config.getClient().create(Api.class);
 
-        Call<PromocionDetalleEntityResponse> call = api.getPromomocionDetalle("https://graph.vistony.pe/ListaPromoD?imei="+Imei);
+        Call<PromocionDetalleEntityResponse> call = api.getPromomocionDetalle(Imei);
 
         try
         {

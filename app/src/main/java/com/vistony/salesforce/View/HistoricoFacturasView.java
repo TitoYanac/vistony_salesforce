@@ -206,10 +206,12 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
                         SesionEntity.fuerzatrabajo_id,
                         tv_fecha_historico_facturas.getText().toString()
                 );
+                Log.e("REOS", "HistoricoFacturas-HiloObtenerHistoricoFacturas-listaHistoricoFacturasEntities.size()" + listaHistoricoFacturasEntities.size());
             } catch (Exception e)
             {
                 // TODO: handle exception
                 System.out.println(e.getMessage());
+                Log.e("REOS", "HistoricoFacturas-HiloObtenerHistoricoFacturas-e" + e.toString());
             }
 
             return listaHistoricoFacturasEntities;
@@ -228,9 +230,20 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
                         ListaHistoricoFacturasDao.getInstance().getLeads(Lista));
                 listviewhistoricofacturas.setAdapter(listaHistoricoFacturasAdapter);
                 Toast.makeText(getContext(), "Ordenes de Venta Obtenidas Correctamente", Toast.LENGTH_SHORT).show();
+                String montoordenventa;
                 for(int i=0;i<Lista.size();i++)
                 {
-                    monto_orden_venta=monto_orden_venta+Float.parseFloat(Lista.get(i).getMontoimporteordenventa());
+                    if(Lista.get(i).getMontoimporteordenventa()==null)
+                    {
+                        montoordenventa="0";
+                    }
+                    else
+                        {
+                            montoordenventa=Lista.get(i).getMontoimporteordenventa();
+                        }
+                    monto_orden_venta=monto_orden_venta+Float.parseFloat(
+                            montoordenventa
+                    );
                 }
                 tv_cantidad_facturas.setText(String.valueOf(Lista.size()));
                 tv_monto_facturas.setText(String.valueOf(monto_orden_venta));

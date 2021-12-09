@@ -1,49 +1,59 @@
 package com.vistony.salesforce.Dao.Retrofit;
 
+import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
+
 import android.content.Context;
+
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
+import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
-import com.vistony.salesforce.Entity.SQLite.BancoSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BancoRepository {
-    private ArrayList<BancoSQLiteEntity> LBanco= new ArrayList<>();
-    private Context context;
+public class BancoRepository extends ViewModel {
+    private BancoSQLite bancoSQLite;
+    private ParametrosSQLite parametrosSQLite;
+    private MutableLiveData<String> status= new MutableLiveData<>();
 
-    public BancoRepository(final Context context){
-        this.context=context;
+
+    public MutableLiveData<String> getAndInsertBank(String Imei,Context context){
+
+        Config.getClient().create(Api.class).getBanco(Imei).enqueue(new Callback<BancoEntityResponse>() {
+            @Override
+            public void onResponse(Call<BancoEntityResponse> call, Response<BancoEntityResponse> response) {
+
+                BancoEntityResponse bancosList=response.body();
+
+                if(response.isSuccessful() && bancosList.getBancoEntity().size()>0){
+
+                    bancoSQLite = new BancoSQLite(context);
+                    parametrosSQLite = new ParametrosSQLite(context);
+
+                    bancoSQLite.LimpiarTablaBanco();
+                    bancoSQLite.InsertaBanco(bancosList.getBancoEntity());
+                    Integer countBank=getCountBank(context);
+                    parametrosSQLite.ActualizaCantidadRegistros("2", "BANCOS", ""+countBank, getDateTime());
+                }
+
+                status.setValue("1");
+            }
+
+            @Override
+            public void onFailure(Call<BancoEntityResponse> call, Throwable t) {
+                status.setValue("0");
+            }
+        });
+        return status;
     }
 
-    public ArrayList<BancoSQLiteEntity> getBancoWS(String Imei){
-        Api api = Config.getClient().create(Api.class);
-        Call<BancoEntityResponse> call = api.getBanco(Imei);
-        try
-        {
-            Response<BancoEntityResponse> response= call.execute();
-            if(response.isSuccessful()) {
-                    BancoEntityResponse bancoEntityResponse=response.body();
-                    for(int i=0;i<bancoEntityResponse.getBancoEntity().size();i++){
-                        BancoSQLiteEntity ObjBanco = new BancoSQLiteEntity();
-                        ObjBanco.banco_id = bancoEntityResponse.getBancoEntity().get(i).getBanco_ID();
-                        ObjBanco.nombrebanco = bancoEntityResponse.getBancoEntity().get(i).getNombre_Banco();
-                        ObjBanco.compania_id = SesionEntity.compania_id;
-                        LBanco.add(ObjBanco);
-                    }
-                }
-            call.cancel();
-        }catch (Exception e){
-            call.cancel();
-            e.printStackTrace();
-        }
-
-
-        return LBanco;
+    private Integer getCountBank(Context context){
+        return bancoSQLite.ObtenerCantidadBancos();
     }
 }

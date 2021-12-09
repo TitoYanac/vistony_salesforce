@@ -10,6 +10,10 @@ public class BancoEntity {
 
     @SerializedName("BankName")
     private String Nombre_Banco;
+
+    @SerializedName("Unique")
+    private String OperacionUnica;
+
     @NonNull
     public String getBanco_ID() {
         return Banco_ID;
@@ -25,5 +29,13 @@ public class BancoEntity {
 
     public void setNombre_Banco(@NonNull String nombre_Banco) {
         Nombre_Banco = nombre_Banco;
+    }
+
+    public String getOperacionUnica() {
+        return OperacionUnica;
+    }
+
+    public void setOperacionUnica(String operacionUnica) {
+        OperacionUnica = operacionUnica;
     }
 }

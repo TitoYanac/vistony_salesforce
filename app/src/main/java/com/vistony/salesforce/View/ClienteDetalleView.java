@@ -104,7 +104,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     DrawerLayout drawerLayout;
     private boolean mToolBarNavigationListenerIsRegistered = false;
     private final int MY_PERMISSIONS_REQUEST_CAMERA=1;
-    ConfigImpresoraView configImpresoraView;
+    //ConfigImpresoraView configImpresoraView;
     private static OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout refreshMasterClient;
     private ClienteRepository clienteRepository;

@@ -30,8 +30,62 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_DocType;
     public String orden_cabecera_total_gal_acumulado;
     public String orden_cabecera_descuentocontado;
+    public String orden_cabecera_cotizacion;
+    public String orden_cabecera_U_SYP_MDTD;
+    public String orden_cabecera_U_SYP_MDSD;
+    public String orden_cabecera_U_SYP_MDCD;
+    public String orden_cabecera_U_SYP_MDMT;
+    public String orden_cabecera_U_SYP_STATUS;
+
+    public String getOrden_cabecera_U_SYP_MDTD() {
+        return orden_cabecera_U_SYP_MDTD;
+    }
+
+    public void setOrden_cabecera_U_SYP_MDTD(String orden_cabecera_U_SYP_MDTD) {
+        this.orden_cabecera_U_SYP_MDTD = orden_cabecera_U_SYP_MDTD;
+    }
+
+    public String getOrden_cabecera_U_SYP_MDSD() {
+        return orden_cabecera_U_SYP_MDSD;
+    }
+
+    public void setOrden_cabecera_U_SYP_MDSD(String orden_cabecera_U_SYP_MDSD) {
+        this.orden_cabecera_U_SYP_MDSD = orden_cabecera_U_SYP_MDSD;
+    }
+
+    public String getOrden_cabecera_U_SYP_MDCD() {
+        return orden_cabecera_U_SYP_MDCD;
+    }
+
+    public void setOrden_cabecera_U_SYP_MDCD(String orden_cabecera_U_SYP_MDCD) {
+        this.orden_cabecera_U_SYP_MDCD = orden_cabecera_U_SYP_MDCD;
+    }
+
+    public String getOrden_cabecera_U_SYP_MDMT() {
+        return orden_cabecera_U_SYP_MDMT;
+    }
+
+    public void setOrden_cabecera_U_SYP_MDMT(String orden_cabecera_U_SYP_MDMT) {
+        this.orden_cabecera_U_SYP_MDMT = orden_cabecera_U_SYP_MDMT;
+    }
+
+    public String getOrden_cabecera_U_SYP_STATUS() {
+        return orden_cabecera_U_SYP_STATUS;
+    }
+
+    public void setOrden_cabecera_U_SYP_STATUS(String orden_cabecera_U_SYP_STATUS) {
+        this.orden_cabecera_U_SYP_STATUS = orden_cabecera_U_SYP_STATUS;
+    }
 
     public ListaOrdenVentaCabeceraEntity() {
+    }
+
+    public String getOrden_cabecera_cotizacion() {
+        return orden_cabecera_cotizacion;
+    }
+
+    public void setOrden_cabecera_cotizacion(String orden_cabecera_cotizacion) {
+        this.orden_cabecera_cotizacion = orden_cabecera_cotizacion;
     }
 
     public String getOrden_cabecera_domfactura_id() {

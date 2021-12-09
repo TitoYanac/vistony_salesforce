@@ -17,8 +17,9 @@ public class ListaHistoricoFacturasEntity {
     public String motivoestadodespacho;
     public String terminopago;
     public String tipo_factura;
+    public String telefonochofer;
 
-    public ListaHistoricoFacturasEntity(String ordenventa_erp_id, String montoimporteordenventa, String cliente_id, String rucdni, String nombrecliente, String documento_id, String nrofactura, String fechaemisionfactura, String montoimportefactura, String montosaldofactura, String nombrechofer, String fechaprogramaciondespacho, String estadodespacho, String motivoestadodespacho, String terminopago, String tipo_factura) {
+    public ListaHistoricoFacturasEntity(String ordenventa_erp_id, String montoimporteordenventa, String cliente_id, String rucdni, String nombrecliente, String documento_id, String nrofactura, String fechaemisionfactura, String montoimportefactura, String montosaldofactura, String nombrechofer, String fechaprogramaciondespacho, String estadodespacho, String motivoestadodespacho, String terminopago, String tipo_factura, String telefonochofer) {
         this.ordenventa_erp_id = ordenventa_erp_id;
         this.montoimporteordenventa = montoimporteordenventa;
         this.cliente_id = cliente_id;
@@ -35,11 +36,19 @@ public class ListaHistoricoFacturasEntity {
         this.motivoestadodespacho = motivoestadodespacho;
         this.terminopago = terminopago;
         this.tipo_factura = tipo_factura;
+        this.telefonochofer = telefonochofer;
     }
 
     public ListaHistoricoFacturasEntity() {
     }
 
+    public String getTelefonochofer() {
+        return telefonochofer;
+    }
+
+    public void setTelefonochofer(String telefonochofer) {
+        this.telefonochofer = telefonochofer;
+    }
 
     public String getTipo_factura() {
         return tipo_factura;

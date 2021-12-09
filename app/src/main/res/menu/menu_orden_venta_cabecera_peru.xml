@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/guardar_orden_venta"
+        android:icon="@drawable/ic_save_black_24dp"
+        android:title="Grabar OV"
+        app:showAsAction="ifRoom"
+        android:enabled="false"
+        />
+    <item
+        android:id="@+id/generarpdf"
+        android:icon="@drawable/ic_picture_as_pdf_black_24dp"
+        android:title="Generar PDF"
+        app:showAsAction="ifRoom"
+        android:enabled="false"
+        />
+    <item
+        android:id="@+id/enviar_erp"
+        android:icon="@drawable/ic_baseline_cloud_upload_24"
+        android:title="Enviar Nube"
+        app:showAsAction="ifRoom"
+        android:enabled="false"
+        />
+
+
+
+</menu>

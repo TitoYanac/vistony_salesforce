@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricoDepositoAdapter;
+import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoWS;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoDepositoDao;
@@ -52,9 +53,9 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
     public ListView listconsdepositos;
     private static OnFragmentInteractionListener mListener;
     View v;
-    SimpleDateFormat dateFormat;
+    SimpleDateFormat dateFormat,dateFormatsap;
     Date date;
-    String fecha;
+    String fecha,fechainisap,fechafinsap;
     private  int diadespacho,mesdespacho,anodespacho,hora,minutos,diadespacho2,mesdespacho2,anodespacho2;
     private static DatePickerDialog oyenteSelectorFecha3,oyenteSelectorFecha4;
     String calendario="";
@@ -113,8 +114,11 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormatsap = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
+        fechainisap=dateFormatsap.format(date);
+        fechafinsap=dateFormatsap.format(date);
         listaHistoricoDepositoEntities = new ArrayList<>();
     }
 
@@ -253,10 +257,12 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
         if(calendario.equals("fechainidep"))
         {
             tv_fechainidep.setText(year + "-" + mes + "-" + dia);
+            fechainisap=year+mes+dia;
         }
         else if(calendario.equals("fechafindep"))
         {
             tv_fechafindep.setText(year + "-" + mes + "-" + dia);
+            fechafinsap=year+mes+dia;
         }
 
 
@@ -299,7 +305,7 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
             try {
 
                 arraylistahistoricodespositoentity = new ArrayList<ListaHistoricoDepositoEntity>();
-                HistoricoDepositoWS historicoDepositoWS=new HistoricoDepositoWS(getContext());
+                DepositoRepository depositoRepository=new DepositoRepository(getContext());
 
                 /*
                 arraylistahistoricodespositoentity=historicoDepositoWSDao.consultarHistoricoDeposito(
@@ -309,12 +315,12 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                         tv_fechafindep.getText().toString(),
                         SesionEntity.fuerzatrabajo_id
                 );*/
-
-                arraylistahistoricodespositoentity=historicoDepositoWS.getHistoricoDeposito(
+                Log.e("REOS","Response-HistoricoDepositoView-depositoRepository.getHistoricoDeposito: "+SesionEntity.imei+"-"+fechainisap+"-"+fechafinsap);
+                arraylistahistoricodespositoentity=depositoRepository.getHistoricoDeposito(
                         SesionEntity.imei,
                         SesionEntity.compania_id,
-                        tv_fechainidep.getText().toString(),
-                        tv_fechafindep.getText().toString(),
+                        fechainisap,
+                        fechafinsap,
                         SesionEntity.fuerzatrabajo_id
                 );
 
@@ -323,10 +329,11 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
 
                 listaCobranzaCabeceraSQLiteEntity=cobranzaCabeceraSQLiteDao.ObtenerHistoricoDepostito
                         (
+                                getContext(),
                         SesionEntity.compania_id,
                         SesionEntity.usuario_id,
-                        tv_fechainidep.getText().toString(),
-                        tv_fechafindep.getText().toString()
+                                fechainisap,
+                                fechafinsap
                         );
 
                 if(listaCobranzaCabeceraSQLiteEntity == null || listaCobranzaCabeceraSQLiteEntity.size() == 0)
@@ -361,7 +368,7 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                                 listaHistoricoDepositoEntity.comentario="";
                                 listaHistoricoDepositoEntity.compania_id=listaCobranzaCabeceraSQLiteEntity.get(l).getCompania_id();
                                 listaHistoricoDepositoEntity.deposito_id=listaCobranzaCabeceraSQLiteEntity.get(l).getCobranza_id();
-                                if(listaCobranzaCabeceraSQLiteEntity.get(l).getChkanulado().equals("1")){
+                                if(listaCobranzaCabeceraSQLiteEntity.get(l).getChkanulado().equals("Y")){
                                     estado="Anulado";
                                 }
                                 else{
@@ -369,6 +376,8 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                                 }
                                 listaHistoricoDepositoEntity.estado=estado;
                                 String dia="",mes="",anio="",fecha="";
+                                //Peru
+                                /*Log.e("REOS", "HistoricoDepositoView-ObtenerHistoricoDeposito-listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito(): "+listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito());
                                 String[] separada = listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito().split("-");
                                 if(separada.length>1)
                                 {
@@ -380,9 +389,11 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                                 String FechaDeposito=dia+"/"+mes+"/"+anio+" 00:00:00.000";
                                 Log.e("REOS","HistoricoDepositoView:FechaDeposito: "+FechaDeposito);
 
-                                listaHistoricoDepositoEntity.fechadeposito=FechaDeposito;
-                                        //listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito();
-                                String diadiferido="",mesdiferido="",aniodiferido="",fechadiferido="",horadiferido,diferido;
+                                listaHistoricoDepositoEntity.fechadeposito=FechaDeposito;*/
+                                listaHistoricoDepositoEntity.fechadeposito=listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito();
+                                //listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito();
+                                /*String diadiferido="",mesdiferido="",aniodiferido="",fechadiferido="",horadiferido,diferido;
+                                Log.e("REOS", "HistoricoDepositoView-ObtenerHistoricoDeposito-listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido(): "+listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido());
                                 String[] separadadiferido = listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido().split(" ");
                                 Log.e("REOS","HistoricoDepositoView:separadadiferido: "+separadadiferido);
 
@@ -390,8 +401,11 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                                 Log.e("REOS","HistoricoDepositoView:fechadiferido: "+fechadiferido);
                                 horadiferido=separadadiferido[1];
 
-                                String[] separarfechadiferida = fechadiferido.split("/");
-
+                                //Peru
+                                //-------------------
+                                //String[] separarfechadiferida = fechadiferido.split("/");
+                                String[] separarfechadiferida = fechadiferido.split("-");
+                                //-------------------
 
                                     diadiferido=separarfechadiferida[0];
                                     mesdiferido=separarfechadiferida[1];
@@ -407,13 +421,14 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                                 listaHistoricoDepositoEntity.fechadiferida=
                                         //listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido()
                                         diferido
-                                ;
+                                ;*/
+                                listaHistoricoDepositoEntity.fechadiferida= listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido();
                                 listaHistoricoDepositoEntity.fuerzatrabajo_id=listaCobranzaCabeceraSQLiteEntity.get(l).getFuerzatrabajo_id();
                                 listaHistoricoDepositoEntity.montodeposito=listaCobranzaCabeceraSQLiteEntity.get(l).getTotalmontocobrado();
                                 listaHistoricoDepositoEntity.motivoanulacion=listaCobranzaCabeceraSQLiteEntity.get(l).getComentarioanulado();
                                 listaHistoricoDepositoEntity.tipoingreso=listaCobranzaCabeceraSQLiteEntity.get(l).getTipoingreso();
                                 listaHistoricoDepositoEntity.usuario_id=listaCobranzaCabeceraSQLiteEntity.get(l).getUsuario_id();
-
+                                listaHistoricoDepositoEntity.bankname=listaCobranzaCabeceraSQLiteEntity.get(l).getBankname();
                                 arraylistahistoricodespositoentity.add(listaHistoricoDepositoEntity);
                             }
                         }

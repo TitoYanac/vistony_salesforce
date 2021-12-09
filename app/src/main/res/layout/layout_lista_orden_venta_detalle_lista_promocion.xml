@@ -42,7 +42,7 @@
         android:layout_marginTop="0dp"
         android:text="Pack"
         android:textAppearance="?attr/textAppearanceListItem"
-         />
+        />
     <TextView
         android:id="@+id/lbl_orden_venta_detalle_lista_promocion_cantidad_promocion"
         android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
         android:id="@+id/lbl_orden_venta_detalle_lista_promocion_preciobase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="250dp"
+        android:layout_marginLeft="230dp"
         android:layout_marginTop="0dp"
         android:textStyle="bold"
         android:text="Precio:"
@@ -73,11 +73,11 @@
         android:id="@+id/tv_orden_venta_detalle_lista_promocion_preciobase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="320dp"
+        android:layout_marginLeft="300dp"
         android:layout_marginTop="0dp"
-        android:textStyle="bold"
         android:text="Precio1"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/lbl_orden_venta_detalle_lista_promocion_cantidad_linas"
         android:layout_width="wrap_content"
@@ -95,6 +95,24 @@
         android:layout_marginTop="20dp"
         android:textStyle="bold"
         android:text="Linea1"
+        android:textAppearance="?attr/textAppearanceListItem" />
+    <TextView
+        android:id="@+id/lbl_orden_venta_detalle_lista_promocion_porcentaje_descuento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="140dp"
+        android:layout_marginTop="20dp"
+        android:text="% Dcto:"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/tv_orden_venta_detalle_lista_promocion_porcentaje_descuento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="210dp"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:text="%"
         android:textAppearance="?attr/textAppearanceListItem" />
 
 

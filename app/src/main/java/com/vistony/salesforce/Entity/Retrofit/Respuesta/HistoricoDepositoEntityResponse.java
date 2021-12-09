@@ -6,7 +6,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoDepositoEntity;
 import java.util.List;
 
 public class HistoricoDepositoEntityResponse {
-    @SerializedName("LeerCobranzaCResult")
+    @SerializedName("Deposits")
     //@SerializedName("data")
     private List<HistoricoDepositoEntity> historicoDepositoEntity;
 

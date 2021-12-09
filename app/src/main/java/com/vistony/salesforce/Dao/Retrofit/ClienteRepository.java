@@ -5,11 +5,10 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.AddressEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
@@ -17,7 +16,8 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.SeguridadEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
-import com.vistony.salesforce.View.RutaVendedorRutaView;
+import com.vistony.salesforce.R;
+import com.vistony.salesforce.View.BuscarClienteView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,8 +98,6 @@ public class ClienteRepository extends ViewModel {
                         ObjCliente.setLista_precio(clienteEntityResponse.getClienteEntity().get(i).getLista_precio());
                         ObjCliente.setDueDays(clienteEntityResponse.getClienteEntity().get(i).getDiasVencidos());
                         ObjCliente.setDomfactura_id(clienteEntityResponse.getClienteEntity().get(i).getDomicilioFactura());
-
-
 
                         //la funcion addCustomer  debe darse aqui!
                         LCliente.add(ObjCliente);
@@ -188,10 +186,29 @@ public class ClienteRepository extends ViewModel {
         }
 
         executor.execute(() -> {
-            ArrayList<ListaClienteCabeceraEntity> listaTemp=clienteSQlite.ObtenerClientes();
+            ArrayList<ListaClienteCabeceraEntity> listaTemp;
+            if(BuscarClienteView.Flujo.equals("historicContainerSaleView"))
+            {
+                listaTemp=clienteSQlite.ObtenerClientesConsulta();
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"EntroFlujo");
+            }else if(BuscarClienteView.Flujo.equals("quotaspercustomer"))
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                listaTemp=clienteSQlite.ObtenerClientesConsulta();
+            }
+            else if(BuscarClienteView.Flujo.equals("historicContainerSaleViewSKU"))
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                listaTemp=clienteSQlite.ObtenerClientesConsulta();
+            }
+            else
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                listaTemp=clienteSQlite.ObtenerClientes();
+            }
 
             if(listaTemp!=null && listaTemp.size()>0){
-                listCustomerNotRoute.postValue(clienteSQlite.ObtenerClientes());
+                listCustomerNotRoute.postValue(listaTemp);
             }else{
                 listCustomerNotRoute.postValue(null);
             }

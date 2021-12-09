@@ -30,8 +30,10 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaConsDepositoAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaConsDepositoDao;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -70,7 +72,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
     private String mParam2;
     SimpleDateFormat dateFormat;
     Date date;
-    String fecha;
+    String fecha,parametrofecha;
     TextView tv_fechacobranza;
     public static TextView tv_cantidad_consdeposito,tv_monto_consdeposito;
     ImageButton imv_calendario;
@@ -93,6 +95,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
     MenuItem vincular;
     static String Recibos_agregados="";
     private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=2;
+    Induvis induvis;
     public ConsDepositoView() {
         // Required empty public constructor
     }
@@ -238,9 +241,11 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
             //mParam2 = getArguments().getString(ARG_PARAM2);
             setHasOptionsMenu(true);
         }
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
+        parametrofecha=fecha;
+        induvis=new Induvis();
 
     }
 
@@ -250,7 +255,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_cons_deposito_view, container, false);
         tv_fechacobranza = (TextView) v.findViewById(R.id.tv_fechacobranza);
-        tv_fechacobranza.setText(fecha);
+        tv_fechacobranza.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
         imv_calendario = (ImageButton) v.findViewById(R.id.imvcalendario);
         imv_calendario.setOnClickListener(this);
         btnconsultafecha = (Button) v.findViewById(R.id.btnconsultarfecha);
@@ -372,8 +377,8 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
                 //String texto3="",texto4="";
                 //texto3="vacio";
                 //texto4=texto3;
-                String parametrofecha="";
-                parametrofecha=String.valueOf(tv_fechacobranza.getText());
+                //String parametrofecha="";
+                //parametrofecha=String.valueOf(tv_fechacobranza.getText());
                 obtenerTareaListaCobranzas = new ObtenerTareaListaCobranzas();
                 obtenerTareaListaCobranzas.execute(parametrofecha);
 
@@ -403,6 +408,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
 
         //diadespacho = dayOfMonth;
         //mesdespacho = month;
+        parametrofecha=year+mes+dia;
         tv_fechacobranza.setText(year + "-" + mes + "-" + dia);
     }
 

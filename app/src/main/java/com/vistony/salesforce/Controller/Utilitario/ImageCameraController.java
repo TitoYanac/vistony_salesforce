@@ -56,7 +56,7 @@ public class ImageCameraController {
         MediaScannerConnection.scanFile(TheThis,
             new String[] { file.toString() } ,null, new MediaScannerConnection.OnScanCompletedListener() {
                 public void onScanCompleted(String path, Uri uri) {
-                    Toast.makeText(TheThis, "Album actualizado", Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(TheThis, "Album actualizado", Toast.LENGTH_SHORT).show();
                 }
             });
     }

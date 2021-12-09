@@ -36,7 +36,7 @@ public class ListaParametrosDao {
         leads.put(lead.getNombreparametro(), lead);
     }
 
-    public List<ListaParametrosEntity> getLeads(ArrayList<ParametrosSQLiteEntity> Lista) {
+    public List<ListaParametrosEntity> getLeads(ArrayList<ParametrosSQLiteEntity> Lista,boolean Status) {
         //clienteDetalleView =  new ClienteDetalleView();
 
         Lista.size();
@@ -45,7 +45,7 @@ public class ListaParametrosDao {
             for( int i=0;i<Lista.size();i++)
             {
                 saveLead(new ListaParametrosEntity(
-                        false
+                        Status
                         , Lista.get(i).getNombreparametro()
                         , Lista.get(i).getCantidadregistros()
                         ,Lista.get(i).getFechacarga()

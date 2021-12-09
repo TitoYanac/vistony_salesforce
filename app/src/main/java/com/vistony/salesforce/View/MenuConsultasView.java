@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
@@ -68,7 +69,20 @@ public class MenuConsultasView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.fragment_menu_consultas_view, container, false);
+        switch (BuildConfig.FLAVOR){
+            case "bolivia":
+            case "ecuador":
+            case "chile":
+            case "india":
+                v= inflater.inflate(R.layout.fragment_menu_consultas_view_induvis, container, false);
+                break;
+            case "peru":
+                v= inflater.inflate(R.layout.fragment_menu_consultas_view, container, false);
+                break;
+            default:
+                break;
+        }
+
         cv_ordenventa=v.findViewById(R.id.cv_ordenventa);
         cv_documentofacturado=v.findViewById(R.id.cv_documentofacturado);
         cv_consulta_cobrado=v.findViewById(R.id.cv_consulta_cobrado);
@@ -78,10 +92,24 @@ public class MenuConsultasView extends Fragment {
         cv_ordenventa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Fragment="MenuConsultasView";
-                String accion="historicoordenventa";
-                String compuesto=Fragment+"-"+accion;
-                mListener.onFragmentInteraction(compuesto,"");
+                String Fragment,accion,compuesto;
+                switch (BuildConfig.FLAVOR){
+                    case "peru":
+                         Fragment="MenuConsultasView";
+                         accion="menuconsultaspedidoview";
+                         compuesto=Fragment+"-"+accion;
+                        mListener.onFragmentInteraction(compuesto,"");
+                        break;
+                    case "ecuador":
+                    case "chile":
+                    case "bolivia":
+                         Fragment="MenuConsultasView";
+                         accion="historicoordenventa";
+                         compuesto=Fragment+"-"+accion;
+                        mListener.onFragmentInteraction(compuesto,"");
+                        break;
+                }
+
             }
         });
 
@@ -89,7 +117,8 @@ public class MenuConsultasView extends Fragment {
             @Override
             public void onClick(View v) {
                 String Fragment="MenuConsultasView";
-                String accion="historicofacturas";
+                //String accion="historicofacturas";
+                String accion="menuconsultasfacturaview";
                 String compuesto=Fragment+"-"+accion;
                mListener.onFragmentInteraction(compuesto,"");
             }
@@ -97,10 +126,24 @@ public class MenuConsultasView extends Fragment {
         cv_consulta_cobrado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String Fragment="HistoricoCobranzaView";
-                String accion="COBRANZA";
-                String compuesto=Fragment+"-"+accion;
-                mListener.onFragmentInteraction(compuesto,"");
+                String Fragment,accion,compuesto;
+                switch (BuildConfig.FLAVOR){
+                    case "peru":
+                         Fragment="HistoricoCobranzaView";
+                         accion="MENUCOBRANZA";
+                         compuesto=Fragment+"-"+accion;
+                        mListener.onFragmentInteraction(compuesto,"");
+                        break;
+                    case "ecuador":
+                    case "chile":
+                    case "bolivia":
+                         Fragment="HistoricoCobranzaView";
+                         accion="COBRANZA";
+                         compuesto=Fragment+"-"+accion;
+                        mListener.onFragmentInteraction(compuesto,"");
+                        break;
+                }
+
             }
         });
 

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentLeft="false"
+    android:layout_alignParentTop="false"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/custom_background_alert"
+            >
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_titulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/white"
+                    android:gravity="center_horizontal"
+                    android:inputType="textMultiLine"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:scrollbars="vertical"
+                    android:text="TITULO"
+                    android:textColor="#000000"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="40dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_mensaje"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="Seleccione el Cliente:" />
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp">
+
+                    <ImageButton
+                        android:id="@+id/imb_obtener_cliente"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/custom_border_button_red"
+                        android:src="@drawable/ic_baseline_account_circle_24"
+                        />
+                    <TextView
+                        android:background="@drawable/borde_editext_ov_negro"
+                        android:id="@+id/tv_nombre_cliente_historic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingTop="15dp"
+                        android:layout_weight="1"
+                        android:enabled="true"
+                        android:hint=""
+                        android:textAlignment="center"
+                        android:text="------SELECCIONAR------"
+                        android:textSize="20dp" />
+
+                </TableRow>
+
+            </TableLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@android:color/white"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/dialogButtonCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_border_button"
+                    android:text="CANCELAR"
+                    android:textColor="#0957C3" />
+
+                <Button
+                    android:id="@+id/dialogButtonOK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_border_button"
+                    android:text="GENERAR"
+                    android:textColor="#0957C3" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/logo" />
+    </FrameLayout>
+
+
+</LinearLayout>

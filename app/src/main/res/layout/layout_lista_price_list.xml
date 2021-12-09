@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeListaPriceList"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_pricelist_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Codigo:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <TextView
+                    android:id="@+id/tv_pricelist_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="30dp"
+                    android:text=""
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    tools:text="ListaPrecio_id" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/lbl_pricelist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Descripcion:"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <TextView
+                    android:id="@+id/tv_pricelist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ListaPrecio"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+
+        </TableLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

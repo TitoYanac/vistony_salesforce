@@ -1,6 +1,7 @@
 package com.vistony.salesforce.Controller.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -179,7 +180,30 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             InputMethodManager imm =(InputMethodManager) getContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             ////////////////OCULTAR TECLADO///////////
-            transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarCliente(ArraylistaClienteCabeceraEntity));
+            if(BuscarClienteView.Flujo.equals("historicContainerSaleView"))
+            {
+                transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarClienteHistoricContainerSale(ArraylistaClienteCabeceraEntity));
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"EntroFlujo");
+            }else if(BuscarClienteView.Flujo.equals("quotaspercustomer"))
+                {
+                    Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                    transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarClienteQuotasPerCustomer(ArraylistaClienteCabeceraEntity));
+                }
+            else if(BuscarClienteView.Flujo.equals("historicContainerSaleViewSKU"))
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarClienteHistoricContainerSKU(ArraylistaClienteCabeceraEntity));
+            }else if(BuscarClienteView.Flujo.equals("dialogoagregarclienteMenu"))
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarClienteQuotasPerCustomerDialog(ArraylistaClienteCabeceraEntity));
+            }
+            else
+                    {
+                        Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                        transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarCliente(ArraylistaClienteCabeceraEntity));
+                    }
+
         }
 
         );

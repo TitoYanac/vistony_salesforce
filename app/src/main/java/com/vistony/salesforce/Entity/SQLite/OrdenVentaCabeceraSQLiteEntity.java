@@ -41,6 +41,69 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String descuentocontado;
     public String dueDays;
     public String excede_lineacredito;
+    public String quotation;
+    public String U_SYP_MDTD;
+    public String U_SYP_MDSD;
+    public String U_SYP_MDCD;
+    public String U_SYP_MDMT;
+    public String U_SYP_STATUS;
+    public String rate;
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public String getU_SYP_MDTD() {
+        return U_SYP_MDTD;
+    }
+
+    public void setU_SYP_MDTD(String u_SYP_MDTD) {
+        U_SYP_MDTD = u_SYP_MDTD;
+    }
+
+    public String getU_SYP_MDSD() {
+        return U_SYP_MDSD;
+    }
+
+    public void setU_SYP_MDSD(String u_SYP_MDSD) {
+        U_SYP_MDSD = u_SYP_MDSD;
+    }
+
+    public String getU_SYP_MDCD() {
+        return U_SYP_MDCD;
+    }
+
+    public void setU_SYP_MDCD(String u_SYP_MDCD) {
+        U_SYP_MDCD = u_SYP_MDCD;
+    }
+
+    public String getU_SYP_MDMT() {
+        return U_SYP_MDMT;
+    }
+
+    public void setU_SYP_MDMT(String u_SYP_MDMT) {
+        U_SYP_MDMT = u_SYP_MDMT;
+    }
+
+    public String getU_SYP_STATUS() {
+        return U_SYP_STATUS;
+    }
+
+    public void setU_SYP_STATUS(String u_SYP_STATUS) {
+        U_SYP_STATUS = u_SYP_STATUS;
+    }
+
+    public String getQuotation() {
+        return quotation;
+    }
+
+    public void setQuotation(String quotation) {
+        this.quotation = quotation;
+    }
 
     public String getCliente_text() {
         return cliente_text;

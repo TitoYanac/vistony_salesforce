@@ -25,12 +25,70 @@ public class UsuarioSQLiteEntity {
     public String LineaProduccion;
     public String Impuesto_ID;
     public String Impuesto;
-    public String TipoCambio;
     public String U_VIS_CashDscnt;
     public String FLAG_STOCK;
+    public String FLAG_BACKUP;
+    public String Country;
+    public String Lenguage;
+    public String Imei;
+    public String rate;
+    public String print;
+    public String activecurrency;
 
+    public String getActivecurrency() {
+        return activecurrency;
+    }
 
-    public UsuarioSQLiteEntity() {
+    public void setActivecurrency(String activecurrency) {
+        this.activecurrency = activecurrency;
+    }
+
+    public String getPrint() {
+        return print;
+    }
+
+    public void setPrint(String print) {
+        this.print = print;
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public String getImei() {
+        return Imei;
+    }
+
+    public void setImei(String imei) {
+        Imei = imei;
+    }
+
+    public String getCountry() {
+        return Country;
+    }
+
+    public void setCountry(String country) {
+        Country = country;
+    }
+
+    public String getLenguage() {
+        return Lenguage;
+    }
+
+    public void setLenguage(String lenguage) {
+        Lenguage = lenguage;
+    }
+
+    public String getFLAG_BACKUP() {
+        return FLAG_BACKUP;
+    }
+
+    public void setFLAG_BACKUP(String FLAG_BACKUP) {
+        this.FLAG_BACKUP = FLAG_BACKUP;
     }
 
     public String getFLAG_STOCK() {
@@ -95,14 +153,6 @@ public class UsuarioSQLiteEntity {
 
     public void setImpuesto(String impuesto) {
         Impuesto = impuesto;
-    }
-
-    public String getTipoCambio() {
-        return TipoCambio;
-    }
-
-    public void setTipoCambio(String tipoCambio) {
-        TipoCambio = tipoCambio;
     }
 
     public String getCogsacct() {

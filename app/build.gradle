@@ -3,19 +3,19 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            storeFile file('C:\\Users\\Vistony\\Downloads\\KeyPublic\\keyStore.jks')
+            storeFile file('C:\\Users\\Vistony\\Documents\\GitHub\\SalesForceInternacional\\salesforce-intenacional-principal\\key\\keyStore.jks')
             storePassword 'keyStore.jks'
             keyPassword 'keyStore.jks'
             keyAlias 'SalesForce'
         }
     }
 
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion "29.0.3"
         defaultConfig {
             applicationId "com.vistony.salesforce"
-            minSdkVersion 24
-            targetSdkVersion 28
+            minSdkVersion 27
+            targetSdkVersion 29
             versionCode 1
             versionName "0.0.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -23,19 +23,19 @@ android {
             ndk {
                 abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
             }
-
-            manifestPlaceholders = [appName:"Vistony Sales Force Test"]
-            buildConfigField('String' , 'BASE_ENDPOINT', '"/cl.test/api"')
+            manifestPlaceholders = [appName:"Test Sales Force"]
+            buildConfigField('String' , 'BASE_ENVIRONMENT', '".test/api"')
             signingConfig  signingConfigs.config
     }
+
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            //minifyEnabled true
+            //shrinkResources true
+            //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable false
-            buildConfigField('String' , 'BASE_ENDPOINT', '"/cl/api"')
-            manifestPlaceholders = [appName:"Vistony Sales Force"]
+            buildConfigField('String' , 'BASE_ENVIRONMENT', '"/api"')
+            manifestPlaceholders = [appName:"Producción Sales Force"]
         }
     }
 
@@ -45,15 +45,47 @@ android {
         india{
             applicationIdSuffix ".india"
             buildConfigField('String' , 'IMEI_DEFAULT', '"355691112769630"')
-            minSdkVersion 23
-            targetSdkVersion 28
-            versionCode 1
+            buildConfigField('String' , 'BASE_ENDPOINT', '"/v1.0"')  //revisar para lead
             versionName "2.1.0"
+            manifestPlaceholders = [country:"India"]
+            buildConfigField('String' , 'COUNTRY_DEFAULT', '"US"')
+            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"EN"')
         }
         chile{
             applicationIdSuffix ".chile"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"/cl"')
             versionName "0.0.1"
+            manifestPlaceholders = [country:"Chile"]
+            buildConfigField('String' , 'COUNTRY_DEFAULT', '"CL"')
+            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
+        }
+        ecuador{
+            applicationIdSuffix ".ecuador"
+            buildConfigField('String' , 'IMEI_DEFAULT', '""')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"/ec"')
+            versionName "1.0.0"
+            manifestPlaceholders = [country:"Ecuador"]
+            buildConfigField('String' , 'COUNTRY_DEFAULT', '"EC"')
+            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
+        }
+        peru{
+            applicationIdSuffix ".peru"
+            buildConfigField('String' , 'IMEI_DEFAULT', '""')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"/pe"')
+            versionName "2.8.0"
+            manifestPlaceholders = [country:"Perú"]
+            buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
+            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
+        }
+        bolivia{
+            applicationIdSuffix ".bolivia"
+            buildConfigField('String' , 'IMEI_DEFAULT', '""')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"/bo"')
+            versionName "1.0.4"
+            manifestPlaceholders = [country:"Bolivia"]
+            buildConfigField('String' , 'COUNTRY_DEFAULT', '"BO"')
+            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
     }
 
@@ -65,19 +97,6 @@ android {
         }
     }*/
 
-    sourceSets {
-        india {
-            java{
-              //srcDirs('src/india/java/')
-            }
-        }
-        chile {
-            java{
-                //srcDirs('src/chile/java/')
-            }
-        }
-    }
-
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
@@ -86,13 +105,19 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+
+    /*implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'*/
+
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -126,18 +151,15 @@ dependencies {
     implementation "androidx.drawerlayout:drawerlayout:1.1.1"
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-
     implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:4.9.0")
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    implementation  'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     implementation 'io.sentry:sentry-android:5.1.2'
     implementation 'dnsjava:dnsjava:2.1.7'
 
-
+    //Libreria de Visor de SQLite
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 }

@@ -22,6 +22,9 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.WRITE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -31,16 +34,18 @@
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="false"
         android:icon="@mipmap/logo"
-        android:label="${appName}"
+        android:label="${country} ${appName}"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
-        android:hardwareAccelerated="true">
+        android:hardwareAccelerated="true"
+        android:requestLegacyExternalStorage="true"
+        >
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
+    
         <activity
             android:name=".View.LoginView"
             android:label="@string/app_name"

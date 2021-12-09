@@ -5,20 +5,15 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
-import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -36,7 +31,7 @@ public class OrdenVentaRepository extends ViewModel {
         sendSalesOrder(orderId,context, new SalesOrderCallback(){
             @Override
             public void onResponseSap(ArrayList<String> data) {
-                if(data==null){
+                if(data==null && data.size()==0){
                     temp.setValue("No hay ordenes de venta pendientes de enviar");
                 }else{
                     temp.setValue(data.get(0));
@@ -101,7 +96,7 @@ public class OrdenVentaRepository extends ViewModel {
             callback.onResponseSap(null);
         }else{
             json = "{ \"SalesOrders\":[" + json + "]}";
-
+            Log.e("REOS","OrdenVentaRepository-sendSalesOrder-json"+json);
             RequestBody jsonConvert = RequestBody.create(json,MediaType.parse("application/json; charset=utf-8"));
 
             Config.getClient().create(Api.class).sendOrder(jsonConvert).enqueue(new Callback<SalesOrderEntityResponse>() {
@@ -152,7 +147,8 @@ public class OrdenVentaRepository extends ViewModel {
 
                 @Override
                 public void onFailure(Call<SalesOrderEntityResponse> call, Throwable t) {
-                    callback.onResponseErrorSap(t.getMessage());
+                    //callback.onResponseErrorSap(t.getMessage());
+                    callback.onResponseErrorSap("En estos momentos no tiene Acceso a Internet. Se reenviara su Orden de Venta en el Proximo inicio de Sesion");
                     call.cancel();
                 }
             });

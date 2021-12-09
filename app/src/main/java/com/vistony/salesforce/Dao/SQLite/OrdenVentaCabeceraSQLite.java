@@ -63,7 +63,16 @@ public class OrdenVentaCabeceraSQLite {
             String DocType,
             String mensajeWS,
             String total_gal_acumulado,
-            String descuentocontado){
+            String descuentocontado,
+            String quotation,
+            String U_SYP_MDTD,
+            String U_SYP_MDSD,
+            String U_SYP_MDCD,
+            String U_SYP_MDMT,
+            String U_SYP_STATUS,
+            String rate
+
+    ){
 
             abrir();
 
@@ -83,8 +92,8 @@ public class OrdenVentaCabeceraSQLite {
                     " (CAST('"+montototal+"' AS decimal)+CAST(linea_credito_usado AS decimal))>=CAST(linea_credito AS decimal) AS linea_validation," +
                     "nombrecliente," +
                     " (SELECT terminopago FROM terminopago WHERE terminopago_id=? LIMIT 1) AS xd," +
-                    "(SELECT direccion FROM direccioncliente WHERE domembarque_id=? LIMIT 1) AS xp FROM cliente WHERE cliente_id=? LIMIT 1",
-                    new String[]{agencia_id,agencia_id,agencia_id,terminopago_id,domembarque_id,cliente_id});
+                    "(SELECT direccion FROM direccioncliente WHERE domembarque_id=? AND cliente_id=? LIMIT 1) AS xp FROM cliente WHERE cliente_id=? LIMIT 1",
+                    new String[]{agencia_id,agencia_id,agencia_id,terminopago_id,domembarque_id,cliente_id,cliente_id});
 
 
 
@@ -95,7 +104,6 @@ public class OrdenVentaCabeceraSQLite {
 
                 dias_documento_vencido=fila.getString(3);
                 igual_mayor_linea_credito=fila.getString(4);
-
 
                 cliente_name=fila.getString(5);
                 terminoPago_name=fila.getString(6);
@@ -133,7 +141,7 @@ public class OrdenVentaCabeceraSQLite {
         registro.put("listaprecio_id",listaprecio_id);
         registro.put("planta_id",planta_id);
         registro.put("fecharegistro",fecharegistro);
-        registro.put("tipocambio",tipocambio);
+        registro.put("tipocambio",rate);
         registro.put("fechatipocambio",fechatipocambio);
         registro.put("rucdni",rucdni);
         registro.put("DocType",DocType);
@@ -142,6 +150,12 @@ public class OrdenVentaCabeceraSQLite {
         registro.put("descuentocontado",descuentocontado);
         registro.put("dueDays_cliente",dias_documento_vencido);
         registro.put("excede_lineacredito",igual_mayor_linea_credito);
+        registro.put("quotation",quotation);
+        registro.put("U_SYP_STATUS",U_SYP_STATUS);
+        registro.put("U_SYP_MDTD",U_SYP_MDTD);
+        registro.put("U_SYP_MDSD",U_SYP_MDSD);
+        registro.put("U_SYP_MDCD",U_SYP_MDCD);
+        registro.put("U_SYP_MDMT",U_SYP_MDMT);
 
         bd.insert("ordenventacabecera",null,registro);
         bd.close();
@@ -282,7 +296,7 @@ public class OrdenVentaCabeceraSQLite {
             Cursor fila = bd.rawQuery("SELECT compania_id,ordenventa_id,cliente_id,domembarque_id,domfactura_id,terminopago_id," +
                     "agencia_id,U_VIS_AgencyRUC,U_VIS_AgencyName,U_VIS_AgencyDir,moneda_id,comentario,almacen_id,impuesto_id,montosubtotal,montodescuento,montoimpuesto,montototal,fuerzatrabajo_id," +
                     "usuario_id,enviadoERP,recibidoERP,ordenventa_ERP_id,listaprecio_id,planta_id,fecharegistro,tipocambio,fechatipocambio,rucdni,DocType," +
-                    "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito,domembarque_text,cliente_text,terminopago_text" +
+                    "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito,domembarque_text,cliente_text,terminopago_text,quotation,U_SYP_MDTD,U_SYP_MDSD,U_SYP_MDCD,U_SYP_MDMT,U_SYP_STATUS " +
                     " FROM ordenventacabecera WHERE ordenventa_id=? LIMIT 1",new String[]{ordenventa_id});
             if (fila.moveToFirst()) {
                 do {
@@ -332,6 +346,14 @@ public class OrdenVentaCabeceraSQLite {
                     ordenVentaCabeceraSQLiteEntity.setDomembarque_text(fila.getString(fila.getColumnIndex("domembarque_text")));
                     ordenVentaCabeceraSQLiteEntity.setCliente_text(fila.getString(fila.getColumnIndex("cliente_text")));
                     ordenVentaCabeceraSQLiteEntity.setTerminopago_text(fila.getString(fila.getColumnIndex("terminopago_text")));
+                    ordenVentaCabeceraSQLiteEntity.setQuotation(fila.getString(fila.getColumnIndex("quotation")));
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_MDTD(fila.getString(fila.getColumnIndex("U_SYP_MDTD")));
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_MDSD(fila.getString(fila.getColumnIndex("U_SYP_MDSD")));
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_MDCD(fila.getString(fila.getColumnIndex("U_SYP_MDCD")));
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_MDMT(fila.getString(fila.getColumnIndex("U_SYP_MDMT")));
+                    ordenVentaCabeceraSQLiteEntity.setU_SYP_STATUS(fila.getString(fila.getColumnIndex("U_SYP_STATUS")));
+
+
 
                     listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
                 } while (fila.moveToNext());
@@ -352,7 +374,7 @@ public class OrdenVentaCabeceraSQLite {
         try {
             abrir();
             ContentValues registro = new ContentValues();
-            registro.put("enviadoERP","1");
+            //registro.put("enviadoERP","1");
             registro.put("recibidoERP",estado);
 
             if(!estado.equals("0")){
@@ -408,7 +430,7 @@ public class OrdenVentaCabeceraSQLite {
         ArrayList<String> listSalesOrder = new ArrayList<String>();
         abrir();
         try {
-            Cursor fila = bd.rawQuery("Select ordenventa_id  from ordenventacabecera where recibidoERP is null or recibidoERP='0' ",null);
+            Cursor fila = bd.rawQuery("Select ordenventa_id  from ordenventacabecera where recibidoERP is null or recibidoERP='0' and enviadoERP='1' ",null);
 
             while (fila.moveToNext())
             {
@@ -422,6 +444,31 @@ public class OrdenVentaCabeceraSQLite {
         }
 
         return listSalesOrder;
+    }
+
+    public int UpdateStatusOVenviada (String ordenventa_id)
+    {
+        int resultado=0;
+
+        try {
+            abrir();
+            ContentValues registro = new ContentValues();
+            registro.put("enviadoERP","1");
+            //registro.put("recibidoERP",estado);
+
+            /*if(!estado.equals("0")){
+                registro.put("ordenventa_ERP_id",ordenventa_id_erp);
+            }*/
+
+            //registro.put("mensajeWS",mensajeWS);
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("ordenventacabecera",registro,"ordenventa_id='"+ordenventa_id+"'" ,null);
+            bd.close();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        return resultado;
     }
 
 }

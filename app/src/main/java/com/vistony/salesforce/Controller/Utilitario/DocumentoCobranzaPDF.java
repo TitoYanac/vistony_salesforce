@@ -1,5 +1,7 @@
 package com.vistony.salesforce.Controller.Utilitario;
 
+import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
+
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -89,8 +91,13 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
         }
     }
 
-    public void generarPdf(Context context, ArrayList<ListaClienteDetalleEntity> Lista, String fuerzatrabajo_id, String nombrefuerzatrabajo, String recibo, String fecharecibo) {
-        Log.e("jpcm","la fecha e snull->"+fecharecibo);
+    public void generarPdf(Context context, ArrayList<ListaClienteDetalleEntity> Lista, String fuerzatrabajo_id, String nombrefuerzatrabajo, String recibo, String fecharecibo,String horarecibo) {
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-Lista: "+Lista.size());
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-fuerzatrabajo_id: "+fuerzatrabajo_id);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-nombrefuerzatrabajo: "+nombrefuerzatrabajo);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-recibo: "+recibo);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-fecharecibo: "+fecharecibo);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-horarecibo: "+horarecibo);
         String cliente_id="",nombrecliente="",direccion="",fechaemision="",fechavencimiento="",nrodocumento="",documento_id="",importe="",saldo="",cobrado="",nuevo_saldo=""
                 ;
         for(int i=0;i<Lista.size();i++)
@@ -109,10 +116,20 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
 
 
         }
+
+
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-cliente_id: "+cliente_id);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-nombrecliente: "+nombrecliente);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-nrodocumento: "+nrodocumento);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-importe: "+importe);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-saldo: "+saldo);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-cobrado: "+cobrado);
+        Log.e("REOS","DocumentoCobranzaPDF-generarPdf-nuevo_saldo: "+nuevo_saldo);
         // Creamos el documento.
         Rectangle pagina = new Rectangle(
                 36, 36,
                 //559
+
                 650
                 //, 806
                 , 1120
@@ -121,10 +138,11 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
         Document documento = new Document(pagina);
 
         try {
-
+            Log.e("REOS","DocumentoCobranzaPDF-generarPdf-EntroalTry1");
             CifradoController cifradoController=new CifradoController();
             String encData="";
             try {
+                Log.e("REOS","DocumentoCobranzaPDF-generarPdf-EntroalTryCifrado");
                 encData= CifradoController.encrypt("Vistony2019*".getBytes("UTF-16LE"), recibo.getBytes("UTF-16LE"));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -143,8 +161,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
 
             // Creamos el flujo de datos de salida para el fichero donde
             // guardaremos el pdf.
-            FileOutputStream ficheroPdf = new FileOutputStream(
-                    f.getAbsolutePath());
+            FileOutputStream ficheroPdf = new FileOutputStream(f.getAbsolutePath());
 
             // Asociamos el flujo que acabamos de crear al documento.
             PdfWriter writer = PdfWriter.getInstance(documento, ficheroPdf);
@@ -179,13 +196,9 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             PdfPCell cellTable = null;
 
 
-                cellTable=new PdfPCell(new Phrase(
-                        "\n R.U.T N° 764114914 " +
-                                "Panamericana Norte 19434 - Bodega 2 - Lampa - Chile " +
-                                "Central: (56) 952285492 E-mail: ventas.chile@vistony.com" +
-                                " Web: www.vistony.com"+
-                                "",font3));
-
+            Log.d("REOS","DocumentCobranzaPDF.generarPdf.BuildConfig.FLAVOR:" + BuildConfig.FLAVOR);
+            cellTable=new PdfPCell(new Phrase(Induvis.getInformation(BuildConfig.FLAVOR),font3));
+            Log.d("REOS","DocumentCobranzaPDF.generarPdf.Induvis.getInformation(BuildConfig.FLAVOR):" + Induvis.getInformation(BuildConfig.FLAVOR));
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblcliente.addCell(cellTable);
@@ -217,7 +230,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cellcobrador.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblcobrador.addCell(cellcobrador);
             documento.add(tblcobrador);
-
+            Log.e("REOS","DocumentoCobranzaPDF-generarPdf-Datosdocumento");
             PdfPTable tbl = new PdfPTable(2);
             tbl.setWidthPercentage(100);
 
@@ -225,7 +238,8 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase(fecharecibo,font4));
+            Log.e("REOS","DocumentCobranzaPDF.generarPdf.FechaHora:" + Induvis.getDate(BuildConfig.FLAVOR,fecharecibo)+" "+Induvis.getTime(BuildConfig.FLAVOR,horarecibo));
+            cell = new PdfPCell(new Phrase(Induvis.getDate(BuildConfig.FLAVOR,fecharecibo)+" "+Induvis.getTime(BuildConfig.FLAVOR,horarecibo),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
@@ -233,6 +247,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
+            Log.e("REOS","DocumentCobranzaPDF.generarPdf.recibo:" + recibo);
             cell = new PdfPCell(new Phrase(recibo,font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -241,7 +256,8 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase(nrodocumento,font4));
+            Log.e("REOS","DocumentCobranzaPDF.generarPdf.nrodocumento:" + nrodocumento);
+            cell = new PdfPCell(new Phrase(nrodocumento,font));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
@@ -249,6 +265,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             cell.disableBorderSide(Rectangle.BOX);
             tbl.addCell(cell);
+            Log.e("REOS","DocumentCobranzaPDF.generarPdf.importe:" + Convert.currencyForView(importe));
             cell = new PdfPCell(new Phrase(Convert.currencyForView(importe),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -257,6 +274,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
+            Log.e("REOS","DocumentCobranzaPDF.generarPdf.saldo:" + Convert.currencyForView(saldo));
             cell = new PdfPCell(new Phrase(Convert.currencyForView(saldo),font4 ));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -265,6 +283,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
+            Log.e("REOS","DocumentCobranzaPDF.generarPdf.cobrado:" + Convert.currencyForView(cobrado));
             cell = new PdfPCell(new Phrase(Convert.currencyForView(cobrado),font4 ));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -273,6 +292,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
+            Log.e("REOS","DocumentCobranzaPDF.generarPdf.nuevo_saldo:" + Convert.currencyForView(nuevo_saldo));
             cell = new PdfPCell(new Phrase(Convert.currencyForView(nuevo_saldo),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -284,31 +304,44 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
 
         } catch (DocumentException e) {
             e.printStackTrace();
+            Log.e("REOS","DocumentCobranzaPDF-generarPdf-DocumentException.E" + e.toString());
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e("REOS","DocumentCobranzaPDF-generarPdf-IOException.E" + e.toString());
         } catch (Exception e){
             e.printStackTrace();
+            Log.e("REOS","DocumentCobranzaPDF-generarPdf-Exception.E" + e.toString());
         }finally {
             // Cerramos el documento.
             documento.close();
 
             ///////////////////ABRIR PDF////////////////////////
+            Log.e("REOS","DocumentCobranzaPDF-generarPdf-SesionEntity.Print" + SesionEntity.Print);
+            /*if(SesionEntity.Print.equals("N"))
+            {
+                File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator
+                        + NOMBRE_DIRECTORIO + File.separator + recibo + ".pdf");
 
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator
-                    +NOMBRE_DIRECTORIO+File.separator+recibo+".pdf");
+                Uri excelPath = FileProvider.getUriForFile(context, context.getPackageName(), file);
 
-            Uri  excelPath = FileProvider.getUriForFile(context, context.getPackageName(), file);
-
-            Intent target = new Intent(Intent.ACTION_VIEW);
-            target.setDataAndType(excelPath,"application/pdf");
-            target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            try {
-                context.startActivity(target);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toast.makeText(context, "Es necesario que instales algun visor de PDF", Toast.LENGTH_SHORT).show();
+                Intent target = new Intent(Intent.ACTION_VIEW);
+                target.setDataAndType(excelPath, "application/pdf");
+                target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }*/
+            switch (BuildConfig.FLAVOR){
+                case "bolivia":
+                case "ecuador":
+                case "chile":
+                    OpenDocumentPDF(recibo,context);
+                    break;
+                case "peru":
+                    if(SesionEntity.Print.equals("N"))
+                    {
+                        OpenDocumentPDF(recibo,context);
+                    }
+                    break;
             }
+
 
             ///////////////////////////////////////////////////
 
@@ -347,7 +380,25 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             }
         } else {
         }
-
         return ruta;
     }
+
+    private void OpenDocumentPDF(String recibo,Context context)
+    {
+        try {
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator
+                    +NOMBRE_DIRECTORIO+File.separator+recibo+".pdf");
+
+            Uri  excelPath = FileProvider.getUriForFile(context, context.getPackageName(), file);
+
+            Intent target = new Intent(Intent.ACTION_VIEW);
+            target.setDataAndType(excelPath,"application/pdf");
+            target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(target);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(context, "Es necesario que instales algun visor de PDF", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }

@@ -86,28 +86,31 @@
                 android:textColor="@color/white" />
         </TableRow>
 
-        <!--
+
         <TableRow
             android:layout_width="0dp"
             android:layout_height="0dp"
-            tools:visibility="gone">
+            tools:visibility="visible"
+            android:id="@+id/tablerowzona"
+            >
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/lbl_zona"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/head_secuencia"
+                android:text="@string/head_zone"
                 android:textColor="@color/white" />
 
             <TextView
-                android:id="@+id/tv_correlativo_navheader"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_zona"
+                android:layout_width="310dp"
                 android:layout_height="wrap_content"
-                android:text="@string/nav_header_subtitle"
-                android:textColor="@color/white" />
+                android:text="@string/zone"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                />
 
         </TableRow>
-        -->
     </TableLayout>
 
     <!--

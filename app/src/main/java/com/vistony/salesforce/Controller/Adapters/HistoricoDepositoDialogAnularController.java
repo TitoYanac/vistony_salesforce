@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
@@ -54,10 +55,17 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
     Context context;
     HiloObtenerRecibos hiloObtenerRecibos;
     String montoTotaldeRecibos="";
+    private DepositoRepository depositoRepository;
+    private CobranzaRepository cobranzaRepository;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         listaHistoricoDepositoAdapter = new ListaHistoricoDepositoAdapter(getContext(), null);
+        depositoRepository = new ViewModelProvider(getActivity()).get(DepositoRepository.class);
+        cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
+
+
 
         final View view = getActivity().getLayoutInflater().inflate(R.layout.layout_comentario_anular_historico_deposito, null);
         et_comentario_anular_deposito = (TextView) view.findViewById(R.id.et_comentario_anular_deposito);
@@ -106,9 +114,11 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                         chkbancarizado=listaHistoricoDepositoAdapter.chkbancarizado;
                         fechadiferido=listaHistoricoDepositoAdapter.fechadiferido;
                         chkdepositodirecto=listaHistoricoDepositoAdapter.chkdepositodirecto;
+
+                        AnnulmentDeposit();
                         //transaction.add(R.id.content_menu_view, historicoDepositoView.newInstanciaComentarioAnulado(comentario));
 
-                        cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
+                        /*cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
                         montoTotaldeRecibos=cobranzaDetalleSQLiteDao.ValidarCobranzaDetallePendientePorMonto(Deposito_id, SesionEntity.compania_id);
 
                         if(Float.parseFloat((Montodeposito))== Float.parseFloat(montoTotaldeRecibos))
@@ -125,9 +135,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                             Log.e("REOS","HistoricoDepositoDialogAnularController-HiloObtenerRecibos:");
                             hiloObtenerRecibos = new HiloObtenerRecibos();
                             hiloObtenerRecibos.execute();
-
-
-                        }
+                        }*/
 
                         dialog.dismiss();
                     }else{
@@ -156,6 +164,46 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
     }
 
 
+    private void AnnulmentDeposit()
+    {
+        cobranzaCabeceraSQLiteDao = new CobranzaCabeceraSQLiteDao(context);
+        cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(context);
+        arrayListCobranzaDetalleSQLiteEntity = new ArrayList<CobranzaDetalleSQLiteEntity>();
+        arrayListCobranzaCabeceraSQLiteEntity = new ArrayList<CobranzaCabeceraSQLiteEntity>();
+        arrayListCobranzaCabeceraSQLiteEntity=cobranzaCabeceraSQLiteDao.ObtenerCobranzaCabeceraporID(Deposito_id);
+        if(!arrayListCobranzaCabeceraSQLiteEntity.isEmpty())
+        {
+            for (int i = 0; i < arrayListCobranzaCabeceraSQLiteEntity.size(); i++) {
+                resultadocabecera = cobranzaCabeceraSQLiteDao.AnularCobranzaCabecera(Deposito_id, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id, motivoanulacion, reswsanuladep);
+            }
+            arrayListCobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporDeposito(Deposito_id, SesionEntity.compania_id);
+            for (int j = 0; j < arrayListCobranzaDetalleSQLiteEntity.size(); j++) {
+                cobranzaDetalleSQLiteDao.ActualizaWSCobranzaDetalle(
+                        arrayListCobranzaDetalleSQLiteEntity.get(j).getRecibo(),
+                        arrayListCobranzaDetalleSQLiteEntity.get(j).getCompania_id(),
+                        arrayListCobranzaDetalleSQLiteEntity.get(j).getUsuario_id(),
+                        "Y",
+                        ""
+                        , ""
+                        , "N"
+                        , "N"
+                );
+            }
+            ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            depositoRepository.UpdatedepositStatus(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+            ////////////////////////ENVIAR RECIBOS DESVINCULADOS DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            cobranzaRepository.ReceiptDetachedDeposit(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+
+            Toast.makeText(getContext(), "Deposito Anulado Correctamente", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getContext(), "Advertencia!! El Deposito no existe en el Equipo, no es posible Anular", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private class HiloAnularDeposito extends AsyncTask<String, Void, Object> {
 
         @Override
@@ -165,7 +213,6 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
             try {
                 cobranzaCabeceraSQLiteDao = new CobranzaCabeceraSQLiteDao(context);
                 cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(context);
-
                 arrayListCobranzaDetalleSQLiteEntity = new ArrayList<CobranzaDetalleSQLiteEntity>();
                 arrayListCobranzaCabeceraSQLiteEntity = new ArrayList<CobranzaCabeceraSQLiteEntity>();
                 arrayListCobranzaCabeceraSQLiteEntity=cobranzaCabeceraSQLiteDao.ObtenerCobranzaCabeceraporID(Deposito_id);
@@ -175,7 +222,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                     String fechadiferido="";
                     String[] sourceSplitFecha;
 
-                    if(arrayListCobranzaCabeceraSQLiteEntity.get(i).getFechadiferido().length()>10)
+                    /*if(arrayListCobranzaCabeceraSQLiteEntity.get(i).getFechadiferido().length()>10)
                     {
                         sourceSplitFecha= arrayListCobranzaCabeceraSQLiteEntity.get(i).getFechadiferido().split(" ");
                         String fecha=sourceSplitFecha[0];
@@ -192,11 +239,11 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                         }
                         fechadiferido=anioemision+"-"+mesemision+"-"+diaemision;
 
-                    }
+                    }*/
                     DepositoRepository depositoRepository =new DepositoRepository(getContext());
                     //int resultado=0;
 
-                    reswsanuladep= depositoRepository.PostCobranzaCabeceraWS(
+                    /*reswsanuladep= depositoRepository.PostCobranzaCabeceraWS(
                             SesionEntity.imei,
                             "UPDATE",
                             SesionEntity.compania_id,
@@ -215,6 +262,8 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                             arrayListCobranzaCabeceraSQLiteEntity.get(i).getPagodirecto(),
                             "0"
                     );
+                    */
+
                     //reswsanuladep=String.valueOf(resultado);
                     /*reswsanuladep = cobranzaCabeceraWSDao.AnularDeposito(
                             SesionEntity.imei,
@@ -233,11 +282,13 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                             motivoanulacion,
                             arrayListCobranzaCabeceraSQLiteEntity.get(i).getPagodirecto()
                     );*/
-                    if (reswsanuladep.equals("1")) {
+
+                    /*if (reswsanuladep.equals("1")) {
                         resultadocabecera = cobranzaCabeceraSQLiteDao.AnularCobranzaCabecera(Deposito_id, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id,motivoanulacion,reswsanuladep);
                     }else{
                         resultadocabecera = cobranzaCabeceraSQLiteDao.AnularCobranzaCabecera(Deposito_id, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id,motivoanulacion,reswsanuladep);
-                    }
+                    }*/
+                    resultadocabecera = cobranzaCabeceraSQLiteDao.AnularCobranzaCabecera(Deposito_id, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id,motivoanulacion,reswsanuladep);
                 }
 
                 arrayListCobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporDeposito(Deposito_id, SesionEntity.compania_id);
@@ -251,7 +302,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                     //      ,SesionEntity.imei,SesionEntity.usuario_id,comentario+"-"+SesionEntity.serialnumber,SesionEntity.fuerzatrabajo_id);
                     //Nuevo Envio de Cobranza De
 
-                    resultado= CobranzaRepository.EnviarReciboWsRetrofit(
+                    /*resultado= CobranzaRepository.EnviarReciboWsRetrofit(
                             cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
                                     arrayListCobranzaDetalleSQLiteEntity.get(j).getRecibo(),
                                     SesionEntity.compania_id,
@@ -262,8 +313,8 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                             "0",
                             "0",
                             "0"
-                    );
-                    reswsliberadetalle=String.valueOf(resultado);
+                    );*/
+                    //reswsliberadetalle=String.valueOf(resultado);
                     /*reswsliberadetalle = cobranzaDetalleWSDao.DesvinculaReciboconDeposito(
                             SesionEntity.imei,
                             "UPDATE",
@@ -291,7 +342,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                     );*/
 
 
-                    if (reswsliberadetalle.equals("1")) {
+                    /*if (reswsliberadetalle.equals("1")) {
                         cobranzaDetalleSQLiteDao.ActualizaWSCobranzaDetalle(
                                 arrayListCobranzaDetalleSQLiteEntity.get(j).getRecibo(),
                                 arrayListCobranzaDetalleSQLiteEntity.get(j).getCompania_id(),
@@ -310,14 +361,24 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                                 arrayListCobranzaDetalleSQLiteEntity.get(j).getRecibo(),
                                 arrayListCobranzaDetalleSQLiteEntity.get(j).getCompania_id(),
                                 arrayListCobranzaDetalleSQLiteEntity.get(j).getUsuario_id(),
-                                "1",
-                                "1"
-                                ,"0"
-                                ,"0"
-                                ,"0"
+                                "Y",
+                                ""
+                                ,""
+                                ,"N"
+                                ,"N"
 
                         );
-                    }
+                    }*/
+                    cobranzaDetalleSQLiteDao.ActualizaWSCobranzaDetalle(
+                            arrayListCobranzaDetalleSQLiteEntity.get(j).getRecibo(),
+                            arrayListCobranzaDetalleSQLiteEntity.get(j).getCompania_id(),
+                            arrayListCobranzaDetalleSQLiteEntity.get(j).getUsuario_id(),
+                            "Y",
+                            ""
+                            ,""
+                            ,"N"
+                            ,"N"
+                    );
                 }
 
                /* if (reswsliberadetalle.equals("1")) {
@@ -411,8 +472,8 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                 }
 
                 //Obtiene la Cobranza de la BD local
-                HistoricoCobranzaWS historicoCobranzaWS=new HistoricoCobranzaWS(getContext());
-                arraylistahistoricocobranzaentity = historicoCobranzaWS.getHistoricoCobranza
+                CobranzaRepository cobranzaRepository=new CobranzaRepository(getContext());
+                arraylistahistoricocobranzaentity = cobranzaRepository.getHistoricoCobranza
                         (
                                 SesionEntity.imei,
                                // SesionEntity.compania_id,
@@ -420,9 +481,10 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                                 //Deposito_id,
 
                                 fechasugerida,
-                                tipofecha
+                                tipofecha,
                                 //SesionEntity.fuerzatrabajo_id,
                                 //"0"
+                                ""
                         );
                 /*arraylistahistoricocobranzaentity = historicoCobranzaWSDao.obtenerHistoricoCobranza
                         (
@@ -549,8 +611,11 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                                         ,
                                         //arraylistahistoricocobranzaentity.get(i).getChkwsdepositorecibido()
                                         depositado
-                                        ,""
+                                        ,"N"
                                         ,arraylistahistoricocobranzaentity.get(i).getPagopos()
+                                        ,arraylistahistoricocobranzaentity.get(i).getCodesap()
+                                        ,""
+                                        ,""
                                 );
 
                     }

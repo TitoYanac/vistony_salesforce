@@ -9,6 +9,9 @@ public class ListaPromocionEntity {
 
     @SerializedName("ListTypeName")
     private String lista_promocion;
+
+    @SerializedName("CashDscnt")
+    private String cashDscnt;
 /*
     @SerializedName("U_VIS_CashDscnt")
     private String u_vis_cashdscnt;
@@ -21,6 +24,15 @@ public class ListaPromocionEntity {
         this.u_vis_cashdscnt = u_vis_cashdscnt;
     }
 */
+
+    public String getCashDscnt() {
+        return cashDscnt;
+    }
+
+    public void setCashDscnt(String cashDscnt) {
+        this.cashDscnt = cashDscnt;
+    }
+
     public String getLista_promocion_id() {
         return lista_promocion_id;
     }
