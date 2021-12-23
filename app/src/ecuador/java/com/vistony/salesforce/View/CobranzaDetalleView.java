@@ -70,6 +70,7 @@ import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
+import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -1073,7 +1074,7 @@ public class CobranzaDetalleView extends Fragment {
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza)
     {
         int resultado=0,recibows=0;
-        String tag="",tag2="";
+        String tag="",tag2="",cliente_id="",shipto="",montocobrado="";
         FormulasController formulasController=new FormulasController(getContext());
         cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
         correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(SesionEntity.compania_id,SesionEntity.usuario_id);
@@ -1126,6 +1127,9 @@ public class CobranzaDetalleView extends Fragment {
         if(tipoCobranza.equals("Cobranza"))
         {
             for (int i = 0; i < Lista.size(); i++) {
+                montocobrado=Lista.get(i).getCobrado();
+                cliente_id=String.valueOf(Lista.get(i).getCliente_id());
+                shipto=Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
                         FormulasController.ObtenerFechaHoraCadena(),
@@ -1172,6 +1176,9 @@ public class CobranzaDetalleView extends Fragment {
         {
             String sumacobrado="";
             for (int i = 0; i < Lista.size(); i++) {
+                montocobrado=Lista.get(i).getCobrado();
+                cliente_id=String.valueOf(Lista.get(i).getCliente_id());
+                shipto=Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 sumacobrado=String.valueOf(Lista.get(i).getCobrado());
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
@@ -1239,6 +1246,17 @@ public class CobranzaDetalleView extends Fragment {
 
         chk_bancarizado.setFocusable(false);
         chk_bancarizado.setClickable(false);
+
+
+        VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
+        visita.setCardCode(cliente_id);
+        visita.setAddress(shipto);
+        visita.setType("02");
+        visita.setObservation("Se genero el recibo "+recibo+" para el cliente: "+cliente_id);
+        visita.setLatitude(""+latitude);
+        visita.setLongitude(""+longitude);
+
+        formulasController.RegistraVisita(visita,getActivity(),montocobrado);
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         //UpdateSendReceipt();

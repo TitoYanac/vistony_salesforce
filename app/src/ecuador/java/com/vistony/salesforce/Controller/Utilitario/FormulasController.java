@@ -355,13 +355,13 @@ public class FormulasController {
                     "",
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_total_gal_acumulado(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_descuentocontado(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_cotizacion()
-                    ,""
-                    ,""
-                    ,""
-                    ,""
-                    ,""
-                    ,""
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_cotizacion(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDTD(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDSD(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDCD(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDMT(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio()
             );
         }
 
@@ -602,6 +602,21 @@ public class FormulasController {
         //SOLO DEVOVLERA LA POSICION UNO POR QUE EL ID SOLO PERTENECE A UN OBJETO NO A UNA LISTA DE OBJETOS
         OrdenVentaCabeceraSQLiteEntity ovCabecera= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id).get(0);
         /**FIN**/
+        String agenciaruc="", agenciadir="", agencianombre="", agenciacode="",U_SYP_MDMT="",U_SYP_TVENTA="",U_SYP_VIST_TG="";
+
+
+        if(ovCabecera.getTerminopago_id().equals("47"))
+        {
+            U_SYP_MDMT="08";
+            U_SYP_TVENTA="3";
+            U_SYP_VIST_TG="Y";
+        }
+        else
+        {
+            U_SYP_MDMT=ovCabecera.getU_SYP_MDMT();
+            U_SYP_TVENTA="1";
+            U_SYP_VIST_TG="N";
+        }
 
         DocumentHeader documentHeader=new DocumentHeader();
         Gson gson=new Gson();
@@ -627,11 +642,21 @@ public class FormulasController {
         documentHeader.setU_VIS_AgencyDir(ovCabecera.getU_VIS_AgencyDir());
         documentHeader.setAppVersion(Utilitario.getVersion(context));
         documentHeader.setQuotation(ovCabecera.getQuotation());
+        documentHeader.setTaxDate(Convertirfechahoraafechanumerica(ovCabecera.getFecharegistro()));
+        documentHeader.setDocRate(ovCabecera.getTipocambio());
+        documentHeader.setU_SYP_MDMT(U_SYP_MDMT);
+        documentHeader.setU_SYP_TVENTA(U_SYP_TVENTA);
+        documentHeader.setU_SYP_FEEST("PE");
+        documentHeader.setU_SYP_FETO("01");
+        documentHeader.setU_SYP_FEMEX("1");
+        documentHeader.setU_SYP_VIST_TG(U_SYP_VIST_TG);
+        documentHeader.setU_SYP_DOCEXPORT("N");
         documentHeader.setDraft("N");
+
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
-        if(ovCabecera.getExcede_lineacredito().equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
+        if(ovCabecera.getExcede_lineacredito().equals("1")&&!SesionEntity.contado.equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
             //documentHeader.setApCredit("Y");
             documentHeader.setDraft(Induvis.getStatusDraft());
        }else{
@@ -660,10 +685,7 @@ public class FormulasController {
             documentHeader.setDraft(Induvis.getStatusDraft());
         }
 
-        documentHeader.setApCredit("N");
-        documentHeader.setApDues("N");
-        documentHeader.setApPrcnt("N");
-        documentHeader.setApTPag("N");
+
 
 
 
@@ -672,20 +694,61 @@ public class FormulasController {
 
         listaordenVentaDetalleSQLiteEntity=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
         for(int j=0;j<listaordenVentaDetalleSQLiteEntity.size();j++){
-            String taxOnly="",taxCode="";
+            String COGSAccountCode=SesionEntity.cogsacct,U_SYP_FECAT_07="",taxOnly="N",taxCode=SesionEntity.Impuesto_ID,U_VIST_CTAINGDCTO=SesionEntity.u_vist_ctaingdcto,montolineatotal="";
 
+            //Casuistica Bonificacion
+            if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100"))
+            {
+                //COGSAccountCode="659420";
+                //U_SYP_FECAT_07="31";
+                //taxOnly="Y";
+                //taxCode="EXE_IGV";
+                //U_VIST_CTAINGDCTO="741111";
+                //montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotal();
+                montolineatotal="0";
+            }
+            //Casustica Descuento
+            else if(Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())>0&&
+                    Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())<100)
+            {
+                //COGSAccountCode="";
+                //U_SYP_FECAT_07="10";
+                //taxOnly="N";
+                //taxCode="IGV";
+                //U_VIST_CTAINGDCTO="741113";
+                montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
+                //ContadorLineasConDescuento++;
+
+            }
+            //Casuistica Transferencia Gratuita
+            /*else if(ovCabecera.getTerminopago_id().equals("47"))
+            {
+                //COGSAccountCode="659419";
+                //U_SYP_FECAT_07="11";
+                //taxOnly="Y";
+                //taxCode="IGV";
+                //U_VIST_CTAINGDCTO="";
+                montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotal();
+            }*/
             //Casuistica Venta
-
+            else
+            {
+                //U_SYP_FECAT_07="10";
+                //COGSAccountCode="";
+                //taxOnly="N";
+                //taxCode="IGV";
+                //U_VIST_CTAINGDCTO="";
+                montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
+            }
 
             taxOnly="N";
             taxCode=Induvis.getTaxCodeString();
             documentLine =new DocumentLine();
             documentLine.setCostingCode( SesionEntity.UnidadNegocio);
             documentLine.setCostingCode2(SesionEntity.CentroCosto);
-
+            documentLine.setCostingCode3(SesionEntity.LineaProduccion);
             //el vendedor puede desde 0 a 99.9%, de 0 a 5% todo ok en adelnate mostrar alerta
             documentLine.setDiscountPercent(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
-
             documentLine.setDscription(ObtenerProductoDescripcion(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id(),context));
             documentLine.setItemCode(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id());
             documentLine.setPrice(listaordenVentaDetalleSQLiteEntity.get(j).getPreciounitario());
@@ -693,11 +756,27 @@ public class FormulasController {
             documentLine.setTaxCode(taxCode);
             documentLine.setTaxOnly(taxOnly);
             documentLine.setWarehouseCode(listaordenVentaDetalleSQLiteEntity.get(j).getAlmacen_id());
-
+            documentLine.setLineTotal(montolineatotal);
+            documentLine.setAcctCode("");
+            documentLine.setU_SYP_FECAT07(U_SYP_FECAT_07);
+            documentLine.setU_VIS_PromID(listaordenVentaDetalleSQLiteEntity.get(j).getPromocion_id());
+            documentLine.setU_VIS_PromLineID(listaordenVentaDetalleSQLiteEntity.get(j).getLineareferencia());
+            documentLine.setU_VIST_CTAINGDCTO(U_VIST_CTAINGDCTO);
+            documentLine.setU_VIS_CommentText("0");
+            documentLine.setCOGSAccountCode(COGSAccountCode);
 
             listadoDocumentLines.add(documentLine);
         }
 
+        documentHeader.setApCredit("N");
+        documentHeader.setApDues("N");
+        documentHeader.setApPrcnt("N");
+        documentHeader.setApTPag("N");
+
+        if(SesionEntity.quotation.equals("Y"))
+        {
+            documentHeader.setDraft("N");
+        }
 
         documentHeader.setDocumentLines(listadoDocumentLines);
 
@@ -999,7 +1078,7 @@ public class FormulasController {
     public void RegistraVisita(VisitaSQLiteEntity visita, Context context,String monto) {
         visitaRepository = new ViewModelProvider((ViewModelStoreOwner) context).get(VisitaRepository.class);
 
-        SimpleDateFormat dateFormathora = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
         SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
 
         Date date = new Date();
@@ -1026,7 +1105,7 @@ public class FormulasController {
                         visita.getAddress(),
                         SesionEntity.compania_id,
                         String.valueOf(FormatFecha.format(date)),
-                        ""
+                        monto
                 );
                 break;
             case "02":
@@ -1035,7 +1114,7 @@ public class FormulasController {
                         visita.getAddress(),
                         SesionEntity.compania_id,
                         String.valueOf(FormatFecha.format(date)),
-                        ""
+                        monto
                 );
                 break;
             default:

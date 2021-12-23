@@ -41,4 +41,25 @@
     <string name="zone">Zone</string>
     <string name="head_zone">Zone:</string>
     <string name="EnablePrint">Enable Print</string>
+    <string name="LineUsed">Line Used</string>
+    <string name="LineCredit">Line Credit</string>
+    <string name="Quotation">Quotation</string>
+    <string name="lbl_orderhed_payterms">PAYMENT TERM</string>
+    <string name="lbl_code">Código:</string>
+    <string name="lbl_gallon">Gallon:</string>
+    <string name="lbl_promotion">Promotion:</string>
+    <string name="Promotion_Summary">Promotion Summary</string>
+    <string name="Selected_Promotion">Promotion Selected</string>
+    <string name="Pending_Promotion">Promoción Pendiente</string>
+    <string name="Promotion_Detail">PROMOTION DETAIL:</string>
+    <string name="Direct_Depost">Direct Deposit</string>
+    <string name="Find_Deposit">Find Deposit</string>
+    <string name="lbl_update_parameters">Update Parameters</string>
+    <string name="lbl_legalnumber">LegalNumber</string>
+    <string name="lbl_invoicedate">Invoice Date</string>
+    <string name="lbl_duedate">Due Date</string>
+    <string name="lbl_DocAmount">Doc Amount</string>
+    <string name="lbl_balance">Balance</string>
+    <string name="lbl_kardex_of_payment">Kardex Of Payment</string>
+
 </resources>

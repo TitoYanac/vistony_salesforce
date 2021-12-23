@@ -197,6 +197,10 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             {
                 Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
                 transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarClienteQuotasPerCustomerDialog(ArraylistaClienteCabeceraEntity));
+            }else if(BuscarClienteView.Flujo.equals("kardexofpayment"))
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarClienteKardexOfPayment(ArraylistaClienteCabeceraEntity));
             }
             else
                     {

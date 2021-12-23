@@ -315,10 +315,15 @@ public class CobranzaRepository extends ViewModel {
         }else if(TipoFecha.equals("Deposito"))
         {
             Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-Deposito-entro");
+            Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-Deposito-Imei"+Imei);
+            Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-Deposito-deposito_id"+deposito_id);
             call = api.getHistoricoCobranzaDE(
                     Imei,
                     deposito_id
             );
+            Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-Deposito-entro-api.getHistoricoCobranzaDE"+api.getHistoricoCobranzaDE(Imei,
+                    deposito_id).toString());
+            Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-Deposito-entro-call"+call.toString());
         }
 
         try{
@@ -326,9 +331,9 @@ public class CobranzaRepository extends ViewModel {
             Log.e("REOS","CobranzaRepository-getHistoricoCobranza-call: "+call.toString());
             if(response.isSuccessful()) {
 
-
+                Log.e("REOS","CobranzaRepository-getHistoricoCobranza-response(): "+response.toString());
                 HistoricoCobranzaEntityResponse historicoCobranzaEntityResponse=response.body();
-                Log.e("REOS","CobranzaRepository-getHistoricoCobranza-response: "+response.toString());
+                Log.e("REOS","CobranzaRepository-getHistoricoCobranza-response.body(): "+response.body().toString());
 //
 
                 for(int i=0;i<historicoCobranzaEntityResponse.getHistoricoCobranza().size();i++){

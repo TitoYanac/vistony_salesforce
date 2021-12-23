@@ -47,6 +47,7 @@ import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
@@ -129,7 +130,7 @@ public class OrdenVentaCabeceraView extends Fragment {
     private static DireccionCliente direccionSelecionada;
     CheckBox chk_lista_precios;
     static ListaPriceListEntity listaPriceListEntity=new ListaPriceListEntity();
-
+    Dialog dialogCrearOrdenVenta;
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
@@ -311,6 +312,8 @@ public class OrdenVentaCabeceraView extends Fragment {
                 //////////////////////////////////////
                 //////////////////////////////////////
                 //////////////////////////////////////
+                ArrayList<DireccionCliente> listaDireccionCliente=new ArrayList<>();
+                DireccionSQLite direccionSQLite=new DireccionSQLite(getContext());
 
                 for(int g=0;g<listaOrdenVentaCabecera.size();g++){
                     listaClienteCabecera= clienteSQlite.ObtenerClienteporClienteID(listaOrdenVentaCabecera.get(g).getCliente_id());
@@ -322,11 +325,12 @@ public class OrdenVentaCabeceraView extends Fragment {
                     impuestosAcum=listaOrdenVentaCabecera.get(g).getMontoimpuesto();
                     totalAcum=listaOrdenVentaCabecera.get(g).getMontototal();
                     confirmationRequestErp=listaOrdenVentaCabecera.get(g).getRecibidoERP().equals("1")?true:false;
+                    cliente_terminopago_id=listaOrdenVentaCabecera.get(g).getTerminopago_id();
 
                     listaAgenciasqliteentity= agenciaSQLiteDao.ObtenerAgencia_porID(
                             listaOrdenVentaCabecera.get(g).getAgencia_id()
                     );
-
+                    listaDireccionCliente=direccionSQLite.getListAddressOV(listaOrdenVentaCabecera.get(g).getCliente_id(),listaOrdenVentaCabecera.get(g).getDomembarque_id());
                     historicoOVcantidaddescuento=listaOrdenVentaCabecera.get(g).getDescuentocontado();
                 }
 
@@ -334,24 +338,28 @@ public class OrdenVentaCabeceraView extends Fragment {
                 {
                     nombrecliente=listaClienteCabecera.get(l).getNombrecliente();
                     codigocliente=listaClienteCabecera.get(l).getCliente_id();
-                    direccioncliente=listaClienteCabecera.get(l).getDireccion();
+                    //direccioncliente=listaClienteCabecera.get(l).getDireccion();
 
                     moneda=listaClienteCabecera.get(l).getMoneda();
                     impuesto_id=listaClienteCabecera.get(l).getImpuesto_id();
                     impuesto=listaClienteCabecera.get(l).getImpuesto();
                     rucdni= listaClienteCabecera.get(l).getRucdni();
-                    cliente_terminopago_id=listaClienteCabecera.get(l).getTerminopago_id();
+                    //cliente_terminopago_id=listaClienteCabecera.get(l).getTerminopago_id();
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.listaClienteCabecera.listaClienteCabecera.get(l).getTerminopago_id(): "+listaClienteCabecera.get(l).getTerminopago_id());
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.listaClienteCabecera.cliente_terminopago_id: "+cliente_terminopago_id);
 
-
-
                 }
+
+                for(int k=0;k<listaDireccionCliente.size();k++)
+                {
+                    direccioncliente=listaDireccionCliente.get(k).getDireccion();
+                }
+
 
                 for(int m=0;m<listaAgenciasqliteentity.size();m++){
                     historicoordenventa_agencia= listaAgenciasqliteentity.get(m).getAgencia();
                 }
-
+                obtenerTituloFormulario();
             }
 
             if(Listado !=null){
@@ -434,7 +442,10 @@ public class OrdenVentaCabeceraView extends Fragment {
 
         tv_cliente.setText(nombrecliente);
         tv_direccion.setText(direccioncliente);
+
+        Log.e("REOS","OrdenVentaCabeceraView-onCreateView-cliente_terminopago_id:"+cliente_terminopago_id);
         listaTerminopago=terminoPagoSQLiteDao.ObtenerTerminoPagoporID(cliente_terminopago_id,SesionEntity.compania_id);
+
 
         chk_lista_precios.setVisibility(View.GONE);
 
@@ -478,6 +489,7 @@ public class OrdenVentaCabeceraView extends Fragment {
         for(int i=0;i<listaTerminopago.size();i++)
         {
             cliente_terminopago=listaTerminopago.get(i).getTerminopago();
+            Log.e("REOS","OrdenVentaCabeceraView-onCreateView-cliente_terminopago:"+cliente_terminopago);
             contado=listaTerminopago.get(i).getContado();
             SesionEntity.contado=contado;
             if(listaTerminopago.get(i).getTerminopago_id().equals("-1"))
@@ -723,7 +735,7 @@ public class OrdenVentaCabeceraView extends Fragment {
 
                 for(int i=0;i<listaHistoricoOrdenVentaEntity.size();i++){
 
-                    if(listaHistoricoOrdenVentaEntity!=null || !listaHistoricoOrdenVentaEntity.get(i).getDocNum().equals("")){
+                    if(listaHistoricoOrdenVentaEntity.get(i).isEnvioERPOV() ){
                         Drawable drawable2 = menu_variable.findItem(R.id.enviar_erp).getIcon();
                         drawable2 = DrawableCompat.wrap(drawable2);
                         DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.Black));
@@ -1206,20 +1218,20 @@ public class OrdenVentaCabeceraView extends Fragment {
 
     private Dialog alertaCrearOrdenVenta(String texto) {
 
-        final Dialog dialog = new Dialog(context);
-        dialog.setContentView(R.layout.layout_dialog_advertencia);
-        dialog.setCanceledOnTouchOutside(false);
+        dialogCrearOrdenVenta = new Dialog(context);
+        dialogCrearOrdenVenta.setContentView(R.layout.layout_dialog_advertencia);
+        dialogCrearOrdenVenta.setCanceledOnTouchOutside(false);
 
-        TextView textMsj = dialog.findViewById(R.id.tv_texto);
+        TextView textMsj = dialogCrearOrdenVenta.findViewById(R.id.tv_texto);
         textMsj.setText(texto);
 
-        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        ImageView image = (ImageView) dialogCrearOrdenVenta.findViewById(R.id.image);
 
         image.setImageResource(R.mipmap.logo_circulo);
 
 
-        Button dialogButtonOK =dialog.findViewById(R.id.dialogButtonOK);
-        Button dialogButtonCancel =  dialog.findViewById(R.id.dialogButtonCancel);
+        Button dialogButtonOK =dialogCrearOrdenVenta.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel =  dialogCrearOrdenVenta.findViewById(R.id.dialogButtonCancel);
 
         dialogButtonOK.setOnClickListener(v -> {
 
@@ -1229,43 +1241,50 @@ public class OrdenVentaCabeceraView extends Fragment {
             }else{
                 cantidaddescuento=sp_cantidaddescuento.getSelectedItem().toString();
             }*/
+            if (tv_terminopago.getText()==null || tv_terminopago.getText()=="")
+            {
+                alertaTerminoPago("Elija un Termino de Pago antes de Iniciar la Orden...").show();
+            }else
+                {
 
-            String Fragment="OrdenVentaCabeceraView";
-            String accion="detalle";
-            String compuesto=Fragment+"-"+accion;
-            cantidaddescuento=String.valueOf(chk_descuento_contado.isChecked());
-            ///////////AQui//////////////
-            String Objeto=
-                    //contado+"-"+
-                    cantidaddescuento+"&"+cliente_terminopago_id;
-            //String Objeto=cantidaddescuento+"-"+cliente_terminopago_id;
-            Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-cantidaddescuento: "+cantidaddescuento);
-            Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-cliente_terminopago_id: "+cliente_terminopago_id);
-            Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-codigocliente: "+codigocliente);
-            Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-Objeto: "+Objeto);
-            Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-String.valueOf(chk_lista_precios.isChecked()): "+String.valueOf(chk_lista_precios.isChecked()));
-            Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-listaPriceListEntity.pricelist_id: "+listaPriceListEntity.pricelist_id);
-            Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-listaPriceListEntity.pricelist: "+listaPriceListEntity.pricelist);
 
-            String [] arrayObject={codigocliente,Objeto,String.valueOf(chk_lista_precios.isChecked()),listaPriceListEntity.pricelist_id,listaPriceListEntity.pricelist};
+                String Fragment = "OrdenVentaCabeceraView";
+                String accion = "detalle";
+                String compuesto = Fragment + "-" + accion;
+                cantidaddescuento = String.valueOf(chk_descuento_contado.isChecked());
+                ///////////AQui//////////////
+                String Objeto =
+                        //contado+"-"+
+                        cantidaddescuento + "&" + cliente_terminopago_id;
+                //String Objeto=cantidaddescuento+"-"+cliente_terminopago_id;
+                Log.e("REOS", "OrdenVentaCabeceraView-alertaCrearOrdenVenta-cantidaddescuento: " + cantidaddescuento);
+                Log.e("REOS", "OrdenVentaCabeceraView-alertaCrearOrdenVenta-cliente_terminopago_id: " + cliente_terminopago_id);
+                Log.e("REOS", "OrdenVentaCabeceraView-alertaCrearOrdenVenta-codigocliente: " + codigocliente);
+                Log.e("REOS", "OrdenVentaCabeceraView-alertaCrearOrdenVenta-Objeto: " + Objeto);
+                Log.e("REOS", "OrdenVentaCabeceraView-alertaCrearOrdenVenta-String.valueOf(chk_lista_precios.isChecked()): " + String.valueOf(chk_lista_precios.isChecked()));
+                Log.e("REOS", "OrdenVentaCabeceraView-alertaCrearOrdenVenta-listaPriceListEntity.pricelist_id: " + listaPriceListEntity.pricelist_id);
+                Log.e("REOS", "OrdenVentaCabeceraView-alertaCrearOrdenVenta-listaPriceListEntity.pricelist: " + listaPriceListEntity.pricelist);
 
-            dialog.dismiss();
-            mListener.onFragmentInteraction(compuesto,arrayObject);
+                String[] arrayObject = {codigocliente, Objeto, String.valueOf(chk_lista_precios.isChecked()), listaPriceListEntity.pricelist_id, listaPriceListEntity.pricelist};
 
-            btn_detalle_orden_venta.setEnabled(true);
-            btn_detalle_orden_venta.setClickable(true);
+                    dialogCrearOrdenVenta.dismiss();
+                mListener.onFragmentInteraction(compuesto, arrayObject);
+
+                btn_detalle_orden_venta.setEnabled(true);
+                btn_detalle_orden_venta.setClickable(true);
+            }
         });
 
         dialogButtonCancel.setOnClickListener(v -> {
-            dialog.dismiss();
+            dialogCrearOrdenVenta.dismiss();
             btn_detalle_orden_venta.setEnabled(true);
             btn_detalle_orden_venta.setClickable(true);
         });
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogCrearOrdenVenta.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        return  dialog;
+        return  dialogCrearOrdenVenta;
     }
 
     public void ObtenerDataSpinnerDescuentoContado()
@@ -1288,5 +1307,43 @@ public class OrdenVentaCabeceraView extends Fragment {
     {
         getActivity().setTitle(Induvis.getTituloVentaString());
     }
+
+
+    private Dialog alertaTerminoPago(String texto) {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog);
+
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText("ADVERTENCIA");
+
+        TextView textMsj = dialog.findViewById(R.id.textViewMsj);
+        textMsj.setText(texto);
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+
+
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                dialogCrearOrdenVenta.cancel();
+                btn_detalle_orden_venta.setEnabled(true);
+                btn_detalle_orden_venta.setClickable(true);
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
 
 }

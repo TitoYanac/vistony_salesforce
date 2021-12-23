@@ -23,6 +23,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricoOrdenVentaAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
@@ -266,9 +267,11 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                 //Evalua listas
                     if ((listadepuracion1.size() < listadepuracion2.size())) {
 
+
                         listadepuracion2.removeAll(listadepuracion1);
 
                         for (int k = 0; k < listadepuracion2.size(); k++) {
+
                             for (int l = 0; l < listaOrdenVentaSQLite.size(); l++) {
 
                                 if (listadepuracion2.get(k).equals(listaOrdenVentaSQLite.get(l).getOrdenventa_id())) {
@@ -291,7 +294,36 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
 
                                     Log.e("MontoTotal","=>"+listaOrdenVentaSQLite.get(l).getMontototal());
                                     listaHOV.setApprovalCommentary(listaOrdenVentaSQLite.get(l).getMensajeWS());
-                                    listaHOV.setApprovalStatus("Pendiente");
+
+                                    switch (BuildConfig.FLAVOR){
+                                        case "peru":
+                                        case "chile":
+                                        case "india":
+                                            listaHOV.setApprovalStatus("Pendiente");
+                                            break;
+                                        case "bolivia":
+                                        case "ecuador":
+
+                                            if(listaOrdenVentaSQLite.get(l).getQuotation()==null)
+                                            {
+                                                listaOrdenVentaSQLite.get(l).setQuotation("N");
+                                            }
+                                            Log.e("REOS","OrdenVentaCabeceraView.listaOrdenVentaSQLite.get(l).getQuotation(): "+listaOrdenVentaSQLite.get(l).getQuotation());
+                                            if(listaOrdenVentaSQLite.get(l).getQuotation().equals("Y"))
+                                            {
+                                                listaHOV.setApprovalStatus("Cotización");
+                                                //SesionEntity.quotation="Y";
+                                            }
+                                            else
+                                                {
+                                                    listaHOV.setApprovalStatus("Orden Venta");
+                                                   // SesionEntity.quotation="N";
+                                                }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
                                     //listaHOV.comentarioaprobacion = "";
                                     listaHOV.setSalesOrderID(listaOrdenVentaSQLite.get(l).getOrdenventa_id());
                                     listaHOV.setComentariows(listaOrdenVentaSQLite.get(l).getMensajeWS());
@@ -315,10 +347,98 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                             }
 
                         }
-                    }
+                    }else
+                        {
+                            Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-cayo-en-el-else:");
+                            for(int k=0;k<listaOrdenVentaSQLite.size();k++)
+                            {
+                                int contador=0;
+                                for(int l=0;l<listaHistoricoOrdenVentaEntities.size();l++)
+                                {
+                                    if(listaOrdenVentaSQLite.get(k).getOrdenventa_id().equals(listaHistoricoOrdenVentaEntities.get(l).getSalesOrderID()))
+                                    {
+                                        contador++;
+                                    }
+                                }
+                                if(contador==0)
+                                {
+                                    String nombrecliente="";
+                                    ClienteSQlite clienteSQlite =new ClienteSQlite(getContext());
+                                    ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity=new ArrayList<>();
+                                    listaClienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(listaOrdenVentaSQLite.get(k).getCliente_id(),SesionEntity.compania_id);
+
+                                    for(int w=0;w<listaClienteSQLiteEntity.size();w++){
+                                        nombrecliente=listaClienteSQLiteEntity.get(w).getNombrecliente();
+                                    }
+
+                                    ListaHistoricoOrdenVentaEntity listaHOV = new ListaHistoricoOrdenVentaEntity();
+
+                                    //listaHOV.ordenventa_id = listaOrdenVentaSQLite.get(l).getOrdenventa_id();
+                                    listaHOV.setCardCode(listaOrdenVentaSQLite.get(k).getCliente_id());
+                                    listaHOV.setLicTradNum(listaOrdenVentaSQLite.get(k).getRucdni());
+                                    listaHOV.setCardName(nombrecliente);
+                                    listaHOV.setDocTotal(listaOrdenVentaSQLite.get(k).getMontototal());
+
+                                    Log.e("MontoTotal","=>"+listaOrdenVentaSQLite.get(k).getMontototal());
+                                    listaHOV.setApprovalCommentary(listaOrdenVentaSQLite.get(k).getMensajeWS());
+
+                                    switch (BuildConfig.FLAVOR){
+                                        case "peru":
+                                        case "chile":
+                                        case "india":
+                                            listaHOV.setApprovalStatus("Pendiente");
+                                            break;
+                                        case "bolivia":
+                                        case "ecuador":
+
+                                            if(listaOrdenVentaSQLite.get(k).getQuotation()==null)
+                                            {
+                                                listaOrdenVentaSQLite.get(k).setQuotation("N");
+                                            }
+
+                                            Log.e("REOS","OrdenVentaCabeceraView.listaOrdenVentaSQLite.get(l).getQuotation(): "+listaOrdenVentaSQLite.get(k).getQuotation());
+                                            if(listaOrdenVentaSQLite.get(k).getQuotation().equals("Y"))
+                                            {
+                                                listaHOV.setApprovalStatus("Cotización");
+                                                //SesionEntity.quotation="Y";
+                                            }
+                                            else
+                                            {
+                                                listaHOV.setApprovalStatus("Orden Venta");
+                                                // SesionEntity.quotation="N";
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+
+                                    //listaHOV.comentarioaprobacion = "";
+                                    listaHOV.setSalesOrderID(listaOrdenVentaSQLite.get(k).getOrdenventa_id());
+                                    listaHOV.setComentariows(listaOrdenVentaSQLite.get(k).getMensajeWS());
+
+                                    Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-listaOrdenVentaSQLite.get(l).getRecibidoERP():"+listaOrdenVentaSQLite.get(k).getRecibidoERP());
+                                    if(listaOrdenVentaSQLite.get(k).getRecibidoERP().equals("1")){
+                                        listaHOV.recepcionERPOV = true;
+                                    }else{
+                                        listaHOV.recepcionERPOV = false;
+                                    }
+                                    Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-listaOrdenVentaSQLite.get(l).getEnviadoERP():"+listaOrdenVentaSQLite.get(k).getEnviadoERP());
+                                    if(listaOrdenVentaSQLite.get(k).getEnviadoERP().equals("1")){
+                                        listaHOV.envioERPOV = true;
+                                    }else{
+                                        listaHOV.envioERPOV = false;
+                                    }
+
+                                    listaHistoricoOrdenVentaEntities.add(listaHOV);
+                                }
+
+                            }
+
+                        }
 
             } catch (Exception e){
                 e.printStackTrace();
+                Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-error:"+e.toString());
             }
             return listaHistoricoOrdenVentaEntities;
         }

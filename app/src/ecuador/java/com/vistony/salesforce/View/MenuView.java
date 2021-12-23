@@ -33,6 +33,7 @@ import android.view.View;
 import android.webkit.ValueCallback;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -142,6 +143,7 @@ public class MenuView extends AppCompatActivity
     Fragment historicoOrdenVentaFragment;
     Fragment PromocionCabeceraFragment;
     Fragment PromocionDetalleFragment;
+    TableRow tablerowzona;
 
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
@@ -236,6 +238,7 @@ public class MenuView extends AppCompatActivity
         imv_compania_menu=(ImageView)
                 navigationView.getHeaderView(0).findViewById(R.id.imv_compania_menu);
         textViewStatus=navigationView.getHeaderView(0).findViewById(R.id.textViewStatus);
+        tablerowzona=(TableRow) navigationView.getHeaderView(0).findViewById(R.id.tablerowzona);
         listaConfiguracionEntity= new ArrayList<ConfiguracionSQLEntity>();
         listaConfiguracionEntity=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
         if(listaConfiguracionEntity.isEmpty())
@@ -272,7 +275,16 @@ public class MenuView extends AppCompatActivity
             imv_compania_menu.setImageResource(R.mipmap.rofalab304x90_2);
         }
 
-
+        switch (BuildConfig.FLAVOR){
+            case "bolivia":
+            case "ecuador":
+            case "chile":
+            case "india":
+                tablerowzona.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
 
         //Manejo de Perfiles
         //Modificado rotarola 29-10-2021 12:39 Optimizacion de codigo de Perfiles

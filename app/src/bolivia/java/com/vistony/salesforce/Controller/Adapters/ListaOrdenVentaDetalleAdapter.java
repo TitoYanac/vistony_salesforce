@@ -102,6 +102,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
             holder.chk_descuento_contado=(CheckBox) convertView.findViewById(R.id.chk_descuento_contado);
             holder.et_porcentaje_descuento_contado=(EditText) convertView.findViewById(R.id.et_porcentaje_descuento_contado);
             holder.tv_orden_detalle_precio_igv = (TextView) convertView.findViewById(R.id.tv_orden_detalle_precio_igv);
+            holder.tv_orden_detalle_total_igv = (TextView) convertView.findViewById(R.id.tv_orden_detalle_total_igv);
             holder.layout=(ViewGroup) convertView.findViewById(R.id.content);
             convertView.setTag(holder);
         } else {
@@ -122,7 +123,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         holder.et_orden_detalle_cantidad.setText(lead.getOrden_detalle_cantidad());
         holder.tv_orden_detalle_galon_unitario.setText(lead.getOrden_detalle_gal());
         holder.tv_orden_detalle_precio_igv.setText(formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(),SesionEntity.Impuesto));
-       // holder.tv_orden_detalle_porcentaje_descuento.setText(String.valueOf(format.format(Float.parseFloat(lead.getOrden_detalle_stock_general()))));
+
+        // holder.tv_orden_detalle_porcentaje_descuento.setText(String.valueOf(format.format(Float.parseFloat(lead.getOrden_detalle_stock_general()))));
         /*if(lead.isOrden_detalle_chk_descuentocontado())
         {
             holder.et_porcentaje_descuento_contado.setText(lead.getOrden_detalle_descuentocontado());
@@ -476,7 +478,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                         lead.setOrden_detalle_porcentaje_descuento(""+(descuento));
                         //lead.setOrden_detalle_descuentocontado(""+descuento);
                         Log.e("REOS","ListaOrdenVentaDetalleAdapter.lead.getOrden_detalle_porcentaje_descuento:"+lead.getOrden_detalle_porcentaje_descuento());
-                        v.setText(""+descuento);
+                        //v.setText(""+descuento);
+                        v.setText(Convert.numberForView(String.valueOf(descuento)));
                     } else {
                         Toast.makeText(Context, "El porcentaje de descuento no puede ser mayor al 99.9%", Toast.LENGTH_LONG).show();
                         holder.editDspPorcentaje.setBackgroundResource(R.drawable.borde_editext_ov_rojo);
@@ -1037,6 +1040,14 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
 
 
         }
+        Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_montototallinea():"+lead.getOrden_detalle_montototallinea());
+        Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_monto_descuento():"+lead.getOrden_detalle_monto_descuento());
+        Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_porcentaje_descuento():"+lead.getOrden_detalle_porcentaje_descuento());
+        Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_porcentaje_descuento_maximo():"+lead.getOrden_detalle_porcentaje_descuento_maximo());
+        Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-formulasController.applyDiscountPercentageForLine(lead.getOrden_detalle_montototallinea(),lead.getOrden_detalle_porcentaje_descuento()):"+formulasController.applyDiscountPercentageForLine(lead.getOrden_detalle_montototallinea(),lead.getOrden_detalle_porcentaje_descuento()));
+        Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_montosubtotal():"+lead.getOrden_detalle_montosubtotal());
+        Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_montosubtotalcondescuento():"+lead.getOrden_detalle_montosubtotalcondescuento());
+        holder.tv_orden_detalle_total_igv.setText(formulasController.CalcularMontoTotalconDescuento(lead.getOrden_detalle_montototallinea(),formulasController.applyDiscountPercentageForLine(lead.getOrden_detalle_montosubtotal(),lead.getOrden_detalle_porcentaje_descuento())));
         return convertView;
     }
 
@@ -1155,6 +1166,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         EditText et_porcentaje_descuento_contado;
         EditText editDspPorcentaje;
         TextView tv_orden_detalle_precio_igv;
+        TextView tv_orden_detalle_total_igv;
         ViewGroup layout;
 
     }
@@ -1287,12 +1299,12 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                         if (!lead.getOrden_detalle_lista_promocion_cabecera().get(a).getListaPromocionDetalleEntities().get(b).getProducto_id().equals("DESCUENTO")) {
                             Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-Inicia Linea DESCUENTO");
                             Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-chk_descuentocontadoaplicado" + String.valueOf(chk_descuentocontadoaplicado));
-                            Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado()" + String.valueOf(lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado()));
+                            //Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado()" + String.valueOf(lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado()));
                             Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-contadodescuento: " + contadodescuento);
                             Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-lead.isOrden_detalle_chk_descuentocontado(): " + lead.isOrden_detalle_chk_descuentocontado());
                             Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-lead.getOrden_detalle_descuentocontado(): " + lead.getOrden_detalle_descuentocontado());
-                            Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).getOrden_detalle_porcentaje_descuento(): " + lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).getOrden_detalle_porcentaje_descuento());
-                            Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado(): " + lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado());
+                            //Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).getOrden_detalle_porcentaje_descuento(): " + lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).getOrden_detalle_porcentaje_descuento());
+                            //Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado(): " + lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado());
 
                             orden_detalle_promocion_item++;
 
@@ -1630,7 +1642,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         TextView textTitle = dialog.findViewById(R.id.text);
         textTitle.setText("ADVERTENCIA");
         final TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("La Linea tiene adjunta una Promocion o Producto no permitido para el Descuento");
+        textMsj.setText("La Línea tiene adjunta una Promoción o Producto no permitido para el Descuento");
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);

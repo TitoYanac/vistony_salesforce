@@ -284,6 +284,10 @@ ParametrosView extends Fragment {
                     //parametrosSQLiteDao.InsertaParametros("14", "DIRECCION CLIENTE", "0", getDateTime());
                     //parametrosSQLiteDao.InsertaParametros("15", "HOJA DESPACHO", "0", getDateTime());
                 }
+                if(parametrosSQLite.ObtenerCantidadParametroID("17")==0)
+                {
+                    parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
+                }
                 break;
             case "peru":
             case "bolivia":
@@ -306,6 +310,7 @@ ParametrosView extends Fragment {
                 {
                 parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
                 }
+
                 break;
         }
 
@@ -407,7 +412,7 @@ ParametrosView extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Descargando Parametros", true, false);
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Descargando Parámetros", true, false);
         }
         @Override
         protected String doInBackground(String... arg0) {
@@ -643,6 +648,8 @@ ParametrosView extends Fragment {
                                     CantMotivoVisita = registrarMotivoVisita(LMVisita);
                                     parametrosSQLite.ActualizaCantidadRegistros("17", "MOTIVO VISITA", String.valueOf(CantMotivoVisita), getDateTime());
                                 }
+
+
                                 break;
                             case "peru":
                                  clienteRepository = new ClienteRepository();

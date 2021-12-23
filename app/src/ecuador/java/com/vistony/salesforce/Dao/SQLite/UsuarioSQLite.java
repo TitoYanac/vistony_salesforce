@@ -69,6 +69,7 @@ public class UsuarioSQLite {
             registro.put("Country",vendedor.getCountry());
             registro.put("flag_stock",vendedor.getSettings().get(0).getOutStock());
             registro.put("flag_backup",vendedor.getSettings().get(0).getFlagBackup());
+            registro.put("rate",vendedor.getRate());
 
             bd.insert("usuario",null,registro);
             bd.close();
@@ -173,7 +174,7 @@ public class UsuarioSQLite {
                     usuarioSQLiteEntity.setCountry(fila.getString(fila.getColumnIndex("Country")));
                     usuarioSQLiteEntity.setLenguage(fila.getString(fila.getColumnIndex("Language")));
                     usuarioSQLiteEntity.setImei(fila.getString(fila.getColumnIndex("imei")));
-
+                    usuarioSQLiteEntity.setRate(fila.getString(fila.getColumnIndex("rate")));
                 } while (fila.moveToNext());
             }
 

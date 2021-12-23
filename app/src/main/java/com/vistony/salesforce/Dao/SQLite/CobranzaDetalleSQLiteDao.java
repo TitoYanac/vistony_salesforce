@@ -803,7 +803,7 @@ public class CobranzaDetalleSQLiteDao {
         try {
             Cursor fila = bd.rawQuery(
                     "Select * from cobranzadetalle" +
-                            " where fechacobranza like '"+fecha+"%'" +" and fuerzatrabajo_id= '"+fuerzatrabajo_id+"'" +" and compania_id= '"+compania_id+"' and chkanulado='N'"
+                            " where fechacobranza like '"+fecha+"%'" +" and fuerzatrabajo_id= '"+fuerzatrabajo_id+"'" +" and compania_id= '"+compania_id+"' and (chkanulado='N' or chkanulado='0') "
                     ,null);
             while (fila.moveToNext())
             {
@@ -1256,10 +1256,10 @@ public class CobranzaDetalleSQLiteDao {
                             "a.comentario as Commentary, " +
                             "a.pagodirecto as DirectDeposit, " +
                             "a.pagopos as POSPay, " +
-                            "a.horacobranza as IncomeTime," +
-                            "IFNULL((Select IFNULL(doc_entry,0 )FROM documentodeuda WHERE documento_id=a.documento_id),0) AS documentoentry " +
+                            "IFNULL(a.horacobranza,'') as IncomeTime, " +
+                            "IFNULL((Select IFNULL(doc_entry,0 ) FROM documentodeuda WHERE documento_id=a.documento_id),0) AS documentoentry " +
                             " from cobranzadetalle a " +
-                            " where chkwsrecibido='N' " +
+                            " where (chkwsrecibido='N' or  chkwsrecibido='0') " +
                             //" and chkwsdepositorecibido='0'" +
                             //" and chkwsrecibido='1'" +
                             " and compania_id='"+compania_id+"'" +
@@ -1268,7 +1268,7 @@ public class CobranzaDetalleSQLiteDao {
 
             while (fila.moveToNext())
             {
-
+                Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-IniciaLlenadoQuery");
                 collectionEntity= new CollectionEntity();
                 collectionEntity.setItemDetail(fila.getString(fila.getColumnIndex("ItemDetail")));
                 collectionEntity.setCardCode(fila.getString(fila.getColumnIndex("CardCode")));
@@ -1286,6 +1286,8 @@ public class CobranzaDetalleSQLiteDao {
                 collectionEntity.setCommentary(fila.getString(fila.getColumnIndex("Commentary")));
                 collectionEntity.setDirectDeposit(fila.getString(fila.getColumnIndex("DirectDeposit")));
                 collectionEntity.setPOSPay(fila.getString(fila.getColumnIndex("POSPay")));
+                Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-Induvis.getTimeSAP-IncomeTime: "+(fila.getString(fila.getColumnIndex("IncomeTime"))));
+                Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-Induvis.getTimeSAP: "+Induvis.getTimeSAP(BuildConfig.FLAVOR,fila.getString(fila.getColumnIndex("IncomeTime"))));
                 collectionEntity.setIncomeTime(Induvis.getTimeSAP(BuildConfig.FLAVOR,fila.getString(fila.getColumnIndex("IncomeTime"))));
                 collectionEntity.setStatus("P");
                 collectionEntity.setDeposit("");
@@ -1300,6 +1302,7 @@ public class CobranzaDetalleSQLiteDao {
         {
             // TODO: handle exception
             System.out.println(e.getMessage());
+            Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-e: "+e.toString());
         }
 
         bd.close();
@@ -1315,8 +1318,8 @@ public class CobranzaDetalleSQLiteDao {
         try {
             Cursor fila = bd.rawQuery(
                     "Select sap_code,cobranza_id,banco_id,recibo,chkqrvalidado from cobranzadetalle" +
-                            " where chkdepositado='Y' " +
-                            " and chkwsdepositorecibido='N'" +
+                            " where (chkdepositado='Y' or  chkdepositado='1')  " +
+                            " and (chkwsdepositorecibido='N'or  chkwsdepositorecibido='0')" +
                             " and cobranza_id<>''" +
                             " and compania_id='"+compania_id+"'" +
                             " and usuario_id='"+usuario_id+"'"
@@ -1383,7 +1386,7 @@ public class CobranzaDetalleSQLiteDao {
         try {
             Cursor fila = bd.rawQuery(
                     "Select sap_code,cobranza_id,banco_id,recibo,chkqrvalidado from cobranzadetalle" +
-                            " where chkwsupdate='Y'" +
+                            " where (chkwsupdate='Y' or chkwsupdate='1') " +
                             " and compania_id='"+compania_id+"'" +
                             " and usuario_id='"+usuario_id+"'"
                     ,null);

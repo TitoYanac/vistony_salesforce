@@ -48,6 +48,7 @@ import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
@@ -299,7 +300,8 @@ public class OrdenVentaCabeceraView extends Fragment {
                 //////////////////////////////////////
                 //////////////////////////////////////
                 //////////////////////////////////////
-
+                ArrayList<DireccionCliente> listaDireccionCliente=new ArrayList<>();
+                DireccionSQLite direccionSQLite=new DireccionSQLite(getContext());
                 for(int g=0;g<listaOrdenVentaCabecera.size();g++){
                     listaClienteCabecera= clienteSQlite.ObtenerClienteporClienteID(listaOrdenVentaCabecera.get(g).getCliente_id());
 
@@ -310,11 +312,12 @@ public class OrdenVentaCabeceraView extends Fragment {
                     impuestosAcum=listaOrdenVentaCabecera.get(g).getMontoimpuesto();
                     totalAcum=listaOrdenVentaCabecera.get(g).getMontototal();
                     confirmationRequestErp=listaOrdenVentaCabecera.get(g).getRecibidoERP().equals("1")?true:false;
+                    cliente_terminopago_id=listaOrdenVentaCabecera.get(g).getTerminopago_id();
 
                     listaAgenciasqliteentity= agenciaSQLiteDao.ObtenerAgencia_porID(
                             listaOrdenVentaCabecera.get(g).getAgencia_id()
                     );
-
+                    listaDireccionCliente=direccionSQLite.getListAddressOV(listaOrdenVentaCabecera.get(g).getCliente_id(),listaOrdenVentaCabecera.get(g).getDomembarque_id());
                     historicoOVcantidaddescuento=listaOrdenVentaCabecera.get(g).getDescuentocontado();
                 }
 
@@ -328,13 +331,17 @@ public class OrdenVentaCabeceraView extends Fragment {
                     impuesto_id=listaClienteCabecera.get(l).getImpuesto_id();
                     impuesto=listaClienteCabecera.get(l).getImpuesto();
                     rucdni= listaClienteCabecera.get(l).getRucdni();
-                    cliente_terminopago_id=listaClienteCabecera.get(l).getTerminopago_id();
+                    //cliente_terminopago_id=listaClienteCabecera.get(l).getTerminopago_id();
+                }
+                for(int k=0;k<listaDireccionCliente.size();k++)
+                {
+                    direccioncliente=listaDireccionCliente.get(k).getDireccion();
                 }
 
                 for(int m=0;m<listaAgenciasqliteentity.size();m++){
                     historicoordenventa_agencia= listaAgenciasqliteentity.get(m).getAgencia();
                 }
-
+                obtenerTituloFormulario();
             }
 
             if(Listado !=null){
@@ -675,7 +682,7 @@ public class OrdenVentaCabeceraView extends Fragment {
 
                 for(int i=0;i<listaHistoricoOrdenVentaEntity.size();i++){
 
-                    if(listaHistoricoOrdenVentaEntity!=null || !listaHistoricoOrdenVentaEntity.get(i).getDocNum().equals("")){
+                    if(listaHistoricoOrdenVentaEntity.get(i).isEnvioERPOV() ){
                         Drawable drawable2 = menu_variable.findItem(R.id.enviar_erp).getIcon();
                         drawable2 = DrawableCompat.wrap(drawable2);
                         DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.Black));
@@ -881,8 +888,11 @@ public class OrdenVentaCabeceraView extends Fragment {
 
         ordenventa_id=formulasController.ObtenerFechaHoraCadena();
         monedatotal=spnmoneda.getSelectedItem().toString();
+        Log.e("REOS","OrdenVentaCabecera.RegistrarOrdenVentaBD-monedatotal:"+monedatotal);
         String[] palabra = monedatotal.split("-");
+
         codigomoneda=palabra[0];
+        Log.e("REOS","OrdenVentaCabecera.RegistrarOrdenVentaBD-codigomoneda:"+codigomoneda);
         descripcionmoneda=palabra[1];
         SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();
@@ -924,12 +934,18 @@ public class OrdenVentaCabeceraView extends Fragment {
             listaOrdenVentaCabeceraEntity.orden_cabecera_planta=SesionEntity.planta_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_lista_precio_id=listaprecio_id;
 
-            if(codigomoneda.equals("USD")){
+            if(codigomoneda.equals("USD ")){
+                Log.e("REOS","OrdenVentaCabecera.RegistrarOrdenVentaBD-codigomoneda.equals(\"USD\")-SI:");
                 listaOrdenVentaCabeceraEntity.orden_cabecera_tipocambio="1";
             }else{
                 //Esperando que el Tipo de Cambio viaje hacia el Usuario
+                Log.e("REOS","OrdenVentaCabecera.RegistrarOrdenVentaBD-codigomoneda.equals(\"USD\")-NO:");
                 listaOrdenVentaCabeceraEntity.orden_cabecera_tipocambio=SesionEntity.rate;
             }
+
+
+            Log.e("REOS","OrdenVentaCabecera.RegistrarOrdenVentaBD-listaOrdenVentaCabeceraEntity.SesionEntity.rate:"+SesionEntity.rate);
+            Log.e("REOS","OrdenVentaCabecera.RegistrarOrdenVentaBD-listaOrdenVentaCabeceraEntity.orden_cabecera_tipocambio:"+listaOrdenVentaCabeceraEntity.orden_cabecera_tipocambio);
 
             listaOrdenVentaCabeceraEntity.orden_cabecera_fechatipocambio=String.valueOf(sdf.format(calendario.getTime()));
             listaOrdenVentaCabeceraEntity.orden_cabecera_rucdni=rucdni;
@@ -937,15 +953,20 @@ public class OrdenVentaCabeceraView extends Fragment {
             listaOrdenVentaCabeceraEntity.orden_cabecera_total_gal_acumulado=""+totalSalesOrder.getGalones();
             listaOrdenVentaCabeceraEntity.orden_cabecera_descuentocontado=cantidaddescuento;
             listaOrdenVentaCabeceraEntity.orden_cabecera_cotizacion=SesionEntity.quotation;
+            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDTD="";
+            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDSD="";
+            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDCD="";
+            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDMT="01";
+            listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_STATUS="V";
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);
             visita.setAddress(listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id);
-            visita.setType("1");
+            visita.setType("01");
             visita.setObservation("Se genero el pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id()+" para la dirección "+Listado.get(i).getDireccion());
             visita.setLatitude(""+latitude);
             visita.setLongitude(""+longitude);
 
-            formulasController.RegistraVisita(visita,getActivity(),"0");
+            formulasController.RegistraVisita(visita,getActivity(),totalSalesOrder.getTotal());
 
         }
 
@@ -1000,7 +1021,8 @@ public class OrdenVentaCabeceraView extends Fragment {
 
             pd = new ProgressDialog(getActivity());
             pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando Orden de Venta", true, false);
-
+            OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite=new OrdenVentaCabeceraSQLite(getContext());
+            ordenVentaCabeceraSQLite.UpdateStatusOVenviada(ordenventa_id);
             ordenVentaRepository.sendSalesOrder(ordenventa_id,getContext()).observe(getActivity(), data->{
 
                 Toast.makeText(getContext(),data, Toast.LENGTH_LONG).show();

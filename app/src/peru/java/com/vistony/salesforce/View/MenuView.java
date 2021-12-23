@@ -131,7 +131,8 @@ public class MenuView extends AppCompatActivity
         MenuConsultaCobradoView.OnFragmentInteractionListener,
         QuotasPerCustomerView.OnFragmentInteractionListener,
         ConsultaStockView.OnFragmentInteractionListener,
-        HistoricContainerSKU.OnFragmentInteractionListener
+        HistoricContainerSKU.OnFragmentInteractionListener,
+        KardexOfPaymentView.OnFragmentInteractionListener
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment,contentHistoryFragment;
@@ -163,6 +164,8 @@ public class MenuView extends AppCompatActivity
     Fragment QuotasPerCustomerFragment;
     Fragment ConsultaStockFragment;
     Fragment MenuConsultaCobranzaFragment;
+    Fragment KardexOfPaymentFragment;
+
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
@@ -234,6 +237,7 @@ public class MenuView extends AppCompatActivity
         QuotasPerCustomerFragment = new Fragment();
         ConsultaStockFragment= new Fragment();
         MenuConsultaCobranzaFragment = new Fragment();
+        KardexOfPaymentFragment = new Fragment();
         arraylistConfiguracionentity= new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao =  new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -1720,9 +1724,41 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("po1p");
                 ft.commit();
             }
-
         }
-
+        if(tag.equals("KardexOfPaymentView"))
+        {
+            if(tag2.equals( "start"))
+            {
+                contentFragment=new KardexOfPaymentView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals( "findClient"))
+            {
+                contentFragment=new BuscarClienteView();
+                String taKardexOfPaymentView="start";
+                KardexOfPaymentFragment  =getSupportFragmentManager().findFragmentByTag(taKardexOfPaymentView);
+                ft.hide(KardexOfPaymentFragment);
+                //ft.add(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals( "sendClient"))
+            {
+                String tagBuscarClienteView="findClient";
+                String tagKardexOfPaymentView="start";
+                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
+                KardexOfPaymentFragment  =getSupportFragmentManager().findFragmentByTag(tagKardexOfPaymentView);
+                ft.remove(BuscarClienteFragment);
+                ft.show(KardexOfPaymentFragment);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                KardexOfPaymentView.newInstanceRecibirLista(Lista);
+                this.setTitle("Kardex de Pago");
+            }
+        }
     }
 
     public void EnviarFragmentCobranza(int i)

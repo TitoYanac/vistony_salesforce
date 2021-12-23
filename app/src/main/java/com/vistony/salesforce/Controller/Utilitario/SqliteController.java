@@ -102,6 +102,7 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN userCode TEXT");
         }
 
+
         if(oldVersion==1&&newVersion==3){
             db.execSQL("CREATE TABLE pricelist (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,pricelist_id TEXT,pricelist TEXT)");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN slpCode TEXT");
@@ -116,6 +117,13 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE cobranzacabecera ADD COLUMN sap_code TEXT");
             db.execSQL("ALTER TABLE cobranzacabecera ADD COLUMN mensajeWS TEXT");
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN horacobranza TEXT");
+        }
+        if(oldVersion==2&&newVersion==3){
+            db.execSQL("CREATE TABLE pricelist (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,pricelist_id TEXT,pricelist TEXT)");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN print TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN activecurrency TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN salesorderamount TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN collectionamount TEXT");
         }
     }
 

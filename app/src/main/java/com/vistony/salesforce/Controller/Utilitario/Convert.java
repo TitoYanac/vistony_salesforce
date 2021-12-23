@@ -2,12 +2,16 @@ package com.vistony.salesforce.Controller.Utilitario;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.util.Log;
 
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Entity.Adapters.ListKardexOfPaymentEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
 
 public class Convert {
 
@@ -100,5 +104,48 @@ public class Convert {
         Locale locale=null;
         BigDecimal amountRedonded=new BigDecimal(amount).setScale(0, RoundingMode.HALF_UP);
         return amountRedonded.toString();
+    }
+
+    public static List<ListKardexOfPaymentEntity> getConvertListKardexOfPayment(List<KardexPagoEntity> ListKardexPagoEntity)
+    {
+        List<ListKardexOfPaymentEntity> ListKardexOfPaymentEntity=new ArrayList<>();
+        ListKardexOfPaymentEntity listKardexOfPaymentEntity;
+        for(int i=0;i<ListKardexPagoEntity.size();i++)
+        {
+            if(ListKardexOfPaymentEntity.isEmpty())
+            {
+                listKardexOfPaymentEntity=new ListKardexOfPaymentEntity();
+                listKardexOfPaymentEntity.legalnumber=ListKardexPagoEntity.get(i).getNumAtCard();
+                listKardexOfPaymentEntity.invoicedate=ListKardexPagoEntity.get(i).getTaxDate();
+                listKardexOfPaymentEntity.duedate=ListKardexPagoEntity.get(i).getDocDueDate();
+                listKardexOfPaymentEntity.DocAmount=ListKardexPagoEntity.get(i).getDocTotal();
+                listKardexOfPaymentEntity.balance=ListKardexPagoEntity.get(i).getsALDO();
+                listKardexOfPaymentEntity.invoice=false;
+                ListKardexOfPaymentEntity.add(listKardexOfPaymentEntity);
+            }
+            else
+                {
+                    int contador=0;
+                    for(int j=0;j<ListKardexOfPaymentEntity.size();j++)
+                    {
+                        if(ListKardexOfPaymentEntity.get(j).getLegalnumber().equals(ListKardexPagoEntity.get(i).getNumAtCard()))
+                        {
+                            contador++;
+                        }
+                    }
+                    if(contador==0)
+                    {
+                        listKardexOfPaymentEntity=new ListKardexOfPaymentEntity();
+                        listKardexOfPaymentEntity.legalnumber=ListKardexPagoEntity.get(i).getNumAtCard();
+                        listKardexOfPaymentEntity.invoicedate=ListKardexPagoEntity.get(i).getTaxDate();
+                        listKardexOfPaymentEntity.duedate=ListKardexPagoEntity.get(i).getDocDueDate();
+                        listKardexOfPaymentEntity.DocAmount=ListKardexPagoEntity.get(i).getDocTotal();
+                        listKardexOfPaymentEntity.balance=ListKardexPagoEntity.get(i).getsALDO();
+                        listKardexOfPaymentEntity.invoice=false;
+                        ListKardexOfPaymentEntity.add(listKardexOfPaymentEntity);
+                    }
+                }
+        }
+        return ListKardexOfPaymentEntity;
     }
 }

@@ -96,6 +96,7 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
         return fragment;
     }
 
+
     public static BuscarClienteView newInstanciaEnviarClienteHistoricContainerSale(Object param1) {
         BuscarClienteView fragment = new BuscarClienteView();
         String Fragment="HistoricContainerSaleView";
@@ -135,6 +136,17 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
         BuscarClienteView fragment = new BuscarClienteView();
         String Fragment="ConsClienteView";
         String accion="agregarquotaspercustomerDialog";
+        String compuesto=Fragment+"-"+accion;
+        if(mListener!=null)
+        {
+            mListener.onFragmentInteraction(compuesto, param1);
+        }
+        return fragment;
+    }
+    public static BuscarClienteView newInstanciaEnviarClienteKardexOfPayment(Object param1) {
+        BuscarClienteView fragment = new BuscarClienteView();
+        String Fragment="KardexOfPaymentView";
+        String accion="sendClient";
         String compuesto=Fragment+"-"+accion;
         if(mListener!=null)
         {

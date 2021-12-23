@@ -127,7 +127,7 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_historico_deposito, container, false);
-        getActivity().setTitle("Consulta Deposito");
+        getActivity().setTitle("Consulta Déposito");
         tv_fechainidep = (TextView) v.findViewById(R.id.tv_fechainidep);
         tv_fechainidep.setText(fecha);
         tv_fechafindep = (TextView) v.findViewById(R.id.tv_fechafindep);

@@ -21,7 +21,7 @@
     <string name="coordenadas">Coordenadas...</string>
     <string name="comentario">Comentario</string>
     <string name="enviar_lead">Enviar lead</string>
-    <string name="head_codigo">Codigo</string>
+    <string name="head_codigo">Código</string>
     <string name="head_usuario">Usuario</string>
     <string name="menu_configuracion">Configuración</string>
     <string name="menu_formulario">Formulario</string>
@@ -29,7 +29,7 @@
     <string name="head_conexion">Conexión</string>
     <string name="head_secuencia">Secuencia</string>
     <string name="menu_ruta_vendedor">Ruta vendedor</string>
-    <string name="menu_deposito">Deposito</string>
+    <string name="menu_deposito">Déposito</string>
     <string name="menu_consultas">Consultas</string>
     <string name="menu_comisiones">Comisiones</string>
     <string name="dialog_advertencia">ADVERTENCIA</string>
@@ -41,4 +41,24 @@
     <string name="zone">Zona</string>
     <string name="head_zone">Zona:</string>
     <string name="EnablePrint">Habilitar Impresora</string>
+    <string name="LineUsed">Línea Utilizada</string>
+    <string name="LineCredit">Línea de Crédito</string>
+    <string name="Quotation">Cotización</string>
+    <string name="lbl_orderhed_payterms">TÉRMINO DE PAGO</string>
+    <string name="lbl_code">Código:</string>
+    <string name="lbl_gallon">Galón:</string>
+    <string name="lbl_promotion">Promoción:</string>
+    <string name="Promotion_Summary">Resumen Promoción</string>
+    <string name="Selected_Promotion">Promoción Seleccionada:</string>
+    <string name="Pending_Promotion">Promoción Pendiente:</string>
+    <string name="Promotion_Detail">DETALLE DE PROMOCIÓN:</string>
+    <string name="Direct_Depost">Déposito Directo</string>
+    <string name="Find_Deposit">Consulta Déposito</string>
+    <string name="lbl_update_parameters">Actualizar Parámetros</string>
+    <string name="lbl_legalnumber">Documento</string>
+    <string name="lbl_invoicedate">Fecha Emision</string>
+    <string name="lbl_duedate">Fecha Vencimiento</string>
+    <string name="lbl_DocAmount">Importe</string>
+    <string name="lbl_balance">Saldo</string>
+    <string name="lbl_kardex_of_payment">Kardex de Pago</string>
 </resources>

@@ -217,7 +217,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
 
                     //Evalua si RutaVendedor ya tiene clientes
                     listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta,getContext());
-
+                    Log.e("REOS","RutaVendedorRutaView-ObtenerSQLiteRutaFuerzaTrabajo-listaClienteCabeceraEntityconruta: "+listaClienteCabeceraEntityconruta.size());
                     if(listaClienteCabeceraEntityconruta.isEmpty()){
 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());

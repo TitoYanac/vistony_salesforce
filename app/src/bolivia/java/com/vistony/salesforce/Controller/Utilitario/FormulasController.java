@@ -665,24 +665,34 @@ public class FormulasController {
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
-            if(ovCabecera.getExcede_lineacredito().equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
-                documentHeader.setApCredit("Y");
+            //Agregar el Tipo de Lista de Precio, con contado no ingresa al flujo
+        documentHeader.setDraft("N");
+        //Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.Excede_SesionEntity.TipoCompra:" + SesionEntity.TipoCompra);
+        Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.Excede_SesionEntity.contado:" + SesionEntity.contado);
+            if(ovCabecera.getExcede_lineacredito().equals("1")&&!SesionEntity.contado.equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
+                //documentHeader.setApCredit("Y");
+                documentHeader.setDraft(Induvis.getStatusDraft());
+                Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.Excede_lineacredito():" + Induvis.getStatusDraft());
             }else{
-                documentHeader.setApCredit("N");
+                //documentHeader.setApCredit("N");
             }
 
             if(Integer.parseInt(ovCabecera.getDueDays())>5){ //NO CUMPLE CON LA VALIDACIÓN DE DOCUMENTOS VENCIDOS
-                documentHeader.setApDues("Y");
+                //documentHeader.setApDues("Y");
+                documentHeader.setDraft(Induvis.getStatusDraft());
+                Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.getDueDays():" + Induvis.getStatusDraft());
             }else{
-                documentHeader.setApDues("N");
+               // documentHeader.setApDues("N");
             }
 
 
 
             if(documentHeader.getPaymentGroupCode().equals(ClienteSQlite.getPaymentGroupCode(documentHeader.getCardCode()))){
-                documentHeader.setApTPag("N");
+                //documentHeader.setApTPag("N");
             }else{
-                documentHeader.setApTPag("Y");
+                //documentHeader.setApTPag("Y");
+                documentHeader.setDraft(Induvis.getStatusDraft());
+                Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.getPaymentGroupCode():" + Induvis.getStatusDraft());
             }
 
 
@@ -768,10 +778,21 @@ public class FormulasController {
 
         /*ecuador no tiene modelado aprovaciones por descuento*/
 
+        Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.ContadorLineasConDescuento:" + String.valueOf(ContadorLineasConDescuento));
         if(ContadorLineasConDescuento>0){ //SE AGREGO UN DESCUENTO FUERA DE LO PERMITIDO
-            documentHeader.setApPrcnt("Y");
+            //documentHeader.setApPrcnt("Y");
+            documentHeader.setDraft(Induvis.getStatusDraft());
         }else{
-            documentHeader.setApPrcnt("N");
+            //documentHeader.setApPrcnt("N");
+        }
+        documentHeader.setApCredit("N");
+        documentHeader.setApDues("N");
+        documentHeader.setApPrcnt("N");
+        documentHeader.setApTPag("N");
+
+        if(SesionEntity.quotation.equals("Y"))
+        {
+            documentHeader.setDraft("N");
         }
 
         documentHeader.setDocumentLines(listadoDocumentLines);

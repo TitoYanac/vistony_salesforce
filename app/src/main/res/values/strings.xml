@@ -47,6 +47,28 @@
     <string name="AsistenciaCamionView" translatable="false">Camion</string>
     <string name="clearTemp" translatable="false">Liberar espacio</string>
     <string name="EnablePrint">Habilitar Impresora</string>
+    <string name="LineUsed">Linea Utilizada</string>
+    <string name="LineCredit">Línea de Crédito</string>
+    <string name="Quotation">Cotización</string>
+    <string name="lbl_orderhed_payterms">TÉRMINO DE PAGO</string>
+    <string name="lbl_code">Código</string>
+    <string name="lbl_gallon">Gallon</string>
+    <string name="lbl_promotion">Promoción:</string>
+    <string name="Promotion_Summary">Resumen Promoción</string>
+    <string name="Selected_Promotion">Promoción Seleccionada:</string>
+    <string name="Pending_Promotion">Promoción Pendiente:</string>
+    <string name="Promotion_Detail">DETALLE PROMOCION:</string>
+    <string name="Direct_Depost">Déposito Directo</string>
+    <string name="Find_Deposit">Consulta Déposito</string>
+    <string name="lbl_update_parameters">Actualizar Parámetros</string>
+    <string name="lbl_legalnumber">Documento</string>
+    <string name="lbl_invoicedate">Fecha Emision</string>
+    <string name="lbl_duedate">Fecha Vencimiento</string>
+    <string name="lbl_DocAmount">Importe</string>
+    <string name="lbl_balance">Saldo</string>
+    <string name="lbl_kardex_of_payment">Kardex de Pago</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 

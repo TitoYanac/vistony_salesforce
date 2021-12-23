@@ -92,18 +92,22 @@ public class Induvis {
 
     public static String getTimeSAP(String flavor,String timeBD){
         String timeView="",hour,minute,second;
-        switch (flavor){
-            case "chile":
-                break;
-            case "ecuador":
-                break;
-            case "peru":
-            case "bolivia":
-                hour=timeBD.substring(0,2);
-                minute=timeBD.substring(2,4);
-                second=timeBD.substring(4,6);
-                timeView=hour+""+minute;
-                break;
+        if(timeBD.equals(""))
+        {
+
+        }
+        else {
+            switch (flavor) {
+                case "peru":
+                case "bolivia":
+                case "ecuador":
+                case "chile":
+                    hour = timeBD.substring(0, 2);
+                    minute = timeBD.substring(2, 4);
+                    second = timeBD.substring(4, 6);
+                    timeView = hour + "" + minute;
+                    break;
+            }
         }
         return timeView;
     }
@@ -197,7 +201,7 @@ public class Induvis {
             case ("bolivia"):
                 if(SesionEntity.quotation.equals("Y"))
                  {
-                     tituloventa="COTIZACION";
+                     tituloventa="COTIZACIÓN";
                  }
                  else
                      {
@@ -289,13 +293,20 @@ public class Induvis {
     public static String getStatusDraft(){
         String draft="N";
         switch (BuildConfig.FLAVOR){
-            case "bolivia":
             case "peru":
             case "chile":
                 draft="N";
                 break;
             case "ecuador":
-                draft="Y";
+            case "bolivia":
+                if(SesionEntity.quotation.equals("Y"))
+                {
+                    draft="N";
+                }else
+                    {
+                        draft="Y";
+                    }
+
                 break;
         }
         return draft;

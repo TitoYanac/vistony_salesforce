@@ -48,7 +48,7 @@ public class MenuConsultaCobradoView extends Fragment {
     private String mParam1;
     private String mParam2;
     View v;
-    CardView cv_cobradoporfecha,cv_calculo_cuotas;
+    CardView cv_cobradoporfecha,cv_calculo_cuotas,cv_kardex_of_payment;
     public static OnFragmentInteractionListener mListener;
     static Dialog dialog=null;
     static public String CardCode="",CardName="";
@@ -113,6 +113,7 @@ public class MenuConsultaCobradoView extends Fragment {
         dialog= new Dialog(getContext());
         cv_cobradoporfecha=v.findViewById(R.id.cv_cobradoporfecha);
         cv_calculo_cuotas=v.findViewById(R.id.cv_calculo_cuotas);
+        cv_kardex_of_payment=v.findViewById(R.id.cv_kardex_of_payment);
         cv_cobradoporfecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,6 +135,16 @@ public class MenuConsultaCobradoView extends Fragment {
                 alertaGetClient("Use el Boton de Buscar para Obtener el Cliente:").show();
             }
         });
+        cv_kardex_of_payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Fragment="KardexOfPaymentView";
+                String accion="start";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,"");
+            }
+        });
+
 
 
         return v;

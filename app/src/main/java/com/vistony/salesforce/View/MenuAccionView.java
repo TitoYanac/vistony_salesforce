@@ -190,13 +190,13 @@ public class MenuAccionView extends Fragment {
             switch (BuildConfig.FLAVOR){
                 case "chile":
                 case "peru":
-                case "ecuador":
                     String Fragment="MenuAccionView";
                     String accion="pedido";
                     String compuesto=Fragment+"-"+accion;
                     mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
                     SesionEntity.quotation="N";
                     break;
+                case "ecuador":
                 case "bolivia":
                     alertatipoventa().show();
                     break;

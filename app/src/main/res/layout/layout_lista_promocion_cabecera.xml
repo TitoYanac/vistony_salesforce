@@ -105,15 +105,15 @@
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@color/Rojo_Vistony"
         android:textStyle="bold" />
+
     <TextView
         android:id="@+id/lbl_detalle_promocion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
-        android:text="DETALLE PROMOCION:"
-        android:textStyle="bold"
+        android:text="@string/Promotion_Detail"
         android:textAppearance="?attr/textAppearanceListItem"
-        />
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/lbl_porcentajedescuentocabecera"
         android:layout_width="wrap_content"

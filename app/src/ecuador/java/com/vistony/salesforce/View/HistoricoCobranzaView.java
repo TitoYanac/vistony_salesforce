@@ -169,8 +169,12 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
             {
                 mParam1 = getArguments().getString(ARG_PARAM1);
                 if (mParam1.equals("COBRANZA")) {
+
                 }
             }
+
+            //obtenerHistoricoCobranza =  new ObtenerHistoricoCobranza();
+            //obtenerHistoricoCobranza.execute();
         }
 
        /* if (SesionEntity.loginSesion.equals("0")) {

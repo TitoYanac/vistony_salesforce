@@ -10,6 +10,7 @@ import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Enum.TipoDeCompra;
 
 import java.util.ArrayList;
@@ -79,6 +80,8 @@ public class ListaPrecioDetalleSQLiteDao {
                 if(isCash.equals("0")){
                     tipoDeCompra=TipoDeCompra.credito;
                 }
+                SesionEntity.TipoCompra=tipoDeCompra.toString();
+
                 Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.tipoDeCompra: "+tipoDeCompra);
                 Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.listaArtificio: "+listaArtificio);
                 String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +

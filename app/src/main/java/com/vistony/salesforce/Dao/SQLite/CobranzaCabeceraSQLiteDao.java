@@ -206,7 +206,7 @@ public class CobranzaCabeceraSQLiteDao {
         try {
             abrir();
             Cursor fila = bd.rawQuery(
-                    "Select * from cobranzacabecera where chkwsrecibido= 'N' and compania_id=? and usuario_id=? ",new String[]{compania_id,usuario_id});
+                    "Select * from cobranzacabecera where (chkwsrecibido= 'N' or chkwsrecibido= '0')  and compania_id=? and usuario_id=? ",new String[]{compania_id,usuario_id});
 
             while (fila.moveToNext())
             {

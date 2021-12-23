@@ -279,7 +279,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_cobranza_cabecera_view, container, false);
-        getActivity().setTitle("Deposito");
+        getActivity().setTitle("Déposito");
         spnbanco=(Spinner) v.findViewById(R.id.spnbanco);
         tv_fechacobrocheque_edit = (TextView) v.findViewById(R.id.tv_fechacobrocheque_edit);
         spnbanco.setEnabled(false);

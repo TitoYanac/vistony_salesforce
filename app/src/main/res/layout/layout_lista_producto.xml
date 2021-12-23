@@ -39,7 +39,7 @@
                     android:id="@+id/lbl_producto_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Codigo:"
+                    android:text="@string/lbl_code"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
@@ -92,7 +92,7 @@
                     android:id="@+id/lbl_gal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Galon:"
+                    android:text="@string/lbl_gallon"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView

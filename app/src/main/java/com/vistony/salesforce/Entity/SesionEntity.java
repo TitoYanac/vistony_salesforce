@@ -39,5 +39,6 @@ public class SesionEntity {
     public static String activecurrency="";
     public static String flagquerystock ="N";
     public static String formhabilPrint ="N";
+    public static String TipoCompra ="";
 }
 

@@ -241,7 +241,7 @@
                     android:enabled="true"
                     android:hint=""
                     android:paddingLeft="10dp"
-                    android:text="TERMINO PAGO"
+                    android:text="@string/lbl_orderhed_payterms"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </TableRow>

@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
 
@@ -75,7 +76,7 @@ public class OrdenVentaCabeceraSQLite {
     ){
 
             abrir();
-
+            Log.e("REOS","OrdenVentaCabeceraSQLite.InsertaOrdenVentaCabecera-rate:"+ rate);
             String dias_documento_vencido="0";
             String igual_mayor_linea_credito="0";
             String agencia_ruc="";
@@ -203,7 +204,7 @@ public class OrdenVentaCabeceraSQLite {
             ordenVentaCabeceraSQLiteEntity.setMensajeWS(fila.getString(31));
             ordenVentaCabeceraSQLiteEntity.setTotal_gal_acumulado(fila.getString(32));
             ordenVentaCabeceraSQLiteEntity.setDescuentocontado(fila.getString(33));
-
+            ordenVentaCabeceraSQLiteEntity.setQuotation(fila.getString(43));
             listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
         }
         bd.close();
