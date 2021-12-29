@@ -135,7 +135,7 @@
                         android:layout_height="64dp"
                         android:background="@drawable/cerclebackgroundpurple"
                         android:padding="10dp"
-                        android:src="@drawable/ic_print_black_24dp" />
+                        android:src="@drawable/ic_baseline_print_always_black_24" />
 
                     <TextView
                         android:layout_width="wrap_content"

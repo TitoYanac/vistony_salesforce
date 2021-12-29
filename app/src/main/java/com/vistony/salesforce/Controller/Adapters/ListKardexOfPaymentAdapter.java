@@ -1,17 +1,24 @@
 package com.vistony.salesforce.Controller.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.vistony.salesforce.Entity.Adapters.ListKardexOfPaymentEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaParametrosEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaSeguimientoFacturasEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.View.KardexOfPaymentView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +69,25 @@ public class ListKardexOfPaymentAdapter extends ArrayAdapter<ListKardexOfPayment
         holder.tv_DocAmount.setText(lead.getDocAmount());
         holder.tv_balance.setText(lead.getBalance());
         holder.chk_invoice.setChecked(lead.isInvoice());
+
+        holder.chk_invoice.setOnClickListener(new View.OnClickListener() {
+                                               @Override
+                                               public void onClick(View v) {
+                                                   for(int i=0;i< KardexOfPaymentView.listKardexOfPaymentEntityList.size();i++)
+                                                   {
+                                                       if(lead.getLegalnumber().equals(KardexOfPaymentView.listKardexOfPaymentEntityList.get(i).getLegalnumber()))
+                                                       {
+                                                           Log.e("REOS","ListKardexOfPaymentAdapter.getView.holder.chk_invoice.isChecked():" + holder.chk_invoice.isChecked());
+                                                           Log.e("REOS","ListKardexOfPaymentAdapter.getView.holder.KardexOfPaymentView.listKardexOfPaymentEntityList.get(i).getLegalnumber():" + KardexOfPaymentView.listKardexOfPaymentEntityList.get(i).getLegalnumber());
+                                                           Log.e("REOS","ListKardexOfPaymentAdapter.getView.holder.lead.getLegalnumber():" + lead.getLegalnumber());
+                                                           KardexOfPaymentView.listKardexOfPaymentEntityList.get(i).setInvoice(holder.chk_invoice.isChecked());
+                                                           Log.e("REOS","ListKardexOfPaymentAdapter.getView.holder.KardexOfPaymentView.listKardexOfPaymentEntityList.get(i).isInvoice:" + KardexOfPaymentView.listKardexOfPaymentEntityList.get(i).isInvoice());
+                                                       }
+                                                   }
+                                               }
+                                           }
+
+        );
 
         return convertView;
     }

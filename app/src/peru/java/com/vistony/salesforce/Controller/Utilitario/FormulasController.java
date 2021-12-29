@@ -14,6 +14,7 @@ import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
@@ -1873,13 +1874,23 @@ public class FormulasController {
 
     public String  convertirCadenaEnvioSMS (ArrayList<ListaClienteDetalleEntity> Lista, String fuerzatrabajo_id, String nombrefuerzatrabajo, String recibo, String fecharecibo)
     {
+        String encRecibo="",encCardCode="",CardCode="",hash="",encHash="",codeSMS="";
+        CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(Context);
+        ArrayList<CobranzaDetalleSQLiteEntity> lista=new ArrayList<>();
+        lista=cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
+                 recibo,
+                 SesionEntity.compania_id,
+                 SesionEntity.fuerzatrabajo_id);
+        for(int j=0;j<lista.size();j++)
+        {
+                codeSMS=lista.get(j).getMotivoanulacion();
+        }
 
-
-        String encRecibo="",encCardCode="",CardCode="",hash="",encHash="";
         for (int i = 0; i < Lista.size(); i++)
         {
             CardCode=Lista.get(i).getCliente_id();
         }
+
         hash=CardCode+"-"+recibo;
         try {
             Log.e("REOS","DocumentoCobranzaPDF-generarPdf-EntroalTryCifrado");
@@ -1908,7 +1919,9 @@ public class FormulasController {
                         "Saldo :S/.      " + Lista.get(i).getSaldo() + "\n" +
                         "Cobrado :S/.     " + Lista.get(i).getCobrado() + "\n" +
                         "Nuevo Saldo:S/.     " + Lista.get(i).getNuevo_saldo() + "\n" +
-                        "www.vistony.com/intranet/hash="+encHash+"" ;
+                        "www.vistony.com/intranet/hash="+encHash+ "\n" +
+                        "Codigo Validacion SMS:"+codeSMS+""
+                ;
                 ;
                /* SmsManager sm = SmsManager.getDefault();
                 ArrayList<String> parts =sm.divideMessage(LONG_TEXT);

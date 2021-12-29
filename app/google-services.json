@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "737479698621",
+    "project_id": "salesforce-f14e4",
+    "storage_bucket": "salesforce-f14e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737479698621:android:0ddba6156367d574f3efd4",
+        "android_client_info": {
+          "package_name": "com.vistony.salesforce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "737479698621-rmnj853busm82v7ulmjevr518oa8ki2h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVAeOpDnC-T3lHujDO6s2goX3rku1eMQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737479698621-rmnj853busm82v7ulmjevr518oa8ki2h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

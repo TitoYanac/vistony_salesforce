@@ -3,6 +3,8 @@ package com.vistony.salesforce.View;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.obtenerImei;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.omega_r.libs.OmegaCenterIconButton;
@@ -241,6 +245,33 @@ public class LoginView extends AppCompatActivity{
     }
 
     public void btnLogin(View v){
+
+        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber="";
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.READ_PHONE_NUMBERS)
+                        != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            mPhoneNumber = tMgr.getLine1Number();
+        }
+        AccountManager am = AccountManager.get(this);
+        Account[] accounts = am.getAccounts();
+
+        ArrayList googleAccounts = new ArrayList();
+        String phoneNumber="";
+        for (Account ac : accounts) {
+            String acname = ac.name;
+            String actype = ac.type;
+
+            System.out.println("Accounts : " + acname + ", " + actype);
+            if(actype.equals("com.whatsapp")){
+                phoneNumber = ac.name;
+            }
+        }
+        Log.e("REOS", "LoginView-btnLogin-phoneNumber:" + phoneNumber);
+        Log.e("REOS", "LoginView-btnLogin-mPhoneNumber:" + mPhoneNumber);
         btnlogin.setEnabled(false);
         btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_onclick));
         btnlogin.setText(getResources().getString(R.string.Ingresando));

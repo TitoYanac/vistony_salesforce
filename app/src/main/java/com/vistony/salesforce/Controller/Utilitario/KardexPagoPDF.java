@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -128,6 +129,8 @@ public class KardexPagoPDF extends AppCompatActivity {
         }
         Log.e("REOS","DocumentCobranzaPDF.generarPdf.ObjArrayListaCorrelativo.length:" + ObjArrayListaCorrelativo.length);
         try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            GregorianCalendar calendario = new GregorianCalendar();
             File f = crearFichero(CardCode+".pdf");
 
             // Creamos el flujo de datos de salida para el fichero donde
@@ -242,6 +245,22 @@ public class KardexPagoPDF extends AppCompatActivity {
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
             cellCabecera = new PdfPCell(new Phrase(Ubigeo,font3));
+            cellCabecera.disableBorderSide(Rectangle.BOX);
+            cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblCabecera.addCell(cellCabecera);
+            cellCabecera = new PdfPCell(new Phrase("Generado por:",font3));
+            cellCabecera.disableBorderSide(Rectangle.BOX);
+            cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblCabecera.addCell(cellCabecera);
+            cellCabecera = new PdfPCell(new Phrase(SesionEntity.fuerzatrabajo_id+" "+SesionEntity.nombrefuerzadetrabajo ,font3));
+            cellCabecera.disableBorderSide(Rectangle.BOX);
+            cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblCabecera.addCell(cellCabecera);
+            cellCabecera = new PdfPCell(new Phrase("Fecha Generacion:",font3));
+            cellCabecera.disableBorderSide(Rectangle.BOX);
+            cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblCabecera.addCell(cellCabecera);
+            cellCabecera = new PdfPCell(new Phrase(String.valueOf(sdf.format(calendario.getTime())),font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);

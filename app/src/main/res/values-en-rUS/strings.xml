@@ -61,5 +61,11 @@
     <string name="lbl_DocAmount">Doc Amount</string>
     <string name="lbl_balance">Balance</string>
     <string name="lbl_kardex_of_payment">Kardex Of Payment</string>
-
+    <string name="lbl_chk_pedido">SalesOrder/Quotation</string>
+    <string name="lbl_type_generate_document_pdf">Generate PDF</string>
+    <string name="lbl_type_send_sms">Send SMS</string>
+    <string name="lbl_type_validate_document_pdf">Validate PDF</string>
+    <string name="lbl_type_validate_SMS">Validate SMS</string>
+    <string name="lbl_tittle_dialog_validate_SMS">VALIDATE SMS</string>
+    <string name="lbl_dialog_code_SMS">Code SMS:</string>
 </resources>

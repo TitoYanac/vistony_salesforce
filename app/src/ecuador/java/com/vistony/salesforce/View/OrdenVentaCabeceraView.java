@@ -961,7 +961,13 @@ public class OrdenVentaCabeceraView extends Fragment {
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);
             visita.setAddress(listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id);
-            visita.setType("01");
+            if(SesionEntity.quotation.equals("Y"))
+            {
+                visita.setType("12");
+            }else{
+                visita.setType("01");
+            }
+
             visita.setObservation("Se genero el pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id()+" para la dirección "+Listado.get(i).getDireccion());
             visita.setLatitude(""+latitude);
             visita.setLongitude(""+longitude);

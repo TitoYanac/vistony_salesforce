@@ -223,6 +223,13 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
 
             for(int l=0;l<quotasPerCustomerInvoiceEntity.size();l++)
             {
+                String tipo,vendedor;
+                String[] sourcedata= quotasPerCustomerInvoiceEntity.get(l).getTipo().split("-");
+                tipo=sourcedata[0];
+                vendedor=sourcedata[1];
+
+
+
                 PdfPTable tbllblfactura = new PdfPTable(1);
                 tbllblfactura.setWidthPercentage(100);
                 PdfPCell celltbllblfactura = null;
@@ -231,6 +238,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltbllblfactura.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tbllblfactura.addCell(celltbllblfactura);
                 documento.add(tbllblfactura);
+
                 PdfPTable tblterminopago= new PdfPTable(2);
                 tblterminopago.setWidthPercentage(100);
 
@@ -240,6 +248,14 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltblterminopago.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblterminopago.addCell(celltblterminopago);
                 celltblterminopago = new PdfPCell(new Phrase(quotasPerCustomerInvoiceEntity.get(l).getCondicionpago(),font3));
+                celltblterminopago.disableBorderSide(Rectangle.BOX);
+                celltblterminopago.setHorizontalAlignment(Element.ALIGN_LEFT);
+                tblterminopago.addCell(celltblterminopago);
+                celltblterminopago = new PdfPCell(new Phrase("Vendedor Factura:",font3));
+                celltblterminopago.disableBorderSide(Rectangle.BOX);
+                celltblterminopago.setHorizontalAlignment(Element.ALIGN_LEFT);
+                tblterminopago.addCell(celltblterminopago);
+                celltblterminopago = new PdfPCell(new Phrase(vendedor,font3));
                 celltblterminopago.disableBorderSide(Rectangle.BOX);
                 celltblterminopago.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblterminopago.addCell(celltblterminopago);
@@ -315,7 +331,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
-                celltblresumencuotas = new PdfPCell(new Phrase(quotasPerCustomerInvoiceEntity.get(l).getTipo() ,font6));
+                celltblresumencuotas = new PdfPCell(new Phrase(tipo ,font6));
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);

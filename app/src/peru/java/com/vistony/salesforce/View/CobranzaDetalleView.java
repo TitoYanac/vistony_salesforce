@@ -27,6 +27,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 
 import android.os.Environment;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -44,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -59,6 +61,7 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
+import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -84,6 +87,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 
 import io.sentry.Sentry;
 
@@ -93,19 +97,19 @@ public class CobranzaDetalleView extends Fragment {
     ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleEntities;
     ListaCobranzaDetalleAdapter listaCobranzaDetalleAdapter;
     ListView listViewCobranzaDetalle;
-    ImageButton imbplus,imbminus,imbaceptar,imbcancelar,imbcancelar2;
+    ImageButton imbplus, imbminus, imbaceptar, imbcancelar, imbcancelar2;
     OmegaCenterIconButton imbcomentariorecibo;
 
     EditText et_cobrado_edit;
     View v;
     ObtenerWSCobranzaDetalle obtenerWSCobranzaDetalle;
 
-    BigDecimal cobrado,nuevo_saldo,saldo;
+    BigDecimal cobrado, nuevo_saldo, saldo;
 
     // float cobrado=0,nuevo_saldo=0,saldo=0;
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
 
-    String fecha,et_cobrado,chkqrvalidado,recibo_generado;
+    String fecha, et_cobrado, chkqrvalidado, recibo_generado;
     static public String recibo;
     DocumentoCobranzaPDF documentoCobranzaPDF;
 
@@ -116,14 +120,15 @@ public class CobranzaDetalleView extends Fragment {
     private String mParam1;
     private String mParam2;
     static String TAG_1 = "text";
-    String texto= null;
+    String texto = null;
     DocumentoSQLite documentoSQLite;
-    int resultado=0,correlativorecibo=0,ultimocorrelativorecibo=0,correlativorecibows=0;
+    int resultado = 0, correlativorecibo = 0, ultimocorrelativorecibo = 0, correlativorecibows = 0;
     private OnFragmentInteractionListener mListener;
     EnviarWSCobranzaDetalle enviarWSCobranzaDetalle;
     static public ImageView imvprueba;
-    CheckBox chkpagoadelantado,chk_bancarizado,chk_pago_directo,chk_pago_pos;;
-    MenuItem generarpdf,validarqr,guardar;
+    CheckBox chkpagoadelantado, chk_bancarizado, chk_pago_directo, chk_pago_pos;
+    ;
+    MenuItem generarpdf, validarqr, guardar;
     TextView tv_recibo;
     public static CheckBox chk_validacionqr;
     static HiloVlidarQR hiloVlidarQR;
@@ -135,35 +140,37 @@ public class CobranzaDetalleView extends Fragment {
     private Camera objCamara;
     Camera.Parameters parametrosCamara;
     private final static String NOMBRE_DIRECTORIO = "Cobranza";
-    public static String comentario="";
-    int resultadows=0;
-    String resultadoenviows="0";
+    public static String comentario = "";
+    int resultadows = 0;
+    String resultadoenviows = "0";
     Menu menu_variable;
     ConfiguracionSQLiteDao configuracionSQLiteDao;
     ArrayList<ConfiguracionSQLEntity> listaConfiguracionSQLEntity;
     String vinculaimpresora;
     UsuarioSQLite usuarioSQLite;
-    String Conexion="",tipocobranza="";
+    String Conexion = "", tipocobranza = "";
     ArrayList<UsuarioSQLiteEntity> listaUsuarioSQLiteEntity;
     ArrayList<ListaHistoricoCobranzaEntity> Listado = new ArrayList<>();
-    private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=2;
-    String Estadochkbancarizado="",Estadodepositodirecto="",Estadopagopos="",Estadopagoadelantado="";
+    private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 2;
+    String Estadochkbancarizado = "", Estadodepositodirecto = "", Estadopagopos = "", Estadopagoadelantado = "";
     HiloCobranzaPOS hiloCobranzaPOS;
     private CobranzaRepository cobranzaRepository;
     private DepositoRepository depositoRepository;
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
-    String cliente_id_visita,domembarque_id_visita,zona_id_visita;
+    String cliente_id_visita, domembarque_id_visita, zona_id_visita;
     private ProgressDialog pd;
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
+
     public static Fragment newInstanciaComentario(String param1) {
-        Log.e("jpcm","Este es NUEVA ISNTANCIA 1");
+        Log.e("jpcm", "Este es NUEVA ISNTANCIA 1");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
-        comentario=param1;
+        comentario = param1;
         return fragment;
     }
+
     public static CobranzaDetalleView newInstance(String param1) {
-        Log.e("jpcm","Este es NUEVA ISNTANCIA 2 CONSULTA COBRADO");
+        Log.e("jpcm", "Este es NUEVA ISNTANCIA 2 CONSULTA COBRADO");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -179,12 +186,12 @@ public class CobranzaDetalleView extends Fragment {
         Bundle args = new Bundle();
         ArrayList<ListaHistoricoCobranzaEntity> Lista = new ArrayList<>();
         Lista = (ArrayList<ListaHistoricoCobranzaEntity>) param1;
-        args.putSerializable(ARG_PARAM1,Lista);
+        args.putSerializable(ARG_PARAM1, Lista);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static CobranzaDetalleView newInstance(Object objeto){
+    public static CobranzaDetalleView newInstance(Object objeto) {
         //Log.e("jpcm","Este es NUEVA ISNTANCIA 3 ESTO VA PARA CLIENTE VERIFICADO");
 
         ListenerBackPress.setCurrentFragment("FormDetalleCobranzaCliente");
@@ -194,14 +201,14 @@ public class CobranzaDetalleView extends Fragment {
         Bundle b = new Bundle();
         ArrayList<ListaClienteDetalleEntity> Lista = (ArrayList<ListaClienteDetalleEntity>) objeto;
         Lista.size();
-        b.putSerializable(TAG_1,Lista);
+        b.putSerializable(TAG_1, Lista);
         fragment.setArguments(b);
         return fragment;
 
     }
 
-    public static CobranzaDetalleView nuevainstancia (Object objeto){
-        Log.e("jpcm","Este es NUEVA ISNTANCIA 4");
+    public static CobranzaDetalleView nuevainstancia(Object objeto) {
+        Log.e("jpcm", "Este es NUEVA ISNTANCIA 4");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
         chk_validacionqr.setChecked(true);
         //hiloVlidarQR.execute();
@@ -217,6 +224,7 @@ public class CobranzaDetalleView extends Fragment {
         LocalDateTime ahora = LocalDateTime.now();
         return formateador.format(ahora);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String obtenerHoraActual() {
         String formato = "HHmmss";
@@ -224,12 +232,13 @@ public class CobranzaDetalleView extends Fragment {
         LocalDateTime ahora = LocalDateTime.now();
         return formateador.format(ahora);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hiloVlidarQR = new HiloVlidarQR();
-        listaClienteDetalleAdapterFragment =  new ArrayList<ListaClienteDetalleEntity>();
+        listaClienteDetalleAdapterFragment = new ArrayList<ListaClienteDetalleEntity>();
         documentoCobranzaPDF = new DocumentoCobranzaPDF();
         documentoSQLite = new DocumentoSQLite(getContext());
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
@@ -239,7 +248,7 @@ public class CobranzaDetalleView extends Fragment {
         cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
         depositoRepository = new ViewModelProvider(getActivity()).get(DepositoRepository.class);
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
 
@@ -249,7 +258,7 @@ public class CobranzaDetalleView extends Fragment {
                 Location mLocation = gpsController.getLocation(null);
                 latitude = mLocation.getLatitude();
                 longitude = mLocation.getLongitude();
-            }catch(Exception e){
+            } catch (Exception e) {
                 Sentry.captureMessage(e.getMessage());
             }
         }
@@ -259,62 +268,53 @@ public class CobranzaDetalleView extends Fragment {
         parametrosCamara = objCamara.getParameters();
         tieneFlash = getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
-        listaConfiguracionSQLEntity =  new ArrayList<>();
+        listaConfiguracionSQLEntity = new ArrayList<>();
         usuarioSQLite = new UsuarioSQLite(getContext());
         if (getArguments() != null) {
 
-            Listado = (ArrayList<ListaHistoricoCobranzaEntity>)getArguments().getSerializable(ARG_PARAM1);
-            if(!(Listado==null)){
-                if(!(Listado.isEmpty()))
-                    for (int j = 0; j < Listado.size(); j++)
-                    {
-                        String Bancarizado="";
+            Listado = (ArrayList<ListaHistoricoCobranzaEntity>) getArguments().getSerializable(ARG_PARAM1);
+            if (!(Listado == null)) {
+                if (!(Listado.isEmpty()))
+                    for (int j = 0; j < Listado.size(); j++) {
+                        String Bancarizado = "";
 
-                        recibo_generado=Listado.get(j).getRecibo();
-                        recibo=recibo_generado;
-                        chkqrvalidado=Listado.get(j).getEstadoqr();
-                        listaClienteDetalleEntity =  new ListaClienteDetalleEntity();
+                        recibo_generado = Listado.get(j).getRecibo();
+                        recibo = recibo_generado;
+                        chkqrvalidado = Listado.get(j).getEstadoqr();
+                        listaClienteDetalleEntity = new ListaClienteDetalleEntity();
                         //cobrado = Float.parseFloat(listaCobranzaDetalleEntities.get(j).getSaldocobrado());
                         //istaClienteDetalleEntity.reci
-                        listaClienteDetalleEntity.cliente_id=Listado.get(j).getCliente_id();
-                        listaClienteDetalleEntity.nombrecliente=Listado.get(j).getCliente_nombre();
-                        listaClienteDetalleEntity.cobrado=Listado.get(j).getMontocobrado();
-                        listaClienteDetalleEntity.saldo=Listado.get(j).getSaldodocumento();
-                        listaClienteDetalleEntity.nuevo_saldo=Listado.get(j).getNuevosaldodocumento();
-                        listaClienteDetalleEntity.importe=Listado.get(j).getImportedocumento();
-                        if(Listado.get(j).getBancarizacion().equals("Y"))
-                        {
-                            Estadochkbancarizado="1";
+                        listaClienteDetalleEntity.cliente_id = Listado.get(j).getCliente_id();
+                        listaClienteDetalleEntity.nombrecliente = Listado.get(j).getCliente_nombre();
+                        listaClienteDetalleEntity.cobrado = Listado.get(j).getMontocobrado();
+                        listaClienteDetalleEntity.saldo = Listado.get(j).getSaldodocumento();
+                        listaClienteDetalleEntity.nuevo_saldo = Listado.get(j).getNuevosaldodocumento();
+                        listaClienteDetalleEntity.importe = Listado.get(j).getImportedocumento();
+                        if (Listado.get(j).getBancarizacion().equals("Y")) {
+                            Estadochkbancarizado = "1";
+                        } else if (Listado.get(j).getBancarizacion().equals("N")) {
+                            Estadochkbancarizado = "0";
                         }
-                        else if(Listado.get(j).getBancarizacion().equals("N"))
-                        {
-                            Estadochkbancarizado="0";
-                        }
-                        Log.e("REOS","CobranzaDetalleView-Listado.get(j).getDepositodirecto(): "+Listado.get(j).getDepositodirecto());
-                        if(Listado.get(j).getDepositodirecto().equals("Y"))
-                        {
-                            Estadodepositodirecto="1";
-                        }
-                        else if(Listado.get(j).getDepositodirecto().equals("N"))
-                        {
-                            Estadodepositodirecto="0";
+                        Log.e("REOS", "CobranzaDetalleView-Listado.get(j).getDepositodirecto(): " + Listado.get(j).getDepositodirecto());
+                        if (Listado.get(j).getDepositodirecto().equals("Y")) {
+                            Estadodepositodirecto = "1";
+                        } else if (Listado.get(j).getDepositodirecto().equals("N")) {
+                            Estadodepositodirecto = "0";
                         }
 
-                        Estadopagopos=SesionEntity.pagopos;
-                        Log.e("REOS","CobranzaDetalleView:-HistoricoCobranzaView: "+Listado.size());
+                        Estadopagopos = SesionEntity.pagopos;
+                        Log.e("REOS", "CobranzaDetalleView:-HistoricoCobranzaView: " + Listado.size());
 
                         //String[] fechaCobrado= Listado.get(j).getFechacobranza().split(" ");
-                        if(!Listado.get(j).getFechacobranza().isEmpty()){
-                            fecha=Listado.get(j).getFechacobranza();
-                        }else{
-                            Log.e("jpcm","FEHCA LLENA");
+                        if (!Listado.get(j).getFechacobranza().isEmpty()) {
+                            fecha = Listado.get(j).getFechacobranza();
+                        } else {
+                            Log.e("jpcm", "FEHCA LLENA");
                         }
-                        if(Listado.get(j).getDocumento_id().equals(""))
-                        {
-                            Estadopagoadelantado="1";
-                        }else
-                        {
-                            Estadopagoadelantado="0";
+                        if (Listado.get(j).getDocumento_id().equals("")) {
+                            Estadopagoadelantado = "1";
+                        } else {
+                            Estadopagoadelantado = "0";
                         }
 
                        /* String  FechaDiferida="";
@@ -337,13 +337,13 @@ public class CobranzaDetalleView extends Fragment {
 
                         //REVISAR HERE line code*/
 
-                        Log.e("jpcm","fecha->"+fecha);
+                        Log.e("jpcm", "fecha->" + fecha);
                         //fecha= Listado.get(j).getFechacobranza();//+" "+Listado.get(j).getFechacobranza();
-                        listaClienteDetalleEntity.fechaemision="0";
-                        listaClienteDetalleEntity.fechavencimiento="0";
-                        listaClienteDetalleEntity.direccion="0";
-                        listaClienteDetalleEntity.nrodocumento=Listado.get(j).getNro_documento();
-                        listaClienteDetalleEntity.documento_id=Listado.get(j).getDocumento_id();
+                        listaClienteDetalleEntity.fechaemision = "0";
+                        listaClienteDetalleEntity.fechavencimiento = "0";
+                        listaClienteDetalleEntity.direccion = "0";
+                        listaClienteDetalleEntity.nrodocumento = Listado.get(j).getNro_documento();
+                        listaClienteDetalleEntity.documento_id = Listado.get(j).getDocumento_id();
 
                         //listaClienteDetalleEntity.fechaemision=Listado.get(j).getFechacobranza();
 
@@ -351,15 +351,14 @@ public class CobranzaDetalleView extends Fragment {
                         //fecha= Listado.get(j).getFechacobranza();
 
                     }
-            }else{
-                Log.e("jpcm","se debio asignar");
+            } else {
+                Log.e("jpcm", "se debio asignar");
                 //fecha =obtenerFechaYHoraActual();
-                listaClienteDetalleAdapterFragment= (ArrayList<ListaClienteDetalleEntity>)getArguments().getSerializable(TAG_1);
-                for(int g=0;g>listaClienteDetalleAdapterFragment.size();g++)
-                {
-                    cliente_id_visita=listaClienteDetalleAdapterFragment.get(g).getCliente_id();
-                    domembarque_id_visita=listaClienteDetalleAdapterFragment.get(g).getDomembarque();
-                    zona_id_visita=listaClienteDetalleAdapterFragment.get(g).getZona_id();
+                listaClienteDetalleAdapterFragment = (ArrayList<ListaClienteDetalleEntity>) getArguments().getSerializable(TAG_1);
+                for (int g = 0; g > listaClienteDetalleAdapterFragment.size(); g++) {
+                    cliente_id_visita = listaClienteDetalleAdapterFragment.get(g).getCliente_id();
+                    domembarque_id_visita = listaClienteDetalleAdapterFragment.get(g).getDomembarque();
+                    zona_id_visita = listaClienteDetalleAdapterFragment.get(g).getZona_id();
                 }
             }
 
@@ -373,27 +372,27 @@ public class CobranzaDetalleView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        v= inflater.inflate(R.layout.fragment_cobranza_detalle_view, container, false);
-        et_cobrado_edit=(EditText)v.findViewById(R.id.et_cobrado_edit);
+        v = inflater.inflate(R.layout.fragment_cobranza_detalle_view, container, false);
+        et_cobrado_edit = (EditText) v.findViewById(R.id.et_cobrado_edit);
         //imbplus=(ImageButton)v.findViewById(R.id.imbplus);
         //imbminus=(ImageButton) v.findViewById(R.id.imbminus);
-        imbaceptar=(ImageButton)v.findViewById(R.id.imbaceptar);
-        imbcancelar=(ImageButton) v.findViewById(R.id.imbcancelar);
+        imbaceptar = (ImageButton) v.findViewById(R.id.imbaceptar);
+        imbcancelar = (ImageButton) v.findViewById(R.id.imbcancelar);
         chkpagoadelantado = (CheckBox) v.findViewById(R.id.chkpagoadelantado);
-        chk_pago_pos=(CheckBox) v.findViewById(R.id.chk_pago_pos);
+        chk_pago_pos = (CheckBox) v.findViewById(R.id.chk_pago_pos);
         chk_validacionqr = (CheckBox) v.findViewById(R.id.chk_validacionqr);
         tv_recibo = (TextView) v.findViewById(R.id.tv_recibo);
         chk_bancarizado = (CheckBox) v.findViewById(R.id.chk_bancarizado);
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
-        imbcomentariorecibo= (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
+        imbcomentariorecibo = (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
 
 
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
                                                    @Override
                                                    public void onClick(View view) {
                                                        DialogFragment dialogFragment = new CobranzaDetalleDialogController();
-                                                       dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
+                                                       dialogFragment.show(getActivity().getSupportFragmentManager(), "un dialogo");
                                                    }
                                                }
         );
@@ -403,13 +402,10 @@ public class CobranzaDetalleView extends Fragment {
         obtenerWSCobranzaDetalle = new ObtenerWSCobranzaDetalle();
 
 
-        if(!(listaClienteDetalleAdapterFragment.isEmpty()))
-        {
+        if (!(listaClienteDetalleAdapterFragment.isEmpty())) {
 
-            for(int i=0;i<listaClienteDetalleAdapterFragment.size();i++)
-            {
-                if(listaClienteDetalleAdapterFragment.get(i).getNrodocumento()==null)
-                {
+            for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++) {
+                if (listaClienteDetalleAdapterFragment.get(i).getNrodocumento() == null) {
                     chkpagoadelantado.setChecked(true);
                 }
             }
@@ -417,7 +413,7 @@ public class CobranzaDetalleView extends Fragment {
         }
 
         imbaceptar.setOnClickListener(view -> {
-                    int total = 0, p = 0,q=0;
+                    int total = 0, p = 0, q = 0;
                     for (int i = 0; i < et_cobrado_edit.getText().toString().length(); i++) {
                         char letra;
 
@@ -425,10 +421,9 @@ public class CobranzaDetalleView extends Fragment {
                         if (letra == '.') {
                             p++;
 
-                        }else
-                            {
-                                q++;
-                            }
+                        } else {
+                            q++;
+                        }
                         Log.e("REOS", "CobranzaDetalleView.onCreateView.letra: " + letra);
                         Log.e("REOS", "CobranzaDetalleView.onCreateView.p: " + p);
                 /*else
@@ -437,7 +432,7 @@ public class CobranzaDetalleView extends Fragment {
                 }*/
                     }
 
-                    if (p <= 1&&q>=1) {
+                    if (p <= 1 && q >= 1) {
                         String saldo_evaluar = "0";
                         if (!chkpagoadelantado.isChecked()) {
                             for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++) {
@@ -528,18 +523,15 @@ public class CobranzaDetalleView extends Fragment {
                             }
 
                         }
+                    } else {
+                        Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
                     }
-                    else
-                        {
-                            Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
-                        }
                 }
         );
         imbcancelar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++){
+            public void onClick(View view) {
+                for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++) {
                     et_cobrado_edit.setText(null);
                     listaClienteDetalleAdapterFragment.get(i).setCobrado(String.valueOf("0"));
                     listaClienteDetalleAdapterFragment.get(i).setNuevo_saldo(String.valueOf("0"));
@@ -547,109 +539,94 @@ public class CobranzaDetalleView extends Fragment {
 
                 Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
                 drawable = DrawableCompat.wrap(drawable);
-                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
+                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
                 menu_variable.findItem(R.id.guardar).setIcon(drawable);
                 guardar.setEnabled(false);
 
                 chk_bancarizado.setChecked(false);
                 obtenerWSCobranzaDetalle = new ObtenerWSCobranzaDetalle();
                 obtenerWSCobranzaDetalle.execute();
-            }});
-
-
+            }
+        });
 
 
         if (getArguments() != null) {
-            if(!(Listado==null)) {
+            if (!(Listado == null)) {
                 tv_recibo.setText(recibo_generado);
-                if (chkqrvalidado.equals("False")||chkqrvalidado.equals("N")) {
+                if (chkqrvalidado.equals("False") || chkqrvalidado.equals("N")) {
                     chk_validacionqr.setChecked(false);
 
 
-                } else if (chkqrvalidado.equals("True")||chkqrvalidado.equals("Y")) {
+                } else if (chkqrvalidado.equals("True") || chkqrvalidado.equals("Y")) {
                     chk_validacionqr.setChecked(true);
                 }
 
-                if(Estadopagopos!=null && Estadopagopos.equals("Y")){
+                if (Estadopagopos != null && Estadopagopos.equals("Y")) {
                     chk_pago_pos.setChecked(true);
-                }else{
+                } else {
                     chk_pago_pos.setChecked(false);
                 }
 
-                if(Estadopagoadelantado.equals("1"))
-                {
+                if (Estadopagoadelantado.equals("1")) {
                     chkpagoadelantado.setChecked(true);
                 }
 
 
-            }else
-            {
+            } else {
 
-                if(SesionEntity.pagodirecto.equals("Y"))
-                {
+                if (SesionEntity.pagodirecto.equals("Y")) {
                     chk_pago_directo.setChecked(true);
                     chk_bancarizado.setEnabled(false);
                     chk_bancarizado.setChecked(false);
                     chk_bancarizado.setFocusable(false);
                     chk_bancarizado.setClickable(false);
 
-                }
-                else
-                {
+                } else {
                     chk_pago_directo.setChecked(false);
                 }
             }
         }
 
-        if((Listado==null))
-        {
-            if(SesionEntity.pagopos.equals("Y"))
-            {
+        if ((Listado == null)) {
+            if (SesionEntity.pagopos.equals("Y")) {
                 chk_pago_pos.setChecked(true);
-            }
-            else
-            {
+            } else {
                 chk_pago_pos.setChecked(false);
             }
         }
-        Conexion="1";
+        Conexion = "1";
 
         chk_bancarizado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean estado=chk_bancarizado.isChecked();
-                if(chk_bancarizado.isChecked()){
+                boolean estado = chk_bancarizado.isChecked();
+                if (chk_bancarizado.isChecked()) {
                     createSimpleDialog(estado).show();
-                }else{
+                } else {
                     createSimpleDialog(estado).show();
                 }
 
-            }});
+            }
+        });
 
-        if(Estadochkbancarizado.equals("1"))
-        {
+        if (Estadochkbancarizado.equals("1")) {
             chk_bancarizado.setChecked(true);
             chk_bancarizado.setFocusable(false);
             chk_bancarizado.setClickable(false);
             //chk_bancarizado.setEnabled(false);
 
-        }
-        else if(Estadochkbancarizado.equals("0"))
-        {
+        } else if (Estadochkbancarizado.equals("0")) {
             chk_bancarizado.setChecked(false);
             chk_bancarizado.setFocusable(false);
             chk_bancarizado.setClickable(false);
         }
-        if(Estadodepositodirecto.equals("Y"))
-        {
+        if (Estadodepositodirecto.equals("Y")) {
             chk_pago_directo.setChecked(true);
             //chk_bancarizado.setFocusable(false);
             //chk_bancarizado.setClickable(false);
             //chk_bancarizado.setEnabled(false);
 
-        }
-        else if(Estadodepositodirecto.equals("N"))
-        {
+        } else if (Estadodepositodirecto.equals("N")) {
             chk_pago_directo.setChecked(false);
             //chk_bancarizado.setFocusable(false);
             //chk_bancarizado.setClickable(false);
@@ -694,15 +671,14 @@ public class CobranzaDetalleView extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        return  dialog;
+        return dialog;
     }
 
     public AlertDialog createSimpleDialog(final boolean estado) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(true);
-        if(estado)
-        {
+        if (estado) {
             builder.setTitle("Advertencia")
                     .setMessage("Esta Seguro de Marcar el Recibo como Bancarizado")
                     .setPositiveButton("OK",
@@ -720,9 +696,7 @@ public class CobranzaDetalleView extends Fragment {
                                     chk_bancarizado.setChecked(false);
                                 }
                             });
-        }
-        else
-        {
+        } else {
             builder.setTitle("Advertencia")
                     .setMessage("Esta Seguro de DesMarcar el Recibo como Bancarizado")
                     .setPositiveButton("OK",
@@ -743,6 +717,7 @@ public class CobranzaDetalleView extends Fragment {
         }
         return builder.create();
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
@@ -751,13 +726,11 @@ public class CobranzaDetalleView extends Fragment {
         guardar = menu.findItem(R.id.guardar);
         generarpdf = menu.findItem(R.id.generarpdf);
         validarqr = menu.findItem(R.id.validarqr);
-        menu_variable=menu;
-
-
+        menu_variable = menu;
 
 
         if (getArguments() != null) {
-            if(!(Listado==null)){
+            if (!(Listado == null)) {
                 guardar.setEnabled(false);
                 generarpdf.setEnabled(true);
                 validarqr.setEnabled(true);
@@ -779,8 +752,8 @@ public class CobranzaDetalleView extends Fragment {
                 et_cobrado_edit.setEnabled(false);
                 imbcomentariorecibo.setEnabled(false);
 
-            }else{
-                comentario="";
+            } else {
+                comentario = "";
                 Drawable drawable = menu.findItem(R.id.guardar).getIcon();
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
@@ -798,8 +771,7 @@ public class CobranzaDetalleView extends Fragment {
             }
         }
 
-        if(SesionEntity.Print.equals("Y"))
-        {
+        if (SesionEntity.Print.equals("Y")) {
             //vinculaimpresora="1"; ///para chile no se requiere impresora
             listaConfiguracionSQLEntity = configuracionSQLiteDao.ObtenerConfiguracion();
             for (int i = 0; i < listaConfiguracionSQLEntity.size(); i++) {
@@ -810,14 +782,12 @@ public class CobranzaDetalleView extends Fragment {
                 Toast.makeText(getContext(), "Advertencia: Impresora No Vinculada - Revisar en Configuracion" + comentario, Toast.LENGTH_SHORT).show();
             }
 
-        }else
-            {
-                vinculaimpresora="1";
-            }
+        } else {
+            vinculaimpresora = "1";
+        }
         super.onCreateOptionsMenu(menu, inflater);
 
     }
-
 
 
     private class ObtenerWSCobranzaDetalle extends AsyncTask<String, Void, Object> {
@@ -827,17 +797,15 @@ public class CobranzaDetalleView extends Fragment {
             return "1";
         }
 
-        protected void onPostExecute(Object result){
+        protected void onPostExecute(Object result) {
             listaCobranzaDetalleAdapter = new ListaCobranzaDetalleAdapter(getActivity(), ListaCobranzaDetalleDao.getInstance().getLeads(listaClienteDetalleAdapterFragment));
             listViewCobranzaDetalle.setAdapter(listaCobranzaDetalleAdapter);
 
         }
 
-        protected ArrayList<ListaClienteDetalleEntity>  llenarlista(ArrayList<ListaClienteDetalleEntity> listaClienteDetalleAdapter)
-        {
+        protected ArrayList<ListaClienteDetalleEntity> llenarlista(ArrayList<ListaClienteDetalleEntity> listaClienteDetalleAdapter) {
 
-            for(int i=0; i<listaClienteDetalleAdapter.size();i++)
-            {
+            for (int i = 0; i < listaClienteDetalleAdapter.size(); i++) {
 
             }
 
@@ -870,37 +838,38 @@ public class CobranzaDetalleView extends Fragment {
         switch (item.getItemId()) {
 
             case R.id.guardar:
-                if(SesionEntity.fuerzatrabajo_id==null && SesionEntity.nombrefuerzadetrabajo==null && SesionEntity.compania_id==null){
+                if (SesionEntity.fuerzatrabajo_id == null && SesionEntity.nombrefuerzadetrabajo == null && SesionEntity.compania_id == null) {
                     //if(true){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Advertencia")
                             .setMessage("Tu sesión a expirado")
                             .setPositiveButton("INICIAR SESIóN",
                                     (dialog, which) -> {
-                                        Intent i = getContext().getPackageManager().getLaunchIntentForPackage( getContext().getPackageName());
+                                        Intent i = getContext().getPackageManager().getLaunchIntentForPackage(getContext().getPackageName());
                                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(i);
                                         return;
                                     });
 
                     builder.show();
-                }else{
-                    fecha =obtenerFechaActual();
+                } else {
+                    fecha = obtenerFechaActual();
                     guardar.setEnabled(false);
                     alertaGuardarCobranza().show();
                 }
                 return false;
             case R.id.generarpdf:
-                alertaGenerarPDF().show();
+                //alertaGenerarPDF().show();
+                alertatypegeneratedocumentcollection().show();
                 return true;
             case R.id.validarqr:
-                if(SesionEntity.Print.equals("Y"))
-                {
+                if (SesionEntity.Print.equals("Y")) {
                     alertaValidarQR().show();
-                }else
-                    {
-                        alertaEnviarSMS(getContext()).show();
-                    }
+
+                } else {
+                    alertatypevalidatedocumentcollection().show();
+                    //alertaEnviarSMS(getContext()).show();
+                }
                 return false;
             default:
                 break;
@@ -914,7 +883,7 @@ public class CobranzaDetalleView extends Fragment {
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.layout_dialog_enviar_sms);
         //TextView textMsj = dialog.findViewById(R.id.tv_texto);
-        EditText et_numero_telefonico=(EditText) dialog.findViewById(R.id.et_numero_telefonico);
+        EditText et_numero_telefonico = (EditText) dialog.findViewById(R.id.et_numero_telefonico);
         //textMsj.setText(texto);
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         Drawable background = image.getBackground();
@@ -924,9 +893,8 @@ public class CobranzaDetalleView extends Fragment {
         // if button is clicked, close the custom dialog
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                FormulasController formulasController=new FormulasController(getContext());
+            public void onClick(View v) {
+                /*FormulasController formulasController=new FormulasController(getContext());
                 if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
                 {
                     ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
@@ -949,7 +917,36 @@ public class CobranzaDetalleView extends Fragment {
                 catch (Exception e)
                 {
                     Log.e("REOS","CobranzaDetalleView-alertaEnviarSMS-Erroe-"+e.toString());
+                }*/
+                TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+                String mPhoneNumber="";
+                try {
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS)
+                            != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(getContext(),
+                                    Manifest.permission.READ_PHONE_NUMBERS)
+                                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        mPhoneNumber = tMgr.getLine1Number();
+                    }
+                }catch (Exception e)
+                {
+                    Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-e:" + e.toString());
                 }
+
+
+
+                Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-et_numero_telefonico.getText().toString():" + et_numero_telefonico.getText().toString());
+                Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-mPhoneNumber:" + mPhoneNumber);
+                if(et_numero_telefonico.getText().toString().equals(mPhoneNumber))
+                {
+                    Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    sendSMS(et_numero_telefonico.getText().toString());
+                }
+
             }
         });
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
@@ -962,7 +959,7 @@ public class CobranzaDetalleView extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        return  dialog;
+        return dialog;
     }
 
     public AlertDialog alertaGuardarCobranza() {
@@ -972,15 +969,15 @@ public class CobranzaDetalleView extends Fragment {
                 .setMessage("Esta Seguro de Guardar la Cobranza?")
                 .setPositiveButton("OK",
                         (dialog, which) -> {
-                            if(et_cobrado_edit.getText().toString().equals("0")){
+                            if (et_cobrado_edit.getText().toString().equals("0")) {
                                 Toast.makeText(getContext(), "No puedes Guardar un Recibo con valor 0 ", Toast.LENGTH_SHORT).show();
-                            }else{
+                            } else {
 
-                                if(vinculaimpresora.equals("0")){
+                                if (vinculaimpresora.equals("0")) {
                                     //generarpdf.setEnabled(true);
                                     Toast.makeText(getContext(), "Impresora No Vinculada - Favor de Vincular para proseguir", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    switch(SesionEntity.pagopos) {
+                                } else {
+                                    switch (SesionEntity.pagopos) {
                                         case "Y":
                                             tipocobranza = "Cobranza/Deposito";
                                             Log.e("REOS", "CobranzaDetalleView-alertaGuardarCobranza-SesionEntity.pagopos:Cobranza/Deposito" + SesionEntity.pagopos);
@@ -992,23 +989,30 @@ public class CobranzaDetalleView extends Fragment {
                                             resultado = GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment, tipocobranza);
                                             break;
                                     }
-                                    if(resultado>0){
+                                    if (resultado > 0) {
                                         guardar.setEnabled(false);
                                         //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
                                         Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
                                         drawable = DrawableCompat.wrap(drawable);
-                                        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
+                                        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
                                         menu_variable.findItem(R.id.guardar).setIcon(drawable);
                                         Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
                                         drawable2 = DrawableCompat.wrap(drawable2);
-                                        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
+                                        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.white));
                                         menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
                                         //guardar.setEnabled(false);
                                         //imbcomentariorecibo.setColorFilter(Color.BLACK);
+                                        if (!SesionEntity.Print.equals("Y")) {
+                                            Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
+                                            drawable3 = DrawableCompat.wrap(drawable3);
+                                            DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
+                                            menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
+                                            validarqr.setEnabled(true);
+
+                                        }
                                         imbcomentariorecibo.setEnabled(false);
 
-                                        if(vinculaimpresora.equals("1"))
-                                        {
+                                        if (vinculaimpresora.equals("1")) {
                                             generarpdf.setEnabled(true);
                                         }
 
@@ -1023,8 +1027,7 @@ public class CobranzaDetalleView extends Fragment {
                                         //enviarWSCobranzaDetalle.execute();
 
 
-                                    }else
-                                    {
+                                    } else {
                                         Toast.makeText(getContext(), "No se Guardo la Cobranza Comunicarse con El Administrador", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -1053,58 +1056,53 @@ public class CobranzaDetalleView extends Fragment {
 
                         (dialog, which) -> {
 
-                            if(listaClienteDetalleAdapterFragment.size()>0)
-                            {
+                            if (listaClienteDetalleAdapterFragment.size() > 0) {
                                 // SesionEntity.imagen="R"+recibo;
                                 // fecha =obtenerFechaYHoraActual();
-
-
 
 
                                 //documentPDFController.showPdfFile(recibo+".pdf",getContext());
                                 File file = new File(Environment
                                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
                                         NOMBRE_DIRECTORIO);
-                                String Cadenafile="";
-                                Cadenafile=String.valueOf(file);
-                                String ruta=Cadenafile+"/"+recibo+".pdf";
+                                String Cadenafile = "";
+                                Cadenafile = String.valueOf(file);
+                                String ruta = Cadenafile + "/" + recibo + ".pdf";
 
 
                                 // MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
-                                String correlativo="";
+                                String correlativo = "";
                                 ConfiguracionSQLiteDao configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
-                                ArrayList<ConfiguracionSQLEntity> arraylistconfiguracion =  new ArrayList<ConfiguracionSQLEntity>();
-                                arraylistconfiguracion=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
+                                ArrayList<ConfiguracionSQLEntity> arraylistconfiguracion = new ArrayList<ConfiguracionSQLEntity>();
+                                arraylistconfiguracion = configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
 
-                                for(int i=0;i<arraylistconfiguracion.size();i++)
-                                {
-                                    correlativo=arraylistconfiguracion.get(i).getSecuenciarecibos();
+                                for (int i = 0; i < arraylistconfiguracion.size(); i++) {
+                                    correlativo = arraylistconfiguracion.get(i).getSecuenciarecibos();
                                 }
 
-                                configuracionSQLiteDao.ActualizaCorrelativo(String.valueOf(Integer.parseInt(correlativo)-1));
+                                configuracionSQLiteDao.ActualizaCorrelativo(String.valueOf(Integer.parseInt(correlativo) - 1));
 
                                 //btn item validar QR se queda en disabled
                                 Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
                                 drawable = DrawableCompat.wrap(drawable);
-                                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.white));
+                                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
                                 menu_variable.findItem(R.id.validarqr).setIcon(drawable);
 
                                 Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
                                 drawable2 = DrawableCompat.wrap(drawable2);
-                                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.Black));
+                                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
                                 menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
 
                                 validarqr.setEnabled(true); //no aplica validar qr //peru si
 
 
-                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual());
+                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual());
 
-                                if(SesionEntity.Print.equals("Y"))
-                                {
+                                if (SesionEntity.Print.equals("Y")) {
                                     MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
                                 }
                                 Toast.makeText(getContext(), "Se creo tu archivo pdf", Toast.LENGTH_SHORT).show();
-                            }else{
+                            } else {
                                 Toast.makeText(getContext(), "No se creo el archivo pdf", Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -1123,7 +1121,7 @@ public class CobranzaDetalleView extends Fragment {
                 .setMessage("Iniciar validacion QR?")
                 .setPositiveButton("OK",
                         (dialog, which) -> {
-                            SesionEntity.imagen="R"+recibo;
+                            SesionEntity.imagen = "R" + recibo;
                             final Activity activity = getActivity();
                             //encenderFlash();
                             IntentIntegrator integrator = new IntentIntegrator(activity);
@@ -1165,70 +1163,58 @@ public class CobranzaDetalleView extends Fragment {
     }
 
 
-    public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza)
-    {
-        int resultado=0,recibows=0;
-        String tag="",tag2="",cliente_id="",shipto="",montocobrado="",qrvalidado="N";
-        FormulasController formulasController=new FormulasController(getContext());
-        cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
-        correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(SesionEntity.compania_id,SesionEntity.usuario_id);
+    public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza) {
+        int resultado = 0, recibows = 0;
+        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "";
+        FormulasController formulasController = new FormulasController(getContext());
+        Random numAleatorio = new Random();
+        int n = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
+
+        cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
+        correlativorecibo = cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(SesionEntity.compania_id, SesionEntity.usuario_id);
 
 
         String[] separada = SesionEntity.recibo.split("R");
-        if(SesionEntity.recibo.equals("0"))
-        {
-            tag2=SesionEntity.recibo;
-        }
-        else
-        {
-            if(separada.length>1)
-            {
-                tag=separada[0];
-                tag2=separada[1];
-            }
-            else
-            {
-                tag=separada[0];
+        if (SesionEntity.recibo.equals("0")) {
+            tag2 = SesionEntity.recibo;
+        } else {
+            if (separada.length > 1) {
+                tag = separada[0];
+                tag2 = separada[1];
+            } else {
+                tag = separada[0];
             }
         }
 
-        if(tag.equals(""))
-        {
-            tag="0";
+        if (tag.equals("")) {
+            tag = "0";
         }
 
 
-        recibows=Integer.parseInt(tag);
-        if(correlativorecibo>=recibows)
-        {
-            ultimocorrelativorecibo=correlativorecibo;
-        }
-        else
-        {
-            ultimocorrelativorecibo=recibows;
+        recibows = Integer.parseInt(tag);
+        if (correlativorecibo >= recibows) {
+            ultimocorrelativorecibo = correlativorecibo;
+        } else {
+            ultimocorrelativorecibo = recibows;
         }
 
-        String bancarizado="";
-        if(chk_bancarizado.isChecked())
-        {
-            bancarizado="Y";
+        String bancarizado = "";
+        if (chk_bancarizado.isChecked()) {
+            bancarizado = "Y";
+        } else {
+            bancarizado = "N";
         }
-        else
-        {
-            bancarizado="N";
-        }
-        if(SesionEntity.Print.equals("N"))
+        /*if(SesionEntity.Print.equals("N"))
         {
             qrvalidado="Y";
-        }
+        }*/
 
-        if(tipoCobranza.equals("Cobranza"))
-        {
+        if (tipoCobranza.equals("Cobranza")) {
             for (int i = 0; i < Lista.size(); i++) {
 
-                montocobrado=Lista.get(i).getCobrado();
-                cliente_id=String.valueOf(Lista.get(i).getCliente_id());
-                shipto=Lista.get(i).getDomembarque();
+                montocobrado = Lista.get(i).getCobrado();
+                cliente_id = String.valueOf(Lista.get(i).getCliente_id());
+                shipto = Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
                         FormulasController.ObtenerFechaHoraCadena(),
@@ -1248,7 +1234,8 @@ public class CobranzaDetalleView extends Fragment {
                         //Peru - Cambio necesario para letras
                         //------------------
                         //"0",
-                        String.valueOf(Lista.get(i).getNrodocumento()),
+                        //String.valueOf(Lista.get(i).getNrodocumento()),
+                        String.valueOf(n),
                         //------------------
                         SesionEntity.usuario_id,
                         comentario,
@@ -1270,16 +1257,14 @@ public class CobranzaDetalleView extends Fragment {
                         String.valueOf(Lista.get(i).getNuevo_saldo()));
 
             }
-        }
-        else if(tipoCobranza.equals("Cobranza/Deposito"))
-        {
-            String sumacobrado="";
+        } else if (tipoCobranza.equals("Cobranza/Deposito")) {
+            String sumacobrado = "";
             for (int i = 0; i < Lista.size(); i++) {
-                cliente_id=String.valueOf(Lista.get(i).getCliente_id());
-                shipto=Lista.get(i).getDomembarque();
+                cliente_id = String.valueOf(Lista.get(i).getCliente_id());
+                shipto = Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
-                sumacobrado=String.valueOf(Lista.get(i).getCobrado());
-                montocobrado=sumacobrado;
+                sumacobrado = String.valueOf(Lista.get(i).getCobrado());
+                montocobrado = sumacobrado;
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
                         FormulasController.ObtenerFechaHoraCadena(),
                         String.valueOf(Lista.get(i).getCliente_id()),
@@ -1294,7 +1279,8 @@ public class CobranzaDetalleView extends Fragment {
                         String.valueOf(Lista.get(i).getNrodocumento()),
                         SesionEntity.fuerzatrabajo_id,
                         bancarizado,
-                        "",
+                        //"",
+                        String.valueOf(n),
                         SesionEntity.usuario_id,
                         comentario,
                         "Y",
@@ -1346,15 +1332,44 @@ public class CobranzaDetalleView extends Fragment {
         chk_bancarizado.setFocusable(false);
         chk_bancarizado.setClickable(false);
 
-        VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
+        VisitaSQLiteEntity visita = new VisitaSQLiteEntity();
         visita.setCardCode(cliente_id);
         visita.setAddress(shipto);
         visita.setType("02");
-        visita.setObservation("Se genero el recibo "+recibo+" para el cliente: "+cliente_id);
-        visita.setLatitude(""+latitude);
-        visita.setLongitude(""+longitude);
+        visita.setObservation("Se genero el recibo " + recibo + " para el cliente: " + cliente_id);
+        visita.setLatitude("" + latitude);
+        visita.setLongitude("" + longitude);
 
-        formulasController.RegistraVisita(visita,getActivity(),montocobrado);
+        formulasController.RegistraVisita(visita, getActivity(), montocobrado);
+        //Enviar SMS
+        ArrayList<ClienteSQLiteEntity> listClienteSQlite = new ArrayList<>();
+        ClienteSQlite clienteSQlite = new ClienteSQlite(getContext());
+        listClienteSQlite = clienteSQlite.ObtenerDatosCliente(cliente_id, SesionEntity.compania_id);
+        for (int i = 0; i < listClienteSQlite.size(); i++) {
+            telefono = listClienteSQlite.get(i).getTelefonofijo();
+        }
+
+        TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber="";
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.READ_PHONE_NUMBERS)
+                        != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            mPhoneNumber = tMgr.getLine1Number();
+        }
+
+        Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-mPhoneNumber:" + mPhoneNumber);
+        Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-telefono:" + telefono);
+        if(telefono.equals(mPhoneNumber))
+        {
+            Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
+        }
+        else
+            {
+                //sendSMS(telefono);
+            }
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         //UpdateSendReceipt();
@@ -1962,4 +1977,196 @@ public class CobranzaDetalleView extends Fragment {
             pd.dismiss();
         }
     }
+
+
+    private Dialog alertatypegeneratedocumentcollection() {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_type_generate_document_collection);
+
+
+        CardView cv_generate_pdf,cv_send_sms;
+        cv_generate_pdf=dialog.findViewById(R.id.cv_generate_pdf);
+        cv_send_sms=dialog.findViewById(R.id.cv_send_sms);
+        //kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
+
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText("Elija Tipo de Cobranza:");
+
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+
+
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+        cv_generate_pdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //alertatiporecibos().show();
+                /*String Fragment="MenuAccionView";
+                String accion="cobranza";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                SesionEntity.pagodirecto="N";
+                SesionEntity.pagopos="N";
+                dialog.dismiss();*/
+                alertaGenerarPDF().show();
+                dialog.dismiss();
+            }
+        });
+        cv_send_sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //alertatiporecibos().show();
+                /*String Fragment="MenuAccionView";
+                String accion="cobranza";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                SesionEntity.pagodirecto="Y";
+                SesionEntity.pagopos="N";
+                dialog.dismiss();*/
+                alertaEnviarSMS(getContext()).show();
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
+    private Dialog alertatypevalidatedocumentcollection() {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_type_validate_document_collection);
+
+
+        CardView cv_validate_pdf,cv_validate_sms;
+        cv_validate_pdf=dialog.findViewById(R.id.cv_validate_pdf);
+        cv_validate_sms=dialog.findViewById(R.id.cv_validate_sms);
+        //kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
+
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText("Elija Tipo de Cobranza:");
+
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+
+
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+        cv_validate_pdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //alertatiporecibos().show();
+                /*String Fragment="MenuAccionView";
+                String accion="cobranza";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                SesionEntity.pagodirecto="N";
+                SesionEntity.pagopos="N";
+                dialog.dismiss();*/
+                //alertaGenerarPDF().show();
+                alertaValidarQR().show();
+                dialog.dismiss();
+            }
+        });
+        cv_validate_sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //alertatiporecibos().show();
+                /*String Fragment="MenuAccionView";
+                String accion="cobranza";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                SesionEntity.pagodirecto="Y";
+                SesionEntity.pagopos="N";
+                dialog.dismiss();*/
+                //alertaEnviarSMS(getContext()).show();
+                alertValidateSMS(getContext()).show();
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
+    private Dialog alertValidateSMS(Context context) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog_validate_sms);
+        EditText et_code_sms=(EditText) dialog.findViewById(R.id.et_code_sms);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                int resultado=0;
+                CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
+                resultado=cobranzaDetalleSQLiteDao.getCountValidateCodeSMS(
+                        SesionEntity.compania_id,SesionEntity.usuario_id,recibo,et_code_sms.getText().toString()
+                );
+                if(resultado>0)
+                {
+                    cobranzaDetalleSQLiteDao.ActualizaValidacionQRCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
+                    chk_validacionqr.setChecked(true);
+                    Toast.makeText(getContext(), "Codigo Actualizado Correctamente!!!", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+                else
+                    {
+                        Toast.makeText(getContext(), "El codigo Ingresado no es el Correcto, Intente Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                    }
+            }
+        });
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
+    public void sendSMS(String telefono)
+    {
+        FormulasController formulasController=new FormulasController(getContext());
+        if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
+        }
+        SmsManager smsManager=SmsManager.getDefault();
+        try
+        {
+            //SmsManager sms = SmsManager.getDefault();
+            ArrayList<String> parts = smsManager.divideMessage(formulasController.convertirCadenaEnvioSMS(listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha));
+            //sms.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
+            smsManager.sendMultipartTextMessage(
+                    telefono
+                    , null
+                    //, formulasController.convertirCadenaEnvioSMS(listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha)
+                    ,parts
+                    , null
+                    , null);
+            Toast.makeText(getContext(), "Mensaje de Texto Enviado Correctamente", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            Log.e("REOS","CobranzaDetalleView-alertaEnviarSMS-Erroe-"+e.toString());
+        }
+    }
+
 }

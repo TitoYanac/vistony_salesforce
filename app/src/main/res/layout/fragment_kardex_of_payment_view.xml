@@ -5,7 +5,7 @@
     android:id="@+id/ConsDepositoView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.HistoricoCobranzaView">
+    tools:context=".View.KardexOfPaymentView">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,8 +19,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="5dp"
                 android:paddingTop="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <com.omega_r.libs.OmegaCenterIconButton
                     android:id="@+id/btn_find_client"
@@ -33,8 +33,8 @@
 
                 <TextView
                     android:id="@+id/tv_client"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_weight="4"
                     android:enabled="true"
                     android:hint="Elegir Cliente................"
@@ -98,7 +98,7 @@
                 android:textSize="25dp"></TextView>
 
             <TextView
-                android:id="@+id/tv_cantidad_cobranza"
+                android:id="@+id/tv_quantity_invoice_kardex"
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                 android:textSize="25dp"></TextView>
 
             <TextView
-                android:id="@+id/tv_monto_cobranza"
+                android:id="@+id/tv_docamount_kardex_invoice"
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.google.gms.google-services'
 
 android {
     signingConfigs {
@@ -12,6 +13,7 @@ android {
 
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+    //buildToolsVersion "30.0.2"
         defaultConfig {
             applicationId "com.vistony.salesforce"
             minSdkVersion 27
@@ -24,7 +26,7 @@ android {
                 abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
             }
             manifestPlaceholders = [appName:"Test Sales Force"]
-            buildConfigField('String' , 'BASE_ENVIRONMENT', '".test2/api"')
+            buildConfigField('String' , 'BASE_ENVIRONMENT', '".test/api"')
             signingConfig  signingConfigs.config
     }
 
@@ -162,4 +164,6 @@ dependencies {
 
     //Libreria de Visor de SQLite
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+    //SDK FireBase
+    //implementation 'com.google.firebase:firebase-analytics:17.4.1'
 }

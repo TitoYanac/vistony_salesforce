@@ -415,9 +415,11 @@ public class CobranzaDetalleSQLiteDao {
         {
             // TODO: handle exception
             System.out.println(e.getMessage());
+            Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-e"+e.toString());
         }
 
         bd.close();
+        Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-listaCobranzaDetalleSQLiteEntity"+listaCobranzaDetalleSQLiteEntity.size());
         return listaCobranzaDetalleSQLiteEntity;
     }
 
@@ -1072,7 +1074,7 @@ public class CobranzaDetalleSQLiteDao {
 
             ContentValues registro = new ContentValues();
             registro.put("chkanulado",chkanulado);
-            registro.put("motivoanulacion",motivoanulacion);
+            //registro.put("motivoanulacion",motivoanulacion);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
 
@@ -1440,6 +1442,47 @@ public class CobranzaDetalleSQLiteDao {
             resultado=0;
         }
         bd.close();
+        return resultado;
+    }
+
+    public int getCountValidateCodeSMS (
+            String compania_id,
+            String usuario_id,
+            String recibo,
+            String codesms
+            )
+    {
+        Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-compania_id"+String.valueOf(compania_id));
+        Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-usuario_id"+String.valueOf(usuario_id));
+        Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-recibo"+String.valueOf(recibo));
+        Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-codesms"+String.valueOf(codesms));
+
+        abrir();
+        int resultado=0;
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(count(recibo),0) as cantidad from cobranzadetalle" +
+                            " where compania_id='"+compania_id+"'" +
+                            " and usuario_id='"+usuario_id+"'" +
+                            " and recibo='"+recibo+"'" +
+                            " and motivoanulacion='"+codesms+"'"
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                resultado=Integer.parseInt(fila.getString(0));
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-e"+e.toString());
+        }
+
+        bd.close();
+        Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-resultado"+String.valueOf(resultado));
         return resultado;
     }
 }

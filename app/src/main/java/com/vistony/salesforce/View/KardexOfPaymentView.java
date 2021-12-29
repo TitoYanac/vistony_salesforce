@@ -1,7 +1,10 @@
 package com.vistony.salesforce.View;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,23 +13,32 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.annotations.SerializedName;
 import com.vistony.salesforce.Controller.Adapters.ListKardexOfPaymentAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.KardexPagoPDF;
 import com.vistony.salesforce.Dao.Adapters.ListKardexOfPaymentDao;
 import com.vistony.salesforce.Dao.Adapters.ListaConsultaStockDao;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
+import com.vistony.salesforce.Entity.Adapters.ListKardexOfPaymentEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,7 +59,7 @@ public class KardexOfPaymentView extends Fragment {
     View v;
     static ListView lv_kardex_of_payment;
     Button btn_find_client;
-    static TextView tv_client;
+    static TextView tv_client,tv_quantity_invoice_kardex,tv_docamount_kardex_invoice;
     static KardexPagoRepository kardexPagoRepository;
     static Context context;
     static ListKardexOfPaymentAdapter listKardexOfPaymentAdapter;
@@ -55,6 +67,10 @@ public class KardexOfPaymentView extends Fragment {
     static Activity activity;
     static LifecycleOwner lifecycleOwner;
     public static OnFragmentInteractionListener mListener;
+    static List<KardexPagoEntity> kardexPagoEntityList;
+    public static List<ListKardexOfPaymentEntity> listKardexOfPaymentEntityList;
+    static double docamount;
+    MenuItem checklist_all,generate_pdf;
     public KardexOfPaymentView() {
         // Required empty public constructor
     }
@@ -106,6 +122,7 @@ public class KardexOfPaymentView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Kardex de Pago");
+        setHasOptionsMenu(true);
         kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
         context=getContext();
         activity=getActivity();
@@ -120,11 +137,13 @@ public class KardexOfPaymentView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         v= inflater.inflate(R.layout.fragment_kardex_of_payment_view, container, false);
         lv_kardex_of_payment=v.findViewById(R.id.lv_kardex_of_payment);
         btn_find_client=v.findViewById(R.id.btn_find_client);
         tv_client=v.findViewById(R.id.tv_client);
-
+        tv_quantity_invoice_kardex=v.findViewById(R.id.tv_quantity_invoice_kardex);
+        tv_docamount_kardex_invoice=v.findViewById(R.id.tv_docamount_kardex_invoice);
         btn_find_client.setOnClickListener(v -> {
             String Fragment="KardexOfPaymentView";
             String accion="findClient";
@@ -138,15 +157,27 @@ public class KardexOfPaymentView extends Fragment {
 
     static private void getListKardexOfPayment(String CardCode)
     {
+        kardexPagoEntityList=new ArrayList<>();
+        listKardexOfPaymentEntityList=new ArrayList<>();
+        docamount=0;
         kardexPagoRepository.getKardexPago(SesionEntity.imei, CardCode,context).observe(lifecycleOwner, data -> {
         Convert convert=new Convert();
             Log.e("Jepicame","=>"+data);
-
+            listKardexOfPaymentEntityList=convert.getConvertListKardexOfPayment(data);
+            kardexPagoEntityList=data;
              listKardexOfPaymentAdapter
                     =new ListKardexOfPaymentAdapter(
                      activity,
-                    ListKardexOfPaymentDao.getInstance().getLeads(convert.getConvertListKardexOfPayment(data)));
+                     listKardexOfPaymentEntityList);
                     lv_kardex_of_payment.setAdapter(listKardexOfPaymentAdapter);
+                    Log.e("REOS","KardexOfPaymentView.getListKardexOfPayment.listKardexOfPaymentEntityList.size()"+listKardexOfPaymentEntityList.size());
+                    for(int i=0;i<listKardexOfPaymentEntityList.size();i++)
+                    {
+                        docamount=docamount+Double.parseDouble(listKardexOfPaymentEntityList.get(i).getDocAmount()) ;
+                        //tv_docamount_kardex_invoice.setText(Convert.currencyForView(String.valueOf(listKardexOfPaymentEntityList.get(i).getDocAmount())));
+                    }
+            tv_quantity_invoice_kardex.setText(String.valueOf(listKardexOfPaymentEntityList.size()));
+            tv_docamount_kardex_invoice.setText(Convert.currencyForView(String.valueOf(docamount)));
         });
     }
 
@@ -172,7 +203,128 @@ public class KardexOfPaymentView extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
+
     }
 
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
+        inflater.inflate(R.menu.menu_kardex_of_payment, menu);
+        checklist_all = menu.findItem(R.id.checklist_all);
+        generate_pdf = menu.findItem(R.id.generate_pdf);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.checklist_all:
+                alertaSeleccionarTodo("Esta Seguro de Seleccionar Todos los parametros?").show();
+                return false;
+            case R.id.generate_pdf:
+                //alertaSeleccionarTodo("Esta Seguro de Seleccionar Todos los parametros?").show();
+                KardexPagoPDF kardexPagoPDF=new KardexPagoPDF();
+                kardexPagoPDF.generarPdf(context, getListKardexPagoEntity(listKardexOfPaymentEntityList,kardexPagoEntityList));
+                return false;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    private Dialog alertaSeleccionarTodo(String texto) {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_advertencia);
+
+        TextView textMsj = dialog.findViewById(R.id.tv_texto);
+        textMsj.setText(texto);
+
+        ImageView image = dialog.findViewById(R.id.image);
+
+        image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+
+        dialogButtonOK.setOnClickListener(v -> {
+            //ObtenerParametrosCheck();
+            //getListKardexOfPayment(CardCode);
+            getCheckListAll(listKardexOfPaymentEntityList);
+            dialog.dismiss();
+        });
+        dialogButtonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
+    private List<KardexPagoEntity> getListKardexPagoEntity
+            (List<ListKardexOfPaymentEntity> listKardexOfPaymentEntityList,
+             List<KardexPagoEntity> ListKardexPagoEntity)
+    {
+        List<KardexPagoEntity> newListKardexPagoEntity=new ArrayList<>();
+        KardexPagoEntity kardexPagoEntity=new KardexPagoEntity();
+        for(int i=0;i<listKardexOfPaymentEntityList.size();i++)
+        {
+            if(listKardexOfPaymentEntityList.get(i).isInvoice())
+            {
+                for(int j=0;j<ListKardexPagoEntity.size();j++) {
+                    if(listKardexOfPaymentEntityList.get(i).getLegalnumber().equals(ListKardexPagoEntity.get(j).getNumAtCard()))
+                    {
+                        kardexPagoEntity = new KardexPagoEntity();
+                        kardexPagoEntity.cardCode = ListKardexPagoEntity.get(j).getCardCode();
+                        kardexPagoEntity.docCur = ListKardexPagoEntity.get(j).getDocCur();
+                        kardexPagoEntity.u_SYP_MDSD = ListKardexPagoEntity.get(j).getU_SYP_MDSD();
+                        kardexPagoEntity.u_SYP_MDCD = ListKardexPagoEntity.get(j).getU_SYP_MDCD();
+                        kardexPagoEntity.taxDate = ListKardexPagoEntity.get(j).getTaxDate();
+                        kardexPagoEntity.docDueDate = ListKardexPagoEntity.get(j).getDocDueDate();
+                        kardexPagoEntity.docTotal = ListKardexPagoEntity.get(j).getDocTotal();
+                        kardexPagoEntity.docEntry = ListKardexPagoEntity.get(j).getDocEntry();
+                        kardexPagoEntity.objType = ListKardexPagoEntity.get(j).getObjType();
+                        kardexPagoEntity.sALDO = ListKardexPagoEntity.get(j).getsALDO();
+                        kardexPagoEntity.cardName = ListKardexPagoEntity.get(j).getCardName();
+                        kardexPagoEntity.licTradNum = ListKardexPagoEntity.get(j).getLicTradNum();
+                        kardexPagoEntity.phone1 = ListKardexPagoEntity.get(j).getPhone1();
+                        kardexPagoEntity.u_VIS_SlpCode = ListKardexPagoEntity.get(j).getU_VIS_SlpCode();
+                        kardexPagoEntity.street = ListKardexPagoEntity.get(j).getStreet();
+                        kardexPagoEntity.pymntGroup = ListKardexPagoEntity.get(j).getPymntGroup();
+                        kardexPagoEntity.u_SYP_DEPA = ListKardexPagoEntity.get(j).getU_SYP_DEPA();
+                        kardexPagoEntity.u_SYP_PROV = ListKardexPagoEntity.get(j).getU_SYP_PROV();
+                        kardexPagoEntity.u_SYP_DIST = ListKardexPagoEntity.get(j).getU_SYP_DIST();
+                        kardexPagoEntity.importe = ListKardexPagoEntity.get(j).getImporte();
+                        kardexPagoEntity.importeCobrado = ListKardexPagoEntity.get(j).getImporteCobrado();
+                        kardexPagoEntity.fECHADEPAGO = ListKardexPagoEntity.get(j).getfECHADEPAGO();
+                        kardexPagoEntity.nROOPERA = ListKardexPagoEntity.get(j).getnROOPERA();
+                        kardexPagoEntity.docNum = ListKardexPagoEntity.get(j).getDocNum();
+                        kardexPagoEntity.jrnlMemo = ListKardexPagoEntity.get(j).getJrnlMemo();
+                        kardexPagoEntity.comments = ListKardexPagoEntity.get(j).getComments();
+                        kardexPagoEntity.banco = ListKardexPagoEntity.get(j).getBanco();
+                        kardexPagoEntity.numAtCard = ListKardexPagoEntity.get(j).getNumAtCard();
+                        newListKardexPagoEntity.add(kardexPagoEntity);
+                    }
+                }
+
+            }
+        }
+        return newListKardexPagoEntity;
+    }
+
+    private void getCheckListAll (List<ListKardexOfPaymentEntity> listKardexOfPaymentEntityList)
+    {
+        for(int i=0;i<listKardexOfPaymentEntityList.size();i++)
+        {
+            listKardexOfPaymentEntityList.get(i).setInvoice(true);
+        }
+        listKardexOfPaymentAdapter
+                =new ListKardexOfPaymentAdapter(
+                activity,
+                listKardexOfPaymentEntityList);
+        lv_kardex_of_payment.setAdapter(listKardexOfPaymentAdapter);
+
+    }
 }

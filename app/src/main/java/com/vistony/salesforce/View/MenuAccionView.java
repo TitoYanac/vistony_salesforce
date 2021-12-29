@@ -286,7 +286,7 @@ public class MenuAccionView extends Fragment {
         cv_cobranza_ordinaria=dialog.findViewById(R.id.cv_cobranza_ordinaria);
         cv_cobranza_deposito_directo=dialog.findViewById(R.id.cv_cobranza_deposito_directo);
         cv_cobranza_pago_pos=dialog.findViewById(R.id.cv_cobranza_pago_pos);
-        cv_cobranza_kardex_pago=dialog.findViewById(R.id.cv_cobranza_kardex_pago);
+        //cv_cobranza_kardex_pago=dialog.findViewById(R.id.cv_cobranza_kardex_pago);
         kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
 
         TextView textTitle = dialog.findViewById(R.id.text);
@@ -338,7 +338,7 @@ public class MenuAccionView extends Fragment {
                 dialog.dismiss();
             }
         });
-        cv_cobranza_kardex_pago.setOnClickListener(new View.OnClickListener() {
+        /*cv_cobranza_kardex_pago.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /////////////////////Sincronizar Recibos Pendientes de Depositar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -347,7 +347,7 @@ public class MenuAccionView extends Fragment {
                 });
 
             }
-        });
+        });*/
         /*Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         // if button is clicked, close the custom dialog
         dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -362,6 +362,7 @@ public class MenuAccionView extends Fragment {
 
         return  dialog;
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -137,7 +137,7 @@ public class ClienteSQlite {
            listaClienteSQLiteEntity = new ArrayList<ClienteSQLiteEntity>();
            ClienteSQLiteEntity clienteentity;
            Cursor fila = sqlite.rawQuery(
-                   "Select cliente_id,compania_id,nombrecliente,direccion,rucdni,categoria,linea_credito,linea_credito_usado,terminopago_id,domembarque_id,zona_id,domfactura_id from cliente" +
+                   "Select cliente_id,compania_id,nombrecliente,direccion,rucdni,categoria,linea_credito,linea_credito_usado,terminopago_id,domembarque_id,zona_id,domfactura_id,telefonofijo from cliente" +
                            " where cliente_id= '"+cliente_id+"' and compania_id= '"+compania_id+"'",null);
 
            while (fila.moveToNext())
@@ -155,6 +155,7 @@ public class ClienteSQlite {
                clienteentity.setDomembarque_id(fila.getString(9));
                clienteentity.setZona_id(fila.getString(10));
                clienteentity.setDomfactura_id(fila.getString(11));
+               clienteentity.setTelefonofijo(fila.getString(12));
                listaClienteSQLiteEntity.add(clienteentity);
            }
        }catch(Exception e){

@@ -4,88 +4,88 @@ import com.google.gson.annotations.SerializedName;
 
 public class KardexPagoEntity {
     @SerializedName("CardCode")
-    private String cardCode;
+    public String cardCode;
 
     @SerializedName("DocCur")
-    private String docCur;
+    public String docCur;
 
     @SerializedName("U_SYP_MDSD")
-    private String u_SYP_MDSD;
+    public String u_SYP_MDSD;
 
     @SerializedName("U_SYP_MDCD")
-    private String u_SYP_MDCD;
+    public String u_SYP_MDCD;
 
     @SerializedName("TaxDate")
-    private String taxDate;
+    public String taxDate;
 
     @SerializedName("DocDueDate")
-    private String docDueDate;
+    public String docDueDate;
 
     @SerializedName("DocTotal")
-    private String docTotal;
+    public String docTotal;
 
     @SerializedName("DocEntry")
-    private String docEntry;
+    public String docEntry;
 
     @SerializedName("ObjType")
-    private String objType;
+    public String objType;
 
     @SerializedName("Balance")
-    private String sALDO;
+    public String sALDO;
 
     @SerializedName("CardName")
-    private String cardName;
+    public String cardName;
 
     @SerializedName("LicTradNum")
-    private String licTradNum;
+    public String licTradNum;
 
     @SerializedName("Mobile")
-    private String phone1;
+    public String phone1;
 
     @SerializedName("SlpCode")
-    private String u_VIS_SlpCode;
+    public String u_VIS_SlpCode;
 
     @SerializedName("Street")
-    private String street;
+    public String street;
 
     @SerializedName("PymntGroup")
-    private String pymntGroup;
+    public String pymntGroup;
 
     @SerializedName("Block")
-    private String u_SYP_DEPA;
+    public String u_SYP_DEPA;
 
     @SerializedName("County")
-    private String u_SYP_PROV;
+    public String u_SYP_PROV;
 
     @SerializedName("City")
-    private String u_SYP_DIST;
+    public String u_SYP_DIST;
 
     @SerializedName("Importe")
-    private String importe;
+    public String importe;
 
     @SerializedName("AmountCharged")
-    private String importeCobrado;
+    public String importeCobrado;
 
     @SerializedName("IncomeDate")
-    private String fECHADEPAGO;
+    public String fECHADEPAGO;
 
     @SerializedName("OperationNumber")
-    private String nROOPERA;
+    public String nROOPERA;
 
     @SerializedName("DocNum")
-    private String docNum;
+    public String docNum;
 
     @SerializedName("JrnlMemo")
-    private String jrnlMemo;
+    public String jrnlMemo;
 
     @SerializedName("Comments")
-    private String comments;
+    public String comments;
 
     @SerializedName("Bank")
-    private String banco;
+    public String banco;
 
     @SerializedName("NumAtCard")
-    private String numAtCard;
+    public String numAtCard;
 
     public String getNumAtCard() {
         return numAtCard;

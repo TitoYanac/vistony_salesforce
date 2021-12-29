@@ -1100,6 +1100,7 @@ public class FormulasController {
 
         switch(visita.getType()){
             case "01":
+            case "12":
                 rutaVendedorSQLiteDao.ActualizaChkPedidoRutaVendedor(
                         visita.getCardCode(),
                         visita.getAddress(),
