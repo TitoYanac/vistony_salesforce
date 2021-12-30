@@ -311,6 +311,14 @@ public class KardexPagoPDF extends AppCompatActivity {
                         celltblterminopago.disableBorderSide(Rectangle.BOX);
                         celltblterminopago.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblterminopago.addCell(celltblterminopago);
+                        celltblterminopago = new PdfPCell(new Phrase("Vendedor Factura:",font3));
+                        celltblterminopago.disableBorderSide(Rectangle.BOX);
+                        celltblterminopago.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblterminopago.addCell(celltblterminopago);
+                        celltblterminopago = new PdfPCell(new Phrase(ListKardexPagoEntity.get(j).getSalesinvoice(),font3));
+                        celltblterminopago.disableBorderSide(Rectangle.BOX);
+                        celltblterminopago.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblterminopago.addCell(celltblterminopago);
                         documento.add(tblterminopago);
 
                         PdfPTable tblLineas = new PdfPTable(4);
@@ -380,6 +388,19 @@ public class KardexPagoPDF extends AppCompatActivity {
 
                     if(Correlativo.get(l).equals(ListKardexPagoEntity.get(j).getNumAtCard()))
                     {
+                        PdfPTable tblcobrador= new PdfPTable(2);
+                        tblcobrador.setWidthPercentage(100);
+                        PdfPCell cellcobrador = null;
+                        cellcobrador = new PdfPCell(new Phrase("Cobrador:",font3));
+                        cellcobrador.disableBorderSide(Rectangle.BOX);
+                        cellcobrador.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblcobrador.addCell(cellcobrador);
+                        cellcobrador = new PdfPCell(new Phrase(ListKardexPagoEntity.get(j).getCollectorinvoice() ,font3));
+                        cellcobrador.disableBorderSide(Rectangle.BOX);
+                        cellcobrador.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblcobrador.addCell(cellcobrador);
+                        documento.add(tblcobrador);
+
                         PdfPTable tbldatarecibos = new PdfPTable(4);
                         tbldatarecibos.setWidthPercentage(100);
                         PdfPCell celltbldatarecibos= null;

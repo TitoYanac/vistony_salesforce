@@ -40,5 +40,6 @@ public class SesionEntity {
     public static String flagquerystock ="N";
     public static String formhabilPrint ="N";
     public static String TipoCompra ="";
+    public static String phone ="";
 }
 

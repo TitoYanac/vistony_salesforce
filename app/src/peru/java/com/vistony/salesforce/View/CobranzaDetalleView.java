@@ -920,7 +920,7 @@ public class CobranzaDetalleView extends Fragment {
                 }*/
                 TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
                 String mPhoneNumber="";
-                try {
+                /*try {
                     if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS)
                             != PackageManager.PERMISSION_GRANTED &&
                             ActivityCompat.checkSelfPermission(getContext(),
@@ -932,8 +932,8 @@ public class CobranzaDetalleView extends Fragment {
                 }catch (Exception e)
                 {
                     Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-e:" + e.toString());
-                }
-
+                }*/
+                mPhoneNumber=SesionEntity.phone;
 
 
                 Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-et_numero_telefonico.getText().toString():" + et_numero_telefonico.getText().toString());
@@ -1348,8 +1348,8 @@ public class CobranzaDetalleView extends Fragment {
         for (int i = 0; i < listClienteSQlite.size(); i++) {
             telefono = listClienteSQlite.get(i).getTelefonofijo();
         }
-
-        TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber="";
+        /*TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber="";
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS)
                 != PackageManager.PERMISSION_GRANTED &&
@@ -1358,8 +1358,8 @@ public class CobranzaDetalleView extends Fragment {
                         != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                                 getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             mPhoneNumber = tMgr.getLine1Number();
-        }
-
+        }*/
+        mPhoneNumber=SesionEntity.phone;
         Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-mPhoneNumber:" + mPhoneNumber);
         Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-telefono:" + telefono);
         if(telefono.equals(mPhoneNumber))
@@ -1368,7 +1368,7 @@ public class CobranzaDetalleView extends Fragment {
         }
         else
             {
-                //sendSMS(telefono);
+                sendSMS(telefono);
             }
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

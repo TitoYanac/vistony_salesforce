@@ -747,7 +747,7 @@ public class MenuView extends AppCompatActivity
                 TAG_FRAGMENT="config_print";
                 break;
             case R.id.nav_comisiones:
-                contentFragment=new ComisionesView();
+                contentFragment=new ContenedorComisionesView();
                 fragmentSeleccionado=true;
                 TAG_FRAGMENT="config_print";
                 break;

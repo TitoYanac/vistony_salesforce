@@ -305,6 +305,8 @@ public class KardexOfPaymentView extends Fragment {
                         kardexPagoEntity.comments = ListKardexPagoEntity.get(j).getComments();
                         kardexPagoEntity.banco = ListKardexPagoEntity.get(j).getBanco();
                         kardexPagoEntity.numAtCard = ListKardexPagoEntity.get(j).getNumAtCard();
+                        kardexPagoEntity.salesinvoice = ListKardexPagoEntity.get(j).getSalesinvoice();
+                        kardexPagoEntity.collectorinvoice = ListKardexPagoEntity.get(j).getCollectorinvoice();
                         newListKardexPagoEntity.add(kardexPagoEntity);
                     }
                 }

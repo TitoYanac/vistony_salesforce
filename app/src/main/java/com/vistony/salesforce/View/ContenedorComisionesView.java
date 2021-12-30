@@ -1,5 +1,6 @@
 package com.vistony.salesforce.View;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,11 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
+import com.vistony.salesforce.Controller.Adapters.PageAdapter;
 import com.vistony.salesforce.Controller.Adapters.SeccionesAdapter;
 import com.vistony.salesforce.Controller.Utilitario.UtilidadesController;
 import com.vistony.salesforce.R;
@@ -32,12 +35,15 @@ import com.vistony.salesforce.R;
  */
 public class ContenedorComisionesView extends Fragment {
 
-    View vista;
+    View v;
     private AppBarLayout appBar;
     private TabLayout pestanas;
     private ViewPager viewPager;
-
-
+    private Toolbar tollbartab;
+    private TabLayout tabLayout;
+    private PageAdapter pageAdapter;
+    public static Activity activity;
+    public static Context context;
     private OnFragmentInteractionListener mListener;
 
     public ContenedorComisionesView() {
@@ -63,6 +69,8 @@ public class ContenedorComisionesView extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        activity=getActivity();
+        context=getContext();
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Avance Ventas");
         if (getArguments() != null) {
@@ -74,36 +82,22 @@ public class ContenedorComisionesView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        vista= inflater.inflate(R.layout.fragment_contenedor_comisiones, container, false);
-        //View parent=(View) container.getParent();
-        if(UtilidadesController.rotacion==0)
-        {
-            View parent = (View) container.getParent();
-            if (appBar == null) {
-                appBar = (AppBarLayout) parent.findViewById(R.id.appBar);
-                pestanas = new TabLayout(getActivity());
-                pestanas.setTabTextColors(Color.parseColor("#FFFFFF"), Color.parseColor("#FFFFFF"));
-                appBar.addView(pestanas);
+        v= inflater.inflate(R.layout.fragment_contenedor_comisiones, container, false);
+        tollbartab=v.findViewById(R.id.tollbartab);
+        viewPager=v.findViewById(R.id.viewpager);
+        tabLayout=v.findViewById(R.id.tablayout);
+        pageAdapter= new PageAdapter(getChildFragmentManager());
+        pageAdapter.addFRagment(new ComisionesView(),"PERIODO ACTUAL");
+        pageAdapter.addFRagment(new PronosticoComisionesView(),"PERIODO ANTERIOR");
+        viewPager.setAdapter(pageAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+        ComisionesView.newInstance("");
+        PronosticoComisionesView.newInstance("");
 
-
-                viewPager = (ViewPager) vista.findViewById(R.id.vpcontenedorcomisiones);
-                llenarViewPager(viewPager);
-                viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                        super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                    }
-                });
-                pestanas.setupWithViewPager(viewPager);
-            }
-        }else{
-            UtilidadesController.rotacion=1;
-        }
-
-        return vista;
+        return v;
     }
 
-    private void llenarViewPager(ViewPager viewPager) {
+   /* private void llenarViewPager(ViewPager viewPager) {
         SeccionesAdapter adapter=new SeccionesAdapter(getFragmentManager());
         adapter.addFragment(new ComisionesView(),"Comisiones");
         adapter.addFragment(new PronosticoComisionesView(),"Pronostico");
@@ -120,9 +114,9 @@ public class ContenedorComisionesView extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(UtilidadesController.rotacion==0){
+        /*if(UtilidadesController.rotacion==0){
             appBar.removeView(pestanas);
-        }
+        }*/
 
     }
 

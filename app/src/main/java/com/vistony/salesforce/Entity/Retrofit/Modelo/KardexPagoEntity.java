@@ -87,6 +87,28 @@ public class KardexPagoEntity {
     @SerializedName("NumAtCard")
     public String numAtCard;
 
+    @SerializedName("SalesInvoice")
+    public String salesinvoice;
+
+    @SerializedName("CollectorInvoice")
+    public String collectorinvoice;
+
+    public String getSalesinvoice() {
+        return salesinvoice;
+    }
+
+    public void setSalesinvoice(String salesinvoice) {
+        this.salesinvoice = salesinvoice;
+    }
+
+    public String getCollectorinvoice() {
+        return collectorinvoice;
+    }
+
+    public void setCollectorinvoice(String collectorinvoice) {
+        this.collectorinvoice = collectorinvoice;
+    }
+
     public String getNumAtCard() {
         return numAtCard;
     }

@@ -1,5 +1,6 @@
 package com.vistony.salesforce.View;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -28,6 +30,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.DataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.vistony.salesforce.Controller.Adapters.ListaComisionesDetalleAdapter;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Adapters.ListaComisionesDetalleDao;
 import com.vistony.salesforce.Dao.Retrofit.ComisionesWS;
 import com.vistony.salesforce.Entity.SQLite.ComisionesSQLiteEntity;
@@ -35,7 +38,11 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,20 +61,27 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private BarChart barChart;
+    static private BarChart barChart;
     //private HorizontalBarChart barChart;
     private OnFragmentInteractionListener mListener;
     View v;
     //private String [] Indices=new String []{"Total","Re-programado"};
-    private String [] Indices;
+    static private String [] Indices;
     //private int [] colors = new int []{Color.BLUE};
-    private int [] colors;
+    static private int [] colors;
     Spinner spnano,spnmes;
     public static com.omega_r.libs.OmegaCenterIconButton btn_comisiones_consultar;
-    ListView listviewdetallecomisiones;
-    ListaComisionesDetalleAdapter listaComisionesDetalleAdapter;
-    private ProgressDialog pd;
-
+    static ListView listviewdetallecomisiones;
+    static ListaComisionesDetalleAdapter listaComisionesDetalleAdapter;
+    static private ProgressDialog pd;
+    static SimpleDateFormat dateFormat;
+    static Date date;
+    static String fecha;
+    static HiloObtenerComisiones hiloObtenerComisiones;
+    static Activity activity;
+    static Context context;
+    static TextView tv_ano,tv_periodo;
+    static String dia,mes,ano;
     public ComisionesView() {
         // Required empty public constructor
     }
@@ -76,23 +90,23 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ComisionesView.
      */
     // TODO: Rename and change types and number of parameters
-    public static ComisionesView newInstance(String param1, String param2) {
+    public static ComisionesView newInstance(Object object) {
         ComisionesView fragment = new ComisionesView();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+        hiloObtenerComisiones=new HiloObtenerComisiones();
+        hiloObtenerComisiones.execute();
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity=getActivity();
+        context=getContext();
         getActivity().setTitle("Comisiones");
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -105,13 +119,18 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         //ListenerBackPress.setTemporaIdentityFragment("fragmentoConfigImpresora");
         // Inflate the layout for this fragment
+        ObtenerFecha();
         v= inflater.inflate(R.layout.fragment_comisiones_view, container, false);
         barChart=(BarChart) v.findViewById(R.id.barChart);
-        spnano=(Spinner) v.findViewById(R.id.spnano);
-        spnmes=(Spinner) v.findViewById(R.id.spnmes);
+        //spnano=(Spinner) v.findViewById(R.id.spnano);
+        //spnmes=(Spinner) v.findViewById(R.id.spnmes);
+        tv_ano=(TextView) v.findViewById(R.id.tv_ano);
+        tv_periodo=(TextView) v.findViewById(R.id.tv_periodo);
+        tv_ano.setText(ano);
+        tv_periodo.setText(mes);
         listviewdetallecomisiones=(ListView) v.findViewById(R.id.listviewdetallecomisiones);
-        btn_comisiones_consultar= v.findViewById(R.id.btn_comisiones_consultar);
-        btn_comisiones_consultar.setOnClickListener(this);
+        //btn_comisiones_consultar= v.findViewById(R.id.btn_comisiones_consultar);
+        //btn_comisiones_consultar.setOnClickListener(this);
 
         return v;
 
@@ -178,7 +197,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         void onFragmentInteraction(String Dato,Object Lista);
     }
 
-    private DataSet getData(DataSet dataSet)
+    static private DataSet getData(DataSet dataSet)
     {
         dataSet.setColors(colors);
         dataSet.setValueTextSize(Color.WHITE);
@@ -186,8 +205,9 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         return dataSet;
     }
 
-    private BarData getBarData(ArrayList<ComisionesSQLiteEntity> Lista)
+    static private BarData getBarData(ArrayList<ComisionesSQLiteEntity> Lista)
     {
+
         BarDataSet barDataSet=(BarDataSet)getData(new BarDataSet(getBarEntries(Lista),""));
         barDataSet.setBarShadowColor(Color.GRAY);
         BarData barData= new BarData(barDataSet);
@@ -196,7 +216,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         return barData;
     }
 
-    private ArrayList<BarEntry> getBarEntries(ArrayList<ComisionesSQLiteEntity> Lista)
+    static private ArrayList<BarEntry> getBarEntries(ArrayList<ComisionesSQLiteEntity> Lista)
     {
         ArrayList<BarEntry> entries = new ArrayList<>();
         for(int i=0;i<Lista.size();i++)
@@ -208,7 +228,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         return entries;
 
     }
-    private Chart getSameChart2(Chart chart, String description, int textColor, int background, int animateY)
+    static private Chart getSameChart2(Chart chart, String description, int textColor, int background, int animateY)
     {
 
         chart.getDescription().setText(description);
@@ -218,7 +238,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         legend2(chart);
         return chart;
     }
-    private void legend2 (Chart chart)
+    static private void legend2 (Chart chart)
     {
         Legend legend=chart.getLegend();
         legend.setForm(Legend.LegendForm.CIRCLE);
@@ -230,31 +250,40 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
             LegendEntry entry=new LegendEntry();
             entry.formColor=colors[i];
             entry.label=Indices[i];
-
+            Log.e("REOS", "ComisionesView-legend2-Indices[i]:" +Indices[i]);
             entries.add(entry);
         }
-        legend.setWordWrapEnabled(true);
+        legend.setWordWrapEnabled(false);
         legend.setEnabled(false);
         legend.setCustom(entries);
 
     }
-    private void axisX(XAxis axis)
+    static private void axisX(XAxis axis)
     {
         axis.setGranularityEnabled(true);
         axis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        axis.setAxisMaximum(8);
+        //axis.setSpaceMax(10);
+        //axis.setCenterAxisLabels(true);
+        axis.setTextSize(10);
+        axis.setTextColor(Color.BLACK);
+        //axis.setLabelRotationAngle(10);
+        //axis.setSpaceMax(10)
+        //axis.setAxisLineColor();
+        //axis.setAxisLineColor(Color.RED);
         axis.setValueFormatter(new IndexAxisValueFormatter(Indices));
     }
-    private void axisLeft(YAxis axis)
+    static private void axisLeft(YAxis axis)
     {
-        axis.setSpaceTop(30);
+        axis.setSpaceTop(10);
         axis.setAxisMinimum(0);
     }
-    private void axisRight(YAxis axis)
+    static private void axisRight(YAxis axis)
     {
         axis.setEnabled(false);
     }
 
-    public void createCharts(ArrayList<ComisionesSQLiteEntity> Lista)
+    static public void createCharts(ArrayList<ComisionesSQLiteEntity> Lista)
     {
         barChart=(BarChart)getSameChart2(barChart,""
                 //+(Indice())*100
@@ -276,29 +305,39 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         axisRight(barChart.getAxisRight());
     }
 
-    private class HiloObtenerComisiones extends AsyncTask<String, Void, Object> {
+    static private class HiloObtenerComisiones extends AsyncTask<String, Void, Object> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Recibos", true, false);
+            pd = new ProgressDialog(ContenedorComisionesView.activity);
+            pd = ProgressDialog.show(ContenedorComisionesView.activity, "Por favor espere", "Consultando Recibos", true, false);
         }
         @Override
         protected Object doInBackground(String... arg0) {
-            ComisionesWS comisionesWS=new ComisionesWS(getContext());
+            /*dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            date = new Date();
+            fecha = dateFormat.format(date);
+
+            ComisionesWS comisionesWS=new ComisionesWS(ContenedorComisionesView.context);
             ArrayList<ComisionesSQLiteEntity> listaComisionesSQLiteEntity=new ArrayList<>();
-            String[] mes = spnmes.getSelectedItem().toString().split("-");
-            String mes1,mes2,ano;
-            mes1=mes[0];
-            mes2=mes[1];
-            ano=spnano.getSelectedItem().toString();
+            String[] arrayfecha = fecha.toString().split("-");
+            String dia,mes,ano;
+            ano=arrayfecha[0];
+            mes=arrayfecha[1];
+            dia=arrayfecha[2];
+            tv_ano.setText(ano);
+            tv_periodo.setText(mes);*/
+            ComisionesWS comisionesWS=new ComisionesWS(ContenedorComisionesView.context);
+            ArrayList<ComisionesSQLiteEntity> listaComisionesSQLiteEntity=new ArrayList<>();
+            ObtenerFecha();
+
             try {
                 listaComisionesSQLiteEntity=comisionesWS.getComisiones(
                         SesionEntity.imei,
                         SesionEntity.compania_id,
                         SesionEntity.fuerzatrabajo_id,
                         ano,
-                        mes1
+                        mes
                 );
             } catch (Exception e)
             {
@@ -315,24 +354,25 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
             ArrayList<ComisionesSQLiteEntity> Lista = (ArrayList<ComisionesSQLiteEntity>) result;
             if (Lista.isEmpty())
             {
-                Toast.makeText(getContext(), "Error en la Consulta", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ContenedorComisionesView.context, "Error en la Consulta", Toast.LENGTH_SHORT).show();
             }else
             {
                 cargarVariables(Lista);
                 createCharts(Lista);
-                listaComisionesDetalleAdapter = new ListaComisionesDetalleAdapter(getActivity(), ListaComisionesDetalleDao.getInstance().getLeads(Lista));
+                listaComisionesDetalleAdapter = new ListaComisionesDetalleAdapter(activity, ListaComisionesDetalleDao.getInstance().getLeads(Lista));
                 listviewdetallecomisiones.setAdapter(listaComisionesDetalleAdapter);
             }
             pd.dismiss();
         }
     }
 
-    public void cargarVariables(ArrayList<ComisionesSQLiteEntity> Lista)
+    static public void cargarVariables(ArrayList<ComisionesSQLiteEntity> Lista)
     {
         Indices=new String [Lista.size()];
         colors=new int [Lista.size()];
         for(int i=0;i<Lista.size();i++)
         {
+            Log.e("REOS", "ComisionesView-cargarVariables-Lista.get(i).getVariable():" + Lista.get(i).getVariable());
             Indices[i]=Lista.get(i).getVariable();
             colors[i]=Color.BLUE;
         }
@@ -342,15 +382,29 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.btn_comisiones_consultar:
+            /*case R.id.btn_comisiones_consultar:
                 HiloObtenerComisiones hiloObtenerComisiones=new HiloObtenerComisiones();
                 hiloObtenerComisiones.execute();
-                break;
+                break;*/
             default:
                 break;
         }
     }
+    static public void ObtenerFecha()
+    {
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            date = new Date();
+            fecha = dateFormat.format(date);
 
+            ComisionesWS comisionesWS=new ComisionesWS(ContenedorComisionesView.context);
+            ArrayList<ComisionesSQLiteEntity> listaComisionesSQLiteEntity=new ArrayList<>();
+            String[] arrayfecha = fecha.toString().split("-");
+            ano=arrayfecha[0];
+            mes=arrayfecha[1];
+            dia=arrayfecha[2];
+            //tv_ano.setText(ano);
+            //tv_periodo.setText(mes);
+    }
 
 
 }

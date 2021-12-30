@@ -246,7 +246,7 @@ public class LoginView extends AppCompatActivity{
 
     public void btnLogin(View v){
 
-        TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        /*TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber="";
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
                 != PackageManager.PERMISSION_GRANTED &&
@@ -271,7 +271,7 @@ public class LoginView extends AppCompatActivity{
             }
         }
         Log.e("REOS", "LoginView-btnLogin-phoneNumber:" + phoneNumber);
-        Log.e("REOS", "LoginView-btnLogin-mPhoneNumber:" + mPhoneNumber);
+        Log.e("REOS", "LoginView-btnLogin-mPhoneNumber:" + mPhoneNumber);*/
         btnlogin.setEnabled(false);
         btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_onclick));
         btnlogin.setText(getResources().getString(R.string.Ingresando));
@@ -308,6 +308,7 @@ public class LoginView extends AppCompatActivity{
             Sesion.rate=userEntity.getRate();
             Sesion.Print=userEntity.getPrint();
             Sesion.activecurrency=userEntity.getActivecurrency();
+            Sesion.phone=userEntity.getPlanta();
             Log.e("REOS","LoginView.Sesion.rate: "+Sesion.rate);
             String country=userEntity.getCountry();
             String language=userEntity.getLenguage();

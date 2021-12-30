@@ -61,6 +61,19 @@ public class UserEntity {
     private String print;
 
     @NonNull
+    @SerializedName("Phone")
+    private String phone;
+
+    @NonNull
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(@NonNull String phone) {
+        this.phone = phone;
+    }
+
+    @NonNull
     public String getPrint() {
         return print;
     }
