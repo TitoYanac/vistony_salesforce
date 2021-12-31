@@ -2,6 +2,7 @@ package com.vistony.salesforce.View;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.annotations.SerializedName;
 import com.vistony.salesforce.Controller.Adapters.ListKardexOfPaymentAdapter;
@@ -71,6 +73,8 @@ public class KardexOfPaymentView extends Fragment {
     public static List<ListKardexOfPaymentEntity> listKardexOfPaymentEntityList;
     static double docamount;
     MenuItem checklist_all,generate_pdf;
+    static private ProgressDialog pd;
+
     public KardexOfPaymentView() {
         // Required empty public constructor
     }
@@ -157,6 +161,8 @@ public class KardexOfPaymentView extends Fragment {
 
     static private void getListKardexOfPayment(String CardCode)
     {
+        pd = new ProgressDialog(activity);
+        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Kardex de Pago de Cliente", true, false);
         kardexPagoEntityList=new ArrayList<>();
         listKardexOfPaymentEntityList=new ArrayList<>();
         docamount=0;
@@ -178,6 +184,11 @@ public class KardexOfPaymentView extends Fragment {
                     }
             tv_quantity_invoice_kardex.setText(String.valueOf(listKardexOfPaymentEntityList.size()));
             tv_docamount_kardex_invoice.setText(Convert.currencyForView(String.valueOf(docamount)));
+            pd.dismiss();
+            if(data.isEmpty())
+            {
+                Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -220,7 +231,7 @@ public class KardexOfPaymentView extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.checklist_all:
-                alertaSeleccionarTodo("Esta Seguro de Seleccionar Todos los parametros?").show();
+                alertaSeleccionarTodo("Esta Seguro de Seleccionar Todas las Facturas?").show();
                 return false;
             case R.id.generate_pdf:
                 //alertaSeleccionarTodo("Esta Seguro de Seleccionar Todos los parametros?").show();

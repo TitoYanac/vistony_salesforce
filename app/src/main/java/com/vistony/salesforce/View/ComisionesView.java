@@ -310,7 +310,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(ContenedorComisionesView.activity);
-            pd = ProgressDialog.show(ContenedorComisionesView.activity, "Por favor espere", "Consultando Recibos", true, false);
+            pd = ProgressDialog.show(ContenedorComisionesView.activity, "Por favor espere", "Consultando Avance Variables Periodo Actual", true, false);
         }
         @Override
         protected Object doInBackground(String... arg0) {

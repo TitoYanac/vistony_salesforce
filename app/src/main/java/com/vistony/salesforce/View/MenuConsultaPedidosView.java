@@ -2,6 +2,7 @@ package com.vistony.salesforce.View;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vistony.salesforce.Controller.Utilitario.ResumenDiarioPDF;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.Retrofit.ResumenDiarioRepository;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -58,6 +60,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
     private  int diadespacho,mesdespacho,anodespacho;
     private static DatePickerDialog oyenteSelectorFecha;
     private ResumenDiarioRepository resumenDiarioRepository;
+    private ProgressDialog pd;
 
     public MenuConsultaPedidosView() {
         // Required empty public constructor
@@ -183,12 +186,19 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pd = new ProgressDialog(getActivity());
+                pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando Datos de Cobranza POS", true, false);
                 ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                resumenDiarioRepository.getResumenDiario("01",SesionEntity.imei,fechasap,getContext(),fechasap).observe(getActivity(), data -> {
-                    Log.e("REOS", "resumenDiarioRepository" + data);
+                resumenDiarioRepository.getResumenDiario(SesionEntity.compania_id ,SesionEntity.imei,fechasap,getContext(),fechasap).observe(getActivity(), data -> {
+                    Log.e("REOS", "resumenDiarioRepository.data" + data.toString());
+                    Log.e("REOS", "resumenDiarioRepository.data.size()" + data.size());
+
+                    ResumenDiarioPDF resumenDiarioPDF=new ResumenDiarioPDF();
+                    resumenDiarioPDF.generarPdf(getContext(),data,fechasap);
+                    pd.dismiss();
                 });
 
-                //dialog.dismiss();
+
             }
         });
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {

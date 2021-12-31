@@ -275,6 +275,19 @@ public class Induvis {
         Date date2 = rightNow.getTime();
         return sdf.format(date2);
     }
+
+    public static String changeMonthNow (String day, int param) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Date dt = sdf.parse(day);
+        Calendar rightNow = Calendar.getInstance();
+        //Calendar calendar = Calendar.getInstance();
+        rightNow.setTime(dt);
+        rightNow.add(Calendar.MONTH, param);
+        //Date date = rightNow.getTime();
+        //rightNow.add(Calendar.DAY_OF_MONTH,1);
+        Date date2 = rightNow.getTime();
+        return sdf.format(date2);
+    }
     public static int getMaximoDiasDeposito(){
         int dias=0;
         switch (BuildConfig.FLAVOR){

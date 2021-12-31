@@ -18,6 +18,8 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricContainerSalesEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ResumenDiarioEntityResponse;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,10 +27,10 @@ import retrofit2.Response;
 public class ResumenDiarioRepository extends ViewModel {
     private BancoSQLite bancoSQLite;
     private ParametrosSQLite parametrosSQLite;
-    private MutableLiveData<String> status= new MutableLiveData<>();
+    private MutableLiveData<List<HistoricContainerSalesEntity>> status= new MutableLiveData<>();
 
 
-    public MutableLiveData<String> getResumenDiario(
+    public MutableLiveData <List<HistoricContainerSalesEntity>> getResumenDiario(
             String company,
             String Imei,
             String fechaini,
@@ -50,17 +52,16 @@ public class ResumenDiarioRepository extends ViewModel {
                         historicContainerSalesEntityResponse.getHistoricContainerSales().get(i).setFechasap(fechaini);
                     }
 
-                    ResumenDiarioPDF resumenDiarioPDF=new ResumenDiarioPDF();
-                    resumenDiarioPDF.generarPdf(context,historicContainerSalesEntityResponse.getHistoricContainerSales());
+
 
                 }
 
-                status.setValue("1");
+                status.setValue(historicContainerSalesEntityResponse.getHistoricContainerSales());
             }
 
             @Override
             public void onFailure(Call<HistoricContainerSalesEntityResponse> call, Throwable t) {
-                status.setValue("0");
+                status.setValue(null);
             }
         });
         return status;

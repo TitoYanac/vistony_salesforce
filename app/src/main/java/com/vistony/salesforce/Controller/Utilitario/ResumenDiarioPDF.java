@@ -65,7 +65,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
         }
     }
 
-    public void generarPdf(Context context, List<HistoricContainerSalesEntity> resumenDiarioEntityList) {
+    public void generarPdf(Context context, List<HistoricContainerSalesEntity> resumenDiarioEntityList,String fecha) {
         // Creamos el documento.
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(context);
         Rectangle pagina = new Rectangle(
@@ -83,9 +83,9 @@ public class ResumenDiarioPDF extends AppCompatActivity {
         Set<String> listaCorrelativo ;
         for(int i=0;i<resumenDiarioEntityList.size();i++)
         {
-            fechasap=resumenDiarioEntityList.get(i).getFechasap();
+            //fechasap=resumenDiarioEntityList.get(i).getFechasap();
         }
-
+        fechasap=fecha;
         listaCorrelativo = new HashSet<String>(ObjList);
         Object[] ObjArrayListaCorrelativo = listaCorrelativo.toArray();
         try {
@@ -109,9 +109,11 @@ public class ResumenDiarioPDF extends AppCompatActivity {
                     Font.BOLD, Color.black);
 
             Font font3 = FontFactory.getFont(FontFactory.HELVETICA, 16,
-                    Font.BOLD, Color.black);
+                    Font.NORMAL, Color.black);
             Font font4 = FontFactory.getFont(FontFactory.HELVETICA, 32,
                     Font.BOLD, Color.black);
+            Font font5 = FontFactory.getFont(FontFactory.HELVETICA, 16,
+                    Font.NORMAL, Color.black);
             // Insertamos una imagen que se encuentra en los recursos de la
             // aplicacion.
             // Insertamos una imagen que se encuentra en los recursos de la
@@ -144,9 +146,9 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tbllblvendedor = new PdfPTable(1);
             tbllblvendedor.setWidthPercentage(100);
             PdfPCell cellTablelblvendedor = null;
-            cellTablelblvendedor=new PdfPCell(new Phrase("********************************DATOS VENDEDOR***************************",font3));
+            cellTablelblvendedor=new PdfPCell(new Phrase("********************************DATOS VENDEDOR***************************",font5));
             cellTablelblvendedor.disableBorderSide(Rectangle.BOX);
-            cellTablelblvendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cellTablelblvendedor.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbllblvendedor.addCell(cellTablelblvendedor);
             documento.add(tbllblvendedor);
 
@@ -182,7 +184,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tbllblvariable = new PdfPTable(1);
             tbllblvariable.setWidthPercentage(100);
             PdfPCell cellTablelblvariable= null;
-            cellTablelblvariable=new PdfPCell(new Phrase("********************************PRODUCTO FOCO******************************",font3));
+            cellTablelblvariable=new PdfPCell(new Phrase("********************************PRODUCTO FOCO******************************",font5));
             cellTablelblvariable.disableBorderSide(Rectangle.BOX);
             cellTablelblvariable.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbllblvariable.addCell(cellTablelblvariable);
@@ -219,11 +221,23 @@ public class ResumenDiarioPDF extends AppCompatActivity {
                 tblCabecera.addCell(cellCabecera);
             }
             documento.add(tblCabecera);
+            if(resumenDiarioEntityList.size()==0)
+            {
+                PdfPTable tblNodata = new PdfPTable(1);
+                tblNodata.setWidthPercentage(100);
+                PdfPCell celltblNodata = null;
+                celltblNodata=new PdfPCell(new Phrase("No hay Data Disponible",font3));
+                celltblNodata.disableBorderSide(Rectangle.BOX);
+                celltblNodata.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tblNodata.addCell(celltblNodata);
+                documento.add(tblNodata);
+            }
+
 
             PdfPTable tbclientes = new PdfPTable(1);
             tbclientes.setWidthPercentage(100);
             PdfPCell cellTableclientes = null;
-            cellTableclientes=new PdfPCell(new Phrase("**************************************CLIENTES***********************************",font3));
+            cellTableclientes=new PdfPCell(new Phrase("**************************************CLIENTES***********************************",font5));
             cellTableclientes.disableBorderSide(Rectangle.BOX);
             cellTableclientes.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbclientes.addCell(cellTableclientes);
@@ -253,7 +267,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tbruta = new PdfPTable(1);
             tbruta.setWidthPercentage(100);
             PdfPCell cellTableruta = null;
-            cellTableruta=new PdfPCell(new Phrase("*****************************************RUTA*************************************",font3));
+            cellTableruta=new PdfPCell(new Phrase("*****************************************RUTA*************************************",font5));
             cellTableruta.disableBorderSide(Rectangle.BOX);
             cellTableruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbruta.addCell(cellTableruta);
@@ -276,7 +290,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tbltipo.addCell(cellTableTipo);
             cellTableTipo=new PdfPCell(new Phrase("COBRANZA",font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
-            cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellTableTipo.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltipo.addCell(cellTableTipo);
             cellTableTipo=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1")),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
@@ -288,7 +302,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tbltipo.addCell(cellTableTipo);
             cellTableTipo=new PdfPCell(new Phrase("PEDIDO",font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
-            cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellTableTipo.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltipo.addCell(cellTableTipo);
             cellTableTipo=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1")),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
@@ -346,7 +360,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tblnoruta = new PdfPTable(1);
             tblnoruta.setWidthPercentage(100);
             PdfPCell cellTablenoruta = null;
-            cellTablenoruta=new PdfPCell(new Phrase("****************************************NO RUTA*********************************",font3));
+            cellTablenoruta=new PdfPCell(new Phrase("****************************************NO RUTA*********************************",font5));
             cellTablenoruta.disableBorderSide(Rectangle.BOX);
             cellTablenoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblnoruta.addCell(cellTablenoruta);
@@ -363,13 +377,13 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevisitadosnoruta.disableBorderSide(Rectangle.BOX);
             cellTablevisitadosnoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitadosnoruta.addCell(cellTablevisitadosnoruta);
-            cellTablevisitadosnoruta=new PdfPCell(new Phrase("PROGRAMADOS",font3));
+            /*cellTablevisitadosnoruta=new PdfPCell(new Phrase("PROGRAMADOS",font3));
             cellTablevisitadosnoruta.disableBorderSide(Rectangle.BOX);
             cellTablevisitadosnoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitadosnoruta.addCell(cellTablevisitadosnoruta);
             cellTablevisitadosnoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"0")),font3));
             cellTablevisitadosnoruta.disableBorderSide(Rectangle.BOX);
-            cellTablevisitadosnoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cellTablevisitadosnoruta.setHorizontalAlignment(Element.ALIGN_LEFT);*/
 
             tblvisitadosnoruta.addCell(cellTablevisitadosnoruta);
             documento.add(tblvisitadosnoruta);
@@ -391,7 +405,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tbltiponoruta.addCell(cellTableTiponoruta);
             cellTableTiponoruta=new PdfPCell(new Phrase("COBRANZA",font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
-            cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltiponoruta.addCell(cellTableTiponoruta);
             cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0")),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
@@ -403,7 +417,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tbltiponoruta.addCell(cellTableTiponoruta);
             cellTableTiponoruta=new PdfPCell(new Phrase("PEDIDO",font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
-            cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltiponoruta.addCell(cellTableTiponoruta);
             cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"0")),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);

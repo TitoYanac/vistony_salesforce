@@ -154,14 +154,14 @@ public class CobranzaDetalleView extends Fragment {
     private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 2;
     String Estadochkbancarizado = "", Estadodepositodirecto = "", Estadopagopos = "", Estadopagoadelantado = "";
     HiloCobranzaPOS hiloCobranzaPOS;
-    private CobranzaRepository cobranzaRepository;
+    static private CobranzaRepository cobranzaRepository;
     private DepositoRepository depositoRepository;
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     String cliente_id_visita, domembarque_id_visita, zona_id_visita;
     private ProgressDialog pd;
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
-
+    static Context context;
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm", "Este es NUEVA ISNTANCIA 1");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
@@ -211,6 +211,8 @@ public class CobranzaDetalleView extends Fragment {
         Log.e("jpcm", "Este es NUEVA ISNTANCIA 4");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
         chk_validacionqr.setChecked(true);
+        cobranzaRepository.PendingCollectionQR(context);
+
         //hiloVlidarQR.execute();
         return fragment;
 
@@ -247,7 +249,7 @@ public class CobranzaDetalleView extends Fragment {
         hiloCobranzaPOS = new HiloCobranzaPOS();
         cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
         depositoRepository = new ViewModelProvider(getActivity()).get(DepositoRepository.class);
-
+        context=getContext();
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);

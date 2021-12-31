@@ -278,7 +278,7 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(ContenedorComisionesView.activity);
-            pd = ProgressDialog.show(ContenedorComisionesView.activity, "Por favor espere", "Consultando Recibos", true, false);
+            pd = ProgressDialog.show(ContenedorComisionesView.activity, "Por favor espere", "Consultando Avance Variables Periodo Anterior", true, false);
         }
         @Override
         protected Object doInBackground(String... arg0) {
@@ -352,7 +352,7 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
         fecha = dateFormat.format(date);
         String fechainduvis="";
         try {
-            fechainduvis= Induvis.changeMonth(fecha,-1);
+            fechainduvis= Induvis.changeMonthNow(fecha,-1);
         } catch (ParseException e) {
             e.printStackTrace();
             Log.e("REOS","HistoricContainerSalesSemaforo-error"+e);

@@ -1,6 +1,7 @@
 package com.vistony.salesforce.View;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Utilitario.QuotasPerCustomerPDF;
 import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerDetailRepository;
@@ -56,6 +58,7 @@ public class MenuConsultaCobradoView extends Fragment {
     static QuotasPerCustomerInvoiceRepository quotasPerCustomerRepository;
     QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
     static ArrayList<ListaClienteCabeceraEntity> Listado;
+    static private ProgressDialog pd;
     public MenuConsultaCobradoView() {
         // Required empty public constructor
     }
@@ -212,18 +215,22 @@ public class MenuConsultaCobradoView extends Fragment {
     final List<QuotasPerCustomerInvoiceEntity> listQuotasPerCustomerInvoiceEntity=null;
     public void GenerarQuotaPerCustomerPDF()
     {
+        pd = new ProgressDialog(getActivity());
+        pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Calculo de Cuotas de Cliente", true, false);
         ///////////////////////////// BANCO SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        Object object;
+
         try {
 
 
         quotasPerCustomerRepository.getQuotasPerCustomerInvoice(SesionEntity.fuerzatrabajo_id,getContext(),CardCode).observe(getActivity(), data1 ->
         {
+
             quotasPerCustomerDetailRepository.getQuotasPerCustomerDetail (SesionEntity.fuerzatrabajo_id,getContext(),CardCode).observe(getActivity(), data2 ->
             {
 
                 if(!data2.isEmpty())
                 {
+
                     QuotasPerCustomerPDF quotasPerCustomerPDF=new QuotasPerCustomerPDF();
                     quotasPerCustomerPDF.generarPdf(getContext(),
                             data1,
@@ -231,6 +238,12 @@ public class MenuConsultaCobradoView extends Fragment {
                             Listado
                     );
                 }
+
+                if(data1.isEmpty()||data2.isEmpty())
+                {
+                    Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Calculo", Toast.LENGTH_SHORT).show();
+                }
+
             });
 
         });
@@ -239,6 +252,8 @@ public class MenuConsultaCobradoView extends Fragment {
         {
             Log.e("REOS","MenuConsultaCobradoView-GenerarQuotaPerCustomerPDF-e"+e.toString());
         }
+
+        pd.dismiss();
     }
 
 }

@@ -130,14 +130,14 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
             holder.imv_decrementar.setVisibility(View.GONE);
             holder.imv_editar_promocion_detalle.setVisibility(View.GONE);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.e: "+contado);
-            holder.tv_cash.setText(promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
+            /*holder.tv_cash.setText(promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
                     SesionEntity.compania_id,
                     lead.getLista_promocion_id(),
                     lead.getPromocion_id()));
             holder.tv_credit.setText(promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
                     SesionEntity.compania_id,
                     lead.getLista_promocion_id(),
-                    lead.getPromocion_id()));
+                    lead.getPromocion_id()));*/
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.contado: "+contado);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.credito: "+credito);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.formulasController.applyDiscountPercentageForLine): "+formulasController.applyDiscountPercentageForLine(
@@ -151,7 +151,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                     ),lead.getDescuento()
             ));
 
-            holder.tv_price_cash_pack.setText(
+            /*holder.tv_price_cash_pack.setText(
                     formulasController.CalcularMontoTotalconDescuento(
                             formulasController.getTotalPerLine(
                                     contado,lead.getCantidadcompra()
@@ -172,7 +172,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                                             credito,lead.getCantidadcompra()
                                     ),lead.getDescuento()
                             )
-                    ));
+                    ));*/
         }
 
         holder.imv_valorizar.setOnClickListener(new View.OnClickListener() {
