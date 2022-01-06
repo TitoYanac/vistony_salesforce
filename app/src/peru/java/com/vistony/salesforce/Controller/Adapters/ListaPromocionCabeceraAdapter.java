@@ -23,6 +23,9 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
@@ -125,6 +128,10 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
         if(SesionEntity.flagquerystock.equals("Y"))
         {
+            /*FirebaseCrashlytics.getInstance().setUserId(SesionEntity.fuerzatrabajo_id);
+            FirebaseCrashlytics.getInstance().setCustomKey("NameSalesForce",SesionEntity.nombrefuerzadetrabajo);
+            FirebaseCrashlytics.getInstance().setCustomKey("Country", BuildConfig.FLAVOR);*/
+
             holder.tv_cant_promocion.setVisibility(View.GONE);
             holder.imv_incrementar.setVisibility(View.GONE);
             holder.imv_decrementar.setVisibility(View.GONE);

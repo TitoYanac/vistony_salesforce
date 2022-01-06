@@ -37,6 +37,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Controller.Utilitario.UpdateApp;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
@@ -53,12 +54,16 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
+import kotlin.jvm.Throws;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class LoginView extends AppCompatActivity{
     public OmegaCenterIconButton btnlogin;
@@ -71,6 +76,7 @@ public class LoginView extends AppCompatActivity{
     private LoginRepository loginRepository;
     private SharedPreferences statusImei;
     private String version;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -79,7 +85,7 @@ public class LoginView extends AppCompatActivity{
 
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         statusImei = getSharedPreferences("imeiRegister", Context.MODE_PRIVATE);
         setLocale(statusImei.getString("language", BuildConfig.LANGUAGE_DEFAULT),statusImei.getString("country", BuildConfig.COUNTRY_DEFAULT));
 
@@ -182,6 +188,11 @@ public class LoginView extends AppCompatActivity{
 
     }
 
+    /*private void getCrash()
+    {
+        Induvis.getCrashLytics();
+    }*/
+
     @Override
     public void onResume(){
         super.onResume();
@@ -282,6 +293,8 @@ public class LoginView extends AppCompatActivity{
 
         if(userEntity!=null) {
 
+
+
             Sesion.compania_id = userEntity.getCompania_id();
             Sesion.fuerzatrabajo_id = userEntity.getFuerzatrabajo_id();
             Sesion.nombrecompania = userEntity.getNombrecompania();
@@ -309,10 +322,20 @@ public class LoginView extends AppCompatActivity{
             Sesion.Print=userEntity.getPrint();
             Sesion.activecurrency=userEntity.getActivecurrency();
             Sesion.phone=userEntity.getPlanta();
+            Sesion.maxDateDeposit=userEntity.getChkbloqueopago();
             Log.e("REOS","LoginView.Sesion.rate: "+Sesion.rate);
             String country=userEntity.getCountry();
             String language=userEntity.getLenguage();
+
             Log.e("REOS","LoginView-SesionEntity.Print" + Sesion.Print);
+            //getCrash();
+
+            /*String dato="",dato1="",dato2="";
+            String [] forzadoerror=dato.split("-");
+            dato1=forzadoerror[0];
+            dato2=forzadoerror[1];*/
+
+
             if( country==null  && language==null){
                 Toast.makeText(this, "El sistema no pudo indentificar su País y Lenguaje configurado...", Toast.LENGTH_LONG).show();
                 btnlogin.setEnabled(true);

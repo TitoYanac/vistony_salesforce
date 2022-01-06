@@ -48,6 +48,19 @@ public class SettingsUserEntity {
     private String ChangeCurrency;
 
     @NonNull
+    @SerializedName("MaxDateDeposit")
+    private String maxDateDeposit;
+
+    @NonNull
+    public String getMaxDateDeposit() {
+        return maxDateDeposit;
+    }
+
+    public void setMaxDateDeposit(@NonNull String maxDateDeposit) {
+        this.maxDateDeposit = maxDateDeposit;
+    }
+
+    @NonNull
     public String getChangeCurrency() {
         return ChangeCurrency;
     }

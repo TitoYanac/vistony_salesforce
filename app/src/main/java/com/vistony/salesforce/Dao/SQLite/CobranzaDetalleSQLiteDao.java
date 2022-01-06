@@ -613,7 +613,10 @@ public class CobranzaDetalleSQLiteDao {
                             //Cambio para Peru
                             //--------------------------------
                             //"and fuerzatrabajo_id='"+fuerzatrabajo_id+"' and (fechacobranza< DATE('now','-10 day')) and chkdepositado='0' and chkanulado='0'"
-                            " and fuerzatrabajo_id='"+fuerzatrabajo_id+"' and (fechacobranza< strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))-"+Induvis.getMaximoDiasDeposito()+") and chkdepositado='N' and chkanulado='N'"
+                            " and fuerzatrabajo_id='"+fuerzatrabajo_id+"' " +
+                            //"and (fechacobranza< strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))-"+Induvis.getMaximoDiasDeposito()+") " +
+                            "and (fechacobranza< strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))-"+SesionEntity.maxDateDeposit+") " +
+                            "and chkdepositado='N' and chkanulado='N'"
                     //--------------------------------
                     ,null);
 

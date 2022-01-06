@@ -289,6 +289,14 @@ public class OrdenVentaCabeceraView extends Fragment {
 
                 for(int j=0;j<listaHistoricoOrdenVentaEntity.size();j++){
                     ordenventa_id=listaHistoricoOrdenVentaEntity.get(j).getSalesOrderID();
+                    Log.e("REOS","OrdenCabeceraView-onCreate-listaHistoricoOrdenVentaEntity.get(j).getApprovalStattus():"+listaHistoricoOrdenVentaEntity.get(j).getApprovalStatus());
+                    if(listaHistoricoOrdenVentaEntity.get(j).getApprovalStatus().equals("Cotización"))
+                    {
+                        getActivity().setTitle("COTIZACION");
+                    }
+                    else  {
+                        getActivity().setTitle("ORDEN VENTA");
+                    }
                 }
 
                 FormulasController formulasController=new FormulasController(getContext());
@@ -341,7 +349,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                 for(int m=0;m<listaAgenciasqliteentity.size();m++){
                     historicoordenventa_agencia= listaAgenciasqliteentity.get(m).getAgencia();
                 }
-                obtenerTituloFormulario();
+                //obtenerTituloFormulario();
             }
 
             if(Listado !=null){
@@ -595,6 +603,18 @@ public class OrdenVentaCabeceraView extends Fragment {
             setHasOptionsMenu(true);
             if (getArguments().getString("FLAG") != null) {
                 callbackFlag(getArguments().getString("FLAG"));
+            }
+
+            if(listaHistoricoOrdenVentaEntity!=null)
+            {
+                for (int j = 0; j < listaHistoricoOrdenVentaEntity.size(); j++) {
+                    ordenventa_id = listaHistoricoOrdenVentaEntity.get(j).getSalesOrderID();
+                    if (listaHistoricoOrdenVentaEntity.get(j).getApprovalStatus().equals("Cotización")) {
+                        getActivity().setTitle("COTIZACION");
+                    } else {
+                        getActivity().setTitle("ORDEN VENTA");
+                    }
+                }
             }
         }
     }

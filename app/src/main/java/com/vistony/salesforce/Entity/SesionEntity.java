@@ -41,5 +41,6 @@ public class SesionEntity {
     public static String formhabilPrint ="N";
     public static String TipoCompra ="";
     public static String phone ="";
+    public static String maxDateDeposit ="";
 }
 

@@ -295,11 +295,11 @@ public class CobranzaDetalleView extends Fragment {
                         Log.e("REOS","CobranzaDetalleView-Listado.get(j).getDepositodirecto(): "+Listado.get(j).getDepositodirecto());
                         if(Listado.get(j).getDepositodirecto().equals("Y"))
                         {
-                            Estadodepositodirecto="1";
+                            Estadodepositodirecto="Y";
                         }
                         else if(Listado.get(j).getDepositodirecto().equals("N"))
                         {
-                            Estadodepositodirecto="0";
+                            Estadodepositodirecto="N";
                         }
 
                         Estadopagopos=SesionEntity.pagopos;
@@ -311,7 +311,7 @@ public class CobranzaDetalleView extends Fragment {
                         }else{
                             Log.e("jpcm","FEHCA LLENA");
                         }
-                        if(Listado.get(j).getDocumento_id().equals(""))
+                        if(Listado.get(j).getDocumento_id().equals("")||Listado.get(j).getDocumento_id().equals("0"))
                         {
                             Estadopagoadelantado="1";
                         }else
@@ -389,8 +389,6 @@ public class CobranzaDetalleView extends Fragment {
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo= (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
-
-
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
                                                    @Override
                                                    public void onClick(View view) {

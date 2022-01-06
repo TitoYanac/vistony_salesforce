@@ -70,7 +70,7 @@ public class UsuarioSQLite {
             registro.put("flag_stock",vendedor.getSettings().get(0).getOutStock());
             registro.put("flag_backup",vendedor.getSettings().get(0).getFlagBackup());
             registro.put("rate",vendedor.getRate());
-
+            registro.put("chkbloqueopago",vendedor.getSettings().get(0).getMaxDateDeposit());
             bd.insert("usuario",null,registro);
             bd.close();
 

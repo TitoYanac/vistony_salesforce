@@ -3,6 +3,7 @@ package com.vistony.salesforce.Controller.Utilitario;
 import android.app.Activity;
 import android.util.Log;
 
+//import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -337,5 +338,11 @@ public class Induvis {
         Log.e("REOS","FormulasController.getAmountRouteeffectiveness.resultado:" + resultado);
         return String.valueOf(format.format(resultado))+" %";
     }
+    /*static public void getCrashLytics(){
+        FirebaseCrashlytics.getInstance().setUserId(SesionEntity.fuerzatrabajo_id);
+        FirebaseCrashlytics.getInstance().setCustomKey("NameSalesForce",SesionEntity.nombrefuerzadetrabajo);
+        FirebaseCrashlytics.getInstance().setCustomKey("Country", BuildConfig.FLAVOR);
+
+    }*/
 
 }
