@@ -52,6 +52,19 @@ public class SettingsUserEntity {
     private String maxDateDeposit;
 
     @NonNull
+    @SerializedName("CashDscnt")
+    private String cashDscnt;
+
+    @NonNull
+    public String getCashDscnt() {
+        return cashDscnt;
+    }
+
+    public void setCashDscnt(@NonNull String cashDscnt) {
+        this.cashDscnt = cashDscnt;
+    }
+
+    @NonNull
     public String getMaxDateDeposit() {
         return maxDateDeposit;
     }

@@ -187,7 +187,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 pd = new ProgressDialog(getActivity());
-                pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando Datos de Cobranza POS", true, false);
+                pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Resumen Diario", true, false);
                 ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                 resumenDiarioRepository.getResumenDiario(SesionEntity.compania_id ,SesionEntity.imei,fechasap,getContext(),fechasap).observe(getActivity(), data -> {
                     Log.e("REOS", "resumenDiarioRepository.data" + data.toString());

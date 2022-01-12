@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.gson.Gson;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
@@ -1791,11 +1792,14 @@ public class FormulasController {
         ArrayList<ListaPrecioDetalleSQLiteEntity> arrayListListaPrecioDetalleSQLiteEntity=new ArrayList<>();
         ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
         arrayListListaPrecioDetalleSQLiteEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listapromocion_id,SesionEntity.TipoListaPrecio);
+        Log.e("REOS", "FormulasController:obtenerEstadoProductoContadoDescuento-SesionEntity.TipoListaPrecio: "+SesionEntity.TipoListaPrecio);
         Log.e("REOS", "FormulasController:obtenerEstadoProductoContadoDescuento-arrayListListaPrecioDetalleSQLiteEntity.size(): "+arrayListListaPrecioDetalleSQLiteEntity.size());
         for(int i=0;i<arrayListListaPrecioDetalleSQLiteEntity.size();i++)
         {
             Log.e("REOS", "FormulasController:obtenerEstadoProductoContadoDescuento-arrayListListaPrecioDetalleSQLiteEntity.get(i).getU_vis_cashdscnt(): "+arrayListListaPrecioDetalleSQLiteEntity.get(i).getU_vis_cashdscnt());
-            if(Double.parseDouble (arrayListListaPrecioDetalleSQLiteEntity.get(i).getU_vis_cashdscnt())>0)
+            Log.e("REOS", "FormulasController:obtenerEstadoProductoContadoDescuento-getU_vis_cashdscnt(): "+arrayListListaPrecioDetalleSQLiteEntity.get(i).getU_vis_cashdscnt());
+            //if(Double.parseDouble (SesionEntity.U_VIS_CashDscnt )>0)
+            if(arrayListListaPrecioDetalleSQLiteEntity.get(i).getU_vis_cashdscnt().equals("N"))
             {
                 Log.e("REOS", "FormulasController:obtenerEstadoProductoContadoDescuento-true: ");
                 resultado=true;
@@ -1912,14 +1916,14 @@ public class FormulasController {
                         "*********************DATOS COBRADOR*******************\n"  +
                         fuerzatrabajo_id + " " + nombrefuerzatrabajo + "\n" +
                         "*********************DATOS DOCUMENTO******************" + "\n" +
-                        "Fecha:     " + fecharecibo + "\n"+
+                        "Fecha:     " + Induvis.getDate(BuildConfig.FLAVOR,fecharecibo)  + "\n"+
                         "Recibo:     " + recibo + "\n" +
-                        "Documento:     " + Lista.get(i).getNrodocumento() + "\n" +
-                        "Importe :S/.:     " + Lista.get(i).getImporte() + "\n" +
-                        "Saldo :S/.      " + Lista.get(i).getSaldo() + "\n" +
-                        "Cobrado :S/.     " + Lista.get(i).getCobrado() + "\n" +
-                        "Nuevo Saldo:S/.     " + Lista.get(i).getNuevo_saldo() + "\n" +
-                        "www.vistony.com/intranet/hash="+encHash+ "\n" +
+                        "Documento:     " +Convert.currencyForView(Lista.get(i).getNrodocumento())  + "\n" +
+                        "Importe :     " + Convert.currencyForView(Lista.get(i).getImporte()) + "\n" +
+                        "Saldo :.      " + Convert.currencyForView(Lista.get(i).getSaldo()) + "\n" +
+                        "Cobrado :.     " + Convert.currencyForView(Lista.get(i).getCobrado()) + "\n" +
+                        "Nuevo Saldo:.     " + Convert.currencyForView(Lista.get(i).getNuevo_saldo()) + "\n" +
+                        //"www.vistony.com/intranet/hash="+encHash+ "\n" +
                         "Codigo Validacion SMS:"+codeSMS+""
                 ;
                 ;

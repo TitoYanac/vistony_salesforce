@@ -32,6 +32,7 @@ public class QuotasPerCustomerDetailRepository  extends ViewModel {
             Context context,
             String CardCode
     ){
+        status= new MutableLiveData<>();
         Config.getClient().create(Api.class).getQuotasPerCustomerDetail(CardCode,Imei).enqueue(new Callback<QuotasPerCustomerDetailEntityResponse>() {
             @Override
             public void onResponse(Call<QuotasPerCustomerDetailEntityResponse> call, Response<QuotasPerCustomerDetailEntityResponse> response) {

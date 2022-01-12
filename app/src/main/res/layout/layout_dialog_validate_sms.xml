@@ -95,7 +95,7 @@
                     android:layout_marginBottom="15dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="CANCELAR"
+                    android:text="CERRAR"
                     android:textColor="#0957C3" />
 
 

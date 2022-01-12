@@ -344,7 +344,9 @@ public class RutaVendedorSQLiteDao {
             ContentValues registro = new ContentValues();
             registro.put("chk_visita","1");
             bd = sqliteController.getWritableDatabase();
-            resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' and  domembarque_id='"+domembarque_id+"' and fecharuta='"+fecharuta+"' " ,null);
+            resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' " +
+                    //"and  domembarque_id='"+domembarque_id+"' " +
+                    "and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
         }catch (Exception e)
         {
@@ -372,7 +374,9 @@ public class RutaVendedorSQLiteDao {
             registro.put("chk_visita","1");
             registro.put("salesorderamount",salesorderamount);
             bd = sqliteController.getWritableDatabase();
-            resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' and  domembarque_id='"+domembarque_id+"' and fecharuta='"+fecharuta+"' " ,null);
+            resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"'" +
+                    //" and  domembarque_id='"+domembarque_id+"'" +
+                    " and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
         }catch (Exception e)
         {
@@ -400,7 +404,9 @@ public class RutaVendedorSQLiteDao {
             registro.put("chk_visita","1");
             registro.put("collectionamount",collectionamount);
             bd = sqliteController.getWritableDatabase();
-            resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' and  domembarque_id='"+domembarque_id+"' and fecharuta='"+fecharuta+"' " ,null);
+            resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' " +
+                    //"and  domembarque_id='"+domembarque_id+"' " +
+                    "and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
         }catch (Exception e)
         {

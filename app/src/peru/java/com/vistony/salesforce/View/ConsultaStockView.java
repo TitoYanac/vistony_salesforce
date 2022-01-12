@@ -1,5 +1,6 @@
 package com.vistony.salesforce.View;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -46,6 +47,7 @@ public class ConsultaStockView extends Fragment  implements SearchView.OnQueryTe
     private SearchView mSearchView;
     ListaConsultaStockAdapter listaConsultaStockAdapter;
     ListView lv_consultaStock;
+    private ProgressDialog pd;
 
     public ConsultaStockView() {
         // Required empty public constructor
@@ -153,7 +155,8 @@ public class ConsultaStockView extends Fragment  implements SearchView.OnQueryTe
 
     private void cargarConsultaStock()
     {
-
+        pd = new ProgressDialog(getActivity());
+        pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Stock", true, false);
         ArrayList<ListaConsultaStockEntity>  ListaConsultaStockEntity=new ArrayList<>();
         ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(getContext());
         ListaConsultaStockEntity=listaPrecioDetalleSQLiteDao.ObtenerConsultaStock(getContext());
@@ -165,5 +168,6 @@ public class ConsultaStockView extends Fragment  implements SearchView.OnQueryTe
             listaConsultaStockAdapter = new ListaConsultaStockAdapter(getActivity(), ListaConsultaStockDao.getInstance().getLeads(ListaConsultaStockEntity));
             lv_consultaStock.setAdapter(listaConsultaStockAdapter);
         }
+        pd.dismiss();
     }
 }

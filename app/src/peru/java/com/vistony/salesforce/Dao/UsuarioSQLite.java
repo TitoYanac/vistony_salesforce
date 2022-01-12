@@ -64,7 +64,7 @@ public class UsuarioSQLite {
             registro.put("LineaProduccion",vendedor.getSettings().get(0).getLineaproduccion());
             registro.put("Impuesto_ID",vendedor.getSettings().get(0).getTaxCode());
             registro.put("Impuesto",vendedor.getSettings().get(0).getTaxRate());
-            //registro.put("U_VIS_CashDscnt",null);
+            registro.put("U_VIS_CashDscnt",vendedor.getSettings().get(0).getCashDscnt());
             registro.put("Language",vendedor.getSettings().get(0).getLanguage());
             registro.put("Country",vendedor.getCountry());
             registro.put("flag_stock",vendedor.getSettings().get(0).getOutStock());

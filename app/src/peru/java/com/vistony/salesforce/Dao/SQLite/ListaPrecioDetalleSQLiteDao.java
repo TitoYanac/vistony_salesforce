@@ -260,7 +260,7 @@ public class ListaPrecioDetalleSQLiteDao {
                 listaPrecioDetalleEntity.setProducto(fila.getString(4));
                 listaPrecioDetalleEntity.setUmd(fila.getString(5));
                 listaPrecioDetalleEntity.setGal(fila.getString(6));
-                listaPrecioDetalleEntity.setU_vis_cashdscnt(fila.getString(9));
+                listaPrecioDetalleEntity.setU_vis_cashdscnt(fila.getString(7));
                 listaPrecioDetalleEntity.setPorcentaje_descuento(fila.getString(9));
                 arraylistaPreciodetalle.add(listaPrecioDetalleEntity);
 

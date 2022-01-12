@@ -1370,7 +1370,7 @@ public class CobranzaDetalleView extends Fragment {
         }
         else
             {
-                sendSMS(telefono);
+        //        sendSMS(telefono);
             }
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -2164,11 +2164,36 @@ public class CobranzaDetalleView extends Fragment {
                     , null
                     , null);
             Toast.makeText(getContext(), "Mensaje de Texto Enviado Correctamente", Toast.LENGTH_SHORT).show();
+            alertdialogInformative(getContext()).show();
         }
         catch (Exception e)
         {
             Log.e("REOS","CobranzaDetalleView-alertaEnviarSMS-Erroe-"+e.toString());
         }
+    }
+
+    private Dialog alertdialogInformative(Context context) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
+        textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 
 }

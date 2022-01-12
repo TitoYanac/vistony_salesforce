@@ -203,6 +203,7 @@ public class MenuConsultaCobradoView extends Fragment {
         dialogButtonOK.setOnClickListener(v -> {
             //ObtenerParametrosCheck();
             GenerarQuotaPerCustomerPDF();
+            Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.click:");
             //dialog.dismiss();
         });
         dialogButtonCancel.setOnClickListener(v -> dialog.dismiss());
@@ -220,17 +221,18 @@ public class MenuConsultaCobradoView extends Fragment {
         ///////////////////////////// BANCO SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         try {
-
+            quotasPerCustomerRepository = new ViewModelProvider(getActivity()).get(QuotasPerCustomerInvoiceRepository.class);
+            quotasPerCustomerDetailRepository = new ViewModelProvider(getActivity()).get(QuotasPerCustomerDetailRepository.class);
 
         quotasPerCustomerRepository.getQuotasPerCustomerInvoice(SesionEntity.fuerzatrabajo_id,getContext(),CardCode).observe(getActivity(), data1 ->
         {
-
+            Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.data1.size():"+data1.size());
             quotasPerCustomerDetailRepository.getQuotasPerCustomerDetail (SesionEntity.fuerzatrabajo_id,getContext(),CardCode).observe(getActivity(), data2 ->
             {
-
-                if(!data2.isEmpty())
+                Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.data1.size():"+data2.size());
+                if(!data2.isEmpty()&&!data1.isEmpty())
                 {
-
+                    Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.solicitarGenerarPDF:");
                     QuotasPerCustomerPDF quotasPerCustomerPDF=new QuotasPerCustomerPDF();
                     quotasPerCustomerPDF.generarPdf(getContext(),
                             data1,
@@ -245,12 +247,17 @@ public class MenuConsultaCobradoView extends Fragment {
                 }
 
             });
+            if(data1.isEmpty()||data1==null)
+            {
+                Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Calculo", Toast.LENGTH_SHORT).show();
+            }
 
         });
 
         }catch (Exception e)
         {
             Log.e("REOS","MenuConsultaCobradoView-GenerarQuotaPerCustomerPDF-e"+e.toString());
+            Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Calculo", Toast.LENGTH_SHORT).show();
         }
 
         pd.dismiss();

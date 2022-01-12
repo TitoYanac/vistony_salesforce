@@ -48,6 +48,7 @@ import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
@@ -302,6 +303,8 @@ public class OrdenVentaCabeceraView extends Fragment {
                 //////////////////////////////////////
                 //////////////////////////////////////
                 //////////////////////////////////////
+                ArrayList<DireccionCliente> listaDireccionCliente=new ArrayList<>();
+                DireccionSQLite direccionSQLite=new DireccionSQLite(getContext());
 
                 for(int g=0;g<listaOrdenVentaCabecera.size();g++){
                     listaClienteCabecera= clienteSQlite.ObtenerClienteporClienteID(listaOrdenVentaCabecera.get(g).getCliente_id());
@@ -314,10 +317,11 @@ public class OrdenVentaCabeceraView extends Fragment {
                     totalAcum=listaOrdenVentaCabecera.get(g).getMontototal();
                     confirmationRequestErp=listaOrdenVentaCabecera.get(g).getRecibidoERP().equals("1")?true:false;
                     cliente_terminopago_id=listaOrdenVentaCabecera.get(g).getTerminopago_id();
+
                     listaAgenciasqliteentity= agenciaSQLiteDao.ObtenerAgencia_porID(
                             listaOrdenVentaCabecera.get(g).getAgencia_id()
                     );
-
+                    listaDireccionCliente=direccionSQLite.getListAddressOV(listaOrdenVentaCabecera.get(g).getCliente_id(),listaOrdenVentaCabecera.get(g).getDomembarque_id());
                     historicoOVcantidaddescuento=listaOrdenVentaCabecera.get(g).getDescuentocontado();
                 }
 
@@ -325,7 +329,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                 {
                     nombrecliente=listaClienteCabecera.get(l).getNombrecliente();
                     codigocliente=listaClienteCabecera.get(l).getCliente_id();
-                    direccioncliente=listaClienteCabecera.get(l).getDireccion();
+                    //direccioncliente=listaClienteCabecera.get(l).getDireccion();
 
                     moneda=listaClienteCabecera.get(l).getMoneda();
                     impuesto_id=listaClienteCabecera.get(l).getImpuesto_id();
@@ -339,10 +343,15 @@ public class OrdenVentaCabeceraView extends Fragment {
 
                 }
 
+                for(int k=0;k<listaDireccionCliente.size();k++)
+                {
+                    direccioncliente=listaDireccionCliente.get(k).getDireccion();
+                }
+
                 for(int m=0;m<listaAgenciasqliteentity.size();m++){
                     historicoordenventa_agencia= listaAgenciasqliteentity.get(m).getAgencia();
                 }
-
+                obtenerTituloFormulario();
             }
 
             if(Listado !=null){
@@ -882,24 +891,25 @@ public class OrdenVentaCabeceraView extends Fragment {
                 DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.Black));
                 menu_variable.findItem(R.id.enviar_erp).setIcon(drawable);
                 enviar_erp.setEnabled(false);
+                Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                drawable2 = DrawableCompat.wrap(drawable2);
+                DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.Black));
+                menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+                generarpdf.setEnabled(true);
                 break;
             case "peru":
-                Drawable drawable2 = menu_variable.findItem(R.id.enviar_erp).getIcon();
+                /*Drawable drawable2 = menu_variable.findItem(R.id.enviar_erp).getIcon();
                 drawable2 = DrawableCompat.wrap(drawable2);
                 DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.White));
                 menu_variable.findItem(R.id.enviar_erp).setIcon(drawable2);
-                enviar_erp.setEnabled(true);
+                enviar_erp.setEnabled(true);*/
                 break;
             default:
                 break;
         }
 
 
-        Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-        drawable2 = DrawableCompat.wrap(drawable2);
-        DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.Black));
-        menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-        generarpdf.setEnabled(true);
+
     }
 
     public void RegistrarOrdenVentaBD (){
@@ -1057,7 +1067,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.Black));
                 menu_variable.findItem(R.id.enviar_erp).setIcon(drawable);
-                guardar_orden_venta.setEnabled(false);
+                enviar_erp.setEnabled(false);
 
                 Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
                 drawable2 = DrawableCompat.wrap(drawable2);

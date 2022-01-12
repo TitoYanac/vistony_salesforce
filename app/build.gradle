@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 // Apply the Crashlytics Gradle plugin
 apply plugin: 'com.google.firebase.crashlytics'
+// Apply the Performance Monitoring plugin
+apply plugin: 'com.google.firebase.firebase-perf'
+
 android {
     signingConfigs {
         config {
@@ -27,7 +30,7 @@ android {
                 abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
             }
             manifestPlaceholders = [appName:"Test Sales Force"]
-            buildConfigField('String' , 'BASE_ENVIRONMENT', '".test2/api"')
+            buildConfigField('String' , 'BASE_ENVIRONMENT', '".test/api"')
             signingConfig  signingConfigs.config
     }
 
@@ -169,10 +172,11 @@ dependencies {
     //SDK FireBase
     //implementation 'com.google.firebase:firebase-analytics:17.4.1'
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:28.4.0')
+    implementation platform('com.google.firebase:firebase-bom:29.0.3')
 
     // Declare the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-perf'
 }

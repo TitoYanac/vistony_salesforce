@@ -76,7 +76,9 @@ public class ListaPromocionDetalleEditarAdapter  extends ArrayAdapter<ListaPromo
 
                 //if(listaPromocionDetalleEditarEntity.get(position).isEstadoitems())
                 //{
-
+                Log.e("REOS","ListaPromocionCabeceraEditar-imv_incrementar-lead.getCantidad_editada(): "+lead.getCantidad_editada());
+                Log.e("REOS","ListaPromocionCabeceraEditar-imv_incrementar-lead.getCantidad(): "+lead.getCantidad());
+                Log.e("REOS","ListaPromocionCabeceraEditar-imv_incrementar-holder.tv_cant_promocion_detalle_editable.getText: "+holder.tv_cant_promocion_detalle_editable.getText());
                         if(Integer.parseInt(lead.getCantidad_editada())>=Integer.parseInt(lead.getCantidad()))
                         {
                             Toast.makeText(getContext(), "La Cantidad a Editar es mayor a la Cantidad de Promocion", Toast.LENGTH_LONG).show();
@@ -114,7 +116,9 @@ public class ListaPromocionDetalleEditarAdapter  extends ArrayAdapter<ListaPromo
             @Override
             public void onClick(View v) {
 
-
+                Log.e("REOS","ListaPromocionCabeceraEditar-imv_decrementar-lead.getCantidad_editada(): "+lead.getCantidad_editada());
+                Log.e("REOS","ListaPromocionCabeceraEditar-imv_decrementar-lead.getCantidad(): "+lead.getCantidad());
+                Log.e("REOS","ListaPromocionCabeceraEditar-imv_decrementar-holder.tv_cant_promocion_detalle_editable.getText: "+holder.tv_cant_promocion_detalle_editable.getText());
                 //if(listaPromocionDetalleEditarEntity.get(position).isEstadoitems())
                 //{
                     if (Integer.parseInt(lead.getCantidad_editada()) <= Integer.parseInt(lead.getCantidad())) {

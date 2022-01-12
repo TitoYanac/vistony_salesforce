@@ -212,14 +212,17 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
             @Override
             public void onClick(View v) {
                 //Evalua Si las Acciones en ImageView estan Habilitadas
-                if(ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems())
-                {
+                Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.ArraylistaPromocionCabeceraEntit.get(position).isEstadoitems(): "+ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems());
+                //if(ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems())
+                //{
                     //Declara variable de Caja de Texto influenciada por los botones + y -
                     int valorCaja = 0;
                     String cantidadPromocion;
                     //Incrementa en 1 el Valor de Caja y lo multiplica por la cantidad en la Cabecera de Promocion
                     valorCaja =Integer.parseInt(lead.cantidadcompra);
                     //Evalua si la Cantidad Pendiente en el Fragment PromocionCabeceraView - la cantidad en el valorCaja es = a 0
+                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.valorCaja: "+valorCaja);
                     if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) - valorCaja == 0) {
                         int x=0;
                         //Inserta sobre la Caja de Texto la Cantidad Actual + 1
@@ -332,20 +335,23 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                             }
                         }
                     }
-                }
+                //}
             }});
 
         holder.imv_decrementar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Evalua Si las Acciones en ImageView estan Habilitadas
-                if(ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems())
-                {
+                Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.ArraylistaPromocionCabeceraEntit.get(position).isEstadoitems(): "+ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems());
+                //if(ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems())
+                //{
                     //Declara variable de Caja de Texto influenciada por los botones + y -
                     int valorCaja = 0;
                     String cantidadPromocion;
                     //Incrementa en 1 el Valor de Caja y lo multiplica por la cantidad en la Cabecera de Promocion
                     valorCaja =Integer.parseInt(lead.cantidadcompra);
+                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.valorCaja: "+valorCaja);
                     //Evalua si la Cantidad Pendiente en el Fragment PromocionCabeceraView - la cantidad en el valorCaja es = a 0
                     if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) - valorCaja == 0) {
                         //Inserta sobre la Caja de Texto la Cantidad Actual - 1
@@ -440,7 +446,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                             holder.imv_editar_promocion_detalle.setEnabled(true);
                         }
                     }
-                }
+                //}
             }});
         /*holder.et_cant_promocion.addTextChangedListener(new TextWatcher() {
             @Override

@@ -976,7 +976,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
             porcdesccont=listaPrecioDetalleSQLiteEntities.get(i).getPorcentaje_descuento();
         }
         boolean resultado=false;
-        if(Float.parseFloat(valoreditext)>Float.parseFloat(porcdesccont))
+        if(Float.parseFloat(valoreditext)>Float.parseFloat(SesionEntity.U_VIS_CashDscnt ))
         {
             resultado=false;
         }else

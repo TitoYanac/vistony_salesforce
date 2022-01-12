@@ -32,6 +32,7 @@ public class QuotasPerCustomerInvoiceRepository extends ViewModel {
             Context context,
             String CardCode
     ){
+        status= new MutableLiveData<>();
         Config.getClient().create(Api.class).getQuotasPerCustomerInvoice(Imei,CardCode).enqueue(new Callback<QuotasPerCustomerInvoiceEntityResponse>() {
             @Override
             public void onResponse(Call<QuotasPerCustomerInvoiceEntityResponse> call, Response<QuotasPerCustomerInvoiceEntityResponse> response) {

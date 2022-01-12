@@ -65,6 +65,9 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
 
     public void generarPdf(Context context, List<QuotasPerCustomerInvoiceEntity> quotasPerCustomerInvoiceEntity
             , List<QuotasPerCustomerDetailEntity> quotasPerCustomerDetailEntity, ArrayList<ListaClienteCabeceraEntity> ListaClienteCabeceraEntity)  {
+        Log.e("REOS","QuotasPerCustomerPDF.generarPdf.quotasPerCustomerInvoiceEntity.SIZE():"+quotasPerCustomerInvoiceEntity.size());
+        Log.e("REOS","QuotasPerCustomerPDF.generarPdf.quotasPerCustomerDetailEntity.SIZE():"+quotasPerCustomerDetailEntity.size());
+        Log.e("REOS","QuotasPerCustomerPDF.generarPdf.ListaClienteCabeceraEntity.SIZE():"+ListaClienteCabeceraEntity.size());
         // Creamos el documento.
         Rectangle pagina = new Rectangle(
                 36, 36,
@@ -233,7 +236,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 PdfPTable tbllblfactura = new PdfPTable(1);
                 tbllblfactura.setWidthPercentage(100);
                 PdfPCell celltbllblfactura = null;
-                celltbllblfactura=new PdfPCell(new Phrase(quotasPerCustomerInvoiceEntity.get(l).getNrofactura()+"***********************************************",font2 ));
+                celltbllblfactura=new PdfPCell(new Phrase(quotasPerCustomerInvoiceEntity.get(l).getNrofactura()+"*******************************************",font2 ));
                 celltbllblfactura.disableBorderSide(Rectangle.BOX);
                 celltbllblfactura.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tbllblfactura.addCell(celltbllblfactura);
@@ -487,7 +490,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
 
     private void OpenDocumentPDF(String CardCode,Context context)
     {
-        try {
+
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator
                     +NOMBRE_DIRECTORIO+File.separator+CardCode+".pdf");
 
@@ -496,6 +499,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
             Intent target = new Intent(Intent.ACTION_VIEW);
             target.setDataAndType(excelPath,"application/pdf");
             target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
             context.startActivity(target);
         } catch (Exception e) {
             e.printStackTrace();

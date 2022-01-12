@@ -188,10 +188,10 @@ public class LoginView extends AppCompatActivity{
 
     }
 
-    /*private void getCrash()
+    private void getCrash()
     {
         Induvis.getCrashLytics();
-    }*/
+    }
 
     @Override
     public void onResume(){
@@ -324,11 +324,12 @@ public class LoginView extends AppCompatActivity{
             Sesion.phone=userEntity.getPlanta();
             Sesion.maxDateDeposit=userEntity.getChkbloqueopago();
             Log.e("REOS","LoginView.Sesion.rate: "+Sesion.rate);
+            Log.e("REOS","LoginView.Sesion.U_VIS_CashDscnt: "+Sesion.U_VIS_CashDscnt);
             String country=userEntity.getCountry();
             String language=userEntity.getLenguage();
 
             Log.e("REOS","LoginView-SesionEntity.Print" + Sesion.Print);
-            //getCrash();
+            getCrash();
 
             /*String dato="",dato1="",dato2="";
             String [] forzadoerror=dato.split("-");
