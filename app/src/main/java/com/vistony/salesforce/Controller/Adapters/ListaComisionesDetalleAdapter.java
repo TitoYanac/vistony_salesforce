@@ -1,7 +1,12 @@
 package com.vistony.salesforce.Controller.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,11 +71,19 @@ public class ListaComisionesDetalleAdapter  extends
         ArrayList<ListaComisionesDetalleEntity> listaComisionesDetalleEntities = new ArrayList<>();
         listaComisionesDetalleEntities.add(lead);
 
+
+
         Drawable gradiente;
         if (Float.parseFloat(lead.getPorcentajeavance()) >= 0 && Float.parseFloat(lead.getPorcentajeavance()) <= 30)
         {
+
+            int h = holder.v_gradiente_comisiones_detalle.getHeight();
+            ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
+            mDrawable.getPaint().setShader(new LinearGradient(0, 0, 0, h, Color.parseColor("#d50000"), Color.parseColor("#ff5722"), Shader.TileMode.REPEAT));
+            holder.v_gradiente_comisiones_detalle.setBackgroundDrawable(mDrawable);
+
             gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_gradiente_muy_bajo, null);
-            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
+            //holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
 
         } else if (Float.parseFloat(lead.getPorcentajeavance()) >= 31 && Float.parseFloat(lead.getPorcentajeavance()) <= 60)
         {

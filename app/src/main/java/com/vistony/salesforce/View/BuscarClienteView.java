@@ -248,8 +248,10 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText;
-        listaConsClienteCabeceraAdapter.filter(text);
+        if(listaConsClienteCabeceraAdapter!=null)
+        {
+            listaConsClienteCabeceraAdapter.filter(newText);
+        }
         return true;
     }
 }

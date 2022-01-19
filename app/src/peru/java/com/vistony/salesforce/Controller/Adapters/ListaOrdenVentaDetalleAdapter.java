@@ -967,6 +967,15 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
     public boolean ValidarPorcentajeDescuentoContado(String valoreditext,String producto_id)
     {
         String porcdesccont="";
+        float editextDescount;
+        if(valoreditext.isEmpty()||valoreditext=="")
+        {
+            editextDescount=0;
+        }
+        else
+            {
+                editextDescount=Float.parseFloat(valoreditext);
+            }
         ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
         ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(getContext());
         listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(producto_id,SesionEntity.TipoListaPrecio);
@@ -976,7 +985,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
             porcdesccont=listaPrecioDetalleSQLiteEntities.get(i).getPorcentaje_descuento();
         }
         boolean resultado=false;
-        if(Float.parseFloat(valoreditext)>Float.parseFloat(SesionEntity.U_VIS_CashDscnt ))
+        if(editextDescount>Float.parseFloat(SesionEntity.U_VIS_CashDscnt ))
         {
             resultado=false;
         }else

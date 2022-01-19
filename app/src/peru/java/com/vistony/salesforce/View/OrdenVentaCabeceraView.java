@@ -39,6 +39,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoPedidoPDF;
@@ -129,7 +131,7 @@ public class OrdenVentaCabeceraView extends Fragment {
     static CheckBox chk_descuento_contado;
     ArrayList<ListaOrdenVentaCabeceraEntity> listaOrdenVentaCabeceraEntities;
     ArrayAdapter<String> comboAdapterdescuento;
-
+    Trace myTrace;
     Boolean confirmationRequestErp=false;
     List<String> values;
     String cantidaddescuento,historicoOVcantidaddescuento;
@@ -456,7 +458,8 @@ public class OrdenVentaCabeceraView extends Fragment {
         btn_detalle_orden_venta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                myTrace = FirebasePerformance.getInstance().newTrace("test_trace");
+                myTrace.start();
                 btn_detalle_orden_venta.setEnabled(false);
                 btn_detalle_orden_venta.setClickable(false);
                 alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
@@ -1077,7 +1080,7 @@ public class OrdenVentaCabeceraView extends Fragment {
 
                 pd.dismiss();
             });
-
+            myTrace.stop();
 
             //HiloEnviarNubeOV hiloEnviarNubeOV = new HiloEnviarNubeOV();
             //hiloEnviarNubeOV.execute(Jsonx);

@@ -76,16 +76,21 @@ public class ListaListadoPromocionAdapter extends ArrayAdapter<ListaListadoPromo
         holder.relativeListaListadoPromocion.setOnClickListener(new View.OnClickListener() {
                                                            @Override
                                                            public void onClick(View v) {
+                                                               try {
 
-                                                               ListaListadoPromocionEntity listaListadoPromocionEntity=new ListaListadoPromocionEntity();
-                                                               listaListadoPromocionEntity.id = lead.getId().toString();
-                                                               listaListadoPromocionEntity.lista_precio = lead.getLista_precio().toString();
-                                                               arraylistaListadoPromocionEntity.add(listaListadoPromocionEntity);
+                                                                   ListaListadoPromocionEntity listaListadoPromocionEntity = new ListaListadoPromocionEntity();
+                                                                   listaListadoPromocionEntity.id = lead.getId().toString();
+                                                                   listaListadoPromocionEntity.lista_precio = lead.getLista_precio().toString();
+                                                                   arraylistaListadoPromocionEntity.add(listaListadoPromocionEntity);
 
-                                                               fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
-                                                               FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                                               transaction.add(R.id.content_menu_view, listadoPromocionView.newInstanceEnviaListaPromocion(arraylistaListadoPromocionEntity));
-                                                           }
+                                                                   fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+                                                                   FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                                                   transaction.add(R.id.content_menu_view, listadoPromocionView.newInstanceEnviaListaPromocion(arraylistaListadoPromocionEntity));
+                                                               }catch (Exception e)
+                                                               {
+                                                                   e.printStackTrace();
+                                                               }
+                                                               }
                                                        }
 
         );

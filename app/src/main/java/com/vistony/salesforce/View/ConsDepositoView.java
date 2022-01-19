@@ -334,9 +334,9 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
 */
     @Override
     public void onAttach(Context context) {
-        if(!ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")){
+        /*if(!ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")){
             ListenerBackPress.setCurrentFragment("ConsultaCobranzaParaDepositarView");
-        }
+        }*/
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

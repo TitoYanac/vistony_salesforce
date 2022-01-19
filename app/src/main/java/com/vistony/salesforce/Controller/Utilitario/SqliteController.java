@@ -105,6 +105,7 @@ public class SqliteController extends SQLiteOpenHelper {
 
         if(oldVersion==1&&newVersion==3){
             db.execSQL("CREATE TABLE pricelist (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,pricelist_id TEXT,pricelist TEXT)");
+            db.execSQL("CREATE TABLE motivovisita (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,code TEXT,name TEXT,type TEXT,fecha TEXT)");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN slpCode TEXT");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN userCode TEXT");
             db.execSQL("ALTER TABLE usuario ADD COLUMN rate TEXT");

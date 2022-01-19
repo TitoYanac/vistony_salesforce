@@ -66,21 +66,21 @@ public class FormulasController {
         BigDecimal temp1=new BigDecimal(num1);
         BigDecimal rpta=temp1.add(new BigDecimal(num2));
 
-        return rpta.setScale(3, RoundingMode.HALF_UP).toString();
+        return rpta.setScale(6, RoundingMode.HALF_UP).toString();
     }
 
     public String CalcularMontoTotalconDescuento(String MontoTotalLineaSinDescuento,String MontoDescuento){
         BigDecimal temp1=new BigDecimal(MontoTotalLineaSinDescuento);
 
-        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).setScale(6, RoundingMode.HALF_UP);
 
         return repta.toString();
     }
 
     public String CalcularMontoTotalporLinea(String MontoSubTotalSinDescuento,String MontoDescuento,String MontoImpuesto) {
 
-        BigDecimal xd1=new BigDecimal(MontoSubTotalSinDescuento).setScale(3, RoundingMode.HALF_UP);
-        BigDecimal xd2=new BigDecimal(MontoDescuento).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal xd1=new BigDecimal(MontoSubTotalSinDescuento).setScale(6, RoundingMode.HALF_UP);
+        BigDecimal xd2=new BigDecimal(MontoDescuento).setScale(6, RoundingMode.HALF_UP);
 
         BigDecimal rpta=xd1.subtract(xd2).add(new BigDecimal(MontoImpuesto));
 
@@ -88,8 +88,8 @@ public class FormulasController {
     }
 
     public String CalcularMontoImpuestoPorLinea(String MontoSubtotal,String MontoDescuento,String Impuesto){
-        BigDecimal xd1=new BigDecimal(MontoSubtotal).setScale(3, RoundingMode.HALF_UP);
-        BigDecimal xd2=new BigDecimal(MontoDescuento).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal xd1=new BigDecimal(MontoSubtotal).setScale(6, RoundingMode.HALF_UP);
+        BigDecimal xd2=new BigDecimal(MontoDescuento).setScale(6, RoundingMode.HALF_UP);
         return ""+xd1.subtract(xd2).multiply((new BigDecimal(Impuesto)).multiply(new BigDecimal("0.01")));
     }
 
@@ -103,7 +103,7 @@ public class FormulasController {
 
         Cantidad=(Cantidad.equals(""))?"0":Cantidad;
 
-        BigDecimal preUnit = new BigDecimal(PrecioUnitario).setScale(3,RoundingMode.HALF_UP);
+        BigDecimal preUnit = new BigDecimal(PrecioUnitario).setScale(6,RoundingMode.HALF_UP);
         BigDecimal cant = new BigDecimal(Cantidad);
 
         BigDecimal subTotalLine=preUnit.multiply(cant);
@@ -117,7 +117,7 @@ public class FormulasController {
         BigDecimal monto = new BigDecimal(MontoTotalLineaSinIGV);
         BigDecimal porcentaje = new BigDecimal(PorcentajeDescuento);
 
-        BigDecimal montoDescuento=monto.multiply(porcentaje).divide(new BigDecimal(100),3,RoundingMode.HALF_UP);
+        BigDecimal montoDescuento=monto.multiply(porcentaje).divide(new BigDecimal(100),6,RoundingMode.HALF_UP);
         Log.e("applyDiscountPercentageForLine","=>"+montoDescuento);
 
         return montoDescuento.toString();
@@ -163,11 +163,11 @@ public class FormulasController {
         CalculoTotalGalonaje=ObtenerCalculoTotalGalonesOrdenDetallePromocion(listaOrdenVentaDetalleEntity);
 
         String CalculoTotalIGV="",CalculoTotal="";
-        BigDecimal CalculoSubTotal=new BigDecimal(ObtenerCalculoMontoSubTotalOrdenDetallePromocion(listaOrdenVentaDetalleEntity)).setScale(3,RoundingMode.HALF_UP);
-        BigDecimal CalculoTotalDsct=new BigDecimal(CalculoTotalDescuento).setScale(3,RoundingMode.HALF_UP);
+        BigDecimal CalculoSubTotal=new BigDecimal(ObtenerCalculoMontoSubTotalOrdenDetallePromocion(listaOrdenVentaDetalleEntity)).setScale(6,RoundingMode.HALF_UP);
+        BigDecimal CalculoTotalDsct=new BigDecimal(CalculoTotalDescuento).setScale(6,RoundingMode.HALF_UP);
 
-        CalculoTotalIGV=""+CalculoSubTotal.subtract(CalculoTotalDsct).multiply( new BigDecimal(Induvis.getImpuestoDouble())).setScale(3,RoundingMode.HALF_UP);
-        CalculoTotal=CalculoSubTotal.subtract(CalculoTotalDsct).add(new BigDecimal(CalculoTotalIGV)).setScale(3,RoundingMode.HALF_UP).toString();
+        CalculoTotalIGV=""+CalculoSubTotal.subtract(CalculoTotalDsct).multiply( new BigDecimal(Induvis.getImpuestoDouble())).setScale(6,RoundingMode.HALF_UP);
+        CalculoTotal=CalculoSubTotal.subtract(CalculoTotalDsct).add(new BigDecimal(CalculoTotalIGV)).setScale(6,RoundingMode.HALF_UP).toString();
 
 
         Log.e("setSubtotal",""+CalculoSubTotal);
@@ -201,7 +201,7 @@ public class FormulasController {
 
         if(lead.getOrden_detalle_lista_orden_detalle_promocion()!=null){
             for(int i=0;i<lead.getOrden_detalle_lista_orden_detalle_promocion().size();i++){
-                calculoImpuesto=calculoImpuesto.add(new BigDecimal(lead.getOrden_detalle_lista_orden_detalle_promocion().get(i).getOrden_detalle_monto_igv()).setScale(3,RoundingMode.HALF_UP));
+                calculoImpuesto=calculoImpuesto.add(new BigDecimal(lead.getOrden_detalle_lista_orden_detalle_promocion().get(i).getOrden_detalle_monto_igv()).setScale(6,RoundingMode.HALF_UP));
             }
         }
 
@@ -234,7 +234,7 @@ public class FormulasController {
             }
         }
         Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>"+cacculoDsct);
-        return cacculoDsct.setScale(3, RoundingMode.HALF_UP).toString();
+        return cacculoDsct.setScale(6, RoundingMode.HALF_UP).toString();
     }
 
     public String ObtenerCalculoMontoSubTotalOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista){
@@ -245,7 +245,7 @@ public class FormulasController {
             acum=acum.add( new BigDecimal(Lista.get(i).getOrden_detalle_montosubtotal()));
         }
 
-        return ""+acum.setScale(3, RoundingMode.HALF_UP);
+        return ""+acum.setScale(6, RoundingMode.HALF_UP);
     }
 
     /*public Float ObtenerCalculoPromocion(ArrayList<ListaPromocionCabeceraEntity> Lista) {

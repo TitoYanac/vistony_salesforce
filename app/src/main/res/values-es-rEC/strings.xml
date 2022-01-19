@@ -61,7 +61,7 @@
     <string name="lbl_DocAmount">Importe</string>
     <string name="lbl_balance">Saldo</string>
     <string name="lbl_kardex_of_payment">Kardex de Pago</string>
-    <string name="lbl_chk_pedido">Pedidos/Cotizacion</string>
+    <string name="lbl_chk_pedido">Pedidos/Cotización</string>
     <string name="lbl_type_generate_document_pdf">Generar PDF</string>
     <string name="lbl_type_send_sms">Enviar SMS</string>
     <string name="lbl_type_validate_document_pdf">Validar PDF</string>

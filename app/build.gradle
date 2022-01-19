@@ -30,7 +30,7 @@ android {
                 abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
             }
             manifestPlaceholders = [appName:"Test Sales Force"]
-            buildConfigField('String' , 'BASE_ENVIRONMENT', '".test/api"')
+            buildConfigField('String' , 'BASE_ENVIRONMENT', '".test2/api"')
             signingConfig  signingConfigs.config
     }
 
@@ -70,7 +70,7 @@ android {
             applicationIdSuffix ".ecuador"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             buildConfigField('String' , 'BASE_ENDPOINT', '"/ec"')
-            versionName "1.0.0"
+            versionName "1.0.2"
             manifestPlaceholders = [country:"Ecuador"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"EC"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')

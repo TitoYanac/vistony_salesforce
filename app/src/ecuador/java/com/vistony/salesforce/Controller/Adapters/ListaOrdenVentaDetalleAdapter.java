@@ -256,7 +256,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                 lead.setOrden_detalle_monto_igv(formulasController.CalcularMontoImpuestoOrdenDetallePromocionLinea(lead));
 
                 BigDecimal montoTotalconDescuento12=new BigDecimal(formulasController.CalcularMontoTotalconDescuento(lead.getOrden_detalle_montosubtotal(),lead.getOrden_detalle_monto_descuento()));
-                montoTotalconDescuento12.add(new BigDecimal(lead.getOrden_detalle_monto_igv())).setScale(3,RoundingMode.HALF_UP);
+                montoTotalconDescuento12.add(new BigDecimal(lead.getOrden_detalle_monto_igv())).setScale(6,RoundingMode.HALF_UP);
 
                 lead.setOrden_detalle_montototallinea(montoTotalconDescuento12.toString());
 
@@ -437,8 +437,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
 
                     BigDecimal acumImpuesto=new BigDecimal(lead.getOrden_detalle_monto_igv());
 
-                    //lead.setOrden_detalle_montototallinea(acumImpuesto.add(new BigDecimal(montoToalDsct)).setScale(3,RoundingMode.HALF_UP).toString() );
-                    lead.setOrden_detalle_montototallinea(acumImpuesto.add(new BigDecimal(montoToalDsct)).setScale(3,RoundingMode.HALF_UP).toString() );
+                    //lead.setOrden_detalle_montototallinea(acumImpuesto.add(new BigDecimal(montoToalDsct)).setScale(6,RoundingMode.HALF_UP).toString() );
+                    lead.setOrden_detalle_montototallinea(acumImpuesto.add(new BigDecimal(montoToalDsct)).setScale(6,RoundingMode.HALF_UP).toString() );
 
                     //Mostrar total en moneda de acuerdo a la region
                     ///////////////////////////////////////////////////////////////////////////////////////
@@ -457,7 +457,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                             BigDecimal montoPorLinea123=new BigDecimal(montoLineaCUMOXD);
 
                             lead.setOrden_detalle_monto_igv(formulasController.CalcularMontoImpuestoOrdenDetallePromocionLinea(lead));
-                            lead.setOrden_detalle_montototallinea(montoPorLinea123.add(new BigDecimal(lead.getOrden_detalle_monto_igv())).setScale(3,RoundingMode.HALF_UP).toString());
+                            lead.setOrden_detalle_montototallinea(montoPorLinea123.add(new BigDecimal(lead.getOrden_detalle_monto_igv())).setScale(6,RoundingMode.HALF_UP).toString());
 
                             OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotalcondescuento(lead.getOrden_detalle_montosubtotalcondescuento());
                             OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotal(lead.getOrden_detalle_montosubtotal());
@@ -709,7 +709,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
 
                     BigDecimal detalle_monto_igv= new BigDecimal(listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_igv());
 
-                    String valueeee=montoTotalconDescuento.add(detalle_monto_igv).setScale(3, RoundingMode.HALF_UP).toString();
+                    String valueeee=montoTotalconDescuento.add(detalle_monto_igv).setScale(6, RoundingMode.HALF_UP).toString();
                     ///////////////////////TOTAL X LINEA//////////////////////////////////////////////
 
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea = valueeee;
@@ -776,11 +776,11 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                             BigDecimal montoTotalconDescuento1=new BigDecimal(Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
                                     listaOrdenVentaDetallePromocionEntity.getOrden_detalle_montosubtotal(),
                                     listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento()
-                            ))).setScale(3, RoundingMode.HALF_UP);
+                            ))).setScale(6, RoundingMode.HALF_UP);
 
-                            BigDecimal detalle_monto_igv1=new BigDecimal(listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_igv()).setScale(3, RoundingMode.HALF_UP);
+                            BigDecimal detalle_monto_igv1=new BigDecimal(listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_igv()).setScale(6, RoundingMode.HALF_UP);
 
-                            String asdasdas=montoTotalconDescuento1.add(detalle_monto_igv1).setScale(3, RoundingMode.HALF_UP).toString();
+                            String asdasdas=montoTotalconDescuento1.add(detalle_monto_igv1).setScale(6, RoundingMode.HALF_UP).toString();
 
                             listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea =asdasdas ;
                             listaOrdenVentaDetallePromocionEntity.orden_detalle_lista_promocion_cabecera = null;
@@ -877,14 +877,14 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                         Induvis.getImpuestoString()
                 );
 
-                BigDecimal totalIgv=new BigDecimal(listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_igv()).setScale(3, RoundingMode.HALF_UP);
+                BigDecimal totalIgv=new BigDecimal(listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_igv()).setScale(6, RoundingMode.HALF_UP);
                 BigDecimal montoTotalconDescuento3=new BigDecimal(formulasController.CalcularMontoTotalconDescuento(
                         listaOrdenVentaDetallePromocionEntity.getOrden_detalle_montosubtotal(),
                         listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento()
-                )).setScale(3, RoundingMode.HALF_UP);
+                )).setScale(6, RoundingMode.HALF_UP);
 
 
-                String wetwr=totalIgv.add(montoTotalconDescuento3).setScale(3, RoundingMode.HALF_UP).toString();
+                String wetwr=totalIgv.add(montoTotalconDescuento3).setScale(6, RoundingMode.HALF_UP).toString();
 
                 listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea =wetwr;
 

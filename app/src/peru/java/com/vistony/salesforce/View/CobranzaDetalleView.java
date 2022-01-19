@@ -551,42 +551,46 @@ public class CobranzaDetalleView extends Fragment {
             }
         });
 
-
-        if (getArguments() != null) {
-            if (!(Listado == null)) {
-                tv_recibo.setText(recibo_generado);
-                if (chkqrvalidado.equals("False") || chkqrvalidado.equals("N")) {
-                    chk_validacionqr.setChecked(false);
-
-
-                } else if (chkqrvalidado.equals("True") || chkqrvalidado.equals("Y")) {
-                    chk_validacionqr.setChecked(true);
-                }
-
-                if (Estadopagopos != null && Estadopagopos.equals("Y")) {
-                    chk_pago_pos.setChecked(true);
-                } else {
-                    chk_pago_pos.setChecked(false);
-                }
-
-                if (Estadopagoadelantado.equals("1")) {
-                    chkpagoadelantado.setChecked(true);
-                }
+        try {
+            if (getArguments() != null) {
+                if (!(Listado == null)) {
+                    tv_recibo.setText(recibo_generado);
+                    if (chkqrvalidado.equals("False") || chkqrvalidado.equals("N")) {
+                        chk_validacionqr.setChecked(false);
 
 
-            } else {
+                    } else if (chkqrvalidado.equals("True") || chkqrvalidado.equals("Y")) {
+                        chk_validacionqr.setChecked(true);
+                    }
 
-                if (SesionEntity.pagodirecto.equals("Y")) {
-                    chk_pago_directo.setChecked(true);
-                    chk_bancarizado.setEnabled(false);
-                    chk_bancarizado.setChecked(false);
-                    chk_bancarizado.setFocusable(false);
-                    chk_bancarizado.setClickable(false);
+                    if (Estadopagopos != null && Estadopagopos.equals("Y")) {
+                        chk_pago_pos.setChecked(true);
+                    } else {
+                        chk_pago_pos.setChecked(false);
+                    }
+
+                    if (Estadopagoadelantado.equals("1")) {
+                        chkpagoadelantado.setChecked(true);
+                    }
+
 
                 } else {
-                    chk_pago_directo.setChecked(false);
+
+                    if (SesionEntity.pagodirecto.equals("Y")) {
+                        chk_pago_directo.setChecked(true);
+                        chk_bancarizado.setEnabled(false);
+                        chk_bancarizado.setChecked(false);
+                        chk_bancarizado.setFocusable(false);
+                        chk_bancarizado.setClickable(false);
+
+                    } else {
+                        chk_pago_directo.setChecked(false);
+                    }
                 }
             }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
         }
 
         if ((Listado == null)) {

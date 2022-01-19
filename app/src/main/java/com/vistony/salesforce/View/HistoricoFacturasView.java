@@ -180,8 +180,10 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText;
-        listaHistoricoFacturasAdapter.filter(text);
+        if(listaHistoricoFacturasAdapter!=null)
+        {
+            listaHistoricoFacturasAdapter.filter(newText);
+        }
         return true;
     }
     @Override

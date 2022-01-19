@@ -465,9 +465,17 @@ public class OrdenVentaCabeceraView extends Fragment {
             @Override
             public void onClick(View v) {
 
-                btn_detalle_orden_venta.setEnabled(false);
-                btn_detalle_orden_venta.setClickable(false);
-                alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
+                if(!tv_terminopago.getText().equals(""))
+                {
+                    btn_detalle_orden_venta.setEnabled(false);
+                    btn_detalle_orden_venta.setClickable(false);
+                    alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
+                }
+                else
+                    {
+                        //Toast.makeText(getContext(), "Elegir Termino de Pago", Toast.LENGTH_SHORT).show();
+                        alertaAdvertencia("Elegir Termino de Pago!!!").show();
+                    }
             }
         });
 
@@ -1271,6 +1279,35 @@ public class OrdenVentaCabeceraView extends Fragment {
     private void obtenerTituloFormulario()
     {
         getActivity().setTitle(Induvis.getTituloVentaString());
+    }
+
+
+    private Dialog alertaAdvertencia(String texto) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_alert_dialog_info);
+
+        TextView textTittle = dialog.findViewById(R.id.text_alert_dialog_info);
+        TextView Msj = dialog.findViewById(R.id.textViewMsj_alert_dialog_info);
+        textTittle.setText("Advertencia!!!");
+        Msj.setText(texto);
+
+         ImageView image = (ImageView) dialog.findViewById(R.id.image_alert_dialog_info);
+         Drawable background = image.getBackground();
+         image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK_alert_dialog_info);
+
+        dialogButtonOK.setOnClickListener(v -> {
+
+            dialog.dismiss();
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 
 }

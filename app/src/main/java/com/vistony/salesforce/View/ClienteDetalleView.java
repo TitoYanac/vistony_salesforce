@@ -392,9 +392,9 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     public void onAttach(Context context) {
         super.onAttach(context);
         //Log.e("jpcm","regreso PerPerpERo");
-        if(!ListenerBackPress.getCurrentFragment().equals("FormListClienteDetalleRutaVendedor")){
+        /*if(!ListenerBackPress.getCurrentFragment().equals("FormListClienteDetalleRutaVendedor")){
             ListenerBackPress.setCurrentFragment("FormListaDeudaCliente");
-        }
+        }*/
 
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

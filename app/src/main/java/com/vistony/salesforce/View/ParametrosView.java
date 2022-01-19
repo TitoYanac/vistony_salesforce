@@ -829,7 +829,7 @@ ParametrosView extends Fragment {
 
         protected void onPostExecute(String argumento)
         {
-            getActivity().setTitle("Parametros");
+            //getActivity().setTitle("Parametros");
             ArrayList<ParametrosSQLiteEntity> listaparametrosSQlentity = new ArrayList<ParametrosSQLiteEntity>();
             listaparametrosSQlentity= parametrosSQLite.ObtenerParametros();
 
