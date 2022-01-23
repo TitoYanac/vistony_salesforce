@@ -51,7 +51,11 @@
         <!--<item >S/-SOLES</item>
         <item >US$-DOLARES</item>-->
     </string-array>
-
+    <string-array name="Moneda_Chile" >
+        <item >CLP - PESO CHILENO</item>
+        <!--<item >S/-SOLES</item>
+        <item >US$-DOLARES</item>-->
+    </string-array>
     <string-array name="Moneda_Peru" >
         <item >S/-SOLES</item>
         <item >US$-DOLARES</item>

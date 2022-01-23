@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+//import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,23 +32,24 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricoCobranzaAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
-import com.vistony.salesforce.Dao.Adapters.ListaHistoricoCobranzaDao;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
-import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
-import com.vistony.salesforce.Entity.Adapters.ListaHistoricoDepositoEntity;
+import com.vistony.salesforce.Dao.Adapters.ListaHistoricoCobranzaDao;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
+import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
+import com.vistony.salesforce.Entity.Adapters.ListaHistoricoDepositoEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,7 +59,7 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
+ * {@link HistoricoCobranzaView.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link HistoricoCobranzaView#newInstance} factory method to
  * create an instance of this fragment.
@@ -120,7 +122,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
         //fragment.setArguments(args);
         tipofecha=accion;
         ArrayList<ListaHistoricoDepositoEntity> Lista = (ArrayList<ListaHistoricoDepositoEntity>) param1;
-        Lista.size();
+        //Lista.size();
         b.putSerializable(TAG_1,Lista);
         fragment.setArguments(b);
         return fragment;
@@ -150,7 +152,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
         obtenerHistoricoCobranza.execute();
         HistoricoCobranzaView fragment = new HistoricoCobranzaView();
         return fragment;
-        
+
     }
 
 
@@ -158,7 +160,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Consulta Cobrado");
-         Listado = new ArrayList<ListaHistoricoDepositoEntity>();
+        Listado = new ArrayList<ListaHistoricoDepositoEntity>();
         setHasOptionsMenu(true);
         if (getArguments() != null) {
             //Listado = new  ArrayList<ListaHistoricoDepositoEntity>();
@@ -167,8 +169,12 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
             {
                 mParam1 = getArguments().getString(ARG_PARAM1);
                 if (mParam1.equals("COBRANZA")) {
+
                 }
             }
+
+            //obtenerHistoricoCobranza =  new ObtenerHistoricoCobranza();
+            //obtenerHistoricoCobranza.execute();
         }
 
        /* if (SesionEntity.loginSesion.equals("0")) {
@@ -189,7 +195,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
 
         }
 
-        /*if ((vinculaimpresora.equals("0"))) {
+        /* ((vinculaimpresora.equals("0"))) {
             configImpresoraView = new ConfigImpresoraView();
             configImpresoraView.OpenPrinter(
                     //MenuView.indicador
@@ -216,7 +222,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
                         != PackageManager.PERMISSION_GRANTED)
         {
 
-            requestPermissions(new String[] {Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+            requestPermissions(new String[] {android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
         }
 
     }
@@ -237,7 +243,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
                             != PackageManager.PERMISSION_GRANTED))
                     {
 
-                        requestPermissions(new String[] {Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+                        requestPermissions(new String[] {android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
                     }
                     //break;
                     //}
@@ -271,10 +277,10 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
 
         }
         else
-            {
-                imb_calendario_historico_cobranza.setEnabled(false);
-                btn_consultar_fecha_hisorico_cobranza.setEnabled(false);
-            }
+        {
+            imb_calendario_historico_cobranza.setEnabled(false);
+            btn_consultar_fecha_hisorico_cobranza.setEnabled(false);
+        }
 
         if(tipofecha.equals("Deposito"))
         {
@@ -452,7 +458,9 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
         }
         @Override
         protected String doInBackground(String... arg1) {
-
+            ArrayList<CobranzaDetalleSQLiteEntity> listareciboSQLite = new ArrayList<>();
+            CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
+            ArrayList<ListaHistoricoCobranzaEntity> listaHistoricoCobranzaEntities = new ArrayList<>();
             try {
                 String banco="0",deposito_id="1",fecha="";
                 arraylistahistoricocobranzaentity =  new ArrayList<ListaHistoricoCobranzaEntity>();
@@ -479,8 +487,8 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
 
                 }
                 else
-                    {
-                        Log.e("REOS","HistoricoCobranzaView-ListadoEmpty");
+                {
+                    Log.e("REOS","HistoricoCobranzaView-ListadoEmpty");
                     fecha = tv_fecha_historico_cobranza.getText().toString();
 
                 }
@@ -501,8 +509,8 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
                             SesionEntity.fuerzatrabajo_id,
                             ""
                     );*/
-Log.e("REOS","HistoricoCobranzaView-ingreso con Internet");
-                  HistoricoCobranzaWS historicoCobranzaWS=new HistoricoCobranzaWS(getContext());
+                Log.e("REOS","HistoricoCobranzaView-ingreso con Internet");
+                HistoricoCobranzaWS historicoCobranzaWS=new HistoricoCobranzaWS(getContext());
                    /*arraylistahistoricocobranzaentity = historicoCobranzaWS.getHistoricoCobranza
                                    (
                             SesionEntity.imei,
@@ -518,64 +526,62 @@ Log.e("REOS","HistoricoCobranzaView-ingreso con Internet");
                             //"''"
                     );*/
                 arraylistahistoricocobranzaentity = cobranzaRepository.getHistoricoCobranza
-                        (SesionEntity.imei, fecha, tipofecha);
+                        (SesionEntity.imei, fecha, tipofecha,deposito_id);
                 Log.e("REOS","HistoricoCobranzaView-ObtenerHistoricoCobranza-arraylistahistoricocobranzaentity.size(): "+arraylistahistoricocobranzaentity.size());
                 Log.e("REOS","HistoricoCobranzaView-fecha: "+fecha);
                 Log.e("REOS","HistoricoCobranzaView-tipofecha"+tipofecha);
-                    if((Listado.isEmpty())){
+                if((Listado.isEmpty())){
+                    Log.e("REOS","HistoricoCobranzaView-ListadoisEmpty()");
+                    ArrayList<String> listadepuracion1 = new ArrayList<>();
+                    ArrayList<String> listadepuracion2 = new ArrayList<>();
 
-                        ArrayList<String> listadepuracion1 = new ArrayList<>();
-                        ArrayList<String> listadepuracion2 = new ArrayList<>();
+                    for (int g = 0; g < arraylistahistoricocobranzaentity.size(); g++) {
 
-                        for (int g = 0; g < arraylistahistoricocobranzaentity.size(); g++) {
+                        listadepuracion1.add(arraylistahistoricocobranzaentity.get(g).getRecibo());
+                    }
 
-                            listadepuracion1.add(arraylistahistoricocobranzaentity.get(g).getRecibo());
-                        }
 
-                        ArrayList<CobranzaDetalleSQLiteEntity> listareciboSQLite = new ArrayList<>();
-                        CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
-                        ArrayList<ListaHistoricoCobranzaEntity> listaHistoricoCobranzaEntities = new ArrayList<>();
 
-                        listareciboSQLite = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleConsultaCobradoFecha(parametrofecha, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id);
-                        Log.e("REOS","HistoricoCobranzaView-listareciboSQLite.size(): "+listareciboSQLite.size());
-                        Log.e("REOS","HistoricoCobranzaView-listareciboSQLite"+listareciboSQLite.size());
-                        for (int i = 0; i < listareciboSQLite.size(); i++) {
-                            listadepuracion2.add(listareciboSQLite.get(i).getRecibo());
-                        }
-                        Log.e("REOS","HistoricoCobranzaView-listadepuracion1"+listadepuracion1.size());
-                        Log.e("REOS","HistoricoCobranzaView-listadepuracion2"+listadepuracion2.size());
-                        if (!(listadepuracion1.size() == listadepuracion2.size())) {
-                            listadepuracion2.removeAll(listadepuracion1);
-                            for (int k = 0; k < listadepuracion2.size(); k++) {
-                                for (int l = 0; l < listareciboSQLite.size(); l++) {
-                                    if (listadepuracion2.get(k).equals(listareciboSQLite.get(l).getRecibo())) {
-                                        ListaHistoricoCobranzaEntity listaHCE = new ListaHistoricoCobranzaEntity();
-                                        listaHCE.bancarizacion = listareciboSQLite.get(l).getChkbancarizado();
-                                        listaHCE.banco_id = listareciboSQLite.get(l).getBanco_id();
-                                        listaHCE.cliente_id = listareciboSQLite.get(l).getCliente_id();
-                                        ArrayList<ClienteSQLiteEntity> listaclienteSQLiteEntity = new ArrayList<>();
-                                        ClienteSQlite clienteSQlite = new ClienteSQlite(getContext());
-                                        listaclienteSQLiteEntity = clienteSQlite.ObtenerDatosCliente(listareciboSQLite.get(l).getCliente_id(), SesionEntity.compania_id);
-                                        for (int m=0;m<listaclienteSQLiteEntity.size();m++)
-                                        {
-                                            listaHCE.cliente_nombre = listaclienteSQLiteEntity.get(m).getNombrecliente();
-                                        }
+                    listareciboSQLite = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleConsultaCobradoFecha(parametrofecha, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id);
+                    Log.e("REOS","HistoricoCobranzaView-listareciboSQLite.size(): "+listareciboSQLite.size());
+                    Log.e("REOS","HistoricoCobranzaView-listareciboSQLite"+listareciboSQLite.size());
+                    for (int i = 0; i < listareciboSQLite.size(); i++) {
+                        listadepuracion2.add(listareciboSQLite.get(i).getRecibo());
+                    }
+                    Log.e("REOS","HistoricoCobranzaView-listadepuracion1"+listadepuracion1.size());
+                    Log.e("REOS","HistoricoCobranzaView-listadepuracion2"+listadepuracion2.size());
+                    if (!(listadepuracion1.size() == listadepuracion2.size())) {
+                        listadepuracion2.removeAll(listadepuracion1);
+                        for (int k = 0; k < listadepuracion2.size(); k++) {
+                            for (int l = 0; l < listareciboSQLite.size(); l++) {
+                                if (listadepuracion2.get(k).equals(listareciboSQLite.get(l).getRecibo())) {
+                                    ListaHistoricoCobranzaEntity listaHCE = new ListaHistoricoCobranzaEntity();
+                                    listaHCE.bancarizacion = listareciboSQLite.get(l).getChkbancarizado();
+                                    listaHCE.banco_id = listareciboSQLite.get(l).getBanco_id();
+                                    listaHCE.cliente_id = listareciboSQLite.get(l).getCliente_id();
+                                    ArrayList<ClienteSQLiteEntity> listaclienteSQLiteEntity = new ArrayList<>();
+                                    ClienteSQlite clienteSQlite = new ClienteSQlite(getContext());
+                                    listaclienteSQLiteEntity = clienteSQlite.ObtenerDatosCliente(listareciboSQLite.get(l).getCliente_id(), SesionEntity.compania_id);
+                                    for (int m=0;m<listaclienteSQLiteEntity.size();m++)
+                                    {
+                                        listaHCE.cliente_nombre = listaclienteSQLiteEntity.get(m).getNombrecliente();
+                                    }
 
-                                        //listaHCE.comentario=listareciboSQLite.get(l).getComen
-                                        listaHCE.compania_id = listareciboSQLite.get(l).getCompania_id();
-                                        listaHCE.deposito_id = listareciboSQLite.get(l).getCobranza_id();
-                                        listaHCE.detalle_item = listareciboSQLite.get(l).getId();
-                                        listaHCE.documento_id = listareciboSQLite.get(l).getDocumento_id();
-                                        listaHCE.estado = "PENDIENTE";
-                                        Log.e("REOS","HistoricoCobranzaView-QRvalidado: "+listareciboSQLite.get(l).getChkqrvalidado().toString());
-                                        if (listareciboSQLite.get(l).getChkqrvalidado().equals("Y")) {
-                                            listaHCE.estadoqr = "True";
-                                        } else {
-                                            listaHCE.estadoqr = "False";
-                                        }
-                                        String fechaCobro;
-                                        if(listareciboSQLite.get(l).getFechacobranza().length()==10)
-                                        {
+                                    //listaHCE.comentario=listareciboSQLite.get(l).getComen
+                                    listaHCE.compania_id = listareciboSQLite.get(l).getCompania_id();
+                                    listaHCE.deposito_id = listareciboSQLite.get(l).getCobranza_id();
+                                    listaHCE.detalle_item = listareciboSQLite.get(l).getId();
+                                    listaHCE.documento_id = listareciboSQLite.get(l).getDocumento_id();
+                                    listaHCE.estado = "PENDIENTE";
+                                    Log.e("REOS","HistoricoCobranzaView-QRvalidado: "+listareciboSQLite.get(l).getChkqrvalidado().toString());
+                                    if (listareciboSQLite.get(l).getChkqrvalidado().equals("Y")) {
+                                        listaHCE.estadoqr = "True";
+                                    } else {
+                                        listaHCE.estadoqr = "False";
+                                    }
+                                    String fechaCobro;
+                                    if(listareciboSQLite.get(l).getFechacobranza().length()==10)
+                                    {
                                            /* String[] sourceSplitemision2= listareciboSQLite.get(l).getFechacobranza().split("-");
                                             String anioemision= sourceSplitemision2[0];
                                             String mesemision= sourceSplitemision2[1];
@@ -583,48 +589,109 @@ Log.e("REOS","HistoricoCobranzaView-ingreso con Internet");
 
                                             fechaCobro=diaemision+"/"+mesemision+"/"+anioemision+" 00:00:00";
                                             */
-                                            fechaCobro=listareciboSQLite.get(l).getFechacobranza();
-                                        }
-                                        else
-                                        {
-                                            fechaCobro=listareciboSQLite.get(l).getFechacobranza();
-                                        }
-                                        listaHCE.fechacobranza = fechaCobro;
-
-                                        listaHCE.importedocumento = listareciboSQLite.get(l).getImportedocumento();
-                                        listaHCE.montocobrado = listareciboSQLite.get(l).getSaldocobrado();
-                                        listaHCE.motivoanulacion = listareciboSQLite.get(l).getMotivoanulacion();
-                                        listaHCE.nro_documento = listareciboSQLite.get(l).getNrofactura();
-                                        listaHCE.nuevosaldodocumento = listareciboSQLite.get(l).getNuevosaldodocumento();
-                                        listaHCE.recibo = listareciboSQLite.get(l).getRecibo();
-                                        listaHCE.saldodocumento = listareciboSQLite.get(l).getSaldodocumento();
-                                        //listaHCE.tipoingreso=listareciboSQLite.get(l).ge
-                                        listaHCE.usuario_id = listareciboSQLite.get(l).getUsuario_id();
-                                        listaHCE.chkwsrecibido = listareciboSQLite.get(l).getChkwsrecibido();
-                                        listaHCE.depositodirecto = listareciboSQLite.get(l).getPagodirecto();
-                                        listaHCE.mensajeWS = listareciboSQLite.get(l).getMensajews();
-                                        //listaHCE.chkconciliado=listareciboSQLite.get(l).getC
-                                        arraylistahistoricocobranzaentity.add(listaHCE);
+                                        fechaCobro=listareciboSQLite.get(l).getFechacobranza();
                                     }
+                                    else
+                                    {
+                                        fechaCobro=listareciboSQLite.get(l).getFechacobranza();
+                                    }
+                                    listaHCE.fechacobranza = fechaCobro;
+
+                                    listaHCE.importedocumento = listareciboSQLite.get(l).getImportedocumento();
+                                    listaHCE.montocobrado = listareciboSQLite.get(l).getSaldocobrado();
+                                    listaHCE.motivoanulacion = listareciboSQLite.get(l).getMotivoanulacion();
+                                    listaHCE.nro_documento = listareciboSQLite.get(l).getNrofactura();
+                                    listaHCE.nuevosaldodocumento = listareciboSQLite.get(l).getNuevosaldodocumento();
+                                    listaHCE.recibo = listareciboSQLite.get(l).getRecibo();
+                                    listaHCE.saldodocumento = listareciboSQLite.get(l).getSaldodocumento();
+                                    //listaHCE.tipoingreso=listareciboSQLite.get(l).ge
+                                    listaHCE.usuario_id = listareciboSQLite.get(l).getUsuario_id();
+                                    listaHCE.chkwsrecibido = listareciboSQLite.get(l).getChkwsrecibido();
+                                    listaHCE.depositodirecto = listareciboSQLite.get(l).getPagodirecto();
+                                    listaHCE.mensajeWS = listareciboSQLite.get(l).getMensajews();
+                                    //listaHCE.chkconciliado=listareciboSQLite.get(l).getC
+                                    arraylistahistoricocobranzaentity.add(listaHCE);
                                 }
-
                             }
+
                         }
-
                     }
 
-                    BigDecimal montocobrado=new BigDecimal("0");
-                    for(int i=0;i<arraylistahistoricocobranzaentity.size();i++)
-                    {
-                        montocobrado=montocobrado.add(new BigDecimal(arraylistahistoricocobranzaentity.get(i).getMontocobrado()));
+                }
+                else {
+                    //Obtiene data desde Consulta Deposito
+                    Log.e("REOS", "HistoricoCobranzaView-!ListadoisEmpty()");
+                    for (int i = 0; i<Listado.size(); i++) {
+                        listareciboSQLite = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporDeposito(Listado.get(i).getDeposito_id(),SesionEntity.compania_id);
+                        for (int l = 0; l < listareciboSQLite.size(); l++) {
+                            ListaHistoricoCobranzaEntity listaHCE = new ListaHistoricoCobranzaEntity();
+                            listaHCE.bancarizacion = listareciboSQLite.get(l).getChkbancarizado();
+                            listaHCE.banco_id = listareciboSQLite.get(l).getBanco_id();
+                            listaHCE.cliente_id = listareciboSQLite.get(l).getCliente_id();
+                            ArrayList<ClienteSQLiteEntity> listaclienteSQLiteEntity = new ArrayList<>();
+                            ClienteSQlite clienteSQlite = new ClienteSQlite(getContext());
+                            listaclienteSQLiteEntity = clienteSQlite.ObtenerDatosCliente(listareciboSQLite.get(l).getCliente_id(), SesionEntity.compania_id);
+                            for (int m = 0; m < listaclienteSQLiteEntity.size(); m++) {
+                                listaHCE.cliente_nombre = listaclienteSQLiteEntity.get(m).getNombrecliente();
+                            }
+
+                            //listaHCE.comentario=listareciboSQLite.get(l).getComen
+                            listaHCE.compania_id = listareciboSQLite.get(l).getCompania_id();
+                            listaHCE.deposito_id = listareciboSQLite.get(l).getCobranza_id();
+                            listaHCE.detalle_item = listareciboSQLite.get(l).getId();
+                            listaHCE.documento_id = listareciboSQLite.get(l).getDocumento_id();
+                            listaHCE.estado = "PENDIENTE";
+                            Log.e("REOS", "HistoricoCobranzaView-QRvalidado: " + listareciboSQLite.get(l).getChkqrvalidado().toString());
+                            if (listareciboSQLite.get(l).getChkqrvalidado().equals("Y")) {
+                                listaHCE.estadoqr = "True";
+                            } else {
+                                listaHCE.estadoqr = "False";
+                            }
+                            String fechaCobro;
+                            if (listareciboSQLite.get(l).getFechacobranza().length() == 10) {
+                                           /* String[] sourceSplitemision2= listareciboSQLite.get(l).getFechacobranza().split("-");
+                                            String anioemision= sourceSplitemision2[0];
+                                            String mesemision= sourceSplitemision2[1];
+                                            String diaemision= sourceSplitemision2[2];
+
+                                            fechaCobro=diaemision+"/"+mesemision+"/"+anioemision+" 00:00:00";
+                                            */
+                                fechaCobro = listareciboSQLite.get(l).getFechacobranza();
+                            } else {
+                                fechaCobro = listareciboSQLite.get(l).getFechacobranza();
+                            }
+                            listaHCE.fechacobranza = fechaCobro;
+
+                            listaHCE.importedocumento = listareciboSQLite.get(l).getImportedocumento();
+                            listaHCE.montocobrado = listareciboSQLite.get(l).getSaldocobrado();
+                            listaHCE.motivoanulacion = listareciboSQLite.get(l).getMotivoanulacion();
+                            listaHCE.nro_documento = listareciboSQLite.get(l).getNrofactura();
+                            listaHCE.nuevosaldodocumento = listareciboSQLite.get(l).getNuevosaldodocumento();
+                            listaHCE.recibo = listareciboSQLite.get(l).getRecibo();
+                            listaHCE.saldodocumento = listareciboSQLite.get(l).getSaldodocumento();
+                            //listaHCE.tipoingreso=listareciboSQLite.get(l).ge
+                            listaHCE.usuario_id = listareciboSQLite.get(l).getUsuario_id();
+                            listaHCE.chkwsrecibido = listareciboSQLite.get(l).getChkwsrecibido();
+                            listaHCE.depositodirecto = listareciboSQLite.get(l).getPagodirecto();
+                            listaHCE.mensajeWS = listareciboSQLite.get(l).getMensajews();
+                            //listaHCE.chkconciliado=listareciboSQLite.get(l).getC
+                            arraylistahistoricocobranzaentity.add(listaHCE);
+                        }
                     }
+                }
+
+                BigDecimal montocobrado=new BigDecimal("0");
+                for(int i=0;i<arraylistahistoricocobranzaentity.size();i++)
+                {
+                    montocobrado=montocobrado.add(new BigDecimal(arraylistahistoricocobranzaentity.get(i).getMontocobrado()));
+                }
 
 
-                    setText(tv_monto_cobranza, Convert.currencyForView(montocobrado.setScale(3, RoundingMode.HALF_UP).toString()));
+                setText(tv_monto_cobranza, Convert.currencyForView(montocobrado.setScale(3, RoundingMode.HALF_UP).toString()));
 
-                    cantidad_cobranza=String.valueOf(arraylistahistoricocobranzaentity.size());
+                cantidad_cobranza=String.valueOf(arraylistahistoricocobranzaentity.size());
 
-                    setText(tv_cantidad_cobranza,cantidad_cobranza);
+                setText(tv_cantidad_cobranza,cantidad_cobranza);
 
 
 
@@ -659,8 +726,8 @@ Log.e("REOS","HistoricoCobranzaView-ingreso con Internet");
             {
                 Toast.makeText(getContext(), "Cobranzas Obtenidas Exitosamente", Toast.LENGTH_SHORT).show();
             }else{
-                    Toast.makeText(getContext(), "No se obtuvieron Cobranzas", Toast.LENGTH_LONG).show();
-                }
+                Toast.makeText(getContext(), "No se obtuvieron Cobranzas", Toast.LENGTH_LONG).show();
+            }
 
             obtenerHistoricoCobranza =  new ObtenerHistoricoCobranza();
 

@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -17,6 +18,13 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+
+/*
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+*/
+
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,37 +49,43 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
-import com.vistony.salesforce.Controller.Adapters.ListaCobranzaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoCobranzaPDF;
+import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
+import com.vistony.salesforce.Controller.Adapters.ListaCobranzaDetalleAdapter;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
-import com.vistony.salesforce.Dao.Adapters.ListaCobranzaDetalleDao;
-import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
+import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
+import com.vistony.salesforce.Dao.Adapters.ListaCobranzaDetalleDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
-import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
-import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
-import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
+import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
+import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
+import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import io.sentry.Sentry;
 
@@ -90,7 +104,7 @@ public class CobranzaDetalleView extends Fragment {
 
     BigDecimal cobrado,nuevo_saldo,saldo;
 
-   // float cobrado=0,nuevo_saldo=0,saldo=0;
+    // float cobrado=0,nuevo_saldo=0,saldo=0;
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
 
     String fecha,et_cobrado,chkqrvalidado,recibo_generado;
@@ -281,11 +295,11 @@ public class CobranzaDetalleView extends Fragment {
                         Log.e("REOS","CobranzaDetalleView-Listado.get(j).getDepositodirecto(): "+Listado.get(j).getDepositodirecto());
                         if(Listado.get(j).getDepositodirecto().equals("Y"))
                         {
-                            Estadodepositodirecto="1";
+                            Estadodepositodirecto="Y";
                         }
                         else if(Listado.get(j).getDepositodirecto().equals("N"))
                         {
-                            Estadodepositodirecto="0";
+                            Estadodepositodirecto="N";
                         }
 
                         Estadopagopos=SesionEntity.pagopos;
@@ -297,13 +311,13 @@ public class CobranzaDetalleView extends Fragment {
                         }else{
                             Log.e("jpcm","FEHCA LLENA");
                         }
-                        if(Listado.get(j).getDocumento_id().equals(""))
+                        if(Listado.get(j).getDocumento_id().equals("")||Listado.get(j).getDocumento_id().equals("0"))
                         {
                             Estadopagoadelantado="1";
                         }else
-                            {
-                                Estadopagoadelantado="0";
-                            }
+                        {
+                            Estadopagoadelantado="0";
+                        }
 
                        /* String  FechaDiferida="";
                         if(sourceSplitefechadiferida.length>1)
@@ -375,15 +389,13 @@ public class CobranzaDetalleView extends Fragment {
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo= (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
-
-
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                  DialogFragment dialogFragment = new CobranzaDetalleDialogController();
-                  dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
-              }
-          }
+                                                   @Override
+                                                   public void onClick(View view) {
+                                                       DialogFragment dialogFragment = new CobranzaDetalleDialogController();
+                                                       dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
+                                                   }
+                                               }
         );
 
         getActivity().setTitle("Cobranza");
@@ -405,39 +417,39 @@ public class CobranzaDetalleView extends Fragment {
         }
 
         imbaceptar.setOnClickListener(view -> {
-            String saldo_evaluar="0";
-            if (!chkpagoadelantado.isChecked())
-            {
-                for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++) {
-                    saldo_evaluar = listaClienteDetalleAdapterFragment.get(i).saldo;
-                }
-            }
+                    String saldo_evaluar="0";
+                    if (!chkpagoadelantado.isChecked())
+                    {
+                        for (int i = 0; i < listaClienteDetalleAdapterFragment.size(); i++) {
+                            saldo_evaluar = listaClienteDetalleAdapterFragment.get(i).saldo;
+                        }
+                    }
 
-            String temporal="";
+                    String temporal="";
 
-            if(et_cobrado_edit.getText()==null || et_cobrado_edit.getText().toString().length()==0){
-                temporal="0";
-            }else{
-                temporal=et_cobrado_edit.getText().toString();
-            }
+                    if(et_cobrado_edit.getText()==null || et_cobrado_edit.getText().toString().length()==0){
+                        temporal="0";
+                    }else{
+                        temporal=et_cobrado_edit.getText().toString();
+                    }
 
-            Log.e("Monto=>",""+temporal);
-            BigDecimal montoIngresado=new BigDecimal(temporal);
+                    Log.e("Monto=>",""+temporal);
+                    BigDecimal montoIngresado=new BigDecimal(temporal);
 
-            if(!(montoIngresado.compareTo(BigDecimal.ZERO)>0)){
-                et_cobrado_edit.setText(null);
-                Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
-              }else{
+                    if(!(montoIngresado.compareTo(BigDecimal.ZERO)>0)){
+                        et_cobrado_edit.setText(null);
+                        Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
+                    }else{
 
 
-                    BigDecimal montoCobrado=new BigDecimal(et_cobrado_edit.getText().toString());
+                        BigDecimal montoCobrado=new BigDecimal(et_cobrado_edit.getText().toString());
 
                         Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
                         drawable = DrawableCompat.wrap(drawable);
                         DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
                         menu_variable.findItem(R.id.guardar).setIcon(drawable);
                         guardar.setEnabled(true);
-                Log.e("Monto=>",">"+montoCobrado.toString());
+                        Log.e("Monto=>",">"+montoCobrado.toString());
 
                         if (chkpagoadelantado.isChecked()) {
                             for (int j = 0; j < listaClienteDetalleAdapterFragment.size(); j++) {
@@ -495,8 +507,8 @@ public class CobranzaDetalleView extends Fragment {
                             }
                         }
 
-            }
-        }
+                    }
+                }
         );
         imbcancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -581,11 +593,11 @@ public class CobranzaDetalleView extends Fragment {
             @Override
             public void onClick(View v) {
                 boolean estado=chk_bancarizado.isChecked();
-                 if(chk_bancarizado.isChecked()){
-                     createSimpleDialog(estado).show();
-                 }else{
+                if(chk_bancarizado.isChecked()){
                     createSimpleDialog(estado).show();
-                 }
+                }else{
+                    createSimpleDialog(estado).show();
+                }
 
             }});
 
@@ -685,25 +697,25 @@ public class CobranzaDetalleView extends Fragment {
                             });
         }
         else
-            {
-                builder.setTitle("Advertencia")
-                        .setMessage("Esta Seguro de DesMarcar el Recibo como Bancarizado")
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+        {
+            builder.setTitle("Advertencia")
+                    .setMessage("Esta Seguro de DesMarcar el Recibo como Bancarizado")
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
 
-                                    }
-                                })
-                        .setNegativeButton("CANCELAR",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        chk_bancarizado.setChecked(true);
-                                    }
-                                });
-            }
+                                }
+                            })
+                    .setNegativeButton("CANCELAR",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    chk_bancarizado.setChecked(true);
+                                }
+                            });
+        }
         return builder.create();
     }
     @Override
@@ -743,22 +755,22 @@ public class CobranzaDetalleView extends Fragment {
                 imbcomentariorecibo.setEnabled(false);
 
             }else{
-                    comentario="";
-            Drawable drawable = menu.findItem(R.id.guardar).getIcon();
-            drawable = DrawableCompat.wrap(drawable);
-            DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
-            menu.findItem(R.id.guardar).setIcon(drawable);
-                    Drawable drawable2 = menu.findItem(R.id.generarpdf).getIcon();
-                    drawable2 = DrawableCompat.wrap(drawable2);
-                    DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
-                    menu.findItem(R.id.generarpdf).setIcon(drawable2);
-                    Drawable drawable3 = menu.findItem(R.id.validarqr).getIcon();
-                    drawable3 = DrawableCompat.wrap(drawable3);
-                    DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black));
-                    menu.findItem(R.id.validarqr).setIcon(drawable3);
-                    //imbcomentariorecibo.setColorFilter(Color.BLUE);
+                comentario="";
+                Drawable drawable = menu.findItem(R.id.guardar).getIcon();
+                drawable = DrawableCompat.wrap(drawable);
+                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+                menu.findItem(R.id.guardar).setIcon(drawable);
+                Drawable drawable2 = menu.findItem(R.id.generarpdf).getIcon();
+                drawable2 = DrawableCompat.wrap(drawable2);
+                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
+                menu.findItem(R.id.generarpdf).setIcon(drawable2);
+                Drawable drawable3 = menu.findItem(R.id.validarqr).getIcon();
+                drawable3 = DrawableCompat.wrap(drawable3);
+                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black));
+                menu.findItem(R.id.validarqr).setIcon(drawable3);
+                //imbcomentariorecibo.setColorFilter(Color.BLUE);
 
-                }
+            }
         }
 
         vinculaimpresora="1"; ///para chile no se requiere impresora
@@ -769,7 +781,7 @@ public class CobranzaDetalleView extends Fragment {
             Toast.makeText(getContext(), "Advertencia: Impresora No Vinculada - Revisar en Configuracion"+comentario, Toast.LENGTH_SHORT).show();
         }
 
-                super.onCreateOptionsMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
 
     }
 
@@ -804,7 +816,7 @@ public class CobranzaDetalleView extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof OnFragmentInteractionListener) { 
+        if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
@@ -826,7 +838,7 @@ public class CobranzaDetalleView extends Fragment {
 
             case R.id.guardar:
                 if(SesionEntity.fuerzatrabajo_id==null && SesionEntity.nombrefuerzadetrabajo==null && SesionEntity.compania_id==null){
-                //if(true){
+                    //if(true){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Advertencia")
                             .setMessage("Tu sesión a expirado")
@@ -869,60 +881,60 @@ public class CobranzaDetalleView extends Fragment {
                                 Toast.makeText(getContext(), "No puedes Guardar un Recibo con valor 0 ", Toast.LENGTH_SHORT).show();
                             }else{
 
-                                    if(vinculaimpresora.equals("0")){
-                                        //generarpdf.setEnabled(true);
-                                        Toast.makeText(getContext(), "Impresora No Vinculada - Favor de Vincular para proseguir", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        switch(SesionEntity.pagopos) {
-                                            case "Y":
-                                                tipocobranza = "Cobranza/Deposito";
-                                                Log.e("REOS", "CobranzaDetalleView-alertaGuardarCobranza-SesionEntity.pagopos:Cobranza/Deposito" + SesionEntity.pagopos);
-                                                resultado = GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment, tipocobranza);
-                                                break;
-                                            case "N":
-                                                tipocobranza = "Cobranza";
-                                                Log.e("REOS", "CobranzaDetalleView-alertaGuardarCobranza-SesionEntity.pagopos:Cobranza" + SesionEntity.pagopos);
-                                                resultado = GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment, tipocobranza);
-                                                break;
-                                        }
-                                            if(resultado>0){
-                                                guardar.setEnabled(false);
-                                                //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
-                                                Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
-                                                drawable = DrawableCompat.wrap(drawable);
-                                                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
-                                                menu_variable.findItem(R.id.guardar).setIcon(drawable);
-                                                Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                                                drawable2 = DrawableCompat.wrap(drawable2);
-                                                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
-                                                menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                                                //guardar.setEnabled(false);
-                                                //imbcomentariorecibo.setColorFilter(Color.BLACK);
-                                                imbcomentariorecibo.setEnabled(false);
+                                if(vinculaimpresora.equals("0")){
+                                    //generarpdf.setEnabled(true);
+                                    Toast.makeText(getContext(), "Impresora No Vinculada - Favor de Vincular para proseguir", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    switch(SesionEntity.pagopos) {
+                                        case "Y":
+                                            tipocobranza = "Cobranza/Deposito";
+                                            Log.e("REOS", "CobranzaDetalleView-alertaGuardarCobranza-SesionEntity.pagopos:Cobranza/Deposito" + SesionEntity.pagopos);
+                                            resultado = GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment, tipocobranza);
+                                            break;
+                                        case "N":
+                                            tipocobranza = "Cobranza";
+                                            Log.e("REOS", "CobranzaDetalleView-alertaGuardarCobranza-SesionEntity.pagopos:Cobranza" + SesionEntity.pagopos);
+                                            resultado = GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment, tipocobranza);
+                                            break;
+                                    }
+                                    if(resultado>0){
+                                        guardar.setEnabled(false);
+                                        //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
+                                        Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
+                                        drawable = DrawableCompat.wrap(drawable);
+                                        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
+                                        menu_variable.findItem(R.id.guardar).setIcon(drawable);
+                                        Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                                        drawable2 = DrawableCompat.wrap(drawable2);
+                                        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
+                                        menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+                                        //guardar.setEnabled(false);
+                                        //imbcomentariorecibo.setColorFilter(Color.BLACK);
+                                        imbcomentariorecibo.setEnabled(false);
 
-                                                if(vinculaimpresora.equals("1"))
-                                                {
-                                                    generarpdf.setEnabled(true);
-                                                }
-
-                                                tv_recibo.setText(recibo);
-                                                imbaceptar.setEnabled(false);
-                                                imbcancelar.setEnabled(false);
-                                                et_cobrado_edit.setEnabled(false);
-
-                                                Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-                                                //Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-                                                //enviarWSCobranzaDetalle =  new EnviarWSCobranzaDetalle();
-                                                //enviarWSCobranzaDetalle.execute();
-
-
-                                            }else
-                                            {
-                                                Toast.makeText(getContext(), "No se Guardo la Cobranza Comunicarse con El Administrador", Toast.LENGTH_SHORT).show();
-                                            }
+                                        if(vinculaimpresora.equals("1"))
+                                        {
+                                            generarpdf.setEnabled(true);
                                         }
 
+                                        tv_recibo.setText(recibo);
+                                        imbaceptar.setEnabled(false);
+                                        imbcancelar.setEnabled(false);
+                                        et_cobrado_edit.setEnabled(false);
+
+                                        Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
+                                        //enviarWSCobranzaDetalle =  new EnviarWSCobranzaDetalle();
+                                        //enviarWSCobranzaDetalle.execute();
+
+
+                                    }else
+                                    {
+                                        Toast.makeText(getContext(), "No se Guardo la Cobranza Comunicarse con El Administrador", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
+
+                            }
 
 
                         })
@@ -948,8 +960,8 @@ public class CobranzaDetalleView extends Fragment {
 
                             if(listaClienteDetalleAdapterFragment.size()>0)
                             {
-                               // SesionEntity.imagen="R"+recibo;
-                               // fecha =obtenerFechaYHoraActual();
+                                // SesionEntity.imagen="R"+recibo;
+                                // fecha =obtenerFechaYHoraActual();
 
 
 
@@ -958,26 +970,26 @@ public class CobranzaDetalleView extends Fragment {
                                 File file = new File(Environment
                                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
                                         NOMBRE_DIRECTORIO);
-                               String Cadenafile="";
+                                String Cadenafile="";
                                 Cadenafile=String.valueOf(file);
                                 String ruta=Cadenafile+"/"+recibo+".pdf";
 
 
-                              // MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
-                               String correlativo="";
+                                // MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
+                                String correlativo="";
                                 ConfiguracionSQLiteDao configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
                                 ArrayList<ConfiguracionSQLEntity> arraylistconfiguracion =  new ArrayList<ConfiguracionSQLEntity>();
-                               arraylistconfiguracion=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
+                                arraylistconfiguracion=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
 
                                 for(int i=0;i<arraylistconfiguracion.size();i++)
                                 {
-                                   correlativo=arraylistconfiguracion.get(i).getSecuenciarecibos();
+                                    correlativo=arraylistconfiguracion.get(i).getSecuenciarecibos();
                                 }
 
                                 configuracionSQLiteDao.ActualizaCorrelativo(String.valueOf(Integer.parseInt(correlativo)-1));
 
                                 //btn item validar QR se queda en disabled
-                                Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
+                                /*Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
                                 drawable = DrawableCompat.wrap(drawable);
                                 DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.white));
                                 menu_variable.findItem(R.id.validarqr).setIcon(drawable);
@@ -987,7 +999,10 @@ public class CobranzaDetalleView extends Fragment {
                                 DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.Black));
                                 menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
 
-                                validarqr.setEnabled(true); //no aplica validar qr //peru si
+                                validarqr.setEnabled(true);
+
+                                 //no aplica validar qr //peru si
+                                 */
 
 
                                 documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual());
@@ -1057,7 +1072,7 @@ public class CobranzaDetalleView extends Fragment {
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza)
     {
         int resultado=0,recibows=0;
-        String tag="",tag2="";
+        String tag="",tag2="",cliente_id="",shipto="",montocobrado="";
         FormulasController formulasController=new FormulasController(getContext());
         cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
         correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(SesionEntity.compania_id,SesionEntity.usuario_id);
@@ -1110,6 +1125,9 @@ public class CobranzaDetalleView extends Fragment {
         if(tipoCobranza.equals("Cobranza"))
         {
             for (int i = 0; i < Lista.size(); i++) {
+                montocobrado=Lista.get(i).getCobrado();
+                cliente_id=String.valueOf(Lista.get(i).getCliente_id());
+                shipto=Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
                         FormulasController.ObtenerFechaHoraCadena(),
@@ -1134,7 +1152,7 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.usuario_id,
                         comentario,
                         "N",
-                        "N",
+                        "Y",
                         "",
                         "N",
                         "N",
@@ -1156,6 +1174,9 @@ public class CobranzaDetalleView extends Fragment {
         {
             String sumacobrado="";
             for (int i = 0; i < Lista.size(); i++) {
+                montocobrado=Lista.get(i).getCobrado();
+                cliente_id=String.valueOf(Lista.get(i).getCliente_id());
+                shipto=Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 sumacobrado=String.valueOf(Lista.get(i).getCobrado());
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
@@ -1176,7 +1197,7 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.usuario_id,
                         comentario,
                         "Y",
-                        "N",
+                        "Y",
                         "11",
                         "N",
                         "N",
@@ -1224,6 +1245,17 @@ public class CobranzaDetalleView extends Fragment {
         chk_bancarizado.setFocusable(false);
         chk_bancarizado.setClickable(false);
 
+
+        VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
+        visita.setCardCode(cliente_id);
+        visita.setAddress(shipto);
+        visita.setType("02");
+        visita.setObservation("Se genero el recibo "+recibo+" para el cliente: "+cliente_id);
+        visita.setLatitude(""+latitude);
+        visita.setLongitude(""+longitude);
+
+        formulasController.RegistraVisita(visita,getActivity(),montocobrado);
+
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         //UpdateSendReceipt();
         cobranzaRepository.UndepositedPendingCollection(getContext()).observe(getActivity(), data -> {
@@ -1248,24 +1280,24 @@ public class CobranzaDetalleView extends Fragment {
 
     private void UpdateSendReceipt()
     {
-                Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
-                drawable = DrawableCompat.wrap(drawable);
-                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
-                menu_variable.findItem(R.id.guardar).setIcon(drawable);
-                Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                drawable2 = DrawableCompat.wrap(drawable2);
-                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
-                menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                imbcomentariorecibo.setEnabled(false);
-                if(vinculaimpresora.equals("1"))
-                {
-                    generarpdf.setEnabled(true);
-                }
-                tv_recibo.setText(recibo);
-                imbaceptar.setEnabled(false);
-                imbcancelar.setEnabled(false);
-                et_cobrado_edit.setEnabled(false);
-                Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
+        Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
+        menu_variable.findItem(R.id.guardar).setIcon(drawable);
+        Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+        drawable2 = DrawableCompat.wrap(drawable2);
+        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
+        menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+        imbcomentariorecibo.setEnabled(false);
+        if(vinculaimpresora.equals("1"))
+        {
+            generarpdf.setEnabled(true);
+        }
+        tv_recibo.setText(recibo);
+        imbaceptar.setEnabled(false);
+        imbcancelar.setEnabled(false);
+        et_cobrado_edit.setEnabled(false);
+        Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -1299,10 +1331,44 @@ public class CobranzaDetalleView extends Fragment {
         protected void onPostExecute(Object result)
         {
             try {
-                    if(result.equals("1")){
-                        //actualzia el estado a uno pero ni bien se envia a la web service se actualiza
-                        //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
+                if(result.equals("1")){
+                    //actualzia el estado a uno pero ni bien se envia a la web service se actualiza
+                    //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
 
+                    Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
+                    drawable = DrawableCompat.wrap(drawable);
+                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
+                    menu_variable.findItem(R.id.guardar).setIcon(drawable);
+                    Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                    drawable2 = DrawableCompat.wrap(drawable2);
+                    DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
+                    menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+                    //guardar.setEnabled(false);
+                    //imbcomentariorecibo.setColorFilter(Color.BLACK);
+                    imbcomentariorecibo.setEnabled(false);
+
+                    if(vinculaimpresora.equals("1"))
+                    {
+                        generarpdf.setEnabled(true);
+                    }
+
+                    tv_recibo.setText(recibo);
+                    imbaceptar.setEnabled(false);
+                    imbcancelar.setEnabled(false);
+                    et_cobrado_edit.setEnabled(false);
+
+                    Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
+                }else
+                {
+
+                    if(Conexion.equals("1"))
+                    {
+                        //cobranzaDetalleSQLiteDao.EliminarRecibo(SesionEntity.compania_id,recibo,SesionEntity.usuario_id);
+                        //Toast.makeText(getContext(), "No Se Envio la Cobranza, Revisar Conexion a Internet", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(Conexion.equals("0"))
+                    {
+                        //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
                         Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
                         drawable = DrawableCompat.wrap(drawable);
                         DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
@@ -1311,50 +1377,16 @@ public class CobranzaDetalleView extends Fragment {
                         drawable2 = DrawableCompat.wrap(drawable2);
                         DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
                         menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                        //guardar.setEnabled(false);
+                        guardar.setEnabled(false);
                         //imbcomentariorecibo.setColorFilter(Color.BLACK);
                         imbcomentariorecibo.setEnabled(false);
-
-                        if(vinculaimpresora.equals("1"))
-                        {
-                            generarpdf.setEnabled(true);
-                        }
-
+                        generarpdf.setEnabled(true);
                         tv_recibo.setText(recibo);
-                        imbaceptar.setEnabled(false);
-                        imbcancelar.setEnabled(false);
-                        et_cobrado_edit.setEnabled(false);
-
-                        Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-                    }else
-                    {
-
-                        if(Conexion.equals("1"))
-                        {
-                            //cobranzaDetalleSQLiteDao.EliminarRecibo(SesionEntity.compania_id,recibo,SesionEntity.usuario_id);
-                            //Toast.makeText(getContext(), "No Se Envio la Cobranza, Revisar Conexion a Internet", Toast.LENGTH_SHORT).show();
-                        }
-                        else if(Conexion.equals("0"))
-                        {
-                            //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
-                            Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
-                            drawable = DrawableCompat.wrap(drawable);
-                            DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
-                            menu_variable.findItem(R.id.guardar).setIcon(drawable);
-                            Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                            drawable2 = DrawableCompat.wrap(drawable2);
-                            DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
-                            menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                            guardar.setEnabled(false);
-                            //imbcomentariorecibo.setColorFilter(Color.BLACK);
-                            imbcomentariorecibo.setEnabled(false);
-                            generarpdf.setEnabled(true);
-                            tv_recibo.setText(recibo);
-                            Toast.makeText(getContext(), "Se guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-                        }
-
+                        Toast.makeText(getContext(), "Se guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
                     }
+
                 }
+            }
             catch (Exception e)
             {
                 // TODO: handle exception
@@ -1462,7 +1494,7 @@ public class CobranzaDetalleView extends Fragment {
                 resultado= CobranzaRepository.sendPatchQR(cobranzaDetalleSQLiteDao.getSapCode(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),"Y");
                 resultadowsqrvalidado=String.valueOf(resultado);
             } catch (Exception e){
-               e.printStackTrace();
+                e.printStackTrace();
             }
             return resultadowsqrvalidado;
         }
@@ -1671,7 +1703,7 @@ public class CobranzaDetalleView extends Fragment {
     {
         int resultado=1;
 
-            chk_validacionqr.setChecked(true);
+        chk_validacionqr.setChecked(true);
 
 
 
@@ -1793,7 +1825,14 @@ public class CobranzaDetalleView extends Fragment {
                                         "N"
 
                                 );
-                cobranzaCabeceraSQLiteDao.ActualizarCobranzaCabeceraWS(arg0[0],SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id,resultadoccabeceraenviows);
+                cobranzaCabeceraSQLiteDao.ActualizarCobranzaCabeceraWS(
+                        arg0[0],
+                        SesionEntity.compania_id,
+                        SesionEntity.fuerzatrabajo_id,
+                        resultadoccabeceraenviows,
+                        "",
+                        ""
+                );
                 cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
                 cobranzaDetalleSQLiteDao.ActualizaConexionWSDepositoCobranzaDetalle(
                         recibo,SesionEntity.compania_id,SesionEntity.usuario_id,resultadoccabeceraenviows

@@ -238,7 +238,7 @@ public class CobranzaDetalleSQLiteDao {
         return listaCobranzaDetalleSQLiteEntity;
     }
 
-    public int updateStatusCodeSap(String itemId,String code,String induvis_id,String message,String status){
+    public int updateStatusCodeSap(String itemId,String code,String induvis_id,String message,String status,String receip){
         int resultado=0;
 
         try{
@@ -248,7 +248,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("mensajeWS",message);
             registro.put("chkwsrecibido",status);
             bd = sqliteController.getWritableDatabase();
-            resultado=bd.update("cobranzadetalle",registro,"cobranza_id=? and compania_id=?" ,new String[]{itemId, induvis_id});
+            resultado=bd.update("cobranzadetalle",registro,"recibo=? and compania_id=?" ,new String[]{receip, induvis_id});
             bd.close();
         }catch(Exception e){
             e.printStackTrace();
@@ -1322,7 +1322,7 @@ public class CobranzaDetalleSQLiteDao {
         abrir();
         try {
             Cursor fila = bd.rawQuery(
-                    "Select sap_code,cobranza_id,banco_id,recibo,chkqrvalidado from cobranzadetalle" +
+                    "Select sap_code,cobranza_id,banco_id,recibo,chkqrvalidado,usuario_id from cobranzadetalle" +
                             " where (chkdepositado='Y' or  chkdepositado='1')  " +
                             " and (chkwsdepositorecibido='N'or  chkwsdepositorecibido='0')" +
                             " and cobranza_id<>''" +
@@ -1338,6 +1338,7 @@ public class CobranzaDetalleSQLiteDao {
                 collectionEntity.setBankID(fila.getString(2));
                 collectionEntity.setReceip(fila.getString(3));
                 collectionEntity.setQRStatus(fila.getString(4));
+                collectionEntity.setU_VIS_UserID(fila.getString(5));
                 listCollectionEntity.add(collectionEntity);
             }
 

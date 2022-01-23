@@ -41,18 +41,23 @@ public class Convert {
            amount="0";
        }
        Locale locale=null;
-       BigDecimal amountRedonded=new BigDecimal(amount).setScale(3, RoundingMode.HALF_UP);
+       BigDecimal amountRedonded=null;;
         switch (BuildConfig.FLAVOR){
             case "chile":
+                amountRedonded =new BigDecimal(amount).setScale(0, RoundingMode.HALF_UP);
+                locale=new Locale("ES","EC");
+                break;
             case "ecuador":
+                amountRedonded =new BigDecimal(amount).setScale(3, RoundingMode.HALF_UP);
                 locale=new Locale("ES","EC");
                 break;
             case "peru":
+                amountRedonded =new BigDecimal(amount).setScale(3, RoundingMode.HALF_UP);
                 locale=new Locale("ES","PE");
                 break;
             case "bolivia":
+                amountRedonded =new BigDecimal(amount).setScale(3, RoundingMode.HALF_UP);
                 locale=new Locale("ES","BO");
-
             break;
         }
         return NumberFormat.getCurrencyInstance(locale).format(amountRedonded);

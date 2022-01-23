@@ -7,6 +7,64 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:970594490766:android:1815d9f6dcf24c00b72cdf",
+        "android_client_info": {
+          "package_name": "com.vistony.salesforce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970594490766-q6sm6ki41rmp4ijgdog8iod2kvd516p6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHKa49uvrxb0T_bqR0GwadBmnuhu4lwZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970594490766-q6sm6ki41rmp4ijgdog8iod2kvd516p6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970594490766:android:ee5979394feba686b72cdf",
+        "android_client_info": {
+          "package_name": "com.vistony.salesforce.chile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970594490766-q6sm6ki41rmp4ijgdog8iod2kvd516p6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHKa49uvrxb0T_bqR0GwadBmnuhu4lwZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970594490766-q6sm6ki41rmp4ijgdog8iod2kvd516p6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:970594490766:android:9acddfc18f134e55b72cdf",
         "android_client_info": {
           "package_name": "com.vistony.salesforce.ecuador"

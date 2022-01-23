@@ -188,7 +188,7 @@ public class MenuAccionView extends Fragment {
         cv_pedido.setOnClickListener(v -> {
 
             switch (BuildConfig.FLAVOR){
-                case "chile":
+
                 case "peru":
                     String Fragment="MenuAccionView";
                     String accion="pedido";
@@ -198,6 +198,7 @@ public class MenuAccionView extends Fragment {
                     break;
                 case "ecuador":
                 case "bolivia":
+                case "chile":
                     alertatipoventa().show();
                     break;
             }

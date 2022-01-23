@@ -111,9 +111,9 @@ public class CobranzaRepository extends ViewModel {
 
                 for(CobranzaItemEntity cobranza:cobranzas.getCobranzaItem()){
                     if(cobranza.getCode()!=null && cobranza.getErrorCode().equals("0")){
-                        cobranzasqlite.updateStatusCodeSap(cobranza.getItemDetail(),cobranza.getCode(),Compania_ID,cobranza.getMessage(),"Y");
+                        cobranzasqlite.updateStatusCodeSap(cobranza.getItemDetail(),cobranza.getCode(),Compania_ID,cobranza.getMessage(),"Y",cobranza.getReceip());
                     }else{
-                        cobranzasqlite.updateStatusCodeSap(cobranza.getItemDetail(),cobranza.getCode(),Compania_ID,cobranza.getMessage(),"N");
+                        cobranzasqlite.updateStatusCodeSap(cobranza.getItemDetail(),cobranza.getCode(),Compania_ID,cobranza.getMessage(),"N",cobranza.getReceip());
                         acumResul=acumResul+1;
                     }
                 }
@@ -458,7 +458,7 @@ public class CobranzaRepository extends ViewModel {
                                     val = "N";
                                 }
 
-                                cobranzaDetalleSQLiteDao.updateStatusCodeSap(respuesta.getItemDetail(), respuesta.getCode(), SesionEntity.compania_id, respuesta.getMessage(), val);
+                                cobranzaDetalleSQLiteDao.updateStatusCodeSap(respuesta.getItemDetail(), respuesta.getCode(), SesionEntity.compania_id, respuesta.getMessage(), val,respuesta.getReceip());
                             }
 
                             callback.onResponseSap(responseData);

@@ -27,6 +27,17 @@ public class CobranzaItemEntity {
     @SerializedName("Deposit")
     private String deposit;
 
+    @SerializedName("Receip")
+    private String receip;
+
+    public String getReceip() {
+        return receip;
+    }
+
+    public void setReceip(String receip) {
+        this.receip = receip;
+    }
+
     public String getRecibo() {
         return recibo;
     }

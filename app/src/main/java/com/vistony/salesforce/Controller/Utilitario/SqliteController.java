@@ -93,6 +93,11 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE lead (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,document_owner TEXT,sales_person TEXT,razon_social TEXT,ruc TEXT,nombre_comercial TEXT,numero_telefono TEXT,numero_celular TEXT,persona_contacto TEXT,correo TEXT,latitud TEXT,longitud TEXT,direccion TEXT,referencias TEXT,comentario TEXT,categoria TEXT,foto TEXT,fecha TEXT,recibido_api INTEGER)");
             db.execSQL("CREATE TABLE motivovisita (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,code TEXT,name TEXT,type TEXT,fecha TEXT)");
             db.execSQL("CREATE TABLE pricelist (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,pricelist_id TEXT,pricelist TEXT)");
+
+            //Version 5
+        //db.execSQL("CREATE TABLE commissions (variable text,uom TEXT,advance TEXT,quota TEXT,percentage TEXT,esc_colours TEXT,hidedata TEXT)");
+        //db.execSQL("CREATE TABLE esc_colours_c (id text,description TEXT,status TEXT)");
+        //db.execSQL("CREATE TABLE esc_colours_d (id_esc_colours_c TEXT,id TEXT,rangemin TEXT,rangemax TEXT,colourmin TEXT,colourmax TEXT,degrade TEXT )");
     }
 
     @Override

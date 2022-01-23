@@ -78,11 +78,9 @@ public class Induvis {
         String timeView="",hour,minute,second;
         switch (flavor){
             case "chile":
-                break;
-            case "ecuador":
-                break;
             case "peru":
             case "bolivia":
+            case "ecuador":
                 hour=timeBD.substring(0,2);
                 minute=timeBD.substring(2,4);
                 second=timeBD.substring(4,6);
@@ -195,12 +193,13 @@ public class Induvis {
     public static String getTituloVentaString(){
         String tituloventa="";
         switch (BuildConfig.FLAVOR){
-            case "chile":
+
             case "peru":
                 tituloventa="ORDEN VENTA";
                 break;
             case ("ecuador"):
             case ("bolivia"):
+            case "chile":
                 if(SesionEntity.quotation.equals("Y"))
                  {
                      tituloventa="COTIZACIÓN";
@@ -309,11 +308,11 @@ public class Induvis {
         String draft="N";
         switch (BuildConfig.FLAVOR){
             case "peru":
-            case "chile":
                 draft="N";
                 break;
             case "ecuador":
             case "bolivia":
+            case "chile":
                 if(SesionEntity.quotation.equals("Y"))
                 {
                     draft="N";

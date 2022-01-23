@@ -1,7 +1,5 @@
 package com.vistony.salesforce.View;
 
-import static com.vistony.salesforce.Controller.Utilitario.CifradoController.decrypt;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -23,21 +21,25 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.ValueCallback;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -49,19 +51,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
-import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
-
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileDescriptor;
@@ -72,6 +73,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static com.vistony.salesforce.Controller.Utilitario.CifradoController.decrypt;
 
 
 public class MenuView extends AppCompatActivity
@@ -140,6 +143,7 @@ public class MenuView extends AppCompatActivity
     Fragment historicoOrdenVentaFragment;
     Fragment PromocionCabeceraFragment;
     Fragment PromocionDetalleFragment;
+    TableRow tablerowzona;
 
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
@@ -178,7 +182,7 @@ public class MenuView extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         manager = (ConnectivityManager) getApplication().getSystemService(getApplication().CONNECTIVITY_SERVICE);
         super.onCreate(savedInstanceState);
-        registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
         setContentView(R.layout.activity_menu_view);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -220,6 +224,7 @@ public class MenuView extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+
         tv_fuerzatrabajo_id_navheader=(TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_fuerzatrabajo_id_navheader);
         //findViewById( R.id.tv_fuerzatrabajo_id_navheader);
@@ -233,6 +238,7 @@ public class MenuView extends AppCompatActivity
         imv_compania_menu=(ImageView)
                 navigationView.getHeaderView(0).findViewById(R.id.imv_compania_menu);
         textViewStatus=navigationView.getHeaderView(0).findViewById(R.id.textViewStatus);
+        tablerowzona=(TableRow) navigationView.getHeaderView(0).findViewById(R.id.tablerowzona);
         listaConfiguracionEntity= new ArrayList<ConfiguracionSQLEntity>();
         listaConfiguracionEntity=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
         if(listaConfiguracionEntity.isEmpty())
@@ -269,7 +275,16 @@ public class MenuView extends AppCompatActivity
             imv_compania_menu.setImageResource(R.mipmap.rofalab304x90_2);
         }
 
-
+        switch (BuildConfig.FLAVOR){
+            case "bolivia":
+            case "ecuador":
+            case "chile":
+            case "india":
+                tablerowzona.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
 
         //Manejo de Perfiles
         //Modificado rotarola 29-10-2021 12:39 Optimizacion de codigo de Perfiles
@@ -352,7 +367,7 @@ public class MenuView extends AppCompatActivity
         if(BuildConfig.FLAVOR.equals("india")){
             Fragment="MenuFormulariosView";
             accion="agregarcliente";
-       }
+        }
 
         String compuesto=Fragment+"-"+accion;
         onFragmentInteraction(compuesto,"");
@@ -764,7 +779,7 @@ public class MenuView extends AppCompatActivity
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         return  dialog;
-}
+    }
 
     @Override
     public void onFragmentInteraction(String Tag, Object Lista) {
@@ -777,8 +792,8 @@ public class MenuView extends AppCompatActivity
             tag=separada[0];
             tag2=separada[1];
         }else{
-                tag=separada[0];
-            }
+            tag=separada[0];
+        }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         contentFragment=null;
 
@@ -832,48 +847,48 @@ public class MenuView extends AppCompatActivity
         else if(tag.equals("CobranzaCabeceraView")){
 
             //ListenerBackPress.setTemporaIdentityFragment("Deposito");
-                if(tag2.equals("nuevoinicio"))
-                {
-                    Log.e("jpcm","nuevo inicio====");
-                    String taginicio="inicio";
-                    onNavigationItemSelected(navigationView.getMenu().getItem(2).setChecked(true));
-                }
-                else if(tag2.equals("inicio"))
-                {
-                    Log.e("jpcm","inicio====");
-                    ListenerBackPress.setTemporaIdentityFragment("Deposito");
-                    String taginicio=tag2;
-                    ft.replace(R.id.content_menu_view,CobranzaCabeceraFragment,taginicio);
-                    ft.addToBackStack("popqqqqqq");
-                    ft.commit();
-                }
-                else if (tag2.equals("nuevalista"))
-                    {
-                        Log.e("jpcm","nueva lista open");
-                        String tagnuevalista=tag2;
-                        ft.hide(CobranzaCabeceraFragment);
-                        ft.add(R.id.content_menu_view,ConsDepositoView.newInstanciada(tag2),tagnuevalista);
-                        ft.addToBackStack("popssss");
-                    ft.commit();
-                    }
-                else if (tag2.equals("agregarlista"))
-                {
-                    Log.e("jpcm","agregar lista open");
-                    String tagagregarlista="";
-                    tagagregarlista=tag2;
-                    ft.hide(CobranzaCabeceraFragment);
-                    ft.add(R.id.content_menu_view,ConsDepositoView.newInstance(Lista,tagagregarlista),tagagregarlista);
-                    ft.addToBackStack("popaaa");
-                    ft.commit();
-                }
+            if(tag2.equals("nuevoinicio"))
+            {
+                Log.e("jpcm","nuevo inicio====");
+                String taginicio="inicio";
+                onNavigationItemSelected(navigationView.getMenu().getItem(2).setChecked(true));
             }
+            else if(tag2.equals("inicio"))
+            {
+                Log.e("jpcm","inicio====");
+                ListenerBackPress.setTemporaIdentityFragment("Deposito");
+                String taginicio=tag2;
+                ft.replace(R.id.content_menu_view,CobranzaCabeceraFragment,taginicio);
+                ft.addToBackStack("popqqqqqq");
+                ft.commit();
+            }
+            else if (tag2.equals("nuevalista"))
+            {
+                Log.e("jpcm","nueva lista open");
+                String tagnuevalista=tag2;
+                ft.hide(CobranzaCabeceraFragment);
+                ft.add(R.id.content_menu_view,ConsDepositoView.newInstanciada(tag2),tagnuevalista);
+                ft.addToBackStack("popssss");
+                ft.commit();
+            }
+            else if (tag2.equals("agregarlista"))
+            {
+                Log.e("jpcm","agregar lista open");
+                String tagagregarlista="";
+                tagagregarlista=tag2;
+                ft.hide(CobranzaCabeceraFragment);
+                ft.add(R.id.content_menu_view,ConsDepositoView.newInstance(Lista,tagagregarlista),tagagregarlista);
+                ft.addToBackStack("popaaa");
+                ft.commit();
+            }
+        }
 
         else if(tag.equals("ClienteDetalleView"))
         {
             Log.e("jpcm","se intenta regresar 434444444444");
             if(tag2.equals("inicio"))
             {
-               /////////////////////////////////////////////////////*/*/
+                /////////////////////////////////////////////////////*/*/
                 contentFragment=new CobranzaDetalleView();
                 String tagClienteDetalleView="inicioClienteCabeceraView";
                 Fragment clienteDetalleView;
@@ -990,9 +1005,9 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
             }
         }else if(tag.equals("MantenimientoClienteView")){
-                tag2="MantenimientoClienteView";
-                contentFragment=new MapaClienteView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+            tag2="MantenimientoClienteView";
+            contentFragment=new MapaClienteView();
+            ft.replace(R.id.content_menu_view,contentFragment,tag2);
             ft.addToBackStack("popcccceeer");
             ft.commit();
 
@@ -1153,7 +1168,7 @@ public class MenuView extends AppCompatActivity
 
                 ft.remove(ProductoViewFragment);
                 ft.show(OrdenVentaDetalleFragment);
-               // ft.addToBackStack("pop");
+                // ft.addToBackStack("pop");
                 ft.commit();
                 OrdenVentaDetalleView.newInstanceAgregarProducto(Lista);
             }
@@ -1459,7 +1474,7 @@ public class MenuView extends AppCompatActivity
         CobranzaDetalleSQLiteDao cobranzaCabeceraSQLiteDao = new CobranzaDetalleSQLiteDao(this);
 
         if (resultCode == RESULT_OK) {
-           switch (requestCode) {
+            switch (requestCode) {
                 case COD_FOTO:
 
                     File file = new File(mCurrentPhotoPath);
@@ -1562,19 +1577,19 @@ public class MenuView extends AppCompatActivity
 
 
                     break;
-               case 10000:
+                case 10000:
 
-                   Log.e("JPCM","LLEGO DESDE EL WEB VIEW");
-                   if (null == uploadMessage && null == ReclamoClientesView.uploadMessageAboveL) return;
-                   Uri resultx = data == null || resultCode != RESULT_OK ? null : data.getData();
+                    Log.e("JPCM","LLEGO DESDE EL WEB VIEW");
+                    if (null == uploadMessage && null == ReclamoClientesView.uploadMessageAboveL) return;
+                    Uri resultx = data == null || resultCode != RESULT_OK ? null : data.getData();
 
-                   if (ReclamoClientesView.uploadMessageAboveL != null) {
-                       onActivityResultAboveL(requestCode, resultCode, data);
-                   } else if (uploadMessage != null) {
-                       uploadMessage.onReceiveValue(resultx);
-                       uploadMessage = null;
-                   }
-                   break;
+                    if (ReclamoClientesView.uploadMessageAboveL != null) {
+                        onActivityResultAboveL(requestCode, resultCode, data);
+                    } else if (uploadMessage != null) {
+                        uploadMessage.onReceiveValue(resultx);
+                        uploadMessage = null;
+                    }
+                    break;
                 default:
                     Log.d("jpcm", " entro al default con este requestCode " + requestCode);
                     break;
@@ -1610,7 +1625,7 @@ public class MenuView extends AppCompatActivity
                         Log.e("log,",""+ex);
                     }
                     if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.vistony.salesforce.peru" , photoFile);
+                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.vistony.salesforce" , photoFile);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         startActivityForResult(intent,20);
                     }
@@ -1669,19 +1684,13 @@ public class MenuView extends AppCompatActivity
         return formattedDate;
     }
 
-    /*public static BixolonPrinterController getPrinterInstance()
-    {
-        Log.e("REOS","MenuView-getPrinterInstance-Inicio");
-        return bxlPrinter;
-    }*/
-
     @SuppressLint("SimpleDateFormat")
-     private String getCode()
-     {
-     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymmddhhmmss");
-    String date = dateFormat.format(new Date() );
-    String photoCode = "pic_" + date;
-    return photoCode;
+    private String getCode()
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymmddhhmmss");
+        String date = dateFormat.format(new Date() );
+        String photoCode = "pic_" + date;
+        return photoCode;
     }
 
     public void RegresarDeuda()
@@ -1717,7 +1726,7 @@ public class MenuView extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override

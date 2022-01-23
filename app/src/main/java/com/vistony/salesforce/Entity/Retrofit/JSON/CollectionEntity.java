@@ -24,6 +24,15 @@ public class CollectionEntity {
     private String UserID;
     private String SlpCode;
     private String Code;
+    private String U_VIS_UserID;
+
+    public String getU_VIS_UserID() {
+        return U_VIS_UserID;
+    }
+
+    public void setU_VIS_UserID(String u_VIS_UserID) {
+        U_VIS_UserID = u_VIS_UserID;
+    }
 
     public String getCode() {
         return Code;
