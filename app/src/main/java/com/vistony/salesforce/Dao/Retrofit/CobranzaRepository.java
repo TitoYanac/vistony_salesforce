@@ -351,7 +351,7 @@ public class CobranzaRepository extends ViewModel {
                     ObjLHCobranza.deposito_id = historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getDeposito_id();
                     ObjLHCobranza.estado= historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getEstado();
                     ObjLHCobranza.estadoqr = historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getEstadoqr();
-                    /*String[] fechasepacion = historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza().split(" ");
+                    String[] fechasepacion = historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza().split(" ");
                     String fecha,horatotal,año,mes,dia;
                     fecha=fechasepacion[0];
                     horatotal=fechasepacion[1];
@@ -359,8 +359,16 @@ public class CobranzaRepository extends ViewModel {
                     mes=fechasplit[0];
                     dia=fechasplit[1];
                     año=fechasplit[2];
-                    ObjLHCobranza.fechacobranza =  año+mes+dia;*/
-                    ObjLHCobranza.fechacobranza =  historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza();
+                    if(mes.length()==1)
+                    {
+                        mes='0'+mes;
+                    }
+                    if(dia.length()==1)
+                    {
+                        dia='0'+dia;
+                    }
+                    ObjLHCobranza.fechacobranza =  año+mes+dia;
+                    //ObjLHCobranza.fechacobranza =  historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza();
                     ObjLHCobranza.fechadeposito =  historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechadeposito();
                     ObjLHCobranza.fuerzatrabajo_id =  SesionEntity.fuerzatrabajo_id;
                     ObjLHCobranza.importedocumento =  historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getImportedocumento();

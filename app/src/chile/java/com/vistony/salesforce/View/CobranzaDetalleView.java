@@ -26,6 +26,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 */
 
 import android.os.Environment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,6 +51,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.omega_r.libs.OmegaCenterIconButton;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoCobranzaPDF;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
@@ -86,6 +88,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import io.sentry.Sentry;
 
@@ -388,6 +391,17 @@ public class CobranzaDetalleView extends Fragment {
         chk_bancarizado = (CheckBox) v.findViewById(R.id.chk_bancarizado);
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
+
+
+        switch (BuildConfig.FLAVOR){
+            case "chile":
+                et_cobrado_edit.setInputType(InputType.TYPE_CLASS_NUMBER);
+                et_cobrado_edit.setHint ("0");
+                break;
+        }
+
+
+
         imbcomentariorecibo= (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
                                                    @Override
@@ -456,7 +470,7 @@ public class CobranzaDetalleView extends Fragment {
 
                                 cobrado=montoCobrado;
 
-                                listaClienteDetalleAdapterFragment.get(j).setCobrado(cobrado.setScale(3,RoundingMode.HALF_UP).toString());
+                                listaClienteDetalleAdapterFragment.get(j).setCobrado(cobrado.setScale(0,RoundingMode.HALF_UP).toString());
                                 listaClienteDetalleAdapterFragment.get(j).setSaldo(String.valueOf("0"));
                                 listaClienteDetalleAdapterFragment.get(j).setNuevo_saldo(String.valueOf("0"));
                                 listaClienteDetalleAdapterFragment.get(j).setImporte("0");
@@ -491,12 +505,12 @@ public class CobranzaDetalleView extends Fragment {
                                 cobrado=new BigDecimal(cobranza);
                                 saldo=new BigDecimal(listaClienteDetalleAdapterFragment.get(i).getSaldo());
 
-                                listaClienteDetalleAdapterFragment.get(i).setSaldo(saldo.setScale(3,RoundingMode.HALF_UP).toString());
+                                listaClienteDetalleAdapterFragment.get(i).setSaldo(saldo.setScale(0,RoundingMode.HALF_UP).toString());
                                 if (cobrado.compareTo(saldo) <= 0) {
-                                    listaClienteDetalleAdapterFragment.get(i).setCobrado(cobrado.setScale(3,RoundingMode.HALF_UP).toString());
+                                    listaClienteDetalleAdapterFragment.get(i).setCobrado(cobrado.setScale(0,RoundingMode.HALF_UP).toString());
                                     nuevo_saldo = saldo.subtract(cobrado);
 
-                                    listaClienteDetalleAdapterFragment.get(i).setNuevo_saldo(nuevo_saldo.setScale(3,RoundingMode.HALF_UP).toString());
+                                    listaClienteDetalleAdapterFragment.get(i).setNuevo_saldo(nuevo_saldo.setScale(0,RoundingMode.HALF_UP).toString());
 
                                 } else {
                                     Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
@@ -1625,7 +1639,7 @@ public class CobranzaDetalleView extends Fragment {
                                             SesionEntity.fuerzatrabajo_id+recibo,
                                             SesionEntity.usuario_id,
                                             fecha,
-                                            cobrado.setScale(3,RoundingMode.HALF_UP).toString(),
+                                            cobrado.setScale(0,RoundingMode.HALF_UP).toString(),
                                             "Pendiente",
                                             "",
                                             SesionEntity.fuerzatrabajo_id,

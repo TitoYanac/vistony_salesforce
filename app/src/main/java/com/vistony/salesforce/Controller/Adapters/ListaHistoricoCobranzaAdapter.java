@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
@@ -140,7 +141,7 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
 
         // Lead actual.
         final ListaHistoricoCobranzaEntity lead = getItem(position);
-        DecimalFormat format = new DecimalFormat("#0.00");
+        //DecimalFormat format = new DecimalFormat("#0.00");
 
         holder.tv_nombrecliente_cobranza.setText(lead.getCliente_nombre());
         if(lead.getBanco_id().equals(""))
@@ -152,7 +153,7 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
             }
 
         holder.tv_recibo.setText(lead.getRecibo());
-        holder.tv_monto_cobrado.setText(format.format(Double.parseDouble(lead.getMontocobrado())));
+        holder.tv_monto_cobrado.setText((Convert.currencyForView(lead.getMontocobrado())));
         holder.tv_documento_cobrado.setText(lead.getNro_documento());
         holder.tv_estado_historico_cobranza.setText(lead.getEstado());
 

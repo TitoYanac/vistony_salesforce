@@ -94,7 +94,7 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE motivovisita (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,code TEXT,name TEXT,type TEXT,fecha TEXT)");
             db.execSQL("CREATE TABLE pricelist (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,pricelist_id TEXT,pricelist TEXT)");
 
-            //Version 5
+            //Version 4
         //db.execSQL("CREATE TABLE commissions (variable text,uom TEXT,advance TEXT,quota TEXT,percentage TEXT,esc_colours TEXT,hidedata TEXT)");
         //db.execSQL("CREATE TABLE esc_colours_c (id text,description TEXT,status TEXT)");
         //db.execSQL("CREATE TABLE esc_colours_d (id_esc_colours_c TEXT,id TEXT,rangemin TEXT,rangemax TEXT,colourmin TEXT,colourmax TEXT,degrade TEXT )");

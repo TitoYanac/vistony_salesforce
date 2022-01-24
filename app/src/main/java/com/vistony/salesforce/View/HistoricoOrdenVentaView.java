@@ -297,12 +297,12 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
 
                                     switch (BuildConfig.FLAVOR){
                                         case "peru":
-                                        case "chile":
                                         case "india":
                                             listaHOV.setApprovalStatus("Pendiente");
                                             break;
                                         case "bolivia":
                                         case "ecuador":
+                                        case "chile":
 
                                             if(listaOrdenVentaSQLite.get(l).getQuotation()==null)
                                             {
@@ -343,6 +343,8 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
 
                                     listaHistoricoOrdenVentaEntities.add(listaHOV);
                                     Log.e("REOS","HistoricoOrdenVentaView-HiloObtenerHistoricoOrdenVenta-listaHistoricoOrdenVentaEntities:"+listaHistoricoOrdenVentaEntities.size());
+
+
                                 }
                             }
 
@@ -384,12 +386,13 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
 
                                     switch (BuildConfig.FLAVOR){
                                         case "peru":
-                                        case "chile":
+
                                         case "india":
                                             listaHOV.setApprovalStatus("Pendiente");
                                             break;
                                         case "bolivia":
                                         case "ecuador":
+                                        case "chile":
 
                                             if(listaOrdenVentaSQLite.get(k).getQuotation()==null)
                                             {

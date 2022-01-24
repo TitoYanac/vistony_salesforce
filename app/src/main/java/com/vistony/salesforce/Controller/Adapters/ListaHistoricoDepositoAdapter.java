@@ -34,6 +34,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -59,6 +60,7 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
     String reswsanuladep = "", reswsliberadetalle = "";
     int resultadocabecera = 0, resultadodetalle = 0;
     public static String deposito_id, banco_id, fechadeposito, montodeposito, tipoingreso, chkbancarizado, fechadiferido, chkdepositodirecto;
+    FormulasController formulasController;
 
     public ListaHistoricoDepositoAdapter(Context Context, List<ListaHistoricoDepositoEntity> objects) {
 
@@ -99,7 +101,7 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ArraylistaHistoricoDepositoEntity= new ArrayList <ListaHistoricoDepositoEntity>();
-
+        formulasController = new FormulasController(getContext());
         // Obtener inflater.
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -148,7 +150,11 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         holder.tv_monto.setText(Convert.currencyForView((lead.getMontodeposito())));
         holder.tv_estado.setText(lead.getEstado());
         holder.tv_banco.setText(lead.getBankname());
-        holder.tv_fecha_deposito.setText(lead.getFechadeposito());
+        holder.tv_fecha_deposito.setText(
+                //formulasController.Convertirfechahoraafechanumerica(
+                lead.getFechadeposito()
+        //)
+        );
         holder.tv_tipo_ingreso.setText(lead.getTipoingreso());
 
         /*String[] sourceSplitefechadiferida= lead.getFechadiferida().split(" ");

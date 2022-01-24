@@ -14,8 +14,15 @@ public class ListaHistoricoOrdenVentaEntity implements Serializable {
     public boolean recepcionERPOV;
     public String comentariows;
     public boolean envioERPOV;
+    public String Object;
 
+    public String getObject() {
+        return Object;
+    }
 
+    public void setObject(String object) {
+        Object = object;
+    }
 
     public boolean isRecepcionERPOV() {
         return recepcionERPOV;

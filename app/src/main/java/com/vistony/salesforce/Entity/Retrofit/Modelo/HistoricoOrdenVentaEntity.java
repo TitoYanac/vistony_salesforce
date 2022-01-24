@@ -28,6 +28,17 @@ public class HistoricoOrdenVentaEntity {
     @SerializedName("ApprovalCommentary")
     private String comentarioaprobacion;
 
+    @SerializedName("Object")
+    private String object;
+
+    public String getObject() {
+        return object;
+    }
+
+    public void setObject(String object) {
+        this.object = object;
+    }
+
     public String getDocnum() {
         return docnum;
     }

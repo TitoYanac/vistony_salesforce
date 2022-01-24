@@ -3,6 +3,7 @@ package com.vistony.salesforce.Dao.Retrofit;
 import android.content.Context;
 import android.util.Log;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
@@ -41,14 +42,29 @@ public class HistoricoOrdenVentaWS {
                     ObjLHOrdenVenta.setLicTradNum(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getRucdni());
                     ObjLHOrdenVenta.setCardName(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getNombrecliente());
                     ObjLHOrdenVenta.setDocTotal(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getMontototalorden());
-                    ObjLHOrdenVenta.setApprovalStatus(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getEstadoaprobacion());
+
+
+                    switch (BuildConfig.FLAVOR){
+                        case "peru":
+                        case "india":
+                            ObjLHOrdenVenta.setApprovalStatus(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getEstadoaprobacion());
+                            break;
+                        case "bolivia":
+                        case "ecuador":
+                        case "chile":
+                            ObjLHOrdenVenta.setApprovalStatus(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getObject());
+                            break;
+                    }
                     ObjLHOrdenVenta.setApprovalCommentary(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getComentarioaprobacion());
                     ObjLHOrdenVenta.setDocNum(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getDocnum());
                     ObjLHOrdenVenta.setSalesOrderID(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getOrdenventa_id());
                     ObjLHOrdenVenta.setEnvioERPOV(true);
                     ObjLHOrdenVenta.setRecepcionERPOV(true);
                     ObjLHOrdenVenta.setComentariows("Orden de Venta Registrada Correctamente");
+                    ObjLHOrdenVenta.setObject(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getObject());
                     LHOrdenVenta.add(ObjLHOrdenVenta);
+
+
                 }
             }
 

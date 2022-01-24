@@ -14,6 +14,7 @@ import com.vistony.salesforce.Entity.Adapters.ListKardexOfPaymentEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
 
 public class Convert {
+//    static DecimalFormat format = new DecimalFormat("##.##.###,");
 
     public static String getTotaLine(String subTotal,String procentajeDsct,String impuesto) {
 
@@ -37,6 +38,7 @@ public class Convert {
     }
 
     public static String currencyForView(String amount){
+        String resultado="";
        if(amount.equals("")){
            amount="0";
        }
@@ -60,7 +62,28 @@ public class Convert {
                 locale=new Locale("ES","BO");
             break;
         }
-        return NumberFormat.getCurrencyInstance(locale).format(amountRedonded);
+
+        Log.e("REOS","Convert-currencyForView-amountRedonded-Antes"+amountRedonded.toString());
+        switch (BuildConfig.FLAVOR){
+            case "chile":
+                NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
+                nf.setMaximumFractionDigits(0);
+
+                try {
+                    resultado = nf.format(amountRedonded);
+                }catch (Exception e)
+                {
+                    e.getMessage();
+                }
+                break;
+            case "ecuador":
+            case "peru":
+            case "bolivia":
+                resultado= NumberFormat.getCurrencyInstance(locale).format(amountRedonded);
+                break;
+        }
+        Log.e("REOS","Convert-currencyForView-amountRedonded-Despues"+amountRedonded.toString());
+        return resultado;
     }
 
     public static double stringToDouble(String amount){
