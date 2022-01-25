@@ -68,7 +68,7 @@ public class DocumentoSQLite {
 
         try {
             SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
-            Cursor fila = sqlite.rawQuery("Select DISTINCT * from documentodeuda where compania_id=? and fuerzatrabajo_id=? and cliente_id=? order by fechaemision ASC", new String[]{compania_id,fuerzatrabajo_id,cliente_id});
+            Cursor fila = sqlite.rawQuery("Select DISTINCT * from documentodeuda where compania_id=? and fuerzatrabajo_id=? and cliente_id=? and CAST(saldo as INTEGER)>0 order by fechaemision ASC", new String[]{compania_id,fuerzatrabajo_id,cliente_id});
 
             while (fila.moveToNext()) {
                 documentoDeudaSQLiteEntity = new DocumentoDeudaSQLiteEntity();

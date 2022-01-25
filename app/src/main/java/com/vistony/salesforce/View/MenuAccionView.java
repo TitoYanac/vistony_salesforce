@@ -71,7 +71,7 @@ public class MenuAccionView extends Fragment {
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     LocationManager locationManager;
-    static String CardCode;
+    static String CardCode,CardName;
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
@@ -105,6 +105,7 @@ public class MenuAccionView extends Fragment {
             Log.e("JEPICAMEE","=>"+Lista.get(s).getCliente_id());
             Log.e("JEPICAMEE","=>"+Lista.get(s).getZona_id());
             CardCode=Lista.get(s).getCliente_id();
+            CardName=Lista.get(s).getNombrecliente();
         }
 
         b.putSerializable(ARG_PARAM,Lista);
@@ -168,9 +169,10 @@ public class MenuAccionView extends Fragment {
 
 
 
-        if (getArguments() != null) {
+        /*if (getArguments() != null) {
             getActivity().setTitle(Listado.get(0).getNombrecliente());
-        }
+        }*/
+        getActivity().setTitle(CardName);
     }
 
     @Override

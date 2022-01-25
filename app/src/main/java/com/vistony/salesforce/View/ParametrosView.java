@@ -229,9 +229,7 @@ ParametrosView extends Fragment {
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(getContext());
 
-        if(!BuildConfig.FLAVOR.equals("india")){ //la india por el app de lead no carga parametros
-            obtenerWSParametros.execute("Todos");
-        }
+
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -402,6 +400,11 @@ ParametrosView extends Fragment {
         {
             fabdescargarparametros.setEnabled(false);
         }
+
+        if(!BuildConfig.FLAVOR.equals("india")){ //la india por el app de lead no carga parametros
+            obtenerWSParametros.execute("Todos");
+        }
+
         return v;
     }
 
