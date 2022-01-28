@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ import com.vistony.salesforce.Entity.SQLite.ComisionesSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,6 +80,8 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
     static TextView tv_ano,tv_periodo;
     private OnFragmentInteractionListener mListener;
     static String dia,mes,ano;
+    ViewGroup layout;
+    static DecimalFormat format = new DecimalFormat("#0");
     public PronosticoComisionesView() {
         // Required empty public constructor
     }
@@ -123,6 +127,11 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
         listviewAvanceAnterior=(ListView) v.findViewById(R.id.listviewAvanceAnterior);
         //btn_comisiones_consultar= v.findViewById(R.id.btn_comisiones_consultar);
         //btn_comisiones_consultar.setOnClickListener(this);
+        layout=(ViewGroup) v.findViewById(R.id.content);
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        int id = R.layout.layout_leyenda_comisiones_detalle;
+        RelativeLayout relativeLayout = (RelativeLayout) layoutInflater.inflate(id, null, false);
+        layout.addView(relativeLayout);
         return v;
     }
 

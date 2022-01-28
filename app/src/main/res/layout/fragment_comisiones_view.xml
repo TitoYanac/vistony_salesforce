@@ -71,7 +71,7 @@
                     android:layout_marginTop="6dp"
                     android:layout_weight="4"
                     android:background="@color/colorPrimary"
-                    android:text="COMISIONES"
+                    android:text="RESUMEN"
                     android:textAlignment="center"
                     android:textColor="@color/white" />
             </TableRow>
@@ -86,15 +86,33 @@
             android:layout_weight="2"
             android:id="@+id/barChart"
             />
-
+        <TextView
+            android:id="@+id/txtdocumentodetalle"
+            style="@android:style/TextAppearance.Widget.TextView"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="6dp"
+            android:layout_weight="4"
+            android:background="@color/colorPrimary"
+            android:text="SEMAFORO"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/borde_cuadrado"
+            android:orientation="vertical" >
+        </LinearLayout>
 
     </LinearLayout>
     <ListView
         android:id="@+id/listviewdetallecomisiones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="390dp">
+        android:layout_marginTop="420dp">
 
     </ListView>
+
 
 </FrameLayout>

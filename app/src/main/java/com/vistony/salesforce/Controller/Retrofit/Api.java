@@ -12,6 +12,8 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ComisionesEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DepositList;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursCEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursDEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricContainerSalesEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaUnidadEntityResponse;
@@ -194,8 +196,16 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Commissions")
     Call<ComisionesEntityResponse> getComisiones (@Query("imei") String Imei,
                                                   @Query("SlpCode") String SlpCode,
-                                                  @Query("Year") String Year,
-                                                  @Query("Month") String Month
+                                                  @Query("DateIni") String Year,
+                                                  @Query("DateFin") String Month
+            );
+
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ScaColoursC")
+    Call<EscColoursCEntityResponse> getScColoursC (@Query("imei") String Imei
+    );
+
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ScaColoursD")
+    Call<EscColoursDEntityResponse> getScColoursD (@Query("imei") String Imei
     );
    // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);

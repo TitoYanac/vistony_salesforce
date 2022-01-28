@@ -213,8 +213,9 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText;
-        listaHistoricoOrdenVentaAdapter.filter(text);
+        if(listaHistoricoOrdenVentaAdapter!=null) {
+        listaHistoricoOrdenVentaAdapter.filter(newText);
+        }
         return true;
     }
 

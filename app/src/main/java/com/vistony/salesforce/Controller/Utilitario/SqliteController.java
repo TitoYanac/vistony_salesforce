@@ -19,7 +19,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
 
 
     public SqliteController(Context context){
@@ -95,9 +95,9 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE pricelist (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,pricelist_id TEXT,pricelist TEXT)");
 
             //Version 4
-        //db.execSQL("CREATE TABLE commissions (variable text,uom TEXT,advance TEXT,quota TEXT,percentage TEXT,esc_colours TEXT,hidedata TEXT)");
-        //db.execSQL("CREATE TABLE esc_colours_c (id text,description TEXT,status TEXT)");
-        //db.execSQL("CREATE TABLE esc_colours_d (id_esc_colours_c TEXT,id TEXT,rangemin TEXT,rangemax TEXT,colourmin TEXT,colourmax TEXT,degrade TEXT )");
+        db.execSQL("CREATE TABLE commissions (variable text,uom TEXT,advance TEXT,quota TEXT,percentage TEXT,esc_colours TEXT,hidedata TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT)");
+        db.execSQL("CREATE TABLE esc_colours_c (id text,description TEXT,status TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT)");
+        db.execSQL("CREATE TABLE esc_colours_d (id_esc_colours_c TEXT,id TEXT,rangemin TEXT,rangemax TEXT,colourmin TEXT,colourmax TEXT,degrade TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT )");
     }
 
     @Override
@@ -130,6 +130,11 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE usuario ADD COLUMN activecurrency TEXT");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN salesorderamount TEXT");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN collectionamount TEXT");
+        }
+        if(oldVersion==3&&newVersion==4){
+            db.execSQL("CREATE TABLE commissions (variable text,uom TEXT,advance TEXT,quota TEXT,percentage TEXT,esc_colours TEXT,hidedata TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT)");
+            db.execSQL("CREATE TABLE esc_colours_c (id text,description TEXT,status TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT)");
+            db.execSQL("CREATE TABLE esc_colours_d (id_esc_colours_c TEXT,id TEXT,rangemin TEXT,rangemax TEXT,colourmin TEXT,colourmax TEXT,degrade TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT )");
         }
     }
 

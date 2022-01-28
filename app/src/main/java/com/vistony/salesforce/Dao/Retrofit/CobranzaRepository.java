@@ -69,7 +69,7 @@ public class CobranzaRepository extends ViewModel {
             String PagoPOS,
             String Hora
     ){
-        Api api = Config.getClient().create(Api.class);
+        Api api = Config.getClientPost().create(Api.class);
         int acumResul=0;
         HashMap<String, String> params = new HashMap<>();
 

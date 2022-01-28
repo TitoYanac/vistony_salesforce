@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.vistony.salesforce.Entity.Adapters.ListaComisionesDetalleEntity;
@@ -29,11 +30,13 @@ public class ListaComisionesDetalleAdapter  extends
     private String[] Indices;
     //private int [] colors = new int []{Color.BLUE};
     private int[] colors;
+    boolean[] itemChecked;
 
     public ListaComisionesDetalleAdapter(Context context, List<ListaComisionesDetalleEntity> objects) {
         super(context, 0, objects);
         ArraylistaComisionesDetalleEntity = objects;
         this.context = context;
+        this.itemChecked=new boolean[objects.size()];
     }
 
     @Override
@@ -56,6 +59,9 @@ public class ListaComisionesDetalleAdapter  extends
             holder.tv_comisionesdetalle_avance = (TextView) convertView.findViewById(R.id.tv_comisionesdetalle_avance);
             holder.tv_comisionesdetalle_porcentaje = (TextView) convertView.findViewById(R.id.tv_comisionesdetalle_porcentaje);
             holder.v_gradiente_comisiones_detalle = (View) convertView.findViewById(R.id.v_gradiente_comisiones_detalle);
+            holder.cv_comision_detalle = (CardView) convertView.findViewById(R.id.cv_comision_detalle);
+            holder.lbl_comisionesdetalle_cuota = (TextView) convertView.findViewById(R.id.lbl_comisionesdetalle_cuota);
+            holder.lbl_comisionesdetalle_avance = (TextView) convertView.findViewById(R.id.lbl_comisionesdetalle_avance);
             //holder.barChartHorizonalComisionesDetalle = (BarChart) convertView.findViewById(R.id.barChartHorizonalComisionesDetalle);
             convertView.setTag(holder);
         } else {
@@ -73,8 +79,8 @@ public class ListaComisionesDetalleAdapter  extends
 
 
 
-        Drawable gradiente;
-        if (Float.parseFloat(lead.getPorcentajeavance()) >= 0 && Float.parseFloat(lead.getPorcentajeavance()) <= 30)
+        Drawable gradiente,bordecardview;
+        /*if (Float.parseFloat(lead.getPorcentajeavance()) >= 0 && Float.parseFloat(lead.getPorcentajeavance()) <= 30)
         {
 
             int h = holder.v_gradiente_comisiones_detalle.getHeight();
@@ -103,6 +109,53 @@ public class ListaComisionesDetalleAdapter  extends
         {
             gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_gradiente_muy_alto, null);
             holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
+        }*/
+        if (Float.parseFloat(lead.getPorcentajeavance()) >= 0 && Float.parseFloat(lead.getPorcentajeavance()) <= 79.99)
+        {
+            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_color_solido_rojo, null);
+            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
+            bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_rojo, null);
+            holder.cv_comision_detalle.setBackground(bordecardview);
+
+        } else if (Float.parseFloat(lead.getPorcentajeavance()) >= 80 && Float.parseFloat(lead.getPorcentajeavance()) <= 99.99)
+        {
+            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_color_solido_amarillo, null);
+            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
+            bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_amarillo, null);
+            holder.cv_comision_detalle.setBackground(bordecardview);
+
+
+        } else if (Float.parseFloat(lead.getPorcentajeavance()) >= 100)
+        {
+            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_color_solido_verde, null);
+            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
+            bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_verde, null);
+            holder.cv_comision_detalle.setBackground(bordecardview);
+
+
+        }
+
+        if(lead.getVariable().equals("RENTABILIDAD"))
+        {
+            itemChecked[position] = false;
+        }
+        else {
+            itemChecked[position] = true;
+        }
+
+        if(itemChecked[position])
+        {
+            holder.tv_comisionesdetalle_cuota.setVisibility(View.VISIBLE);
+            holder.tv_comisionesdetalle_avance.setVisibility(View.VISIBLE);
+            holder.lbl_comisionesdetalle_cuota.setVisibility(View.VISIBLE);
+            holder.lbl_comisionesdetalle_avance.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.tv_comisionesdetalle_cuota.setVisibility(View.INVISIBLE);
+            holder.tv_comisionesdetalle_avance.setVisibility(View.INVISIBLE);
+            holder.lbl_comisionesdetalle_cuota.setVisibility(View.INVISIBLE);
+            holder.lbl_comisionesdetalle_avance.setVisibility(View.INVISIBLE);
         }
         return convertView;
     }
@@ -112,7 +165,10 @@ public class ListaComisionesDetalleAdapter  extends
         TextView tv_comisionesdetalle_cuota;
         TextView tv_comisionesdetalle_avance;
         TextView tv_comisionesdetalle_porcentaje;
+        CardView cv_comision_detalle;
         View v_gradiente_comisiones_detalle;
+        TextView lbl_comisionesdetalle_cuota;
+        TextView lbl_comisionesdetalle_avance;
         //BarChart barChartHorizonalComisionesDetalle;
 
     }

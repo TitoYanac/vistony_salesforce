@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/relativecomisiondetalle">
+
+
+    <TextView
+        android:id="@+id/lbl_avance_bajo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="0dp"
+        android:text="0% - 79.99%"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"
+        />
+    <ImageView
+        android:id="@+id/imv_circulo_rojo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="120dp"
+        app:srcCompat="@drawable/ic_baseline_circle_24_rojo"
+        />
+    <TextView
+        android:id="@+id/lbl_avance_medio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="0dp"
+        android:text="80% - 99.99%"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"
+        />
+    <ImageView
+        android:id="@+id/imv_circulo_amarrillo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="250dp"
+        app:srcCompat="@drawable/ic_baseline_circle_24"
+        />
+    <TextView
+        android:id="@+id/lbl_avance_alto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="280dp"
+        android:layout_marginTop="0dp"
+        android:text="100% >"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"
+        />
+    <ImageView
+        android:id="@+id/imv_circulo_verde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="340dp"
+        app:srcCompat="@drawable/ic_baseline_circle_24_verde"
+        />
+
+
+</RelativeLayout>

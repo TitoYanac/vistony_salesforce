@@ -37,4 +37,30 @@ public class Config {
 
         return retrofit;
     }
+    public static Retrofit getClientPost() {
+        try{
+            if(client==null) {
+                client = new OkHttpClient.Builder()
+                        .connectTimeout(2, TimeUnit.MINUTES)
+                        .writeTimeout(2, TimeUnit.MINUTES)
+                        .readTimeout(2, TimeUnit.MINUTES)
+                        .retryOnConnectionFailure(true)
+                        .proxy(Proxy.NO_PROXY)
+                        //.connectionPool(new ConnectionPool(10,15,TimeUnit.SECONDS))
+                        //.dns(new Ipv4PreferDns())
+                        .build();
+            }
+
+            if(retrofit==null){
+                retrofit = new Retrofit.Builder()
+                        .baseUrl("http://169.47.196.209_2/")
+                        .addConverterFactory(GsonConverterFactory.create()).client(client)
+                        .build();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return retrofit;
+    }
 }

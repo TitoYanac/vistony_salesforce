@@ -3,100 +3,117 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minHeight="?attr/listPreferredItemHeight"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="8dp"
-    android:id="@+id/realtive_ruta"
-    >
+    android:id="@+id/realtive_ruta">
 
 
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_comision_detalle"
+        android:layout_width="380dp"
+        android:layout_height="150dp"
+        android:layout_margin="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground">
 
-    <TextView
-        android:id="@+id/tv_comisionesdetalle_variable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:text="Variable1"
-        android:textStyle="bold"
-        android:textSize="25dp"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        <TextView
+            android:id="@+id/tv_comisionesdetalle_variable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Variable1"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="25dp"
+            android:textStyle="bold" />
 
 
-    <View
-        android:id="@+id/v_gradiente_comisiones_detalle"
-        android:background="@drawable/linea_rectangular_gradiente_muy_bajo"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginTop="40dp"
-        />
-    <TextView
-        android:id="@+id/lbl_comisionesdetalle_cuota"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:text="Cuota"
-        android:textAppearance="?attr/textAppearanceListItem"
-        />
+        <View
+            android:id="@+id/v_gradiente_comisiones_detalle"
+            android:background="@drawable/linea_rectangular_gradiente_muy_bajo"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="40dp"
+            />
+        <TextView
+            android:id="@+id/lbl_comisionesdetalle_cuota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:layout_marginStart="10dp"
+            android:text="Cuota"
+            android:textAppearance="?attr/textAppearanceListItem"
+            />
 
-    <TextView
-        android:id="@+id/tv_comisionesdetalle_cuota"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Cuota1"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+            android:id="@+id/tv_comisionesdetalle_cuota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:layout_marginStart="10dp"
+            android:text="Cuota1"
+            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-        android:id="@+id/lbl_comisionesdetalle_avance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginLeft="140dp"
-        android:layout_marginTop="80dp"
-        android:text="Avance"
-        android:textAppearance="?attr/textAppearanceListItem"
-        />
+        <TextView
+            android:id="@+id/lbl_comisionesdetalle_avance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:layout_marginLeft="140dp"
+            android:layout_marginTop="80dp"
+            android:text="Avance"
+            android:textAppearance="?attr/textAppearanceListItem"
+            />
 
-    <TextView
-        android:id="@+id/tv_comisionesdetalle_avance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Avance1"
-        android:layout_marginStart="140dp"
-        android:layout_marginLeft="140dp"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+            android:id="@+id/tv_comisionesdetalle_avance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:text="Avance1"
+            android:layout_marginStart="140dp"
+            android:layout_marginLeft="140dp"
+            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-        android:id="@+id/lbl_comisionesdetalle_porcentaje"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="280dp"
-        android:layout_marginLeft="280dp"
-        android:layout_marginTop="80dp"
-        android:text="Porcentaje"
-        android:textAppearance="?attr/textAppearanceListItem"
-        />
+        <TextView
+            android:id="@+id/lbl_comisionesdetalle_porcentaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="270dp"
+            android:layout_marginLeft="270dp"
+            android:layout_marginTop="80dp"
+            android:text="% Avance"
+            android:textAppearance="?attr/textAppearanceListItem"
+            />
 
-    <TextView
-        android:id="@+id/tv_comisionesdetalle_porcentaje"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Porcentaje1"
-        android:layout_marginStart="280dp"
-        android:layout_marginLeft="280dp"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+            android:id="@+id/tv_comisionesdetalle_porcentaje"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:text="%"
+            android:layout_marginStart="280dp"
+            android:layout_marginLeft="280dp"
+            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceListItem"/>
 
+        <ImageView
+            android:id="@+id/imv_historico_cobranza_respuesta_ws"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="310dp"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_baseline_legend_toggle_24" />
+    </androidx.cardview.widget.CardView>
 
 
 </RelativeLayout>
