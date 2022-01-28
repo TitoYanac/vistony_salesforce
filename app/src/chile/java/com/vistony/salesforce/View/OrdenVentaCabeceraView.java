@@ -267,7 +267,7 @@ public class OrdenVentaCabeceraView extends Fragment {
         terminoPagoSQLiteDao=new TerminoPagoSQLiteDao(getContext());
         listaOrdenVentaCabeceraEntities=new ArrayList<>();
         listaOrdenVentaDetalleEntities=new ArrayList<>();
-        hiloObtenerAgencia.execute();
+
         values=new ArrayList<String>();
 
         if (getArguments() != null) {
@@ -566,6 +566,7 @@ public class OrdenVentaCabeceraView extends Fragment {
                 hiloObtenerResumenOrdenVenta.execute();
             }
         }
+        hiloObtenerAgencia.execute();
         return v;
     }
 

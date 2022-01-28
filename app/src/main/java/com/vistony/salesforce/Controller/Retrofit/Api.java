@@ -65,7 +65,7 @@ public interface Api {
     Call<VersionEntity> getVs(@Url String url);
 
     //@Streaming
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/version")
+    @GET(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/version")
     Call<ResponseBody> getNewApk(@Query("v") String version);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Banks")
@@ -83,16 +83,16 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/pricelist")
     Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Query("imei") String imei);
 
-    @POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/SalesOrder")
+    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/SalesOrder")
     Call<SalesOrderEntityResponse> sendOrder(@Body RequestBody params);
 
-    @POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections")
     Call<CobranzaDetalleEntity> sendCollection( @Body RequestBody params);
 
-    @PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollection(@Path("codeSap") String codeSap, @Body RequestBody params);
 
-    @PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollectionQR(@Path("codeSap") String codeSap, @Body RequestBody params);
 
     @Multipart
@@ -108,17 +108,17 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/PaymentTerms")
     Call<TerminoPagoEntityResponse> getTerminoPago (@Query("imei") String imei);
 
-    @POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Visit")
+    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Visit")
     Call<VisitaEntity> sendVisit (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/SalesOrder")
     Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Query("imei") String imei,@Query("fecha") String fecha);
 
-    @POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
+    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
     Call<DepositList> sendDeposit (@Body RequestBody params);
 
 
-    @PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits/{codeSap}")
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits/{codeSap}")
     Call<DepositList> updateDeposit(@Path("codeSap") String codeSap, @Body RequestBody params);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
