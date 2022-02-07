@@ -67,4 +67,5 @@
     <string name="lbl_type_validate_SMS">Validar SMS</string>
     <string name="lbl_tittle_dialog_validate_SMS">VALIDAR SMS</string>
     <string name="lbl_dialog_code_SMS">Codigo SMS:</string>
+    <string name="lbl_dispatch_date">FECHA ENTREGA</string>
 </resources>

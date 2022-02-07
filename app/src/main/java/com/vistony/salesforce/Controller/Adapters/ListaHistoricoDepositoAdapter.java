@@ -33,8 +33,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -152,7 +154,8 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         holder.tv_banco.setText(lead.getBankname());
         holder.tv_fecha_deposito.setText(
                 //formulasController.Convertirfechahoraafechanumerica(
-                lead.getFechadeposito()
+                Induvis.getDate(BuildConfig.FLAVOR,lead.getFechadeposito())
+
         //)
         );
         holder.tv_tipo_ingreso.setText(lead.getTipoingreso());
@@ -173,7 +176,7 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         String diaemision= sourceSplitemision2[2];
         String fechadiferida=diaemision+"-"+mesemision+"-"+anioemision;*/
         //holder.tv_fecha_diferida.setText(fechadiferida);
-        holder.tv_fecha_diferida.setText(lead.getFechadiferida());
+        holder.tv_fecha_diferida.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getFechadiferida()));
         //holder.chkdepositado.setChecked(lead.isCheckbox());
         final View finalConvertView = convertView;
         holder.imv_anular.setOnClickListener(new View.OnClickListener() {

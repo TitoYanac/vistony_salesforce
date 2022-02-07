@@ -36,6 +36,15 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_U_SYP_MDCD;
     public String orden_cabecera_U_SYP_MDMT;
     public String orden_cabecera_U_SYP_STATUS;
+    public String orden_cabecera_dispatch_date;
+
+    public String getOrden_cabecera_dispatch_date() {
+        return orden_cabecera_dispatch_date;
+    }
+
+    public void setOrden_cabecera_dispatch_date(String orden_cabecera_dispatch_date) {
+        this.orden_cabecera_dispatch_date = orden_cabecera_dispatch_date;
+    }
 
     public String getOrden_cabecera_U_SYP_MDTD() {
         return orden_cabecera_U_SYP_MDTD;

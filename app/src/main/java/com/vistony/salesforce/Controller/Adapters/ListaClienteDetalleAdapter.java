@@ -20,8 +20,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import com.vistony.salesforce.BuildConfig;
 
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.R;
 
@@ -106,15 +108,17 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
         String dia= sourceSplit2[2];*/
 
         String fechavencimiento=lead.getFechavencimiento();//anio+"-"+mes+"-"+dia;
-
+        Log.e("REOS","ListaClienteDetalleAdapter-fechaemision: "+fechaemision);
         holder.tv_documento.setText(lead.getNrodocumento());
         holder.tv_fecha_emision.setText(
                 //lead.getFechaemision()
-                //fechaemision
                 fechaemision
+                //Induvis.getDate(BuildConfig.FLAVOR,fechaemision)
         );
+        Log.e("REOS","ListaClienteDetalleAdapter-fechavencimiento: "+fechavencimiento);
         holder.tv_fecha_vencimiento.setText(
                 //lead.getFechavencimiento()
+                //Induvis.getDate(BuildConfig.FLAVOR,fechavencimiento)
                 fechavencimiento
         );
         holder.tv_importe.setText(Convert.currencyForView(lead.getImporte()));

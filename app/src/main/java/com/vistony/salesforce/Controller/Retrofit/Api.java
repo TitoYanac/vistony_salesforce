@@ -93,6 +93,7 @@ public interface Api {
     Call<CobranzaDetalleEntity> updateCollection(@Path("codeSap") String codeSap, @Body RequestBody params);
 
     @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
+    //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollectionQR(@Path("codeSap") String codeSap, @Body RequestBody params);
 
     @Multipart
@@ -109,28 +110,31 @@ public interface Api {
     Call<TerminoPagoEntityResponse> getTerminoPago (@Query("imei") String imei);
 
     @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Visit")
+    //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Visit")
     Call<VisitaEntity> sendVisit (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/SalesOrder")
     Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Query("imei") String imei,@Query("fecha") String fecha);
 
     @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
+    //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
     Call<DepositList> sendDeposit (@Body RequestBody params);
 
 
     @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits/{codeSap}")
+    //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits/{codeSap}")
     Call<DepositList> updateDeposit(@Path("codeSap") String codeSap, @Body RequestBody params);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
     Call<HistoricoDepositoEntityResponse> getHistoricoDeposito (@Query("imei") String imei,@Query("fecIni") String fecIni,@Query("fecFin") String fecFin);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Date")
     Call<HistoricoCobranzaEntityResponse> getHistoricoCobranza(@Query("imei") String imei,@Query("fecha") String fecha);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Status")
     Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaPD(@Query("imei") String imei,@Query("status") String TipoFecha);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Deposit")
     Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaDE(@Query("imei") String imei,@Query("deposit") String Deposito);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/PromotionType")

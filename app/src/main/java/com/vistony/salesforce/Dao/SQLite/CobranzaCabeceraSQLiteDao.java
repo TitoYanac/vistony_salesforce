@@ -464,7 +464,7 @@ public class CobranzaCabeceraSQLiteDao {
         try {
             abrir();
             Cursor fila = bd.rawQuery(
-                    "Select sap_code,banco_id,cobranza_id from cobranzacabecera where chkwsanulado= 'N' and chkanulado='Y' and compania_id=? and usuario_id=? ",new String[]{compania_id,usuario_id});
+                    "Select sap_code,banco_id,cobranza_id,comentarioanulado from cobranzacabecera where chkwsanulado= 'N' and chkanulado='Y' and compania_id=? and usuario_id=? ",new String[]{compania_id,usuario_id});
 
             while (fila.moveToNext())
             {
@@ -472,6 +472,7 @@ public class CobranzaCabeceraSQLiteDao {
                 deposito.setCode(fila.getString(0));
                 deposito.setBankID(fila.getString(1));
                 deposito.setDeposit(fila.getString(2));
+                deposito.setCancelReason(fila.getString(3));
                 deposito.setStatus("A"); //always Anulado
                 depositos.add(deposito);
             }

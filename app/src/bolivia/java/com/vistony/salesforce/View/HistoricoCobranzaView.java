@@ -734,8 +734,9 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText;
-        listaHistoricoCobranzaAdapter.filter(text);
+        if(listaHistoricoCobranzaAdapter!=null) {
+        listaHistoricoCobranzaAdapter.filter(newText);
+        }
         return true;
     }
 

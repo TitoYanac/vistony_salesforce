@@ -31,6 +31,7 @@ public class DepositEntity {
     @SerializedName("Code")
     private String Code;
 
+
     public String getCode() {
         return Code;
     }

@@ -48,6 +48,15 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String U_SYP_MDMT;
     public String U_SYP_STATUS;
     public String rate;
+    public String dispatchdate;
+
+    public String getDispatchdate() {
+        return dispatchdate;
+    }
+
+    public void setDispatchdate(String dispatchdate) {
+        this.dispatchdate = dispatchdate;
+    }
 
     public String getRate() {
         return rate;

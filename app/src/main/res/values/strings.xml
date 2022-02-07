@@ -74,6 +74,7 @@
     <string name="lbl_type_validate_SMS">Validar SMS</string>
     <string name="lbl_tittle_dialog_validate_SMS">VALIDAR SMS</string>
     <string name="lbl_dialog_code_SMS">Codigo SMS:</string>
+    <string name="lbl_dispatch_date">Fecha Entrega:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 

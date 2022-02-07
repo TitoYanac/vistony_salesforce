@@ -26,8 +26,10 @@ public class Config {
             case "ecuador":
             case "chile":
             case "peru":
-            case "bolivia":
                 puerto = ":8054";
+                break;
+            case "bolivia":
+                puerto = ":8052";
                 break;
         }
         try{

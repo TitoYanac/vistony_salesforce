@@ -57,7 +57,9 @@ public class Induvis {
 
     public static String getDate(String flavor,String dateBD){
         String dateView="",year,month,day;
-
+        Log.e("REOS","Induvis-getDate-flavor:"+flavor);
+        Log.e("REOS","Induvis-getDate-dateBD:"+dateBD);
+        try {
         switch (flavor){
             case "bolivia":
             case "india":
@@ -67,10 +69,15 @@ public class Induvis {
                 year=dateBD.substring(0,4);
                 month=dateBD.substring(4,6);
                 day=dateBD.substring(6,8);
-                dateView=year+"-"+month+"-"+day;
+                dateView=day+"/"+month+"/"+year;
 
                 break;
         }
+        }catch (Exception e)
+        {
+            Log.e("REOS","Induvis-getDate-e:"+e);
+        }
+        Log.e("REOS","Induvis-getDate-dateView:"+dateView);
         return dateView;
     }
 
