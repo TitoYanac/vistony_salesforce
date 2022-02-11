@@ -459,13 +459,21 @@ public class CobranzaRepository extends ViewModel {
 
                                 String val = "N";
                                 if (respuesta.getCode() != null && respuesta.getErrorCode().equals("0")) {
+
                                     responseData.add("El Recibo fue aceptado en SAP");
                                     val = "Y";
                                 } else {
                                     responseData.add("El Recibo no fue aceptado en SAP");
+
+
                                     val = "N";
                                 }
-
+                                Log.e("REOS","CobranzaRepository-sendCollection-respuesta-val"+val);
+                                Log.e("REOS","CobranzaRepository-sendCollection-respuesta.getItemDetail()"+respuesta.getItemDetail());
+                                Log.e("REOS","CobranzaRepository-sendCollection-respuesta.getCode()"+respuesta.getCode());
+                                Log.e("REOS","CobranzaRepository-sendCollection-SesionEntity.compania_id"+SesionEntity.compania_id);
+                                Log.e("REOS","CobranzaRepository-sendCollection-respuesta.getMessage()"+respuesta.getMessage());
+                                Log.e("REOS","CobranzaRepository-sendCollection-respuesta.getReceip()"+respuesta.getReceip());
                                 cobranzaDetalleSQLiteDao.updateStatusCodeSap(respuesta.getItemDetail(), respuesta.getCode(), SesionEntity.compania_id, respuesta.getMessage(), val,respuesta.getReceip());
                             }
 

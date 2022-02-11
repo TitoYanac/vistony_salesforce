@@ -42,9 +42,13 @@ public class ComisionesWS {
         );
         try
         {
+            Log.e("REOS","ComisionesWS-getComisiones-call"+call.toString());
+
             Response<ComisionesEntityResponse> response= call.execute();
+            Log.e("REOS","ComisionesWS-getComisiones-response"+response.toString());
             if(response.isSuccessful()) {
                 ComisionesEntityResponse comisionesEntityResponse=response.body();
+                Log.e("REOS","ComisionesWS-getComisiones-comisionesEntityResponse"+comisionesEntityResponse.getComisionesEntity().toString());
                 for(int i=0;i<comisionesEntityResponse.getComisionesEntity().size();i++){
 
                     ComisionesSQLiteEntity ObjComisiones = new ComisionesSQLiteEntity();

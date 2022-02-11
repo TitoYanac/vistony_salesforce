@@ -87,6 +87,7 @@ public interface Api {
     Call<SalesOrderEntityResponse> sendOrder(@Body RequestBody params);
 
     @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
     Call<CobranzaDetalleEntity> sendCollection( @Body RequestBody params);
 
     @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")

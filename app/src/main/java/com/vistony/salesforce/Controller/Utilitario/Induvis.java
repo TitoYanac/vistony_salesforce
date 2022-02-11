@@ -69,7 +69,7 @@ public class Induvis {
                 year=dateBD.substring(0,4);
                 month=dateBD.substring(4,6);
                 day=dateBD.substring(6,8);
-                dateView=day+"/"+month+"/"+year;
+                dateView=year+"-"+month+"-"+day;
 
                 break;
         }
@@ -133,7 +133,7 @@ public class Induvis {
                 impuesto=0.18;
                 break;
             case "bolivia":
-                impuesto=0.1494;
+                impuesto=0.14942529;
                 break;
         }
 
@@ -153,7 +153,7 @@ public class Induvis {
                 impuesto="18";
                 break;
             case "bolivia":
-                impuesto="14.94";
+                impuesto="14.942529";
                 break;
         }
 

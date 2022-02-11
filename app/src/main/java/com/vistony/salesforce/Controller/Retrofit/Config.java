@@ -23,22 +23,26 @@ public class Config {
         String baseUrl = "http://salesforce.vistony.com";
         String puerto = "";
         switch (BuildConfig.FLAVOR) {
-            case "ecuador":
             case "chile":
-            case "peru":
                 puerto = ":8054";
                 break;
             case "bolivia":
                 puerto = ":8052";
                 break;
+            case "ecuador":
+                puerto = ":8050";
+                break;
+            case "peru":
+                puerto = ":8001";
+                break;
         }
         try{
             if(client==null) {
                 client = new OkHttpClient.Builder()
-                .connectTimeout(2, TimeUnit.MINUTES)
-                .writeTimeout(2, TimeUnit.MINUTES)
-                .readTimeout(2, TimeUnit.MINUTES)
-                .retryOnConnectionFailure(true)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(false)
                 .proxy(Proxy.NO_PROXY)
                 //.connectionPool(new ConnectionPool(10,15,TimeUnit.SECONDS))
                 //.dns(new Ipv4PreferDns())
@@ -47,9 +51,8 @@ public class Config {
 
            if(retrofit==null){
                 retrofit = new Retrofit.Builder()
-                //.baseUrl("http://169.47.196.209/")
+                //.baseUrl("http://169.47.196.209")
                         //.baseUrl("http://salesforce.vistony.com")
-
                         .baseUrl( baseUrl+puerto)
                 .addConverterFactory(GsonConverterFactory.create()).client(client)
                 .build();
@@ -57,6 +60,7 @@ public class Config {
             }
         }catch (Exception e){
             e.printStackTrace();
+            Log.e("REOS","Config-getClient-e:"+e.toString());
         }
 
         return retrofit;

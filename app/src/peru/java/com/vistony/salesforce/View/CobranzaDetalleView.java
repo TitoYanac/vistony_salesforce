@@ -866,10 +866,18 @@ public class CobranzaDetalleView extends Fragment {
                 return false;
             case R.id.generarpdf:
                 //alertaGenerarPDF().show();
-                alertatypegeneratedocumentcollection().show();
+                if (SesionEntity.Print.equals("Y")) {
+                    alertaGenerarPDF().show();
+                } else
+                    {
+                        alertatypegeneratedocumentcollection().show();
+                    }
+
+
                 return true;
             case R.id.validarqr:
                 if (SesionEntity.Print.equals("Y")) {
+
                     alertaValidarQR().show();
 
                 } else {

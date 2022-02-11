@@ -190,8 +190,8 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
                 pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Resumen Diario", true, false);
                 ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                 resumenDiarioRepository.getResumenDiario(SesionEntity.compania_id ,SesionEntity.imei,fechasap,getContext(),fechasap).observe(getActivity(), data -> {
-                    Log.e("REOS", "resumenDiarioRepository.data" + data.toString());
-                    Log.e("REOS", "resumenDiarioRepository.data.size()" + data.size());
+//                    Log.e("REOS", "resumenDiarioRepository.data" + data.toString());
+                   // Log.e("REOS", "resumenDiarioRepository.data.size()" + data.size());
 
                     ResumenDiarioPDF resumenDiarioPDF=new ResumenDiarioPDF();
                     resumenDiarioPDF.generarPdf(getContext(),data,fechasap);

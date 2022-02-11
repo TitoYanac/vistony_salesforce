@@ -112,14 +112,14 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
         holder.tv_documento.setText(lead.getNrodocumento());
         holder.tv_fecha_emision.setText(
                 //lead.getFechaemision()
-                fechaemision
-                //Induvis.getDate(BuildConfig.FLAVOR,fechaemision)
+                //fechaemision
+                Induvis.getDate(BuildConfig.FLAVOR,fechaemision)
         );
         Log.e("REOS","ListaClienteDetalleAdapter-fechavencimiento: "+fechavencimiento);
         holder.tv_fecha_vencimiento.setText(
                 //lead.getFechavencimiento()
-                //Induvis.getDate(BuildConfig.FLAVOR,fechavencimiento)
-                fechavencimiento
+                Induvis.getDate(BuildConfig.FLAVOR,fechavencimiento)
+                //fechavencimiento
         );
         holder.tv_importe.setText(Convert.currencyForView(lead.getImporte()));
         holder.tv_saldo.setText(Convert.currencyForView(lead.getSaldo()));

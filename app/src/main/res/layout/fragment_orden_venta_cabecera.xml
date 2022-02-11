@@ -254,7 +254,48 @@
                     android:background="@color/Rojo_Vistony"
                     android:src="@drawable/ic_search_white_24dp" />
             </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <TextView
+                    android:id="@+id/lbl_dispatch_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:enabled="true"
+                    android:hint=""
+                    android:paddingLeft="10dp"
+                    android:text="@string/lbl_dispatch_date"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_dispatch_date"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="4"
+                    android:background="@drawable/borde_cuadrado"
+                    android:enabled="true"
+                    android:gravity="left|center_vertical"
+                    android:hint=""
+                    android:paddingLeft="10dp"
+                    android:text="@string/tag_select"
+                    android:textSize="20dp" />
+
+                <ImageButton
+                    android:id="@+id/btn_dispatch_date"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/Rojo_Vistony"
+                    android:src="@drawable/ic_baseline_calendar_month_24" />
+            </TableRow>
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

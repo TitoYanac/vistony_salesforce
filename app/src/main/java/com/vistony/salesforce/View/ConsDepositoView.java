@@ -409,7 +409,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
         //diadespacho = dayOfMonth;
         //mesdespacho = month;
         parametrofecha=year+mes+dia;
-        tv_fechacobranza.setText(dia + "/" + mes + "/" + year);
+        tv_fechacobranza.setText(year + "-" + mes + "-" + dia);
     }
 
     /**

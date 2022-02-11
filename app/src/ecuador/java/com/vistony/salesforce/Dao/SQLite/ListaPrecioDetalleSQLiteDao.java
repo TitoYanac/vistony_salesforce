@@ -59,6 +59,8 @@ public class ListaPrecioDetalleSQLiteDao {
 
     public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (String cardCode, String terminoPago){
 
+        Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle-cardCode:"+cardCode);
+        Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle-terminoPago:"+terminoPago);
         arraylistaProductoEntity = new ArrayList<ListaProductoEntity>();
         ListaProductoEntity listaProductoEntity;
         Cursor fila=null;
@@ -80,10 +82,12 @@ public class ListaPrecioDetalleSQLiteDao {
                 if(isCash.equals("0")){
                     tipoDeCompra=TipoDeCompra.credito;
                 }
-
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle-tipoDeCompra:"+tipoDeCompra);
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle-listaArtificio:"+listaArtificio);
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle-isCash:"+isCash);
                 String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
                         "IFNULL(stock_general,0) stock_general,"+tipoDeCompra+","+tipoDeCompra+",gal," +
-                        "porcentaje_dsct FROM listapreciodetalle  WHERE Tipo IN("+listaArtificio+")";
+                        "porcentaje_dsct FROM listapreciodetalle  WHERE Tipo IN ("+listaArtificio+")";
 
                 fila = sqlite.rawQuery(query,null);
 

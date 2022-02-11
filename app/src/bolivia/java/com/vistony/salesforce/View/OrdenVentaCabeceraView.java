@@ -1403,7 +1403,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             dia='0'+dia;
         }
         parametrofecha=year+mes+dia;
-        tv_dispatch_date.setText(dia + "/" + mes + "/" + year);
+        tv_dispatch_date.setText(year + "-" + mes + "-" + dia);
     }
 
 

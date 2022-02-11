@@ -58,7 +58,7 @@ public class Convert {
                 locale=new Locale("ES","PE");
                 break;
             case "bolivia":
-                amountRedonded =new BigDecimal(amount).setScale(3, RoundingMode.HALF_UP);
+                amountRedonded =new BigDecimal(amount).setScale(2, RoundingMode.HALF_UP);
                 locale=new Locale("ES","BO");
             break;
         }
@@ -131,6 +131,15 @@ public class Convert {
         }
         Locale locale=null;
         BigDecimal amountRedonded=new BigDecimal(amount).setScale(0, RoundingMode.HALF_UP);
+        return amountRedonded.toString();
+    }
+
+    public static String numberForView2(String amount){
+        if(amount.equals("")){
+            amount="0";
+        }
+        Locale locale=null;
+        BigDecimal amountRedonded=new BigDecimal(amount).setScale(2, RoundingMode.HALF_UP);
         return amountRedonded.toString();
     }
 

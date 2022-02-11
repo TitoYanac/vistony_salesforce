@@ -351,7 +351,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase(total,font3));
+            cellResu = new PdfPCell(new Phrase(Convert.currencyForView(total),font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tblResu.addCell(cellResu);

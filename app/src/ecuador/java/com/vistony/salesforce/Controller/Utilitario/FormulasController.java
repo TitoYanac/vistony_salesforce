@@ -361,7 +361,8 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDCD(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDMT(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date()
             );
         }
 
@@ -626,7 +627,7 @@ public class FormulasController {
         documentHeader.setComments(ovCabecera.getComentario());
         documentHeader.setDocCurrency(ovCabecera.getMoneda_id());
         documentHeader.setDocDate(Convertirfechahoraafechanumerica(ovCabecera.getFecharegistro()));
-        documentHeader.setDocDueDate(Convertirfechahoraafechanumerica(ovCabecera.getFecharegistro()));
+        documentHeader.setDocDueDate(ovCabecera.getDispatchdate());
         documentHeader.setDocType(ovCabecera.getDocType());
         documentHeader.setU_VIS_SalesOrderID(ovCabecera.getOrdenventa_id());
         documentHeader.setDocumentsOwner(SesionEntity.documentsowner);
@@ -659,7 +660,7 @@ public class FormulasController {
         if(ovCabecera.getExcede_lineacredito().equals("1")&&!SesionEntity.contado.equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
             //documentHeader.setApCredit("Y");
             documentHeader.setDraft(Induvis.getStatusDraft());
-            //documentHeader.setComments(documentHeader.getComments()+" Regla: Excede Linea de Credito");
+            documentHeader.setComments(documentHeader.getComments()+" Regla: Excede Linea de Credito");
        }else{
 
        }
@@ -667,7 +668,7 @@ public class FormulasController {
        if(Integer.parseInt(ovCabecera.getDueDays())>5){ //NO CUMPLE CON LA VALIDACIÓN DE DOCUMENTOS VENCIDOS
            //documentHeader.setApDues("Y");
            documentHeader.setDraft(Induvis.getStatusDraft());
-           //documentHeader.setComments(documentHeader.getComments()+" Regla: Documento con fecha vencimiento mayor 5 dias");
+           documentHeader.setComments(documentHeader.getComments()+" Regla: Documento con fecha vencimiento mayor 5 dias");
        }else{
 
         }
@@ -685,7 +686,7 @@ public class FormulasController {
        }else{
             //documentHeader.setApTPag("Y");
             documentHeader.setDraft(Induvis.getStatusDraft());
-            //documentHeader.setComments(documentHeader.getComments()+" Regla: Cambio de Termino de Pago");
+            documentHeader.setComments(documentHeader.getComments()+" Regla: Cambio de Termino de Pago");
         }
 
 

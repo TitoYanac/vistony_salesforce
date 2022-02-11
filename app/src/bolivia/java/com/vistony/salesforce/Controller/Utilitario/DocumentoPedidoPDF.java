@@ -38,14 +38,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.GregorianCalendar;
 
 import harmony.java.awt.Color;
 
 public class DocumentoPedidoPDF extends AppCompatActivity {
-
+    DecimalFormat format = new DecimalFormat("#0.00");
     private final static String NOMBRE_DIRECTORIO = "OrdenVenta";
     private final static String ETIQUETA_ERROR = "ERROR";
 
@@ -279,7 +281,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             documento.add(tblDetalle);
 
             //float[] columnWidths = {1.5f, 6f, 1.5f,2f,2f,2f};
-            float[] columnWidths = {1f,2.5f, 9f,1.5f,1.5f,2f};
+            float[] columnWidths = {1f,2.5f, 8.5f,1.5f,1.5f,2.5f};
             PdfPTable tblLineas = new PdfPTable(columnWidths);
             tblLineas.setWidthPercentage(100);
             PdfPCell cellLineasDetalle = null;
@@ -341,11 +343,11 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                 tblLineas.addCell(cellLineasDetalle);
                 if(ListaOrdenVentaDetalle.get(l).getPorcentajedescuento().equals("100")||ListaOrdenVentaDetalle.get(l).getPorcentajedescuento().equals("100.0"))
                 {
-                    cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getMontosubtotal(),font3));
+                    cellLineasDetalle = new PdfPCell(new Phrase( (ListaOrdenVentaDetalle.get(l).getMontosubtotal()),font3));
                 }
                 else
                     {
-                        cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getMontototallinea(),font3));
+                        cellLineasDetalle = new PdfPCell(new Phrase((ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
                     }
 
                 //cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getMontosubtotal(),font3));
@@ -368,7 +370,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase(total,font3));
+            cellResu = new PdfPCell(new Phrase(Convert.currencyForView(total),font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tblResu.addCell(cellResu);

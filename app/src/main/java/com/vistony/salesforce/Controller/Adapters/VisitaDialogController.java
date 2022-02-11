@@ -72,11 +72,18 @@ public class VisitaDialogController extends DialogFragment {
 
         } else {
             Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
-            // We have already permission to use the location
-            gpsController =  new GPSController(getContext());
-            mLocation = gpsController.getLocation(mLocation);
-            latitude = mLocation.getLatitude();
-            longitude= mLocation.getLongitude();
+            try {
+
+
+                // We have already permission to use the location
+                gpsController = new GPSController(getContext());
+                mLocation = gpsController.getLocation(mLocation);
+                latitude = mLocation.getLatitude();
+                longitude = mLocation.getLongitude();
+            }catch (Exception e)
+            {
+                Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
+            }
         }
         //final EditText textMotivo = dialog.findViewById(R.id.textEditMotivo);
         //textMotivo.setSingleLine(false);

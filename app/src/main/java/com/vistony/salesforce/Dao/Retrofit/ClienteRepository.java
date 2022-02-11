@@ -44,11 +44,13 @@ public class ClienteRepository extends ViewModel {
 
     public ArrayList<ClienteSQLiteEntity>getCustomers(String Imei){
         Call<ClienteEntityResponse> call = Config.getClient().create(Api.class).getCliente(Imei);
+        Log.e("REOS","ClienteRepository-getCustomers-call:"+call.toString());
         try{
             Response<ClienteEntityResponse> response= call.execute();
+            Log.e("REOS","ClienteRepository-getCustomers-response:"+response.toString());
                 if(response.isSuccessful()) {
                     ClienteEntityResponse clienteEntityResponse=response.body();
-
+                    Log.e("REOS","ClienteRepository-getCustomers-clienteEntityResponse:"+clienteEntityResponse.toString());
                     for(int i = 0; i<clienteEntityResponse.getClienteEntity().size(); i++){
 
                         ClienteSQLiteEntity ObjCliente = new ClienteSQLiteEntity();

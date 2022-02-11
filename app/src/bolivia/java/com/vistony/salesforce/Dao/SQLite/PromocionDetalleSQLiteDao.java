@@ -18,7 +18,7 @@ public class PromocionDetalleSQLiteDao {
     SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<PromocionDetalleSQLiteEntity> listaPromocionDetalleSQLiteEntity;
-    DecimalFormat format = new DecimalFormat("#0.00");
+    //DecimalFormat format = new DecimalFormat("#0.00");
 
     public PromocionDetalleSQLiteDao(Context context)
     {

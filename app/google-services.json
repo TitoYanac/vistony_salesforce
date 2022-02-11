@@ -125,6 +125,35 @@
       "client_info": {
         "mobilesdk_app_id": "1:970594490766:android:1318aed080d9d18fb72cdf",
         "android_client_info": {
+          "package_name": "com.vistony.salesforceHuawey.bolivia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970594490766-q6sm6ki41rmp4ijgdog8iod2kvd516p6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHKa49uvrxb0T_bqR0GwadBmnuhu4lwZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970594490766-q6sm6ki41rmp4ijgdog8iod2kvd516p6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970594490766:android:1318aed080d9d18fb72cdf",
+        "android_client_info": {
           "package_name": "com.vistony.salesforce.bolivia"
         }
       },
@@ -151,5 +180,6 @@
       }
     }
   ],
+
   "configuration_version": "1"
 }
