@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/HojaDespachoCabecera"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.DispatchSheetView">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp">
+                <ImageButton
+                    android:id="@+id/imb_consultar_fecha_hoja_despacho"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/custom_border_button_red"
+                    android:src="@drawable/ic_baseline_date_range_24_white"
+                    />
+                <TextView
+                    android:background="@drawable/borde_cuadrado_hoja_despacho_negro"
+                    android:id="@+id/tv_fecha_hoja_despacho"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingTop="15dp"
+                    android:layout_weight="1"
+                    android:enabled="true"
+                    android:hint=""
+                    android:textAlignment="center"
+                    android:text="1900-01-01"
+                    android:textSize="20dp" />
+
+                <com.omega_r.libs.OmegaCenterIconButton
+                    android:id="@+id/btn_consultar_fecha_despacho"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@drawable/custom_border_button_red"
+                    android:text="CONSULTAR"
+                    android:textColor="@color/white"
+                    android:drawableLeft="@drawable/ic_search_white_24dp"
+                    />
+            </TableRow>
+
+        </TableLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            >
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:id="@+id/lbl_codigo_control"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="Codigo Control:"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spn_control_id"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_weight="8"
+                    android:spinnerMode="dropdown"
+                    android:textAlignment="gravity" />
+                <ImageButton
+                    android:id="@+id/imb_consultar_codigo_control"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/custom_border_button_red"
+                    android:src="@drawable/ic_search_white_24dp"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_despachocabecera"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_weight="4"
+                    android:background="@color/colorPrimary"
+                    android:text="DESPACHOS"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+            </TableRow>
+
+
+        </TableLayout>
+        <ListView
+            android:id="@+id/lista_despachos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="70dp"
+            >
+
+</ListView>
+
+
+
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:focusable="false">
+
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lbl_cantidad_despachos"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="Cantidad Despacho:"
+                android:textColor="@color/white"
+                android:textSize="24dp"></TextView>
+
+            <TextView
+                android:id="@+id/tv_cantidad_despachos"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:text="0"
+                android:textColor="@color/white"
+                android:gravity="right"
+                android:textSize="24dp"></TextView>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lbl_total_deuda"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="Total Deuda:"
+                android:textColor="@color/white"
+                android:textSize="24dp"></TextView>
+
+            <TextView
+                android:id="@+id/tv_total_deuda"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:text="0"
+                android:textColor="@color/white"
+                android:gravity="right"
+                android:textSize="24dp"></TextView>
+
+        </TableRow>
+    </TableLayout>-->
+</FrameLayout>

@@ -25,6 +25,15 @@ public class CollectionEntity {
     private String SlpCode;
     private String Code;
     private String U_VIS_UserID;
+    private String Intent;
+
+    public String getIntent() {
+        return Intent;
+    }
+
+    public void setIntent(String intent) {
+        Intent = intent;
+    }
 
     public String getU_VIS_UserID() {
         return U_VIS_UserID;

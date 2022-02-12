@@ -1,6 +1,7 @@
 package com.vistony.salesforce.View;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricContainerSalesAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
@@ -64,6 +66,7 @@ public class HistoricContainerSKU extends Fragment {
     static LifecycleOwner activity;
     static Activity Activity;
     static TextView tv_cantidad_historico_venta,tv_monto_historico_venta;
+    static private ProgressDialog pd;
     public HistoricContainerSKU() {
         // Required empty public constructor
     }
@@ -210,6 +213,8 @@ public class HistoricContainerSKU extends Fragment {
 
     static public void ObtenerListaHistoricContainerSKU()
     {
+        pd = new ProgressDialog(Activity);
+        pd = ProgressDialog.show(Activity, "Por favor espere", "Consultando Facturas", true, false);
         try {
             historicContainerSalesRepository.getHistoricContainerSales(
                     SesionEntity.imei,
@@ -222,11 +227,16 @@ public class HistoricContainerSKU extends Fragment {
             ).observe(activity, data -> {
                 Log.e("Jepicame","=>"+data);
                 ListarHistoricContainerSalesSKU(data);
+                if(data.isEmpty()||data==null)
+                {
+                    Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
+                }
             });
         } catch (ParseException e) {
             e.printStackTrace();
             Log.e("REOS","HistoricContainerSaleFocoView-onCreateView-e:"+e.toString());
         }
+        pd.dismiss();
     }
 
 }

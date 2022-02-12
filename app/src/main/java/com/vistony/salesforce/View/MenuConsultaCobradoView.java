@@ -201,7 +201,9 @@ public class MenuConsultaCobradoView extends Fragment {
                 }
         );
         dialogButtonOK.setOnClickListener(v -> {
-            //ObtenerParametrosCheck();
+            //
+            pd = new ProgressDialog(getActivity());
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Calculo de Cuotas de Cliente", true, false);
             GenerarQuotaPerCustomerPDF();
             Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.click:");
             //dialog.dismiss();
@@ -216,8 +218,7 @@ public class MenuConsultaCobradoView extends Fragment {
     final List<QuotasPerCustomerInvoiceEntity> listQuotasPerCustomerInvoiceEntity=null;
     public void GenerarQuotaPerCustomerPDF()
     {
-        pd = new ProgressDialog(getActivity());
-        pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Calculo de Cuotas de Cliente", true, false);
+
         ///////////////////////////// BANCO SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         try {
@@ -226,10 +227,10 @@ public class MenuConsultaCobradoView extends Fragment {
 
         quotasPerCustomerRepository.getQuotasPerCustomerInvoice(SesionEntity.fuerzatrabajo_id,getContext(),CardCode).observe(getActivity(), data1 ->
         {
-            Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.data1.size():"+data1.size());
+//            Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.data1.size():"+data1.size());
             quotasPerCustomerDetailRepository.getQuotasPerCustomerDetail (SesionEntity.fuerzatrabajo_id,getContext(),CardCode).observe(getActivity(), data2 ->
             {
-                Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.data1.size():"+data2.size());
+                //Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.data1.size():"+data2.size());
                 if(!data2.isEmpty()&&!data1.isEmpty())
                 {
                     Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.solicitarGenerarPDF:");

@@ -498,6 +498,99 @@ public class CobranzaRepository extends ViewModel {
             Log.e("REOS","CobranzaRepository-sendCollection-error: "+e.toString());
         }
     }
+
+    //Prueba Endpoint Walter
+    public MutableLiveData<String> UndepositedPendingCollectionCountSend(Context context){
+        MutableLiveData<String> temp=new MutableLiveData<String>();
+
+        sendCollectionCountSend(context, new CollectionCallback(){
+            @Override
+            public void onResponseSap(ArrayList<String> data) {
+                if(data==null){
+                    temp.setValue("No hay recibos sin depositar pendientes de enviar");
+                }else{
+                    temp.setValue(data.get(0));
+                }
+            }
+            @Override
+            public void onResponseErrorSap(String response) {
+                temp.setValue(response);
+            }
+        });
+
+        return temp;
+    }
+
+    private void sendCollectionCountSend(final Context context,final CollectionCallback callback){
+        String  json=null;
+        Gson gson=new Gson();
+        if(cobranzaDetalleSQLiteDao==null){
+            cobranzaDetalleSQLiteDao =new CobranzaDetalleSQLiteDao(context);
+        }
+        ArrayList<CollectionEntity> listCollection=new ArrayList<>();
+
+        listCollection = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendientesFormatoJSONCountSend(SesionEntity.compania_id, SesionEntity.usuario_id);
+        Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-listCollection.size(): "+listCollection.size());
+        try {
+            if (listCollection != null && listCollection.size() > 0) {
+                json = gson.toJson(listCollection);
+                json = "{ \"Collections\":" + json + "}";
+            }
+            Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-json: "+json);
+            if (json != null) {
+                RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
+                Config.getClient().create(Api.class).sendCollectionCountSend(jsonRequest).enqueue(new Callback<CobranzaDetalleEntity>() {
+                    @Override
+                    public void onResponse(Call<CobranzaDetalleEntity> call, Response<CobranzaDetalleEntity> response) {
+
+                        CobranzaDetalleEntity cobranzaDetalleEntity = response.body();
+                        Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-response: "+response.toString());
+                        if (response.isSuccessful() && cobranzaDetalleEntity != null) {
+                            ArrayList<String> responseData = new ArrayList<>();
+
+                            for (CobranzaItemEntity respuesta : cobranzaDetalleEntity.getCobranzaItem()) {
+
+                                String val = "N";
+                                if (respuesta.getCode() != null && respuesta.getErrorCode().equals("0")) {
+
+                                    responseData.add("El Recibo fue aceptado en SAP");
+                                    val = "Y";
+                                } else {
+                                    responseData.add("El Recibo no fue aceptado en SAP");
+
+
+                                    val = "N";
+                                }
+                                Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-respuesta-val"+val);
+                                Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-respuesta.getItemDetail()"+respuesta.getItemDetail());
+                                Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-respuesta.getCode()"+respuesta.getCode());
+                                Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-SesionEntity.compania_id"+SesionEntity.compania_id);
+                                Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-respuesta.getMessage()"+respuesta.getMessage());
+                                Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-respuesta.getReceip()"+respuesta.getReceip());
+                                cobranzaDetalleSQLiteDao.updateStatusCodeSap(respuesta.getItemDetail(), respuesta.getCode(), SesionEntity.compania_id, respuesta.getMessage(), val,respuesta.getReceip());
+                            }
+
+                            callback.onResponseSap(responseData);
+                        } else {
+                            callback.onResponseErrorSap(response.message());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<CobranzaDetalleEntity> call, Throwable t) {
+                        callback.onResponseErrorSap(t.getMessage());
+                        call.cancel();
+                        Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-onFailure: "+t.toString());
+                    }
+                });
+            } else {
+                callback.onResponseErrorSap("No hay recibos sin depositar pendientes de enviar");
+            }
+        }catch (Exception e)
+        {
+            Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-error: "+e.toString());
+        }
+    }
     //////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     //////////////////Enviar Recibos  Depositados\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public MutableLiveData<String> depositedPendingCollection(Context context){

@@ -289,26 +289,36 @@ ParametrosView extends Fragment {
                 break;
             case "peru":
             case "bolivia":
-                if (listaparametrosSQLiteEntity.isEmpty()) {
-                    parametrosSQLite.LimpiarParametros();
-                    parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
-                    //parametrosSQLite.InsertaParametros("8", "STOCK", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
-                }
-                if(parametrosSQLite.ObtenerCantidadParametroID("18")==0)
+                if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
                 {
-                parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                    //if (listaparametrosSQLiteEntity.isEmpty()) {
+                        parametrosSQLite.LimpiarParametros();
+                        parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("19", "HOJA DESPACHO", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("20", "HOJA DESPACHO DETALLE", "0", getDateTime());
+                   // }
+                }else
+                    {
+                    if (listaparametrosSQLiteEntity.isEmpty()) {
+                        parametrosSQLite.LimpiarParametros();
+                        parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
+                        //parametrosSQLite.InsertaParametros("8", "STOCK", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                    }
+                    if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
+                        parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                    }
                 }
-
                 break;
         }
 
@@ -321,6 +331,12 @@ ParametrosView extends Fragment {
         cobranzaRepository.UndepositedPendingCollection(getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
         });
+
+        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO - Con Conteo de Envio\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        cobranzaRepository.UndepositedPendingCollectionCountSend(getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
+
 
         ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
         cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
@@ -602,7 +618,7 @@ ParametrosView extends Fragment {
                             case "ecuador":
                             case "chile":
                                  clienteRepository = new ClienteRepository();
-                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
+                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
                                     CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
@@ -656,7 +672,7 @@ ParametrosView extends Fragment {
                                 break;
                             case "peru":
                                  clienteRepository = new ClienteRepository();
-                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
+                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
                                     CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
@@ -666,7 +682,7 @@ ParametrosView extends Fragment {
                                 break;
                             case "bolivia":
                                  clienteRepository = new ClienteRepository();
-                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
+                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
                                     CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
@@ -704,7 +720,7 @@ ParametrosView extends Fragment {
                     ///////////////////////FIN DE TODOS
                     else if (argumento.equals("CLIENTES")) {
                         ClienteRepository clienteRepository = new ClienteRepository();
-                        LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei);
+                        LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
                         if (!(LclientesqlSQLiteEntity.isEmpty())) {
                             CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
                             parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());

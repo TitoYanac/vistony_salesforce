@@ -93,10 +93,10 @@ android {
         bolivia{
             applicationIdSuffix ".bolivia"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
-            buildConfigField('String' , 'BASE_ENDPOINT', '"/bo"')
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"bo.get"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"/bo"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"bo.get"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"bo.post"')
-            versionName "1.0.5"
+            versionName "1.0.6"
             manifestPlaceholders = [country:"Bolivia"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"BO"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')

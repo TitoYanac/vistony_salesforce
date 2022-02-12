@@ -42,8 +42,19 @@ public class ClienteRepository extends ViewModel {
         this.context=context;
     }
 
-    public ArrayList<ClienteSQLiteEntity>getCustomers(String Imei){
-        Call<ClienteEntityResponse> call = Config.getClient().create(Api.class).getCliente(Imei);
+    public ArrayList<ClienteSQLiteEntity>getCustomers(String Imei,String Fecha){
+        Call<ClienteEntityResponse> call=null;
+
+        if(SesionEntity.perfil_id.equals(""))
+        {
+            call = Config.getClient().create(Api.class).getClientDelivery(Imei,Fecha);
+        }
+        else
+        {
+            call = Config.getClient().create(Api.class).getCliente(Imei);
+        }
+
+        //Call<ClienteEntityResponse> call = Config.getClient().create(Api.class).getCliente(Imei);
         Log.e("REOS","ClienteRepository-getCustomers-call:"+call.toString());
         try{
             Response<ClienteEntityResponse> response= call.execute();

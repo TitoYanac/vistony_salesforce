@@ -317,7 +317,7 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
             ArrayList<ComisionesSQLiteEntity> Lista = (ArrayList<ComisionesSQLiteEntity>) result;
             if (Lista.isEmpty())
             {
-                Toast.makeText(ContenedorComisionesView.context, "Error en la Consulta", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ContenedorComisionesView.context, "No hay Data Disponible, en este Periodo", Toast.LENGTH_SHORT).show();
             }else
             {
                 cargarVariables(Lista);

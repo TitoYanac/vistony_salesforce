@@ -131,6 +131,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("sap_code",sap_code);
             registro.put("mensajeWS",mensajeWS);
             registro.put("horacobranza",horacobranza);
+            registro.put("countsend","1");
             bd.insert("cobranzadetalle", null, registro);
 
             resultado=1;
@@ -1262,12 +1263,14 @@ public class CobranzaDetalleSQLiteDao {
                             "a.pagodirecto as DirectDeposit, " +
                             "a.pagopos as POSPay, " +
                             "IFNULL(a.horacobranza,'') as IncomeTime, " +
-                            "IFNULL((Select IFNULL(doc_entry,0 ) FROM documentodeuda WHERE documento_id=a.documento_id),0) AS documentoentry " +
+                            "IFNULL((Select IFNULL(doc_entry,0 ) FROM documentodeuda WHERE documento_id=a.documento_id),0) AS documentoentry, " +
+                            "IFNULL(a.countsend,'1') as countsend " +
                             " from cobranzadetalle a " +
                             " where (chkwsrecibido='N' or  chkwsrecibido='0') " +
                             //" and chkwsdepositorecibido='0'" +
                             //" and chkwsrecibido='1'" +
                             " and compania_id='"+compania_id+"'" +
+                            " and CAST(IFNULL( a.countsend,'1') AS INTEGER)=1 " +
                             " and usuario_id='"+usuario_id+"'"
                     ,null);
 
@@ -1299,7 +1302,10 @@ public class CobranzaDetalleSQLiteDao {
                 collectionEntity.setUserID(fila.getString(fila.getColumnIndex("UserID")));
                 collectionEntity.setSlpCode(fila.getString(fila.getColumnIndex("SlpCode")));
                 collectionEntity.setDocEntryFT(fila.getString(fila.getColumnIndex("documentoentry")));
+                collectionEntity.setIntent (fila.getString(fila.getColumnIndex("countsend")));
                 listCollectionEntity.add(collectionEntity);
+
+                UpdateCountSend(fila.getString(fila.getColumnIndex("Receip")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
             }
 
             bd.close();
@@ -1489,4 +1495,111 @@ public class CobranzaDetalleSQLiteDao {
         Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-resultado"+String.valueOf(resultado));
         return resultado;
     }
+
+    public int UpdateCountSend (String recibo, String compania_id,String usuario_id,String countsend)
+    {
+        int resultado=0;
+        abrir();
+        try {
+
+            ContentValues registro = new ContentValues();
+            registro.put("countsend",String.valueOf(Integer.parseInt(countsend)+1));
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            resultado=0;
+        }
+
+        bd.close();
+        return  resultado;
+    }
+
+    public ArrayList<CollectionEntity> ObtenerCobranzaDetallePendientesFormatoJSONCountSend (String compania_id, String usuario_id)
+    {
+        ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
+        CollectionEntity collectionEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select   a.cobranza_id as ItemDetail,"  +
+                            "a.cliente_id as CardCode, " +
+                            "a.documento_id as DocNum, " +
+                            "a.importedocumento as DocTotal, " +
+                            "a.saldodocumento as Balance, " +
+                            "a.nuevosaldodocumento as NewBalance," +
+                            "a.saldocobrado as AmountCharged," +
+                            "a.fechacobranza as IncomeDate," +
+                            "a.recibo as Receip, " +
+                            "a.nrofactura as CancelReason, " +
+                            "a.chkqrvalidado as QRStatus, " +
+                            "a.fuerzatrabajo_id as SlpCode, " +
+                            "a.chkbancarizado as Banking, " +
+                            "a.usuario_id as UserID, " +
+                            "a.banco_id as BankID, " +
+                            "a.comentario as Commentary, " +
+                            "a.pagodirecto as DirectDeposit, " +
+                            "a.pagopos as POSPay, " +
+                            "IFNULL(a.horacobranza,'') as IncomeTime, " +
+                            "IFNULL((Select IFNULL(doc_entry,0 ) FROM documentodeuda WHERE documento_id=a.documento_id),0) AS documentoentry, " +
+                            "IFNULL(a.countsend,'1') as countsend " +
+                            " from cobranzadetalle a " +
+                            " where (chkwsrecibido='N' or  chkwsrecibido='0') " +
+                            //" and chkwsdepositorecibido='0'" +
+                            //" and chkwsrecibido='1'" +
+                            " and compania_id='"+compania_id+"'" +
+                            " and CAST(IFNULL( a.countsend,'1') AS INTEGER)>1 " +
+                            " and usuario_id='"+usuario_id+"'"
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-IniciaLlenadoQuery");
+                collectionEntity= new CollectionEntity();
+                collectionEntity.setItemDetail(fila.getString(fila.getColumnIndex("ItemDetail")));
+                collectionEntity.setCardCode(fila.getString(fila.getColumnIndex("CardCode")));
+                collectionEntity.setDocNum(fila.getString(fila.getColumnIndex("DocNum")));
+                collectionEntity.setDocTotal(fila.getString(fila.getColumnIndex("DocTotal")));
+                collectionEntity.setBalance(fila.getString(fila.getColumnIndex("Balance")));
+                collectionEntity.setNewBalance(fila.getString(fila.getColumnIndex("NewBalance")));
+                collectionEntity.setAmountCharged(fila.getString(fila.getColumnIndex("AmountCharged")));
+                collectionEntity.setIncomeDate(fila.getString(fila.getColumnIndex("IncomeDate")));
+                collectionEntity.setReceip(fila.getString(fila.getColumnIndex("Receip")));
+                collectionEntity.setQRStatus(fila.getString(fila.getColumnIndex("QRStatus")));
+                collectionEntity.setBanking(fila.getString(fila.getColumnIndex("Banking")));
+                collectionEntity.setCancelReason(fila.getString(fila.getColumnIndex("CancelReason")));
+                collectionEntity.setBankID(fila.getString(fila.getColumnIndex("BankID")));
+                collectionEntity.setCommentary(fila.getString(fila.getColumnIndex("Commentary")));
+                collectionEntity.setDirectDeposit(fila.getString(fila.getColumnIndex("DirectDeposit")));
+                collectionEntity.setPOSPay(fila.getString(fila.getColumnIndex("POSPay")));
+                Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-Induvis.getTimeSAP-IncomeTime: "+(fila.getString(fila.getColumnIndex("IncomeTime"))));
+                Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-Induvis.getTimeSAP: "+Induvis.getTimeSAP(BuildConfig.FLAVOR,fila.getString(fila.getColumnIndex("IncomeTime"))));
+                collectionEntity.setIncomeTime(Induvis.getTimeSAP(BuildConfig.FLAVOR,fila.getString(fila.getColumnIndex("IncomeTime"))));
+                collectionEntity.setStatus("P");
+                collectionEntity.setDeposit("");
+                collectionEntity.setUserID(fila.getString(fila.getColumnIndex("UserID")));
+                collectionEntity.setSlpCode(fila.getString(fila.getColumnIndex("SlpCode")));
+                collectionEntity.setDocEntryFT(fila.getString(fila.getColumnIndex("documentoentry")));
+                collectionEntity.setIntent (fila.getString(fila.getColumnIndex("countsend")));
+                listCollectionEntity.add(collectionEntity);
+
+                UpdateCountSend(fila.getString(fila.getColumnIndex("Receip")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-e: "+e.toString());
+        }
+
+        bd.close();
+        return listCollectionEntity;
+    }
+
 }

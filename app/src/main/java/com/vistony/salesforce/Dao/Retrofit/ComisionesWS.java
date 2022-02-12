@@ -36,7 +36,6 @@ public class ComisionesWS {
         //Call<ComisionesEntityResponse> call = api.getComisiones("https://graph.vistony.pe/Comision?imei="+Imei+"&anio="+ano+"&mes="+Periodo);
         Call<ComisionesEntityResponse> call =Config.getClient().create(Api.class).getComisiones(
                 Imei,
-                FuerzaTrabajo_ID,
                 ano,
                 Periodo
         );

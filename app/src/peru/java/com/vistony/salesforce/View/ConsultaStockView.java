@@ -100,8 +100,16 @@ public class ConsultaStockView extends Fragment  implements SearchView.OnQueryTe
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_consulta_stock_view, container, false);
         lv_consultaStock=(ListView) v.findViewById(R.id.lv_consultaStock);
-        cargarConsultaStock();
         return v;
+
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+
+        super.onActivityCreated(savedInstanceState);
+        cargarConsultaStock();
+
     }
 
     public interface OnFragmentInteractionListener {
@@ -148,8 +156,10 @@ public class ConsultaStockView extends Fragment  implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText;
-        listaConsultaStockAdapter.filter(text);
+        if(listaConsultaStockAdapter!=null)
+        {
+            listaConsultaStockAdapter.filter(newText);
+        }
         return true;
     }
 

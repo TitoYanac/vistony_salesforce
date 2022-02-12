@@ -3,6 +3,7 @@ package com.vistony.salesforce.Dao.Adapters;
 import android.content.Context;
 
 import com.vistony.salesforce.Entity.Adapters.ListaHojaDespachoEntity;
+import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoSQLiteEntity;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class ListaHojaDespachoDao {
         leads.put(lead.getNrofactura(), lead);
     }
 
-    public List<ListaHojaDespachoEntity> getLeads(ArrayList<HojaDespachoSQLiteEntity> Lista) {
+    public List<ListaHojaDespachoEntity> getLeads(ArrayList<HojaDespachoDetalleSQLiteEntity> Lista) {
         Lista.size();
 
         try {
@@ -37,9 +38,11 @@ public class ListaHojaDespachoDao {
                 saveLead(new ListaHojaDespachoEntity(
                         Lista.get(i).getNombrecliente()
                         , Lista.get(i).getDireccion()
-                        , Lista.get(i).getNrofactura()
+                        , Lista.get(i).getFactura()
                         , Lista.get(i).getSaldo()
-                        , (Lista.get(i).getFuerzatrabajo_id()+" "+Lista.get(i).getNombrefuerzatrabajo())
+                        , (Lista.get(i).getFuerzatrabajo_id()+" "+Lista.get(i).getFuerzatrabajo_factura())
+                        , Lista.get(i).getTerminopago()
+                        ,Lista.get(i).getCliente_id()
                 ));
             }
         }catch (Exception e)

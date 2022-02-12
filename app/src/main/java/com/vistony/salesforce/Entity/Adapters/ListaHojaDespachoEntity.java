@@ -7,17 +7,40 @@ public class ListaHojaDespachoEntity {
     public String nrofactura;
     public String saldo;
     public String nombrefuerzatrabajo;
+    public String terminopago;
+    public String cliente_id;
 
-    public ListaHojaDespachoEntity(String nombrecliente, String direccion, String nrofactura, String saldo, String nombrefuerzatrabajo) {
+
+    public ListaHojaDespachoEntity(String nombrecliente, String direccion, String nrofactura, String saldo, String nombrefuerzatrabajo, String terminopago, String cliente_id) {
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
         this.nrofactura = nrofactura;
         this.saldo = saldo;
         this.nombrefuerzatrabajo = nombrefuerzatrabajo;
+        this.terminopago = terminopago;
+        this.cliente_id = cliente_id;
     }
+
+
 
     public ListaHojaDespachoEntity() {
 
+    }
+
+    public String getTerminopago() {
+        return terminopago;
+    }
+
+    public void setTerminopago(String terminopago) {
+        this.terminopago = terminopago;
+    }
+
+    public String getCliente_id() {
+        return cliente_id;
+    }
+
+    public void setCliente_id(String cliente_id) {
+        this.cliente_id = cliente_id;
     }
 
     public String getNombrecliente() {

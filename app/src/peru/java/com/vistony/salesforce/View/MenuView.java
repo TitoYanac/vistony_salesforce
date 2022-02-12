@@ -132,7 +132,8 @@ public class MenuView extends AppCompatActivity
         QuotasPerCustomerView.OnFragmentInteractionListener,
         ConsultaStockView.OnFragmentInteractionListener,
         HistoricContainerSKU.OnFragmentInteractionListener,
-        KardexOfPaymentView.OnFragmentInteractionListener
+        KardexOfPaymentView.OnFragmentInteractionListener,
+        DispatchSheetView.OnFragmentInteractionListener
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment,contentHistoryFragment;
@@ -343,7 +344,7 @@ public class MenuView extends AppCompatActivity
             case "CHOFER":
             case "Chofer":
                 onNavigationItemSelected(navigationView.getMenu().getItem(1).setVisible(false));
-                onNavigationItemSelected(navigationView.getMenu().getItem(3).setVisible(false));
+                onNavigationItemSelected(navigationView.getMenu().getItem(4).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(5).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
                 break;
@@ -389,7 +390,7 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
                 break;
             case "peru":
-                navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(true);
@@ -709,10 +710,9 @@ public class MenuView extends AppCompatActivity
 
                 break;*/
             case R.id.nav_hoja_despacho:
-                /*contentFragment=new HojaDespachoView();
+                contentFragment=new DispatchSheetView();
                 fragmentSeleccionado=true;
-                TAG_FRAGMENT="config_print";*/
-                //Toast.makeText(context, "Vista no construida", Toast.LENGTH_SHORT).show();
+                TAG_FRAGMENT="config_print";
                 break;
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();

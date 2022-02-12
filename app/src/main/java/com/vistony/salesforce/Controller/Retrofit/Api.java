@@ -12,8 +12,10 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ComisionesEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DepositList;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.DetailDispatchSheetEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursCEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursDEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.HeaderDispatchSheetEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricContainerSalesEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaUnidadEntityResponse;
@@ -77,6 +79,9 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/customers")
     Call<ClienteEntityResponse> getClienteInformation (@Query("imei") String imei,@Query("cliente") String cliente);
 
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/customers")
+    Call<ClienteEntityResponse> getClientDelivery (@Query("imei") String imei,@Query("fecha") String fecha);
+
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/WorkPath")
     Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Query("imei") String imei);
 
@@ -89,6 +94,10 @@ public interface Api {
     @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections")
     //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
     Call<CobranzaDetalleEntity> sendCollection( @Body RequestBody params);
+
+    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/Valid")
+        //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    Call<CobranzaDetalleEntity> sendCollectionCountSend ( @Body RequestBody params);
 
     @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollection(@Path("codeSap") String codeSap, @Body RequestBody params);
@@ -181,13 +190,13 @@ public interface Api {
             @Query("SlpCode") String SlpCode
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/QuotaDetail")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Quota/Detail")
     Call<QuotasPerCustomerDetailEntityResponse> getQuotasPerCustomerDetail(
             @Query("CardCode") String CardCode,
             @Query("SlpCode") String SlpCode
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/QuotaInvoice")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Quota/Invoice")
     Call<QuotasPerCustomerInvoiceEntityResponse> getQuotasPerCustomerInvoice(
             @Query("SlpCode") String SlpCode,
             @Query("CardCode") String CardCode
@@ -200,9 +209,8 @@ public interface Api {
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Commissions")
     Call<ComisionesEntityResponse> getComisiones (@Query("imei") String Imei,
-                                                  @Query("SlpCode") String SlpCode,
-                                                  @Query("DateIni") String Year,
-                                                  @Query("DateFin") String Month
+                                                  @Query("Year") String Year,
+                                                  @Query("Month") String Month
             );
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ScaColoursC")
@@ -211,6 +219,21 @@ public interface Api {
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ScaColoursD")
     Call<EscColoursDEntityResponse> getScColoursD (@Query("imei") String Imei
+    );
+
+    //@GET("/AppVistonySalesTest/ServicioApp.svc/Obtener_DespachoC/{Imei},{Compania_ID},{FuerzaTrabajo_ID},{FechaDespacho}") //Maestro de Hoja de Despacho Cabecera
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HeaderDispatchSheet")
+    Call<HeaderDispatchSheetEntityResponse> getHeaderDispatchSheet (
+            @Query("Imei") String Imei
+            ,@Query("FechaDespacho") String FechaDespacho
+
+    );
+
+    //@GET("/AppVistonySalesTest/ServicioApp.svc/Obtener_DespachoD/{Imei},{Compania_ID},{FuerzaTrabajo_ID},{FechaDespacho}") //Maestro de Hoja de Despacho Cabecera
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/DetailDispatchSheet")
+    Call<DetailDispatchSheetEntityResponse> getDetailDispatchSheet (
+            @Query("Imei") String Imei
+            ,@Query("FechaDespacho") String FechaDespacho
     );
    // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);

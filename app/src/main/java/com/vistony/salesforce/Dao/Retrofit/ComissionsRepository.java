@@ -34,7 +34,6 @@ public class ComissionsRepository  extends ViewModel {
 
         Config.getClient().create(Api.class).getComisiones(
                 Imei,
-                FuerzaTrabajo_ID,
                 FechaIni,
                 FechFino
         ).enqueue(new Callback<ComisionesEntityResponse>() {
