@@ -42,9 +42,13 @@ public class KardexPagoRepository  extends ViewModel {
                     Log.e("REOS","KardexPagoRepository.getKardexPago.Ingreso:");
                     Log.e("REOS","KardexPagoRepository.getKardexPago.kardexPagoEntityResponse.getKardexPagoEntity():"+kardexPagoEntityResponse.getKardexPagoEntity().size());
                     //kardexPagoPDF.generarPdf(context, kardexPagoEntityResponse.getKardexPagoEntity());
-                }
+                    status.setValue(kardexPagoEntityResponse.getKardexPagoEntity());
+                }else
+                    {
+                        status.setValue(null);
+                    }
 
-                status.setValue(kardexPagoEntityResponse.getKardexPagoEntity());
+
             }
 
             @Override

@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -242,15 +243,17 @@ public class MenuConsultaCobradoView extends Fragment {
                     );
                 }
 
-                if(data1.isEmpty()||data2.isEmpty())
+                if(data1.isEmpty()||data2.isEmpty()||data1==null||data2==null)
                 {
                     Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Calculo", Toast.LENGTH_SHORT).show();
+                    alertdialogInformative(getContext(),"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
                 }
 
             });
-            if(data1.isEmpty()||data1==null)
+            if(data1==null)
             {
                 Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Calculo", Toast.LENGTH_SHORT).show();
+                alertdialogInformative(getContext(),"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
             }
 
         });
@@ -259,9 +262,36 @@ public class MenuConsultaCobradoView extends Fragment {
         {
             Log.e("REOS","MenuConsultaCobradoView-GenerarQuotaPerCustomerPDF-e"+e.toString());
             Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Calculo", Toast.LENGTH_SHORT).show();
+            alertdialogInformative(getContext(),"IMPORTANTE!!!",e.toString()).show();
         }
 
         pd.dismiss();
+    }
+
+    private Dialog alertdialogInformative(Context context,String titulo,String message) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText(titulo);
+        textViewMsj.setText(message);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 
 }

@@ -45,13 +45,17 @@ public class ClienteRepository extends ViewModel {
     public ArrayList<ClienteSQLiteEntity>getCustomers(String Imei,String Fecha){
         Call<ClienteEntityResponse> call=null;
 
-        if(SesionEntity.perfil_id.equals(""))
+        if(SesionEntity.perfil_id.equals("CHOFER"))
         {
+            Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.perfil_id:"+SesionEntity.perfil_id);
             call = Config.getClient().create(Api.class).getClientDelivery(Imei,Fecha);
+            Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.call:"+call.toString());
         }
         else
         {
+            Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.perfil_id:"+SesionEntity.perfil_id);
             call = Config.getClient().create(Api.class).getCliente(Imei);
+            Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.call:"+call.toString());
         }
 
         //Call<ClienteEntityResponse> call = Config.getClient().create(Api.class).getCliente(Imei);

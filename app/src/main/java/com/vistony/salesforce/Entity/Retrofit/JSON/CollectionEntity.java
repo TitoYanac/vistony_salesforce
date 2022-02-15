@@ -26,6 +26,15 @@ public class CollectionEntity {
     private String Code;
     private String U_VIS_UserID;
     private String Intent;
+    private String AppVersion;
+
+    public String getAppVersion() {
+        return AppVersion;
+    }
+
+    public void setAppVersion(String appVersion) {
+        AppVersion = appVersion;
+    }
 
     public String getIntent() {
         return Intent;

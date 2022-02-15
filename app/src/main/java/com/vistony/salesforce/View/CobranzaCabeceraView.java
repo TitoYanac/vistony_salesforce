@@ -37,6 +37,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -55,14 +56,17 @@ import com.vistony.salesforce.Controller.Adapters.ListaCobranzaCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
+import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
 import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaCabeceraDao;
+import com.vistony.salesforce.Dao.SQLite.HeaderDispatchSheetSQLite;
 import com.vistony.salesforce.Entity.SQLite.BancoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaConsDepositoEntity;
+import com.vistony.salesforce.Entity.SQLite.HojaDespachoCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -127,7 +131,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     public static MenuItem abrir,guardar_deposito,agregar_foto_deposito;
     ArrayList<String> ListaTipo;
     ImageView imv_calendario_cheque;
-    private  int diadespacho,mesdespacho,anodespacho,hora,minutos;
+    private  int diadespacho,mesdespacho,anodespacho,hora,minutos,diadespacho2,mesdespacho2,anodespacho2;
     private static DatePickerDialog oyenteSelectorFecha3;
     static CheckBox chkbancarizado,chkdepositodirecto;
     static ArrayList<ListaConsDepositoEntity> listaAdd= new ArrayList<ListaConsDepositoEntity>();
@@ -141,7 +145,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     private ProgressDialog pd;
     private DepositoRepository depositoRepository;
     private CobranzaRepository cobranzaRepository;
-
+    Spinner spn_control_despacho_id;
+    ImageButton imb_consultar_codigo_control;
+    TextView tv_fecha_hoja_despacho;
     public CobranzaCabeceraView() {
         // Required empty public constructor
     }
@@ -294,6 +300,13 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         tv_fechacobrocheque = (TextView) v.findViewById(R.id.tv_fechacobrocheque);
         chkbancarizado = (CheckBox) v.findViewById(R.id.chkbancarizado);
         chkdepositodirecto = (CheckBox) v.findViewById(R.id.chkdepositodirecto);
+        imb_consultar_codigo_control= (ImageButton)  v.findViewById(R.id.imb_consultar_codigo_control);
+
+        if(!SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            imb_consultar_codigo_control.setVisibility(View.GONE);
+        }
+
         String [] valores =  new String[]{"Deposito","Cheque"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, valores);
@@ -386,6 +399,15 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 }
             }
         });
+        imb_consultar_codigo_control.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(guardar_deposito.isEnabled())
+                {
+                    String texto = "Elija El el Codigo de Control: ";
+                    AlertaObtenerCodigoControlDespacho(texto).show();
+                }
+            }});
 
 
        return v;
@@ -446,6 +468,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
             //tv_fechacobrocheque_edit.setText(year + "/" + mes + "/" + dia);
         tv_fechacobrocheque_edit.setText(year + "-" + mes + "-" + dia);
+        tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
     }
 
     @Override
@@ -467,7 +490,19 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
 
                 break;
+            case R.id.imb_consultar_fecha_hoja_despacho:
+                final Calendar c2 = Calendar.getInstance();
+                diadespacho2 = c2.get(Calendar.DAY_OF_MONTH);
+                mesdespacho2 = c2.get(Calendar.MONTH);
 
+                anodespacho2 = c2.get(Calendar.YEAR);
+                oyenteSelectorFecha3 = new DatePickerDialog(getContext(),this,
+                        anodespacho2,
+                        mesdespacho2,
+                        diadespacho2
+                );
+                oyenteSelectorFecha3.show();
+                break;
             default:
                 break;
         }
@@ -630,6 +665,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         }
         else
             {
+                if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+                {
                 abrir = menu.findItem(R.id.abrir);
                 guardar_deposito = menu.findItem(R.id.guardar_deposito);
                 agregar_foto_deposito = menu.findItem(R.id.agregar_foto_deposito);
@@ -639,15 +676,43 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 menu.findItem(R.id.abrir).setIcon(drawable);
                 Drawable drawable3 = menu.findItem(R.id.agregar_foto_deposito).getIcon();
                 drawable3 = DrawableCompat.wrap(drawable3);
-                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
+                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black));
                 menu.findItem(R.id.agregar_foto_deposito).setIcon(drawable3);
                 Drawable drawable2 = menu.findItem(R.id.guardar_deposito).getIcon();
                 drawable2 = DrawableCompat.wrap(drawable2);
-                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
+                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.white));
                 menu.findItem(R.id.guardar_deposito).setIcon(drawable2);
                 abrir.setEnabled(false);
-                guardar_deposito.setEnabled(false);
+                guardar_deposito.setEnabled(true);
                 spntipo.setEnabled(true);
+                etgrupo.setEnabled(true);
+                agregar_foto_deposito.setEnabled(false);
+                chkbancarizado.setVisibility(View.INVISIBLE);
+                chkdepositodirecto.setVisibility(View.INVISIBLE);
+                imb_consultar_codigo_control.setEnabled(true);
+                imb_consultar_codigo_control.setClickable(true);
+                imb_consultar_codigo_control.setBackgroundColor(Color.parseColor("#D6001C"));
+                }
+                else {
+                    abrir = menu.findItem(R.id.abrir);
+                    guardar_deposito = menu.findItem(R.id.guardar_deposito);
+                    agregar_foto_deposito = menu.findItem(R.id.agregar_foto_deposito);
+                    Drawable drawable = menu.findItem(R.id.abrir).getIcon();
+                    drawable = DrawableCompat.wrap(drawable);
+                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+                    menu.findItem(R.id.abrir).setIcon(drawable);
+                    Drawable drawable3 = menu.findItem(R.id.agregar_foto_deposito).getIcon();
+                    drawable3 = DrawableCompat.wrap(drawable3);
+                    DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
+                    menu.findItem(R.id.agregar_foto_deposito).setIcon(drawable3);
+                    Drawable drawable2 = menu.findItem(R.id.guardar_deposito).getIcon();
+                    drawable2 = DrawableCompat.wrap(drawable2);
+                    DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
+                    menu.findItem(R.id.guardar_deposito).setIcon(drawable2);
+                    abrir.setEnabled(false);
+                    guardar_deposito.setEnabled(false);
+                    spntipo.setEnabled(true);
+                }
 
             }
 
@@ -1159,5 +1224,96 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
 
     }
+    public Dialog AlertaObtenerCodigoControlDespacho(String tipo) {
+
+        String mensaje=tipo;
+
+        ImageButton imb_consultar_fecha_hoja_despacho,imb_consultar_codigo_control_cabecera;
+
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_obtener_codigo_control_despacho);
+
+        TextView textTitle = dialog.findViewById(R.id.tv_titulo);
+        textTitle.setText("ADVERTENCIA!");
+
+        TextView textMsj = dialog.findViewById(R.id.tv_mensaje);
+        textMsj.setText(mensaje);
+
+        tv_fecha_hoja_despacho = dialog.findViewById(R.id.tv_fecha_hoja_despacho);
+        imb_consultar_fecha_hoja_despacho = dialog.findViewById(R.id.imb_consultar_fecha_hoja_despacho);
+        imb_consultar_codigo_control_cabecera = dialog.findViewById(R.id.imb_consultar_codigo_control_cabecera);
+        spn_control_despacho_id = dialog.findViewById(R.id.spn_control_despacho_id);
+        imb_consultar_fecha_hoja_despacho.setOnClickListener(this);
+
+
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        date = new Date();
+        fecha =dateFormat.format(date);
+        tv_fecha_hoja_despacho.setText(fecha);
+        imb_consultar_codigo_control_cabecera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HeaderDispatchSheetRepository headerDispatchSheetRepository= new ViewModelProvider(getActivity()).get(HeaderDispatchSheetRepository.class);
+                headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(SesionEntity.imei ,tv_fecha_hoja_despacho.getText().toString() ,getContext()).observe(getActivity(), data -> {
+                    Log.e("REOS", "DispatchSheetView-getMastersDelivery-headerDispatchSheetRepository-data" + data);
+                });
+        /*detailDispatchSheetRepository.getAndInsertDetailDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
+            Log.e("REOS", "DispatchSheetView-getMastersDelivery-detailDispatchSheetRepository-data" + data);
+        });*/
+                getListDispatchSheet(tv_fecha_hoja_despacho.getText().toString(),getContext());
+            }});
+
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etgrupo.setText(spn_control_despacho_id.getSelectedItem().toString());
+                dialog.dismiss();
+            }
+        });
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        return  dialog;
+    }
+
+
+    public void getListDispatchSheet(String dispatchDate,Context context)
+    {
+        ArrayList<HojaDespachoCabeceraSQLiteEntity> listaHeaderDispatchSheetSQLite = new ArrayList<>();
+        HeaderDispatchSheetSQLite headerDispatchSheetSQLite= new HeaderDispatchSheetSQLite(context);
+        listaHeaderDispatchSheetSQLite=headerDispatchSheetSQLite.getHeaderDispatchSheetforDate(dispatchDate);
+        String [] Lista_Control_ID= new String [listaHeaderDispatchSheetSQLite.size()];
+        int Contador=0;
+        for(int i=0;i<listaHeaderDispatchSheetSQLite.size();i++)
+        {
+            Lista_Control_ID[Contador] = listaHeaderDispatchSheetSQLite.get(i).getControl_id();
+            Contador++;
+        }
+        CargaSpinnerControl(Lista_Control_ID);
+    }
+
+    public void CargaSpinnerControl(String [] control_id)
+    {
+        ArrayAdapter<String> adapter_control_id = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, control_id);
+        spn_control_despacho_id.setAdapter(adapter_control_id);
+    }
+
+
 
 }

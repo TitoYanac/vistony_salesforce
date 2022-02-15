@@ -43,12 +43,19 @@ public class QuotasPerCustomerInvoiceRepository extends ViewModel {
                     Log.e("REOS", "QuotasPerCustomerInvoiceRepository.getQuotasPerCustomerInvoice.entro:");
                     //QuotasPerCustomerView.newInstanceRecibirListaDetail(QuotasPerCustomerDetailEntityResponse.getQuotasPerCustomerDetailEntity());
                     // }
+                    Log.e("REOS", "QuotasPerCustomerInvoiceRepository.getQuotasPerCustomerInvoice.quotasPerCustomerInvoiceEntityResponse.getQuotasPerCustomerInvoiceEntity():"+quotasPerCustomerInvoiceEntityResponse.getQuotasPerCustomerInvoiceEntity());
                     status.setValue(quotasPerCustomerInvoiceEntityResponse.getQuotasPerCustomerInvoiceEntity());
                 }
+                else
+                    {
+                        Log.e("REOS", "QuotasPerCustomerInvoiceRepository.getQuotasPerCustomerInvoice.onResponse-null:"+null);
+                        status.setValue(null);
+                    }
             }
 
             @Override
             public void onFailure(Call<QuotasPerCustomerInvoiceEntityResponse> call, Throwable t) {
+                Log.e("REOS", "QuotasPerCustomerInvoiceRepository.getQuotasPerCustomerInvoice.onFailure:"+null);
                 status.setValue(null);
             }
         });

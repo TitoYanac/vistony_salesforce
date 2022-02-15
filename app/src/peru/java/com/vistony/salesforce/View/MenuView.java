@@ -29,9 +29,11 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.ValueCallback;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -166,7 +168,8 @@ public class MenuView extends AppCompatActivity
     Fragment ConsultaStockFragment;
     Fragment MenuConsultaCobranzaFragment;
     Fragment KardexOfPaymentFragment;
-
+    Fragment HojaDespachoView;
+    Fragment HojaDespachoFragment;
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
@@ -206,6 +209,9 @@ public class MenuView extends AppCompatActivity
     private static BixolonPrinterController bxlPrinter = null;
     QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
     HistoricContainerSalesRepository historicContainerSalesRepository;
+    TableRow tablerowzona;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         manager = (ConnectivityManager) getApplication().getSystemService(getApplication().CONNECTIVITY_SERVICE);
@@ -239,6 +245,9 @@ public class MenuView extends AppCompatActivity
         ConsultaStockFragment= new Fragment();
         MenuConsultaCobranzaFragment = new Fragment();
         KardexOfPaymentFragment = new Fragment();
+        HojaDespachoView = new Fragment();
+        HojaDespachoFragment = new Fragment();
+
         arraylistConfiguracionentity= new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao =  new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -282,6 +291,16 @@ public class MenuView extends AppCompatActivity
         textViewStatus=navigationView.getHeaderView(0).findViewById(R.id.textViewStatus);
         listaConfiguracionEntity= new ArrayList<ConfiguracionSQLEntity>();
         listaConfiguracionEntity=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
+        tablerowzona= navigationView.getHeaderView(0).findViewById(R.id.tablerowzona);
+
+
+
+
+        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+        {
+            tv_zona.setVisibility(View.GONE);
+            tablerowzona.setVisibility(View.GONE);
+        }
         if(listaConfiguracionEntity.isEmpty())
         {
             configuracionSQLiteDao.InsertaConfiguracion(
@@ -710,9 +729,16 @@ public class MenuView extends AppCompatActivity
 
                 break;*/
             case R.id.nav_hoja_despacho:
-                contentFragment=new DispatchSheetView();
-                fragmentSeleccionado=true;
-                TAG_FRAGMENT="config_print";
+                //contentFragment=new DispatchSheetView();
+                //fragmentSeleccionado=true;
+                //TAG_FRAGMENT="config_print";
+
+                HojaDespachoFragment = new DispatchSheetView();
+                fragment="HojaDespachoView";
+                accion="inicio";
+                compuesto=fragment+"-"+accion;
+                object=null;
+                onFragmentInteraction(compuesto,object);
                 break;
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
@@ -1757,6 +1783,30 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
                 KardexOfPaymentView.newInstanceRecibirLista(Lista);
                 this.setTitle("Kardex de Pago");
+            }
+        }
+        if(tag.equals("HojaDespachoView"))
+        {
+
+            if(tag2.equals("inicio"))
+            {
+                //Log.e("jpcm","inicio====");
+                //ListenerBackPress.setTemporaIdentityFragment("Deposito");
+                String taginicio=tag;
+                ft.replace(R.id.content_menu_view,HojaDespachoFragment,taginicio);
+                ft.addToBackStack("popqqqqqq");
+                ft.commit();
+            }
+            if(tag2.equals("inicioHojaDespachoViewView"))
+            {
+                String tagHojaDespachoView="HojaDespachoView";
+                tag2="inicioRutaVendedorView";
+                HojaDespachoView = getSupportFragmentManager().findFragmentByTag(tagHojaDespachoView);
+                ft.remove(HojaDespachoView);
+                //ft.add(R.id.content_menu_view,ClienteDetalleView.newInstance(Lista),tag3);
+                ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("2pop");
+                ft.commit();
             }
         }
     }

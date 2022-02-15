@@ -121,8 +121,8 @@ public class ListaPromocionDetalleEditarAdapter  extends ArrayAdapter<ListaPromo
                 Log.e("REOS","ListaPromocionCabeceraEditar-imv_decrementar-holder.tv_cant_promocion_detalle_editable.getText: "+holder.tv_cant_promocion_detalle_editable.getText());
                 //if(listaPromocionDetalleEditarEntity.get(position).isEstadoitems())
                 //{
-                    if (Integer.parseInt(lead.getCantidad_editada()) <= Integer.parseInt(lead.getCantidad())) {
-
+                    //if (Integer.parseInt(lead.getCantidad_editada()) <= Integer.parseInt(lead.getCantidad())) {
+                        if ((Integer.parseInt(lead.getCantidad_editada()) - 1)>0) {
                         lead.setCantidad_editada(String.valueOf(
                                 Integer.parseInt(lead.getCantidad_editada()) - 1));
                         holder.tv_cant_promocion_detalle_editable.setText(lead.getCantidad_editada());

@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricContainerSalesAdapter;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricContainerSalesDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricContainerSalesRepository;
@@ -153,7 +154,7 @@ public class HistoricContainerSKU extends Fragment {
             {
                 suma=suma+Double.parseDouble(lista.get(i).getMontototal());
             }
-            tv_monto_historico_venta.setText(String.valueOf(suma));
+            tv_monto_historico_venta.setText(Convert.currencyForView(String.valueOf(suma)));
         }catch (Exception e)
         {
             Log.e("REOS","HistoricContainerSaleFocoView-ListarHistoricContainerSalesFoco-e:"+e.toString());

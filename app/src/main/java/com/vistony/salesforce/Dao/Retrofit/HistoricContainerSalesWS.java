@@ -36,7 +36,7 @@ public class HistoricContainerSalesWS {
     ){
         Api api = Config.getClient().create(Api.class);
 
-        Call<HistoricContainerSalesEntityResponse> call = api.getHistoricContainerSales("01",Imei,Variable,CardCode,FechaIni,FechFin);
+        Call<HistoricContainerSalesEntityResponse> call = api.getHistoricContainerSales(Imei,Variable,CardCode,FechaIni,FechFin);
 
         try
         {

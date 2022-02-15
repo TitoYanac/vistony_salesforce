@@ -193,8 +193,10 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
 //                    Log.e("REOS", "resumenDiarioRepository.data" + data.toString());
                    // Log.e("REOS", "resumenDiarioRepository.data.size()" + data.size());
 
-                    ResumenDiarioPDF resumenDiarioPDF=new ResumenDiarioPDF();
-                    resumenDiarioPDF.generarPdf(getContext(),data,fechasap);
+
+                        ResumenDiarioPDF resumenDiarioPDF = new ResumenDiarioPDF();
+                        resumenDiarioPDF.generarPdf(getContext(), data, fechasap);
+
                     pd.dismiss();
                 });
 

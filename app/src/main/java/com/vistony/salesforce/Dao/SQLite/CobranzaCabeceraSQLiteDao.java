@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Entity.Retrofit.JSON.CollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.DepositEntity;
 import com.vistony.salesforce.Entity.SQLite.BancoSQLiteEntity;
@@ -20,10 +21,11 @@ public class CobranzaCabeceraSQLiteDao {
     SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<CobranzaCabeceraSQLiteEntity> listaCobranzaCabeceraSQLiteEntity;
-
+    Context Context;
     public CobranzaCabeceraSQLiteDao(Context context)
     {
         sqliteController = new SqliteController(context);
+        Context=context;
     }
     public void abrir(){
         Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
@@ -229,6 +231,7 @@ public class CobranzaCabeceraSQLiteDao {
                 deposito.setDirectDeposit((fila.getString(17)));
                 deposito.setPOSPay((fila.getString(18)));
                 deposito.setComments("");
+                deposito.setAppVersion(Utilitario.getVersion(Context));
                 depositos.add(deposito);
             }
 

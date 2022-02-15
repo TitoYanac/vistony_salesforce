@@ -41,6 +41,16 @@ public class VisitaSQLiteEntity {
     @SerializedName("Message")
     private String Message;
 
+    private String AppVersion;
+
+    public String getAppVersion() {
+        return AppVersion;
+    }
+
+    public void setAppVersion(String appVersion) {
+        AppVersion = appVersion;
+    }
+
     public String getMessage() {
         return Message;
     }

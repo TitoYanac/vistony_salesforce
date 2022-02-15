@@ -870,7 +870,19 @@ public class CobranzaDetalleView extends Fragment {
                     alertaGenerarPDF().show();
                 } else
                     {
-                        alertatypegeneratedocumentcollection().show();
+                        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+                        {
+                            alertaGenerarPDF().show();
+                            Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
+                            drawable3 = DrawableCompat.wrap(drawable3);
+                            DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black ));
+                            menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
+                            validarqr.setEnabled(false);
+                            chk_validacionqr.setChecked(true);
+                        }else{
+                            alertatypegeneratedocumentcollection().show();
+                        }
+
                     }
 
 
@@ -959,6 +971,7 @@ public class CobranzaDetalleView extends Fragment {
                 else
                 {
                     sendSMS(et_numero_telefonico.getText().toString());
+                    dialog.dismiss();
                 }
 
             }
@@ -1017,11 +1030,22 @@ public class CobranzaDetalleView extends Fragment {
                                         //guardar.setEnabled(false);
                                         //imbcomentariorecibo.setColorFilter(Color.BLACK);
                                         if (!SesionEntity.Print.equals("Y")) {
-                                            Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
-                                            drawable3 = DrawableCompat.wrap(drawable3);
-                                            DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
-                                            menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
-                                            validarqr.setEnabled(true);
+                                            if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+                                            {
+                                                Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
+                                                drawable3 = DrawableCompat.wrap(drawable3);
+                                                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black));
+                                                menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
+                                                validarqr.setEnabled(false);
+                                            }else
+                                                {
+                                                    Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
+                                                    drawable3 = DrawableCompat.wrap(drawable3);
+                                                    DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
+                                                    menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
+                                                    validarqr.setEnabled(true);
+                                                }
+
 
                                         }
                                         imbcomentariorecibo.setEnabled(false);
@@ -1097,17 +1121,35 @@ public class CobranzaDetalleView extends Fragment {
                                 configuracionSQLiteDao.ActualizaCorrelativo(String.valueOf(Integer.parseInt(correlativo) - 1));
 
                                 //btn item validar QR se queda en disabled
-                                Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
-                                drawable = DrawableCompat.wrap(drawable);
-                                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
-                                menu_variable.findItem(R.id.validarqr).setIcon(drawable);
+                                if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+                                {
+                                    Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
+                                    drawable = DrawableCompat.wrap(drawable);
+                                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+                                    menu_variable.findItem(R.id.validarqr).setIcon(drawable);
+                                    validarqr.setEnabled(false); //no aplica validar qr //peru si
 
-                                Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                                drawable2 = DrawableCompat.wrap(drawable2);
-                                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
-                                menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+                                    Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                                    drawable2 = DrawableCompat.wrap(drawable2);
+                                    DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.white));
+                                    menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+                                }
+                                else
+                                    {
+                                        Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
+                                        drawable = DrawableCompat.wrap(drawable);
+                                        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
+                                        menu_variable.findItem(R.id.validarqr).setIcon(drawable);
+                                        validarqr.setEnabled(true); //no aplica validar qr //peru si
 
-                                validarqr.setEnabled(true); //no aplica validar qr //peru si
+                                        Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                                        drawable2 = DrawableCompat.wrap(drawable2);
+                                        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
+                                        menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+                                    }
+
+
+
 
 
                                 documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual());
@@ -1218,10 +1260,12 @@ public class CobranzaDetalleView extends Fragment {
         } else {
             bancarizado = "N";
         }
-        /*if(SesionEntity.Print.equals("N"))
+        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
+
             qrvalidado="Y";
-        }*/
+            Log.e("REOS","CobranzaDetalleView.GuardarCobranzaSQLite.qrvalidado:"+qrvalidado);
+        }
 
         if (tipoCobranza.equals("Cobranza")) {
             for (int i = 0; i < Lista.size(); i++) {
@@ -2002,6 +2046,8 @@ public class CobranzaDetalleView extends Fragment {
         CardView cv_generate_pdf,cv_send_sms;
         cv_generate_pdf=dialog.findViewById(R.id.cv_generate_pdf);
         cv_send_sms=dialog.findViewById(R.id.cv_send_sms);
+
+
         //kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
 
         TextView textTitle = dialog.findViewById(R.id.text);
@@ -2193,6 +2239,8 @@ public class CobranzaDetalleView extends Fragment {
         image.setImageResource(R.mipmap.logo_circulo);
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
         TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText("IMPORTANTE!!!");
         textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
         // if button is clicked, close the custom dialog
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {

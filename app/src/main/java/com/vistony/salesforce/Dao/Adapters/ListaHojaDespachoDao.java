@@ -30,7 +30,7 @@ public class ListaHojaDespachoDao {
     }
 
     public List<ListaHojaDespachoEntity> getLeads(ArrayList<HojaDespachoDetalleSQLiteEntity> Lista) {
-        Lista.size();
+        leads.clear();
 
         try {
             for( int i=0;i<Lista.size();i++)

@@ -30,7 +30,15 @@ public class DepositEntity {
 
     @SerializedName("Code")
     private String Code;
+    private String AppVersion;
 
+    public String getAppVersion() {
+        return AppVersion;
+    }
+
+    public void setAppVersion(String appVersion) {
+        AppVersion = appVersion;
+    }
 
     public String getCode() {
         return Code;

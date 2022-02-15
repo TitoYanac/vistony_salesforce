@@ -9,6 +9,7 @@ import android.util.Log;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Entity.Retrofit.JSON.CollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoCobranzaEntity;
@@ -25,10 +26,12 @@ public class CobranzaDetalleSQLiteDao {
     SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<CobranzaDetalleSQLiteEntity> listaCobranzaDetalleSQLiteEntity;
+    Context Context;
 
     public CobranzaDetalleSQLiteDao(Context context)
     {
         sqliteController = new SqliteController(context);
+        Context=context;
     }
     public void abrir(){
         Log.i("SQLite", "Se abre conexion a la base de datos desde" + this.getClass().getName() );
@@ -1303,6 +1306,7 @@ public class CobranzaDetalleSQLiteDao {
                 collectionEntity.setSlpCode(fila.getString(fila.getColumnIndex("SlpCode")));
                 collectionEntity.setDocEntryFT(fila.getString(fila.getColumnIndex("documentoentry")));
                 collectionEntity.setIntent (fila.getString(fila.getColumnIndex("countsend")));
+                collectionEntity.setAppVersion(Utilitario.getVersion(Context));
                 listCollectionEntity.add(collectionEntity);
 
                 UpdateCountSend(fila.getString(fila.getColumnIndex("Receip")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
@@ -1585,6 +1589,7 @@ public class CobranzaDetalleSQLiteDao {
                 collectionEntity.setSlpCode(fila.getString(fila.getColumnIndex("SlpCode")));
                 collectionEntity.setDocEntryFT(fila.getString(fila.getColumnIndex("documentoentry")));
                 collectionEntity.setIntent (fila.getString(fila.getColumnIndex("countsend")));
+                collectionEntity.setAppVersion(Utilitario.getVersion(Context));
                 listCollectionEntity.add(collectionEntity);
 
                 UpdateCountSend(fila.getString(fila.getColumnIndex("Receip")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));

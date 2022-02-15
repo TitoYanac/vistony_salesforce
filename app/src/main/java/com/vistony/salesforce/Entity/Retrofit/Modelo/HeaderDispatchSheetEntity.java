@@ -2,25 +2,38 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class HeaderDispatchSheetEntity {
 
-    @SerializedName("Control_ID")
+    @SerializedName("ControlCode")
     private String control_id;
 
-    @SerializedName("Asistente_ID")
+    @SerializedName("")
     private String asistente_id;
 
-    @SerializedName("Asistente")
+    @SerializedName("Assistant")
     private String asistente;
 
-    @SerializedName("Placa")
+    @SerializedName("LicensePlate")
     private String placa;
 
-    @SerializedName("Marca")
+    @SerializedName("Brand")
     private String marca;
 
-    @SerializedName("Peso_Total")
+    @SerializedName("OverallWeight")
     private String peso_total;
+
+    @SerializedName("Detail")
+    private List<DetailDispatchSheetEntity> ListDedailDispatch;
+
+    public List<DetailDispatchSheetEntity> getListDedailDispatch() {
+        return ListDedailDispatch;
+    }
+
+    public void setListDedailDispatch(List<DetailDispatchSheetEntity> listDedailDispatch) {
+        ListDedailDispatch = listDedailDispatch;
+    }
 
     public String getControl_id() {
         return control_id;

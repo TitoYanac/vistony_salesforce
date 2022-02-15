@@ -118,7 +118,8 @@ public class ParametrosSQLite {
             //registro.put("hash",hash);
             //registro.put("precio",pre);
             bd = sqliteController.getWritableDatabase();
-            resultado = bd.update("parametros",registro,"parametro_id='"+id+"'"+" and nombreparametro='"+nombreparametro+"'" ,null);
+            resultado = bd.update("parametros",registro,"parametro_id='"+id+"'"//+" and nombreparametro='"+nombreparametro+"'"
+                    ,null);
 
             /*Cursor fila = bd.rawQuery(
                     "update cobranzadetalle set cobranza_id = '"+cobranza_id+ "'" +

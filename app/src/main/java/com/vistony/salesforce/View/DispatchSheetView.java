@@ -3,8 +3,13 @@ package com.vistony.salesforce.View;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -83,7 +89,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
     ClienteRepository clienteRepository;
     List<ClienteSQLiteEntity> LclientesqlSQLiteEntity;
     ParametrosSQLite parametrosSQLite;
-
+    GetAsyncTaskCustomer getAsyncTaskCustomer;
     public DispatchSheetView() {
         // Required empty public constructor
     }
@@ -214,6 +220,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
 
                     }
                 });*/
+                Log.e("REOS","HojaDespachoView.btn_consultar_fecha_despacho: tv_fecha_hoja_despacho.getText().toString()-"+tv_fecha_hoja_despacho.getText().toString());
                 getMastersDelivery(SesionEntity.imei,tv_fecha_hoja_despacho.getText().toString(),getContext());
                 break;
             case R.id.imb_consultar_codigo_control:
@@ -227,7 +234,10 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
                         obtenerSQLiteHojaDespachoDetalle.execute();
                     }
                 });*/
-                getListDetailDispatchSheet(spn_control_id.getSelectedItem().toString(),getContext());
+                if(spn_control_id.getSelectedItem()!=null)
+                {
+                    getListDetailDispatchSheet(spn_control_id.getSelectedItem().toString(), getContext());
+                }
                 break;
             default:
                 break;
@@ -237,21 +247,33 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
 
     public void getMastersDelivery(String Imei,String DispatchDate,Context context)
     {
+        Log.e("REOS","HojaDespachoView.getMastersDelivery-DispatchDate:"+DispatchDate);
         HeaderDispatchSheetRepository headerDispatchSheetRepository= new ViewModelProvider(getActivity()).get(HeaderDispatchSheetRepository.class);
         DetailDispatchSheetRepository detailDispatchSheetRepository= new ViewModelProvider(getActivity()).get(DetailDispatchSheetRepository.class);
-        int CantClientes=0;
-        ClienteRepository clienteRepository = new ClienteRepository();
-        LclientesqlSQLiteEntity = clienteRepository.getCustomers(Imei,DispatchDate);
-        if (!(LclientesqlSQLiteEntity.isEmpty())) {
-            CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-            parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
-        }
+
+        /*getActivity().runOnUiThread
+            (new Runnable() {
+                    @Override
+                    public void run() {
+                        int CantClientes=0;
+                        ClienteRepository clienteRepository = new ClienteRepository();
+                        LclientesqlSQLiteEntity = clienteRepository.getCustomers(Imei,DispatchDate);
+                        Log.e("REOS","HojaDespachoView.getMastersDelivery-LclientesqlSQLiteEntity:"+LclientesqlSQLiteEntity.size());
+                        if (!(LclientesqlSQLiteEntity.isEmpty())) {
+                            CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
+                            parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
+                        }
+
+                    }
+                });*/
+        getAsyncTaskCustomer=new GetAsyncTaskCustomer();
+        getAsyncTaskCustomer.execute();
         headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
             Log.e("REOS", "DispatchSheetView-getMastersDelivery-headerDispatchSheetRepository-data" + data);
         });
-        detailDispatchSheetRepository.getAndInsertDetailDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
+        /*detailDispatchSheetRepository.getAndInsertDetailDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
             Log.e("REOS", "DispatchSheetView-getMastersDelivery-detailDispatchSheetRepository-data" + data);
-        });
+        });*/
         getListDispatchSheet(DispatchDate,context);
 
 
@@ -268,14 +290,19 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         ArrayList<HojaDespachoCabeceraSQLiteEntity> listaHeaderDispatchSheetSQLite = new ArrayList<>();
         HeaderDispatchSheetSQLite headerDispatchSheetSQLite= new HeaderDispatchSheetSQLite(context);
         listaHeaderDispatchSheetSQLite=headerDispatchSheetSQLite.getHeaderDispatchSheetforDate(dispatchDate);
-        String [] Lista_Control_ID= new String [listaHeaderDispatchSheetSQLite.size()];
-        int Contador=0;
-        for(int i=0;i<listaHeaderDispatchSheetSQLite.size();i++)
+        if(!listaHeaderDispatchSheetSQLite.isEmpty())
         {
-            Lista_Control_ID[Contador] = listaHeaderDispatchSheetSQLite.get(i).getControl_id();
-            Contador++;
-        }
-        CargaSpinnerControl(Lista_Control_ID);
+            String[] Lista_Control_ID = new String[listaHeaderDispatchSheetSQLite.size()];
+            int Contador = 0;
+            for (int i = 0; i < listaHeaderDispatchSheetSQLite.size(); i++) {
+                Lista_Control_ID[Contador] = listaHeaderDispatchSheetSQLite.get(i).getControl_id();
+                Contador++;
+            }
+            CargaSpinnerControl(Lista_Control_ID);
+        }else
+            {
+                alertdialogInformative(getContext(),"IMPORTANTE","No hay Datos Disponibles del Despacho en la Fecha Seleccionada").show();
+            }
     }
 
 
@@ -288,9 +315,11 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
     }
 
     public void getListDetailDispatchSheet (String codeControl,Context context){
+        Log.e("REOS", "DispatchSheetView-getMastersDelivery-headerDispatchSheetRepository-codeControl" + codeControl);
         ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetSQLite=new ArrayList<>();
         DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(context);
         listDetailDispatchSheetSQLite=detailDispatchSheetSQLite.getDetailDispatchSheetforCodeControl(codeControl);
+        Log.e("REOS", "DispatchSheetView-getMastersDelivery-headerDispatchSheetRepository-listDetailDispatchSheetSQLite" + listDetailDispatchSheetSQLite.size());
         listaHojaDespachoAdapter = new ListaHojaDespachoAdapter(getActivity(), ListaHojaDespachoDao.getInstance().getLeads(listDetailDispatchSheetSQLite));
         lista_despachos.setAdapter(listaHojaDespachoAdapter);
 
@@ -322,6 +351,30 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
     }
 
+    public class GetAsyncTaskCustomer extends AsyncTask<String, Void, Object> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(getActivity());
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Datos", true, false);
+        }
+        @Override
+        protected Object doInBackground(String... arg0) {
+            int CantClientes=0;
+            ClienteRepository clienteRepository = new ClienteRepository();
+            ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getContext());
+            LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei ,tv_fecha_hoja_despacho.getText().toString());
+            Log.e("REOS","HojaDespachoView.getMastersDelivery-LclientesqlSQLiteEntity:"+LclientesqlSQLiteEntity.size());
+            if (!(LclientesqlSQLiteEntity.isEmpty())) {
+                CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
+                parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
+            }
+            return 1;
+        }
+        protected void onPostExecute(Object result) {
+            pd.dismiss();
+        }
+    }
     /*public class ObtenerSQLiteHojaDespachoCabecera extends AsyncTask<String, Void, Object> {
         @Override
         protected void onPreExecute() {
@@ -548,6 +601,30 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         }
         return true;
     }
+    static private Dialog alertdialogInformative(Context context, String titulo, String message) {
 
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText(titulo);
+        textViewMsj.setText(message);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
 
 }

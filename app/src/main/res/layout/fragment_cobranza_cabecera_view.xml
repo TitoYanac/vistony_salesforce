@@ -39,7 +39,18 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:layout_weight="8"
+            />
+        <ImageButton
+            android:id="@+id/imb_consultar_codigo_control"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/custom_border_button_grey"
+            android:src="@drawable/ic_baseline_electric_rickshaw_24"
+            android:enabled="false"
+            android:clickable="false"
+            />
 
         <TextView
             android:id="@+id/txtfecha"

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 
 import java.util.ArrayList;
@@ -18,10 +19,13 @@ public class VisitaSQLite {
     SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<VisitaSQLiteEntity> listaVisitaSQLiteEntity;
+    Context Context;
 
     public VisitaSQLite(Context context)
     {
+
         sqliteController = new SqliteController(context);
+        Context=context;
     }
 
     public void abrir(){
@@ -86,7 +90,7 @@ public class VisitaSQLite {
                     visita.setObservation(fila.getString(fila.getColumnIndex("observacion")));
                     visita.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
                     visita.setLongitude(fila.getString(fila.getColumnIndex("longitud")));
-
+                    visita.setAppVersion(Utilitario.getVersion(Context));
                     listaVisitaSQLiteEntity.add(visita);
                 } while (fila.moveToNext());
             }

@@ -101,9 +101,11 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
             TerminoPagoSQLiteDao terminoPagoSQLiteDao = new TerminoPagoSQLiteDao(getContext());
             mParam1 = getArguments().getString(ARG_PARAM1);
             listaTerminopago = terminoPagoSQLiteDao.ObtenerTerminoPagoporID(mParam1, SesionEntity.compania_id);
+            Log.e("REOS","TerminoPagoView-onCreate-mParam1"+mParam1);
             for (int i = 0; i < listaTerminopago.size(); i++) {
                 dias_vencimiento = listaTerminopago.get(i).getDias_vencimiento();
             }
+            Log.e("REOS","TerminoPagoView-onCreate-dias_vencimiento"+dias_vencimiento);
         }
     }
 
@@ -188,8 +190,10 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        String text = newText;
-        listaTerminoPagoAdapter.filter(text);
+        if(listaTerminoPagoAdapter!=null)
+        {
+        listaTerminoPagoAdapter.filter(newText);
+        }
         return true;
     }
 }

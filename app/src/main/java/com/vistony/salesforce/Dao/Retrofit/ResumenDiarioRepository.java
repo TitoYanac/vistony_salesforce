@@ -39,7 +39,7 @@ public class ResumenDiarioRepository extends ViewModel {
 
     ){
 
-        Config.getClient().create(Api.class).getDailySummary(company,Imei,fechaini,fechafin).enqueue(new Callback<HistoricContainerSalesEntityResponse>() {
+        Config.getClient().create(Api.class).getDailySummary(Imei,fechaini,fechafin).enqueue(new Callback<HistoricContainerSalesEntityResponse>() {
             @Override
             public void onResponse(Call<HistoricContainerSalesEntityResponse> call, Response<HistoricContainerSalesEntityResponse> response) {
 
@@ -50,13 +50,15 @@ public class ResumenDiarioRepository extends ViewModel {
                     for(int i=0;i<historicContainerSalesEntityResponse.getHistoricContainerSales().size();i++)
                     {
                         historicContainerSalesEntityResponse.getHistoricContainerSales().get(i).setFechasap(fechaini);
+
+                    }
+                    status.setValue(historicContainerSalesEntityResponse.getHistoricContainerSales());
+                }else
+                    {
+                        status.setValue(null);
                     }
 
 
-
-                }
-
-                status.setValue(historicContainerSalesEntityResponse.getHistoricContainerSales());
             }
 
             @Override

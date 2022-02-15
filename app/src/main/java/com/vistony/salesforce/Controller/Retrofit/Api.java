@@ -79,7 +79,7 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/customers")
     Call<ClienteEntityResponse> getClienteInformation (@Query("imei") String imei,@Query("cliente") String cliente);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/customers")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/Customer")
     Call<ClienteEntityResponse> getClientDelivery (@Query("imei") String imei,@Query("fecha") String fecha);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/WorkPath")
@@ -165,17 +165,15 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/PriceListHead")
     Call<PriceListEntityResponse> getPriceList(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricalSales")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricalSales/Variable")
     Call<HistoricContainerSalesEntityResponse> getDailySummary(
-            @Query("company") String company,
             @Query("imei") String imei,
             @Query("fecini") String fecini,
             @Query("fecfin") String fecfin
             );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricalSales")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricalSales/Type")
     Call<HistoricContainerSalesEntityResponse> getHistoricContainerSales(
-            @Query("company") String company,
             @Query("imei") String imei,
             @Query("type") String type,
             @Query("cardCode") String cardcode,
@@ -222,10 +220,10 @@ public interface Api {
     );
 
     //@GET("/AppVistonySalesTest/ServicioApp.svc/Obtener_DespachoC/{Imei},{Compania_ID},{FuerzaTrabajo_ID},{FechaDespacho}") //Maestro de Hoja de Despacho Cabecera
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HeaderDispatchSheet")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
     Call<HeaderDispatchSheetEntityResponse> getHeaderDispatchSheet (
-            @Query("Imei") String Imei
-            ,@Query("FechaDespacho") String FechaDespacho
+            @Query("imei") String Imei
+            ,@Query("fecha") String FechaDespacho
 
     );
 

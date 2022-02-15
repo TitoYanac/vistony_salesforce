@@ -81,10 +81,10 @@ public class ResumenDiarioPDF extends AppCompatActivity {
         ArrayList<String> ObjList=new ArrayList<>();
         String fechasap="",CardName="",LicTradNum="",Street="",Ubigeo="",Phone="";
         Set<String> listaCorrelativo ;
-        for(int i=0;i<resumenDiarioEntityList.size();i++)
+        /*for(int i=0;i<resumenDiarioEntityList.size();i++)
         {
             //fechasap=resumenDiarioEntityList.get(i).getFechasap();
-        }
+        }*/
         fechasap=fecha;
         listaCorrelativo = new HashSet<String>(ObjList);
         Object[] ObjArrayListaCorrelativo = listaCorrelativo.toArray();
@@ -193,44 +193,52 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tblCabecera = new PdfPTable(3);
             tblCabecera.setWidthPercentage(100);
             PdfPCell cellCabecera = null;
-            cellCabecera = new PdfPCell(new Phrase("Item",font3));
+            cellCabecera = new PdfPCell(new Phrase("ITEM",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase("Variable",font3));
+            cellCabecera = new PdfPCell(new Phrase("VARIABLE",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase("Monto",font3));
+            cellCabecera = new PdfPCell(new Phrase("MONTO",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblCabecera.addCell(cellCabecera);
-            for(int i=0;i<resumenDiarioEntityList.size();i++)
+
+
+            Log.d("REOS","DocumentCobranzaPDF.generarPdf.resumenDiarioEntityList.size:" + resumenDiarioEntityList.size());
+            if(resumenDiarioEntityList!=null)
             {
-                cellCabecera = new PdfPCell(new Phrase(String.valueOf(i+1),font3));
-                cellCabecera.disableBorderSide(Rectangle.BOX);
-                cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
+                for(int i=0;i<resumenDiarioEntityList.size();i++)
+                {
+                    cellCabecera = new PdfPCell(new Phrase(String.valueOf(i+1),font3));
+                    cellCabecera.disableBorderSide(Rectangle.BOX);
+                    cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    tblCabecera.addCell(cellCabecera);
+                    cellCabecera = new PdfPCell(new Phrase(resumenDiarioEntityList.get(i).getVariable(),font3));
+                    cellCabecera.disableBorderSide(Rectangle.BOX);
+                    cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    tblCabecera.addCell(cellCabecera);
+                    cellCabecera = new PdfPCell(new Phrase((resumenDiarioEntityList.get(i).getMontototal()),font3));
+                    cellCabecera.disableBorderSide(Rectangle.BOX);
+                    cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    tblCabecera.addCell(cellCabecera);
+
+                }
                 tblCabecera.addCell(cellCabecera);
-                cellCabecera = new PdfPCell(new Phrase(resumenDiarioEntityList.get(i).getVariable(),font3));
-                cellCabecera.disableBorderSide(Rectangle.BOX);
-                cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
-                tblCabecera.addCell(cellCabecera);
-                cellCabecera = new PdfPCell(new Phrase(resumenDiarioEntityList.get(i).getMontototal(),font3));
-                cellCabecera.disableBorderSide(Rectangle.BOX);
-                cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
-                tblCabecera.addCell(cellCabecera);
-            }
-            documento.add(tblCabecera);
-            if(resumenDiarioEntityList.size()==0)
-            {
+                documento.add(tblCabecera);
+            }else {
+
                 PdfPTable tblNodata = new PdfPTable(1);
                 tblNodata.setWidthPercentage(100);
                 PdfPCell celltblNodata = null;
-                celltblNodata=new PdfPCell(new Phrase("No hay Data Disponible",font3));
+                celltblNodata=new PdfPCell(new Phrase("No hay Datos de Variables Disponible",font3));
                 celltblNodata.disableBorderSide(Rectangle.BOX);
                 celltblNodata.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tblNodata.addCell(celltblNodata);
                 documento.add(tblNodata);
+
             }
 
 

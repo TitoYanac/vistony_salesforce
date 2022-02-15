@@ -6,49 +6,49 @@ public class DetailDispatchSheetEntity {
     @SerializedName("Control_ID")
     private String controlid;
 
-    @SerializedName("Item_ID")
+    @SerializedName("Item")
     private String itemid;
 
-    @SerializedName("Cliente_ID")
+    @SerializedName("CardCode")
     private String clienteid;
 
-    @SerializedName("DomEmbarque_ID")
+    @SerializedName("ShipToCode")
     private String domembarque_id;
 
-    @SerializedName("Direccion")
+    @SerializedName("Address")
     private String direccion;
 
-    @SerializedName("Factura_ID")
+    @SerializedName("InvoiceNum")
     private String factura_id;
 
-    @SerializedName("Entrega_ID")
+    @SerializedName("DeliveryNum")
     private String entrega_id;
 
-    @SerializedName("Entrega")
+    @SerializedName("DeliveryLegalNumber")
     private String entrega;
 
-    @SerializedName("Factura")
+    @SerializedName("InvoiceLegalNumber")
     private String factura;
 
-    @SerializedName("Saldo")
+    @SerializedName("Balance")
     private String saldo;
 
-    @SerializedName("Estado")
+    @SerializedName("Status")
     private String estado;
 
-    @SerializedName("Fuerzatrabajo_ID")
+    @SerializedName("SlpCode")
     private String fuerzatrabajo_id;
 
-    @SerializedName("FuerzaTrabajo")
+    @SerializedName("SlpName")
     private String fuerzatrabajo;
 
     @SerializedName("TerminoPago_ID")
     private String terminoPago_id;
 
-    @SerializedName("TerminoPago")
+    @SerializedName("PymntGroup")
     private String terminoPago;
 
-    @SerializedName("Peso")
+    @SerializedName("Weight")
     private String peso;
 
     @SerializedName("Comentario_Despacho")

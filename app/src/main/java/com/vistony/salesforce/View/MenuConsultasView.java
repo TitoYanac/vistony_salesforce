@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
@@ -87,6 +88,13 @@ public class MenuConsultasView extends Fragment {
         cv_documentofacturado=v.findViewById(R.id.cv_documentofacturado);
         cv_consulta_cobrado=v.findViewById(R.id.cv_consulta_cobrado);
         cv_consulta_deposito=v.findViewById(R.id.cv_consulta_deposito);
+
+        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+        {
+            cv_ordenventa.setVisibility(View.GONE);
+            cv_documentofacturado.setVisibility(View.GONE);
+        }
+
         //cv_consulta_stock=v.findViewById(R.id.cv_consulta_stock);
         //cv_consulta_orden_venta_estado=v.findViewById(R.id.cv_consulta_orden_venta_estado);
         cv_ordenventa.setOnClickListener(new View.OnClickListener() {
@@ -129,10 +137,21 @@ public class MenuConsultasView extends Fragment {
                 String Fragment,accion,compuesto;
                 switch (BuildConfig.FLAVOR){
                     case "peru":
-                         Fragment="HistoricoCobranzaView";
-                         accion="MENUCOBRANZA";
-                         compuesto=Fragment+"-"+accion;
-                        mListener.onFragmentInteraction(compuesto,"");
+                        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+                        {
+                            Fragment="HistoricoCobranzaView";
+                             accion="COBRANZA";
+                             compuesto=Fragment+"-"+accion;
+                            mListener.onFragmentInteraction(compuesto,"");
+                        }
+                        else
+                            {
+                                Fragment="HistoricoCobranzaView";
+                                accion="MENUCOBRANZA";
+                                compuesto=Fragment+"-"+accion;
+                                mListener.onFragmentInteraction(compuesto,"");
+                            }
+
                         break;
                     case "ecuador":
                     case "chile":

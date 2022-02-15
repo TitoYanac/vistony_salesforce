@@ -79,21 +79,12 @@ public class HeaderDispatchSheetSQLite {
         HojaDespachoCabeceraSQLiteEntity hojaDespachoCabeceraSQLiteEntity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select * from headerdispatchsheet where fechahojadespacho='"+DispatchDate+"'",null);
+                "Select control_id from headerdispatchsheet where fechahojadespacho='"+DispatchDate+"' group by control_id ",null);
 
         while (fila.moveToNext())
         {
             hojaDespachoCabeceraSQLiteEntity= new HojaDespachoCabeceraSQLiteEntity();
-            hojaDespachoCabeceraSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
-            hojaDespachoCabeceraSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
-            hojaDespachoCabeceraSQLiteEntity.setUsuario_id(fila.getString(fila.getColumnIndex("usuario_id")));
             hojaDespachoCabeceraSQLiteEntity.setControl_id(fila.getString(fila.getColumnIndex("control_id")));
-            hojaDespachoCabeceraSQLiteEntity.setAsistente_id(fila.getString(fila.getColumnIndex("asistente_id")));
-            hojaDespachoCabeceraSQLiteEntity.setAsistente(fila.getString(fila.getColumnIndex("asistente")));
-            hojaDespachoCabeceraSQLiteEntity.setPlaca(fila.getString(fila.getColumnIndex("placa")));
-            hojaDespachoCabeceraSQLiteEntity.setMarca(fila.getString(fila.getColumnIndex("marca")));
-            hojaDespachoCabeceraSQLiteEntity.setPesototal(fila.getString(fila.getColumnIndex("pesototal")));
-            hojaDespachoCabeceraSQLiteEntity.setFechahojadespacho(fila.getString(fila.getColumnIndex("fechahojadespacho")));
             listaHojaDespachoCabeceraSQLiteEntity.add(hojaDespachoCabeceraSQLiteEntity);
         }
 

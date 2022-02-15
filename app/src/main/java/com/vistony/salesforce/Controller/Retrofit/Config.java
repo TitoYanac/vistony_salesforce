@@ -42,7 +42,7 @@ public class Config {
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
-                .retryOnConnectionFailure(false)
+                .retryOnConnectionFailure(true)
                 .proxy(Proxy.NO_PROXY)
                 //.connectionPool(new ConnectionPool(10,15,TimeUnit.SECONDS))
                 //.dns(new Ipv4PreferDns())

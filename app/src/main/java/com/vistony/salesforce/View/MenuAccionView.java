@@ -184,6 +184,12 @@ public class MenuAccionView extends Fragment {
         cv_visita=v.findViewById(R.id.cv_visita);
         setHasOptionsMenu(true);
 
+        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+        {
+            cv_pedido.setVisibility(View.GONE);
+            cv_visita.setVisibility(View.GONE);
+        }
+
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         /********/
 

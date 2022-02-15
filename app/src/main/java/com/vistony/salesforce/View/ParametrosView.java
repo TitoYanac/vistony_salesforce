@@ -37,6 +37,7 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
+import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
 import com.vistony.salesforce.Dao.Retrofit.MotivoVisitaWS;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.Retrofit.AgenciaWS;
@@ -172,6 +173,7 @@ ParametrosView extends Fragment {
     private BackupRepository backupRepository;
     private BancoRepository bancoRepository;
     private PriceListRepository priceListRepository;
+    private HeaderDispatchSheetRepository headerDispatchSheetRepository;
     MenuItem seleccionar_todo;
 
     public static ParametrosView newInstance(String param1) {
@@ -252,7 +254,7 @@ ParametrosView extends Fragment {
         backupRepository = new ViewModelProvider(getActivity()).get(BackupRepository.class);
         bancoRepository = new ViewModelProvider(getActivity()).get(BancoRepository.class);
         priceListRepository = new ViewModelProvider(getActivity()).get(PriceListRepository.class);
-
+        headerDispatchSheetRepository = new ViewModelProvider(getActivity()).get(HeaderDispatchSheetRepository.class);
         listaParametrosEntity = new ListaParametrosEntity();
         arraylistaparametrosentity = new ArrayList<ListaParametrosEntity>();
         ArrayList<ParametrosSQLiteEntity> listaparametrosSQLiteEntity = new ArrayList<>();
@@ -388,6 +390,9 @@ ParametrosView extends Fragment {
         priceListRepository.getAddAllPriceList(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
         });
+
+
+
 
 
         fabdescargarparametros.setOnClickListener(view -> {

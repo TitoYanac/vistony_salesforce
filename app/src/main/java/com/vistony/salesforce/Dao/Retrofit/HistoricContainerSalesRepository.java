@@ -34,7 +34,7 @@ public class HistoricContainerSalesRepository  extends ViewModel {
 
     public MutableLiveData<List<HistoricContainerSalesEntity>> getHistoricContainerSales(String Imei, Context context, String CardCode, String FechaIni, String FechFin, String Variable, String Tipo){
 
-        Config.getClient().create(Api.class).getHistoricContainerSales(SesionEntity.compania_id ,Imei,Variable,CardCode,FechaIni,FechFin).enqueue(new Callback<HistoricContainerSalesEntityResponse>() {
+        Config.getClient().create(Api.class).getHistoricContainerSales(Imei,Variable,CardCode,FechaIni,FechFin).enqueue(new Callback<HistoricContainerSalesEntityResponse>() {
             @Override
             public void onResponse(Call<HistoricContainerSalesEntityResponse> call, Response<HistoricContainerSalesEntityResponse> response) {
                 Log.e("REOS","HistoricContainerSalesRepository-getHistoricContainerSales-call"+call);

@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -169,6 +170,8 @@ public class KardexOfPaymentView extends Fragment {
         kardexPagoRepository.getKardexPago(SesionEntity.imei, CardCode,context).observe(lifecycleOwner, data -> {
         Convert convert=new Convert();
             Log.e("Jepicame","=>"+data);
+            if(data!=null)
+            {
             listKardexOfPaymentEntityList=convert.getConvertListKardexOfPayment(data);
             kardexPagoEntityList=data;
              listKardexOfPaymentAdapter
@@ -184,11 +187,11 @@ public class KardexOfPaymentView extends Fragment {
                     }
             tv_quantity_invoice_kardex.setText(String.valueOf(listKardexOfPaymentEntityList.size()));
             tv_docamount_kardex_invoice.setText(Convert.currencyForView(String.valueOf(docamount)));
-            pd.dismiss();
-            if(data.isEmpty())
-            {
+            }else {
                 Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
+                alertdialogInformative(context,"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
             }
+            pd.dismiss();
         });
     }
 
@@ -339,5 +342,31 @@ public class KardexOfPaymentView extends Fragment {
                 listKardexOfPaymentEntityList);
         lv_kardex_of_payment.setAdapter(listKardexOfPaymentAdapter);
 
+    }
+
+    static private Dialog alertdialogInformative(Context context,String titulo,String message) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText(titulo);
+        textViewMsj.setText(message);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 }
