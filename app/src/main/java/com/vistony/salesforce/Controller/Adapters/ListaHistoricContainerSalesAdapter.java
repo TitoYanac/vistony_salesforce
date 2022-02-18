@@ -127,11 +127,11 @@ public class ListaHistoricContainerSalesAdapter extends ArrayAdapter<ListaHistor
             holder.tv_variable.setText(lead.getVariable());
 
         }
-        if(Float.parseFloat(lead.getTotal())==0)
+        /*if(Float.parseFloat(lead.getTotal())==0)
         {
 
             holder.relativeListacontainersalesSemaforo.setBackground(new ColorDrawable(Color.RED));
-        }
+        }*/
 
         return convertView;
     }

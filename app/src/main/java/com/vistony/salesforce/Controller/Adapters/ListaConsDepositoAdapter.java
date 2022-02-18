@@ -149,7 +149,22 @@ public class ListaConsDepositoAdapter extends
                 itemChecked[position] = isChecked;
             }
         });
+        if(lead.isCheckbox())
+        {
+            itemChecked[position] = lead.isCheckbox();
+            holder.checkBox.setChecked(itemChecked[position]);
+            //LLena variable estatica
+            SesionEntity.listaConsDeposito=String.valueOf(ArraylistaConsDepositoEntity.size());
 
+            //Envia Datos a Fragment
+            fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.content_menu_view, consDepositoView.nuevaInstancia(ArraylistaConsDepositoEntity));
+        }
+        else
+        {
+            holder.checkBox.setChecked(itemChecked[position]);
+        }
         holder.checkBox.setChecked(itemChecked[position]);
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
                                                  @Override

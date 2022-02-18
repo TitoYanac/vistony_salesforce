@@ -2,8 +2,11 @@ package com.vistony.salesforce.View;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,10 +96,12 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
     static String TAG_1 = "text";
     String calendario="";
     //ArrayList<ListaConsDepositoEntity> ArraylistaConsDepositoEntity;
-    MenuItem vincular;
+    MenuItem vincular,seleccionar_todo;
     static String Recibos_agregados="";
     private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=2;
     Induvis induvis;
+    boolean estadoseleccionartodo;
+
     public ConsDepositoView() {
         // Required empty public constructor
     }
@@ -232,6 +238,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        estadoseleccionartodo=false;
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             if(mParam1.equals("nuevalista"))
@@ -269,7 +276,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
         tv_monto_consdeposito= (TextView) v.findViewById(R.id.tv_monto_consdeposito);
 
 
-        getActivity().setTitle("Pendientes Deposito");
+        getActivity().setTitle("Pendientes Depósito");
         return v;
     }
 
@@ -283,7 +290,10 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
                 //listacobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerBanco();
                 listacobranzaDetalleSQLiteEntity = new ArrayList<CobranzaDetalleSQLiteEntity>();
                 cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
-                listacobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporFecha(fecha, SesionEntity.compania_id,SesionEntity.usuario_id,Recibos_agregados,SesionEntity.fuerzatrabajo_id);
+                listacobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporFecha(
+                        //fecha
+                        parametrofecha
+                        , SesionEntity.compania_id,SesionEntity.usuario_id,Recibos_agregados,SesionEntity.fuerzatrabajo_id);
             } catch (Exception e)
             {
                Log.e("jpcm",""+e);
@@ -302,7 +312,8 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
                 listaConsDepositoAdapter = new ListaConsDepositoAdapter(
                         getActivity(),
                         ListaConsDepositoDao.getInstance().getLeads(listacobranzaDetalleSQLiteEntity
-                        , getContext()
+                        , getContext(),
+                                estadoseleccionartodo
                 ));
                 listaViewCobranzas.setAdapter(listaConsDepositoAdapter);
                 listaConsDepositoAdapter.notifyDataSetChanged();
@@ -430,10 +441,16 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
 
         inflater.inflate(R.menu.menu_consdeposito, menu);
         vincular = menu.findItem(R.id.vincular);
+        seleccionar_todo = menu.findItem(R.id.seleccionar_todo);
         Drawable drawable = menu.findItem(R.id.vincular).getIcon();
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
         menu.findItem(R.id.vincular).setIcon(drawable);
+
+        if(!SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            seleccionar_todo.setVisible(false);
+        }
 
         super.onCreateOptionsMenu(menu, inflater);
 
@@ -460,7 +477,11 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
                    }
 
                 return false;
+            case R.id.seleccionar_todo:
+                alertaSeleccionartodo("Esta Seguro de Seleccionar todos los recibos?",getContext()).show();
 
+
+                return false;
             default:
                 break;
         }
@@ -507,6 +528,55 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
             }
         }
 
+    }
+
+    private Dialog alertaSeleccionartodo(String texto, Context context) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog_advertencia);
+
+        TextView textMsj = dialog.findViewById(R.id.tv_texto);
+        textMsj.setText(texto);
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+
+
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*String Fragment="OrdenVentaCabeceraView";
+                String accion="detalle";
+                String compuesto=Fragment+"-"+accion;
+                String Objeto=contado;
+                mListener.onFragmentInteraction(compuesto,Objeto);*/
+                estadoseleccionartodo=true;
+                String parametrofecha="";
+                parametrofecha=String.valueOf(tv_fechacobranza.getText());
+                obtenerTareaListaCobranzas = new ObtenerTareaListaCobranzas();
+                obtenerTareaListaCobranzas.execute(parametrofecha);
+                dialog.dismiss();
+
+
+            }
+        });
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 
 

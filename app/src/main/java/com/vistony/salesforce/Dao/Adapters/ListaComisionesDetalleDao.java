@@ -57,6 +57,8 @@ public class ListaComisionesDetalleDao {
                                 ,Lista.get(i).getAvance()
                                 ,Lista.get(i).getCuota()
                                 ,String.valueOf (Float.parseFloat(Lista.get(i).getPorcentajeavance())*100)//+"%"
+                                ,Lista.get(i).getEsc_colours()
+                                ,Lista.get(i).getHidedata()
                         )
                 );
 

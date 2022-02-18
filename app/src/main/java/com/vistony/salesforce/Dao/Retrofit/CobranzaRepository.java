@@ -500,7 +500,7 @@ public class CobranzaRepository extends ViewModel {
     }
 
     //Prueba Endpoint Walter
-    public MutableLiveData<String> UndepositedPendingCollectionCountSend(Context context){
+    /*public MutableLiveData<String> UndepositedPendingCollectionCountSend(Context context){
         MutableLiveData<String> temp=new MutableLiveData<String>();
 
         sendCollectionCountSend(context, new CollectionCallback(){
@@ -591,6 +591,8 @@ public class CobranzaRepository extends ViewModel {
             Log.e("REOS","CobranzaRepository-UndepositedPendingCollectionCountSend-error: "+e.toString());
         }
     }
+    */
+
     //////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     //////////////////Enviar Recibos  Depositados\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public MutableLiveData<String> depositedPendingCollection(Context context){

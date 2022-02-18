@@ -67,12 +67,16 @@ public class RutaVendedorSQLiteDao {
              String chk_pedido,
              String chk_cobranza,
              String chk_ruta,
-             String fecharuta
+             String fecharuta,
+             String slpCode,
+             String userCode
     )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
         // SQLiteDatabase bd = admin.getWritableDatabase();
         try {
+
+
             abrir();
             ContentValues registro = new ContentValues();
             registro.put("cliente_id", cliente_id);
@@ -101,8 +105,8 @@ public class RutaVendedorSQLiteDao {
             registro.put("chk_ruta", chk_ruta);
             registro.put("fecharuta", fecharuta);
             registro.put("saldomn", saldomn);
-            registro.put("slpCode", SesionEntity.fuerzatrabajo_id);
-            registro.put("userCode", SesionEntity.usuario_id);
+            registro.put("slpCode", slpCode);
+            registro.put("userCode", userCode);
 
 
             bd.insert("rutavendedor", null, registro);

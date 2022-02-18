@@ -437,6 +437,7 @@ public class CobranzaDetalleView extends Fragment {
                     BigDecimal montoIngresado=new BigDecimal(temporal);
 
                     if(!(montoIngresado.compareTo(BigDecimal.ZERO)>0)){
+
                         et_cobrado_edit.setText(null);
                         Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
                     }else{
@@ -1072,7 +1073,7 @@ public class CobranzaDetalleView extends Fragment {
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza)
     {
         int resultado=0,recibows=0;
-        String tag="",tag2="",cliente_id="",shipto="",montocobrado="";
+        String tag="",tag2="",cliente_id="",shipto="",montocobrado="",cardname;
         FormulasController formulasController=new FormulasController(getContext());
         cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
         correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(SesionEntity.compania_id,SesionEntity.usuario_id);
@@ -1127,6 +1128,7 @@ public class CobranzaDetalleView extends Fragment {
             for (int i = 0; i < Lista.size(); i++) {
                 montocobrado=Lista.get(i).getCobrado();
                 cliente_id=String.valueOf(Lista.get(i).getCliente_id());
+                cardname=Lista.get(i).getNombrecliente();
                 shipto=Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
@@ -1161,7 +1163,8 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.pagopos,
                         "",
                         "",
-                        obtenerHoraActual()
+                        obtenerHoraActual(),
+                        cardname
                 );
 
                 ActualizaDocumentoDeuda(SesionEntity.compania_id,
@@ -1176,6 +1179,7 @@ public class CobranzaDetalleView extends Fragment {
             for (int i = 0; i < Lista.size(); i++) {
                 montocobrado=Lista.get(i).getCobrado();
                 cliente_id=String.valueOf(Lista.get(i).getCliente_id());
+                cardname=Lista.get(i).getNombrecliente();
                 shipto=Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 sumacobrado=String.valueOf(Lista.get(i).getCobrado());
@@ -1206,7 +1210,8 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.pagopos,
                         "",
                         "",
-                        obtenerHoraActual()
+                        obtenerHoraActual(),
+                        cardname
                 );
 
 

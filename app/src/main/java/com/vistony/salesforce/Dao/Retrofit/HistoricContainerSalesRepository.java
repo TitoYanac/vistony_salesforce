@@ -61,6 +61,9 @@ public class HistoricContainerSalesRepository  extends ViewModel {
                     }*/
                     status.setValue(historicContainerSalesEntityResponse.getHistoricContainerSales());
                 }
+                else {
+                    status.setValue(null);
+                }
 
             }
 

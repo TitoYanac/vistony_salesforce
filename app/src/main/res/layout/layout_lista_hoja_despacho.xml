@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Cliente:"
+        android:text="@string/lbl_client_dispatch_sheet"
         />
     <TextView
         android:id="@+id/tv_cliente"
@@ -35,9 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Cond.Vent:"
-        />
+        android:text="@string/lbl_payment_term"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_terminopago"
@@ -85,14 +84,14 @@
         android:layout_marginTop="90dp"
         android:text="Saldo1"
         android:textAppearance="?attr/textAppearanceListItem" />
+
     <TextView
         android:id="@+id/lbl_nombrefuerzatrabajo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Vendedor:"
-        />
+        android:text="@string/lbl_seller_dispatch_sheet"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_nombrefuerzatrabajo"
@@ -109,7 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="110dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Direccion:"
+        android:text="@string/lbl_address"
 
         />
 

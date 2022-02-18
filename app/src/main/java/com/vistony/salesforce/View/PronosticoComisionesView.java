@@ -127,11 +127,11 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
         listviewAvanceAnterior=(ListView) v.findViewById(R.id.listviewAvanceAnterior);
         //btn_comisiones_consultar= v.findViewById(R.id.btn_comisiones_consultar);
         //btn_comisiones_consultar.setOnClickListener(this);
-        layout=(ViewGroup) v.findViewById(R.id.content);
+        /*layout=(ViewGroup) v.findViewById(R.id.content);
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         int id = R.layout.layout_leyenda_comisiones_detalle;
         RelativeLayout relativeLayout = (RelativeLayout) layoutInflater.inflate(id, null, false);
-        layout.addView(relativeLayout);
+        layout.addView(relativeLayout);*/
         return v;
     }
 

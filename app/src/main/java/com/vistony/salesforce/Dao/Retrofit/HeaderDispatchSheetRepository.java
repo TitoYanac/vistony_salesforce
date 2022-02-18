@@ -23,17 +23,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HeaderDispatchSheetRepository extends ViewModel {
-    private HeaderDispatchSheetSQLite headerDispatchSheetSQLite;
-    private ParametrosSQLite parametrosSQLite;
+
+
     private MutableLiveData<String> status= new MutableLiveData<>();
-    private DetailDispatchSheetSQLite detailDispatchSheetSQLite;
 
     public MutableLiveData<String> getAndInsertHeaderDispatchSheet(
             String Imei
             , String FechaDespacho
             ,Context context
     ){
-
+        status= new MutableLiveData<>();
         Config.getClient().create(Api.class).getHeaderDispatchSheet(
                 Imei
                 , FechaDespacho
@@ -46,11 +45,10 @@ public class HeaderDispatchSheetRepository extends ViewModel {
                 if(response.isSuccessful() && headerDispatchSheetEntityResponse.getHeaderDispatchSheetEntity().size()>0){
                     Log.e("REOS","HeaderDispatchSheetRepository-getAndInsertHeaderDispatchSheet-headerDispatchSheetEntityResponse.getHeaderDispatchSheetEntity()"+headerDispatchSheetEntityResponse.getHeaderDispatchSheetEntity().toString());
 
-                    headerDispatchSheetSQLite = new HeaderDispatchSheetSQLite(context);
-                    parametrosSQLite = new ParametrosSQLite(context);
+                    HeaderDispatchSheetSQLite headerDispatchSheetSQLite= new HeaderDispatchSheetSQLite(context);
+                    ParametrosSQLite parametrosSQLite = new ParametrosSQLite(context);
                     headerDispatchSheetSQLite.ClearTableHeaderDispatchDate();
-                    detailDispatchSheetSQLite = new DetailDispatchSheetSQLite(context);
-                    parametrosSQLite = new ParametrosSQLite(context);
+                    DetailDispatchSheetSQLite detailDispatchSheetSQLite= new DetailDispatchSheetSQLite(context);
                     detailDispatchSheetSQLite.ClearTableDetailDispatchSheet();
                     for(int i=0;i< headerDispatchSheetEntityResponse.getHeaderDispatchSheetEntity().size();i++ )
                     {
@@ -75,9 +73,13 @@ public class HeaderDispatchSheetRepository extends ViewModel {
                     parametrosSQLite.ActualizaCantidadRegistros("19", "HOJA DESPACHO", "" + countHeadDispatchSheet, getDateTime());
                     Integer countDetailDispatchSheet=detailDispatchSheetSQLite.getCountDetailDispatchSheet();
                     parametrosSQLite.ActualizaCantidadRegistros("20", "HOJA DESPACHO DETALLE", ""+countDetailDispatchSheet, getDateTime());
+                    status.setValue("1");
+                }else
+                {
+                    status.setValue("0");
                 }
 
-                status.setValue("1");
+
             }
 
             @Override

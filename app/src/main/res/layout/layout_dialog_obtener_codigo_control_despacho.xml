@@ -47,7 +47,7 @@
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="Seleccione su codigo de control para registrarlo como codigo de deposito:" />
+                    android:text="Seleccione su Código de Control para registrarlo como Código de Depósito:" />
 
 
                 <TableRow
@@ -107,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:text="Codigo Control:"
+                        android:text="@string/lbl_code_control"
                         android:textSize="20dp"
                         android:textStyle="bold" />
 

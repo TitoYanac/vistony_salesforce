@@ -1,6 +1,8 @@
 package com.vistony.salesforce.Dao.Retrofit;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.google.gson.Gson;
@@ -53,7 +55,7 @@ public class VisitaRepository extends ViewModel {
             json = gson.toJson(listVisit);
             json = "{ \"Visits\":" + json + "}";
         }
-
+        Log.e("REOS", "VisitaRepository-sendVisit-json"+json);
         if(json!=null){
             RequestBody jsonRequest = RequestBody.create(json,MediaType.parse("application/json; charset=utf-8"));
             Config.getClient().create(Api.class).sendVisit(jsonRequest).enqueue(new Callback<VisitaEntity>() {

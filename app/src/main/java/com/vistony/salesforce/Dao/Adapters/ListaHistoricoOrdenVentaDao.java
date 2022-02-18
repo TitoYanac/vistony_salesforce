@@ -35,6 +35,7 @@ public class ListaHistoricoOrdenVentaDao {
             for( int i=0;i<Lista.size();i++){
                 ListaHistoricoOrdenVentaEntity temp=new ListaHistoricoOrdenVentaEntity();
                        // Lista.get(i).getDocNum()
+                temp.setDocNum(Lista.get(i).getDocNum());
                 temp.setCardCode(Lista.get(i).getCardCode());
                 temp.setLicTradNum(Lista.get(i).getLicTradNum());
                 temp.setCardName(Lista.get(i).getCardName());

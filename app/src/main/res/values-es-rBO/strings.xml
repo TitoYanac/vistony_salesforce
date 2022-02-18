@@ -29,7 +29,7 @@
     <string name="head_conexion">Conexión</string>
     <string name="head_secuencia">Secuencia</string>
     <string name="menu_ruta_vendedor">Ruta vendedor</string>
-    <string name="menu_deposito">Déposito</string>
+    <string name="menu_deposito">Depósito</string>
     <string name="menu_consultas">Consultas</string>
     <string name="menu_comisiones">Comisiones</string>
     <string name="dialog_advertencia">ADVERTENCIA</string>
@@ -52,7 +52,7 @@
     <string name="Selected_Promotion">Promoción Seleccionada:</string>
     <string name="Pending_Promotion">Promoción Pendiente:</string>
     <string name="Promotion_Detail">DETALLE DE PROMOCIÓN:</string>
-    <string name="Direct_Depost">Déposito Directo</string>
+    <string name="Direct_Depost">Depósito Directo</string>
     <string name="lbl_update_parameters">Actualizar Parámetros</string>
     <string name="lbl_legalnumber">Documento</string>
     <string name="lbl_invoicedate">Fecha Emision</string>
@@ -68,4 +68,9 @@
     <string name="lbl_tittle_dialog_validate_SMS">VALIDAR SMS</string>
     <string name="lbl_dialog_code_SMS">Codigo SMS:</string>
     <string name="lbl_dispatch_date">FECHA ENTREGA</string>
+    <string name="lbl_code_control">Código Control:</string>
+    <string name="lbl_client_dispatch_sheet">Cliente:</string>
+    <string name="lbl_seller_dispatch_sheet">Vendedor:</string>
+    <string name="lbl_payment_term">Termino de Pago:</string>
+    <string name="lbl_address">Dirección:</string>
 </resources>

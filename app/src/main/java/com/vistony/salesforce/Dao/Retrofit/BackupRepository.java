@@ -2,6 +2,7 @@ package com.vistony.salesforce.Dao.Retrofit;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -38,10 +39,16 @@ public class BackupRepository  extends ViewModel {
         RequestBody requestBody=RequestBody.create(file,MediaType.parse("multipart/form-data"));
 
         final String endPoint="https://reclamos.vistonyapp.com/backup/sqlite";
+        final String nameFile=(imei==null?"sinImei":imei);
 
-        api.sendBackup(endPoint,MultipartBody.Part.createFormData("file",(imei==null?"sinImei":imei),requestBody)).enqueue(new Callback<ResponseBody>(){
+        Log.e("jepicame","=>"+nameFile);
+
+        api.sendBackup(endPoint,MultipartBody.Part.createFormData("file",nameFile,requestBody)).enqueue(new Callback<ResponseBody>(){
+
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.e("REOS","BackupRepository-sendSqlite-call:"+call.toString());
+                Log.e("REOS","BackupRepository-sendSqlite-response:"+response.toString());
                 status.setValue(true);
             }
             @Override

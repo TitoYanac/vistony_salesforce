@@ -18,10 +18,10 @@ public class ComisionesEntity {
     @SerializedName("Percentage")
     private String porcentajeavance;
 
-    @SerializedName("Esc_colours")
+    @SerializedName("CodeColor")
     private String esc_colours;
 
-    @SerializedName("Hidedata")
+    @SerializedName("HideData")
     private String hidedata;
 
     public String getEsc_colours() {

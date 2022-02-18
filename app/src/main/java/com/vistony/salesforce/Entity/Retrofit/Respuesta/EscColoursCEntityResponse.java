@@ -7,7 +7,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.EscColoursCEntity;
 import java.util.List;
 
 public class EscColoursCEntityResponse {
-    @SerializedName("EscColoursC")
+    @SerializedName("Colors")
     private List<EscColoursCEntity> escColoursCEntity;
 
     public EscColoursCEntityResponse (List<EscColoursCEntity> escColoursCEntity)  {

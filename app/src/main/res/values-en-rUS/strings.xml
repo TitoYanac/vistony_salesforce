@@ -69,4 +69,9 @@
     <string name="lbl_tittle_dialog_validate_SMS">VALIDATE SMS</string>
     <string name="lbl_dialog_code_SMS">Code SMS:</string>
     <string name="lbl_dispatch_date">DISPATCH DATE</string>
+    <string name="lbl_code_control">Code Control:</string>
+    <string name="lbl_client_dispatch_sheet">Client:</string>
+    <string name="lbl_seller_dispatch_sheet">Seller:</string>
+    <string name="lbl_payment_term">Payment Term:</string>
+    <string name="lbl_address">Address:</string>
 </resources>

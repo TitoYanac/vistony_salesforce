@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -54,6 +56,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaCobranzaCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
@@ -285,7 +288,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_cobranza_cabecera_view, container, false);
-        getActivity().setTitle("Déposito");
+        getActivity().setTitle("Depósito");
         spnbanco=(Spinner) v.findViewById(R.id.spnbanco);
         tv_fechacobrocheque_edit = (TextView) v.findViewById(R.id.tv_fechacobrocheque_edit);
         spnbanco.setEnabled(false);
@@ -1255,13 +1258,25 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             @Override
             public void onClick(View view) {
                 HeaderDispatchSheetRepository headerDispatchSheetRepository= new ViewModelProvider(getActivity()).get(HeaderDispatchSheetRepository.class);
-                headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(SesionEntity.imei ,tv_fecha_hoja_despacho.getText().toString() ,getContext()).observe(getActivity(), data -> {
-                    Log.e("REOS", "DispatchSheetView-getMastersDelivery-headerDispatchSheetRepository-data" + data);
-                });
-        /*detailDispatchSheetRepository.getAndInsertDetailDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
-            Log.e("REOS", "DispatchSheetView-getMastersDelivery-detailDispatchSheetRepository-data" + data);
-        });*/
-                getListDispatchSheet(tv_fecha_hoja_despacho.getText().toString(),getContext());
+                ConnectivityManager manager= (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);;
+                NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+
+                if (networkInfo != null) {
+                    if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                        Log.e("REOS","DispatchSheetView-getMastersDelivery-entraif");
+                        headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(SesionEntity.imei ,tv_fecha_hoja_despacho.getText().toString() ,getContext()).observe(getActivity(), data -> {
+                            Log.e("REOS","DispatchSheetView-getMastersDelivery-data"+data.toString());
+                            getListDispatchSheet(tv_fecha_hoja_despacho.getText().toString(),getContext());
+                        });
+
+                    } else {
+                        Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
+                    }
+                }else{
+                    Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
+                    getListDispatchSheet(tv_fecha_hoja_despacho.getText().toString(),getContext());
+                }
+
             }});
 
 
@@ -1276,8 +1291,25 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etgrupo.setText(spn_control_despacho_id.getSelectedItem().toString());
-                dialog.dismiss();
+                CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao=new CobranzaCabeceraSQLiteDao(getContext());
+                FormulasController formulasController=new FormulasController(getContext());
+                if(spn_control_despacho_id.getSelectedItem()!=null)
+                {
+                    if(cobranzaCabeceraSQLiteDao.getCountValidateDeposit
+                            (SesionEntity.compania_id,
+                                    SesionEntity.usuario_id,
+                                    spn_control_despacho_id.getSelectedItem().toString())>0)
+                    {
+                        alertDepositDuplicate().show();
+                        dialog.dismiss();
+                    }
+                    else
+                        {
+                            etgrupo.setText(spn_control_despacho_id.getSelectedItem().toString());
+                            dialog.dismiss();
+                        }
+
+                }
             }
         });
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
@@ -1314,6 +1346,49 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         spn_control_despacho_id.setAdapter(adapter_control_id);
     }
 
+    public Dialog alertDepositDuplicate() {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_alert_dialog);
+        dialog.setCanceledOnTouchOutside(false);
+
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText("CONFIRMACIÓN!");
+
+        TextView textMsj = dialog.findViewById(R.id.textViewMsj);
+        textMsj.setText("¿El Nro de Depósito, esta duplicado, desea asignarle un ID unico?");
+
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FormulasController formulasController=new FormulasController(getContext());
+                etgrupo.setText(formulasController.ObtenerFechaHoraCadena());
+                dialog.dismiss();
+            }
+        });
+
+
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
 
 
 }

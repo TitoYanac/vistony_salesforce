@@ -15,16 +15,16 @@ public class EscColoursDEntity {
     @SerializedName("Id")
     private String id;
 
-    @SerializedName("Rangemin")
+    @SerializedName("RangeMin")
     private String rangemin;
 
-    @SerializedName("Rangemax")
+    @SerializedName("RangeMax")
     private String rangemax;
 
-    @SerializedName("Colourmin")
+    @SerializedName("ColorMin")
     private String colourmin;
 
-    @SerializedName("Colourmax")
+    @SerializedName("ColorMax")
     private String colourmax;
 
     @SerializedName("Degrade")

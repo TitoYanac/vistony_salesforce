@@ -67,6 +67,17 @@ public class HistoricoDepositoEntity {
     @SerializedName("Code")
     private String code;
 
+    @SerializedName("U_VIS_POSPay")
+    private String pospay;
+
+    public String getPospay() {
+        return pospay;
+    }
+
+    public void setPospay(String pospay) {
+        this.pospay = pospay;
+    }
+
     public String getCode() {
         return code;
     }

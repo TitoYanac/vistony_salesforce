@@ -7,16 +7,38 @@ public class ListaComisionesDetalleEntity {
     public String avance;
     public String cuota;
     public String porcentajeavance;
+    public String codecolor;
+    public String hidedate;
 
-    public ListaComisionesDetalleEntity(String compania_id, String variable, String umd, String avance, String cuota, String porcentajeavance) {
+
+    public ListaComisionesDetalleEntity(String compania_id, String variable, String umd, String avance, String cuota, String porcentajeavance, String codecolor, String hidedate) {
         this.compania_id = compania_id;
         this.variable = variable;
         this.umd = umd;
         this.avance = avance;
         this.cuota = cuota;
         this.porcentajeavance = porcentajeavance;
+        this.codecolor = codecolor;
+        this.hidedate = hidedate;
     }
+
     public ListaComisionesDetalleEntity() {
+    }
+
+    public String getCodecolor() {
+        return codecolor;
+    }
+
+    public void setCodecolor(String codecolor) {
+        this.codecolor = codecolor;
+    }
+
+    public String getHidedate() {
+        return hidedate;
+    }
+
+    public void setHidedate(String hidedate) {
+        this.hidedate = hidedate;
     }
 
     public String getCompania_id() {

@@ -2,6 +2,8 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class EscColoursCEntity {
     private String compania_id;
 
@@ -9,14 +11,25 @@ public class EscColoursCEntity {
 
     private String usuario_id;
 
-    @SerializedName("Id")
+    @SerializedName("Code")
     private String id;
 
-    @SerializedName("Scale")
+    @SerializedName("Description")
     private String scale;
 
     @SerializedName("Status")
     private String status;
+
+    @SerializedName("Detail")
+    private List<EscColoursDEntity> escColoursDEntityList;
+
+    public List<EscColoursDEntity> getEscColoursDEntityList() {
+        return escColoursDEntityList;
+    }
+
+    public void setEscColoursDEntityList(List<EscColoursDEntity> escColoursDEntityList) {
+        this.escColoursDEntityList = escColoursDEntityList;
+    }
 
     public String getId() {
         return id;

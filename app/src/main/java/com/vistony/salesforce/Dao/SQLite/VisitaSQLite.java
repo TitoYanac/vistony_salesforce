@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
 
@@ -62,7 +64,7 @@ public class VisitaSQLite {
         registro.put("chkrecibido",visita.getChkrecibido());
         registro.put("latitud",visita.getLatitude());
         registro.put("longitud",visita.getLongitude());
-
+        registro.put("countsend","1");
         bd.insert("visita",null,registro);
         bd.close();
         return 1;
@@ -70,9 +72,12 @@ public class VisitaSQLite {
 
     public ArrayList<VisitaSQLiteEntity> ObtenerVisitas (){
         listaVisitaSQLiteEntity = new ArrayList<VisitaSQLiteEntity>();
+        String brand = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        String osVersion = android.os.Build.VERSION.RELEASE;
         try {
             abrir();
-            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud FROM VISITA WHERE chkrecibido='0' ", null);
+            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend FROM VISITA WHERE chkrecibido='0' ", null);
 
             if (fila.moveToFirst()) {
                 do {
@@ -91,7 +96,13 @@ public class VisitaSQLite {
                     visita.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
                     visita.setLongitude(fila.getString(fila.getColumnIndex("longitud")));
                     visita.setAppVersion(Utilitario.getVersion(Context));
+                    visita.setModel(model);
+                    visita.setBrand(brand);
+                    visita.setOSVersion(osVersion);
+                    visita.setIntent (fila.getString(fila.getColumnIndex("countsend")));
                     listaVisitaSQLiteEntity.add(visita);
+
+                    UpdateCountSend(fila.getString(fila.getColumnIndex("id")), SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
                 } while (fila.moveToNext());
             }
 
@@ -131,5 +142,28 @@ public class VisitaSQLite {
         }
 
         return status;
+    }
+
+    public int UpdateCountSend (String id, String compania_id,String usuario_id,String countsend)
+    {
+        int resultado=0;
+        abrir();
+        try {
+
+            ContentValues registro = new ContentValues();
+            registro.put("countsend",String.valueOf(Integer.parseInt(countsend)+1));
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("visita",registro,"id='"+id+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            resultado=0;
+        }
+
+        bd.close();
+        return  resultado;
     }
 }

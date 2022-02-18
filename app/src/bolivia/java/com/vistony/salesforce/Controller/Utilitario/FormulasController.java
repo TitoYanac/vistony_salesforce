@@ -2,6 +2,7 @@ package com.vistony.salesforce.Controller.Utilitario;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.lifecycle.LifecycleOwner;
@@ -20,6 +21,7 @@ import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
@@ -36,6 +38,7 @@ import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
@@ -604,6 +607,10 @@ public class FormulasController {
         String cadenaJSON="";
         OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(context);
         OrdenVentaDetallePromocionSQLiteDao ordenVentaDetallePromocionSQLiteDao=new OrdenVentaDetallePromocionSQLiteDao(context);
+        String fabricante = Build.MANUFACTURER;
+        String modelo = Build.MODEL;
+        String AndroidVersion = android.os.Build.VERSION.RELEASE;
+
 
         ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaordenVentaDetalleSQLiteEntity=new ArrayList<>();
         ArrayList<DocumentLine> listadoDocumentLines =new ArrayList<>();
@@ -662,7 +669,10 @@ public class FormulasController {
         documentHeader.setU_SYP_FEMEX("1");
         documentHeader.setU_SYP_VIST_TG(U_SYP_VIST_TG);
         documentHeader.setU_SYP_DOCEXPORT("N");
-
+        documentHeader.setIntent(ovCabecera.getIntent());
+        documentHeader.setBrand(fabricante);
+        documentHeader.setOSVersion(AndroidVersion);
+        documentHeader.setModel(modelo);
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
@@ -1052,6 +1062,9 @@ public class FormulasController {
     public int RegistrarRutaVendedor(ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntities,String fecharuta,String chk_ruta)
     {
         int resultado=0;
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(Context);
         try
         {
@@ -1084,7 +1097,9 @@ public class FormulasController {
                         "0",
                         "0",
                         chk_ruta,
-                        fecharuta
+                        fecharuta,
+                        ObjUsuario.fuerzatrabajo_id,
+                        ObjUsuario.usuario_id
                 );
             }
 
@@ -1099,19 +1114,20 @@ public class FormulasController {
 
     public void RegistraVisita(VisitaSQLiteEntity visita, Context context,String monto) {
         visitaRepository = new ViewModelProvider((ViewModelStoreOwner) context).get(VisitaRepository.class);
-
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
         SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
         SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-
         Date date = new Date();
 
 
 
-        visita.setCompania_id(SesionEntity.compania_id);
+        visita.setCompania_id(ObjUsuario.compania_id);
         visita.setDate(FormatFecha.format(date));
         visita.setHour(dateFormathora.format(date));
-        visita.setSlpCode(SesionEntity.fuerzatrabajo_id);
-        visita.setUserId(SesionEntity.usuario_id);
+        visita.setSlpCode(ObjUsuario.fuerzatrabajo_id);
+        visita.setUserId(ObjUsuario.usuario_id);
         visita.setChkenviado("1");
         visita.setChkrecibido("0");
 
@@ -1127,7 +1143,7 @@ public class FormulasController {
                 rutaVendedorSQLiteDao.ActualizaChkPedidoRutaVendedor(
                         visita.getCardCode(),
                         visita.getAddress(),
-                        SesionEntity.compania_id,
+                        ObjUsuario.compania_id,
                         String.valueOf(FormatFecha.format(date)),
                         monto
                 );
@@ -1136,7 +1152,7 @@ public class FormulasController {
                 rutaVendedorSQLiteDao.ActualizaChkCobranzaRutaVendedor(
                         visita.getCardCode(),
                         visita.getAddress(),
-                        SesionEntity.compania_id,
+                        ObjUsuario.compania_id,
                         String.valueOf(FormatFecha.format(date)),
                         monto
                 );
@@ -1145,7 +1161,7 @@ public class FormulasController {
                 rutaVendedorSQLiteDao.ActualizaVisitaRutaVendedor(
                         visita.getCardCode(),
                         visita.getAddress(),
-                        SesionEntity.compania_id,
+                        ObjUsuario.compania_id,
                         String.valueOf(FormatFecha.format(date))
                 );
                 break;

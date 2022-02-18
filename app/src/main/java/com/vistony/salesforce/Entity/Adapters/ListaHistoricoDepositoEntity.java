@@ -21,8 +21,9 @@ public class ListaHistoricoDepositoEntity  implements Serializable {
     public String depositodirecto;
     public String bankname;
     public String code;
+    public String pospay;
 
-    public ListaHistoricoDepositoEntity(String bancarizacion, String banco_id, String comentario, String compania_id, String deposito_id, String estado, String fechadeposito, String fechadiferida, String fuerzatrabajo_id, String montodeposito, String motivoanulacion, String tipoingreso, String usuario_id, boolean checkbox, int imvdetalle, String depositodirecto, String bankname, String code) {
+    public ListaHistoricoDepositoEntity(String bancarizacion, String banco_id, String comentario, String compania_id, String deposito_id, String estado, String fechadeposito, String fechadiferida, String fuerzatrabajo_id, String montodeposito, String motivoanulacion, String tipoingreso, String usuario_id, boolean checkbox, int imvdetalle, String depositodirecto, String bankname, String code, String pospay) {
         this.bancarizacion = bancarizacion;
         this.banco_id = banco_id;
         this.comentario = comentario;
@@ -41,9 +42,18 @@ public class ListaHistoricoDepositoEntity  implements Serializable {
         this.depositodirecto = depositodirecto;
         this.bankname = bankname;
         this.code = code;
+        this.pospay = pospay;
     }
 
     public ListaHistoricoDepositoEntity() {
+    }
+
+    public String getPospay() {
+        return pospay;
+    }
+
+    public void setPospay(String pospay) {
+        this.pospay = pospay;
     }
 
     public String getCode() {

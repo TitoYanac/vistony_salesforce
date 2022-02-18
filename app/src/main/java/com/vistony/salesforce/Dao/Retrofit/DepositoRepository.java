@@ -226,6 +226,7 @@ public class DepositoRepository extends ViewModel {
                     ObjLHDeposito.usuario_id =  SesionEntity.usuario_id;
                     ObjLHDeposito.bankname =  historicoDepositoEntityResponse.getHistoricoDeposito().get(i).getBankname();
                     ObjLHDeposito.code =  historicoDepositoEntityResponse.getHistoricoDeposito().get(i).getCode();
+                    ObjLHDeposito.pospay =  historicoDepositoEntityResponse.getHistoricoDeposito().get(i).getPospay();
                     LHDeposito.add(ObjLHDeposito);
                 }
             }

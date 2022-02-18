@@ -32,8 +32,9 @@ public class CobranzaDetalleSQLiteEntity {
     public String sap_code;
     public String mensajews;
     public String horacobranza;
+    public String cardname;
 
-    public CobranzaDetalleSQLiteEntity(String id, String cobranza_id, String cliente_id, String documento_id, String documento_entry, String compania_id, String importedocumento, String saldodocumento, String nuevosaldodocumento, String saldocobrado, String fechacobranza, String recibo, String nrofactura, String chkqrvalidado, String chkbancarizado, String motivoanulacion, String usuario_id, String chkwsrecibido, String banco_id, String chkwsdepositorecibido, String comentario, String chkwsupdate, String chkdepositado, String chkwsqrvalidado, String chkanulado, String pagodirecto, String pagopos, String sap_code, String mensajews, String horacobranza) {
+    public CobranzaDetalleSQLiteEntity(String id, String cobranza_id, String cliente_id, String documento_id, String documento_entry, String compania_id, String importedocumento, String saldodocumento, String nuevosaldodocumento, String saldocobrado, String fechacobranza, String recibo, String nrofactura, String chkqrvalidado, String chkbancarizado, String motivoanulacion, String usuario_id, String chkwsrecibido, String banco_id, String chkwsdepositorecibido, String comentario, String chkwsupdate, String chkdepositado, String chkwsqrvalidado, String chkanulado, String pagodirecto, String pagopos, String sap_code, String mensajews, String horacobranza, String cardname) {
         this.id = id;
         this.cobranza_id = cobranza_id;
         this.cliente_id = cliente_id;
@@ -64,10 +65,19 @@ public class CobranzaDetalleSQLiteEntity {
         this.sap_code = sap_code;
         this.mensajews = mensajews;
         this.horacobranza = horacobranza;
+        this.cardname = cardname;
     }
 
     public CobranzaDetalleSQLiteEntity() {
 
+    }
+
+    public String getCardname() {
+        return cardname;
+    }
+
+    public void setCardname(String cardname) {
+        this.cardname = cardname;
     }
 
     public String getMensajews() {

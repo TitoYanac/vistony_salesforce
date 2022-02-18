@@ -30,9 +30,9 @@
     <string name="BotonPrincipalLogin">Iniciar sesión</string>
     <string name="VersionLogin" translatable="false">Version 1.1.6</string>
     <string name="DeudaDrawer" translatable="false">Cliente</string>
-    <string name="DepositoDrawer" translatable="false">Deposito</string>
+    <string name="DepositoDrawer" translatable="false">Depósito</string>
     <string name="RutaVendedorDrawer" translatable="false">Ruta Vendedor</string>
-    <string name="ConsultaDepositoDrawer" translatable="false">Consulta Deposito</string>
+    <string name="ConsultaDepositoDrawer" translatable="false">Consulta Depósito</string>
     <string name="ConsultaCobradoDrawer" translatable="false">Consulta Cobrado</string>
     <string name="ParametrosDrawer" translatable="false">Parametros</string>
     <string name="ConfiguracionImpresoraDrawer" translatable="false">Configuracion Impresora</string>
@@ -40,7 +40,7 @@
     <string name="AvanceVentasDrawer" translatable="false">Avance Ventas</string>
     <string name="SalirDrawer">Salir</string>
     <string name="CobranzaCabeceraN" translatable="false">N°</string>
-    <string name="DepositoDirecto" translatable="false">Deposito Directo</string>
+    <string name="DepositoDirecto" translatable="false">Depósito Directo</string>
     <string name="DeleteCajaChica" translatable="false">Eliminar BD - Caja Chica</string>
     <string name="HojaDespachoView" translatable="false">Hoja Despacho</string>
     <string name="DineroCobradoView" translatable="false">Dinero Cobrado</string>
@@ -59,7 +59,7 @@
     <string name="Pending_Promotion">Promoción Pendiente:</string>
     <string name="Promotion_Detail">DETALLE PROMOCION:</string>
     <string name="Direct_Depost">Déposito Directo</string>
-    <string name="Find_Deposit">Consulta Déposito</string>
+    <string name="Find_Deposit">Consulta Depósito</string>
     <string name="lbl_update_parameters">Actualizar Parámetros</string>
     <string name="lbl_legalnumber">Documento</string>
     <string name="lbl_invoicedate">Fecha Emision</string>
@@ -117,4 +117,9 @@
     <string name="tax_code">tax code</string>
     <string name="zone">Zona</string>
     <string name="head_zone">Zona:</string>
+    <string name="lbl_code_control">Code Control:</string>
+    <string name="lbl_client_dispatch_sheet">Client:</string>
+    <string name="lbl_seller_dispatch_sheet">Seller:</string>
+    <string name="lbl_payment_term">Payment Term:</string>
+    <string name="lbl_address">Address:</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoDepositoEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.View.ClienteDetalleView;
 
 import java.util.ArrayList;
@@ -87,8 +89,10 @@ public class ListaHistoricoDepositoDao {
                         ,Lista.get(i).getDepositodirecto()
                         ,Lista.get(i).getBankname()
                         ,Lista.get(i).getCode()
+                        ,Lista.get(i).getPospay()
                 )
                 );
+                Log.e("REOS","ListaHistoricoDepositoDao-getLeads-Lista.get(i).getPospay(): "+ Lista.get(i).getPospay());
             }
         }catch (Exception e)
         {

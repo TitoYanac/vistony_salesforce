@@ -1,8 +1,12 @@
 package com.vistony.salesforce.View;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +20,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -138,7 +144,7 @@ public class HistoricContainerSKU extends Fragment {
         fecha = dateFormat.format(date);
         historicContainerSalesRepository = new ViewModelProvider(getActivity()).get(HistoricContainerSalesRepository.class);
 
-        ObtenerListaHistoricContainerSKU();
+        //ObtenerListaHistoricContainerSKU();
         return v;
     }
 
@@ -227,10 +233,15 @@ public class HistoricContainerSKU extends Fragment {
                     "SKU"
             ).observe(activity, data -> {
                 Log.e("Jepicame","=>"+data);
-                ListarHistoricContainerSalesSKU(data);
-                if(data.isEmpty()||data==null)
+
+                if(data==null)
                 {
+                    lv_HistoricContainerSKU.setAdapter(null);
                     Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
+                    alertdialogInformative(context,"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
+                }
+                else {
+                    ListarHistoricContainerSalesSKU(data);
                 }
             });
         } catch (ParseException e) {
@@ -238,6 +249,32 @@ public class HistoricContainerSKU extends Fragment {
             Log.e("REOS","HistoricContainerSaleFocoView-onCreateView-e:"+e.toString());
         }
         pd.dismiss();
+    }
+
+    static private Dialog alertdialogInformative(Context context, String titulo, String message) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText(titulo);
+        textViewMsj.setText(message);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 
 }

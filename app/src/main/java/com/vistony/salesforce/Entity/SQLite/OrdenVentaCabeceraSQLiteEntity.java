@@ -49,6 +49,15 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String U_SYP_STATUS;
     public String rate;
     public String dispatchdate;
+    public String Intent;
+
+    public String getIntent() {
+        return Intent;
+    }
+
+    public void setIntent(String intent) {
+        Intent = intent;
+    }
 
     public String getDispatchdate() {
         return dispatchdate;

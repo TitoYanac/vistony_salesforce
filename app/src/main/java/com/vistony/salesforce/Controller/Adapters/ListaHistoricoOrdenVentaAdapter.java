@@ -123,7 +123,7 @@ public class ListaHistoricoOrdenVentaAdapter extends ArrayAdapter<ListaHistorico
         final ListaHistoricoOrdenVentaEntity lead = getItem(position);
 
         // Setup.
-        holder.tv_orden_venta_ERP_id.setText((lead.getDocNum()==null||lead.getDocNum().equals(""))?lead.getSalesOrderID():lead.getSalesOrderID());
+        holder.tv_orden_venta_ERP_id.setText((lead.getDocNum()==null||lead.getDocNum().equals(""))?lead.getSalesOrderID():lead.getDocNum());
         holder.tv_rucdnni.setText(lead.getLicTradNum());
         holder.tv_nombrecliente.setText(lead.getCardName());
         holder.tv_estado_historico_orden_venta.setText(lead.getApprovalStatus());

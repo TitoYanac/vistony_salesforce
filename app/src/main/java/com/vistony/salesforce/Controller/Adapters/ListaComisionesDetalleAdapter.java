@@ -4,9 +4,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RectShape;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +19,13 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Dao.SQLite.EscColoursDSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaComisionesDetalleEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.EscColoursDEntity;
 import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
@@ -58,6 +67,7 @@ public class ListaComisionesDetalleAdapter  extends
             holder.tv_comisionesdetalle_cuota = (TextView) convertView.findViewById(R.id.tv_comisionesdetalle_cuota);
             holder.tv_comisionesdetalle_avance = (TextView) convertView.findViewById(R.id.tv_comisionesdetalle_avance);
             holder.tv_comisionesdetalle_porcentaje = (TextView) convertView.findViewById(R.id.tv_comisionesdetalle_porcentaje);
+            holder.tv_comisionesdetalle_umd = (TextView) convertView.findViewById(R.id.tv_comisionesdetalle_umd);
             holder.v_gradiente_comisiones_detalle = (View) convertView.findViewById(R.id.v_gradiente_comisiones_detalle);
             holder.cv_comision_detalle = (CardView) convertView.findViewById(R.id.cv_comision_detalle);
             holder.lbl_comisionesdetalle_cuota = (TextView) convertView.findViewById(R.id.lbl_comisionesdetalle_cuota);
@@ -70,9 +80,18 @@ public class ListaComisionesDetalleAdapter  extends
         // Lead actual.
         final ListaComisionesDetalleEntity lead = getItem(position);
         // Setup.
+        if(lead.getUmd().equals("SO"))
+
+        {
+            holder.tv_comisionesdetalle_cuota.setText(Convert.currencyForView(lead.getCuota()));
+            holder.tv_comisionesdetalle_avance.setText(Convert.currencyForView(lead.getAvance()));
+        }else
+            {
+                holder.tv_comisionesdetalle_cuota.setText(lead.getCuota());
+                holder.tv_comisionesdetalle_avance.setText(lead.getAvance());
+            }
         holder.tv_comisionesdetalle_variable.setText(lead.getVariable());
-        holder.tv_comisionesdetalle_cuota.setText(lead.getCuota());
-        holder.tv_comisionesdetalle_avance.setText(lead.getAvance());
+        holder.tv_comisionesdetalle_umd.setText(lead.getUmd());
         holder.tv_comisionesdetalle_porcentaje.setText(lead.getPorcentajeavance());
         ArrayList<ListaComisionesDetalleEntity> listaComisionesDetalleEntities = new ArrayList<>();
         listaComisionesDetalleEntities.add(lead);
@@ -110,7 +129,63 @@ public class ListaComisionesDetalleAdapter  extends
             gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_gradiente_muy_alto, null);
             holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
         }*/
-        if (Float.parseFloat(lead.getPorcentajeavance()) >= 0 && Float.parseFloat(lead.getPorcentajeavance()) <= 79.99)
+        Log.e("REOS","ListaComisionesDetalleAdapter-getView-lead.getCodecolor():"+lead.getCodecolor());
+        Log.e("REOS","ListaComisionesDetalleAdapter-getView-Float.parseFloat(lead.getPorcentajeavance()):"+Float.parseFloat(lead.getPorcentajeavance()));
+        ArrayList<EscColoursDEntity> escColoursDEntityArrayList=new ArrayList<>();
+        EscColoursDSQLiteDao escColoursDSQLiteDao=new EscColoursDSQLiteDao(getContext());
+        escColoursDEntityArrayList=escColoursDSQLiteDao.GetEscColours(
+                lead.getCodecolor(),
+                Float.parseFloat(lead.getPorcentajeavance())
+        );
+        Log.e("REOS","ListaComisionesDetalleAdapter-getView-escColoursDEntityArrayList.size():"+escColoursDEntityArrayList.size());
+        for(int i=0;i<escColoursDEntityArrayList.size();i++)
+        {
+            int h = holder.v_gradiente_comisiones_detalle.getHeight();
+            ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
+            mDrawable.getPaint().setShader(new LinearGradient(0, 0, 0, h, Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()), Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax()), Shader.TileMode.REPEAT));
+            holder.v_gradiente_comisiones_detalle.setBackgroundDrawable(mDrawable);
+
+            /*int[] colors=new int[2];
+            colors[0]=Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin());
+            colors[1]=Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax());
+            GradientDrawable gradientDrawable=new GradientDrawable();
+            LinearGradient linearGradient=new LinearGradient();
+            //        setStroke(10,Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()));
+            //gradientDrawable.setStroke(10,Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()));
+            gradientDrawable.setCornerRadius(30);*/
+            /*if (background instanceof ShapeDrawable) {
+                ShapeDrawable shapeDrawable = (ShapeDrawable) background;
+                shapeDrawable.getPaint().setColor(ContextCompat.getColor(context,R.color.green));
+            } else if (background instanceof GradientDrawable) {
+                GradientDrawable gradientDrawable = (GradientDrawable) background;
+                gradientDrawable.setColor(ContextCompat.getColor(context,R.color.green));
+            } else if (background instanceof ColorDrawable) {
+                ColorDrawable colorDrawable = (ColorDrawable) background;
+                colorDrawable.setColor(ContextCompat.getColor(context,R.color.green));
+            }*/
+            GradientDrawable layer1 = new GradientDrawable();
+            layer1.setShape(GradientDrawable.RECTANGLE);
+            layer1.setSize(33,33);
+            layer1.setColor(Color.WHITE);
+            layer1.setStroke(4,Color.RED);
+
+            GradientDrawable layer2 = new GradientDrawable();
+            layer2.setCornerRadius(3);
+            layer2.setColor(Color.WHITE);
+            layer2.setColors(new int[] { Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()),Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax())}); // please input your color from resource for color-4 getResources().getColor(R.color.color2),
+            layer2.setShape(GradientDrawable.RECTANGLE);
+            InsetDrawable insetLayer2 = new InsetDrawable(layer1, 8, 8, 8, 8);
+
+            LayerDrawable layerDrawable = new LayerDrawable(new Drawable[]
+                    {insetLayer2,layer2});
+
+            //bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_rojo, null);
+            holder.cv_comision_detalle.setBackground(layerDrawable);
+
+
+        }
+
+        /*if (Float.parseFloat(lead.getPorcentajeavance()) >= 0 && Float.parseFloat(lead.getPorcentajeavance()) <= 79.99)
         {
             gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_color_solido_rojo, null);
             holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
@@ -131,11 +206,11 @@ public class ListaComisionesDetalleAdapter  extends
             holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
             bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_verde, null);
             holder.cv_comision_detalle.setBackground(bordecardview);
+        }*/
 
 
-        }
 
-        if(lead.getVariable().equals("RENTABILIDAD"))
+        if(lead.getHidedate().equals("Y"))
         {
             itemChecked[position] = false;
         }
@@ -165,6 +240,7 @@ public class ListaComisionesDetalleAdapter  extends
         TextView tv_comisionesdetalle_cuota;
         TextView tv_comisionesdetalle_avance;
         TextView tv_comisionesdetalle_porcentaje;
+        TextView tv_comisionesdetalle_umd;
         CardView cv_comision_detalle;
         View v_gradiente_comisiones_detalle;
         TextView lbl_comisionesdetalle_cuota;

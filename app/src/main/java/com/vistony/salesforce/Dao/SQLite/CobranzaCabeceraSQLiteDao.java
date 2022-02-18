@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
@@ -69,6 +70,7 @@ public class CobranzaCabeceraSQLiteDao {
             registro.put("pagopos",pagopos);
             registro.put("sap_code","");
             registro.put("mensajeWS","");
+            registro.put("countsend","1");
 
             bd.insert("cobranzacabecera",null,registro);
             bd.close();
@@ -204,6 +206,9 @@ public class CobranzaCabeceraSQLiteDao {
     {
 
         ArrayList<DepositEntity> depositos = new ArrayList<DepositEntity>();
+        String brand = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        String osVersion = android.os.Build.VERSION.RELEASE;
 
         try {
             abrir();
@@ -232,7 +237,13 @@ public class CobranzaCabeceraSQLiteDao {
                 deposito.setPOSPay((fila.getString(18)));
                 deposito.setComments("");
                 deposito.setAppVersion(Utilitario.getVersion(Context));
+                deposito.setModel(model);
+                deposito.setBrand(brand);
+                deposito.setOSVersion(osVersion);
+                deposito.setIntent (fila.getString(fila.getColumnIndex("countsend")));
                 depositos.add(deposito);
+
+                UpdateCountSend(fila.getString(fila.getColumnIndex("cobranza_id")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
             }
 
             bd.close();
@@ -509,6 +520,68 @@ public class CobranzaCabeceraSQLiteDao {
             resultado=0;
         }
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        return resultado;
+    }
+
+    public int UpdateCountSend (String cobranza_id, String compania_id,String usuario_id,String countsend)
+    {
+        int resultado=0;
+        abrir();
+        try {
+
+            ContentValues registro = new ContentValues();
+            registro.put("countsend",String.valueOf(Integer.parseInt(countsend)+1));
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("cobranzacabecera",registro,"cobranza_id='"+cobranza_id+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            resultado=0;
+        }
+
+        bd.close();
+        return  resultado;
+    }
+
+
+
+    public int getCountValidateDeposit (
+            String compania_id,
+            String usuario_id,
+            String cobranza_id
+    )
+    {
+        Log.e("REOS","CobranzaCabeceraSQLiteDao-getCountValidateDeposit-usuario_id"+String.valueOf(usuario_id));
+        Log.e("REOS","CobranzaCabeceraSQLiteDao-getCountValidateDeposit-cobranza_id"+String.valueOf(cobranza_id));
+
+        abrir();
+        int resultado=0;
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(count(cobranza_id),0) as cantidad from cobranzacabecera" +
+                            " where compania_id='"+compania_id+"'" +
+                            " and usuario_id='"+usuario_id+"'" +
+                            " and cobranza_id='"+cobranza_id+"'"
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                resultado=Integer.parseInt(fila.getString(0));
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS","CobranzaCabeceraSQLiteDao-getCountValidateDeposit-e"+e.toString());
+        }
+
+        bd.close();
+        Log.e("REOS","CobranzaCabeceraSQLiteDao-getCountValidateDeposit-resultado"+String.valueOf(resultado));
         return resultado;
     }
 

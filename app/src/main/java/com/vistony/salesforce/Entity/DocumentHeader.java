@@ -37,6 +37,42 @@ public class DocumentHeader {
     private String U_SYP_FEMEX;
     private String U_SYP_FETO;
     private String Draft;
+    private String Model;
+    private String Brand;
+    private String OSVersion;
+    private String Intent;
+
+    public String getIntent() {
+        return Intent;
+    }
+
+    public void setIntent(String intent) {
+        Intent = intent;
+    }
+
+    public String getModel() {
+        return Model;
+    }
+
+    public void setModel(String model) {
+        Model = model;
+    }
+
+    public String getBrand() {
+        return Brand;
+    }
+
+    public void setBrand(String brand) {
+        Brand = brand;
+    }
+
+    public String getOSVersion() {
+        return OSVersion;
+    }
+
+    public void setOSVersion(String OSVersion) {
+        this.OSVersion = OSVersion;
+    }
 
     private List<DocumentLine> DocumentLines;
 

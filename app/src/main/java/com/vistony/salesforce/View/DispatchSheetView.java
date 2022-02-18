@@ -9,6 +9,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -210,7 +212,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
 
                 break;
             case R.id.btn_consultar_fecha_despacho:
-                Log.e("REOS","HojaDespachoView.btnconsultarfecha: Ingreso");
+                //Log.e("REOS","HojaDespachoView.btnconsultarfecha: Ingreso");
 
                 /*getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -249,32 +251,32 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
     {
         Log.e("REOS","HojaDespachoView.getMastersDelivery-DispatchDate:"+DispatchDate);
         HeaderDispatchSheetRepository headerDispatchSheetRepository= new ViewModelProvider(getActivity()).get(HeaderDispatchSheetRepository.class);
-        DetailDispatchSheetRepository detailDispatchSheetRepository= new ViewModelProvider(getActivity()).get(DetailDispatchSheetRepository.class);
+        ConnectivityManager manager= (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);;
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-        /*getActivity().runOnUiThread
-            (new Runnable() {
-                    @Override
-                    public void run() {
-                        int CantClientes=0;
-                        ClienteRepository clienteRepository = new ClienteRepository();
-                        LclientesqlSQLiteEntity = clienteRepository.getCustomers(Imei,DispatchDate);
-                        Log.e("REOS","HojaDespachoView.getMastersDelivery-LclientesqlSQLiteEntity:"+LclientesqlSQLiteEntity.size());
-                        if (!(LclientesqlSQLiteEntity.isEmpty())) {
-                            CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-                            parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
-                        }
+        if (networkInfo != null) {
+            if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                Log.e("REOS","DispatchSheetView-getMastersDelivery-entraif");
+                getAsyncTaskCustomer=new GetAsyncTaskCustomer();
+                getAsyncTaskCustomer.execute();
+                headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
+                    Log.e("REOS","DispatchSheetView-getMastersDelivery-data"+data.toString());
+                    getListDispatchSheet(DispatchDate,context);
+                });
 
-                    }
-                });*/
-        getAsyncTaskCustomer=new GetAsyncTaskCustomer();
-        getAsyncTaskCustomer.execute();
-        headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
-            Log.e("REOS", "DispatchSheetView-getMastersDelivery-headerDispatchSheetRepository-data" + data);
-        });
+            } else {
+                Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
+            }
+        }else{
+            Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
+            getListDispatchSheet(DispatchDate,context);
+        }
+
+
         /*detailDispatchSheetRepository.getAndInsertDetailDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
             Log.e("REOS", "DispatchSheetView-getMastersDelivery-detailDispatchSheetRepository-data" + data);
         });*/
-        getListDispatchSheet(DispatchDate,context);
+
 
 
 
@@ -300,9 +302,10 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
             }
             CargaSpinnerControl(Lista_Control_ID);
         }else
-            {
-                alertdialogInformative(getContext(),"IMPORTANTE","No hay Datos Disponibles del Despacho en la Fecha Seleccionada").show();
-            }
+        {
+            alertdialogInformative(getContext(),"IMPORTANTE","No hay Datos Disponibles del Despacho en la Fecha Seleccionada").show();
+            spn_control_id.setAdapter(null);
+        }
     }
 
 

@@ -69,28 +69,36 @@ public class EscColoursDSQLiteDao {
         return 1;
     }
 
-    public ArrayList<EscColoursDEntity> GetEscColoursD ()
+    public ArrayList<EscColoursDEntity> GetEscColours (String codeColor,float percent)
     {
+        Log.e("REOS","EscColoursDSQLiteDao-GetEscColours-codeColor"+codeColor);
+        Log.e("REOS","EscColoursDSQLiteDao-GetEscColours-percent"+percent);
         listEscColoursDEntity = new ArrayList<EscColoursDEntity>();
         EscColoursDEntity escColoursDEntity;
         abrir();
-        Cursor fila = bd.rawQuery(
-                "Select * from esc_colours_d ",null);
-
-        while (fila.moveToNext())
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select * from esc_colours_d where id_esc_colours_c='"+codeColor+"' and CAST(rangemin AS DECIMAL) <='"+percent+"' OR CAST(rangemax AS DECIMAL)<='"+percent+"'"
+                    , null);
+            Log.e("REOS","EscColoursDSQLiteDao-GetEscColours-bd.rawQuery"+fila.toString());
+            while (fila.moveToNext()) {
+                escColoursDEntity = new EscColoursDEntity();
+                escColoursDEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
+                escColoursDEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+                escColoursDEntity.setUsuario_id(fila.getString(fila.getColumnIndex("usuario_id")));
+                escColoursDEntity.setId_esc_colours_c(fila.getString(fila.getColumnIndex("id_esc_colours_c")));
+                escColoursDEntity.setId(fila.getString(fila.getColumnIndex("id")));
+                escColoursDEntity.setRangemin(fila.getString(fila.getColumnIndex("rangemin")));
+                escColoursDEntity.setRangemax(fila.getString(fila.getColumnIndex("rangemax")));
+                escColoursDEntity.setColourmin(fila.getString(fila.getColumnIndex("colourmin")));
+                escColoursDEntity.setColourmax(fila.getString(fila.getColumnIndex("colourmax")));
+                escColoursDEntity.setDegrade(fila.getString(fila.getColumnIndex("degrade")));
+                listEscColoursDEntity.add(escColoursDEntity);
+            }
+        }catch (Exception e)
         {
-            escColoursDEntity= new EscColoursDEntity();
-            escColoursDEntity.setCompania_id (fila.getString(fila.getColumnIndex("compania_id")));
-            escColoursDEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
-            escColoursDEntity.setUsuario_id(fila.getString(fila.getColumnIndex("usuario_id")));
-            escColoursDEntity.setId_esc_colours_c(fila.getString(fila.getColumnIndex("id_esc_colours_c")));
-            escColoursDEntity.setId(fila.getString(fila.getColumnIndex("id")));
-            escColoursDEntity.setRangemin(fila.getString(fila.getColumnIndex("rangemin")));
-            escColoursDEntity.setRangemax(fila.getString(fila.getColumnIndex("rangemax")));
-            escColoursDEntity.setColourmin(fila.getString(fila.getColumnIndex("colourmin")));
-            escColoursDEntity.setColourmax(fila.getString(fila.getColumnIndex("colourmax")));
-            escColoursDEntity.setDegrade(fila.getString(fila.getColumnIndex("degrade")));
-            listEscColoursDEntity.add(escColoursDEntity);
+            e.getMessage();
+            Log.e("REOS","EscColoursDSQLiteDao-GetEscColours-e:"+e.toString());
         }
 
         bd.close();

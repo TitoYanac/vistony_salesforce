@@ -187,6 +187,8 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
                             Toast.makeText(getContext(), "No se puede Anular un Deposito - Conciliado", Toast.LENGTH_LONG).show();
                         }else if(lead.getEstado().equals("Anulado")){
                             Toast.makeText(getContext(), "El deposito ya esta anulado", Toast.LENGTH_LONG).show();
+                        }else if(lead.getPospay().equals("Y")){
+                            Toast.makeText(getContext(), "No se puede Anular un Depósito POS", Toast.LENGTH_LONG).show();
                         }else if(lead.getEstado().equals("Pendiente")){
                             ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                             NetworkInfo networkInfo = manager.getActiveNetworkInfo();

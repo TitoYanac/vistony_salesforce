@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 
 import com.vistony.salesforce.BuildConfig;
@@ -96,7 +97,8 @@ public class CobranzaDetalleSQLiteDao {
                                        String pagopos,
                                        String sap_code,
                                        String mensajeWS,
-                                       String horacobranza
+                                       String horacobranza,
+                                       String cardname
     )
     {
         int resultado;
@@ -135,6 +137,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("mensajeWS",mensajeWS);
             registro.put("horacobranza",horacobranza);
             registro.put("countsend","1");
+            registro.put("cardname",cardname);
             bd.insert("cobranzadetalle", null, registro);
 
             resultado=1;
@@ -228,6 +231,7 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setSap_code(fila.getString(29));
                 cobdetalleentity.setMensajews(fila.getString(30));
                 cobdetalleentity.setHoracobranza(fila.getString(31));
+                cobdetalleentity.setCardname (fila.getString(33));
                 //cobdetalleentity.setCompania_id(fila.getString(3));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
@@ -1244,6 +1248,9 @@ public class CobranzaDetalleSQLiteDao {
     {
         ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
         CollectionEntity collectionEntity;
+        String brand = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        String osVersion = android.os.Build.VERSION.RELEASE;
         abrir();
         try {
             Cursor fila = bd.rawQuery(
@@ -1273,7 +1280,7 @@ public class CobranzaDetalleSQLiteDao {
                             //" and chkwsdepositorecibido='0'" +
                             //" and chkwsrecibido='1'" +
                             " and compania_id='"+compania_id+"'" +
-                            " and CAST(IFNULL( a.countsend,'1') AS INTEGER)=1 " +
+                            //" and CAST(IFNULL( a.countsend,'1') AS INTEGER)=1 " +
                             " and usuario_id='"+usuario_id+"'"
                     ,null);
 
@@ -1307,6 +1314,9 @@ public class CobranzaDetalleSQLiteDao {
                 collectionEntity.setDocEntryFT(fila.getString(fila.getColumnIndex("documentoentry")));
                 collectionEntity.setIntent (fila.getString(fila.getColumnIndex("countsend")));
                 collectionEntity.setAppVersion(Utilitario.getVersion(Context));
+                collectionEntity.setModel(model);
+                collectionEntity.setBrand(brand);
+                collectionEntity.setOSVersion(osVersion);
                 listCollectionEntity.add(collectionEntity);
 
                 UpdateCountSend(fila.getString(fila.getColumnIndex("Receip")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));

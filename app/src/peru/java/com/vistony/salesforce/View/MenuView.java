@@ -503,7 +503,14 @@ public class MenuView extends AppCompatActivity
                 case "FormListaDeudaCliente":
                 case "MenuAccionView":
                     //no necesita ir mas atras ya que es un fragmento base
-                    onNavigationItemSelected(navigationView.getMenu().getItem(1).setChecked(true));
+                    if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+                    {
+                        onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
+                    }else
+                        {
+                            onNavigationItemSelected(navigationView.getMenu().getItem(1).setChecked(true));
+                        }
+
                     /*
                     if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("rutaVendedor")){
                         onNavigationItemSelected(navigationView.getMenu().getItem(2).setChecked(true));

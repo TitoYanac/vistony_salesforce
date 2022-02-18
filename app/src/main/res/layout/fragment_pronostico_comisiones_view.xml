@@ -99,20 +99,20 @@
             android:text="SEMAFORO"
             android:textAlignment="center"
             android:textColor="@color/white" />
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/borde_cuadrado"
             android:orientation="vertical" >
-        </LinearLayout>
+        </LinearLayout>-->
 
     </LinearLayout>
     <ListView
         android:id="@+id/listviewAvanceAnterior"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="420dp">
+        android:layout_marginTop="390dp">
 
     </ListView>
 

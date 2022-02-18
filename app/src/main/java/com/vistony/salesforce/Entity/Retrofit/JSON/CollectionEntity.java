@@ -27,6 +27,33 @@ public class CollectionEntity {
     private String U_VIS_UserID;
     private String Intent;
     private String AppVersion;
+    private String Model;
+    private String Brand;
+    private String OSVersion;
+
+    public String getModel() {
+        return Model;
+    }
+
+    public void setModel(String model) {
+        Model = model;
+    }
+
+    public String getBrand() {
+        return Brand;
+    }
+
+    public void setBrand(String brand) {
+        Brand = brand;
+    }
+
+    public String getOSVersion() {
+        return OSVersion;
+    }
+
+    public void setOSVersion(String OSVersion) {
+        this.OSVersion = OSVersion;
+    }
 
     public String getAppVersion() {
         return AppVersion;

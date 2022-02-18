@@ -159,6 +159,8 @@ public class OrdenVentaCabeceraSQLite {
         registro.put("U_SYP_MDCD",U_SYP_MDCD);
         registro.put("U_SYP_MDMT",U_SYP_MDMT);
         registro.put("dispatchdate",dispatchdate);
+        registro.put("countsend","1");
+
         bd.insert("ordenventacabecera",null,registro);
         bd.close();
 
@@ -298,7 +300,7 @@ public class OrdenVentaCabeceraSQLite {
             Cursor fila = bd.rawQuery("SELECT compania_id,ordenventa_id,cliente_id,domembarque_id,domfactura_id,terminopago_id," +
                     "agencia_id,U_VIS_AgencyRUC,U_VIS_AgencyName,U_VIS_AgencyDir,moneda_id,comentario,almacen_id,impuesto_id,montosubtotal,montodescuento,montoimpuesto,montototal,fuerzatrabajo_id," +
                     "usuario_id,enviadoERP,recibidoERP,ordenventa_ERP_id,listaprecio_id,planta_id,fecharegistro,tipocambio,fechatipocambio,rucdni,DocType," +
-                    "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito,domembarque_text,cliente_text,terminopago_text,quotation,U_SYP_MDTD,U_SYP_MDSD,U_SYP_MDCD,U_SYP_MDMT,U_SYP_STATUS,dispatchdate " +
+                    "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito,domembarque_text,cliente_text,terminopago_text,quotation,U_SYP_MDTD,U_SYP_MDSD,U_SYP_MDCD,U_SYP_MDMT,U_SYP_STATUS,dispatchdate,countsend " +
                     " FROM ordenventacabecera WHERE ordenventa_id=? LIMIT 1",new String[]{ordenventa_id});
             if (fila.moveToFirst()) {
                 do {
@@ -355,9 +357,11 @@ public class OrdenVentaCabeceraSQLite {
                     ordenVentaCabeceraSQLiteEntity.setU_SYP_MDMT(fila.getString(fila.getColumnIndex("U_SYP_MDMT")));
                     ordenVentaCabeceraSQLiteEntity.setU_SYP_STATUS(fila.getString(fila.getColumnIndex("U_SYP_STATUS")));
                     ordenVentaCabeceraSQLiteEntity.setDispatchdate(fila.getString(fila.getColumnIndex("dispatchdate")));
-
+                    ordenVentaCabeceraSQLiteEntity.setIntent(fila.getString(fila.getColumnIndex("countsend")));
 
                     listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
+
+                    UpdateCountSend(fila.getString(fila.getColumnIndex("ordenventa_id")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
                 } while (fila.moveToNext());
             }
         }catch(Exception e){
@@ -471,6 +475,29 @@ public class OrdenVentaCabeceraSQLite {
         }
 
         return resultado;
+    }
+
+    public int UpdateCountSend (String ordenventa_id, String compania_id,String usuario_id,String countsend)
+    {
+        int resultado=0;
+        abrir();
+        try {
+
+            ContentValues registro = new ContentValues();
+            registro.put("countsend",String.valueOf(Integer.parseInt(countsend)+1));
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("ordenventacabecera",registro,"ordenventa_id='"+ordenventa_id+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            resultado=0;
+        }
+
+        bd.close();
+        return  resultado;
     }
 
 }

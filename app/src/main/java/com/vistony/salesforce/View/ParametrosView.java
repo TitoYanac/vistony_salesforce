@@ -37,6 +37,7 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
+import com.vistony.salesforce.Dao.Retrofit.EscColoursCRepository;
 import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
 import com.vistony.salesforce.Dao.Retrofit.MotivoVisitaWS;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
@@ -174,6 +175,7 @@ ParametrosView extends Fragment {
     private BancoRepository bancoRepository;
     private PriceListRepository priceListRepository;
     private HeaderDispatchSheetRepository headerDispatchSheetRepository;
+    private EscColoursCRepository escColoursCRepository;
     MenuItem seleccionar_todo;
 
     public static ParametrosView newInstance(String param1) {
@@ -241,7 +243,7 @@ ParametrosView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        getActivity().setTitle("Parametros");
+        getActivity().setTitle("Parámetros");
         setHasOptionsMenu(true);
         v = inflater.inflate(R.layout.fragment_parametros_view, container, false);
         listviewparametro = v.findViewById(R.id.listparametro);
@@ -255,6 +257,7 @@ ParametrosView extends Fragment {
         bancoRepository = new ViewModelProvider(getActivity()).get(BancoRepository.class);
         priceListRepository = new ViewModelProvider(getActivity()).get(PriceListRepository.class);
         headerDispatchSheetRepository = new ViewModelProvider(getActivity()).get(HeaderDispatchSheetRepository.class);
+        escColoursCRepository = new ViewModelProvider(getActivity()).get(EscColoursCRepository.class);
         listaParametrosEntity = new ListaParametrosEntity();
         arraylistaparametrosentity = new ArrayList<ListaParametrosEntity>();
         ArrayList<ParametrosSQLiteEntity> listaparametrosSQLiteEntity = new ArrayList<>();
@@ -316,6 +319,8 @@ ParametrosView extends Fragment {
                         parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
                         parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
                         parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("21", "COLORES CABECERA", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("22", "COLORES DETALLE", "0", getDateTime());
                     }
                     if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
                         parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
@@ -335,9 +340,9 @@ ParametrosView extends Fragment {
         });
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO - Con Conteo de Envio\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.UndepositedPendingCollectionCountSend(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
+        //cobranzaRepository.UndepositedPendingCollectionCountSend(getContext()).observe(getActivity(), data -> {
+        //    Log.e("Jepicame","=>"+data);
+        //});
 
 
         ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
@@ -388,6 +393,11 @@ ParametrosView extends Fragment {
 
         ///////////////////////////// PRICE LIST \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         priceListRepository.getAddAllPriceList(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
+
+        ///////////////////////////COLORES/////////////////////////////////////////////////
+        escColoursCRepository.getEscColours(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
         });
 
@@ -924,6 +934,7 @@ ParametrosView extends Fragment {
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getDepositodirecto(),
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getPagopos(),
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getCodesap(),
+                                        "",
                                         "",
                                         ""
                                 );

@@ -43,6 +43,46 @@ public class VisitaSQLiteEntity {
 
     private String AppVersion;
 
+    private String Model;
+
+    private String Brand;
+
+    private String OSVersion;
+
+    private String Intent;
+
+    public String getIntent() {
+        return Intent;
+    }
+
+    public void setIntent(String intent) {
+        Intent = intent;
+    }
+
+    public String getModel() {
+        return Model;
+    }
+
+    public void setModel(String model) {
+        Model = model;
+    }
+
+    public String getBrand() {
+        return Brand;
+    }
+
+    public void setBrand(String brand) {
+        Brand = brand;
+    }
+
+    public String getOSVersion() {
+        return OSVersion;
+    }
+
+    public void setOSVersion(String OSVersion) {
+        this.OSVersion = OSVersion;
+    }
+
     public String getAppVersion() {
         return AppVersion;
     }

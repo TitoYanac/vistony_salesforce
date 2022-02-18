@@ -56,8 +56,8 @@
             android:id="@+id/tv_comisionesdetalle_cuota"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginStart="70dp"
             android:text="Cuota1"
             android:textStyle="bold"
             android:textAppearance="?attr/textAppearanceListItem"/>
@@ -66,9 +66,8 @@
             android:id="@+id/lbl_comisionesdetalle_avance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="140dp"
-            android:layout_marginLeft="140dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="100dp"
             android:text="Avance"
             android:textAppearance="?attr/textAppearanceListItem"
             />
@@ -79,8 +78,26 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:text="Avance1"
-            android:layout_marginStart="140dp"
-            android:layout_marginLeft="140dp"
+            android:layout_marginStart="70dp"
+            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceListItem"/>
+        <TextView
+            android:id="@+id/lbl_comisionesdetalle_umd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="220dp"
+            android:layout_marginTop="80dp"
+            android:text="UMD"
+            android:textAppearance="?attr/textAppearanceListItem"
+            />
+
+        <TextView
+            android:id="@+id/tv_comisionesdetalle_umd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:text="UMD"
+            android:layout_marginLeft="300dp"
             android:textStyle="bold"
             android:textAppearance="?attr/textAppearanceListItem"/>
 
@@ -88,9 +105,8 @@
             android:id="@+id/lbl_comisionesdetalle_porcentaje"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="270dp"
-            android:layout_marginLeft="270dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginStart="220dp"
+            android:layout_marginTop="100dp"
             android:text="% Avance"
             android:textAppearance="?attr/textAppearanceListItem"
             />
@@ -101,8 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:text="%"
-            android:layout_marginStart="280dp"
-            android:layout_marginLeft="280dp"
+            android:layout_marginLeft="300dp"
             android:textStyle="bold"
             android:textAppearance="?attr/textAppearanceListItem"/>
 

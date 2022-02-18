@@ -95,9 +95,9 @@ public interface Api {
     //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
     Call<CobranzaDetalleEntity> sendCollection( @Body RequestBody params);
 
-    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/Valid")
+    //@POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/Valid")
         //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
-    Call<CobranzaDetalleEntity> sendCollectionCountSend ( @Body RequestBody params);
+    //Call<CobranzaDetalleEntity> sendCollectionCountSend ( @Body RequestBody params);
 
     @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollection(@Path("codeSap") String codeSap, @Body RequestBody params);
@@ -211,7 +211,7 @@ public interface Api {
                                                   @Query("Month") String Month
             );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ScaColoursC")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Colors")
     Call<EscColoursCEntityResponse> getScColoursC (@Query("imei") String Imei
     );
 

@@ -16,7 +16,7 @@ import retrofit2.Response;
 
 public class ComisionesWS {
 
-    private ArrayList<ComisionesSQLiteEntity> LComisiones =  new ArrayList<>();
+
     private Context context;
 
     public ComisionesWS (final Context context){
@@ -32,7 +32,7 @@ public class ComisionesWS {
 
     ){
         Api api = Config.getClient().create(Api.class);
-
+        ArrayList<ComisionesSQLiteEntity> LComisiones =  new ArrayList<>();
         //Call<ComisionesEntityResponse> call = api.getComisiones("https://graph.vistony.pe/Comision?imei="+Imei+"&anio="+ano+"&mes="+Periodo);
         Call<ComisionesEntityResponse> call =Config.getClient().create(Api.class).getComisiones(
                 Imei,
@@ -57,6 +57,8 @@ public class ComisionesWS {
                     ObjComisiones.cuota = comisionesEntityResponse.getComisionesEntity().get(i).getCuota();
                     ObjComisiones.porcentajeavance = comisionesEntityResponse.getComisionesEntity().get(i).getPorcentajeavance();
                     ObjComisiones.compania_id = SesionEntity.compania_id;
+                    ObjComisiones.hidedata = comisionesEntityResponse.getComisionesEntity().get(i).getHidedata();
+                    ObjComisiones.esc_colours = comisionesEntityResponse.getComisionesEntity().get(i).getEsc_colours();
                     LComisiones.add(ObjComisiones);
                 }
             }

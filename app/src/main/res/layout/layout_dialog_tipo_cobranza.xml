@@ -130,7 +130,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Deposito Directo"
+                                android:text="@string/Direct_Depost"
                                 android:textStyle="bold" />
 
 

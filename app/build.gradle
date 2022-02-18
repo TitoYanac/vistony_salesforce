@@ -40,7 +40,7 @@ android {
             //minifyEnabled true
             //shrinkResources true
             //proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            debuggable false
+            debuggable true
             buildConfigField('String' , 'BASE_ENVIRONMENT', '"/api"')
             manifestPlaceholders = [appName:"Producción Sales Force"]
         }
@@ -96,7 +96,7 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"/bo"')
             buildConfigField('String' , 'BASE_ENDPOINT', '"bo.get"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"bo.post"')
-            versionName "1.0.6"
+            versionName "1.0.7"
             manifestPlaceholders = [country:"Bolivia"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"BO"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -172,6 +172,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+
+    //Interceptor
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+
     implementation 'io.sentry:sentry-android:5.1.2'
     implementation 'dnsjava:dnsjava:2.1.7'
 
@@ -187,4 +191,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-perf'
+
+
 }

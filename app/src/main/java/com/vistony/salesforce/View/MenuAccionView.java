@@ -218,8 +218,9 @@ public class MenuAccionView extends Fragment {
             if(validar>0){
                 alertarecibospendientes().show();
             }else{
-                alertatiporecibos().show();
+
             }
+            //alertatiporecibos().show();
         });
 
         cv_visita.setOnClickListener(v -> {
@@ -297,6 +298,11 @@ public class MenuAccionView extends Fragment {
         cv_cobranza_pago_pos=dialog.findViewById(R.id.cv_cobranza_pago_pos);
         //cv_cobranza_kardex_pago=dialog.findViewById(R.id.cv_cobranza_kardex_pago);
         kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
+
+        if(SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            cv_cobranza_deposito_directo.setVisibility(View.GONE);
+        }
 
         TextView textTitle = dialog.findViewById(R.id.text);
         textTitle.setText("Elija Tipo de Cobranza:");

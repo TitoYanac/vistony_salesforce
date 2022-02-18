@@ -429,6 +429,7 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                                 listaHistoricoDepositoEntity.tipoingreso=listaCobranzaCabeceraSQLiteEntity.get(l).getTipoingreso();
                                 listaHistoricoDepositoEntity.usuario_id=listaCobranzaCabeceraSQLiteEntity.get(l).getUsuario_id();
                                 listaHistoricoDepositoEntity.bankname=listaCobranzaCabeceraSQLiteEntity.get(l).getBankname();
+                                listaHistoricoDepositoEntity.pospay=listaCobranzaCabeceraSQLiteEntity.get(l).getPagopos();
                                 arraylistahistoricodespositoentity.add(listaHistoricoDepositoEntity);
                             }
                         }
