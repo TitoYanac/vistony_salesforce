@@ -30,6 +30,23 @@ public class EscColoursDEntity {
     @SerializedName("Degrade")
     private String degrade;
 
+    public EscColoursDEntity(String compania_id, String fuerzatrabajo_id, String usuario_id, String id_esc_colours_c, String id, String rangemin, String rangemax, String colourmin, String colourmax, String degrade) {
+        this.compania_id = compania_id;
+        this.fuerzatrabajo_id = fuerzatrabajo_id;
+        this.usuario_id = usuario_id;
+        this.id_esc_colours_c = id_esc_colours_c;
+        this.id = id;
+        this.rangemin = rangemin;
+        this.rangemax = rangemax;
+        this.colourmin = colourmin;
+        this.colourmax = colourmax;
+        this.degrade = degrade;
+    }
+
+    public EscColoursDEntity() {
+
+    }
+
     public String getCompania_id() {
         return compania_id;
     }

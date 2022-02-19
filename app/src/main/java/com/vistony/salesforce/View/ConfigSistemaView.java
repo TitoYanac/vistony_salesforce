@@ -140,14 +140,16 @@ public class ConfigSistemaView extends Fragment{
         }else{
             deletecajachica.setVisibility(View.VISIBLE);
         }*/
-        if(SesionEntity.formhabilPrint.equals("Y"))
+        /*if(SesionEntity.formhabilPrint.equals("Y"))
         {
             deletecajachica.setVisibility(View.VISIBLE);
         }
         else
             {
                 deletecajachica.setVisibility(View.GONE);
-            }
+            }*/
+
+        deletecajachica.setVisibility(View.GONE);
 
         deletecajachica.setOnClickListener(v -> AlertaEnablePrint().show());
 

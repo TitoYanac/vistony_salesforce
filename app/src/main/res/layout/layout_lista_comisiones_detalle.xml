@@ -85,7 +85,7 @@
             android:id="@+id/lbl_comisionesdetalle_umd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="220dp"
+            android:layout_marginStart="210dp"
             android:layout_marginTop="80dp"
             android:text="UMD"
             android:textAppearance="?attr/textAppearanceListItem"
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="80dp"
             android:text="UMD"
-            android:layout_marginLeft="300dp"
+            android:layout_marginLeft="290dp"
             android:textStyle="bold"
             android:textAppearance="?attr/textAppearanceListItem"/>
 
@@ -105,7 +105,7 @@
             android:id="@+id/lbl_comisionesdetalle_porcentaje"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="220dp"
+            android:layout_marginStart="210dp"
             android:layout_marginTop="100dp"
             android:text="% Avance"
             android:textAppearance="?attr/textAppearanceListItem"
@@ -117,12 +117,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:text="%"
-            android:layout_marginLeft="300dp"
+            android:layout_marginLeft="290dp"
             android:textStyle="bold"
             android:textAppearance="?attr/textAppearanceListItem"/>
 
         <ImageView
-            android:id="@+id/imv_historico_cobranza_respuesta_ws"
+            android:id="@+id/imv_get_legend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="310dp"

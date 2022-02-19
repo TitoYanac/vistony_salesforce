@@ -936,6 +936,7 @@ ParametrosView extends Fragment {
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getCodesap(),
                                         "",
                                         "",
+                                        "",
                                         ""
                                 );
                     }

@@ -190,7 +190,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
 
             PdfPTable tblgeneral = new PdfPTable(2);
             tblgeneral.setWidthPercentage(100);
-            PdfPCell cellgneral = new PdfPCell(new Phrase("Codigo Orden:",font3));
+            PdfPCell cellgneral = new PdfPCell(new Phrase("Código Orden:",font3));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
@@ -215,7 +215,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
-            cellgneral = new PdfPCell(new Phrase("Direccion:",font3 ));
+            cellgneral = new PdfPCell(new Phrase("Dirección:",font3 ));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
@@ -231,7 +231,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
-            cellgneral = new PdfPCell(new Phrase("Cond.Vent:",font3));
+            cellgneral = new PdfPCell(new Phrase("Cónd.Vent:",font3));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
@@ -279,7 +279,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblLineas.addCell(cellLineasDetalle);
-            cellLineasDetalle = new PdfPCell(new Phrase("Codigo",font3));
+            cellLineasDetalle = new PdfPCell(new Phrase("Código",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblLineas.addCell(cellLineasDetalle);

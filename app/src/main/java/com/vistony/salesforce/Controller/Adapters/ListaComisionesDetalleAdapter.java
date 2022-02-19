@@ -1,5 +1,7 @@
 package com.vistony.salesforce.Controller.Adapters;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -16,6 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -23,9 +28,12 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Dao.Adapters.ListaHojaDespachoDao;
+import com.vistony.salesforce.Dao.Adapters.ListaLegendComissionsDao;
 import com.vistony.salesforce.Dao.SQLite.EscColoursDSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaComisionesDetalleEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.EscColoursDEntity;
+import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
@@ -40,12 +48,14 @@ public class ListaComisionesDetalleAdapter  extends
     //private int [] colors = new int []{Color.BLUE};
     private int[] colors;
     boolean[] itemChecked;
-
-    public ListaComisionesDetalleAdapter(Context context, List<ListaComisionesDetalleEntity> objects) {
+    ListaLegendComissionsAdapter listaLegendComissionsAdapter;
+    Activity activity;
+    public ListaComisionesDetalleAdapter(Context context, List<ListaComisionesDetalleEntity> objects,Activity activity) {
         super(context, 0, objects);
         ArraylistaComisionesDetalleEntity = objects;
         this.context = context;
         this.itemChecked=new boolean[objects.size()];
+        this.activity=activity;
     }
 
     @Override
@@ -72,6 +82,7 @@ public class ListaComisionesDetalleAdapter  extends
             holder.cv_comision_detalle = (CardView) convertView.findViewById(R.id.cv_comision_detalle);
             holder.lbl_comisionesdetalle_cuota = (TextView) convertView.findViewById(R.id.lbl_comisionesdetalle_cuota);
             holder.lbl_comisionesdetalle_avance = (TextView) convertView.findViewById(R.id.lbl_comisionesdetalle_avance);
+            holder.imv_get_legend = (ImageView) convertView.findViewById(R.id.imv_get_legend);
             //holder.barChartHorizonalComisionesDetalle = (BarChart) convertView.findViewById(R.id.barChartHorizonalComisionesDetalle);
             convertView.setTag(holder);
         } else {
@@ -140,10 +151,19 @@ public class ListaComisionesDetalleAdapter  extends
         Log.e("REOS","ListaComisionesDetalleAdapter-getView-escColoursDEntityArrayList.size():"+escColoursDEntityArrayList.size());
         for(int i=0;i<escColoursDEntityArrayList.size();i++)
         {
-            int h = holder.v_gradiente_comisiones_detalle.getHeight();
+            /*int h = holder.v_gradiente_comisiones_detalle.getHeight();
             ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
             mDrawable.getPaint().setShader(new LinearGradient(0, 0, 0, h, Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()), Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax()), Shader.TileMode.REPEAT));
-            holder.v_gradiente_comisiones_detalle.setBackgroundDrawable(mDrawable);
+            */
+            GradientDrawable layer3 = new GradientDrawable();
+            //layer3.setCornerRadius(20);
+            //layer1.setShape(GradientDrawable.RECTANGLE);
+            layer3.setShape(GradientDrawable.RECTANGLE);
+            layer3.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+            
+            layer3.setColors(new int[] { Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()),Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax())}); // please input your color from resource for color-4 getResources().getColor(R.color.color2),
+
+            holder.v_gradiente_comisiones_detalle.setBackgroundDrawable(layer3);
 
             /*int[] colors=new int[2];
             colors[0]=Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin());
@@ -167,17 +187,31 @@ public class ListaComisionesDetalleAdapter  extends
             layer1.setShape(GradientDrawable.RECTANGLE);
             layer1.setSize(33,33);
             layer1.setColor(Color.WHITE);
-            layer1.setStroke(4,Color.RED);
+            layer1.setCornerRadius(20);
 
             GradientDrawable layer2 = new GradientDrawable();
-            layer2.setCornerRadius(3);
-            layer2.setColor(Color.WHITE);
+            layer2.setCornerRadius(20);
+            //layer1.setShape(GradientDrawable.RECTANGLE);
             layer2.setColors(new int[] { Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()),Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax())}); // please input your color from resource for color-4 getResources().getColor(R.color.color2),
-            layer2.setShape(GradientDrawable.RECTANGLE);
+
             InsetDrawable insetLayer2 = new InsetDrawable(layer1, 8, 8, 8, 8);
 
             LayerDrawable layerDrawable = new LayerDrawable(new Drawable[]
-                    {insetLayer2,layer2});
+                    {layer2,insetLayer2});
+
+            //Color.parseColor() method allow us to convert
+            // a hexadecimal color string to an integer value (int color)
+            /*            int[] colors = {Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()),Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax())};
+
+            //create a new gradient color
+                        GradientDrawable gd = new GradientDrawable(
+                                GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setShape(GradientDrawable.RECTANGLE);
+            gd.setSize(33,33);
+            gd.setColor(Color.WHITE);
+                        gd.setCornerRadius(10f);*/
+            //apply the button background to newly created drawable gradient
+                        //btn.setBackground(gd);
 
             //bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_rojo, null);
             holder.cv_comision_detalle.setBackground(layerDrawable);
@@ -232,6 +266,13 @@ public class ListaComisionesDetalleAdapter  extends
             holder.lbl_comisionesdetalle_cuota.setVisibility(View.INVISIBLE);
             holder.lbl_comisionesdetalle_avance.setVisibility(View.INVISIBLE);
         }
+
+        holder.imv_get_legend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertgetLegend(getContext(),lead).show();
+            }
+        });
         return convertView;
     }
 
@@ -245,8 +286,47 @@ public class ListaComisionesDetalleAdapter  extends
         View v_gradiente_comisiones_detalle;
         TextView lbl_comisionesdetalle_cuota;
         TextView lbl_comisionesdetalle_avance;
+        ImageView imv_get_legend;
         //BarChart barChartHorizonalComisionesDetalle;
 
+    }
+
+
+
+    private Dialog alertgetLegend(Context context,ListaComisionesDetalleEntity lead) {
+
+        final Dialog dialog = new Dialog(context);
+        ArrayList<EscColoursDEntity> escColoursDEntityArrayList=new ArrayList<>();
+        EscColoursDSQLiteDao escColoursDSQLiteDao=new EscColoursDSQLiteDao(getContext());
+        dialog.setContentView(R.layout.layout_alert_dialog_legend_comissions);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image_alert_dialog_info);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK_alert_dialog_info);
+        ListView lv_legend_comissions=dialog.findViewById(R.id.lv_legend_comissions);
+        TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj_alert_dialog_info);
+        TextView text=(TextView) dialog.findViewById(R.id.text_alert_dialog_info);
+        text.setText("LEYENDA");
+        textViewMsj.setText("Los Rangos estan minimo y maximo, y estan expresados en %:");
+        //textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
+        // if button is clicked, close the custom dialog
+        Log.e("REOS", "ListaComisionesDetalleAdaptar-alertgetLegend-lead.getCodecolor():" + lead.getCodecolor());
+        escColoursDEntityArrayList=escColoursDSQLiteDao.GetEscColoursForCode(lead.getCodecolor());
+        Log.e("REOS", "ListaComisionesDetalleAdaptar-alertgetLegend-escColoursDEntityArrayList:" + escColoursDEntityArrayList.size());
+        listaLegendComissionsAdapter = new ListaLegendComissionsAdapter(activity, ListaLegendComissionsDao.getInstance().getLeads(escColoursDEntityArrayList));
+        lv_legend_comissions.setAdapter(listaLegendComissionsAdapter);
+
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 }
 

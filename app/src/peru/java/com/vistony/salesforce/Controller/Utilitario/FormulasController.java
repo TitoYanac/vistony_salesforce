@@ -701,9 +701,10 @@ public class FormulasController {
         documentHeader.setU_SYP_FEMEX("1");
         documentHeader.setU_SYP_VIST_TG(U_SYP_VIST_TG);
         documentHeader.setU_SYP_DOCEXPORT("N");
-        //documentHeader.setBrand(fabricante);
-        //documentHeader.setOSVersion(AndroidVersion);
-        //documentHeader.setModel(modelo);
+        documentHeader.setIntent(ovCabecera.getIntent());
+        documentHeader.setBrand(fabricante);
+        documentHeader.setOSVersion(AndroidVersion);
+        documentHeader.setModel(modelo);
 
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
@@ -1934,7 +1935,7 @@ public class FormulasController {
                  SesionEntity.fuerzatrabajo_id);
         for(int j=0;j<lista.size();j++)
         {
-                codeSMS=lista.get(j).getMotivoanulacion();
+                codeSMS=lista.get(j).getCodeSMS();
         }
 
         for (int i = 0; i < Lista.size(); i++)

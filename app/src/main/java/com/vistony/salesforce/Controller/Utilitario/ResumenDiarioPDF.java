@@ -137,7 +137,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbldireccion.addCell(cellTable);
-            cellTable = new PdfPCell(new Phrase("RESUMEN DEL DIA",font2));
+            cellTable = new PdfPCell(new Phrase("RESUMEN DEL DÍA",font2));
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbldireccion.addCell(cellTable);
@@ -155,7 +155,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tblvendedor = new PdfPTable(2);
             tbldireccion.setWidthPercentage(100);
             PdfPCell cellTablevendedor = null;
-            cellTablevendedor=new PdfPCell(new Phrase("CODIGO",font3));
+            cellTablevendedor=new PdfPCell(new Phrase("CÓDIGO",font3));
             cellTablevendedor.disableBorderSide(Rectangle.BOX);
             cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvendedor.addCell(cellTablevendedor);
@@ -193,7 +193,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tblCabecera = new PdfPTable(3);
             tblCabecera.setWidthPercentage(100);
             PdfPCell cellCabecera = null;
-            cellCabecera = new PdfPCell(new Phrase("ITEM",font3));
+            cellCabecera = new PdfPCell(new Phrase("ÍTEM",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblCabecera.addCell(cellCabecera);

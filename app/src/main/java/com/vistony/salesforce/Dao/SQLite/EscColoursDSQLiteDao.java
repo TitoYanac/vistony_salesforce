@@ -127,4 +127,39 @@ public class EscColoursDSQLiteDao {
         return resultado;
     }
 
+    public ArrayList<EscColoursDEntity> GetEscColoursForCode (String codeColor)
+    {
+        Log.e("REOS","EscColoursDSQLiteDao-GetEscColours-codeColor"+codeColor);
+        listEscColoursDEntity = new ArrayList<EscColoursDEntity>();
+        EscColoursDEntity escColoursDEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select * from esc_colours_d where id_esc_colours_c='"+codeColor+"'"
+                    , null);
+            Log.e("REOS","EscColoursDSQLiteDao-GetEscColours-bd.rawQuery"+fila.toString());
+            while (fila.moveToNext()) {
+                escColoursDEntity = new EscColoursDEntity();
+                escColoursDEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
+                escColoursDEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+                escColoursDEntity.setUsuario_id(fila.getString(fila.getColumnIndex("usuario_id")));
+                escColoursDEntity.setId_esc_colours_c(fila.getString(fila.getColumnIndex("id_esc_colours_c")));
+                escColoursDEntity.setId(fila.getString(fila.getColumnIndex("id")));
+                escColoursDEntity.setRangemin(fila.getString(fila.getColumnIndex("rangemin")));
+                escColoursDEntity.setRangemax(fila.getString(fila.getColumnIndex("rangemax")));
+                escColoursDEntity.setColourmin(fila.getString(fila.getColumnIndex("colourmin")));
+                escColoursDEntity.setColourmax(fila.getString(fila.getColumnIndex("colourmax")));
+                escColoursDEntity.setDegrade(fila.getString(fila.getColumnIndex("degrade")));
+                listEscColoursDEntity.add(escColoursDEntity);
+            }
+        }catch (Exception e)
+        {
+            e.getMessage();
+            Log.e("REOS","EscColoursDSQLiteDao-GetEscColours-e:"+e.toString());
+        }
+
+        bd.close();
+        return listEscColoursDEntity;
+    }
+
 }

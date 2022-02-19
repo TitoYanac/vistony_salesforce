@@ -1,5 +1,6 @@
 package com.vistony.salesforce.View;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -49,6 +50,7 @@ public class AgenciaView extends Fragment implements SearchView.OnQueryTextListe
     AgenciaSQLiteDao agenciaSQLiteDao;
     ListaAgenciaAdapter listaAgenciaAdapter;
     private SearchView mSearchView;
+    static Activity activity;
     public AgenciaView() {
         // Required empty public constructor
     }
@@ -80,13 +82,14 @@ public class AgenciaView extends Fragment implements SearchView.OnQueryTextListe
         String accion="inicio";
         String compuesto=Fragment+"-"+accion;
         mListener.onFragmentInteraction(compuesto,objeto);
-
+        activity.setTitle("ORDEN VENTA");
         return agenciaView;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getActivity().setTitle("Agencias");
+        activity=getActivity();
         setHasOptionsMenu(true);
         agenciaSQLiteDao= new AgenciaSQLiteDao(getContext());
         super.onCreate(savedInstanceState);

@@ -368,7 +368,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
             {
                 cargarVariables(Lista);
                 createCharts(Lista);
-                listaComisionesDetalleAdapter = new ListaComisionesDetalleAdapter(activity, ListaComisionesDetalleDao.getInstance().getLeads(Lista));
+                listaComisionesDetalleAdapter = new ListaComisionesDetalleAdapter(activity, ListaComisionesDetalleDao.getInstance().getLeads(Lista),activity);
                 listviewdetallecomisiones.setAdapter(listaComisionesDetalleAdapter);
             }
             pd.dismiss();

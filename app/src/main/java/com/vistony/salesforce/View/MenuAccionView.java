@@ -218,9 +218,9 @@ public class MenuAccionView extends Fragment {
             if(validar>0){
                 alertarecibospendientes().show();
             }else{
-
+                alertatiporecibos().show();
             }
-            //alertatiporecibos().show();
+
         });
 
         cv_visita.setOnClickListener(v -> {

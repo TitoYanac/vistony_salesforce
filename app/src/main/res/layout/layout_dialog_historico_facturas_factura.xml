@@ -43,14 +43,15 @@
             android:layout_height="wrap_content"
             android:background="@drawable/custom_background_alert"
             android:orientation="vertical">
+
             <TextView
 
                 android:id="@+id/lbl_historico_facturas_facturacion_documento_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal|center_vertical"
                 android:layout_marginLeft="20dp"
-                android:text="Codigo:"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/lbl_code"
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/tv_historico_facturas_facturacion_documento_id"
@@ -80,14 +81,15 @@
                 android:textStyle="bold"
                 android:text="Documento1"
                 android:textSize="18dp" />
+
             <TextView
                 android:id="@+id/lbl_historico_facturas_facturacion_fechaemision"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_marginTop="40dp"
                 android:layout_marginLeft="20dp"
-                android:text="F.Emision:"
+                android:layout_marginTop="40dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/lbl_f_emision"
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/tv_historico_facturas_facturacion_fechaemision"

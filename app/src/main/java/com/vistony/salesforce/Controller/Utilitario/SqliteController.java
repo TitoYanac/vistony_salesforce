@@ -19,7 +19,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 7;
+    private static final int VERSION = 8;
 
 
     public SqliteController(Context context){
@@ -62,7 +62,7 @@ public class SqliteController extends SQLiteOpenHelper {
         //Transaccional
         db.execSQL("CREATE TABLE cobranzacabecera (cobranza_id text , usuario_id text,banco_id text,compania_id text,totalmontocobrado text,chkdepositado text,chkanulado text,fuerzatrabajo_id text ,tipoingreso text,chkbancarizado text,fechadiferido text, chkwsrecibido text, fechadeposito text,comentarioanulado  text,chkwsanulado text,chkupdate text,chkwsupdate text,pagodirecto text,pagopos text,sap_code TEXT,mensajeWS TEXT,countsend TEXT)");
         db.execSQL("CREATE TABLE cobranzadetalle (id INTEGER PRIMARY KEY AUTOINCREMENT,cobranza_id text , cliente_id text,documento_id text,compania_id text,importedocumento text,saldodocumento text,nuevosaldodocumento text,saldocobrado text, fechacobranza text,recibo text,nrofactura text,chkdepositado text,chkqrvalidado text,chkanulado text ,fuerzatrabajo_id text,chkbancarizado text,motivoanulacion text," +
-                "usuario_id text, chkwsrecibido text,banco_id text,chkwsdepositorecibido text,chkwsqrvalidado text,comentario text,chkwsanulado text,chkupdate text,chkwsupdate text,pagodirecto text,pagopos text,sap_code TEXT,mensajeWS TEXT,horacobranza TEXT,countsend TEXT, cardname TEXT)");
+                "usuario_id text, chkwsrecibido text,banco_id text,chkwsdepositorecibido text,chkwsqrvalidado text,comentario text,chkwsanulado text,chkupdate text,chkwsupdate text,pagodirecto text,pagopos text,sap_code TEXT,mensajeWS TEXT,horacobranza TEXT,countsend TEXT, cardname TEXT, codeSMS TEXT)");
         db.execSQL("CREATE TABLE visita (id TEXT,compania_id TEXT,cliente_id TEXT,direccion_id TEXT,fecha_registro TEXT,hora_registro TEXT,zona_id TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,tipo TEXT,motivo TEXT,observacion TEXT,chkenviado TEXT,chkrecibido TEXT,latitud TEXT,longitud TEXT,countsend TEXT )");
 
         //Pedidos
@@ -177,6 +177,9 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE visita ADD COLUMN countsend TEXT");
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN cardname TEXT");
 
+        }
+        if(oldVersion==7&&newVersion==8) {
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN codeSMS TEXT");
         }
     }
 

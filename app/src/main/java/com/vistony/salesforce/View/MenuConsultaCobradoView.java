@@ -204,7 +204,7 @@ public class MenuConsultaCobradoView extends Fragment {
         dialogButtonOK.setOnClickListener(v -> {
             //
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Calculo de Cuotas de Cliente", true, false);
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Cálculo de Cuotas de Cliente", true, false);
             GenerarQuotaPerCustomerPDF();
             Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.click:");
             //dialog.dismiss();
@@ -245,14 +245,14 @@ public class MenuConsultaCobradoView extends Fragment {
 
                 if(data1.isEmpty()||data2.isEmpty()||data1==null||data2==null)
                 {
-                    Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Calculo", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Cálculo", Toast.LENGTH_SHORT).show();
                     alertdialogInformative(getContext(),"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
                 }
 
             });
             if(data1==null)
             {
-                Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Calculo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Cálculo", Toast.LENGTH_SHORT).show();
                 alertdialogInformative(getContext(),"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
             }
 

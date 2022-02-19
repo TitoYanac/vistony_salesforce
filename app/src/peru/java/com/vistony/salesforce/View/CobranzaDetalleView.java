@@ -875,9 +875,9 @@ public class CobranzaDetalleView extends Fragment {
                             alertaGenerarPDF().show();
                             Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
                             drawable3 = DrawableCompat.wrap(drawable3);
-                            DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black ));
+                            DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white ));
                             menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
-                            validarqr.setEnabled(false);
+                            validarqr.setEnabled(true);
                             chk_validacionqr.setChecked(true);
                         }else{
                             alertatypegeneratedocumentcollection().show();
@@ -893,8 +893,16 @@ public class CobranzaDetalleView extends Fragment {
                     alertaValidarQR().show();
 
                 } else {
-                    alertatypevalidatedocumentcollection().show();
-                    //alertaEnviarSMS(getContext()).show();
+                    if(SesionEntity.perfil_id.equals("CHOFER"))
+                    {
+                        chk_validacionqr.setChecked(true);
+                        alertaEnviarSMS(getContext()).show();
+                    }
+                    else
+                        {
+                            alertatypevalidatedocumentcollection().show();
+                        }
+
                 }
                 return false;
             default:
@@ -1034,9 +1042,9 @@ public class CobranzaDetalleView extends Fragment {
                                             {
                                                 Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
                                                 drawable3 = DrawableCompat.wrap(drawable3);
-                                                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black));
+                                                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
                                                 menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
-                                                validarqr.setEnabled(false);
+                                                validarqr.setEnabled(true);
                                             }else
                                                 {
                                                     Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
@@ -1125,9 +1133,9 @@ public class CobranzaDetalleView extends Fragment {
                                 {
                                     Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
                                     drawable = DrawableCompat.wrap(drawable);
-                                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+                                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
                                     menu_variable.findItem(R.id.validarqr).setIcon(drawable);
-                                    validarqr.setEnabled(false); //no aplica validar qr //peru si
+                                    validarqr.setEnabled(true); //no aplica validar qr //peru si
 
                                     Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
                                     drawable2 = DrawableCompat.wrap(drawable2);
@@ -1293,8 +1301,7 @@ public class CobranzaDetalleView extends Fragment {
                         //Peru - Cambio necesario para letras
                         //------------------
                         //"0",
-                        //String.valueOf(Lista.get(i).getNrodocumento()),
-                        String.valueOf(n),
+                        String.valueOf(Lista.get(i).getNrodocumento()),
                         //------------------
                         SesionEntity.usuario_id,
                         comentario,
@@ -1309,7 +1316,8 @@ public class CobranzaDetalleView extends Fragment {
                         "",
                         "",
                         obtenerHoraActual(),
-                        cardname
+                        cardname,
+                        String.valueOf(n)
                 );
 
                 ActualizaDocumentoDeuda(SesionEntity.compania_id,
@@ -1356,7 +1364,8 @@ public class CobranzaDetalleView extends Fragment {
                         "",
                         "",
                         obtenerHoraActual(),
-                        cardname
+                        cardname,
+                        String.valueOf(n)
                 );
 
 
@@ -1422,7 +1431,7 @@ public class CobranzaDetalleView extends Fragment {
                                 getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             mPhoneNumber = tMgr.getLine1Number();
         }*/
-        if(!SesionEntity.perfil_id.equals("CHOFER"))
+        /*if(!SesionEntity.perfil_id.equals("CHOFER"))
         {
             mPhoneNumber = SesionEntity.phone;
             Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-mPhoneNumber:" + mPhoneNumber);
@@ -1433,7 +1442,7 @@ public class CobranzaDetalleView extends Fragment {
                 sendSMS(telefono);
                 Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
             }
-        }
+        }*/
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         //UpdateSendReceipt();
@@ -2248,7 +2257,14 @@ public class CobranzaDetalleView extends Fragment {
         TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
         TextView text=(TextView) dialog.findViewById(R.id.text);
         text.setText("IMPORTANTE!!!");
-        textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
+        if(SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            textViewMsj.setText("El SMS fue enviado Correctamente!!!");
+        }
+        else
+            {
+                textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
+            }
         // if button is clicked, close the custom dialog
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override

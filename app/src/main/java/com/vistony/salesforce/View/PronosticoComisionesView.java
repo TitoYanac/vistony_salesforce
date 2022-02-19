@@ -322,7 +322,7 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
             {
                 cargarVariables(Lista);
                 createCharts(Lista);
-                listaComisionesDetalleAdapter = new ListaComisionesDetalleAdapter(ContenedorComisionesView.activity, ListaComisionesDetalleDao.getInstance().getLeads(Lista));
+                listaComisionesDetalleAdapter = new ListaComisionesDetalleAdapter(ContenedorComisionesView.activity, ListaComisionesDetalleDao.getInstance().getLeads(Lista),ContenedorComisionesView.activity);
                 listviewAvanceAnterior.setAdapter(listaComisionesDetalleAdapter);
             }
             pd.dismiss();

@@ -200,7 +200,7 @@ public class KardexPagoPDF extends AppCompatActivity {
             PdfPTable tblCabecera = new PdfPTable(2);
             tblCabecera.setWidthPercentage(100);
             PdfPCell cellCabecera = null;
-            cellCabecera = new PdfPCell(new Phrase("Cod.Cliente",font3));
+            cellCabecera = new PdfPCell(new Phrase("Cód.Cliente",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
@@ -232,7 +232,7 @@ public class KardexPagoPDF extends AppCompatActivity {
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase("Direccion",font3));
+            cellCabecera = new PdfPCell(new Phrase("Dirección",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
@@ -256,7 +256,7 @@ public class KardexPagoPDF extends AppCompatActivity {
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase("Fecha Generacion:",font3));
+            cellCabecera = new PdfPCell(new Phrase("Fecha Generación:",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
@@ -324,7 +324,7 @@ public class KardexPagoPDF extends AppCompatActivity {
                         PdfPTable tblLineas = new PdfPTable(4);
                         tblLineas.setWidthPercentage(100);
                         PdfPCell cellLineasDetalle = null;
-                        cellLineasDetalle = new PdfPCell(new Phrase("Fecha.Emision:", font3));
+                        cellLineasDetalle = new PdfPCell(new Phrase("Fecha.Emisión:", font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblLineas.addCell(cellLineasDetalle);
@@ -458,7 +458,7 @@ public class KardexPagoPDF extends AppCompatActivity {
                         PdfPTable tbldatabanco = new PdfPTable(2);
                         tbldatabanco.setWidthPercentage(100);
                         PdfPCell celltbldatabanco= null;
-                        celltbldatabanco = new PdfPCell(new Phrase("Nro. Operacion:", font3));
+                        celltbldatabanco = new PdfPCell(new Phrase("Nro. Operación:", font3));
                         celltbldatabanco.disableBorderSide(Rectangle.BOX);
                         celltbldatabanco.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tbldatabanco.addCell(celltbldatabanco);

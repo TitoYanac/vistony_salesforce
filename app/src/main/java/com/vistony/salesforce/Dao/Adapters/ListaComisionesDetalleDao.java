@@ -10,6 +10,7 @@ import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.View.ClienteDetalleView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ListaComisionesDetalleDao {
     public DocumentoDeudaSQLiteEntity documentoDeudaSQLiteEntity;
     public ClienteSQlite clienteSQlite;
     ArrayList<ClienteSQLiteEntity> listaclienteSQLiteEntity;
+    DecimalFormat format = new DecimalFormat("#0.00");
 
     public static ListaComisionesDetalleDao getInstance() {
         return repository;
@@ -56,7 +58,7 @@ public class ListaComisionesDetalleDao {
                                 ,Lista.get(i).getUmd()
                                 ,Lista.get(i).getAvance()
                                 ,Lista.get(i).getCuota()
-                                ,String.valueOf (Float.parseFloat(Lista.get(i).getPorcentajeavance())*100)//+"%"
+                                ,(String.valueOf (format.format(Float.parseFloat(Lista.get(i).getPorcentajeavance())*100)))//+"%"
                                 ,Lista.get(i).getEsc_colours()
                                 ,Lista.get(i).getHidedata()
                         )

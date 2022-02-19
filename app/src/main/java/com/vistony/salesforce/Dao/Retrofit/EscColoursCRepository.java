@@ -59,6 +59,7 @@ public class EscColoursCRepository extends ViewModel {
 
                             for(int j=0;j<escColoursCEntityResponse.getEscColoursEntity().get(i).getEscColoursDEntityList().size();j++)
                             {
+                                escColoursCEntityResponse.getEscColoursEntity().get(i).getEscColoursDEntityList().get(j).setId(String.valueOf(j));
                                 escColoursCEntityResponse.getEscColoursEntity().get(i).getEscColoursDEntityList().get(j).setId_esc_colours_c(escColoursCEntityResponse.getEscColoursEntity().get(i).getId());
                             }
                             escColoursDSQLiteDao.InsertEscColoursD (escColoursCEntityResponse.getEscColoursEntity().get(i).getEscColoursDEntityList());

@@ -84,6 +84,8 @@ public class MenuConfiguracionView extends Fragment {
         cv_configuracion_datos=v.findViewById(R.id.cv_configuracion_datos);
         cv_configuracion_impresora=v.findViewById(R.id.cv_configuracion_impresora);
         cv_confiracion_sistema=v.findViewById(R.id.cv_confiracion_sistema);
+
+
         cv_configuracion_datos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

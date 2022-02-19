@@ -98,7 +98,8 @@ public class CobranzaDetalleSQLiteDao {
                                        String sap_code,
                                        String mensajeWS,
                                        String horacobranza,
-                                       String cardname
+                                       String cardname,
+                                       String codeSMS
     )
     {
         int resultado;
@@ -138,6 +139,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("horacobranza",horacobranza);
             registro.put("countsend","1");
             registro.put("cardname",cardname);
+            registro.put("codeSMS",codeSMS);
             bd.insert("cobranzadetalle", null, registro);
 
             resultado=1;
@@ -414,7 +416,7 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setSap_code(fila.getString(fila.getColumnIndex("sap_code")));
                 cobdetalleentity.setMensajews(fila.getString(fila.getColumnIndex("mensajeWS")));
                 cobdetalleentity.setHoracobranza(fila.getString(fila.getColumnIndex("horacobranza")));
-
+                cobdetalleentity.setCodeSMS(fila.getString(fila.getColumnIndex("codeSMS")));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
 
@@ -1489,7 +1491,7 @@ public class CobranzaDetalleSQLiteDao {
                             " where compania_id='"+compania_id+"'" +
                             " and usuario_id='"+usuario_id+"'" +
                             " and recibo='"+recibo+"'" +
-                            " and motivoanulacion='"+codesms+"'"
+                            " and codeSMS='"+codesms+"'"
                     ,null);
 
             while (fila.moveToNext())

@@ -165,7 +165,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
             PdfPTable tblCabecera = new PdfPTable(2);
             tblCabecera.setWidthPercentage(100);
             PdfPCell cellCabecera = null;
-            cellCabecera = new PdfPCell(new Phrase("Cod.Cliente",font3));
+            cellCabecera = new PdfPCell(new Phrase("Cód.Cliente",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
@@ -197,7 +197,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase("Direccion",font3));
+            cellCabecera = new PdfPCell(new Phrase("Dirección",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
@@ -246,7 +246,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 tblterminopago.setWidthPercentage(100);
 
                 PdfPCell celltblterminopago = null;
-                celltblterminopago = new PdfPCell(new Phrase("Cond.Venta:",font3));
+                celltblterminopago = new PdfPCell(new Phrase("Cónd.Venta:",font3));
                 celltblterminopago.disableBorderSide(Rectangle.BOX);
                 celltblterminopago.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblterminopago.addCell(celltblterminopago);
