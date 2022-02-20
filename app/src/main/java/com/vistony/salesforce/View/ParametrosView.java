@@ -294,36 +294,36 @@ ParametrosView extends Fragment {
                 break;
             case "peru":
             case "bolivia":
-                if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
-                {
-                    //if (listaparametrosSQLiteEntity.isEmpty()) {
+                if (listaparametrosSQLiteEntity.isEmpty()) {
+                    if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
+                        //if (listaparametrosSQLiteEntity.isEmpty()) {
                         parametrosSQLite.LimpiarParametros();
                         parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
                         parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
                         parametrosSQLite.InsertaParametros("19", "HOJA DESPACHO", "0", getDateTime());
                         parametrosSQLite.InsertaParametros("20", "HOJA DESPACHO DETALLE", "0", getDateTime());
-                   // }
-                }else
-                    {
-                    if (listaparametrosSQLiteEntity.isEmpty()) {
-                        parametrosSQLite.LimpiarParametros();
-                        parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
-                        //parametrosSQLite.InsertaParametros("8", "STOCK", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("21", "COLORES CABECERA", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("22", "COLORES DETALLE", "0", getDateTime());
-                    }
-                    if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
-                        parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                        // }
+                    } else {
+                        if (listaparametrosSQLiteEntity.isEmpty()) {
+                            parametrosSQLite.LimpiarParametros();
+                            parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
+                            //parametrosSQLite.InsertaParametros("8", "STOCK", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("21", "COLORES CABECERA", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("22", "COLORES DETALLE", "0", getDateTime());
+                        }
+                        if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
+                            parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                        }
                     }
                 }
                 break;
@@ -436,6 +436,9 @@ ParametrosView extends Fragment {
             obtenerWSParametros.execute("Todos");
         }
 
+        //listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQLiteEntity,false));
+        //listviewparametro.setAdapter(listaParametrosAdapter);
+
         return v;
     }
 
@@ -459,171 +462,6 @@ ParametrosView extends Fragment {
                 for(int i=0;i<arg0.length;i++) {
                     argumento = arg0[i];
                     if (argumento.equals("Todos")) {
-
-                        /*SINCRONIZAR AL CARGAR PARAMETROS*/
-                        /*String resultadocantidadcobranzadetalle;
-                        CobranzaDetalleSQLiteDao cantidadregistroscobranzadetalle = new CobranzaDetalleSQLiteDao(getContext());
-                        resultadocantidadcobranzadetalle = cantidadregistroscobranzadetalle.ObtenerCantidadCobranzaDetalle(SesionEntity.usuario_id, SesionEntity.compania_id);
-                        if (resultadocantidadcobranzadetalle.equals("0")) {
-                            ObtenerRecibosPendientes();
-                        }*/
-                        /*FIN*/
-
-                        //Envio de Cobranza Detalle Pendientes a WS
-                        /* = new ArrayList<>();
-                        listaCobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendientesEnvioTotalWS(SesionEntity.compania_id, SesionEntity.usuario_id);
-
-
-                        if (!(listaCobranzaDetalleSQLiteEntity.isEmpty())) {
-                            for (int j = 0; j < listaCobranzaDetalleSQLiteEntity.size(); j++) {
-                                String resultado = "0";
-                                List<CobranzaDetalleSQLiteEntity> listaleercobranza = new ArrayList<>();
-
-                                listaleercobranza=null;/*formulasController.ObtenerListaConvertidaCobranzaDetalleSQLite(
-                                        getContext(),
-                                        SesionEntity.imei,
-                                        SesionEntity.compania_id,
-                                        SesionEntity.usuario_id,
-                                        listaCobranzaDetalleSQLiteEntity.get(j).getRecibo()
-                                );
-
-                                if (listaleercobranza==null||listaleercobranza.isEmpty()) {
-                                    if (listaCobranzaDetalleSQLiteEntity.get(j).getCobranza_id().equals("1")) {
-                                        String resultadoWS="0";
-                                        ArrayList<CobranzaDetalleSQLiteEntity> ListaCobranzaDetalleSQLiteEntity = new ArrayList<>();
-                                        CobranzaDetalleSQLiteEntity cobranzaDetalleSQLiteEntity = new CobranzaDetalleSQLiteEntity();
-                                        cobranzaDetalleSQLiteEntity.id = listaCobranzaDetalleSQLiteEntity.get(j).getId();
-                                        cobranzaDetalleSQLiteEntity.cobranza_id = listaCobranzaDetalleSQLiteEntity.get(j).getCobranza_id();
-                                        cobranzaDetalleSQLiteEntity.cliente_id = listaCobranzaDetalleSQLiteEntity.get(j).getCliente_id();
-                                        cobranzaDetalleSQLiteEntity.compania_id = listaCobranzaDetalleSQLiteEntity.get(j).getCompania_id();
-                                        cobranzaDetalleSQLiteEntity.documento_id = listaCobranzaDetalleSQLiteEntity.get(j).getDocumento_id();
-                                        cobranzaDetalleSQLiteEntity.fechacobranza = listaCobranzaDetalleSQLiteEntity.get(j).getFechacobranza();
-                                        cobranzaDetalleSQLiteEntity.importedocumento = listaCobranzaDetalleSQLiteEntity.get(j).getImportedocumento();
-                                        cobranzaDetalleSQLiteEntity.saldocobrado = listaCobranzaDetalleSQLiteEntity.get(j).getSaldocobrado();
-                                        cobranzaDetalleSQLiteEntity.nuevosaldodocumento = listaCobranzaDetalleSQLiteEntity.get(j).getNuevosaldodocumento();
-                                        cobranzaDetalleSQLiteEntity.recibo = listaCobranzaDetalleSQLiteEntity.get(j).getRecibo();
-                                        cobranzaDetalleSQLiteEntity.saldodocumento = listaCobranzaDetalleSQLiteEntity.get(j).getSaldodocumento();
-                                        cobranzaDetalleSQLiteEntity.chkbancarizado = listaCobranzaDetalleSQLiteEntity.get(j).getChkbancarizado();
-                                        cobranzaDetalleSQLiteEntity.motivoanulacion = listaCobranzaDetalleSQLiteEntity.get(j).getMotivoanulacion();
-                                        cobranzaDetalleSQLiteEntity.chkqrvalidado = listaCobranzaDetalleSQLiteEntity.get(j).getChkqrvalidado();
-                                        cobranzaDetalleSQLiteEntity.banco_id = listaCobranzaDetalleSQLiteEntity.get(j).getBanco_id();
-                                        cobranzaDetalleSQLiteEntity.comentario = listaCobranzaDetalleSQLiteEntity.get(j).getComentario();
-                                        cobranzaDetalleSQLiteEntity.pagodirecto = listaCobranzaDetalleSQLiteEntity.get(j).getPagodirecto();
-
-                                        resultado= CobranzaRepository.EnviarReciboWsRetrofit(
-                                                cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
-                                                        listaCobranzaDetalleSQLiteEntity.get(j).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
-                                                getContext(),
-                                                "CREATE",
-                                                "0",
-                                                "0",
-                                                "0",
-                                                "0"
-                                        );
-                                        //resultado=String.valueOf(resultadoWS);
-
-                                        if (resultado.equals("1")) {
-
-                                            /*listaleercobranza = cobranzaDetalleWSDao.LeerCobranzaRecibo(SesionEntity.imei, SesionEntity.compania_id
-                                                    , SesionEntity.usuario_id, listaCobranzaDetalleSQLiteEntity.get(j).getRecibo().toString()
-                                            );
-
-                                            listaleercobranza=formulasController.ObtenerListaConvertidaCobranzaDetalleSQLite(
-                                                    getContext(),
-                                                    SesionEntity.imei,
-                                                    SesionEntity.compania_id,
-                                                    SesionEntity.usuario_id,
-                                                    listaCobranzaDetalleSQLiteEntity.get(j).getRecibo()
-                                            );
-
-                                            if (listaleercobranza.isEmpty()) {
-                                                resultado = "0";
-
-                                            } else {
-                                                resultado = "1";
-                                            }
-                                            cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(listaCobranzaDetalleSQLiteEntity.get(j).getRecibo(), SesionEntity.compania_id, SesionEntity.usuario_id, resultado);
-                                        }
-
-                                    } else {
-                                        ArrayList<CobranzaDetalleSQLiteEntity> ListaCobranzaDetalleSQLiteEntity = new ArrayList<>();
-                                        CobranzaDetalleSQLiteEntity cobranzaDetalleSQLiteEntity = new CobranzaDetalleSQLiteEntity();
-                                        cobranzaDetalleSQLiteEntity.id = listaCobranzaDetalleSQLiteEntity.get(j).getId();
-                                        cobranzaDetalleSQLiteEntity.cobranza_id = listaCobranzaDetalleSQLiteEntity.get(j).getCobranza_id();
-                                        cobranzaDetalleSQLiteEntity.cliente_id = listaCobranzaDetalleSQLiteEntity.get(j).getCliente_id();
-                                        cobranzaDetalleSQLiteEntity.compania_id = listaCobranzaDetalleSQLiteEntity.get(j).getCompania_id();
-                                        cobranzaDetalleSQLiteEntity.documento_id = listaCobranzaDetalleSQLiteEntity.get(j).getDocumento_id();
-                                        cobranzaDetalleSQLiteEntity.fechacobranza = listaCobranzaDetalleSQLiteEntity.get(j).getFechacobranza();
-                                        cobranzaDetalleSQLiteEntity.importedocumento = listaCobranzaDetalleSQLiteEntity.get(j).getImportedocumento();
-                                        cobranzaDetalleSQLiteEntity.saldocobrado = listaCobranzaDetalleSQLiteEntity.get(j).getSaldocobrado();
-                                        cobranzaDetalleSQLiteEntity.nuevosaldodocumento = listaCobranzaDetalleSQLiteEntity.get(j).getNuevosaldodocumento();
-                                        cobranzaDetalleSQLiteEntity.recibo = listaCobranzaDetalleSQLiteEntity.get(j).getRecibo();
-                                        cobranzaDetalleSQLiteEntity.saldodocumento = listaCobranzaDetalleSQLiteEntity.get(j).getSaldodocumento();
-                                        cobranzaDetalleSQLiteEntity.chkbancarizado = listaCobranzaDetalleSQLiteEntity.get(j).getChkbancarizado();
-                                        cobranzaDetalleSQLiteEntity.motivoanulacion = listaCobranzaDetalleSQLiteEntity.get(j).getMotivoanulacion();
-                                        cobranzaDetalleSQLiteEntity.chkqrvalidado = listaCobranzaDetalleSQLiteEntity.get(j).getChkqrvalidado();
-                                        cobranzaDetalleSQLiteEntity.banco_id = listaCobranzaDetalleSQLiteEntity.get(j).getBanco_id();
-                                        cobranzaDetalleSQLiteEntity.comentario = listaCobranzaDetalleSQLiteEntity.get(j).getComentario();
-                                        cobranzaDetalleSQLiteEntity.pagodirecto = listaCobranzaDetalleSQLiteEntity.get(j).getPagodirecto();
-
-                                        ListaCobranzaDetalleSQLiteEntity.add(cobranzaDetalleSQLiteEntity);
-                                        String resultadoWS="0";
-
-                                        resultado=CobranzaRepository.EnviarReciboWsRetrofit(
-                                                cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
-                                                        listaCobranzaDetalleSQLiteEntity.get(j).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
-                                                getContext(),"CREATE","0","0","0","0");
-                                        //resultado=String.valueOf(resultadoWS);
-
-                                        if (resultado.equals("1")) {
-                                            cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(listaCobranzaDetalleSQLiteEntity.get(j).getRecibo(), SesionEntity.compania_id, SesionEntity.usuario_id, resultado);
-                                            cobranzaDetalleSQLiteDao.ActualizaConexionWSDepositoCobranzaDetalle(
-                                                    listaCobranzaDetalleSQLiteEntity.get(j).getRecibo(),
-                                                    listaCobranzaDetalleSQLiteEntity.get(j).getCompania_id(),
-                                                    SesionEntity.usuario_id,
-                                                    resultado
-                                            );
-                                        }
-
-                                    }
-
-                                } else {
-                                    for (int g = 0; g < listaleercobranza.size(); g++) {
-                                        CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteEntity = new CobranzaDetalleSQLiteDao(getContext());
-                                        cobranzaDetalleSQLiteEntity.ActualizaConexionWSCobranzaDetalle(
-                                                listaleercobranza.get(g).getRecibo(),
-                                                SesionEntity.compania_id,
-                                                SesionEntity.usuario_id,
-                                                "1"
-                                        );
-                                    }
-
-                                }
-
-
-                            }
-                        }*/
-
-                        //CARGA DE MAESTROS
-                        /*listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
-                        if (listaparametrosSQLiteEntity.isEmpty()) {
-                            parametrosSQLite.LimpiarParametros();
-                            parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
-                            //parametrosSQLiteDao.InsertaParametros("3", "DOCUMENTOS", "0", getDateTime());
-                            //parametrosSQLiteDao.InsertaParametros("4", "RUTA VENDEDOR", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
-                            //parametrosSQLiteDao.InsertaParametros("8", "STOCK", "0", getDateTime());
-                            //parametrosSQLiteDao.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
-                            //parametrosSQLiteDao.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
-                            //parametrosSQLiteDao.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
-                            //parametrosSQLiteDao.InsertaParametros("13", "CATALOGO", "0", getDateTime());
-                            //parametrosSQLiteDao.InsertaParametros("14", "DIRECCION CLIENTE", "0", getDateTime());
-                            //parametrosSQLiteDao.InsertaParametros("15", "HOJA DESPACHO", "0", getDateTime());
-                        }*/
 
                         ClienteRepository clienteRepository;
                         ListaPrecioRepository listaPrecioRepository;
@@ -686,12 +524,15 @@ ParametrosView extends Fragment {
 
                                 break;
                             case "peru":
+                                if(!SesionEntity.perfil_id.equals("CHOFER"))
+                                {
                                  clienteRepository = new ClienteRepository();
                                 LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
                                     CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
                                     parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), getDateTime());
+                                }
                                 }
 
                                 break;

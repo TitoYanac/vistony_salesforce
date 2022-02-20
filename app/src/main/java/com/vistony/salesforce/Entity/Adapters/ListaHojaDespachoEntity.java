@@ -9,9 +9,9 @@ public class ListaHojaDespachoEntity {
     public String nombrefuerzatrabajo;
     public String terminopago;
     public String cliente_id;
+    public String domembarque_id;
 
-
-    public ListaHojaDespachoEntity(String nombrecliente, String direccion, String nrofactura, String saldo, String nombrefuerzatrabajo, String terminopago, String cliente_id) {
+    public ListaHojaDespachoEntity(String nombrecliente, String direccion, String nrofactura, String saldo, String nombrefuerzatrabajo, String terminopago, String cliente_id, String domembarque_id) {
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
         this.nrofactura = nrofactura;
@@ -19,12 +19,19 @@ public class ListaHojaDespachoEntity {
         this.nombrefuerzatrabajo = nombrefuerzatrabajo;
         this.terminopago = terminopago;
         this.cliente_id = cliente_id;
+        this.domembarque_id = domembarque_id;
     }
-
-
 
     public ListaHojaDespachoEntity() {
 
+    }
+
+    public String getDomembarque_id() {
+        return domembarque_id;
+    }
+
+    public void setDomembarque_id(String domembarque_id) {
+        this.domembarque_id = domembarque_id;
     }
 
     public String getTerminopago() {

@@ -43,6 +43,7 @@ public class ListaHojaDespachoDao {
                         , (Lista.get(i).getFuerzatrabajo_id()+" "+Lista.get(i).getFuerzatrabajo_factura())
                         , Lista.get(i).getTerminopago()
                         ,Lista.get(i).getCliente_id()
+                        ,Lista.get(i).getDomembarque_id()
                 ));
             }
         }catch (Exception e)
