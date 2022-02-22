@@ -881,6 +881,55 @@ public class CobranzaRepository extends ViewModel {
     }
 
 
+    public MutableLiveData<String> SynchronizedepositedPendingCollectionForced (Context context){
+        MutableLiveData<String> temp=new MutableLiveData<String>();
+        SynchronizedepositedPendingreceipsForced(context, new CollectionCallback(){
+            @Override
+            public void onResponseSap(ArrayList<String> data) {
+                if(data==null){
+                    temp.setValue("No hay recibos pendientes de depositar");
+                }else{
+                    temp.setValue(data.get(0));
+                }
+            }
+            @Override
+            public void onResponseErrorSap(String response) {
+                temp.setValue(response);
+            }
+        });
+        return temp;
+    }
+
+    private void SynchronizedepositedPendingreceipsForced(final Context contexto,final CollectionCallback callback){
+        ArrayList<String> responseData = new ArrayList<>();
+
+            Config.getClient().create(Api.class).getHistoricoCobranzaPD(SesionEntity.imei,"PD").enqueue(new Callback<HistoricoCobranzaEntityResponse>() {
+                @Override
+                public void onResponse(Call<HistoricoCobranzaEntityResponse> call, Response<HistoricoCobranzaEntityResponse> response) {
+
+                    if(response.isSuccessful()) {
+                        HistoricoCobranzaEntityResponse historicoCobranzaEntityResponse=response.body();
+                        CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(contexto);
+                        cobranzaDetalleSQLiteDao.addCollection(historicoCobranzaEntityResponse);
+
+                        responseData.add("Se Sincronizaron los recibos Correctamente");
+                        callback.onResponseSap(responseData);
+                    } else {
+                        responseData.add("No se encontraron los Recibos con QR Pendientes");
+                        callback.onResponseErrorSap(response.message());
+                    }
+                }
+
+
+                @Override
+                public void onFailure(Call<HistoricoCobranzaEntityResponse> call, Throwable t) {
+                    callback.onResponseErrorSap(t.getMessage());
+                    call.cancel();
+                }
+            });
+    }
+
+
     /*protected void ObtenerRecibosPendientes()
     {
         //Peru

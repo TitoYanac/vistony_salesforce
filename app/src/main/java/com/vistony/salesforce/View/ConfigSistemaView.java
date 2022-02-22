@@ -31,10 +31,12 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
+import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoDepositoUnidadWS;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -78,6 +80,7 @@ public class ConfigSistemaView extends Fragment{
     private CardView cveliminar,cvsincronizar,createFile,deletecajachica,clearTemp;
     private SharedPreferences preferencia;
     private OnFragmentInteractionListener mListener;
+    private CobranzaRepository cobranzaRepository;
 
     private File fileRuta;
  private UsuarioSQLite usuarioSQLite;
@@ -118,7 +121,7 @@ public class ConfigSistemaView extends Fragment{
         v= inflater.inflate(R.layout.fragment_config_sistema_view, container, false);
         clearTemp=v.findViewById(R.id.clearTemp);
         usuarioSQLite =new UsuarioSQLite(getContext());
-
+        cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
         LinearLayout linear=v.findViewById(R.id.firstFile);
 
         /*if(fileRuta.exists()) {
@@ -417,7 +420,12 @@ public class ConfigSistemaView extends Fragment{
 
         dialogButton.setOnClickListener(v -> {
 
-            ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(getContext().CONNECTIVITY_SERVICE);
+            /////////////////////Sincronizar Recibos Pendientes de Depositar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            cobranzaRepository.SynchronizedepositedPendingCollectionForced(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+
+
+           /* ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(getContext().CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
             if (networkInfo != null && networkInfo.isConnected()) {
@@ -425,8 +433,9 @@ public class ConfigSistemaView extends Fragment{
                 TareaHistoricoCobranzaPendiente.execute();
             }else{
                 Toast.makeText(getContext(), "No hay conexión a internet para sincronzar...", Toast.LENGTH_SHORT).show();
-            }
-            dialog.dismiss();
+            }*/
+                dialog.dismiss();
+            });
         });
         return  dialog;
     }

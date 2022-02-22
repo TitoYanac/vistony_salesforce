@@ -189,6 +189,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("sap_code",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getCodesap());
             registro.put("mensajeWS","Recibo Registrado Correctamente");
             registro.put("horacobranza",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza());
+            registro.put("cardname",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getNombrecliente());
             bd.insert("cobranzadetalle", null, registro);
         }
 
@@ -1271,7 +1272,7 @@ public class CobranzaDetalleSQLiteDao {
                             "a.chkbancarizado as Banking, " +
                             "a.usuario_id as UserID, " +
                             "a.banco_id as BankID, " +
-                            "a.comentario as Commentary, " +
+                            "substr(a.comentario, 1, 100 ) as Commentary, " +
                             "a.pagodirecto as DirectDeposit, " +
                             "a.pagopos as POSPay, " +
                             "IFNULL(a.horacobranza,'') as IncomeTime, " +
@@ -1316,7 +1317,12 @@ public class CobranzaDetalleSQLiteDao {
                 collectionEntity.setDocEntryFT(fila.getString(fila.getColumnIndex("documentoentry")));
                 collectionEntity.setIntent (fila.getString(fila.getColumnIndex("countsend")));
                 collectionEntity.setAppVersion(Utilitario.getVersion(Context));
-                collectionEntity.setModel(model);
+                if(model.length()>50) {
+                    collectionEntity.setModel(model.substring(0,49));
+                }
+                else {
+                    collectionEntity.setModel(model);
+                }
                 collectionEntity.setBrand(brand);
                 collectionEntity.setOSVersion(osVersion);
                 listCollectionEntity.add(collectionEntity);

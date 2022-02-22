@@ -119,7 +119,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             // aplicacion.
             Bitmap bitmap=null;
 
-            if(SesionEntity.compania_id.equals("C001"))
+            if(SesionEntity.compania_id.equals("01"))
             {
                 bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
             }
@@ -144,7 +144,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             tblcliente.setWidthPercentage(100);
             PdfPCell cellTable = null;
 
-            if(SesionEntity.compania_id.equals("C001") )
+            /*if(SesionEntity.compania_id.equals("01") )
             {
                 cellTable=new PdfPCell(new Phrase(
                         "\n R.U.C N° 20102306598 " +
@@ -176,8 +176,8 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                                 "Central: (01) 5521325 E-mail: lubricantes@vistony.com   " +
                                 " Web: www.vistony.com"+
                                 "",font3));
-            }
-
+            }*/
+            cellTable=new PdfPCell(new Phrase(Induvis.getInformation(BuildConfig.FLAVOR),font3));
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblcliente.addCell(cellTable);

@@ -471,7 +471,11 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
             //tv_fechacobrocheque_edit.setText(year + "/" + mes + "/" + dia);
         tv_fechacobrocheque_edit.setText(year + "-" + mes + "-" + dia);
-        tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
+
+        if(tv_fecha_hoja_despacho!=null)
+        {
+            tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
+        }
     }
 
     @Override

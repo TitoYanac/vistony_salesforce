@@ -203,7 +203,7 @@
                 android:clipToPadding="false"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="invisible">
+                android:visibility="visible">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cvsincronizar"
