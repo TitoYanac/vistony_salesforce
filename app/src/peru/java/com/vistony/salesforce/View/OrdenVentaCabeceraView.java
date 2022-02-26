@@ -283,7 +283,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         terminoPagoSQLiteDao=new TerminoPagoSQLiteDao(getContext());
         listaOrdenVentaCabeceraEntities=new ArrayList<>();
         listaOrdenVentaDetalleEntities=new ArrayList<>();
-        hiloObtenerAgencia.execute();
+
         values=new ArrayList<String>();
         dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
@@ -575,7 +575,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         {
             spnmoneda.setEnabled(false);
         }
-
+        hiloObtenerAgencia.execute();
         return v;
     }
 

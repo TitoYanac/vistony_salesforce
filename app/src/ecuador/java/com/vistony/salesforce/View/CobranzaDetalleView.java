@@ -1165,6 +1165,7 @@ public class CobranzaDetalleView extends Fragment {
                         "",
                         obtenerHoraActual(),
                         cardname
+                        ,""
                 );
 
                 ActualizaDocumentoDeuda(SesionEntity.compania_id,
@@ -1211,7 +1212,8 @@ public class CobranzaDetalleView extends Fragment {
                         "",
                         "",
                         obtenerHoraActual(),
-                        cardname
+                        cardname,
+                        ""
                 );
 
 

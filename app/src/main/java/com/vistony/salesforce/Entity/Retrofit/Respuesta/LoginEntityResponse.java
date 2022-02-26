@@ -9,12 +9,13 @@ public class LoginEntityResponse {
     @SerializedName("Users")
     private List<UserEntity> users;
 
-    public LoginEntityResponse(List<UserEntity> users) {
-        this.users = users;
-    }
     public List<UserEntity> getUsers() {
         return users;
     }
+    public LoginEntityResponse(List<UserEntity> users) {
+        this.users = users;
+    }
+
 
 
 }

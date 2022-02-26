@@ -7,10 +7,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.UserEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.sentry.Sentry;
 
@@ -31,54 +34,64 @@ public class UsuarioSQLite {
         sqliteController.close();
     }
 
-    public int InsertaUsuario (UserEntity vendedor){
+    public int InsertaUsuario (//UserEntity vendedor
+    List<UserEntity> vendedor
+    ){
 
         abrir();
 
-        if(vendedor.getSettings()==null || vendedor.getSettings().size()==0){
-            return 0;
-        }else{
+        //if(vendedor.getSettings()==null || vendedor.getSettings().size()==0){
+        //    return 0;
+        //}else{
+        try {
+            Log.e("REOS", "UsuarioSQLite.InsertaUsuario.vendedor.size(): " + vendedor.size());
             ContentValues registro = new ContentValues();
-
-            registro.put("imei",vendedor.getImei());
-            registro.put("compania_id",vendedor.getCompaniaid());
-            registro.put("fuerzatrabajo_id",vendedor.getSlp_code());
-            registro.put("nombrecompania",vendedor.getNombrecompania());
-            registro.put("nombrefuerzatrabajo",vendedor.getNombreusuario());
-            registro.put("nombreusuario",vendedor.getNombreusuario());
-            registro.put("usuario_id",vendedor.getUser_code());
-            registro.put("recibo",vendedor.getSettings().get(0).getRecibo());
-            registro.put("chksesion","0");
-            registro.put("online","0");
-            registro.put("perfil",vendedor.getPerfil());
-            registro.put("chkbloqueopago","0");
-            // registro.put("listaPrecios_id_1",null);
-            //registro.put("listaPrecios_id_2",null);
-            registro.put("almacen_id", vendedor.getAlmacen());
-            registro.put("CogsAcct",vendedor.getSettings().get(0).getCogsAcct());
-            registro.put("U_VIST_CTAINGDCTO",vendedor.getSettings().get(0).getDiscAccount());
-            registro.put("DocumentsOwner",vendedor.getUser_code());
-            registro.put("U_VIST_SUCUSU",vendedor.getU_vist_sucusu());//branch
-            registro.put("CentroCosto",vendedor.getSettings().get(0).getCentrocosto());
-            registro.put("UnidadNegocio",vendedor.getSettings().get(0).getUnidadnegocio());
-            registro.put("LineaProduccion",vendedor.getSettings().get(0).getLineaproduccion());
-            registro.put("Impuesto_ID",vendedor.getSettings().get(0).getTaxCode());
-            registro.put("Impuesto",vendedor.getSettings().get(0).getTaxRate());
-            registro.put("U_VIS_CashDscnt",vendedor.getSettings().get(0).getCashDscnt());
-            registro.put("Language",vendedor.getSettings().get(0).getLanguage());
-            registro.put("Country",vendedor.getCountry());
-            registro.put("flag_stock",vendedor.getSettings().get(0).getOutStock());
-            registro.put("flag_backup",vendedor.getSettings().get(0).getFlagBackup());
-            registro.put("rate",vendedor.getRate());
-            registro.put("print",vendedor.getSettings().get(0).getUsePrinter());
-            registro.put("activecurrency",vendedor.getSettings().get(0).getChangeCurrency());
-            registro.put("planta",vendedor.getPhone());
-            Log.e("REOS","UsuarioSQLite.InsertaUsuario.rate: "+vendedor.getRate());
-            bd.insert("usuario",null,registro);
+            for (int i = 0; i < vendedor.size(); i++) {
+                registro.put("imei", vendedor.get(i).getImei());
+                registro.put("compania_id", vendedor.get(i).getCompaniaid());
+                registro.put("fuerzatrabajo_id", vendedor.get(i).getSlp_code());
+                registro.put("nombrecompania", vendedor.get(i).getNombrecompania());
+                registro.put("nombrefuerzatrabajo", vendedor.get(i).getNombreusuario());
+                registro.put("nombreusuario", vendedor.get(i).getNombreusuario());
+                registro.put("usuario_id", vendedor.get(i).getUser_code());
+                registro.put("recibo", vendedor.get(i).getSettings().get(0).getRecibo());
+                registro.put("chksesion", "0");
+                registro.put("online", "0");
+                registro.put("perfil", vendedor.get(i).getPerfil());
+                registro.put("chkbloqueopago", vendedor.get(i).getSettings().get(0).getMaxDateDeposit());
+                // registro.put("listaPrecios_id_1",null);
+                //registro.put("listaPrecios_id_2",null);
+                registro.put("almacen_id", vendedor.get(i).getAlmacen());
+                registro.put("CogsAcct", vendedor.get(i).getSettings().get(0).getCogsAcct());
+                registro.put("U_VIST_CTAINGDCTO", vendedor.get(i).getSettings().get(0).getDiscAccount());
+                registro.put("DocumentsOwner", vendedor.get(i).getUser_code());
+                registro.put("U_VIST_SUCUSU", vendedor.get(i).getU_vist_sucusu());//branch
+                registro.put("CentroCosto", vendedor.get(i).getSettings().get(0).getCentrocosto());
+                registro.put("UnidadNegocio", vendedor.get(i).getSettings().get(0).getUnidadnegocio());
+                registro.put("LineaProduccion", vendedor.get(i).getSettings().get(0).getLineaproduccion());
+                registro.put("Impuesto_ID", vendedor.get(i).getSettings().get(0).getTaxCode());
+                registro.put("Impuesto", vendedor.get(i).getSettings().get(0).getTaxRate());
+                registro.put("U_VIS_CashDscnt", vendedor.get(i).getSettings().get(0).getCashDscnt());
+                registro.put("Language", vendedor.get(i).getSettings().get(0).getLanguage());
+                registro.put("Country", vendedor.get(i).getCountry());
+                registro.put("flag_stock", vendedor.get(i).getSettings().get(0).getOutStock());
+                registro.put("flag_backup", vendedor.get(i).getSettings().get(0).getFlagBackup());
+                registro.put("rate", vendedor.get(i).getRate());
+                registro.put("print", vendedor.get(i).getSettings().get(0).getUsePrinter());
+                registro.put("activecurrency", vendedor.get(i).getSettings().get(0).getChangeCurrency());
+                registro.put("planta", vendedor.get(i).getPhone());
+                Log.e("REOS", "UsuarioSQLite.InsertaUsuario.rate: " + vendedor.get(i).getRate());
+                Log.e("REOS", "UsuarioSQLite.InsertaUsuario.vendedor.get(i).getNombreusuario(): " + vendedor.get(i).getNombreusuario());
+                bd.insert("usuario", null, registro);
+            }
+        }
+        catch (Exception e){
+            Log.e("REOS", "UsuarioSQLite.InsertaUsuario.e: " + e.toString());
+        }
             bd.close();
 
             return 1;
-        }
+
     }
 
 

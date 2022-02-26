@@ -325,6 +325,7 @@ public class LoginView extends AppCompatActivity{
             Sesion.maxDateDeposit=userEntity.getChkbloqueopago();
             Log.e("REOS","LoginView.Sesion.rate: "+Sesion.rate);
             Log.e("REOS","LoginView.Sesion.U_VIS_CashDscnt: "+Sesion.U_VIS_CashDscnt);
+            Log.e("REOS","LoginView.Sesion.maxDateDeposit: "+Sesion.maxDateDeposit);
             String country=userEntity.getCountry();
             String language=userEntity.getLenguage();
 
