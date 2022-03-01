@@ -617,6 +617,9 @@ public class CobranzaDetalleSQLiteDao {
     public int VerificaRecibosPendientesDeposito (String compania_id,String fuerzatrabajo_id) {
 
         int recibo=0;
+        String maxdatedeposit="";
+        maxdatedeposit="'-"+SesionEntity.maxDateDeposit+" day'";
+        Log.e("REOS", "CobranzaDetalleSQLiteDao-VerificaRecibosPendientesDeposito-maxdatedeposit:" + maxdatedeposit);
         try {
             abrir();
             Cursor fila = bd.rawQuery(
@@ -626,7 +629,7 @@ public class CobranzaDetalleSQLiteDao {
                             //"and fuerzatrabajo_id='"+fuerzatrabajo_id+"' and (fechacobranza< DATE('now','-10 day')) and chkdepositado='0' and chkanulado='0'"
                             " and fuerzatrabajo_id='"+fuerzatrabajo_id+"' " +
                             //"and (fechacobranza< strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))-"+Induvis.getMaximoDiasDeposito()+") " +
-                            "and (fechacobranza< strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))-"+SesionEntity.maxDateDeposit+") " +
+                            "and (fechacobranza< strftime ('%Y',date('now','localtime',"+maxdatedeposit+"))||strftime ('%m',date('now','localtime',"+maxdatedeposit+"))||strftime ('%d',date('now','localtime',"+maxdatedeposit+"))) " +
                             "and chkdepositado='N' and chkanulado='N'"
                     //--------------------------------
                     ,null);
@@ -640,6 +643,7 @@ public class CobranzaDetalleSQLiteDao {
             Log.e("REOS", "CobranzaDetalleSQLiteDao-VerificaRecibosPendientesDeposito-e: "+e.toString());
             e.printStackTrace();
         }
+        Log.e("REOS", "CobranzaDetalleSQLiteDao-VerificaRecibosPendientesDeposito-recibo:" + recibo);
 
         bd.close();
         return recibo;

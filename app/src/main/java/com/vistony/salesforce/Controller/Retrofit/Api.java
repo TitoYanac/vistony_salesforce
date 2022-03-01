@@ -141,6 +141,9 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Date")
     Call<HistoricoCobranzaEntityResponse> getHistoricoCobranza(@Query("imei") String imei,@Query("fecha") String fecha);
 
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Status2")
+    Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaPDSupervisor(@Query("imei") String imei,@Query("status") String TipoFecha,@Query("user") String user);
+
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Status")
     Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaPD(@Query("imei") String imei,@Query("status") String TipoFecha);
 

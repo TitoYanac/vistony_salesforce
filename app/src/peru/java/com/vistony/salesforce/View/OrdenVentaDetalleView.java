@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
@@ -272,17 +273,16 @@ public class OrdenVentaDetalleView extends Fragment {
         tv_orden_venta_detalle_igv = v.findViewById(R.id.tv_orden_venta_detalle_igv);
         tv_orden_venta_detalle_total = v.findViewById(R.id.tv_orden_venta_detalle_total);
         tv_orden_detalle_galones = v.findViewById(R.id.tv_orden_detalle_galones);
+        ClienteAtendido cliente=new ClienteAtendido();
+        cliente.setCardCode(listaprecio_id);//contiene CardCode
+        cliente.setPymntGroup(terminopago_id);
+
 
         fab_consulta_productos.setOnClickListener(view -> {
 
             String Fragment="OrdenVentaDetalleView";
             String accion="producto";
             String compuesto=Fragment+"-"+accion;
-
-            ClienteAtendido cliente=new ClienteAtendido();
-            cliente.setCardCode(listaprecio_id);//contiene CardCode
-            cliente.setPymntGroup(terminopago_id);
-
             Vendedor vendedor=new Vendedor();
             vendedor.setCliente(cliente);
             mListener.onFragmentInteraction(compuesto,vendedor);
@@ -340,12 +340,18 @@ public class OrdenVentaDetalleView extends Fragment {
             getActivity().setTitle("Orden Venta Detalle");
             listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
 
-            lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
-            hiloAgregarListaProductos =  new HiloAgregarListaProductos();
+            if(lv_ordenventadetalle!=null)
+            {
+                lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
+                hiloAgregarListaProductos = new HiloAgregarListaProductos();
 
-            ActualizarResumenMontos(tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones);
+                ActualizarResumenMontos(tv_orden_venta_detalle_subtotal, tv_orden_venta_detalle_descuento, tv_orden_venta_detalle_igv, tv_orden_venta_detalle_total, tv_orden_detalle_galones);
 
-            setHasOptionsMenu(true);
+                setHasOptionsMenu(true);
+            }
+            else {
+                Toast.makeText(getContext(), "Consultar nuevamente el Cliente:", Toast.LENGTH_SHORT).show();
+            }
             pd.dismiss();
         }
     }

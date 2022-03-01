@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.DetailDispatchSheetEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
@@ -166,6 +167,27 @@ public class DetailDispatchSheetSQLite {
         }
 
         bd.close();
+
+        return resultado;
+    }
+
+    public int UpdateBalanceDetailDispatchSheet (String compania_id, String documento_id, String nuevo_saldo)
+    {
+        int resultado=0;
+
+        try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
+            ContentValues registro = new ContentValues();
+            registro.put("saldo",nuevo_saldo);
+
+            resultado = sqlite.update("detaildispatchsheet",registro,"factura_id='"+documento_id+"'"+" and compania_id='"+compania_id+"'" ,null);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
 
         return resultado;
     }

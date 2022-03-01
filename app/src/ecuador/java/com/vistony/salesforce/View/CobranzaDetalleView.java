@@ -256,7 +256,8 @@ public class CobranzaDetalleView extends Fragment {
             }
         }
         //fecha =obtenerFechaYHoraActual();
-        objCamara = Camera.open();
+
+            objCamara = Camera.open();
 
         parametrosCamara = objCamara.getParameters();
         tieneFlash = getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);

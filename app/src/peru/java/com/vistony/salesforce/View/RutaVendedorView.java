@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -160,9 +161,16 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
                 vinculaimpresora=arraylistConfiguracionentity.get(i).getVinculaimpresora();
                 serialnumber=arraylistConfiguracionentity.get(i).getPapel();
                 String deviceserialnumber=serialnumber;
-                String[] compuestoserialnumber= deviceserialnumber.split(" ");
-                String serialnumberbluetooh= compuestoserialnumber[0];
-                SesionEntity.serialnumber=serialnumberbluetooh;
+                try
+                {
+                    String[] compuestoserialnumber = deviceserialnumber.split(" ");
+                    String serialnumberbluetooh = compuestoserialnumber[0];
+                    SesionEntity.serialnumber=serialnumberbluetooh;
+                }catch (Exception e)
+                {
+                    Toast.makeText(getContext(), "Impresora Blueetooh no fue configurada Correctamente", Toast.LENGTH_SHORT).show();
+                }
+
             }
             if ((vinculaimpresora.equals("0"))) {
                 configImpresoraView = new ConfigImpresoraView();

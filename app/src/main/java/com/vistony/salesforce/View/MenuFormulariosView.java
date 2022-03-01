@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
@@ -72,6 +73,11 @@ public class MenuFormulariosView extends Fragment {
         cv_catalogos=v.findViewById(R.id.cv_catalogos);
         cv_agregarcliente=v.findViewById(R.id.cv_agregarcliente);
         cv_reclamocliente=v.findViewById(R.id.cv_reclamocliente);
+
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            cv_reclamocliente.setVisibility(View.GONE);
+        }
 
         cv_catalogos.setOnClickListener(v -> {
             String Fragment="MenuFormulariosView";

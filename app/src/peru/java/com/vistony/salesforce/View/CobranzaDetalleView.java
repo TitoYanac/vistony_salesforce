@@ -66,6 +66,7 @@ import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaDetalleDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
@@ -265,8 +266,12 @@ public class CobranzaDetalleView extends Fragment {
             }
         }
         //fecha =obtenerFechaYHoraActual();
-        objCamara = Camera.open();
-
+        try {
+            objCamara = Camera.open();
+        }catch (Exception e)
+        {
+            Toast.makeText(getContext(), "Error en Comunicacio Camara:"+e.toString() , Toast.LENGTH_SHORT).show();
+        }
         parametrosCamara = objCamara.getParameters();
         tieneFlash = getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
@@ -975,15 +980,15 @@ public class CobranzaDetalleView extends Fragment {
 
                 Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-et_numero_telefonico.getText().toString():" + et_numero_telefonico.getText().toString());
                 Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-mPhoneNumber:" + mPhoneNumber);
-                if(et_numero_telefonico.getText().toString().equals(mPhoneNumber))
+                /*if(et_numero_telefonico.getText().toString().equals(mPhoneNumber))
                 {
                     Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
                 }
                 else
-                {
+                {*/
                     sendSMS(et_numero_telefonico.getText().toString());
                     dialog.dismiss();
-                }
+                //}
 
             }
         });
@@ -1331,9 +1336,21 @@ public class CobranzaDetalleView extends Fragment {
                             String.valueOf(n)
                     );
 
-                    ActualizaDocumentoDeuda(ObjUsuario.compania_id,
-                            String.valueOf(Lista.get(i).getDocumento_id()),
-                            String.valueOf(Lista.get(i).getNuevo_saldo()));
+                    if(SesionEntity.perfil_id.equals("CHOFER")){
+                        DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(getContext());
+                        detailDispatchSheetSQLite.UpdateBalanceDetailDispatchSheet(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()));
+
+                        ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()));
+
+                    }else {
+                        ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()));
+                    }
 
                 }
             } else if (tipoCobranza.equals("Cobranza/Deposito")) {
@@ -1379,10 +1396,22 @@ public class CobranzaDetalleView extends Fragment {
                             String.valueOf(n)
                     );
 
+                    if(SesionEntity.perfil_id.equals("CHOFER")){
+                        DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(getContext());
+                        detailDispatchSheetSQLite.UpdateBalanceDetailDispatchSheet(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()));
 
-                    ActualizaDocumentoDeuda(ObjUsuario.compania_id,
-                            String.valueOf(Lista.get(i).getDocumento_id()),
-                            String.valueOf(Lista.get(i).getNuevo_saldo()));
+                        ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()));
+
+                    }else {
+                        ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()));
+                    }
+
 
                 }
                 addDepositPOS(sumacobrado);

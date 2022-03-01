@@ -84,8 +84,10 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
         String Fragment = "TerminoPagoView";
         String accion = "inicio";
         String compuesto = Fragment + "-" + accion;
-        mListener.onFragmentInteraction(compuesto, objeto);
-
+        if (mListener!=null)
+        {
+            mListener.onFragmentInteraction(compuesto, objeto);
+        }
         return terminoPagoView;
     }
 

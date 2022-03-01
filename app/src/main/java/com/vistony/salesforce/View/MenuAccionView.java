@@ -214,13 +214,17 @@ public class MenuAccionView extends Fragment {
 
         cv_cobranza.setOnClickListener(v -> {
 
-            validar=CobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
-            if(validar>0){
-                alertarecibospendientes().show();
-            }else{
-                alertatiporecibos().show();
-            }
-
+            //if(!SesionEntity.perfil_id.equals("CHOFER"))
+            //{
+                validar=CobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
+                if(validar>0){
+                    alertarecibospendientes().show();
+                }else{
+                    alertatiporecibos().show();
+                }
+            //}else {
+           //     alertatiporecibos().show();
+           // }
         });
 
         cv_visita.setOnClickListener(v -> {

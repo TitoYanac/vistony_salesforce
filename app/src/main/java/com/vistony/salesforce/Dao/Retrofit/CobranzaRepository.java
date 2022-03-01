@@ -301,9 +301,10 @@ public class CobranzaRepository extends ViewModel {
         }else if(TipoFecha.equals("PENDIENTE_DEPOSITO"))
         {
             Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-PENDIENTE_DEPOSITO-entro");
-            call = api.getHistoricoCobranzaPD(
+            call = api.getHistoricoCobranzaPDSupervisor(
                     Imei,
-                    "PD"
+                    "PD",
+                    SesionEntity.usuario_id
             );
         }else if(TipoFecha.equals("RECIBO_ANULADO"))
         {
@@ -853,7 +854,7 @@ public class CobranzaRepository extends ViewModel {
             //Response<HistoricoCobranzaEntityResponse> response= call.execute();
             //if(response.isSuccessful()) {
             //RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
-            Config.getClient().create(Api.class).getHistoricoCobranzaPD(SesionEntity.imei,"PD").enqueue(new Callback<HistoricoCobranzaEntityResponse>() {
+            Config.getClient().create(Api.class).getHistoricoCobranzaPDSupervisor(SesionEntity.imei,"PD",SesionEntity.usuario_id).enqueue(new Callback<HistoricoCobranzaEntityResponse>() {
                 @Override
                 public void onResponse(Call<HistoricoCobranzaEntityResponse> call, Response<HistoricoCobranzaEntityResponse> response) {
 
@@ -903,7 +904,7 @@ public class CobranzaRepository extends ViewModel {
     private void SynchronizedepositedPendingreceipsForced(final Context contexto,final CollectionCallback callback){
         ArrayList<String> responseData = new ArrayList<>();
 
-            Config.getClient().create(Api.class).getHistoricoCobranzaPD(SesionEntity.imei,"PD").enqueue(new Callback<HistoricoCobranzaEntityResponse>() {
+            Config.getClient().create(Api.class).getHistoricoCobranzaPDSupervisor(SesionEntity.imei,"PD",SesionEntity.usuario_id).enqueue(new Callback<HistoricoCobranzaEntityResponse>() {
                 @Override
                 public void onResponse(Call<HistoricoCobranzaEntityResponse> call, Response<HistoricoCobranzaEntityResponse> response) {
 
