@@ -8,7 +8,7 @@
     android:paddingTop="8dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="8dp"
-    android:id="@+id/relativeListahistoriccontainersalesfamilia"
+    android:id="@+id/relativeListahistoriccontainersalessku"
     >
 
     <TableLayout
@@ -29,8 +29,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:text="PROMEDIO:"
+                android:text="TOTAL         :"
                 android:textAlignment="center"
+
                 android:textSize="14dp">
 
             </TextView>
@@ -81,6 +82,44 @@
         android:layout_height="wrap_content"
         android:layout_gravity=""
         android:focusable="false">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false">
+            <TextView
+                android:id="@+id/lbl_galouns"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="GALONES   :"
+                android:textAlignment="center"
+                android:textSize="14dp"
+                android:layout_marginTop="20dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_galouns"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="GALONES"
+                android:textSize="14dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:textStyle="bold">
+            </TextView>
+        </TableRow>
+    </TableLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity=""
+        android:focusable="false"
+        android:layout_marginTop="40dp"
+        >
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -91,10 +130,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
-            android:text="PRODUCTO:"
+            android:text="PRODUCTO :  "
             android:textAlignment="center"
-            android:textSize="14dp"
-            android:layout_marginTop="20dp">
+            android:textSize="14dp">
 
         </TextView>
 
@@ -106,8 +144,6 @@
             android:focusable="false"
             android:text="VARIABLE"
             android:textSize="14dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
             android:textStyle="bold">
         </TextView>
     </TableRow>

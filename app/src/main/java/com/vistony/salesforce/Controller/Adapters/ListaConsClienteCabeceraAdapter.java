@@ -16,7 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaConsClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -119,6 +121,8 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             holder.tv_categoria = (TextView) convertView.findViewById(R.id.tv_categoria);
             holder.relativeListaCabezeraCns=convertView.findViewById(R.id.relativeListaCabezera);
             holder.progressLineCredit=convertView.findViewById(R.id.progressBar);
+            holder.tv_lastpurchase = (TextView) convertView.findViewById(R.id.tv_lastpurchase);
+
             convertView.setTag(holder);
         } else {
             holder = (ListaConsClienteCabeceraAdapter.ViewHolder) convertView.getTag();
@@ -133,7 +137,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));
         holder.tv_moneda.setText(lead.getMoneda());
         holder.tv_categoria.setText(lead.getCategoria());
-
+        holder.tv_lastpurchase.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getLastpurchase()));
         //Mostrar linea de credito en moneda de acuerdo a la region
         ///////////////////////////////////////////////////////////////////////////////////////
         holder.tv_linea_credito.setText(Convert.currencyForView(lead.getLinea_credito()));
@@ -170,7 +174,9 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             listaClienteCabeceraEntity.setCorreo(lead.getCorreo());
             listaClienteCabeceraEntity.setUbigeo_id(lead.getUbigeo_id());
             listaClienteCabeceraEntity.setTipocambio(lead.getTipocambio());
-
+            listaClienteCabeceraEntity.setLastpurchase (lead.getLastpurchase());
+            listaClienteCabeceraEntity.setLineofbussiness (lead.getLineofbussiness());
+                    Log.e("REOS","ListaConsClienteCabeceraAdapter.getView.lead.getLineofbussiness(): "+lead.getLineofbussiness());
             ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
 
             fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
@@ -199,7 +205,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
                 transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarClienteQuotasPerCustomerDialog(ArraylistaClienteCabeceraEntity));
             }else if(BuscarClienteView.Flujo.equals("kardexofpayment"))
             {
-                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo-kardex:"+BuscarClienteView.Flujo+"NoEntroFlujo");
                 transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarClienteKardexOfPayment(ArraylistaClienteCabeceraEntity));
             }
             else
@@ -224,5 +230,6 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         ImageView imv_clientecabecera;
         RelativeLayout relativeListaCabezeraCns;
         ProgressBar progressLineCredit;
+        TextView tv_lastpurchase;
     }
 }

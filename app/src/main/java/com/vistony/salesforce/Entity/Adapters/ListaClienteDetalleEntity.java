@@ -18,12 +18,13 @@ public class ListaClienteDetalleEntity  implements Serializable {
     public int imvclientedetalle;
     public String moneda;
     public String zona_id;
+    public String docentry;
 
     public ListaClienteDetalleEntity() {
 
     }
 
-    public ListaClienteDetalleEntity(String cliente_id, String nombrecliente, String domembarque, String direccion, String documento_id, String nrodocumento, String fechaemision, String fechavencimiento, String importe, String saldo, String cobrado, String nuevo_saldo, int imvclientedetalle, String moneda, String zona_id) {
+    public ListaClienteDetalleEntity(String cliente_id, String nombrecliente, String domembarque, String direccion, String documento_id, String nrodocumento, String fechaemision, String fechavencimiento, String importe, String saldo, String cobrado, String nuevo_saldo, int imvclientedetalle, String moneda, String zona_id, String docentry) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.domembarque = domembarque;
@@ -39,6 +40,15 @@ public class ListaClienteDetalleEntity  implements Serializable {
         this.imvclientedetalle = imvclientedetalle;
         this.moneda = moneda;
         this.zona_id = zona_id;
+        this.docentry = docentry;
+    }
+
+    public String getDocentry() {
+        return docentry;
+    }
+
+    public void setDocentry(String docentry) {
+        this.docentry = docentry;
     }
 
     public String getZona_id() {

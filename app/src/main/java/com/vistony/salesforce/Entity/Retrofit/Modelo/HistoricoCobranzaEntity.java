@@ -83,6 +83,17 @@ public class HistoricoCobranzaEntity {
     @SerializedName("Code")
     private String codesap;
 
+    @SerializedName("DocEntry")
+    private String docentry;
+
+    public String getDocentry() {
+        return docentry;
+    }
+
+    public void setDocentry(String docentry) {
+        this.docentry = docentry;
+    }
+
     public String getCodesap() {
         return codesap;
     }

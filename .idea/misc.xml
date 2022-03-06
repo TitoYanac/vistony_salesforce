@@ -53,6 +53,7 @@
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/app_bar_menu_view.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/content_main.xml" value="0.10208333333333333" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/content_menu_view.xml" value="0.10208333333333333" />
+        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/fragment_cliente_cabecera.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/fragment_cliente_detalle_actionbar.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/fragment_cobranza_cabecera_view.xml" value="0.25" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/fragment_cobranza_detalle_view.xml" value="0.22" />
@@ -126,7 +127,7 @@
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_input_dialog.xml" value="0.10520833333333333" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_leyenda_comisiones_detalle.xml" value="0.25" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_list_legend_comissions_colours.xml" value="0.33" />
-        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_lista_cliente_cabecera.xml" value="0.2" />
+        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_lista_cliente_cabecera.xml" value="0.25" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_lista_comisiones_detalle.xml" value="0.25" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_lista_consdeposito.xml" value="0.18" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_lista_consulta_stock.xml" value="0.25" />

@@ -3,6 +3,7 @@ package com.vistony.salesforce.Controller.Adapters;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Entity.Adapters.ListaAgenciaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaParametrosEntity;
@@ -82,7 +84,7 @@ public class ListaHistoricContainerSalesAdapter extends ArrayAdapter<ListaHistor
 
             holder.tv_periodo = (TextView) convertView.findViewById(R.id.tv_periodo);
             holder.tv_montoacumulado = (TextView) convertView.findViewById(R.id.tv_montoacumulado);
-            holder.relativeListacontainersalesSemaforo = (RelativeLayout) convertView.findViewById(R.id.relativeListacontainersalesSemaforo);
+           // holder.relativeListacontainersalesSemaforo = (RelativeLayout) convertView.findViewById(R.id.relativeListacontainersalesSemaforo);
             if(tipo.equals("SEMAFORO"))
             {
 
@@ -91,6 +93,10 @@ public class ListaHistoricContainerSalesAdapter extends ArrayAdapter<ListaHistor
                 {
                     holder.tv_variable = (TextView) convertView.findViewById(R.id.tv_variable);
                 }
+            if(tipo.equals("SKU")){
+                holder.tv_galouns =  (TextView) convertView.findViewById(R.id.tv_galouns);
+                holder.relativeListahistoriccontainersalessku = (RelativeLayout) convertView.findViewById(R.id.relativeListahistoriccontainersalessku);
+            }
 
             convertView.setTag(holder);
         } else {
@@ -111,7 +117,27 @@ public class ListaHistoricContainerSalesAdapter extends ArrayAdapter<ListaHistor
             año=sourcefechadesordenada[2];
             mes=sourcefechadesordenada[0];
             dia=sourcefechadesordenada[1];
+
+            if(mes.length()==1)
+            {
+                mes='0'+mes;
+            }
+            if(dia.length()==1)
+            {
+                dia='0'+dia;
+            }
             holder.tv_periodo.setText(año+"/"+mes+"/"+dia);
+            Induvis induvis=new Induvis();
+            Long day=0L;
+            try {
+                day=induvis.getDiferenceDays(año +"-"+ mes +"-"+ dia);
+            }catch (Exception e){
+                Log.e("REOS","ListaHistoricContainerSalesAdapter.e"+e.toString());
+            }
+            if(day>90) {
+                holder.relativeListahistoriccontainersalessku.setBackground(new ColorDrawable(Color.parseColor("#eF9a9a")));
+            }
+            holder.tv_galouns.setText(lead.getGaloun());
         }else
         {
             holder.tv_periodo.setText(lead.getAnio()+"-"+lead.getMes());
@@ -127,11 +153,7 @@ public class ListaHistoricContainerSalesAdapter extends ArrayAdapter<ListaHistor
             holder.tv_variable.setText(lead.getVariable());
 
         }
-        /*if(Float.parseFloat(lead.getTotal())==0)
-        {
 
-            holder.relativeListacontainersalesSemaforo.setBackground(new ColorDrawable(Color.RED));
-        }*/
 
         return convertView;
     }
@@ -141,7 +163,10 @@ public class ListaHistoricContainerSalesAdapter extends ArrayAdapter<ListaHistor
         TextView tv_periodo;
         TextView tv_montoacumulado;
         TextView tv_variable;
+        TextView tv_galouns;
         RelativeLayout relativeListacontainersalesSemaforo;
+        RelativeLayout relativeListahistoriccontainersalesfamilia;
+        RelativeLayout relativeListahistoriccontainersalessku;
     }
 
 }

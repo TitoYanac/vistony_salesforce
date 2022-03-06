@@ -83,6 +83,7 @@ public class ListaHistoricoCobranzaDao {
                         ,Lista.get(i).getCodesap()
                         ,Lista.get(i).getMensajeWS()
                         ,Lista.get(i).getHoracobranza()
+                        ,Lista.get(i).getDocentry()
                 ));
             }
         }catch (Exception e)

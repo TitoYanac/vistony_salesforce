@@ -31,9 +31,10 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
     public String chk_ruta;
     public String fecharuta;
     public String linea_credito_usado;
+    public String lastpurchase;
+    public String lineofbussiness;
 
-
-    public ListaConsClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta) {
+    public ListaConsClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta,String lastpurchase,String lineofbussiness) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -62,10 +63,28 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
         this.chk_cobranza = chk_cobranza;
         this.chk_ruta = chk_ruta;
         this.fecharuta = fecharuta;
+        this.lastpurchase = lastpurchase;
+        this.lineofbussiness = lineofbussiness;
     }
 
     public ListaConsClienteCabeceraEntity() {
 
+    }
+
+    public String getLineofbussiness() {
+        return lineofbussiness;
+    }
+
+    public void setLineofbussiness(String lineofbussiness) {
+        this.lineofbussiness = lineofbussiness;
+    }
+
+    public String getLastpurchase() {
+        return lastpurchase;
+    }
+
+    public void setLastpurchase(String lastpurchase) {
+        this.lastpurchase = lastpurchase;
     }
 
     public String getLinea_credito_usado() {

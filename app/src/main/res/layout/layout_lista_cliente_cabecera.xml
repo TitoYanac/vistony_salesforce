@@ -109,6 +109,7 @@
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
             </TableRow>
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
@@ -132,8 +133,30 @@
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
             </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tablerowlastpurchase">
 
+                <TextView
+                    android:id="@+id/lbl_lastpurchase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:text="@string/lbl_lastpurchase" />
 
+                <TextView
+                    android:id="@+id/tv_lastpurchase"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text=""
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold" />
+            </TableRow>
         </TableLayout>
 
         <LinearLayout

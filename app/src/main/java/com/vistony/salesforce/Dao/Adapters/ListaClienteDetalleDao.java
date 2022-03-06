@@ -108,6 +108,7 @@ public class ListaClienteDetalleDao {
             listaClienteDetalleEntity.nuevo_saldo="0";
             listaClienteDetalleEntity.imvclientedetalle=1;
             listaClienteDetalleEntity.moneda=Lista.get(i).getMoneda();
+            listaClienteDetalleEntity.docentry=Lista.get(i).getDocumento_entry();
             listaClienteDetalleEntities.add(listaClienteDetalleEntity);
         }
         }catch (Exception e)

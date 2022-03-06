@@ -99,7 +99,8 @@ public class CobranzaDetalleSQLiteDao {
                                        String mensajeWS,
                                        String horacobranza,
                                        String cardname,
-                                       String codeSMS
+                                       String codeSMS,
+                                       String docentry
     )
     {
         int resultado;
@@ -140,6 +141,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("countsend","1");
             registro.put("cardname",cardname);
             registro.put("codeSMS",codeSMS);
+            registro.put("docentry",docentry);
             bd.insert("cobranzadetalle", null, registro);
 
             resultado=1;
@@ -190,6 +192,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("mensajeWS","Recibo Registrado Correctamente");
             registro.put("horacobranza",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza());
             registro.put("cardname",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getNombrecliente());
+            registro.put("docentry",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getDocentry());
             bd.insert("cobranzadetalle", null, registro);
         }
 
@@ -1280,7 +1283,7 @@ public class CobranzaDetalleSQLiteDao {
                             "a.pagodirecto as DirectDeposit, " +
                             "a.pagopos as POSPay, " +
                             "IFNULL(a.horacobranza,'') as IncomeTime, " +
-                            "IFNULL((Select IFNULL(doc_entry,0 ) FROM documentodeuda WHERE documento_id=a.documento_id),0) AS documentoentry, " +
+                            "IFNULL(docentry,0 )  AS documentoentry, " +
                             "IFNULL(a.countsend,'1') as countsend " +
                             " from cobranzadetalle a " +
                             " where (chkwsrecibido='N' or  chkwsrecibido='0') " +

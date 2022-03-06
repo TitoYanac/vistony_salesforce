@@ -1111,7 +1111,8 @@ public class FormulasController {
                         chk_ruta,
                         fecharuta,
                         ObjUsuario.fuerzatrabajo_id,
-                        ObjUsuario.usuario_id
+                        ObjUsuario.usuario_id,
+                        listaClienteCabeceraEntities.get(i).getLastpurchase()
                 );
             }
 

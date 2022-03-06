@@ -1,6 +1,7 @@
 package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaConsClienteCabeceraEntity;
@@ -60,7 +61,10 @@ public class ListaConsClienteCabeceraDao {
                         ,Lista.get(i).getChk_cobranza()
                         ,Lista.get(i).getChk_ruta()
                         ,Lista.get(i).getFecharuta()
+                        ,Lista.get(i).getLastpurchase()
+                        ,Lista.get(i).getLineofbussiness()
                 ));
+                Log.e("REOS","ListaConsClienteCabeceraDao.getLeads.Lista.get(i).getLineofbussiness(): "+Lista.get(i).getLineofbussiness());
             }
         }catch (Exception e)
         {

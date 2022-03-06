@@ -33,6 +33,24 @@ public class ClienteSQLiteEntity {
     private List<AddressEntity> listAddress;
     private List<InvoicesEntity> listInvoice;
     private String dueDays;
+    private String lineofbusiness;
+    private String lastpurchase;
+
+    public String getLineofbusiness() {
+        return lineofbusiness;
+    }
+
+    public void setLineofbusiness(String lineofbusiness) {
+        this.lineofbusiness = lineofbusiness;
+    }
+
+    public String getLastpurchase() {
+        return lastpurchase;
+    }
+
+    public void setLastpurchase(String lastpurchase) {
+        this.lastpurchase = lastpurchase;
+    }
 
     public String getDueDays() {
         return dueDays;

@@ -71,6 +71,28 @@ public class ClienteEntity {
     @SerializedName("Addresses")
     private List<AddressEntity> address;
 
+    @SerializedName("LineOfBusiness")
+    private String lineofbusiness;
+
+    @SerializedName("LastPurchase")
+    private String lastpurchase;
+
+    public String getLastpurchase() {
+        return lastpurchase;
+    }
+
+    public void setLastpurchase(String lastpurchase) {
+        this.lastpurchase = lastpurchase;
+    }
+
+    public String getLineofbusiness() {
+        return lineofbusiness;
+    }
+
+    public void setLineofbusiness(String lineofbusiness) {
+        this.lineofbusiness = lineofbusiness;
+    }
+
     public String getLista_precio() {
         return lista_precio;
     }

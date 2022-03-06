@@ -1,5 +1,7 @@
 package com.vistony.salesforce.Controller.Utilitario;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 import android.app.Activity;
 import android.util.Log;
 
@@ -14,6 +16,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -356,6 +359,18 @@ public class Induvis {
                 FirebaseCrashlytics.getInstance().setCustomKey("AppBuild", "Release");
 
             }
+
+    }
+
+    public long getDiferenceDays(String Date) throws ParseException {
+
+        LocalDate myDate = LocalDate.parse(Date);
+
+        LocalDate currentDate = LocalDate.now();
+
+       long numberOFDays = DAYS.between(myDate, currentDate);
+        Log.e("REOS","Induvis.getDiferenceDays.numberOFDays"+numberOFDays);
+        return numberOFDays;
 
     }
 

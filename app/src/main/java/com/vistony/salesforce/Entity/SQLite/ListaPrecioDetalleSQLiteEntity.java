@@ -13,6 +13,15 @@ public class ListaPrecioDetalleSQLiteEntity {
     private String porcentaje_descuento;
     private String stock_almacen;
     private String stock_general;
+    private String unit;
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
 
     public String getStock_almacen() {
         return stock_almacen;

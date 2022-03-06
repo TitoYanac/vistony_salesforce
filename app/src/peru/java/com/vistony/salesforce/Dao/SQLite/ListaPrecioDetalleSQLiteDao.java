@@ -39,7 +39,8 @@ public class ListaPrecioDetalleSQLiteDao {
             String tipo,
             String porcentaje_descuento,
             String stock_almacen,
-            String stock_general
+            String stock_general,
+            String units
     ){
         SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
 
@@ -56,6 +57,7 @@ public class ListaPrecioDetalleSQLiteDao {
         registro.put("Tipo",tipo);
         registro.put("stock_almacen",stock_almacen);
         registro.put("stock_general",stock_general);
+        registro.put("units",units);
         sqlite.insert("listapreciodetalle",null,registro);
 
         DataBaseManager.getInstance().closeDatabase();
@@ -374,10 +376,10 @@ public class ListaPrecioDetalleSQLiteDao {
         try {
             SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
             String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
-                    "IFNULL(stock_general,0) stock_general,contado,credito,gal " +
+                    "IFNULL(stock_general,0) stock_general,contado,credito,gal,units " +
                     " FROM listapreciodetalle " +
                     "where producto_id='"+producto_id+"' "+
-                    "GROUP BY producto_id,producto,umd,stock_almacen,stock_general,contado,credito,gal";
+                    "GROUP BY producto_id,producto,umd,stock_almacen,stock_general,contado,credito,gal,units";
 
             fila = sqlite.rawQuery(query,null);
 
@@ -391,6 +393,7 @@ public class ListaPrecioDetalleSQLiteDao {
                 listaPrecioDetalleSQLiteEntity.setContado(fila.getString(5));
                 listaPrecioDetalleSQLiteEntity.setCredito(fila.getString(6));
                 listaPrecioDetalleSQLiteEntity.setGal(fila.getString(7));
+                listaPrecioDetalleSQLiteEntity.setUnit(fila.getString(8));
                 ListaPrecioDetalleSQLiteEntity.add(listaPrecioDetalleSQLiteEntity);
             }
 

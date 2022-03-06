@@ -97,8 +97,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     View v;
     static Button btn_detalle_orden_venta;
     OnFragmentInteractionListener mListener;
-    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag;
-    static String cliente_terminopago,cliente_terminopago_id;
+    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate;
+    static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
     static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,lbl_terminopago;
     static EditText et_comentario;
@@ -342,7 +342,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     totalAcum=listaOrdenVentaCabecera.get(g).getMontototal();
                     confirmationRequestErp=listaOrdenVentaCabecera.get(g).getRecibidoERP().equals("1")?true:false;
                     cliente_terminopago_id=listaOrdenVentaCabecera.get(g).getTerminopago_id();
-
+                    cliente_domembarque_id=listaOrdenVentaCabecera.get(g).getDomembarque_id();
+                    dispatchdate=listaOrdenVentaCabecera.get(g).getDispatchdate();
                     listaAgenciasqliteentity= agenciaSQLiteDao.ObtenerAgencia_porID(
                             listaOrdenVentaCabecera.get(g).getAgencia_id()
                     );
@@ -389,6 +390,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     impuesto=Listado.get(i).getImpuesto();
                     rucdni= Listado.get(i).getRucdni();
                     cliente_terminopago_id=Listado.get(i).getTerminopago_id();
+                    cliente_domembarque_id=Listado.get(i).getDomembarque_id();
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.Listado.get(i).getTerminopago_id(): "+Listado.get(i).getTerminopago_id());
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.cliente_terminopago_id: "+cliente_terminopago_id);
 
@@ -462,8 +464,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         btn_dispatch_date.setOnClickListener(this);
         tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
 
-
-
         Log.e("REOS","OrdenVentaCabeceraView-onCreateView-cliente_terminopago_id:"+cliente_terminopago_id);
         listaTerminopago=terminoPagoSQLiteDao.ObtenerTerminoPagoporID(cliente_terminopago_id,SesionEntity.compania_id);
 
@@ -525,7 +525,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             Log.e("REOS","OrdenVentaCabeceraView-contado:"+SesionEntity.contado);
 
         }
-
+        Log.e("REOS","OrdenVentaCabeceraView-cliente_terminopago:"+cliente_terminopago);
         tv_terminopago.setText(cliente_terminopago);
         //tv_moneda.setText(moneda);
 

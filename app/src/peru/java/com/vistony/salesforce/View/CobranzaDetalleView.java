@@ -1333,7 +1333,8 @@ public class CobranzaDetalleView extends Fragment {
                             "",
                             obtenerHoraActual(),
                             cardname,
-                            String.valueOf(n)
+                            String.valueOf(n),
+                            Lista.get(i).getDocentry()
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1393,7 +1394,8 @@ public class CobranzaDetalleView extends Fragment {
                             "",
                             obtenerHoraActual(),
                             cardname,
-                            String.valueOf(n)
+                            String.valueOf(n),
+                            Lista.get(i).getDocentry()
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){

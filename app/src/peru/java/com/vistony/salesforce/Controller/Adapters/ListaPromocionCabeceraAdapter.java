@@ -628,6 +628,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         final TextView tv_pack_contado,tv_pack_credito,tv_descuento_pack_contado,tv_descuento_pack_credito
                 ,tv_bono_pack_contado,tv_bono_pack_credito,tv_total_pack_contado,tv_total_pack_credito,
                 tv_precio_referencial_pack_contado,tv_precio_referencial_pack_credito,tv_precio_contado,tv_precio_credito
+                ,tv_precio_referencial_pack_contado_unit,tv_precio_referencial_pack_credito_unit
                 ;
 
         tv_pack_contado= dialog.findViewById(R.id.tv_pack_contado);
@@ -642,8 +643,9 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         tv_precio_referencial_pack_credito= dialog.findViewById(R.id.tv_precio_referencial_pack_credito);
         tv_precio_contado= dialog.findViewById(R.id.tv_precio_contado);
         tv_precio_credito= dialog.findViewById(R.id.tv_precio_credito);
-
-        String contado="",credito="";
+        tv_precio_referencial_pack_contado_unit= dialog.findViewById(R.id.tv_precio_referencial_pack_contado_unit);
+        tv_precio_referencial_pack_credito_unit= dialog.findViewById(R.id.tv_precio_referencial_pack_credito_unit);
+        String contado="",credito="",units="";
         ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
         listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
                 getContext(),
@@ -653,6 +655,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         {
             contado=listaPrecioDetalleSQLiteEntities.get(i).getContado();
             credito=listaPrecioDetalleSQLiteEntities.get(i).getCredito();
+            units=listaPrecioDetalleSQLiteEntities.get(i).getUnit();
         }
 
         tv_precio_contado.setText(Convert.currencyForView(contado));
@@ -754,6 +757,53 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                 )
         ));
 
+
+
+
+        tv_precio_referencial_pack_contado_unit.setText(Convert.currencyForView(
+                formulasController.getPriceReferencePack(
+                        formulasController.getPriceReferencePack(
+                                formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                                        formulasController.getTotalPerLine(
+                                                contado,lead.getCantidadcompra()
+                                        ),
+                                        formulasController.applyDiscountPercentageForLine(
+                                                formulasController.getTotalPerLine(
+                                                        contado,lead.getCantidadcompra()
+                                                ),lead.getDescuento()
+                                        ),
+                                        promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
+                                                SesionEntity.compania_id,
+                                                lead.getLista_promocion_id(),
+                                                lead.getPromocion_id())
+                                ),
+                                lead.getCantidadcompra()
+                        ),
+                        units
+                )
+        ));
+        tv_precio_referencial_pack_credito_unit.setText(Convert.currencyForView(
+                formulasController.getPriceReferencePack(
+                        formulasController.getPriceReferencePack(
+                                formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                                        formulasController.getTotalPerLine(
+                                                credito,lead.getCantidadcompra()
+                                        ),
+                                        formulasController.applyDiscountPercentageForLine(
+                                                formulasController.getTotalPerLine(
+                                                        credito,lead.getCantidadcompra()
+                                                ),lead.getDescuento()
+                                        ),
+                                        promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
+                                                SesionEntity.compania_id,
+                                                lead.getLista_promocion_id(),
+                                                lead.getPromocion_id())
+                                ),
+                                lead.getCantidadcompra()
+                        ),
+                        units
+                )
+        ));
 
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);

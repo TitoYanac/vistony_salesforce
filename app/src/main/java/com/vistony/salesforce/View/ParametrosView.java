@@ -778,7 +778,8 @@ ParametrosView extends Fragment {
                                         "",
                                         "",
                                         "",
-                                        ""
+                                        "",
+                                        ListaCobranzaDetalleSQLiteEntity.get(i).getDocentry()
                                 );
                     }
                 }
@@ -998,7 +999,8 @@ ParametrosView extends Fragment {
                         Lista.get(i).getTypo(),
                         Lista.get(i).getPorcentaje_descuento(),
                         Lista.get(i).getStock_almacen(),
-                        Lista.get(i).getStock_general()
+                        Lista.get(i).getStock_general(),
+                        Lista.get(i).getUnit()
 
                 );
             }

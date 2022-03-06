@@ -69,7 +69,8 @@ public class RutaVendedorSQLiteDao {
              String chk_ruta,
              String fecharuta,
              String slpCode,
-             String userCode
+             String userCode,
+             String lastpurchase
     )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
@@ -107,7 +108,7 @@ public class RutaVendedorSQLiteDao {
             registro.put("saldomn", saldomn);
             registro.put("slpCode", slpCode);
             registro.put("userCode", userCode);
-
+            registro.put("lastpurchase", lastpurchase);
 
             bd.insert("rutavendedor", null, registro);
         }catch (Exception e)
@@ -203,6 +204,7 @@ public class RutaVendedorSQLiteDao {
 
             for(int i=0;i<listaClienteSQLiteEntity.size();i++){
                 terminopago_id=listaClienteSQLiteEntity.get(i).getTerminopago_id();
+                Log.e("REOS","RutaVendedorSQLiteDao.listaClienteSQLiteEntity.get(i).getTerminopago_id(): "+listaClienteSQLiteEntity.get(i).getTerminopago_id());
                 linea_credito_usado=listaClienteSQLiteEntity.get(i).getLinea_credito_usado();
                 domfactura_id=listaClienteSQLiteEntity.get(i).getDomfactura_id();
                 ShipToCode=listaClienteSQLiteEntity.get(i).getDomembarque_id();
@@ -242,6 +244,8 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setFecharuta(fila.getString(24));
             ObjListaClienteCabeceraEntity.setSaldo(fila.getString(25));
 
+            ObjListaClienteCabeceraEntity.setLastpurchase(fila.getString(30));
+            Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getLastpurchase"+ObjListaClienteCabeceraEntity.getLastpurchase());
             listaClienteCabeceraEntity.add(ObjListaClienteCabeceraEntity);
         }
 
@@ -469,6 +473,29 @@ public class RutaVendedorSQLiteDao {
         {
             System.out.println(e.getMessage());
         }
+        return resultado;
+    }
+
+    public int GetCountClientwithBalance (String fecharuta,String chkruta)
+    {
+        int resultado=0;
+
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select count(Cliente_id) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and saldomn>0",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        bd.close();
         return resultado;
     }
 

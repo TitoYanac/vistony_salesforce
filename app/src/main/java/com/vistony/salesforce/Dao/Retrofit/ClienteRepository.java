@@ -115,7 +115,8 @@ public class ClienteRepository extends ViewModel {
                         ObjCliente.setLista_precio(clienteEntityResponse.getClienteEntity().get(i).getLista_precio());
                         ObjCliente.setDueDays(clienteEntityResponse.getClienteEntity().get(i).getDiasVencidos());
                         ObjCliente.setDomfactura_id(clienteEntityResponse.getClienteEntity().get(i).getDomicilioFactura());
-
+                        ObjCliente.setLineofbusiness(clienteEntityResponse.getClienteEntity().get(i).getLineofbusiness());
+                        ObjCliente.setLastpurchase (clienteEntityResponse.getClienteEntity().get(i).getLastpurchase());
                         //la funcion addCustomer  debe darse aqui!
                         LCliente.add(ObjCliente);
                     }
@@ -218,9 +219,19 @@ public class ClienteRepository extends ViewModel {
                 Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
                 listaTemp=clienteSQlite.ObtenerClientesConsulta();
             }
-            else
+            else if(BuscarClienteView.Flujo.equals("dialogoagregarclienteMenu"))
             {
                 Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                listaTemp=clienteSQlite.ObtenerClientesConsulta();
+            }
+            else if(BuscarClienteView.Flujo.equals("kardexofpayment"))
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo-findClient-kardex:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                listaTemp=clienteSQlite.ObtenerClientesConsulta();
+            }
+            else
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo-ningunflujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");
                 listaTemp=clienteSQlite.ObtenerClientes();
             }
 

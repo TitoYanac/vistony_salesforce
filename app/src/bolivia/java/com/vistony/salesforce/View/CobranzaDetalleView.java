@@ -82,6 +82,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 
 import io.sentry.Sentry;
 
@@ -1095,191 +1096,188 @@ public class CobranzaDetalleView extends Fragment {
 
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza) {
         int resultado = 0, recibows = 0;
-        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "";
+        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0";
         FormulasController formulasController = new FormulasController(getContext());
-        cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
-        correlativorecibo = cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(SesionEntity.compania_id, SesionEntity.usuario_id);
+        Random numAleatorio = new Random();
+        int n = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
+        for (int k = 0; k < Lista.size(); k++) {
+            valorcobranza=Lista.get(k).getCobrado();
+        }
+
+        if(Float.parseFloat(valorcobranza)>=1) {
+
+            cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
+            correlativorecibo = cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(ObjUsuario.compania_id, ObjUsuario.usuario_id);
 
 
-        String[] separada = SesionEntity.recibo.split("R");
-        if (SesionEntity.recibo.equals("0")) {
-            tag2 = SesionEntity.recibo;
-        } else {
-            if (separada.length > 1) {
-                tag = separada[0];
-                tag2 = separada[1];
+            String[] separada = SesionEntity.recibo.split("R");
+            if (SesionEntity.recibo.equals("0")) {
+                tag2 = SesionEntity.recibo;
             } else {
-                tag = separada[0];
+                if (separada.length > 1) {
+                    tag = separada[0];
+                    tag2 = separada[1];
+                } else {
+                    tag = separada[0];
+                }
             }
-        }
 
-        if (tag.equals("")) {
-            tag = "0";
-        }
-
-
-        recibows = Integer.parseInt(tag);
-        if (correlativorecibo >= recibows) {
-            ultimocorrelativorecibo = correlativorecibo;
-        } else {
-            ultimocorrelativorecibo = recibows;
-        }
-
-        String bancarizado = "";
-        if (chk_bancarizado.isChecked()) {
-            bancarizado = "Y";
-        } else {
-            bancarizado = "N";
-        }
-
-        if (tipoCobranza.equals("Cobranza")) {
-            for (int i = 0; i < Lista.size(); i++) {
-                montocobrado = Lista.get(i).getCobrado();
-                cliente_id = String.valueOf(Lista.get(i).getCliente_id());
-                shipto = Lista.get(i).getDomembarque();
-                recibo = String.valueOf(ultimocorrelativorecibo + 1);
-                resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
-                        FormulasController.ObtenerFechaHoraCadena(),
-                        String.valueOf(Lista.get(i).getCliente_id()),
-                        String.valueOf(Lista.get(i).getDocumento_id()),
-                        SesionEntity.compania_id,
-                        String.valueOf(Lista.get(i).getImporte()),
-                        String.valueOf(Lista.get(i).getSaldo()),
-                        String.valueOf(Lista.get(i).getNuevo_saldo()),
-                        String.valueOf(Lista.get(i).getCobrado()),
-                        //fechaCobro
-                        fecha,
-                        recibo,
-                        String.valueOf(Lista.get(i).getNrodocumento()),
-                        SesionEntity.fuerzatrabajo_id,
-                        bancarizado,
-                        //Peru - Cambio necesario para letras
-                        //------------------
-                        //"0",
-                        String.valueOf(Lista.get(i).getNrodocumento()),
-                        //------------------
-                        SesionEntity.usuario_id,
-                        comentario,
-                        "N",
-                        "Y",
-                        "",
-                        "N",
-                        "Y",
-                        "N",
-                        SesionEntity.pagodirecto,
-                        SesionEntity.pagopos,
-                        "",
-                        "",
-                        obtenerHoraActual()
-                );
-
-                ActualizaDocumentoDeuda(SesionEntity.compania_id,
-                        String.valueOf(Lista.get(i).getDocumento_id()),
-                        String.valueOf(Lista.get(i).getNuevo_saldo()));
-
+            if (tag.equals("")) {
+                tag = "0";
             }
-        } else if (tipoCobranza.equals("Cobranza/Deposito")) {
-            String sumacobrado = "";
-            for (int i = 0; i < Lista.size(); i++) {
-                cliente_id = String.valueOf(Lista.get(i).getCliente_id());
-                shipto = Lista.get(i).getDomembarque();
-                recibo = String.valueOf(ultimocorrelativorecibo + 1);
-                sumacobrado = String.valueOf(Lista.get(i).getCobrado());
-                montocobrado = sumacobrado;
-                resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
-                        FormulasController.ObtenerFechaHoraCadena(),
-                        String.valueOf(Lista.get(i).getCliente_id()),
-                        String.valueOf(Lista.get(i).getDocumento_id()),
-                        SesionEntity.compania_id,
-                        String.valueOf(Lista.get(i).getImporte()),
-                        String.valueOf(Lista.get(i).getSaldo()),
-                        String.valueOf(Lista.get(i).getNuevo_saldo()),
-                        sumacobrado,
-                        fecha,
-                        recibo,
-                        String.valueOf(Lista.get(i).getNrodocumento()),
-                        SesionEntity.fuerzatrabajo_id,
-                        bancarizado,
-                        "",
-                        SesionEntity.usuario_id,
-                        comentario,
-                        "Y",
-                        "N",
-                        "11",
-                        "N",
-                        "N",
-                        "N",
-                        SesionEntity.pagodirecto,
-                        SesionEntity.pagopos,
-                        "",
-                        "",
-                        obtenerHoraActual()
-                );
 
 
-                ActualizaDocumentoDeuda(SesionEntity.compania_id,
-                        String.valueOf(Lista.get(i).getDocumento_id()),
-                        String.valueOf(Lista.get(i).getNuevo_saldo()));
-
+            recibows = Integer.parseInt(tag);
+            if (correlativorecibo >= recibows) {
+                ultimocorrelativorecibo = correlativorecibo;
+            } else {
+                ultimocorrelativorecibo = recibows;
             }
-            addDepositPOS(sumacobrado);
-            /*hiloEnviarWSCobranzaCabecera = new CobranzaDetalleView.HiloEnviarWSCobranzaCabecera();
-            hiloEnviarWSCobranzaCabecera.execute(
-                    SesionEntity.fuerzatrabajo_id+recibo,
-                    "BCPMN",
-                    sumacobrado,
-                    "Deposito",
-                    bancarizado,
-                    "1900-01-01",
-                    fecha,
-                    SesionEntity.pagodirecto);*/
+
+            String bancarizado = "";
+            if (chk_bancarizado.isChecked()) {
+                bancarizado = "Y";
+            } else {
+                bancarizado = "N";
+            }
+
+            if (tipoCobranza.equals("Cobranza")) {
+                for (int i = 0; i < Lista.size(); i++) {
+                    montocobrado = Lista.get(i).getCobrado();
+                    cliente_id = String.valueOf(Lista.get(i).getCliente_id());
+                    cardname = Lista.get(i).getNombrecliente();
+                    shipto = Lista.get(i).getDomembarque();
+                    recibo = String.valueOf(ultimocorrelativorecibo + 1);
+                    resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
+                            FormulasController.ObtenerFechaHoraCadena(),
+                            String.valueOf(Lista.get(i).getCliente_id()),
+                            String.valueOf(Lista.get(i).getDocumento_id()),
+                            ObjUsuario.compania_id,
+                            String.valueOf(Lista.get(i).getImporte()),
+                            String.valueOf(Lista.get(i).getSaldo()),
+                            String.valueOf(Lista.get(i).getNuevo_saldo()),
+                            String.valueOf(Lista.get(i).getCobrado()),
+                            //fechaCobro
+                            fecha,
+                            recibo,
+                            String.valueOf(Lista.get(i).getNrodocumento()),
+                            ObjUsuario.fuerzatrabajo_id,
+                            bancarizado,
+                            //Peru - Cambio necesario para letras
+                            //------------------
+                            //"0",
+                            String.valueOf(Lista.get(i).getNrodocumento()),
+                            //------------------
+                            ObjUsuario.usuario_id,
+                            comentario,
+                            "N",
+                            "Y",
+                            "",
+                            "N",
+                            "Y",
+                            "N",
+                            SesionEntity.pagodirecto,
+                            SesionEntity.pagopos,
+                            "",
+                            "",
+                            obtenerHoraActual(),
+                            cardname,
+                            String.valueOf(n),
+                            Lista.get(i).getDocentry()
+                    );
+
+                    ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                            String.valueOf(Lista.get(i).getDocumento_id()),
+                            String.valueOf(Lista.get(i).getNuevo_saldo()));
+
+                }
+            } else if (tipoCobranza.equals("Cobranza/Deposito")) {
+                String sumacobrado = "";
+                for (int i = 0; i < Lista.size(); i++) {
+                    cliente_id = String.valueOf(Lista.get(i).getCliente_id());
+                    shipto = Lista.get(i).getDomembarque();
+                    recibo = String.valueOf(ultimocorrelativorecibo + 1);
+                    sumacobrado = String.valueOf(Lista.get(i).getCobrado());
+                    montocobrado = sumacobrado;
+                    resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
+                            FormulasController.ObtenerFechaHoraCadena(),
+                            String.valueOf(Lista.get(i).getCliente_id()),
+                            String.valueOf(Lista.get(i).getDocumento_id()),
+                            ObjUsuario.compania_id,
+                            String.valueOf(Lista.get(i).getImporte()),
+                            String.valueOf(Lista.get(i).getSaldo()),
+                            String.valueOf(Lista.get(i).getNuevo_saldo()),
+                            sumacobrado,
+                            fecha,
+                            recibo,
+                            String.valueOf(Lista.get(i).getNrodocumento()),
+                            ObjUsuario.fuerzatrabajo_id,
+                            bancarizado,
+                            "",
+                            ObjUsuario.usuario_id,
+                            comentario,
+                            "Y",
+                            "N",
+                            "11",
+                            "N",
+                            "N",
+                            "N",
+                            SesionEntity.pagodirecto,
+                            SesionEntity.pagopos,
+                            "",
+                            "",
+                            obtenerHoraActual(),
+                            cardname,
+                            String.valueOf(n),
+                            Lista.get(i).getDocentry()
+                    );
+
+
+                    ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                            String.valueOf(Lista.get(i).getDocumento_id()),
+                            String.valueOf(Lista.get(i).getNuevo_saldo()));
+
+                }
+                addDepositPOS(sumacobrado);
+            }
+            chk_bancarizado.setFocusable(false);
+            chk_bancarizado.setClickable(false);
+
+
+            VisitaSQLiteEntity visita = new VisitaSQLiteEntity();
+            visita.setCardCode(cliente_id);
+            visita.setAddress(shipto);
+            visita.setType("02");
+            visita.setObservation("Se genero el recibo " + recibo + " para el cliente: " + cliente_id);
+            visita.setLatitude("" + latitude);
+            visita.setLongitude("" + longitude);
+
+            formulasController.RegistraVisita(visita, getActivity(), montocobrado);
+
+            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            //UpdateSendReceipt();
+            cobranzaRepository.UndepositedPendingCollection(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+            ///////////////////////////// ENVIAR DEPOSITOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+
         }
-
-        /*GENERAR UN DEPOSITO GENERA UNA VISITA AL CLIENTE?????? */
-
-        /*
-        formulasController.RegistraVisita(
-                cliente_id_visita,
-                domembarque_id_visita,
-                zona_id_visita,
-                "02",
-                "02-MOTIVO 02",
-                "Registro Cobranza",
-                getActivity(),
-                String.valueOf(latitude),
-                String.valueOf(longitude)
-        );*/
-
-        chk_bancarizado.setFocusable(false);
-        chk_bancarizado.setClickable(false);
-
-
-        VisitaSQLiteEntity visita = new VisitaSQLiteEntity();
-        visita.setCardCode(cliente_id);
-        visita.setAddress(shipto);
-        visita.setType("02");
-        visita.setObservation("Se genero el recibo " + recibo + " para el cliente: " + cliente_id);
-        visita.setLatitude("" + latitude);
-        visita.setLongitude("" + longitude);
-
-        formulasController.RegistraVisita(visita, getActivity(), montocobrado);
-
-        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        //UpdateSendReceipt();
-        cobranzaRepository.UndepositedPendingCollection(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
-        });
-        ///////////////////////////// ENVIAR DEPOSITOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
-        });
-
-        /*/////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO - Con Conteo de Envio\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.UndepositedPendingCollectionCountSend(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
-
-         */
+            else {
+                et_cobrado_edit.setText(null);
+                Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido, verifique su cobranza por:  "+valorcobranza, Toast.LENGTH_SHORT).show();
+                Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
+                drawable = DrawableCompat.wrap(drawable);
+                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+                menu_variable.findItem(R.id.guardar).setIcon(drawable);
+                guardar.setEnabled(false);
+            }
         return resultado;
 
     }

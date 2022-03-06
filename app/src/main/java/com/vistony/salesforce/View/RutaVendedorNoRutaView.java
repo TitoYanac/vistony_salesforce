@@ -115,6 +115,7 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
             listaClienteCabeceraEntity.setCorreo ( listaConsClienteCabeceraEntities.get(i).getCorreo());
             listaClienteCabeceraEntity.setUbigeo_id ( listaConsClienteCabeceraEntities.get(i).getUbigeo_id());
             listaClienteCabeceraEntity.setTipocambio ( listaConsClienteCabeceraEntities.get(i).getTipocambio());
+            listaClienteCabeceraEntity.setLastpurchase ( listaConsClienteCabeceraEntities.get(i).getLastpurchase());
             listaClienteCabeceraEntities.add(listaClienteCabeceraEntity);
         }
         clienteagregado=true;
@@ -245,6 +246,7 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
                 fecha = dateFormat.format(date);
                 if (clienteagregado) {
                     formulasController.RegistrarRutaVendedor(listaConsClienteCabeceraEntities, fecha, chk_ruta);
+                    //formulasController.RegistrarRutaVendedor(listaClienteCabeceraEntities, fecha, chk_ruta);
                     clienteagregado = false;
                 }else{
                     Log.e("PERCONA","CAYO EN EL ELSEEEEE");

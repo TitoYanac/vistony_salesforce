@@ -300,12 +300,22 @@ public class CobranzaRepository extends ViewModel {
             Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-COBRANZA-api"+api.toString());
         }else if(TipoFecha.equals("PENDIENTE_DEPOSITO"))
         {
-            Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-PENDIENTE_DEPOSITO-entro");
-            call = api.getHistoricoCobranzaPDSupervisor(
-                    Imei,
-                    "PD",
-                    SesionEntity.usuario_id
-            );
+            if(BuildConfig.FLAVOR.equals("peru"))
+            {
+                Log.e("REOS", "CobranzaRepository-getHistoricoCobranza-TipoFecha-PENDIENTE_DEPOSITO-entro");
+                call = api.getHistoricoCobranzaPDSupervisor(
+                        Imei,
+                        "PD",
+                        SesionEntity.usuario_id
+                );
+            }else {
+                Log.e("REOS", "CobranzaRepository-getHistoricoCobranza-TipoFecha-PENDIENTE_DEPOSITO-entro");
+                call = api.getHistoricoCobranzaPD(
+                        Imei,
+                        "PD"
+                );
+            }
+
         }else if(TipoFecha.equals("RECIBO_ANULADO"))
         {
             Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-RECIBO_ANULADO-entro");
@@ -854,28 +864,57 @@ public class CobranzaRepository extends ViewModel {
             //Response<HistoricoCobranzaEntityResponse> response= call.execute();
             //if(response.isSuccessful()) {
             //RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
-            Config.getClient().create(Api.class).getHistoricoCobranzaPDSupervisor(SesionEntity.imei,"PD",SesionEntity.usuario_id).enqueue(new Callback<HistoricoCobranzaEntityResponse>() {
-                @Override
-                public void onResponse(Call<HistoricoCobranzaEntityResponse> call, Response<HistoricoCobranzaEntityResponse> response) {
 
-                    if(response.isSuccessful()) {
-                                HistoricoCobranzaEntityResponse historicoCobranzaEntityResponse=response.body();
-                                CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(contexto);
-                                cobranzaDetalleSQLiteDao.addCollection(historicoCobranzaEntityResponse);
+            if(BuildConfig.FLAVOR.equals("peru")) {
+                Config.getClient().create(Api.class).getHistoricoCobranzaPDSupervisor(SesionEntity.imei, "PD", SesionEntity.usuario_id).enqueue(new Callback<HistoricoCobranzaEntityResponse>() {
+                    @Override
+                    public void onResponse(Call<HistoricoCobranzaEntityResponse> call, Response<HistoricoCobranzaEntityResponse> response) {
 
-                        responseData.add("Se Sincronizaron los recibos Correctamente");
-                        callback.onResponseSap(responseData);
-                    } else {
-                        responseData.add("No se encontraron los Recibos con QR Pendientes");
-                        callback.onResponseErrorSap(response.message());
+                        if (response.isSuccessful()) {
+                            HistoricoCobranzaEntityResponse historicoCobranzaEntityResponse = response.body();
+                            CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(contexto);
+                            cobranzaDetalleSQLiteDao.addCollection(historicoCobranzaEntityResponse);
+
+                            responseData.add("Se Sincronizaron los recibos Correctamente");
+                            callback.onResponseSap(responseData);
+                        } else {
+                            responseData.add("No se encontraron los Recibos con QR Pendientes");
+                            callback.onResponseErrorSap(response.message());
+                        }
                     }
-                }
-                @Override
-                public void onFailure(Call<HistoricoCobranzaEntityResponse> call, Throwable t) {
-                    callback.onResponseErrorSap(t.getMessage());
-                    call.cancel();
-                }
-            });
+
+                    @Override
+                    public void onFailure(Call<HistoricoCobranzaEntityResponse> call, Throwable t) {
+                        callback.onResponseErrorSap(t.getMessage());
+                        call.cancel();
+                    }
+                });
+
+            }else {
+                Config.getClient().create(Api.class).getHistoricoCobranzaPD(SesionEntity.imei, "PD").enqueue(new Callback<HistoricoCobranzaEntityResponse>() {
+                    @Override
+                    public void onResponse(Call<HistoricoCobranzaEntityResponse> call, Response<HistoricoCobranzaEntityResponse> response) {
+
+                        if (response.isSuccessful()) {
+                            HistoricoCobranzaEntityResponse historicoCobranzaEntityResponse = response.body();
+                            CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(contexto);
+                            cobranzaDetalleSQLiteDao.addCollection(historicoCobranzaEntityResponse);
+
+                            responseData.add("Se Sincronizaron los recibos Correctamente");
+                            callback.onResponseSap(responseData);
+                        } else {
+                            responseData.add("No se encontraron los Recibos con QR Pendientes");
+                            callback.onResponseErrorSap(response.message());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<HistoricoCobranzaEntityResponse> call, Throwable t) {
+                        callback.onResponseErrorSap(t.getMessage());
+                        call.cancel();
+                    }
+                });
+            }
         }else{
             callback.onResponseErrorSap("Base de datos con data, no es necesario sincronizar");
         }

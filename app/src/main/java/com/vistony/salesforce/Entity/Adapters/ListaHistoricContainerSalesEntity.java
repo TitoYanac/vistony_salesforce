@@ -7,20 +7,37 @@ public class ListaHistoricContainerSalesEntity {
     public String mes;
     public String variable;
     public String total;
-
-    public ListaHistoricContainerSalesEntity(String fuerzatrabajo_id, String usuario_id, String anio, String mes, String variable, String total) {
+    public String galoun;
+    public String umd;
+    public ListaHistoricContainerSalesEntity(String fuerzatrabajo_id, String usuario_id, String anio, String mes, String variable, String total,String galoun,String umd) {
         this.fuerzatrabajo_id = fuerzatrabajo_id;
         this.usuario_id = usuario_id;
         this.anio = anio;
         this.mes = mes;
         this.variable = variable;
         this.total = total;
-
+        this.galoun = galoun;
+        this.umd = umd;
     }
 
     public ListaHistoricContainerSalesEntity() {
     }
 
+    public String getGaloun() {
+        return galoun;
+    }
+
+    public void setGaloun(String galoun) {
+        this.galoun = galoun;
+    }
+
+    public String getUmd() {
+        return umd;
+    }
+
+    public void setUmd(String umd) {
+        this.umd = umd;
+    }
 
     public String getFuerzatrabajo_id() {
         return fuerzatrabajo_id;

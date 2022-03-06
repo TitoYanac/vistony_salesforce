@@ -33,8 +33,11 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String linea_credito_usado;
     private String fecharuta;
     private String lista_precio;
+    private String docentry;
+    private String lastpurchase;
+    private String lineofbussiness;
 
-    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id,String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String linea_credito_usado,   String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta,String lista_precio) {
+    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String linea_credito_usado, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta, String lista_precio, String docentry,String lastpurchase,String lineofbussiness) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -42,13 +45,12 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.imvclientecabecera = imvclientecabecera;
         this.moneda = moneda;
         this.domembarque_id = domembarque_id;
-        this.domfactura_id=domfactura_id;
+        this.domfactura_id = domfactura_id;
         this.impuesto_id = impuesto_id;
         this.impuesto = impuesto;
         this.rucdni = rucdni;
         this.categoria = categoria;
         this.linea_credito = linea_credito;
-        this.linea_credito_usado=linea_credito_usado;
         this.terminopago_id = terminopago_id;
         this.zona_id = zona_id;
         this.compania_id = compania_id;
@@ -63,10 +65,37 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.chk_pedido = chk_pedido;
         this.chk_cobranza = chk_cobranza;
         this.chk_ruta = chk_ruta;
+        this.linea_credito_usado = linea_credito_usado;
         this.fecharuta = fecharuta;
-        this.lista_precio=lista_precio;
+        this.lista_precio = lista_precio;
+        this.docentry = docentry;
+        this.lastpurchase = lastpurchase;
+        this.lineofbussiness = lineofbussiness;
     }
 
+    public String getLineofbussiness() {
+        return lineofbussiness;
+    }
+
+    public void setLineofbussiness(String lineofbussiness) {
+        this.lineofbussiness = lineofbussiness;
+    }
+
+    public String getLastpurchase() {
+        return lastpurchase;
+    }
+
+    public void setLastpurchase(String lastpurchase) {
+        this.lastpurchase = lastpurchase;
+    }
+
+    public String getDocentry() {
+        return docentry;
+    }
+
+    public void setDocentry(String docentry) {
+        this.docentry = docentry;
+    }
 
     public String getDomfactura_id() {
         return domfactura_id;

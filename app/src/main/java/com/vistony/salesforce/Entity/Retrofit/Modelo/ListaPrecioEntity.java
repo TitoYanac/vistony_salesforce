@@ -37,6 +37,17 @@ public class ListaPrecioEntity {
     @SerializedName("CashDscnt")
     private String cashdscnt;
 
+    @SerializedName("Units")
+    private String unit;
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public String getCashdscnt() {
         return cashdscnt;
     }

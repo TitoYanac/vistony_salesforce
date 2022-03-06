@@ -75,4 +75,5 @@
     <string name="lbl_address">Dirección:</string>
     <string name="lbl_credit">Crédito:</string>
     <string name="lbl_f_emision">F.Emisión:</string>
+    <string name="lbl_lastpurchase">Ult.Compra</string>
 </resources>

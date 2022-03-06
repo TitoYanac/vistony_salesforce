@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:text="SKU's con Venta Promedio Antiguedad 3 meses"
+                android:text="Historico de Venta a 6 meses, Productos no comprados en 3 meses en Rojo"
                 android:textAlignment="center"
                 android:gravity="center"
                 android:layout_gravity="center"
@@ -41,11 +41,57 @@
 
         </TableRow>
     </TableLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity=""
+        android:layout_marginTop="40dp"
+        android:background="@color/colorPrimary"
+        android:focusable="false">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="8"
+            >
+            <TextView
+                android:id="@+id/lbl_linea_negocio"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:text="Linea Negocio:"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold"
+
+                >
+            </TextView>
+            <TextView
+                android:id="@+id/tv_linea_negocio"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:text="Linea Negocio:"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                >
+
+            </TextView>
+
+
+        </TableRow>
+    </TableLayout>
     <ListView
         android:id="@+id/lv_HistoricContainerSKU"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="70dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="70dp"
         />
     <TableLayout
         android:layout_width="match_parent"

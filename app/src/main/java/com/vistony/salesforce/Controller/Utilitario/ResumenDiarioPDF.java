@@ -177,7 +177,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevendedor.disableBorderSide(Rectangle.BOX);
             cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvendedor.addCell(cellTablevendedor);
-            cellTablevendedor = new PdfPCell(new Phrase(fechasap,font3));
+            cellTablevendedor = new PdfPCell(new Phrase(Induvis.getDate(BuildConfig.FLAVOR, fechasap) ,font3));
             cellTablevendedor.disableBorderSide(Rectangle.BOX);
             cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvendedor.addCell(cellTablevendedor);
@@ -192,7 +192,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tbllblvariable.addCell(cellTablelblvariable);
             documento.add(tbllblvariable);
             //float[] columnWidthsCabecera = {1.5f,10f,7f};
-            PdfPTable tblCabecera = new PdfPTable(3);
+            PdfPTable tblCabecera = new PdfPTable(5);
             tblCabecera.setWidthPercentage(100);
             PdfPCell cellCabecera = null;
             cellCabecera = new PdfPCell(new Phrase("ÍTEM",font6));
@@ -203,13 +203,20 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblCabecera.addCell(cellCabecera);
+            cellCabecera = new PdfPCell(new Phrase("UMD",font6));
+            cellCabecera.disableBorderSide(Rectangle.BOX);
+            cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tblCabecera.addCell(cellCabecera);
             cellCabecera = new PdfPCell(new Phrase("MONTO",font6));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblCabecera.addCell(cellCabecera);
+            cellCabecera = new PdfPCell(new Phrase("GALON",font6));
+            cellCabecera.disableBorderSide(Rectangle.BOX);
+            cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tblCabecera.addCell(cellCabecera);
 
-
-            Log.d("REOS","DocumentCobranzaPDF.generarPdf.resumenDiarioEntityList.size:" + resumenDiarioEntityList.size());
+            //Log.d("REOS","DocumentCobranzaPDF.generarPdf.resumenDiarioEntityList.size:" + resumenDiarioEntityList.size());
             if(resumenDiarioEntityList!=null)
             {
                 for(int i=0;i<resumenDiarioEntityList.size();i++)
@@ -222,7 +229,15 @@ public class ResumenDiarioPDF extends AppCompatActivity {
                     cellCabecera.disableBorderSide(Rectangle.BOX);
                     cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
                     tblCabecera.addCell(cellCabecera);
+                    cellCabecera = new PdfPCell(new Phrase(resumenDiarioEntityList.get(i).getUmd(),font3));
+                    cellCabecera.disableBorderSide(Rectangle.BOX);
+                    cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    tblCabecera.addCell(cellCabecera);
                     cellCabecera = new PdfPCell(new Phrase((resumenDiarioEntityList.get(i).getMontototal()),font3));
+                    cellCabecera.disableBorderSide(Rectangle.BOX);
+                    cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    tblCabecera.addCell(cellCabecera);
+                    cellCabecera = new PdfPCell(new Phrase((resumenDiarioEntityList.get(i).getSumgaloun()),font3));
                     cellCabecera.disableBorderSide(Rectangle.BOX);
                     cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
                     tblCabecera.addCell(cellCabecera);
@@ -269,6 +284,14 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
             cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")),font3));
+            cellTablevisitados.disableBorderSide(Rectangle.BOX);
+            cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblvisitados.addCell(cellTablevisitados);
+            cellTablevisitados=new PdfPCell(new Phrase("CON DEUDA",font6));
+            cellTablevisitados.disableBorderSide(Rectangle.BOX);
+            cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblvisitados.addCell(cellTablevisitados);
+            cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")),font3));
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
@@ -362,6 +385,24 @@ public class ResumenDiarioPDF extends AppCompatActivity {
                 celltblefectividad=new PdfPCell(new Phrase(
                         Induvis.getAmountRouteeffectiveness(
                                 (rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1")),
+                                rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
+                        ),font3));
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+                Log.e("REOS","DocumentCobranzaPDF.generarPdf.e:" + e.toString());
+            }
+            celltblefectividad.disableBorderSide(Rectangle.BOX);
+            celltblefectividad.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tblefectividad.addCell(celltblefectividad);
+            celltblefectividad=new PdfPCell(new Phrase("EFECTIVIDAD VISITA",font6));
+            celltblefectividad.disableBorderSide(Rectangle.BOX);
+            celltblefectividad.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblefectividad.addCell(celltblefectividad);
+            try{
+                celltblefectividad=new PdfPCell(new Phrase(
+                        Induvis.getAmountRouteeffectiveness(
+                                (rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1")),
                                 rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
                         ),font3));
             }catch (Exception e)
@@ -378,7 +419,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tblnoruta = new PdfPTable(1);
             tblnoruta.setWidthPercentage(100);
             PdfPCell cellTablenoruta = null;
-            cellTablenoruta=new PdfPCell(new Phrase("****************************************NO RUTA*********************************",font6));
+            cellTablenoruta=new PdfPCell(new Phrase("**********************************FUERA DE RUTA******************************",font6));
             cellTablenoruta.disableBorderSide(Rectangle.BOX);
             cellTablenoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblnoruta.addCell(cellTablenoruta);

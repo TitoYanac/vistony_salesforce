@@ -24,7 +24,29 @@ public class HistoricContainerSalesEntity {
     @SerializedName("TotalMN")
     public String montototal;
 
+    @SerializedName("Galones")
+    public String sumgaloun;
+
+    @SerializedName("UOM")
+    public String umd;
+
     public String fechasap;
+
+    public String getUmd() {
+        return umd;
+    }
+
+    public void setUmd(String umd) {
+        this.umd = umd;
+    }
+
+    public String getSumgaloun() {
+        return sumgaloun;
+    }
+
+    public void setSumgaloun(String sumgaloun) {
+        this.sumgaloun = sumgaloun;
+    }
 
     public String getFechasap() {
         return fechasap;

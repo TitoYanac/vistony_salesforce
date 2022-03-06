@@ -68,11 +68,11 @@ public class HistoricContainerSKU extends Fragment {
     static ListaHistoricContainerSalesAdapter listaHistoricContainerSalesAdapter;
     static HistoricContainerSalesRepository historicContainerSalesRepository;
     public static OnFragmentInteractionListener mListener;
-    static public String CardCode="",CardName="";
+    static public String CardCode="",CardName="",LineOfBussiness="";
     MenuItem buscar_cliente;
     static LifecycleOwner activity;
     static Activity Activity;
-    static TextView tv_cantidad_historico_venta,tv_monto_historico_venta;
+    static TextView tv_cantidad_historico_venta,tv_monto_historico_venta,tv_linea_negocio;
     static private ProgressDialog pd;
     public HistoricContainerSKU() {
         // Required empty public constructor
@@ -111,6 +111,7 @@ public class HistoricContainerSKU extends Fragment {
         {
             CardCode=Listado.get(i).getCliente_id();
             CardName=Listado.get(i).getNombrecliente();
+            LineOfBussiness=Listado.get(i).getLineofbussiness();
         }
         ObtenerListaHistoricContainerSKU();
         Induvis.setTituloContenedor(CardName,Activity);
@@ -138,6 +139,8 @@ public class HistoricContainerSKU extends Fragment {
         lv_HistoricContainerSKU=v.findViewById(R.id.lv_HistoricContainerSKU);
         tv_cantidad_historico_venta=v.findViewById(R.id.tv_cantidad_historico_venta);
         tv_monto_historico_venta=v.findViewById(R.id.tv_monto_historico_venta);
+        tv_linea_negocio=v.findViewById(R.id.tv_linea_negocio);
+
         dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         context = getContext();
@@ -161,6 +164,7 @@ public class HistoricContainerSKU extends Fragment {
                 suma=suma+Double.parseDouble(lista.get(i).getMontototal());
             }
             tv_monto_historico_venta.setText(Convert.currencyForView(String.valueOf(suma)));
+            tv_linea_negocio.setText(LineOfBussiness);
         }catch (Exception e)
         {
             Log.e("REOS","HistoricContainerSaleFocoView-ListarHistoricContainerSalesFoco-e:"+e.toString());

@@ -323,6 +323,48 @@
                         android:textStyle="bold"
                         android:text="P.CREDITO" />
                 </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:id="@+id/tablerowppromounit"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_precio_referencial_unit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:textAlignment="textStart"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textColor="#D6001C"
+                        android:text="P.PROMO UNIT." />
+                    <TextView
+                        android:id="@+id/tv_precio_referencial_pack_contado_unit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="textEnd"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:textColor="#D6001C"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:text="P.CONTADO.U" />
+                    <TextView
+                        android:id="@+id/tv_precio_referencial_pack_credito_unit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="textEnd"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:textColor="#D6001C"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:text="P.CREDITO.U" />
+                </TableRow>
             </TableLayout>
 
 

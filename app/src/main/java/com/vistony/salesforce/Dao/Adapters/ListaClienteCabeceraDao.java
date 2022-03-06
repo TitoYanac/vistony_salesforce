@@ -1,6 +1,7 @@
 package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
@@ -80,7 +81,11 @@ public class ListaClienteCabeceraDao {
                         ,Lista.get(i).getChk_ruta()
                         ,Lista.get(i).getFecharuta()
                         ,Lista.get(i).getLista_precio()
+                        ,Lista.get(i).getDocentry()
+                        ,Lista.get(i).getLastpurchase()
+                        ,Lista.get(i).getLineofbussiness()
                 ));
+                Log.e("REOS","ListaClienteCabeceraDao.getLeads.Lista.get(i).getLastpurchase())"+Lista.get(i).getLastpurchase());
             }
         }catch (Exception e){
             e.printStackTrace();
