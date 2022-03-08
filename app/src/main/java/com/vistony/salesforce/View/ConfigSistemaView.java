@@ -166,6 +166,9 @@ public class ConfigSistemaView extends Fragment{
         clearTemp.setOnClickListener(v->{
             File fdelete = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"OrdenVenta");
             File fdelete2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"Cobranza");
+            File fdelete3 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"ResumenDiario");
+            File fdelete4 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"KardexPago");
+            File fdelete5 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"Quota");
             if (fdelete.isDirectory()){
                 String[] children = fdelete.list();
                 for (int i = 0; i < children.length; i++)
@@ -181,6 +184,33 @@ public class ConfigSistemaView extends Fragment{
                     new File(fdelete2, children[i]).delete();
                 }
             }
+
+            if (fdelete3.isDirectory()){
+                String[] children = fdelete3.list();
+                for (int i = 0; i < children.length; i++)
+                {
+                    new File(fdelete3, children[i]).delete();
+                }
+            }
+
+            if (fdelete4.isDirectory()){
+                String[] children = fdelete4.list();
+                for (int i = 0; i < children.length; i++)
+                {
+                    new File(fdelete4, children[i]).delete();
+                }
+            }
+
+            if (fdelete5.isDirectory()){
+                String[] children = fdelete5.list();
+                for (int i = 0; i < children.length; i++)
+                {
+                    new File(fdelete5, children[i]).delete();
+                }
+            }
+
+
+
             Toast.makeText(getContext(), "Proceso terminado...", Toast.LENGTH_SHORT).show();
 
         });

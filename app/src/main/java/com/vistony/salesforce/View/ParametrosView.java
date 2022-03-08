@@ -347,19 +347,19 @@ ParametrosView extends Fragment {
 
         ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
         cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
+            Log.e("REOS-ParametrosView-depositedPendingCollection","=>"+data);
         });
         ///////////////////////////// ENVIAR PEDIDOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         ordenVentaRepository.salesOrderResend(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
+            Log.e("REOS-ParametrosView-salesOrderResend", "=>" + data);
         });
         ///////////////////////////// ENVIAR VISITAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         visitaRepository.visitResend(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
+            Log.e("REOS-ParametrosView-visitResend", "=>" + data);
         });
         ///////////////////////////// ENVIAR DEPOSITOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
+            Log.e("REOS-ParametrosView-depositResend", "=>" + data);
         });
 
         ///////////////////////////// ENVIAR COBRANZAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -375,11 +375,11 @@ ParametrosView extends Fragment {
         }
         ////////////////////////SINCRONIZACION ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         cobranzaRepository.Synchronizevoidedreceipts(getContext(),SesionEntity.imei).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
+            Log.e("REOS-ParametrosView-Synchronizevoidedreceipts-","=>"+data);
         });
         ///////////////////////////// BANCO SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         bancoRepository.getAndInsertBank(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
+            Log.e("REOS-ParametrosView-getAndInsertBank-","=>"+data);
         });
 
         ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

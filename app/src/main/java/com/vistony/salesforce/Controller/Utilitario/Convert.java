@@ -172,6 +172,7 @@ public class Convert {
                 listKardexOfPaymentEntity.DocAmount=ListKardexPagoEntity.get(i).getDocTotal();
                 listKardexOfPaymentEntity.balance=ListKardexPagoEntity.get(i).getsALDO();
                 listKardexOfPaymentEntity.invoice=false;
+                listKardexOfPaymentEntity.paymentterms =ListKardexPagoEntity.get(i).getPymntGroup();
                 ListKardexOfPaymentEntity.add(listKardexOfPaymentEntity);
             }
             else
@@ -207,6 +208,7 @@ public class Convert {
                         listKardexOfPaymentEntity.DocAmount=ListKardexPagoEntity.get(i).getDocTotal();
                         listKardexOfPaymentEntity.balance=ListKardexPagoEntity.get(i).getsALDO();
                         listKardexOfPaymentEntity.invoice=false;
+                        listKardexOfPaymentEntity.paymentterms =ListKardexPagoEntity.get(i).getPymntGroup();
                         ListKardexOfPaymentEntity.add(listKardexOfPaymentEntity);
                     }
                 }

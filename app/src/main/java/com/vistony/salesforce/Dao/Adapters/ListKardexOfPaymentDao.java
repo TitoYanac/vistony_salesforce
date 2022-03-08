@@ -42,6 +42,7 @@ public class ListKardexOfPaymentDao {
                         , Lista.get(i).getDocAmount()
                         , Lista.get(i).getBalance()
                         , Lista.get(i).isInvoice()
+                        , Lista.get(i).getPaymentterms()
                 ));
             }
         }catch (Exception e)

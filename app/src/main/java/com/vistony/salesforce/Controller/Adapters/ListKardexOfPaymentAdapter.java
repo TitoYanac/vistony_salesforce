@@ -54,6 +54,8 @@ public class ListKardexOfPaymentAdapter extends ArrayAdapter<ListKardexOfPayment
             holder.tv_DocAmount = (TextView) convertView.findViewById(R.id.tv_DocAmount);
             holder.tv_balance = (TextView) convertView.findViewById(R.id.tv_balance);
             holder.chk_invoice = (CheckBox) convertView.findViewById(R.id.chk_invoice);
+            holder.tv_paymentterms = (TextView) convertView.findViewById(R.id.tv_paymentterms);
+
             convertView.setTag(holder);
         } else {
             holder = (ListKardexOfPaymentAdapter.ViewHolder) convertView.getTag();
@@ -69,7 +71,7 @@ public class ListKardexOfPaymentAdapter extends ArrayAdapter<ListKardexOfPayment
         holder.tv_DocAmount.setText(lead.getDocAmount());
         holder.tv_balance.setText(lead.getBalance());
         holder.chk_invoice.setChecked(lead.isInvoice());
-
+        holder.tv_paymentterms.setText (lead.getPaymentterms());
         holder.chk_invoice.setOnClickListener(new View.OnClickListener() {
                                                @Override
                                                public void onClick(View v) {
@@ -98,6 +100,7 @@ public class ListKardexOfPaymentAdapter extends ArrayAdapter<ListKardexOfPayment
         TextView tv_duedate;
         TextView tv_DocAmount;
         TextView tv_balance;
+        TextView tv_paymentterms;
         CheckBox chk_invoice;
     }
 

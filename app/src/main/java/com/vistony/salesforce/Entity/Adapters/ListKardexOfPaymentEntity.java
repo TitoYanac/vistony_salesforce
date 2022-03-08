@@ -9,16 +9,26 @@ public class ListKardexOfPaymentEntity {
     public String DocAmount;
     public String balance;
     public boolean invoice;
+    public String paymentterms;
 
-    public ListKardexOfPaymentEntity(String legalnumber, String invoicedate, String duedate, String docAmount, String balance, boolean invoice) {
+    public ListKardexOfPaymentEntity(String legalnumber, String invoicedate, String duedate, String docAmount, String balance, boolean invoice,String paymentterms) {
         this.legalnumber = legalnumber;
         this.invoicedate = invoicedate;
         this.duedate = duedate;
         DocAmount = docAmount;
         this.balance = balance;
         this.invoice = invoice;
+        this.paymentterms=paymentterms;
     }
     public ListKardexOfPaymentEntity() {
+    }
+
+    public String getPaymentterms() {
+        return paymentterms;
+    }
+
+    public void setPaymentterms(String paymentterms) {
+        this.paymentterms = paymentterms;
     }
 
     public String getLegalnumber() {

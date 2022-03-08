@@ -217,14 +217,14 @@ public class MenuAccionView extends Fragment {
             //if(!SesionEntity.perfil_id.equals("CHOFER"))
             //{
             //Prueba Patricia Avila
-               /* validar=CobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
+               validar=CobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
                 if(validar>0){
                     alertarecibospendientes().show();
                 }else{
                     alertatiporecibos().show();
-                }*/
+                }
             //}else {
-             alertatiporecibos().show();
+            // alertatiporecibos().show();
            // }
         });
 

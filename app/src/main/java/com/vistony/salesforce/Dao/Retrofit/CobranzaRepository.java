@@ -664,6 +664,7 @@ public class CobranzaRepository extends ViewModel {
                     public void onResponse(Call<CobranzaDetalleEntity> call, Response<CobranzaDetalleEntity> response) {
                         ArrayList<String> responseData = new ArrayList<>();
                         CobranzaDetalleEntity cobranzaDetalleEntity = response.body();
+                        Log.e("REOS", "CobranzaRepository-depositedPendingCollection-UpdateCollection-cobranzaDetalleEntity: " + cobranzaDetalleEntity.toString());
                         if (response.isSuccessful() && cobranzaDetalleEntity != null) {
                             responseData = new ArrayList<>();
                             for (CobranzaItemEntity respuesta : cobranzaDetalleEntity.getCobranzaItem()) {
