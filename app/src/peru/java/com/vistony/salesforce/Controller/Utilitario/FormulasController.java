@@ -1145,7 +1145,6 @@ public class FormulasController {
         visita.setUserId(ObjUsuario.usuario_id);
         visita.setChkenviado("1");
         visita.setChkrecibido("0");
-
         VisitaSQLite visitaSQLite = new VisitaSQLite(context);
         visitaSQLite.InsertaVisita(visita);
 

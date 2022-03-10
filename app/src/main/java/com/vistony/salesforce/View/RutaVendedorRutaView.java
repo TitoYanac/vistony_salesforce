@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,6 +60,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
     private SearchView mSearchView;
     TextView tv_cantidad_cliente_ruta,tv_cantidad_cliente_cabecera_total,tv_cantidad_cliente_cabecera_visita,tv_cantidad_cliente_cabecera_cobranza,tv_cantidad_cliente_cabecera_pedido;
     private ProgressDialog pd;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public RutaVendedorRutaView() {
         // Required empty public constructor
@@ -97,13 +99,36 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_ruta_vendedor_ruta_view, container, false);
         listrutavendedorruta=v.findViewById(R.id.listrutavendedorruta);
+        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
         tv_cantidad_cliente_cabecera_total=v.findViewById(R.id.tv_cantidad_cliente_cabecera_total);
         tv_cantidad_cliente_cabecera_visita=v.findViewById(R.id.tv_cantidad_cliente_cabecera_visita);
         tv_cantidad_cliente_cabecera_cobranza=v.findViewById(R.id.tv_cantidad_cliente_cabecera_cobranza);
         tv_cantidad_cliente_cabecera_pedido=v.findViewById(R.id.tv_cantidad_cliente_cabecera_pedido);
         obtenerSQLiteRutaFuerzaTrabajo=new ObtenerSQLiteRutaFuerzaTrabajo();
         obtenerSQLiteRutaFuerzaTrabajo.execute();
+
+        // Implementing setOnRefreshListener on SwipeRefreshLayout
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                // User defined method to shuffle the array list items
+                UpdateListView();
+            }
+        });
         return v;
+    }
+
+    public void UpdateListView() {
+        // Shuffling the arraylist items on the basis of system time
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        Date date = new Date();
+        String fecha =dateFormat.format(date);
+        RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(getContext());
+        rutaVendedorSQLiteDao.DeleteRouteSalesForDate(fecha);
+        obtenerSQLiteRutaFuerzaTrabajo=new ObtenerSQLiteRutaFuerzaTrabajo();
+        obtenerSQLiteRutaFuerzaTrabajo.execute();
+
     }
 
 
@@ -215,17 +240,17 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     //Obtiene Clientes con zona del dia
                     listaClienteCabeceraEntities= clienteSQlite.ObtenerClientePorZonaCompleto();//IINER JOIN A LA TABLA RUTAS
 
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                    Date date = new Date();
+                    String fecha =dateFormat.format(date);
+
                     //Evalua si RutaVendedor ya tiene clientes
-                    listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta,getContext());
+                    listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta,getContext(),fecha);
                     Log.e("REOS","RutaVendedorRutaView-ObtenerSQLiteRutaFuerzaTrabajo-listaClienteCabeceraEntityconruta: "+listaClienteCabeceraEntityconruta.size());
                     if(listaClienteCabeceraEntityconruta.isEmpty()){
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                        Date date = new Date();
-                        String fecha =dateFormat.format(date);
-
                         formulasController.RegistrarRutaVendedor(listaClienteCabeceraEntities,fecha,chk_ruta);
-                        listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta,getContext());
+                        listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta,getContext(),fecha);
                     }
 
                     listaClienteCabeceraAdapter = new ListaClienteCabeceraAdapter(getActivity(), ListaClienteCabeceraDao.getInstance().getLeads(listaClienteCabeceraEntityconruta));

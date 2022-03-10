@@ -8,10 +8,16 @@
    android:id="@+id/fragmentRutaVendedorNoRuta"
    tools:context=".View.RutaVendedorNoRutaView">
    <!-- TODO: Update blank fragment layout -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <ListView
         android:id="@+id/listrutavendedorruta"
         android:layout_width="match_parent"
         android:layout_height="603dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <!--
         <LinearLayout
             android:layout_width="match_parent"

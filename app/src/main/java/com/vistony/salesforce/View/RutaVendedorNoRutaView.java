@@ -252,7 +252,7 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
                     Log.e("PERCONA","CAYO EN EL ELSEEEEE");
                 }
 
-                listaClienteCabeceraEntityconnoruta = rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta, getContext());
+                listaClienteCabeceraEntityconnoruta = rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta, getContext(),fecha);
                 Log.e("PERCONA","6666666 "+listaClienteCabeceraEntityconnoruta.size());
 
 

@@ -65,6 +65,9 @@ public class VisitaSQLite {
         registro.put("latitud",visita.getLatitude());
         registro.put("longitud",visita.getLongitude());
         registro.put("countsend","1");
+        registro.put("chkruta",visita.getChkruta());
+        registro.put("id_trans_mobile",visita.getId_trans_mobile());
+        registro.put("amount",visita.getAmount());
         bd.insert("visita",null,registro);
         bd.close();
         return 1;
@@ -77,7 +80,7 @@ public class VisitaSQLite {
         String osVersion = android.os.Build.VERSION.RELEASE;
         try {
             abrir();
-            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend FROM VISITA WHERE chkrecibido='0' ", null);
+            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend FROM VISITA WHERE chkrecibido='0' LIMIT 5", null);
 
             if (fila.moveToFirst()) {
                 do {
@@ -165,5 +168,44 @@ public class VisitaSQLite {
 
         bd.close();
         return  resultado;
+    }
+
+    public int getCountVisitWithType (String date,String cardcode,String type,String chkruta)
+    {
+        int resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select count(compania_id) from visita where fecha_registro='"+date+"' and cliente_id='"+cardcode+"' and tipo='"+type+"' and chkruta='"+chkruta+"'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
+        return resultado;
+    }
+    public int getCountVisitWithDate (String date,String cardcode,String chkruta)
+    {
+        int resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select count(compania_id) from visita where fecha_registro='"+date+"' and cliente_id='"+cardcode+"' and chkruta='"+chkruta+"'  ",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
+        return resultado;
     }
 }

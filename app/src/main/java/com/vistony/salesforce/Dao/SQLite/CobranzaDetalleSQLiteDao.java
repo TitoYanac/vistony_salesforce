@@ -209,7 +209,9 @@ public class CobranzaDetalleSQLiteDao {
         abrir();
         try {
             String query="Select * from cobranzadetalle" +
-                    " where fechacobranza LIKE '"+fecha+"%'" +" and chkdepositado='N' and chkanulado='N' and usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"' and recibo not in ("+recibos_agregados+")"
+                    " where fechacobranza LIKE '"+fecha+"%'" +" and chkdepositado='N' and chkanulado='N' " +
+                    "and usuario_id= '"+usuario_id+"'" +"" +
+                    " and compania_id= '"+compania_id+"' and recibo not in ("+recibos_agregados+")"
                     + " and chkqrvalidado='Y' and fuerzatrabajo_id='"+fuerzatrabajo_id+"'";
 
             Log.e("jpcm","print query-> "+query);

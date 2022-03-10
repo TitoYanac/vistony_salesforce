@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VisitaDialogController extends DialogFragment {
-    String cliente_id,direccion_id,zona_id;
+    String cliente_id,direccion_id,zona_id,chkruta;
     private GPSController gpsController;
     private Location mLocation;
     double latitude, longitude;
@@ -50,6 +50,7 @@ public class VisitaDialogController extends DialogFragment {
             cliente_id=listaObjetos.get(i).getCliente_id();
             direccion_id=listaObjetos.get(i).getDomembarque_id();
             zona_id=listaObjetos.get(i).getZona_id();
+            chkruta=listaObjetos.get(i).getChk_ruta();
         }
 
     }
@@ -147,7 +148,8 @@ public class VisitaDialogController extends DialogFragment {
                visitaNativa.setObservation(textDescargo.getText().toString());
                visitaNativa.setLatitude(""+latitude);
                visitaNativa.setLongitude(""+longitude);
-
+               visitaNativa.setChkruta(chkruta);
+               visitaNativa.setId_trans_mobile("0");
                formulasController.RegistraVisita(visitaNativa,getActivity(),"0");
 
                 Toast.makeText(getContext(), "Visita registrada...", Toast.LENGTH_SHORT).show();

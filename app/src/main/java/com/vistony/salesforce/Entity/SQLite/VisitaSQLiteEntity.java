@@ -51,6 +51,36 @@ public class VisitaSQLiteEntity {
 
     private String Intent;
 
+    private String chkruta;
+
+    private String id_trans_mobile;
+
+    private String amount;
+
+    public String getChkruta() {
+        return chkruta;
+    }
+
+    public void setChkruta(String chkruta) {
+        this.chkruta = chkruta;
+    }
+
+    public String getId_trans_mobile() {
+        return id_trans_mobile;
+    }
+
+    public void setId_trans_mobile(String id_trans_mobile) {
+        this.id_trans_mobile = id_trans_mobile;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
     public String getIntent() {
         return Intent;
     }

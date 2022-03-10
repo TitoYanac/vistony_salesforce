@@ -179,11 +179,13 @@ public class RutaVendedorSQLiteDao {
         return listaRutaVendedorSQLiteEntity;
     }
 
-    public ArrayList<ListaClienteCabeceraEntity> ObtenerRutaVendedorPorFecha (String checkRuta,Context context){
+    public ArrayList<ListaClienteCabeceraEntity> ObtenerRutaVendedorPorFecha (String checkRuta,Context context,String date){
 
         ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntity=new ArrayList<>();
         ListaClienteCabeceraEntity ObjListaClienteCabeceraEntity;
         abrir();
+
+
 
         Cursor fila = bd.rawQuery("SELECT * FROM rutavendedor WHERE fecharuta=" +
                 //"date('now','localtime') " +
@@ -192,9 +194,11 @@ public class RutaVendedorSQLiteDao {
 
         while (fila.moveToNext())
         {
+            int countsalesorder=0,countcollection=0,countvisit=0;
+            String visitsalesorder="0",visitcollection="0",visit="0";
             ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity=new ArrayList<>();
             ClienteSQlite clienteSQlite =new ClienteSQlite(context);
-
+            VisitaSQLite visitaSQLite=new VisitaSQLite(context);
             String terminopago_id="";
             String linea_credito_usado="";
             String domfactura_id="";
@@ -209,7 +213,21 @@ public class RutaVendedorSQLiteDao {
                 domfactura_id=listaClienteSQLiteEntity.get(i).getDomfactura_id();
                 ShipToCode=listaClienteSQLiteEntity.get(i).getDomembarque_id();
             }
-
+            countsalesorder=visitaSQLite.getCountVisitWithType(date,fila.getString(0),"01",checkRuta);
+            countcollection=visitaSQLite.getCountVisitWithType(date,fila.getString(0),"02",checkRuta);
+            countvisit=visitaSQLite.getCountVisitWithDate(date,fila.getString(0),checkRuta);
+            if(countsalesorder>0)
+            {
+                visitsalesorder="1";
+            }
+            if(countcollection>0)
+            {
+                visitcollection="1";
+            }
+            if(countvisit>0)
+            {
+                visit="1";
+            }
             ObjListaClienteCabeceraEntity= new ListaClienteCabeceraEntity();
             ObjListaClienteCabeceraEntity.setCliente_id(fila.getString(0));
 
@@ -237,10 +255,10 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setLinea_credito_usado(linea_credito_usado);
             ObjListaClienteCabeceraEntity.setTerminopago_id(terminopago_id);
 
-            ObjListaClienteCabeceraEntity.setChk_visita(fila.getString(20));
-            ObjListaClienteCabeceraEntity.setChk_pedido(fila.getString(21));
-            ObjListaClienteCabeceraEntity.setChk_cobranza(fila.getString(22));
-            ObjListaClienteCabeceraEntity.setChk_ruta(fila.getString(23));
+            ObjListaClienteCabeceraEntity.setChk_visita(visit);
+            ObjListaClienteCabeceraEntity.setChk_pedido(visitsalesorder);
+            ObjListaClienteCabeceraEntity.setChk_cobranza(visitcollection);
+            ObjListaClienteCabeceraEntity.setChk_ruta(checkRuta);
             ObjListaClienteCabeceraEntity.setFecharuta(fila.getString(24));
             ObjListaClienteCabeceraEntity.setSaldo(fila.getString(25));
 
@@ -497,6 +515,18 @@ public class RutaVendedorSQLiteDao {
 
         bd.close();
         return resultado;
+    }
+
+    public int DeleteRouteSalesForDate (String date)
+    {
+        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
+        // SQLiteDatabase bd = admin.getWritableDatabase();
+        abrir();
+        // bd.insert("documentodeuda",null,);
+        bd.execSQL("delete from rutavendedor where  fecharuta='"+date+"' and chk_ruta='1' "); //add espesificacion
+        bd.close();
+        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        return 1;
     }
 
 }

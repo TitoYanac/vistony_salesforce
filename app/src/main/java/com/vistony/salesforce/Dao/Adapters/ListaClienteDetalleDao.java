@@ -67,7 +67,7 @@ public class ListaClienteDetalleDao {
         leads.put(lead.getNrodocumento(), lead);
     }
 */
-    public List<ListaClienteDetalleEntity> getLeads(ArrayList<DocumentoDeudaSQLiteEntity> Lista) {
+    public List<ListaClienteDetalleEntity> getLeads(ArrayList<DocumentoDeudaSQLiteEntity> Lista,String chkruta) {
         if(leads.size()>0)
         {
             leads.clear();
@@ -109,6 +109,7 @@ public class ListaClienteDetalleDao {
             listaClienteDetalleEntity.imvclientedetalle=1;
             listaClienteDetalleEntity.moneda=Lista.get(i).getMoneda();
             listaClienteDetalleEntity.docentry=Lista.get(i).getDocumento_entry();
+            listaClienteDetalleEntity.chkruta=chkruta;
             listaClienteDetalleEntities.add(listaClienteDetalleEntity);
         }
         }catch (Exception e)

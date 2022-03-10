@@ -157,6 +157,7 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
                 listaClienteDetalleEntity.cobrado="0";
                 listaClienteDetalleEntity.nuevo_saldo="0";
                 listaClienteDetalleEntity.docentry= lead.docentry;
+                listaClienteDetalleEntity.chkruta= lead.getChkruta();
                 Log.e("REOS","ListaClienteDetalleAdapter.lead.docentry: "+lead.docentry);
                 ArraylistaClienteDetalleEntity.add(listaClienteDetalleEntity);
 

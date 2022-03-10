@@ -82,7 +82,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     String imei;
     String fuerzatrabajo_id;
     String compania_id;
-    static String nombrecliente,domebarque,zona_id;
+    static String nombrecliente,domebarque,zona_id,chkruta;
     static String ruccliente;
     public static String textorecuperado;
     public ListView listaDDeuda;
@@ -285,6 +285,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
                     ruccliente=texto;
                     domebarque=Listado.get(i).getDomembarque_id();
                     zona_id=Listado.get(i).getZona_id();
+                    chkruta=Listado.get(i).getChk_ruta();
                 }
 
                 textorecuperado=texto;
@@ -345,7 +346,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
             listaClienteDetalleDao = new ListaClienteDetalleDao();
             pd.cancel();
 
-            listaClienteDetalleAdapter = new ListaClienteDetalleAdapter(getActivity(),ListaClienteDetalleDao.getInstance().getLeads(listaDDeudaEntity));
+            listaClienteDetalleAdapter = new ListaClienteDetalleAdapter(getActivity(),ListaClienteDetalleDao.getInstance().getLeads(listaDDeudaEntity,chkruta));
             //listaClienteDetalleAdapter = new ListaClienteDetalleAdapter(getActivity(),listaDDeudaEntity);
             listaDDeuda.setAdapter(listaClienteDetalleAdapter);
 
@@ -440,6 +441,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
                 listaClienteDetalleEntity.domembarque=domebarque;
                 Log.e("REOS","listaClienteDetalleEntity: domembarque: "+domebarque);
                 listaClienteDetalleEntity.zona_id=zona_id;
+                listaClienteDetalleEntity.chkruta=chkruta;
                 Log.e("REOS","listaClienteDetalleEntity:  zona_id:"+zona_id);
                 ArraylistaClienteDetalleEntity.add(listaClienteDetalleEntity);
                 Object param1 = (Object)  ArraylistaClienteDetalleEntity;
