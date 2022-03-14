@@ -259,7 +259,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Utilitario.disabledImageButtton(btn_consultar_termino_pago);
         Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia);
         Utilitario.disabledSpinner(spnmoneda);
-        Utilitario.disabledImageButtton(btn_dispatch_date);
+        //Utilitario.disabledImageButtton(btn_dispatch_date);
         //Utilitario.disabledEditText(et_comentario);
         Utilitario.disabledCheckBox(chk_descuento_contado);
 
@@ -828,6 +828,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
 
         dialogButtonOK.setOnClickListener(v -> {
+            Utilitario.disabledImageButtton(btn_dispatch_date);
             RegistrarOrdenVentaBD ();
             Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
@@ -1022,8 +1023,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             visita.setObservation("Se genero el pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id()+" para la dirección "+Listado.get(i).getDireccion());
             visita.setLatitude(""+latitude);
             visita.setLongitude(""+longitude);
-            visita.setId_trans_mobile(ordenventa_id);
-            visita.setChkruta(chkruta);
+            visita.setMobileID(ordenventa_id);
+            visita.setStatusRoute(chkruta);
             visita.setAmount(""+totalSalesOrder.getTotal());
             formulasController.RegistraVisita(visita,getActivity(),totalSalesOrder.getTotal());
 

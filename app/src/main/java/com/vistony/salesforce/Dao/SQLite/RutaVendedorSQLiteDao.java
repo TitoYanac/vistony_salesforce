@@ -8,9 +8,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaVendedorSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
@@ -184,13 +186,14 @@ public class RutaVendedorSQLiteDao {
         ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntity=new ArrayList<>();
         ListaClienteCabeceraEntity ObjListaClienteCabeceraEntity;
         abrir();
-
-
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
+        usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
 
         Cursor fila = bd.rawQuery("SELECT * FROM rutavendedor WHERE fecharuta=" +
                 //"date('now','localtime') " +
                 " strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))" +
-                "AND chk_ruta=? AND slpCode=?",new String[]{checkRuta,SesionEntity.fuerzatrabajo_id});
+                "AND chk_ruta=? AND slpCode=?",new String[]{checkRuta,usuarioSQLiteEntity.getFuerzatrabajo_id()});
 
         while (fila.moveToNext())
         {
@@ -302,7 +305,7 @@ public class RutaVendedorSQLiteDao {
         abrir();
         try {
             Cursor fila = bd.rawQuery(
-                    "Select count(Cliente_id) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and chk_visita='1'",null);
+                    " Select count(Cliente_id) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and chk_visita='1' ",null);
 
             while (fila.moveToNext())
             {
@@ -392,13 +395,19 @@ public class RutaVendedorSQLiteDao {
             )
     {
         int resultado=0;
+        float monto=0;
         abrir();
         try {
-
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(SUM(salesorderamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and compania_id='"+compania_id+"' and cliente_id='"+cliente_id+"'   " ,null);
+            while (fila.moveToNext())
+            {
+                monto= Float.parseFloat (fila.getString(0));
+            }
             ContentValues registro = new ContentValues();
             registro.put("chk_pedido","1");
             registro.put("chk_visita","1");
-            registro.put("salesorderamount",salesorderamount);
+            registro.put("salesorderamount",String.valueOf(monto+Float.parseFloat(salesorderamount)));
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"'" +
                     //" and  domembarque_id='"+domembarque_id+"'" +
@@ -422,13 +431,20 @@ public class RutaVendedorSQLiteDao {
     )
     {
         int resultado=0;
+        float monto=0;
         abrir();
         try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(SUM(collectionamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and compania_id='"+compania_id+"' and cliente_id='"+cliente_id+"'   " ,null);
+            while (fila.moveToNext())
+            {
+                monto= Float.parseFloat (fila.getString(0));
+            }
 
             ContentValues registro = new ContentValues();
             registro.put("chk_cobranza","1");
             registro.put("chk_visita","1");
-            registro.put("collectionamount",collectionamount);
+            registro.put("collectionamount",String.valueOf(monto+Float.parseFloat(collectionamount)));
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' " +
                     //"and  domembarque_id='"+domembarque_id+"' " +

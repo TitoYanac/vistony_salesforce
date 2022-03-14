@@ -51,34 +51,34 @@ public class VisitaSQLiteEntity {
 
     private String Intent;
 
-    private String chkruta;
+    private String StatusRoute;
 
-    private String id_trans_mobile;
+    private String MobileID;
 
-    private String amount;
+    private String Amount;
 
-    public String getChkruta() {
-        return chkruta;
+    public String getStatusRoute() {
+        return StatusRoute;
     }
 
-    public void setChkruta(String chkruta) {
-        this.chkruta = chkruta;
+    public void setStatusRoute(String statusRoute) {
+        StatusRoute = statusRoute;
     }
 
-    public String getId_trans_mobile() {
-        return id_trans_mobile;
+    public String getMobileID() {
+        return MobileID;
     }
 
-    public void setId_trans_mobile(String id_trans_mobile) {
-        this.id_trans_mobile = id_trans_mobile;
+    public void setMobileID(String mobileID) {
+        MobileID = mobileID;
     }
 
     public String getAmount() {
-        return amount;
+        return Amount;
     }
 
     public void setAmount(String amount) {
-        this.amount = amount;
+        Amount = amount;
     }
 
     public String getIntent() {

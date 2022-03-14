@@ -101,7 +101,7 @@ public class PromocionCabeceraSQLiteDao {
         abrir();
         Cursor fila = bd.rawQuery(
                 "Select * from promocioncabecera where compania_id='" + compania_id + "' and fuerzatrabajo_id='" + fuerzatrabajo_id + "' and usuario_id='" + usuario_id + "' " +
-                        "and producto_id='" + producto_id + "' and umd='" + umd + "' and CAST(cantidad as INTEGER)<='" + cantidad + "'",null);
+                        "and producto_id='" + producto_id + "' and umd='" + umd + "' and CAST(cantidad as INTEGER)<='" + cantidad + "' order by cantidad desc ",null);
 
         while (fila.moveToNext())
         {
@@ -340,6 +340,7 @@ public class PromocionCabeceraSQLiteDao {
             {
                 estado=false;
             }
+        fila.close();
         bd.close();
         return estado;
     }
@@ -359,7 +360,7 @@ public class PromocionCabeceraSQLiteDao {
         abrir();
         Cursor fila = bd.rawQuery(
                 "Select * from promocioncabecera where compania_id='" + compania_id + "' and fuerzatrabajo_id='" + fuerzatrabajo_id + "' and usuario_id='" + usuario_id + "' " +
-                        "and producto_id='" + producto_id + "' and umd='" + umd + "'",null);
+                        "and producto_id='" + producto_id + "' and umd='" + umd + "' order by CAST(cantidad AS INTEGER)",null);
 
         while (fila.moveToNext())
         {
@@ -370,6 +371,7 @@ public class PromocionCabeceraSQLiteDao {
             listaPromocionCabeceraEntity.setProducto(fila.getString(4));
             listaPromocionCabeceraEntity.setUmd(fila.getString(5));
             listaPromocionCabeceraEntity.setCantidadcompra(fila.getString(6));
+            Log.e("REOS","PromocionCabeceraSQLiteDao-ObtenerPromocionCabeceraConsultaStock-listaPromocionCabeceraEntity.getCantidadCompra: "+listaPromocionCabeceraEntity.getCantidadcompra());
             listaPromocionCabeceraEntity.setPreciobase(fila.getString(9));
             listaPromocionCabeceraEntity.setDescuento(fila.getString(10));
 

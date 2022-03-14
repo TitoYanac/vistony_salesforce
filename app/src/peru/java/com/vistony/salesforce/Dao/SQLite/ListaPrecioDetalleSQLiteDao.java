@@ -355,7 +355,7 @@ public class ListaPrecioDetalleSQLiteDao {
                             ));
                     listaConsultaStockEntity.add(consultaStockEntity);
                 }
-
+            fila.close();
 
         }catch (Exception e){
             Log.e("ErrorSqlite","=>"+e.getMessage());

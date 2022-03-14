@@ -61,9 +61,9 @@ public class ListaCobranzaDetalleAdapter extends ArrayAdapter<ListaCobranzaDetal
         // Setup.
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
         holder.tv_nrodocumento.setText(lead.getNrodocumento());
-        holder.et_saldo.setText((lead.getSaldo()==null)?"$0":Convert.currencyForView(lead.getSaldo()));
-        holder.et_cobrado.setText((lead.getCobrado()==null)?"$0":Convert.currencyForView(lead.getCobrado()));
-        holder.et_nuevosaldo.setText((lead.getNuevosaldo()==null)?" $0":Convert.currencyForView(lead.getNuevosaldo()));
+        holder.et_saldo.setText((lead.getSaldo()==null)?Convert.currencyForView("0"):Convert.currencyForView(lead.getSaldo()));
+        holder.et_cobrado.setText((lead.getCobrado()==null)?Convert.currencyForView("0"):Convert.currencyForView(lead.getCobrado()));
+        holder.et_nuevosaldo.setText((lead.getNuevosaldo()==null)?Convert.currencyForView("0"):Convert.currencyForView(lead.getNuevosaldo()));
 
         return convertView;
     }

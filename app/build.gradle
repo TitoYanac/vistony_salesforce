@@ -85,7 +85,7 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"/pe"')
             buildConfigField('String' , 'BASE_ENDPOINT', '"pe.get"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"pe.post"')
-            versionName "2.2.2"
+            versionName "2.2.3"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')

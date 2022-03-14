@@ -148,8 +148,9 @@ public class VisitaDialogController extends DialogFragment {
                visitaNativa.setObservation(textDescargo.getText().toString());
                visitaNativa.setLatitude(""+latitude);
                visitaNativa.setLongitude(""+longitude);
-               visitaNativa.setChkruta(chkruta);
-               visitaNativa.setId_trans_mobile("0");
+               visitaNativa.setStatusRoute(chkruta);
+               visitaNativa.setMobileID("0");
+               visitaNativa.setAmount("0");
                formulasController.RegistraVisita(visitaNativa,getActivity(),"0");
 
                 Toast.makeText(getContext(), "Visita registrada...", Toast.LENGTH_SHORT).show();

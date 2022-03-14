@@ -29,7 +29,10 @@ public class ListaPromocionCabeceraDao {
     }
 
     private void saveLead(ListaPromocionCabeceraEntity lead) {
-        leads.put(lead.getPromocion_id(), lead);
+        leads.put(
+               // lead.getPromocion_id()
+                lead.getCantidadcompra()
+                , lead);
     }
 
     public List<ListaPromocionCabeceraEntity> getLeads(ArrayList<ListaPromocionCabeceraEntity> Lista) {

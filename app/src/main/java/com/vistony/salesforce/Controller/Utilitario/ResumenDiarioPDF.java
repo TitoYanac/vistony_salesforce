@@ -7,11 +7,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
@@ -29,6 +31,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.ResumenDiarioEntity;
@@ -41,6 +44,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -68,6 +73,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
     public void generarPdf(Context context, List<HistoricContainerSalesEntity> resumenDiarioEntityList,String fecha) {
         // Creamos el documento.
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(context);
+        VisitaSQLite visitaSQLite=new VisitaSQLite(context);
         Rectangle pagina = new Rectangle(
                 36, 36,
                 //559
@@ -181,6 +187,14 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevendedor.disableBorderSide(Rectangle.BOX);
             cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvendedor.addCell(cellTablevendedor);
+            cellTablevendedor = new PdfPCell(new Phrase("HORA",font6));
+            cellTablevendedor.disableBorderSide(Rectangle.BOX);
+            cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblvendedor.addCell(cellTablevendedor);
+            cellTablevendedor = new PdfPCell(new Phrase(Induvis.getTime(BuildConfig.FLAVOR, obtenerHoraActual()) ,font3));
+            cellTablevendedor.disableBorderSide(Rectangle.BOX);
+            cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblvendedor.addCell(cellTablevendedor);
             documento.add(tblvendedor);
 
             PdfPTable tbllblvariable = new PdfPTable(1);
@@ -268,6 +282,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tbclientes.addCell(cellTableclientes);
             documento.add(tbclientes);
 
+            int cantvisit=0;
             PdfPTable tblvisitados = new PdfPTable(2);
             tblvisitados.setWidthPercentage(100);
             PdfPCell  cellTablevisitados= null;
@@ -275,7 +290,18 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
-            cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1")),font3));
+            if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1")>rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"))
+            {
+                cantvisit=(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1"));
+            }
+            else {
+                cantvisit=(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"));
+            }
+            cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(
+                    //visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1")
+                    //rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1")
+                    cantvisit
+            ),font3));
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
@@ -283,7 +309,9 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
-            cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")),font3));
+            cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(
+                    rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+            ),font3));
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
@@ -291,7 +319,9 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
-            cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")),font3));
+            cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(
+                    rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
+            ),font3));
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
@@ -325,11 +355,36 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltipo.addCell(cellTableTipo);
-            cellTableTipo=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1")),font3));
+            int countVisitTypeCOB=0,countVisitTypeOV=0;
+            float amountVisitTypeCOB=0,amountVisitTypeOV=0;
+            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","02")>rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1"))
+            {
+                countVisitTypeCOB=visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","02");
+            }else
+                {
+                    countVisitTypeCOB=rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1");
+                }
+            cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
+                    //rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1")
+                          //  visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","02")
+                    countVisitTypeCOB
+                    ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltipo.addCell(cellTableTipo);
-            cellTableTipo=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1")),font3));
+            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","02")>rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1"))
+            {
+                amountVisitTypeCOB=visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","02");
+            }else
+            {
+                amountVisitTypeCOB=rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1");
+            }
+
+            cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
+                    //rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1")
+                    //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","02")
+                    amountVisitTypeCOB
+            ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltipo.addCell(cellTableTipo);
@@ -337,11 +392,36 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltipo.addCell(cellTableTipo);
-            cellTableTipo=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1")),font3));
+
+            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01")>0)
+            {
+                countVisitTypeOV=visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01");
+            }else
+            {
+                countVisitTypeOV=rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1");
+            }
+
+            cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
+                    //rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1")
+                    //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01")
+                    countVisitTypeOV
+            ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltipo.addCell(cellTableTipo);
-            cellTableTipo=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"1")),font3));
+
+            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01")>0)
+            {
+                amountVisitTypeOV=visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01");
+            }else
+            {
+                amountVisitTypeOV=rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"1");
+            }
+            cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
+                    //rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"1")
+                    //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01")
+                    amountVisitTypeOV
+            ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltipo.addCell(cellTableTipo);
@@ -366,7 +446,9 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             try{
                 celltblefectividad=new PdfPCell(new Phrase(
                         Induvis.getAmountRouteeffectiveness(
-                                (rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1")),
+                                //(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1")),
+                                //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01"),
+                                countVisitTypeOV,
                                 rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
                         ),font3));
             }catch (Exception e)
@@ -384,7 +466,9 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             try{
                 celltblefectividad=new PdfPCell(new Phrase(
                         Induvis.getAmountRouteeffectiveness(
-                                (rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1")),
+                                //(rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1")),
+                                //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","02"),
+                                countVisitTypeCOB,
                                 rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
                         ),font3));
             }catch (Exception e)
@@ -402,7 +486,9 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             try{
                 celltblefectividad=new PdfPCell(new Phrase(
                         Induvis.getAmountRouteeffectiveness(
-                                (rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1")),
+                                //(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1")),
+                                //visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1"),
+                                cantvisit,
                                 rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
                         ),font3));
             }catch (Exception e)
@@ -466,11 +552,33 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0")),font3));
+            int countVisitNoRoute=0,countVisitOVNoRoute=0,countVisitCOBNoRoute=0;
+            float amountVisitOVNoRoute=0,amountVisitCOBNoRoute=0;
+            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02")>0)
+            {
+                countVisitCOBNoRoute= visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02");
+            }else {
+                countVisitCOBNoRoute= rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0");
+            }
+            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
+                    //rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0")
+                    //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02")
+                    countVisitCOBNoRoute
+            ),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"0")) ,font3));
+            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02")>0)
+            {
+                amountVisitCOBNoRoute= visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02");
+            }else {
+                amountVisitCOBNoRoute= rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0");
+            }
+            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
+                    //rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"0")
+                    //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02")
+                    amountVisitCOBNoRoute
+            ) ,font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltiponoruta.addCell(cellTableTiponoruta);
@@ -478,11 +586,33 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"0")),font3));
+            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01")>0)
+            {
+                countVisitOVNoRoute= visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01");
+            }else {
+                countVisitOVNoRoute= rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"0");
+            }
+            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
+                    //rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"0")
+                    //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01")
+                    countVisitOVNoRoute
+            ),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"0")),font3));
+
+            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01")>0)
+            {
+                amountVisitOVNoRoute= visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01");
+            }else {
+                amountVisitOVNoRoute= rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"0");
+            }
+
+            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
+                    //rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"0")
+                    //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01")
+                    amountVisitOVNoRoute
+            ),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltiponoruta.addCell(cellTableTiponoruta);
@@ -490,7 +620,18 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"0")),font3));
+            if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0")>0)
+            {
+                countVisitNoRoute= visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0");
+            }else {
+                countVisitNoRoute= rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"0");
+            }
+
+            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
+                    //rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"0")
+                    //visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0")
+                    countVisitNoRoute
+            ),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltiponoruta.addCell(cellTableTiponoruta);
@@ -621,6 +762,14 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             Log.e("REOS","ResumenDiarioPDF-OpenDocumentPDF-e"+e.toString());
             Toast.makeText(context, "Es necesario que instales algun visor de PDF", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String obtenerHoraActual() {
+        String formato = "HHmmss";
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern(formato);
+        LocalDateTime ahora = LocalDateTime.now();
+        return formateador.format(ahora);
     }
 
 }

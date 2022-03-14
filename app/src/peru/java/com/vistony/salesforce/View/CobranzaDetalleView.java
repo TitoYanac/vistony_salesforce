@@ -1463,8 +1463,8 @@ public class CobranzaDetalleView extends Fragment {
             visita.setObservation("Se genero el recibo " + recibo + " para el cliente: " + cliente_id);
             visita.setLatitude("" + latitude);
             visita.setLongitude("" + longitude);
-            visita.setId_trans_mobile(recibo);
-            visita.setChkruta(chkruta);
+            visita.setMobileID(recibo);
+            visita.setStatusRoute(chkruta);
             visita.setAmount(valorcobranza);
 
             formulasController.RegistraVisita(visita, getActivity(), montocobrado);
