@@ -72,7 +72,8 @@ public class RutaVendedorSQLiteDao {
              String fecharuta,
              String slpCode,
              String userCode,
-             String lastpurchase
+             String lastpurchase,
+             String saldosincontado
     )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
@@ -111,7 +112,7 @@ public class RutaVendedorSQLiteDao {
             registro.put("slpCode", slpCode);
             registro.put("userCode", userCode);
             registro.put("lastpurchase", lastpurchase);
-
+            registro.put("saldosincontado", saldosincontado);
             bd.insert("rutavendedor", null, registro);
         }catch (Exception e)
         {
@@ -517,7 +518,8 @@ public class RutaVendedorSQLiteDao {
         abrir();
         try {
             Cursor fila = bd.rawQuery(
-                    "Select count(Cliente_id) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and saldomn>0",null);
+                    "Select count(A.Cliente_id) from rutavendedor A" +
+                            " where A.fecharuta='"+fecharuta+"' and A.chk_ruta='"+chkruta+"' and A.saldosincontado>0 ",null);
 
             while (fila.moveToNext())
             {

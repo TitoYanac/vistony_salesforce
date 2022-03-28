@@ -64,7 +64,7 @@ public class ListaClienteCabeceraDao {
                         ,Lista.get(i).getRucdni()
                         ,Lista.get(i).getCategoria()
                         ,Lista.get(i).getLinea_credito()
-                        ,Lista.get(i).getLinea_credito_usado()
+
                         ,Lista.get(i).getTerminopago_id()
                         ,Lista.get(i).getZona_id()
                         ,Lista.get(i).getCompania_id()
@@ -79,13 +79,16 @@ public class ListaClienteCabeceraDao {
                         ,Lista.get(i).getChk_pedido()
                         ,Lista.get(i).getChk_cobranza()
                         ,Lista.get(i).getChk_ruta()
+                        ,Lista.get(i).getLinea_credito_usado()
                         ,Lista.get(i).getFecharuta()
                         ,Lista.get(i).getLista_precio()
                         ,Lista.get(i).getDocentry()
                         ,Lista.get(i).getLastpurchase()
                         ,Lista.get(i).getLineofbussiness()
+                        ,Lista.get(i).getSaldosincontados()
                 ));
                 Log.e("REOS","ListaClienteCabeceraDao.getLeads.Lista.get(i).getLastpurchase())"+Lista.get(i).getLastpurchase());
+                Log.e("REOS","ListaClienteCabeceraDao.getLeads.Lista.get(i).getChk_ruta())"+Lista.get(i).getChk_ruta());
             }
         }catch (Exception e){
             e.printStackTrace();

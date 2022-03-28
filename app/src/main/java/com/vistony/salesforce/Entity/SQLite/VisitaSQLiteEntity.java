@@ -57,6 +57,26 @@ public class VisitaSQLiteEntity {
 
     private String Amount;
 
+    private String TerminoPago_ID;
+
+    private String Hour_Before;
+
+    public String getHour_Before() {
+        return Hour_Before;
+    }
+
+    public void setHour_Before(String hour_Before) {
+        Hour_Before = hour_Before;
+    }
+
+    public String getTerminoPago_ID() {
+        return TerminoPago_ID;
+    }
+
+    public void setTerminoPago_ID(String terminoPago_ID) {
+        TerminoPago_ID = terminoPago_ID;
+    }
+
     public String getStatusRoute() {
         return StatusRoute;
     }

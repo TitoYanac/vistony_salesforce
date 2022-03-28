@@ -1026,6 +1026,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             visita.setMobileID(ordenventa_id);
             visita.setStatusRoute(chkruta);
             visita.setAmount(""+totalSalesOrder.getTotal());
+            visita.setTerminoPago_ID(contado);
             formulasController.RegistraVisita(visita,getActivity(),totalSalesOrder.getTotal());
 
         }

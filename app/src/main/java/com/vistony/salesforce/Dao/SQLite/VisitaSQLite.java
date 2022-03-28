@@ -68,6 +68,8 @@ public class VisitaSQLite {
         registro.put("chkruta",visita.getStatusRoute());
         registro.put("id_trans_mobile",visita.getMobileID());
         registro.put("amount",visita.getAmount());
+        registro.put("terminopago_id",visita.getTerminoPago_ID());
+        registro.put("hora_anterior",visita.getHour_Before());
         bd.insert("visita",null,registro);
         bd.close();
         return 1;
@@ -80,7 +82,7 @@ public class VisitaSQLite {
         String osVersion = android.os.Build.VERSION.RELEASE;
         try {
             abrir();
-            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend,chkruta,id_trans_mobile,IFNULL(amount,0) AS amount  FROM VISITA WHERE chkrecibido='0' LIMIT 5", null);
+            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend,chkruta,id_trans_mobile,IFNULL(amount,0) AS amount,hora_anterior  FROM VISITA WHERE chkrecibido='0' LIMIT 10", null);
 
             if (fila.moveToFirst()) {
                 do {
@@ -113,6 +115,7 @@ public class VisitaSQLite {
                     visita.setStatusRoute (chkruta);
                     visita.setMobileID (fila.getString(fila.getColumnIndex("id_trans_mobile")));
                     visita.setAmount (fila.getString(fila.getColumnIndex("amount")));
+                    visita.setHour_Before (fila.getString(fila.getColumnIndex("hora_anterior")));
                     listaVisitaSQLiteEntity.add(visita);
 
                     UpdateCountSend(fila.getString(fila.getColumnIndex("id")), SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
@@ -245,7 +248,29 @@ public class VisitaSQLite {
         abrir();
         try {
             Cursor fila = bd.rawQuery(
-                    "SELECT count(TABLE_A.compania_id) FROM  (Select  compania_id from visita where fecha_registro='"+date+"' and chkruta='"+chkruta+"' group by cliente_id) AS TABLE_A  ",null);
+                    "SELECT count(TABLE_A.compania_id) FROM  (Select  compania_id from visita where fecha_registro='"+date+"' and chkruta='"+chkruta+"'" +
+                            " group by cliente_id) AS TABLE_A  ",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            Log.e("REOS","VisitaSQLite.getCountVisitWithTypeVisit.e:" + e.toString());
+        }
+        bd.close();
+        Log.e("REOS","VisitaSQLite.getCountVisitWithTypeVisit.resultado:" + resultado);
+        return resultado;
+    }
+    public int getCountVisitWithTypeVisitCOB (String date,String chkruta,String type)
+    {
+        int resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "SELECT count(TABLE_A.compania_id) FROM  (Select compania_id from visita where fecha_registro='"+date+"' and chkruta='"+chkruta+"' and tipo='"+type+"' and terminopago_id='0' group by cliente_id) AS TABLE_A ",null);
 
             while (fila.moveToNext())
             {
@@ -280,6 +305,68 @@ public class VisitaSQLite {
         }
         bd.close();
         Log.e("REOS","VisitaSQLite.getSumVisitWithTypeOVCOB.resultado:" + resultado);
+        return resultado;
+    }
+
+    public float getSumVisitWithTypeCOB (String date,String chkruta,String type)
+    {
+        float resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(SUM(amount),0)  from visita where fecha_registro='"+date+"' and chkruta='"+chkruta+"' and tipo='"+type+"' and terminopago_id='0'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Float.parseFloat(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            Log.e("REOS","VisitaSQLite.getSumVisitWithTypeOVCOB.e:" + e.toString());
+        }
+        bd.close();
+        Log.e("REOS","VisitaSQLite.getSumVisitWithTypeOVCOB.resultado:" + resultado);
+        return resultado;
+    }
+
+    public int getCountVisitWithTypeCOB (String date,String chkruta,String type)
+    {
+        int resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "SELECT count(TABLE_A.compania_id) FROM  (Select compania_id from visita where fecha_registro='"+date+"' and chkruta='"+chkruta+"' and tipo='"+type+"' group by cliente_id) AS TABLE_A ",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
+        return resultado;
+    }
+
+    public String getHourAfter (String date)
+    {
+        String resultado="";
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(max(hora_registro),0) from visita where fecha_registro='"+date+"'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= String.valueOf(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
         return resultado;
     }
 }

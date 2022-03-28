@@ -1364,7 +1364,7 @@ public class CobranzaDetalleSQLiteDao {
                             " and (chkwsdepositorecibido='N'or  chkwsdepositorecibido='0')" +
                             " and cobranza_id<>''" +
                             " and compania_id='"+compania_id+"'" +
-                            " and usuario_id='"+usuario_id+"'  LIMIT 10  "
+                            " and usuario_id='"+usuario_id+"'  LIMIT 30  "
                     ,null);
 
             while (fila.moveToNext())

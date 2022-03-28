@@ -287,7 +287,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
                     zona_id=Listado.get(i).getZona_id();
                     chkruta=Listado.get(i).getChk_ruta();
                 }
-
+                Log.e("REOS","ClienteDetalleView-onCreate-chkruta "+chkruta);
                 textorecuperado=texto;
                 Log.e("ID :", "" + texto.toString());
             }else{

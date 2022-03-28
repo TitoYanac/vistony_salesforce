@@ -36,6 +36,17 @@ public class InvoicesEntity {
     @SerializedName("RawBalance")
     private String saldoSinProcesar;
 
+    @SerializedName("PymntGroup")
+    private String pymntgroup;
+
+    public String getPymntgroup() {
+        return pymntgroup;
+    }
+
+    public void setPymntgroup(String pymntgroup) {
+        this.pymntgroup = pymntgroup;
+    }
+
     public String getDocEntry() {
         return docEntry;
     }

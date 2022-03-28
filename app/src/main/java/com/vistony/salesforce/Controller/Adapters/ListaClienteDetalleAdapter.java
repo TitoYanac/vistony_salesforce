@@ -78,6 +78,8 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
             holder.tv_saldo =  convertView.findViewById(R.id.tv_saldo);
             holder.imv_clientedetalle =  convertView.findViewById(R.id.imv_cliente_detalle);
             holder.tv_moneda_cliente_detalle =convertView.findViewById(R.id.tv_moneda_cliente_detalle);
+            holder.tv_terminopago_cliente_detalle =convertView.findViewById(R.id.tv_terminopago_cliente_detalle);
+
             holder.xd =convertView.findViewById(R.id.layoutXD);
 
             convertView.setTag(holder);
@@ -124,7 +126,7 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
         holder.tv_importe.setText(Convert.currencyForView(lead.getImporte()));
         holder.tv_saldo.setText(Convert.currencyForView(lead.getSaldo()));
         holder.tv_moneda_cliente_detalle.setText(lead.getMoneda());
-
+        holder.tv_terminopago_cliente_detalle.setText(lead.getPymntgroup());
         holder.xd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -159,6 +161,7 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
                 listaClienteDetalleEntity.docentry= lead.docentry;
                 listaClienteDetalleEntity.chkruta= lead.getChkruta();
                 Log.e("REOS","ListaClienteDetalleAdapter.lead.docentry: "+lead.docentry);
+                Log.e("REOS","ListaClienteDetalleAdapter.lead.getChkruta(): "+lead.getChkruta());
                 ArraylistaClienteDetalleEntity.add(listaClienteDetalleEntity);
 
 
@@ -194,6 +197,7 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
         TextView tv_saldo;
         TextView tv_moneda_cliente_detalle;
         ImageView imv_clientedetalle;
+        TextView tv_terminopago_cliente_detalle;
         RelativeLayout xd;
     }
 

@@ -36,8 +36,9 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String docentry;
     private String lastpurchase;
     private String lineofbussiness;
+    private String saldosincontados;
 
-    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String linea_credito_usado, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta, String lista_precio, String docentry,String lastpurchase,String lineofbussiness) {
+    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String linea_credito_usado, String fecharuta, String lista_precio, String docentry, String lastpurchase, String lineofbussiness, String saldosincontados) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -71,6 +72,15 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.docentry = docentry;
         this.lastpurchase = lastpurchase;
         this.lineofbussiness = lineofbussiness;
+        this.saldosincontados = saldosincontados;
+    }
+
+    public String getSaldosincontados() {
+        return saldosincontados;
+    }
+
+    public void setSaldosincontados(String saldosincontados) {
+        this.saldosincontados = saldosincontados;
     }
 
     public String getLineofbussiness() {

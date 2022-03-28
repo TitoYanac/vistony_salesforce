@@ -357,13 +357,14 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tbltipo.addCell(cellTableTipo);
             int countVisitTypeCOB=0,countVisitTypeOV=0;
             float amountVisitTypeCOB=0,amountVisitTypeOV=0;
-            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","02")>rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1"))
+            /*if(visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02")>rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1"))
             {
-                countVisitTypeCOB=visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","02");
+                countVisitTypeCOB=visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02");
             }else
                 {
                     countVisitTypeCOB=rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1");
-                }
+                }*/
+            countVisitTypeCOB=visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02");
             cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1")
                           //  visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","02")
@@ -372,14 +373,14 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltipo.addCell(cellTableTipo);
-            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","02")>rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1"))
+            /*if(visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02")>rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1"))
             {
-                amountVisitTypeCOB=visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","02");
+                amountVisitTypeCOB=visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02");
             }else
             {
                 amountVisitTypeCOB=rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1");
-            }
-
+            }*/
+            amountVisitTypeCOB=visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02");
             cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1")
                     //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","02")

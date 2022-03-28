@@ -110,6 +110,7 @@ public class ListaClienteDetalleDao {
             listaClienteDetalleEntity.moneda=Lista.get(i).getMoneda();
             listaClienteDetalleEntity.docentry=Lista.get(i).getDocumento_entry();
             listaClienteDetalleEntity.chkruta=chkruta;
+            listaClienteDetalleEntity.pymntgroup=Lista.get(i).getPymntgroup();
             listaClienteDetalleEntities.add(listaClienteDetalleEntity);
         }
         }catch (Exception e)

@@ -263,6 +263,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                listaClienteCabeceraEntity.setChk_pedido(lead.getChk_pedido());
                listaClienteCabeceraEntity.setChk_cobranza(lead.getChk_cobranza());
                listaClienteCabeceraEntity.setChk_ruta(lead.getChk_ruta());
+                    Log.e("REOS","ListaClienteCabeceraAdapter.lead.getChk_ruta() "+lead.getChk_ruta());
                listaClienteCabeceraEntity.setChk_cobranza(lead.getFecharuta());
                listaClienteCabeceraEntity.setDocentry(lead.getDocentry());
                listaClienteCabeceraEntity.setLastpurchase(lead.getLastpurchase());
