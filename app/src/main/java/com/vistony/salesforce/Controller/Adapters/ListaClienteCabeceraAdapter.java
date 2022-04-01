@@ -34,6 +34,8 @@ import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ClienteCabeceraView;
 import com.vistony.salesforce.View.RutaVendedorView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -148,6 +150,8 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.relativeListaCabezeraCns=convertView.findViewById(R.id.relativeListaCabezera);
             holder.progressLineCredit=convertView.findViewById(R.id.progressBar);
             holder.tv_lastpurchase = (TextView) convertView.findViewById(R.id.tv_lastpurchase);
+            holder.tv_address = (TextView) convertView.findViewById(R.id.tv_address);
+
             convertView.setTag(holder);
         } else {
             holder = (ListaClienteCabeceraAdapter.ViewHolder) convertView.getTag();
@@ -168,6 +172,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         holder.tv_clienteid.setText(lead.getCliente_id());
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
         holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));
+        holder.tv_address.setText(lead.getDomembarque_id()+"-"+lead.getDireccion());
         switch(lead.getMoneda()){
             case "S/":
                 holder.tv_moneda.setText("Soles");
@@ -309,7 +314,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         RelativeLayout relativeListaCabezeraCns;
         ProgressBar progressLineCredit;
         TextView tv_lastpurchase;
-
+        TextView tv_address;
     }
 
 

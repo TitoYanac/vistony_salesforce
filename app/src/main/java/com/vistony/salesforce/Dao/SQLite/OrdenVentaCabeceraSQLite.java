@@ -499,5 +499,27 @@ public class OrdenVentaCabeceraSQLite {
         bd.close();
         return  resultado;
     }
+    public int getCountSalesOrderPendingSend(String usuario_id,String compania_id)
+    {
+        int resultado=0;
 
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select count(compania_id) from ordenventacabecera where recibidoERP='0' AND usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        bd.close();
+
+        return resultado;
+    }
 }

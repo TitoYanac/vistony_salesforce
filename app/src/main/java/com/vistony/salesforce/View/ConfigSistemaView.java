@@ -42,6 +42,7 @@ import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
+import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -406,7 +407,7 @@ public class ConfigSistemaView extends Fragment{
         dialogButtonExit.setOnClickListener(v -> dialog.dismiss());
 
         dialogButton.setOnClickListener(v -> {
-            ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(getContext().CONNECTIVITY_SERVICE);
+            /*ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(getContext().CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
                 ObtenerCobranzaDetallePendienteWS HiloOCDPWS= new ObtenerCobranzaDetallePendienteWS();
@@ -414,10 +415,55 @@ public class ConfigSistemaView extends Fragment{
                 dialog.dismiss();
             }else{
                 Alerta("6").show();
+            }*/
+            if(getCountPendingSend())
+            {
+                Alerta("5").show();
+            }else {
+
+                SqliteController sqliteController = new SqliteController(getContext());
+                sqliteController.deleteDatabase(getContext());
+                System.exit(0);
             }
             dialog.dismiss();
         });
         return  dialog;
+    }
+
+
+    public boolean getCountPendingSend()
+    {
+        boolean estado;
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
+        OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite=new OrdenVentaCabeceraSQLite(getContext());
+        VisitaSQLite visitaSQLite=new VisitaSQLite(getContext());
+        UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
+        int countCollection,countSalesOrder,countVisit;
+        usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
+
+        countCollection=cobranzaDetalleSQLiteDao.getCountCollectionPendingSend(
+                usuarioSQLiteEntity.usuario_id,
+                usuarioSQLiteEntity.compania_id);
+        countSalesOrder=ordenVentaCabeceraSQLite.getCountSalesOrderPendingSend(
+                usuarioSQLiteEntity.usuario_id,
+                usuarioSQLiteEntity.compania_id);
+        countVisit=visitaSQLite.getCountVisitPendingSend(
+                usuarioSQLiteEntity.usuario_id,
+                usuarioSQLiteEntity.compania_id);
+        Log.e("REOS","ConfigSistemaView-getCountPendingSend-countVisit:"+countVisit);
+        Log.e("REOS","ConfigSistemaView-getCountPendingSend-countSalesOrder:"+countSalesOrder);
+        Log.e("REOS","ConfigSistemaView-getCountPendingSend-countVisit:"+countVisit);
+        if(countVisit>0||countSalesOrder>0||countCollection>0)
+        {
+            estado=true;
+        }else
+            {
+                estado=false;
+            }
+        Log.e("REOS","ConfigSistemaView-getCountPendingSend-estado:"+estado);
+        return estado;
+
     }
 
 
@@ -569,7 +615,7 @@ public class ConfigSistemaView extends Fragment{
         {
             mensaje="Ud. Cuenta con Ordenes de Venta Pendientes de Envio,revisar en Consulta de Orden Venta";
         }else if(tipo.equals("5")){
-            mensaje="Ud. Cuenta con recibos/depositos pendientes de procesar, cierre la aplicación y vuelva a ingresar";
+            mensaje="Ud. Cuenta con recibos/ordenes de Venta/visitas pendientes de envio a SAP, cierre la aplicación y vuelva a ingresar con Conexion a Internet";
         }
         else if(tipo.equals("6")){
             mensaje="Esta opción esta habilitada con internet";
@@ -599,98 +645,6 @@ public class ConfigSistemaView extends Fragment{
         return  dialog;
     }
 
-    private class ObtenerHistoricoCobranzaPendiente extends AsyncTask<String, Void, Object> {
-
-        @Override
-        protected String doInBackground(String... arg1) {
-            //String argumento1=arg1[0];
-            String resultado="0";
-            try {
-
-                ArrayList<CobranzaDetalleSQLiteEntity> ListaCobranzaDetalleSQLiteEntity = new ArrayList<>();
-
-                FormulasController formulasController=new FormulasController(getContext());
-                ListaCobranzaDetalleSQLiteEntity = formulasController.ObtenerListaConvertidaHistoricoCobranza
-                        (
-                                getContext(),
-                                SesionEntity.imei,
-                                SesionEntity.compania_id,
-                                "0",
-                                "0",
-                                "Pendiente_Deposito",
-                                "01-01-1900",
-                                SesionEntity.fuerzatrabajo_id,
-                                "0"
-                        );
-                if(!ListaCobranzaDetalleSQLiteEntity.isEmpty()) {
-                    resultado="1";
-                    for (int i = 0; i < ListaCobranzaDetalleSQLiteEntity.size(); i++) {
-
-                        ArrayList<CobranzaDetalleSQLiteEntity> listadoCobranzaDetalleSQLiteEntity = new ArrayList<>();
-                        CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
-                        listadoCobranzaDetalleSQLiteEntity = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
-                                ListaCobranzaDetalleSQLiteEntity.get(i).getRecibo(),
-                                ListaCobranzaDetalleSQLiteEntity.get(i).getCompania_id().toString(),
-                                SesionEntity.fuerzatrabajo_id
-                        );
-                        if (listadoCobranzaDetalleSQLiteEntity.isEmpty()) {
-
-                            //Toast.makeText(getActivity(), "asdasdasd", Toast.LENGTH_SHORT).show();
-                           Alerta("5").show();
-                            /*
-                            CobranzaDetalleSQLiteDao insertarCobranzaDetalle = new CobranzaDetalleSQLiteDao(getContext());
-                            insertarCobranzaDetalle.InsertaCobranzaDetalle
-                                    (
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getCobranza_id(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getCliente_id(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getDocumento_id(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getCompania_id(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getImportedocumento(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getSaldodocumento(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getNuevosaldodocumento(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getSaldocobrado(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getFechacobranza(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getRecibo(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getNrofactura(),
-                                            SesionEntity.fuerzatrabajo_id,
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getChkbancarizado(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getMotivoanulacion(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getUsuario_id(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getComentario(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getChkdepositado(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getChkqrvalidado(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getBanco_id(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getChkwsrecibido(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getChkqrvalidado(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getChkwsdepositorecibido(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getPagodirecto(),
-                                            ListaCobranzaDetalleSQLiteEntity.get(i).getPagopos()
-
-
-                                    );*/
-                        }
-                    }
-                }else{
-                    resultado="0";
-                }
-
-
-            } catch (Exception e){
-                e.printStackTrace();
-                Log.e("jpcm ->",""+e);
-            }
-            return resultado;
-        }
-
-        protected void onPostExecute(Object result)
-        {
-            if(result.equals("0")){
-                Toast.makeText(getContext(), "No cuenta con recibos Pendientes por Sincronizar", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(getContext(), "Recibos Sincronizados Correctamente", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     public class ObtenerCobranzaDetallePendienteWS extends AsyncTask<String, Void, Object> {
         @Override

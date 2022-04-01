@@ -238,4 +238,5 @@ public class OrdenVentaDetalleSQLiteDao {
         }
         return estado;
     }
+
 }

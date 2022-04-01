@@ -1634,4 +1634,24 @@ public class CobranzaDetalleSQLiteDao {
         return listCollectionEntity;
     }
 
+    public int getCountCollectionPendingSend (String usuario_id,String compania_id)
+    {
+        int resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(COUNT(recibo),0) cantidad from cobranzadetalle  where usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"' AND chkwsrecibido='N' " ,null);
+            while (fila.moveToNext())
+            {
+                resultado=Integer.parseInt(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+        bd.close();
+        return resultado;
+    }
+
 }

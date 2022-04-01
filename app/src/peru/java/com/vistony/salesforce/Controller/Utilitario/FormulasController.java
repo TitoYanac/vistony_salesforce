@@ -1152,7 +1152,8 @@ public class FormulasController {
         visitaSQLite.InsertaVisita(visita);
 
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(context);
-
+        Log.e("REOS","FormulasController-RegistraVisita-visita.getCardCode():"+visita.getCardCode());
+        Log.e("REOS","FormulasController-RegistraVisita-visita.getAddress():"+visita.getAddress());
         switch(visita.getType()){
             case "01":
                 rutaVendedorSQLiteDao.ActualizaChkPedidoRutaVendedor(

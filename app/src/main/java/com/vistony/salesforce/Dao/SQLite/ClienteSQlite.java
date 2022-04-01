@@ -412,12 +412,12 @@ public class ClienteSQlite {
             SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
 
              fila = sqlite.rawQuery(
-                    "SELECT DISTINCT a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,d.zona_id,a.ordenvisita,a.zona," +
+                    "SELECT DISTINCT a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,d.direccion,d.zona_id,a.ordenvisita,a.zona," +
                             "a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio," +
                             "a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lastpurchase,IFNULL(SUM(e.saldo),0) as saldonocontados from cliente a" +
                             " LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id and a.cliente_id=b.cliente_id " +
-                            "INNER JOIN (SELECT compania_id,cliente_id,zona_id FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id) d ON a.compania_id=d.compania_id " +
+                            "INNER JOIN (SELECT compania_id,cliente_id,zona_id,domembarque_id,direccion FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id,domembarque_id,direccion) d ON a.compania_id=d.compania_id " +
                             "and a.cliente_id=d.cliente_id " +
                              " LEFT JOIN (Select saldo,compania_id,cliente_id,domembarque_id,moneda   from documentodeuda where fechaemision<>fechavencimiento GROUP BY compania_id,cliente_id,domembarque_id,saldo,moneda) e ON "+
                             " a.compania_id=e.compania_id and a.cliente_id=e.cliente_id " +
@@ -425,7 +425,7 @@ public class ClienteSQlite {
                             //"date('now') " +
                             " strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))" +
                             "AND estado='ACTIVO') GROUP BY a.cliente_id," +
-                            "a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,d.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id," +
+                            "a.compania_id,a.nombrecliente,d.domembarque_id,d.direccion,d.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id," +
                             "a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id;",null);
 
             while (fila.moveToNext())

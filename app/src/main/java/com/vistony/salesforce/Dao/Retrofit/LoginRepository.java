@@ -24,7 +24,7 @@ public class LoginRepository extends ViewModel{
 
     public MutableLiveData<ArrayList<String>> getAndLoadUsers(final String imei,final Context context){
 
-        Config.getClient().create(Api.class).getUsers(imei).enqueue(new Callback<LoginEntityResponse>() {
+        Config.getClientLogin().create(Api.class).getUsers(imei).enqueue(new Callback<LoginEntityResponse>() {
             @Override
             public void onResponse(Call<LoginEntityResponse> call, Response<LoginEntityResponse> response) {
                 LoginEntityResponse loginEntityResponse=response.body();

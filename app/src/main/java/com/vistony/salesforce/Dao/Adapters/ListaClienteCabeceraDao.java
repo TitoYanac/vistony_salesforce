@@ -35,7 +35,7 @@ public class ListaClienteCabeceraDao {
 
 
     private void saveLead(ListaClienteCabeceraEntity lead) {
-        leads.put(lead.getCliente_id(), lead);
+        leads.put(lead.getCliente_id()+lead.getDomembarque_id(), lead);
     }
 
     public List<ListaClienteCabeceraEntity> getLeads(ArrayList<ListaClienteCabeceraEntity> Lista) {

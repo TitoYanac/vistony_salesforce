@@ -73,7 +73,7 @@
     <string name="lbl_client_dispatch_sheet">Cliente:</string>
     <string name="lbl_seller_dispatch_sheet">Vendedor:</string>
     <string name="lbl_payment_term">Cond.Vta:</string>
-    <string name="lbl_address">Dirección:</string>
+    <string name="lbl_address">Dirección</string>
     <string name="lbl_credit">Crédito:</string>
     <string name="lbl_f_emision">F.Emisión:</string>
     <string name="lbl_lastpurchase">Ult.Compra</string>

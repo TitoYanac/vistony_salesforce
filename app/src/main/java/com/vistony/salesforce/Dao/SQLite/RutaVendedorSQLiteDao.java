@@ -217,9 +217,9 @@ public class RutaVendedorSQLiteDao {
                 domfactura_id=listaClienteSQLiteEntity.get(i).getDomfactura_id();
                 ShipToCode=listaClienteSQLiteEntity.get(i).getDomembarque_id();
             }
-            countsalesorder=visitaSQLite.getCountVisitWithType(date,fila.getString(0),"01",checkRuta);
-            countcollection=visitaSQLite.getCountVisitWithType(date,fila.getString(0),"02",checkRuta);
-            countvisit=visitaSQLite.getCountVisitWithDate(date,fila.getString(0),checkRuta);
+            countsalesorder=visitaSQLite.getCountVisitWithType(date,fila.getString(0),"01",checkRuta,fila.getString(1));
+            countcollection=visitaSQLite.getCountVisitWithType(date,fila.getString(0),"02",checkRuta,fila.getString(1));
+            countvisit=visitaSQLite.getCountVisitWithDate(date,fila.getString(0),checkRuta,fila.getString(1));
             if(countsalesorder>0)
             {
                 visitsalesorder="1";
@@ -235,7 +235,7 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity= new ListaClienteCabeceraEntity();
             ObjListaClienteCabeceraEntity.setCliente_id(fila.getString(0));
 
-            ObjListaClienteCabeceraEntity.setDomembarque_id(ShipToCode);
+            ObjListaClienteCabeceraEntity.setDomembarque_id(fila.getString(1));
             ObjListaClienteCabeceraEntity.setDomfactura_id(domfactura_id);
 
             ObjListaClienteCabeceraEntity.setCompania_id(fila.getString(2));
@@ -375,7 +375,7 @@ public class RutaVendedorSQLiteDao {
             registro.put("chk_visita","1");
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' " +
-                    //"and  domembarque_id='"+domembarque_id+"' " +
+                    "and  domembarque_id='"+domembarque_id+"' " +
                     "and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
         }catch (Exception e)
@@ -400,7 +400,7 @@ public class RutaVendedorSQLiteDao {
         abrir();
         try {
             Cursor fila = bd.rawQuery(
-                    "Select IFNULL(SUM(salesorderamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and compania_id='"+compania_id+"' and cliente_id='"+cliente_id+"'   " ,null);
+                    "Select IFNULL(SUM(salesorderamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and compania_id='"+compania_id+"' and cliente_id='"+cliente_id+"' and domembarque_id='"+domembarque_id+"'   " ,null);
             while (fila.moveToNext())
             {
                 monto= Float.parseFloat (fila.getString(0));
@@ -411,7 +411,7 @@ public class RutaVendedorSQLiteDao {
             registro.put("salesorderamount",String.valueOf(monto+Float.parseFloat(salesorderamount)));
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"'" +
-                    //" and  domembarque_id='"+domembarque_id+"'" +
+                    " and  domembarque_id='"+domembarque_id+"'" +
                     " and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
         }catch (Exception e)
@@ -436,7 +436,7 @@ public class RutaVendedorSQLiteDao {
         abrir();
         try {
             Cursor fila = bd.rawQuery(
-                    "Select IFNULL(SUM(collectionamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and compania_id='"+compania_id+"' and cliente_id='"+cliente_id+"'   " ,null);
+                    "Select IFNULL(SUM(collectionamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and compania_id='"+compania_id+"' and cliente_id='"+cliente_id+"' and domembarque_id='"+domembarque_id+"'   " ,null);
             while (fila.moveToNext())
             {
                 monto= Float.parseFloat (fila.getString(0));
@@ -448,7 +448,7 @@ public class RutaVendedorSQLiteDao {
             registro.put("collectionamount",String.valueOf(monto+Float.parseFloat(collectionamount)));
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' " +
-                    //"and  domembarque_id='"+domembarque_id+"' " +
+                    "and  domembarque_id='"+domembarque_id+"' " +
                     "and fecharuta='"+fecharuta+"' " ,null);
             bd.close();
         }catch (Exception e)
