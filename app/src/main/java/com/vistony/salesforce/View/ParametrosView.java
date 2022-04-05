@@ -294,6 +294,7 @@ ParametrosView extends Fragment {
                 break;
             case "peru":
             case "bolivia":
+            case "paraguay":
                 if (listaparametrosSQLiteEntity.isEmpty()) {
                     if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
                         //if (listaparametrosSQLiteEntity.isEmpty()) {
@@ -537,6 +538,7 @@ ParametrosView extends Fragment {
 
                                 break;
                             case "bolivia":
+                            case "paraguay":
                                  clienteRepository = new ClienteRepository();
                                 LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 

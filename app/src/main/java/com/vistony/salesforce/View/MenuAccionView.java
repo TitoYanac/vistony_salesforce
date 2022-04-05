@@ -60,7 +60,7 @@ public class MenuAccionView extends Fragment {
     int validar=0;
     private static String TAG_1 = "text";
     View v;
-    private CardView cv_pedido,cv_cobranza,cv_visita;
+    private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
 
     OnFragmentInteractionListener mListener;
@@ -182,8 +182,13 @@ public class MenuAccionView extends Fragment {
         cv_pedido=v.findViewById(R.id.cv_pedido);
         cv_cobranza=v.findViewById(R.id.cv_cobranza);
         cv_visita=v.findViewById(R.id.cv_visita);
+        cv_lead=v.findViewById(R.id.cv_lead);
         setHasOptionsMenu(true);
-
+        switch (BuildConfig.FLAVOR){
+            case "paraguay":
+                cv_lead.setVisibility(View.GONE);
+                break;
+        }
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
             cv_pedido.setVisibility(View.GONE);
@@ -207,6 +212,7 @@ public class MenuAccionView extends Fragment {
                 case "ecuador":
                 case "bolivia":
                 case "chile":
+                case "paraguay":
                     alertatipoventa().show();
                     break;
             }
@@ -244,6 +250,15 @@ public class MenuAccionView extends Fragment {
             }
             //alertaAdvertencia("La Opcion Aun no Esta Habilitada",getContext()).show();
         });
+        cv_lead.setOnClickListener(v -> {
+                String Fragment="MenuAccionView";
+                String accion="lead";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                SesionEntity.quotation="N";
+
+        });
+
         return v;
     }
 
@@ -289,6 +304,7 @@ public class MenuAccionView extends Fragment {
             case "chile":
             case "ecuador":
             case "bolivia":
+            case "paraguay":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza_induvis);
                 break;
             case "peru":

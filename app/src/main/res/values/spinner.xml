@@ -65,6 +65,10 @@
         <item >Bs-Bolivianos</item>
     </string-array>
 
+    <string-array name="Moneda_Paraguay" >
+        <item >Gs-Guaraníes</item>
+    </string-array>
+
     <string-array name="tipo_visita" >
         <item >01-ORDEN VENTA</item>
         <item >02-COBRANZA</item>

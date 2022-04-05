@@ -178,6 +178,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970594490766:android:8c50f1f3cad393b3b72cdf",
+        "android_client_info": {
+          "package_name": "com.vistony.salesforce.paraguay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970594490766-q6sm6ki41rmp4ijgdog8iod2kvd516p6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHKa49uvrxb0T_bqR0GwadBmnuhu4lwZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970594490766-q6sm6ki41rmp4ijgdog8iod2kvd516p6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
 

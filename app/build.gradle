@@ -101,6 +101,17 @@ android {
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"BO"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
+        paraguay{
+            applicationIdSuffix ".paraguay"
+            buildConfigField('String' , 'IMEI_DEFAULT', '""')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"/bo"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"py.get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"py.post"')
+            versionName "1.0.0"
+            manifestPlaceholders = [country:"Paraguay"]
+            buildConfigField('String' , 'COUNTRY_DEFAULT', '"PY"')
+            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
+        }
     }
 
     /*

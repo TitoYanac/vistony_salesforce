@@ -53,6 +53,12 @@ public class Induvis {
                         "Central: (01) 5521325 E-mail: ventas@vistony.com   " +
                         " Web: www.vistony.com";
                 break;
+            case "paraguay":
+                information="R.U.C N° 80035312-9" +
+                        "Acceso Sur y Benjamín Aceval -Barrio Alegre-Guarambaré" +
+                        "Central:0986-454-534/0986-125-810 E-mail: ventas@vistony.com   " +
+                        " Web: www.vistony.com.py";
+                break;
         }
 
         return information;
@@ -69,6 +75,7 @@ public class Induvis {
             case "chile":
             case "ecuador":
             case "peru":
+            case "paraguay":
                 year=dateBD.substring(0,4);
                 month=dateBD.substring(4,6);
                 day=dateBD.substring(6,8);
@@ -91,6 +98,7 @@ public class Induvis {
             case "peru":
             case "bolivia":
             case "ecuador":
+            case "paraguay":
                 hour=timeBD.substring(0,2);
                 minute=timeBD.substring(2,4);
                 second=timeBD.substring(4,6);
@@ -112,6 +120,7 @@ public class Induvis {
                 case "bolivia":
                 case "ecuador":
                 case "chile":
+                case "paraguay":
                     hour = timeBD.substring(0, 2);
                     minute = timeBD.substring(2, 4);
                     second = timeBD.substring(4, 6);
@@ -138,6 +147,8 @@ public class Induvis {
             case "bolivia":
                 impuesto=0.14942529;
                 break;
+            case "paraguay":
+                break;
         }
 
         return impuesto;
@@ -157,6 +168,8 @@ public class Induvis {
                 break;
             case "bolivia":
                 impuesto="14.942529";
+                break;
+            case "paraguay":
                 break;
         }
 
@@ -178,6 +191,8 @@ public class Induvis {
             case "bolivia":
                 agencia="P1004361020";
                 break;
+            case "paraguay":
+                break;
         }
 
         return agencia;
@@ -196,6 +211,8 @@ public class Induvis {
             case "peru":
                 impuesto="IGV";
                 break;
+            case "paraguay":
+                break;
         }
         return impuesto;
     }
@@ -209,6 +226,7 @@ public class Induvis {
                 break;
             case ("ecuador"):
             case ("bolivia"):
+            case "paraguay":
             case "chile":
                 if(SesionEntity.quotation.equals("Y"))
                  {
@@ -304,6 +322,7 @@ public class Induvis {
         switch (BuildConfig.FLAVOR){
             case "bolivia":
             case "peru":
+            case "paraguay":
                 dias=0;
                 break;
             case "ecuador":
@@ -323,6 +342,7 @@ public class Induvis {
             case "ecuador":
             case "bolivia":
             case "chile":
+            case "paraguay":
                 if(SesionEntity.quotation.equals("Y"))
                 {
                     draft="N";

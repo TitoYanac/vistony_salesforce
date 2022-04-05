@@ -43,9 +43,14 @@
         android:requestLegacyExternalStorage="true"
         >
 
+        <!--<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="AIzaSyC_k2m7mxljS8M4kXZE41n1t4V_Usgkq_4" />
+
+
         <meta-data
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />

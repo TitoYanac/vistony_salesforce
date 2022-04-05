@@ -308,7 +308,8 @@ public class LeadClientesView extends Fragment {
 
                                             latitud = location.getLatitude();
                                             longitud = location.getLongitude();
-
+                                            Log.e("REOS","LeadClientesView.displayDialogMap.latitud:"+latitud);
+                                            Log.e("REOS","LeadClientesView.displayDialogMap.longitud:"+longitud);
                                             LatLng latLng = new LatLng(latitud, longitud);
                                             myGoogleMap.clear();
                                             myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Potential client").draggable(true));
@@ -316,7 +317,7 @@ public class LeadClientesView extends Fragment {
                                             editTextCoordenates.setText(latitud + "," + longitud);
 
                                             if (status) {
-                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                                                 status = false;
                                             } else {
                                                 myGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));

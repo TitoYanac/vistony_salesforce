@@ -149,7 +149,8 @@ public class DepositoRepository extends ViewModel {
             Config.getClient().create(Api.class).sendDeposit(jsonRequest).enqueue(new Callback<DepositList>() {
                 @Override
                 public void onResponse(Call<DepositList> call, Response<DepositList> response) {
-
+                    Log.e("REOS","DepositoRepository-enviarDepositos-call: "+call.toString());
+                    Log.e("REOS","DepositoRepository-enviarDepositos-call: "+response.toString());
                     DepositList depositos=response.body();
 
                     if(response.isSuccessful() && depositos!=null){

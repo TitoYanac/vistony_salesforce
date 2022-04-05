@@ -38,6 +38,9 @@ public class Config {
             case "peru":
                 puerto = ":8001";
                 break;
+            case "paraguay":
+                puerto = ":8051";
+                break;
         }
         try{
             if(client==null) {
@@ -80,6 +83,9 @@ public class Config {
                 break;
             case "peru":
                 puerto = ":8001";
+                break;
+            case "paraguay":
+                puerto = ":8051";
                 break;
         }
         try{

@@ -44,6 +44,9 @@ public class VersionViewModel {
             case "peru":
                 puerto = ":8001";
                 break;
+            case "paraguay":
+                puerto = ":8051";
+                break;
         }
 
         String endPoint=baseUrl
@@ -59,6 +62,7 @@ public class VersionViewModel {
             case "ecuador":
             case "bolivia":
             case "peru":
+            case "paraguay":
                 String hashMd5=context.getPackageName()+"."+BuildConfig.BUILD_TYPE;
                 Log.e("El hash ess","=>"+hashMd5);
                 endPoint=endPoint+BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/version?imei="+imei+"&token="+md5(hashMd5);

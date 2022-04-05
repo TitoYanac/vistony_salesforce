@@ -55,18 +55,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.vistony.salesforce.BuildConfig;
-import com.vistony.salesforce.Controller.Utilitario.BixolonPrinterController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
-import com.vistony.salesforce.Dao.Retrofit.HistoricContainerSalesRepository;
-import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerDetailRepository;
-import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerHeadRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.RutaFuerzaTrabajoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
-import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -79,12 +73,10 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 
 public class MenuView extends AppCompatActivity
@@ -127,15 +119,8 @@ public class MenuView extends AppCompatActivity
         PromocionDetalleView.OnFragmentInteractionListener,
         ConsStockView.OnFragmentInteractionListener,
         PromocionCabeceraEditarDescuentoView.OnFragmentInteractionListener,
-        MenuConsultaPedidosView.OnFragmentInteractionListener,
-        MenuConsultasFacturasView.OnFragmentInteractionListener,
-        HistoricContainerSalesFamilyView.OnFragmentInteractionListener,
-        MenuConsultaCobradoView.OnFragmentInteractionListener,
-        QuotasPerCustomerView.OnFragmentInteractionListener,
-        ConsultaStockView.OnFragmentInteractionListener,
-        HistoricContainerSKU.OnFragmentInteractionListener,
-        KardexOfPaymentView.OnFragmentInteractionListener,
-        DispatchSheetView.OnFragmentInteractionListener
+        PriceListView.OnFragmentInteractionListener
+
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment,contentHistoryFragment;
@@ -161,20 +146,13 @@ public class MenuView extends AppCompatActivity
     Fragment historicoOrdenVentaFragment;
     Fragment PromocionCabeceraFragment;
     Fragment PromocionDetalleFragment;
-    Fragment MenuConsultasPedidosFragment;
-    Fragment HistoricContainerSaleFragment;
-    Fragment BuscarClienteFragment;
-    Fragment QuotasPerCustomerFragment;
-    Fragment ConsultaStockFragment;
-    Fragment MenuConsultaCobranzaFragment;
-    Fragment KardexOfPaymentFragment;
-    Fragment HojaDespachoView;
-    Fragment HojaDespachoFragment;
-    static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
+    Fragment PriceListFragment;
+    TableRow tablerowzona;
+
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
     private File file = new File(ruta_fotos);
-    TextView tv_fuerzatrabajo_id_navheader,tv_nombrefuerzatrabajo_navheader,tv_correlativo_navheader,tv_conexion_navheader,tv_zona;
+    TextView tv_fuerzatrabajo_id_navheader,tv_nombrefuerzatrabajo_navheader,tv_correlativo_navheader,tv_conexion_navheader;
     FragmentManager fragmentManager;
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
@@ -193,10 +171,6 @@ public class MenuView extends AppCompatActivity
     private String NameOfFile = "imagen";
     public static String mCurrentPhotoPath="";
     private ValueCallback<Uri> uploadMessage;
-    SimpleDateFormat dateFormat;
-    Date date;
-    String fecha;
-    RutaFuerzaTrabajoSQLiteDao rutaFuerzaTrabajoSQLiteDao;
 
     /*VARIABLES TEMPORALESS*/
     final int COD_FOTO=20;
@@ -206,11 +180,6 @@ public class MenuView extends AppCompatActivity
 
     private  String recibovalidado = "";
     private ConnectivityManager manager;
-    private static BixolonPrinterController bxlPrinter = null;
-    QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
-    HistoricContainerSalesRepository historicContainerSalesRepository;
-    TableRow tablerowzona;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,10 +189,6 @@ public class MenuView extends AppCompatActivity
         setContentView(R.layout.activity_menu_view);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-        date = new Date();
-        fecha =dateFormat.format(date);
-
         view= (MenuItem) findViewById(R.id.nav_cobranzas);
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(this);
         CobranzaCabeceraFragment= new Fragment();
@@ -238,30 +203,19 @@ public class MenuView extends AppCompatActivity
         DireccionClienteFragment = new Fragment();
         ConsClienteFragment =new Fragment();
         historicoOrdenVentaFragment = new Fragment();
-        MenuConsultasPedidosFragment = new Fragment();
-        HistoricContainerSaleFragment = new Fragment();
-        BuscarClienteFragment = new Fragment();
-        QuotasPerCustomerFragment = new Fragment();
-        ConsultaStockFragment= new Fragment();
-        MenuConsultaCobranzaFragment = new Fragment();
-        KardexOfPaymentFragment = new Fragment();
-        HojaDespachoView = new Fragment();
-        HojaDespachoFragment = new Fragment();
-
+        PriceListFragment = new Fragment();
         arraylistConfiguracionentity= new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao =  new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         context=this;
         usuarioSQLite = new UsuarioSQLite(this);
-        quotasPerCustomerRepository = new ViewModelProvider(this).get(QuotasPerCustomerHeadRepository.class);
-        quotasPerCustomerDetailRepository = new ViewModelProvider(this).get(QuotasPerCustomerDetailRepository.class);
         cobranzaRepository = new ViewModelProvider(this).get(CobranzaRepository.class);
         cobranzaRepository.PendingCollectionQR(this).observe(MenuView.this, data -> {
             Log.e("Jepicame","=>"+data);
         });
-        historicContainerSalesRepository = new ViewModelProvider(this).get(HistoricContainerSalesRepository.class);
+
         Conexion=usuarioSQLite.ObtenerUsuarioSesion().getOnline();
-        rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(this);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle( this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -275,15 +229,15 @@ public class MenuView extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-        bxlPrinter = new BixolonPrinterController(this);
+        //bxlPrinter = new BixolonPrinterController(this);
         tv_fuerzatrabajo_id_navheader=(TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_fuerzatrabajo_id_navheader);
         //findViewById( R.id.tv_fuerzatrabajo_id_navheader);
         tv_nombrefuerzatrabajo_navheader=(TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_nombrefuerzatrabajo_navheader);
+        tablerowzona=(TableRow) navigationView.getHeaderView(0).findViewById(R.id.tablerowzona);
+        //tv_correlativo_navheader=(TextView)navigationView.getHeaderView(0).findViewById(R.id.tv_correlativo_navheader);
 
-        tv_zona=(TextView)navigationView.getHeaderView(0).findViewById(R.id.tv_zona);
-        tv_zona.setText(rutaFuerzaTrabajoSQLiteDao.ObtenerZonaRutaFuerzaTrabajo(fecha));
         //tv_conexion_navheader=(TextView)
         //        navigationView.getHeaderView(0).findViewById(R.id.tv_Conexion_navheader);
         imv_compania_menu=(ImageView)
@@ -291,16 +245,6 @@ public class MenuView extends AppCompatActivity
         textViewStatus=navigationView.getHeaderView(0).findViewById(R.id.textViewStatus);
         listaConfiguracionEntity= new ArrayList<ConfiguracionSQLEntity>();
         listaConfiguracionEntity=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
-        tablerowzona= navigationView.getHeaderView(0).findViewById(R.id.tablerowzona);
-
-
-
-
-        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
-        {
-            tv_zona.setVisibility(View.GONE);
-            tablerowzona.setVisibility(View.GONE);
-        }
         if(listaConfiguracionEntity.isEmpty())
         {
             configuracionSQLiteDao.InsertaConfiguracion(
@@ -336,9 +280,16 @@ public class MenuView extends AppCompatActivity
         }
 
 
-        if(SesionEntity.Print.equals("Y"))
-        {
-            SesionEntity.formhabilPrint=("Y");
+        switch (BuildConfig.FLAVOR){
+            case "bolivia":
+            case "ecuador":
+            case "chile":
+            case "india":
+            case "paraguay":
+                tablerowzona.setVisibility(View.GONE);
+                break;
+            default:
+                break;
         }
 
 
@@ -363,7 +314,7 @@ public class MenuView extends AppCompatActivity
             case "CHOFER":
             case "Chofer":
                 onNavigationItemSelected(navigationView.getMenu().getItem(1).setVisible(false));
-                onNavigationItemSelected(navigationView.getMenu().getItem(4).setVisible(false));
+                onNavigationItemSelected(navigationView.getMenu().getItem(3).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(5).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
                 break;
@@ -383,8 +334,10 @@ public class MenuView extends AppCompatActivity
 
         switch (BuildConfig.FLAVOR){
             case "bolivia":
+            case "peru":
             case "ecuador":
             case "chile":
+            case "paraguay":
                 navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
@@ -406,18 +359,6 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_configuracion_general).setEnabled(false);
-                navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
-                break;
-            case "peru":
-                navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_formularios).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
-                navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
-                navigationView.getMenu().findItem(R.id.nav_configuracion_general).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
                 break;
             default:
@@ -503,14 +444,7 @@ public class MenuView extends AppCompatActivity
                 case "FormListaDeudaCliente":
                 case "MenuAccionView":
                     //no necesita ir mas atras ya que es un fragmento base
-                    if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
-                    {
-                        onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
-                    }else
-                        {
-                            onNavigationItemSelected(navigationView.getMenu().getItem(1).setChecked(true));
-                        }
-
+                    onNavigationItemSelected(navigationView.getMenu().getItem(1).setChecked(true));
                     /*
                     if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("rutaVendedor")){
                         onNavigationItemSelected(navigationView.getMenu().getItem(2).setChecked(true));
@@ -736,16 +670,10 @@ public class MenuView extends AppCompatActivity
 
                 break;*/
             case R.id.nav_hoja_despacho:
-                //contentFragment=new DispatchSheetView();
-                //fragmentSeleccionado=true;
-                //TAG_FRAGMENT="config_print";
-
-                HojaDespachoFragment = new DispatchSheetView();
-                fragment="HojaDespachoView";
-                accion="inicio";
-                compuesto=fragment+"-"+accion;
-                object=null;
-                onFragmentInteraction(compuesto,object);
+                /*contentFragment=new HojaDespachoView();
+                fragmentSeleccionado=true;
+                TAG_FRAGMENT="config_print";*/
+                //Toast.makeText(context, "Vista no construida", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
@@ -780,7 +708,7 @@ public class MenuView extends AppCompatActivity
                 TAG_FRAGMENT="config_print";
                 break;
             case R.id.nav_comisiones:
-                contentFragment=new ContenedorComisionesView();
+                contentFragment=new ComisionesView();
                 fragmentSeleccionado=true;
                 TAG_FRAGMENT="config_print";
                 break;
@@ -1085,13 +1013,6 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
-            else if(tag2.equals("MENUCOBRANZA"))
-            {
-                contentFragment=new MenuConsultaCobradoView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
         }else if(tag.equals("MantenimientoClienteView")){
                 tag2="MantenimientoClienteView";
                 contentFragment=new MapaClienteView();
@@ -1109,9 +1030,10 @@ public class MenuView extends AppCompatActivity
                 MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
                 ft.remove(MenuAccionViewFragment);
                 ft.add(R.id.content_menu_view, OrdenVentaCabeceraView.newInstance(Lista),tag2);
-
                 ft.addToBackStack("po1p");
                 ft.commit();
+
+
             }
             if(tag2.equals("cobranza"))
             {
@@ -1124,23 +1046,6 @@ public class MenuView extends AppCompatActivity
                 //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("po1p");
                 ft.commit();
-            }
-            if(tag2.equals("lead"))
-            {
-                //String tagClienteCabeceraView="inicioClienteCabeceraView";
-                /*String tagRutaVendedorView="inicioRutaVendedorView";
-                MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
-                ft.remove(MenuAccionViewFragment);
-                tag2="inicioClienteCabeceraView";
-                ft.add(R.id.content_menu_view,ClienteDetalleView.newInstance(Lista),tag2);
-                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
-                ft.addToBackStack("po1p");
-                ft.commit();*/
-                contentFragment=new LeadClientesView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-
             }
 
         }
@@ -1189,6 +1094,15 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("po1p");
                 ft.commit();
             }
+            if(tag2.equals("pricelist"))
+            {
+                String tagOrdenVentaCabeceraView="pedido";
+                OrdenVentaCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaCabeceraView);
+                ft.hide(OrdenVentaCabeceraFragment);
+                ft.add(R.id.content_menu_view, PriceListView.newInstance(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
         }
 
         else if(tag.equals("TerminoPagoView"))
@@ -1205,6 +1119,7 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("pop");
                 ft.commit();
                 OrdenVentaCabeceraView.newInstanciaTerminoPago(Lista);
+                obtenerTituloFormulario();
             }
         }
 
@@ -1223,6 +1138,7 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
 
                 OrdenVentaCabeceraView.newInstanciaAgencia(Lista);
+                obtenerTituloFormulario();
             }
         }
 
@@ -1356,13 +1272,6 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
-            if(tag2.equals("menuconsultaspedidoview"))
-            {
-                contentFragment=new MenuConsultaPedidosView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
             if(tag2.equals("historicofacturas"))
             {
                 contentFragment=new HistoricoFacturasView();
@@ -1380,13 +1289,6 @@ public class MenuView extends AppCompatActivity
             if(tag2.equals("Consulta_Orden_Venta_Estado"))
             {
                 //contentFragment=new HistoricoOrdenVentaEstadoView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-            if(tag2.equals("menuconsultasfacturaview"))
-            {
-                contentFragment=new MenuConsultasFacturasView();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
@@ -1450,6 +1352,7 @@ public class MenuView extends AppCompatActivity
         }
         if(tag.equals("ConsClienteView"))
         {
+
             if(tag2.equals("agregarClienteNoRuta"))
             {
                 String tagRutaVendedor="nuevoinicioRutaVendedorView";
@@ -1462,59 +1365,10 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popuuuploo");
                 ft.commit();
             }
-            else if(tag2.equals("agregarquotaspercustomer"))
-            {
-                contentFragment=new BuscarClienteView();
-                String tagBuscarClienteView="dialogoagregarcliente";
-                String tagQuotasPerCustomer="QUOTAS";
-                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
-                ft.hide(BuscarClienteFragment);
-                QuotasPerCustomerFragment  =getSupportFragmentManager().findFragmentByTag(tagQuotasPerCustomer);
-                //ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
-                ft.show(QuotasPerCustomerFragment);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-                String nomblecliente="",cliente_id="";
-                if(Lista!=null)
-                {
-
-                    ArrayList<ListaClienteCabeceraEntity>Listado=(ArrayList<ListaClienteCabeceraEntity>) Lista;
-                    for(int i=0;i<Listado.size();i++)
-                    {
-                        nomblecliente=Listado.get(i).getNombrecliente();
-                        cliente_id=Listado.get(i).getCliente_id();
-                    }
-                    Induvis.setTituloContenedor( nomblecliente,this);
-
-                }
-                QuotasPerCustomerView.newInstanceRecibirCliente(Lista);
-                quotasPerCustomerRepository.getQuotasPerCustomer(SesionEntity.fuerzatrabajo_id,this,cliente_id).observe(this, data -> {
-                    Log.e("Jepicame","=>"+data);
-                });
-                quotasPerCustomerDetailRepository.getQuotasPerCustomerDetail (SesionEntity.fuerzatrabajo_id,this,cliente_id).observe(this, data -> {
-                    Log.e("Jepicame","=>"+data);
-                });
-
-            }
-            else if(tag2.equals("agregarquotaspercustomerDialog"))
-            {
-                contentFragment=new BuscarClienteView();
-                String tagBuscarClienteView="dialogoagregarclienteMenu";
-                String tagQuotasPerCustomer="MENUCOBRANZA";
-                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
-                ft.remove(BuscarClienteFragment);
-                MenuConsultaCobranzaFragment  =getSupportFragmentManager().findFragmentByTag(tagQuotasPerCustomer);
-                //ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
-                ft.show(MenuConsultaCobranzaFragment);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-                MenuConsultaCobradoView.newInstanceRecibirCliente(Lista);
-
-            }
-
         }
         if(tag.equals("RutaVendedorNorutaView"))
         {
+
             if(tag2.equals("agregarClienteNoRuta"))
             {
                 contentFragment=new BuscarClienteView();
@@ -1524,8 +1378,6 @@ public class MenuView extends AppCompatActivity
                 ft.add(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
-                BuscarClienteView.newInstanceFlujoNoRuta(Lista);
-
             }
         }
         if(tag.equals("DireccionClienteView"))
@@ -1542,6 +1394,7 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("po1p");
                 ft.commit();
                 OrdenVentaCabeceraView.newInstanciaNuevaDireccion(Lista);
+                obtenerTituloFormulario();
             }
         }
         if(tag.equals("HistoricoOrdenVentaView"))
@@ -1559,280 +1412,22 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
             }
         }
-        if(tag.equals("MenuConsultasPedidosView"))
+        if(tag.equals("PriceList"))
         {
 
-            if(tag2.equals("iniciar"))
+            if(tag2.equals("enviarlead"))
             {
-                tag2="historicoordenventa";
-                String tagOrdenVentaCabeceraView="consultaordenventa";
-                historicoOrdenVentaFragment = getSupportFragmentManager().findFragmentByTag(tag2);
+                String tagOrdenVentaCabeceraView="pedido";
+                String tagPricelist="pricelist";
+                PriceListFragment = getSupportFragmentManager().findFragmentByTag(tagPricelist);
                 OrdenVentaCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaCabeceraView);
-                ft.hide(historicoOrdenVentaFragment);
-                ft.add(R.id.content_menu_view, OrdenVentaCabeceraView.newInstanceHistoricoOrdenVenta(Lista,tag2),tagOrdenVentaCabeceraView);
-                ft.addToBackStack("po1p");
-                ft.commit();
-            }
-            if(tag2.equals("consulta_stock"))
-            {
-                    contentFragment=new ConsultaStockView();
-                    ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                    ft.addToBackStack("popsssggggersa");
-                    ft.commit();
-
-            }
-        }
-        if(tag.equals("MenuConsultasFacturasView"))
-        {
-            if(tag2.equals("historiccontainersaleview"))
-            {
-                contentFragment=new HistoricContainerSaleView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-            if(tag2.equals("historiccontainersaleviewSKU"))
-            {
-                contentFragment=new HistoricContainerSKU();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-        }
-        if(tag.equals("HistoricContainerSaleView"))
-        {
-            if(tag2.equals("dialogoagregarclienteSKU"))
-            {
-                contentFragment=new BuscarClienteView();
-                String tagHistoricContainerSale="historiccontainersaleviewSKU";
-                HistoricContainerSaleFragment=getSupportFragmentManager().findFragmentByTag(tagHistoricContainerSale);
-                ft.hide(HistoricContainerSaleFragment);
-                //ft.add(R.id.content_menu_view,contentFragment,tag2);
-                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-            if(tag2.equals("dialogoagregarcliente"))
-            {
-                contentFragment=new BuscarClienteView();
-                String tagHistoricContainerSale="historiccontainersaleview";
-                HistoricContainerSaleFragment=getSupportFragmentManager().findFragmentByTag(tagHistoricContainerSale);
-                ft.hide(HistoricContainerSaleFragment);
-                //ft.add(R.id.content_menu_view,contentFragment,tag2);
-                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-            if(tag2.equals("recibircliente"))
-            {
-
-                contentFragment=new BuscarClienteView();
-                String tagBuscarClienteView="dialogoagregarcliente";
-                String tagHistoricContainerSale="historiccontainersaleview";
-                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
-                ft.hide(BuscarClienteFragment);
-                HistoricContainerSaleFragment=getSupportFragmentManager().findFragmentByTag(tagHistoricContainerSale);
-                //ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
-                ft.show(HistoricContainerSaleFragment);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-                HistoricContainerSaleView.newInstanceRecibirCliente(Lista);
-                if(Lista!=null)
-                {
-                    String nomblecliente="";
-                    ArrayList<ListaClienteCabeceraEntity>Listado=(ArrayList<ListaClienteCabeceraEntity>) Lista;
-                    for(int i=0;i<Listado.size();i++)
-                    {
-                        nomblecliente=Listado.get(i).getNombrecliente();
-                    }
-                    Induvis.setTituloContenedor( nomblecliente,this);
-
-                }
-                /*dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                date = new Date();
-                fecha =dateFormat.format(date);
-
-                HistoricContainerSaleView.newInstanceRecibirCliente(Lista);
-                historicContainerSalesRepository = new ViewModelProvider(this).get(HistoricContainerSalesRepository.class);
-                try {
-                    historicContainerSalesRepository.getHistoricContainerSales(
-                            SesionEntity.imei,
-                            this,
-                            HistoricContainerSaleView.CardCode,
-                            Induvis.changeMonth(fecha,-6),
-                            fecha,
-                            "FOCOS",
-                            "FOCOS"
-                    ).observe(this, data -> {
-                        HistoricContainerSaleFocoView.newInstanceListarClienteFoco(data);
-                        Log.e("REOS","RESPUESTAFOCO"+data);
-                    });
-                    historicContainerSalesRepository.getHistoricContainerSales(
-                            SesionEntity.imei,
-                            this,
-                            HistoricContainerSaleView.CardCode,
-                            Induvis.changeMonth(fecha,-6),
-                            fecha,
-                            "FAMILIA",
-                            "FAMILIA"
-                    ).observe(this, data -> {
-                        HistoricContainerSalesFamilyView.newInstanceListarClienteFamily(data);
-                        Log.e("REOS","RESPUESTAFAMILIA"+data);
-                    });
-                    historicContainerSalesRepository.getHistoricContainerSales(
-                            SesionEntity.imei,
-                            this,
-                            HistoricContainerSaleView.CardCode,
-                            Induvis.changeMonth(fecha,-6),
-                            fecha,
-                            "SEMAFORO",
-                            "SEMAFORO"
-                    ).observe(this, data -> {
-                        Log.e("REOS","RESPUESTASEMAFORO"+data);
-                        HistoricContainerSalesSemaforoView.newInstanceListarClienteSemaforo(data);
-                    });
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                */
-            }
-            if(tag2.equals("recibirclienteSKU"))
-            {
-                contentFragment=new BuscarClienteView();
-                String tagBuscarClienteView="dialogoagregarclienteSKU";
-                String tagHistoricContainerSale="historiccontainersaleviewSKU";
-                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
-                ft.hide(BuscarClienteFragment);
-                HistoricContainerSaleFragment=getSupportFragmentManager().findFragmentByTag(tagHistoricContainerSale);
-                //ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
-                ft.show(HistoricContainerSaleFragment);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-                HistoricContainerSKU.newInstanceRecibirCliente(Lista);
-            }
-        }
-
-        if(tag.equals("HistoricoMenuCobranzaView"))
-        {
-            if(tag2.equals("QUOTAS"))
-            {
-                contentFragment=new QuotasPerCustomerView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-        }
-        if(tag.equals("QuotasPerCustomer"))
-        {
-            if(tag2.equals("dialogoagregarcliente"))
-            {
-                contentFragment=new BuscarClienteView();
-                String tagQUOTAS="QUOTAS";
-                QuotasPerCustomerFragment  =getSupportFragmentManager().findFragmentByTag(tagQUOTAS);
-                ft.hide(QuotasPerCustomerFragment);
-                //ft.add(R.id.content_menu_view,contentFragment,tag2);
-                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-            if(tag2.equals("dialogoagregarclienteMenu"))
-            {
-                contentFragment=new BuscarClienteView();
-                String tagMenuCobranza="MENUCOBRANZA";
-                MenuConsultaCobranzaFragment  =getSupportFragmentManager().findFragmentByTag(tagMenuCobranza);
-                ft.hide(MenuConsultaCobranzaFragment);
-                //ft.add(R.id.content_menu_view,contentFragment,tag2);
-                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-        }
-
-        if(tag.equals("ConsultaStockView"))
-        {
-            if(tag2.equals( "listadopromocion"))
-            {
-                String tag3="consulta_stock";
-                ConsultaStockFragment = getSupportFragmentManager().findFragmentByTag(tag3);
-                ft.hide(ConsultaStockFragment);
-                ft.add(R.id.content_menu_view, ListadoPromocionView.newInstanceRecibePromocionConsultaStock(Lista), tag2);
-                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
-                ft.addToBackStack("po1p");
-                ft.commit();
-            }
-            else if(tag2.equals( "mostrarConsultaStock"))
-            {
-                Induvis.setTituloContenedor("Consulta Stock",this);
-                String tag3="consulta_stock",tag4="promociondetalle";
-                PromocionCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tag4);
-                ConsultaStockFragment = getSupportFragmentManager().findFragmentByTag(tag3);
-
-                ft.remove(PromocionCabeceraFragment);
-                ft.show(ConsultaStockFragment);
-                //ft.add(R.id.content_menu_view, ListadoPromocionView.newInstanceRecibePromocionConsultaStock(Lista), tag2);
-                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.hide(PriceListFragment);
+                ft.add(R.id.content_menu_view, OrdenVentaCabeceraView.newInstanciaRecibirPriceList(Lista),tagOrdenVentaCabeceraView);
                 ft.addToBackStack("po1p");
                 ft.commit();
             }
         }
-        if(tag.equals("KardexOfPaymentView"))
-        {
-            if(tag2.equals( "start"))
-            {
-                contentFragment=new KardexOfPaymentView();
-                ft.replace(R.id.content_menu_view,contentFragment,tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-            if(tag2.equals( "findClient"))
-            {
-                contentFragment=new BuscarClienteView();
-                String taKardexOfPaymentView="start";
-                KardexOfPaymentFragment  =getSupportFragmentManager().findFragmentByTag(taKardexOfPaymentView);
-                ft.hide(KardexOfPaymentFragment);
-                //ft.add(R.id.content_menu_view,contentFragment,tag2);
-                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-            }
-            if(tag2.equals( "sendClient"))
-            {
-                String tagBuscarClienteView="findClient";
-                String tagKardexOfPaymentView="start";
-                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
-                KardexOfPaymentFragment  =getSupportFragmentManager().findFragmentByTag(tagKardexOfPaymentView);
-                ft.remove(BuscarClienteFragment);
-                ft.show(KardexOfPaymentFragment);
-                ft.addToBackStack("popsssggggersa");
-                ft.commit();
-                KardexOfPaymentView.newInstanceRecibirLista(Lista);
-                this.setTitle("Kardex de Pago");
-            }
-        }
-        if(tag.equals("HojaDespachoView"))
-        {
 
-            if(tag2.equals("inicio"))
-            {
-                //Log.e("jpcm","inicio====");
-                //ListenerBackPress.setTemporaIdentityFragment("Deposito");
-                String taginicio=tag;
-                ft.replace(R.id.content_menu_view,HojaDespachoFragment,taginicio);
-                ft.addToBackStack("popqqqqqq");
-                ft.commit();
-            }
-            if(tag2.equals("inicioHojaDespachoViewView"))
-            {
-                String tagHojaDespachoView="HojaDespachoView";
-                tag2="inicioRutaVendedorView";
-                HojaDespachoView = getSupportFragmentManager().findFragmentByTag(tagHojaDespachoView);
-                ft.remove(HojaDespachoView);
-                //ft.add(R.id.content_menu_view,ClienteDetalleView.newInstance(Lista),tag3);
-                ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
-                ft.addToBackStack("2pop");
-                ft.commit();
-            }
-        }
     }
 
     public void EnviarFragmentCobranza(int i)
@@ -2128,11 +1723,6 @@ public class MenuView extends AppCompatActivity
         return formattedDate;
     }
 
-    public static BixolonPrinterController getPrinterInstance()
-    {
-        Log.e("REOS","MenuView-getPrinterInstance-Inicio");
-        return bxlPrinter;
-    }
 
     @SuppressLint("SimpleDateFormat")
      private String getCode()
@@ -2198,5 +1788,9 @@ public class MenuView extends AppCompatActivity
             textViewStatus.setTextColor(Color.parseColor("#FFFFFF"));
             textViewStatus.setText("DESCONECTADO");
         }
+    }
+    private void obtenerTituloFormulario()
+    {
+        setTitle(Induvis.getTituloVentaString());
     }
 }
