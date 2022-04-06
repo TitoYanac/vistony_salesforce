@@ -266,13 +266,16 @@ public class ClienteSQlite {
         try {
             Cursor fila = sqlite.rawQuery(
                     "Select " +
-                            "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
+                            "a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
                             "a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lista_precio" +
                             ",a.domfactura_id,a.lastpurchase,a.lineofbusiness FROM cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
-                            "and a.cliente_id=b.cliente_id where a.cliente_id not in (Select cliente_id from rutavendedor where fecharuta='"+fecha+"') "  +
-                            "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.domfactura_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.lista_precio,a.lineofbusiness",null);
+                            " and a.cliente_id=b.cliente_id " +
+                            " INNER JOIN (SELECT compania_id,cliente_id,zona_id,domembarque_id,direccion FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id,domembarque_id,direccion) d ON a.compania_id=d.compania_id " +
+                            " and a.cliente_id=d.cliente_id " +
+                            "where a.cliente_id not in (Select cliente_id from rutavendedor where fecharuta='"+fecha+"') "  +
+                            " GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,a.domfactura_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.lista_precio,a.lineofbusiness",null);
 
             while (fila.moveToNext())
             {

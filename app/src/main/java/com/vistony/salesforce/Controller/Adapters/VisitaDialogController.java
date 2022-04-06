@@ -51,6 +51,7 @@ public class VisitaDialogController extends DialogFragment {
             direccion_id=listaObjetos.get(i).getDomembarque_id();
             zona_id=listaObjetos.get(i).getZona_id();
             chkruta=listaObjetos.get(i).getChk_ruta();
+            Log.e("REOS","VisitaDialogController-VisitaDialogController-chkruta:"+chkruta);
         }
 
     }

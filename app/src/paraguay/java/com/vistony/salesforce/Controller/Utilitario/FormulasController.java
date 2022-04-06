@@ -1132,8 +1132,8 @@ public class FormulasController {
         visita.setUserId(ObjUsuario.usuario_id);
         visita.setChkenviado("1");
         visita.setChkrecibido("0");
-
         VisitaSQLite visitaSQLite = new VisitaSQLite(context);
+        visita.setHour_Before(visitaSQLite.getHourAfter(FormatFecha.format(date)));
         visitaSQLite.InsertaVisita(visita);
 
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(context);

@@ -1098,7 +1098,7 @@ public class CobranzaDetalleView extends Fragment {
 
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza) {
         int resultado = 0, recibows = 0;
-        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0";
+        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0",chkruta="",contado="0";
         FormulasController formulasController = new FormulasController(getContext());
         Random numAleatorio = new Random();
         int n = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
@@ -1108,6 +1108,16 @@ public class CobranzaDetalleView extends Fragment {
 
         for (int k = 0; k < Lista.size(); k++) {
             valorcobranza=Lista.get(k).getCobrado();
+            chkruta=Lista.get(k).getChkruta();
+
+            if(Lista.get(k).getFechaemision().equals(Lista.get(k).getFechavencimiento()))
+            {
+                contado="1";
+            }
+            else
+            {
+                contado="0";
+            }
         }
 
         if(Float.parseFloat(valorcobranza)>=1) {
@@ -1257,7 +1267,11 @@ public class CobranzaDetalleView extends Fragment {
             visita.setObservation("Se genero el recibo " + recibo + " para el cliente: " + cliente_id);
             visita.setLatitude("" + latitude);
             visita.setLongitude("" + longitude);
-
+            visita.setMobileID(recibo);
+            Log.e("REOS", "CobranzaDetalleView-Guardar-chkruta:" + chkruta);
+            visita.setStatusRoute(chkruta);
+            visita.setAmount(valorcobranza);
+            visita.setTerminoPago_ID(contado);
             formulasController.RegistraVisita(visita, getActivity(), montocobrado);
 
             /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\

@@ -124,6 +124,7 @@ public class VisitaSQLite {
 
         }catch (Exception e){
             System.out.println(e.getMessage());
+            Log.e("REOS", "VisitaSQLite-ObtenerVisitas-e"+e.toString());
         }finally {
             bd.close();
         }

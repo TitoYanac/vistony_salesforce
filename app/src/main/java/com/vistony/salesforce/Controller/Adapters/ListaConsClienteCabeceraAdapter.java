@@ -122,7 +122,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             holder.relativeListaCabezeraCns=convertView.findViewById(R.id.relativeListaCabezera);
             holder.progressLineCredit=convertView.findViewById(R.id.progressBar);
             holder.tv_lastpurchase = (TextView) convertView.findViewById(R.id.tv_lastpurchase);
-
+            holder.tv_address = (TextView) convertView.findViewById(R.id.tv_address);
             convertView.setTag(holder);
         } else {
             holder = (ListaConsClienteCabeceraAdapter.ViewHolder) convertView.getTag();
@@ -135,6 +135,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         holder.tv_clienteid.setText(lead.getCliente_id());
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
         holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));
+        holder.tv_address.setText(lead.getDomembarque_id()+"-"+lead.getDireccion());
         holder.tv_moneda.setText(lead.getMoneda());
         holder.tv_categoria.setText(lead.getCategoria());
         holder.tv_lastpurchase.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getLastpurchase()));
@@ -231,5 +232,6 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         RelativeLayout relativeListaCabezeraCns;
         ProgressBar progressLineCredit;
         TextView tv_lastpurchase;
+        TextView tv_address;
     }
 }

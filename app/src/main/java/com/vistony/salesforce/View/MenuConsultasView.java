@@ -75,6 +75,7 @@ public class MenuConsultasView extends Fragment {
             case "ecuador":
             case "chile":
             case "india":
+            case "paraguay":
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view_induvis, container, false);
                 break;
             case "peru":
@@ -111,6 +112,7 @@ public class MenuConsultasView extends Fragment {
                     case "ecuador":
                     case "chile":
                     case "bolivia":
+                    case "paraguay":
                          Fragment="MenuConsultasView";
                          accion="historicoordenventa";
                          compuesto=Fragment+"-"+accion;
@@ -156,6 +158,7 @@ public class MenuConsultasView extends Fragment {
                     case "ecuador":
                     case "chile":
                     case "bolivia":
+                    case "paraguay":
                          Fragment="HistoricoCobranzaView";
                          accion="COBRANZA";
                          compuesto=Fragment+"-"+accion;
