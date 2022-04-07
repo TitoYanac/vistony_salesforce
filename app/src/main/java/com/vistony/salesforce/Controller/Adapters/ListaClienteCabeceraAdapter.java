@@ -151,7 +151,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.progressLineCredit=convertView.findViewById(R.id.progressBar);
             holder.tv_lastpurchase = (TextView) convertView.findViewById(R.id.tv_lastpurchase);
             holder.tv_address = (TextView) convertView.findViewById(R.id.tv_address);
-
+            holder.chk_geolocation = (CheckBox) convertView.findViewById(R.id.chk_geolocation);
             convertView.setTag(holder);
         } else {
             holder = (ListaClienteCabeceraAdapter.ViewHolder) convertView.getTag();
@@ -173,6 +173,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
         holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));
         holder.tv_address.setText(lead.getDomembarque_id()+"-"+lead.getDireccion());
+        holder.chk_geolocation.setVisibility(View.GONE);
         switch(lead.getMoneda()){
             case "S/":
                 holder.tv_moneda.setText("Soles");
@@ -315,6 +316,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         ProgressBar progressLineCredit;
         TextView tv_lastpurchase;
         TextView tv_address;
+        CheckBox chk_geolocation;
     }
 
 

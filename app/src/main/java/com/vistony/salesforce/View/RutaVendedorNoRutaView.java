@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -57,8 +58,9 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
     ListView listrutavendedornoruta;
     static ObtenerRutaVendedorNoRuta obtenerRutaVendedorNoRuta;
     private SearchView mSearchView;
-    TextView tv_cantidad_cliente_no_ruta_total,tv_cantidad_cliente_no_ruta_visita,tv_cantidad_cliente_no_ruta_pedido,tv_cantidad_cliente_no_ruta_cobranza;
+    TextView tv_cantidad_cliente_no_ruta_total,tv_cantidad_cliente_no_ruta_visita,tv_cantidad_cliente_no_ruta_pedido,tv_cantidad_cliente_no_ruta_cobranza,tv_cantidad_cliente_cabecera_no_ruta_geolocation;
     static boolean clienteagregado=false;
+    TableRow table_row_no_ruta_geolocation;
     public RutaVendedorNoRutaView() {
         // Required empty public constructor
     }
@@ -148,10 +150,12 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
         tv_cantidad_cliente_no_ruta_visita=v.findViewById(R.id.tv_cantidad_cliente_no_ruta_visita);
         tv_cantidad_cliente_no_ruta_pedido=v.findViewById(R.id.tv_cantidad_cliente_no_ruta_pedido);
         tv_cantidad_cliente_no_ruta_cobranza=v.findViewById(R.id.tv_cantidad_cliente_no_ruta_cobranza);
-
+        table_row_no_ruta_geolocation=v.findViewById(R.id.table_row_no_ruta_geolocation);
+        tv_cantidad_cliente_cabecera_no_ruta_geolocation=v.findViewById(R.id.tv_cantidad_cliente_cabecera_no_ruta_geolocation);
         obtenerRutaVendedorNoRuta=new ObtenerRutaVendedorNoRuta();
         obtenerRutaVendedorNoRuta.execute();
 
+        table_row_no_ruta_geolocation.setVisibility(View.GONE);
         fabagregarclientenoruta.setOnClickListener(view -> {
             String Fragment="RutaVendedorNorutaView";
             String accion="agregarClienteNoRuta";

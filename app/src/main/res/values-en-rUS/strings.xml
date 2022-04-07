@@ -77,4 +77,6 @@
     <string name="lbl_credit">Crédit:</string>
     <string name="lbl_f_emision">F.Emisión:</string>
     <string name="lbl_lastpurchase">Last Purchase</string>
+    <string name="lbl_chk_geolocation">Geolocation</string>
+    <string name="lbl_route_sales_count_geolocation">Client Geolocation</string>
 </resources>

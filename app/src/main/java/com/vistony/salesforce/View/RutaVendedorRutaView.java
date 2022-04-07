@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,10 +59,10 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
     ListView listrutavendedorruta;
     ObtenerSQLiteRutaFuerzaTrabajo obtenerSQLiteRutaFuerzaTrabajo;
     private SearchView mSearchView;
-    TextView tv_cantidad_cliente_ruta,tv_cantidad_cliente_cabecera_total,tv_cantidad_cliente_cabecera_visita,tv_cantidad_cliente_cabecera_cobranza,tv_cantidad_cliente_cabecera_pedido;
+    TextView tv_cantidad_cliente_ruta,tv_cantidad_cliente_cabecera_total,tv_cantidad_cliente_cabecera_visita,tv_cantidad_cliente_cabecera_cobranza,tv_cantidad_cliente_cabecera_pedido,tv_cantidad_cliente_cabecera_geolocation;
     private ProgressDialog pd;
     SwipeRefreshLayout swipeRefreshLayout;
-
+    TableRow table_row_geolocation;
     public RutaVendedorRutaView() {
         // Required empty public constructor
     }
@@ -104,9 +105,12 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         tv_cantidad_cliente_cabecera_visita=v.findViewById(R.id.tv_cantidad_cliente_cabecera_visita);
         tv_cantidad_cliente_cabecera_cobranza=v.findViewById(R.id.tv_cantidad_cliente_cabecera_cobranza);
         tv_cantidad_cliente_cabecera_pedido=v.findViewById(R.id.tv_cantidad_cliente_cabecera_pedido);
+        table_row_geolocation=v.findViewById(R.id.table_row_geolocation);
+        tv_cantidad_cliente_cabecera_geolocation=v.findViewById(R.id.tv_cantidad_cliente_cabecera_geolocation);
         obtenerSQLiteRutaFuerzaTrabajo=new ObtenerSQLiteRutaFuerzaTrabajo();
         obtenerSQLiteRutaFuerzaTrabajo.execute();
 
+        table_row_geolocation.setVisibility(View.GONE);
         // Implementing setOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

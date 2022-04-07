@@ -95,7 +95,9 @@ public class LeadClienteViewModel extends ViewModel {
                 params.get("SalesPersonCode"),
                 params.get("DocumentsOwner"),
                 params.get("Address"),
-                params.get("Reference")
+                params.get("Reference"),
+                params.get("CardCode"),
+                params.get("Address")
         );
     }
 }

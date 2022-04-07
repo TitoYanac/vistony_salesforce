@@ -35,7 +35,8 @@ public class ListaPrecioDetalleSQLiteDao {
             String tipo,
             String porcentaje_descuento,
             String stock_almacen,
-            String stock_general
+            String stock_general,
+            String units
     ){
         SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
 
@@ -52,6 +53,7 @@ public class ListaPrecioDetalleSQLiteDao {
         registro.put("Tipo",tipo);
         registro.put("stock_almacen",stock_almacen);
         registro.put("stock_general",stock_general);
+        registro.put("units",units);
         sqlite.insert("listapreciodetalle",null,registro);
 
         DataBaseManager.getInstance().closeDatabase();

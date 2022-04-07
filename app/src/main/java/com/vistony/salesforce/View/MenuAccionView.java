@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -28,10 +29,18 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
 import com.vistony.salesforce.Controller.Adapters.VisitaDialogController;
@@ -71,13 +80,20 @@ public class MenuAccionView extends Fragment {
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     LocationManager locationManager;
-    static String CardCode,CardName;
+    static String CardCode,CardName,Address;
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
     String fecha;
     CobranzaDetalleSQLiteDao CobranzaDetalleSQLiteDao;
     KardexPagoRepository kardexPagoRepository;
+    private MapView mapView;
+    private GoogleMap myGoogleMap;
+    private Double latitud = null, longitud = null;
+    private boolean status = true;
+    private String direccion = "Sin dirección", referencia = "Sin referencias";
+    private Dialog dialog;
+
     public MenuAccionView() {
         // Required empty public constructor
     }
@@ -106,6 +122,7 @@ public class MenuAccionView extends Fragment {
             Log.e("JEPICAMEE","=>"+Lista.get(s).getZona_id());
             CardCode=Lista.get(s).getCliente_id();
             CardName=Lista.get(s).getNombrecliente();
+            Address=Lista.get(s).getDireccion();
         }
 
         b.putSerializable(ARG_PARAM,Lista);
@@ -183,6 +200,7 @@ public class MenuAccionView extends Fragment {
         cv_cobranza=v.findViewById(R.id.cv_cobranza);
         cv_visita=v.findViewById(R.id.cv_visita);
         cv_lead=v.findViewById(R.id.cv_lead);
+        dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
         switch (BuildConfig.FLAVOR){
             case "paraguay":
@@ -251,15 +269,153 @@ public class MenuAccionView extends Fragment {
             //alertaAdvertencia("La Opcion Aun no Esta Habilitada",getContext()).show();
         });
         cv_lead.setOnClickListener(v -> {
-                String Fragment="MenuAccionView";
+                /*String Fragment="MenuAccionView";
                 String accion="lead";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
-                SesionEntity.quotation="N";
+                SesionEntity.quotation="N";*/
+            displayDialogMap();
+            MapsInitializer.initialize(getActivity());
 
+            mapView.onCreate(dialog.onSaveInstanceState());
+            mapView.onResume();
         });
 
         return v;
+    }
+
+    private void displayDialogMap() {
+        //final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_mapa_dialog);
+
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        final EditText editTextAddress = dialog.findViewById(R.id.editTextAddressDialog);
+        final EditText editTextAddressReference = dialog.findViewById(R.id.editTextAddressReferenceDialog);
+        editTextAddress.setHint("Client");
+        editTextAddressReference.setHint("Address");
+        editTextAddress.setEnabled(false);
+        editTextAddressReference.setEnabled(false);
+        //editTextAddress.setText((direccion.equals("Sin dirección") ? "" : direccion));
+        //editTextAddressReference.setText((referencia.equals("Sin referencias") ? "" : referencia));
+        editTextAddress.setText(CardName);
+        editTextAddressReference.setText(Address);
+
+        ImageView image = dialog.findViewById(R.id.image);
+        image.setImageResource(R.mipmap.logo_circulo);
+        image.setBackground(new ColorDrawable(Color.TRANSPARENT));
+
+        final Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
+        final Button dialogButtonExit = dialog.findViewById(R.id.dialogButtonCancel);
+        mapView = dialog.findViewById(R.id.mapView);
+
+        dialogButton.setText("Add");
+        dialogButtonExit.setText("Cancel");
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        if (mapView != null) {
+
+            LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                mapView.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(final GoogleMap googleMap) {
+
+                        myGoogleMap=googleMap;
+
+                        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+
+                            myGoogleMap.setMyLocationEnabled(true);
+                            myGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+                                    new LocationListener() {
+                                        @Override
+                                        public void onLocationChanged(Location location) {
+                                            Toast.makeText(getActivity(), "onLocationChanged", Toast.LENGTH_SHORT).show();
+
+                                            latitud = location.getLatitude();
+                                            longitud = location.getLongitude();
+                                            Log.e("REOS","LeadClientesView.displayDialogMap.latitud:"+latitud);
+                                            Log.e("REOS","LeadClientesView.displayDialogMap.longitud:"+longitud);
+                                            LatLng latLng = new LatLng(latitud, longitud);
+                                            myGoogleMap.clear();
+                                            myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Potential client").draggable(true));
+
+                                            //editTextCoordenates.setText(latitud + "," + longitud);
+
+                                            if (status) {
+                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                                                status = false;
+                                            } else {
+                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onStatusChanged(String provider, int status, Bundle extras) {
+                                            Toast.makeText(getActivity(), "onStatusChanged", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                        @Override
+                                        public void onProviderEnabled(String provider) {
+                                            Toast.makeText(getActivity(), "onProviderEnabled", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                        @Override
+                                        public void onProviderDisabled(String provider) {
+                                            Toast.makeText(getActivity(), "onProviderDisabled", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                    }
+                            );
+
+
+
+                            dialog.show();
+
+                        }else{
+                            Toast.makeText( getActivity().getApplicationContext(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
+                            getActivity().requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION },100);
+                        }
+
+                    }
+                });
+
+
+            } else {
+                Toast.makeText( getActivity(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
+                getActivity().requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION },100);
+            }
+
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////
+
+        dialogButtonExit.setOnClickListener(v -> {
+            // mapView=null;
+            dialog.dismiss();
+        });
+
+        dialogButton.setOnClickListener(v -> {
+
+            direccion=editTextAddress.getText().toString();
+            referencia=editTextAddressReference.getText().toString();
+
+//            mapView=null;
+            dialog.dismiss();
+
+        });
     }
 
     private Dialog alertarecibospendientes() {

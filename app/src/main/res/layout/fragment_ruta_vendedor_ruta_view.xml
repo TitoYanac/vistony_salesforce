@@ -271,5 +271,39 @@
                 android:textSize="24dp"></TextView>
 
         </TableRow>
-    </TableLayout>-->
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/table_row_geolocation"
+            >
+
+            <TextView
+                android:id="@+id/lbl_cantidad_cliente_cabecera_geolocation"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="@string/lbl_route_sales_count_geolocation"
+                android:textColor="@color/white"
+                android:textSize="24dp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_cantidad_cliente_cabecera_geolocation"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:gravity="right"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="24dp">
+
+            </TextView>
+
+        </TableRow>
+    </TableLayout>
 </FrameLayout>
