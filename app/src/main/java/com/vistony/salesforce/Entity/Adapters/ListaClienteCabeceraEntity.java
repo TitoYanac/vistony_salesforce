@@ -37,8 +37,10 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String lastpurchase;
     private String lineofbussiness;
     private String saldosincontados;
+    private String chkgeolocation;
+    private String chkvisitsection;
 
-    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String linea_credito_usado, String fecharuta, String lista_precio, String docentry, String lastpurchase, String lineofbussiness, String saldosincontados) {
+    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String linea_credito_usado, String fecharuta, String lista_precio, String docentry, String lastpurchase, String lineofbussiness, String saldosincontados,String chkgeolocation,String chkvisitsection) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -73,6 +75,25 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.lastpurchase = lastpurchase;
         this.lineofbussiness = lineofbussiness;
         this.saldosincontados = saldosincontados;
+        this.chkgeolocation = chkgeolocation;
+        this.chkvisitsection = chkvisitsection;
+
+    }
+
+    public String getChkvisitsection() {
+        return chkvisitsection;
+    }
+
+    public void setChkvisitsection(String chkvisitsection) {
+        this.chkvisitsection = chkvisitsection;
+    }
+
+    public String getChkgeolocation() {
+        return chkgeolocation;
+    }
+
+    public void setChkgeolocation(String chkgeolocation) {
+        this.chkgeolocation = chkgeolocation;
     }
 
     public String getSaldosincontados() {

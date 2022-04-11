@@ -155,7 +155,7 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
         obtenerRutaVendedorNoRuta=new ObtenerRutaVendedorNoRuta();
         obtenerRutaVendedorNoRuta.execute();
 
-        table_row_no_ruta_geolocation.setVisibility(View.GONE);
+        //table_row_no_ruta_geolocation.setVisibility(View.GONE);
         fabagregarclientenoruta.setOnClickListener(view -> {
             String Fragment="RutaVendedorNorutaView";
             String accion="agregarClienteNoRuta";
@@ -265,7 +265,7 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
                 obtenerRutaVendedorNoRuta = new ObtenerRutaVendedorNoRuta();
 
 
-                int visita = 0, pedido = 0, cobranza = 0;
+                int visita = 0, pedido = 0, cobranza = 0,geolocalizacion=0;
                 for (int i = 0; i < listaClienteCabeceraEntityconnoruta.size(); i++) {
                     if (listaClienteCabeceraEntityconnoruta.get(i).getChk_visita().equals("1")) {
                         visita++;
@@ -276,12 +276,19 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
                     if (listaClienteCabeceraEntityconnoruta.get(i).getChk_cobranza().equals("1")) {
                         cobranza++;
                     }
+                    if(listaClienteCabeceraEntityconnoruta.get(i).getChkgeolocation()!=null)
+                    {
+                        if(listaClienteCabeceraEntityconnoruta.get(i).getChkgeolocation().equals("1"))
+                        {
+                            geolocalizacion++;
+                        }
+                    }
                 }
                 tv_cantidad_cliente_no_ruta_total.setText(String.valueOf(listaClienteCabeceraEntityconnoruta.size()));
                 tv_cantidad_cliente_no_ruta_visita.setText(String.valueOf(visita));
                 tv_cantidad_cliente_no_ruta_cobranza.setText(String.valueOf(cobranza));
                 tv_cantidad_cliente_no_ruta_pedido.setText(String.valueOf(pedido));
-
+                tv_cantidad_cliente_cabecera_no_ruta_geolocation.setText(String.valueOf(geolocalizacion));
                 getActivity().runOnUiThread(() -> {
                     fabagregarclientenoruta.setEnabled(true);
                     fabagregarclientenoruta.setBackground(ContextCompat.getDrawable(context, R.drawable.custom_border_button_red));

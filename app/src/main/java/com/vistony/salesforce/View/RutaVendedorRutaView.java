@@ -110,7 +110,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         obtenerSQLiteRutaFuerzaTrabajo=new ObtenerSQLiteRutaFuerzaTrabajo();
         obtenerSQLiteRutaFuerzaTrabajo.execute();
 
-        table_row_geolocation.setVisibility(View.GONE);
+        //table_row_geolocation.setVisibility(View.GONE);
         // Implementing setOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -262,7 +262,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
 
 
 
-                    int visita=0,pedido=0,cobranza=0;
+                    int visita=0,pedido=0,cobranza=0,geolocalizacion=0;
                     for(int i=0;i<listaClienteCabeceraEntityconruta.size();i++)
                     {
                         if(listaClienteCabeceraEntityconruta.get(i).getChk_visita().equals("1"))
@@ -277,11 +277,19 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                         {
                             cobranza++;
                         }
+                        if(listaClienteCabeceraEntityconruta.get(i).getChkgeolocation()!=null)
+                        {
+                            if(listaClienteCabeceraEntityconruta.get(i).getChkgeolocation().equals("1"))
+                            {
+                                geolocalizacion++;
+                            }
+                        }
                     }
                     tv_cantidad_cliente_cabecera_total.setText(String.valueOf(listaClienteCabeceraEntityconruta.size()));
                     tv_cantidad_cliente_cabecera_visita.setText(String.valueOf(visita));
                     tv_cantidad_cliente_cabecera_cobranza.setText(String.valueOf(cobranza));
                     tv_cantidad_cliente_cabecera_pedido.setText(String.valueOf(pedido));
+                    tv_cantidad_cliente_cabecera_geolocation.setText(String.valueOf(geolocalizacion));
                     //getActivity().setTitle("Ruta Vendedor");
                 }
 

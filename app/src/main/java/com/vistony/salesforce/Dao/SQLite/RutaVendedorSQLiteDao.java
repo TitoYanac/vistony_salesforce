@@ -73,7 +73,9 @@ public class RutaVendedorSQLiteDao {
              String slpCode,
              String userCode,
              String lastpurchase,
-             String saldosincontado
+             String saldosincontado,
+             String chkgeolocation,
+             String chkvisitsection
     )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
@@ -113,6 +115,8 @@ public class RutaVendedorSQLiteDao {
             registro.put("userCode", userCode);
             registro.put("lastpurchase", lastpurchase);
             registro.put("saldosincontado", saldosincontado);
+            registro.put("chkgeolocation", chkgeolocation);
+            registro.put("chkvisitsection", chkvisitsection);
             bd.insert("rutavendedor", null, registro);
         }catch (Exception e)
         {
@@ -267,6 +271,8 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setSaldo(fila.getString(25));
 
             ObjListaClienteCabeceraEntity.setLastpurchase(fila.getString(30));
+            ObjListaClienteCabeceraEntity.setChkgeolocation(fila.getString(32));
+            ObjListaClienteCabeceraEntity.setChkvisitsection(fila.getString(33));
             Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getLastpurchase"+ObjListaClienteCabeceraEntity.getLastpurchase());
             listaClienteCabeceraEntity.add(ObjListaClienteCabeceraEntity);
         }
@@ -547,4 +553,47 @@ public class RutaVendedorSQLiteDao {
         return 1;
     }
 
+    public int UpdateChkGeolocationRouteSales (String cliente_id, String domembarque_id, String compania_id,String fecharuta)
+    {
+        int resultado=0;
+        abrir();
+        try {
+
+            ContentValues registro = new ContentValues();
+            registro.put("chkgeolocation","1");
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' " +
+                    "and  domembarque_id='"+domembarque_id+"' " +
+                    "and fecharuta='"+fecharuta+"' " ,null);
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            resultado=0;
+        }
+        return resultado;
+    }
+
+    public int UpdateChkVisitSection (String cliente_id, String domembarque_id, String compania_id,String fecharuta)
+    {
+        int resultado=0;
+        abrir();
+        try {
+
+            ContentValues registro = new ContentValues();
+            registro.put("chkvisitsection","1");
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' " +
+                    "and  domembarque_id='"+domembarque_id+"' " +
+                    "and fecharuta='"+fecharuta+"' " ,null);
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            resultado=0;
+        }
+        return resultado;
+    }
 }

@@ -417,13 +417,16 @@ public class ClienteSQlite {
              fila = sqlite.rawQuery(
                     "SELECT DISTINCT a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,d.direccion,d.zona_id,a.ordenvisita,a.zona," +
                             "a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio," +
-                            "a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lastpurchase,IFNULL(SUM(e.saldo),0) as saldonocontados from cliente a" +
+                            "a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lastpurchase,IFNULL(SUM(e.saldo),0) as saldonocontados,(case when d.latitud='0' or d.latitud is null then '0' else '1' end) as geolocalizado" +
+                            ",(case when f.latitudini is not null and f.latitudini is not null then '1' else '0' end) as duracionvisita  from cliente a" +
                             " LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id and a.cliente_id=b.cliente_id " +
-                            "INNER JOIN (SELECT compania_id,cliente_id,zona_id,domembarque_id,direccion FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id,domembarque_id,direccion) d ON a.compania_id=d.compania_id " +
+                            "INNER JOIN (SELECT compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud) d ON a.compania_id=d.compania_id " +
                             "and a.cliente_id=d.cliente_id " +
-                             " LEFT JOIN (Select saldo,compania_id,cliente_id,domembarque_id,moneda   from documentodeuda where fechaemision<>fechavencimiento GROUP BY compania_id,cliente_id,domembarque_id,saldo,moneda) e ON "+
+                            " LEFT JOIN (Select saldo,compania_id,cliente_id,domembarque_id,moneda   from documentodeuda where fechaemision<>fechavencimiento GROUP BY compania_id,cliente_id,domembarque_id,saldo,moneda) e ON "+
                             " a.compania_id=e.compania_id and a.cliente_id=e.cliente_id " +
+                            " LEFT JOIN visitsection f ON "+
+                            " a.compania_id=f.compania_id and a.cliente_id=f.cliente_id and a.domembarque_id=f.domembarque_id and f.dateini=strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))  " +
                             "WHERE d.zona_id IN (SELECT zona_id FROM rutafuerzatrabajo WHERE fechainicioruta=" +
                             //"date('now') " +
                             " strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))" +
@@ -458,6 +461,8 @@ public class ClienteSQlite {
                 clienteentity.setSaldo(fila.getString(21));
                 clienteentity.setLastpurchase(fila.getString(22));
                 clienteentity.setSaldosincontados(fila.getString(23));
+                clienteentity.setChkgeolocation(fila.getString(24));
+                clienteentity.setChkvisitsection(fila.getString(25));
                 Log.e("REOS","ClienteSQlite-ObtenerClientePorZonaCompleto-clienteentity.getSaldoSincontados: "+clienteentity.getSaldosincontados());
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }

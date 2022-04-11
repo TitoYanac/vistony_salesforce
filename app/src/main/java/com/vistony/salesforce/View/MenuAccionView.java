@@ -29,6 +29,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,10 +46,17 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
 import com.vistony.salesforce.Controller.Adapters.VisitaDialogController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.LeadSQLite;
+import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
+import com.vistony.salesforce.Dao.SQLite.VisitSectionSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitSectionEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -69,7 +77,7 @@ public class MenuAccionView extends Fragment {
     int validar=0;
     private static String TAG_1 = "text";
     View v;
-    private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead;
+    private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead,cv_visit_section;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
 
     OnFragmentInteractionListener mListener;
@@ -80,7 +88,7 @@ public class MenuAccionView extends Fragment {
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     LocationManager locationManager;
-    static String CardCode,CardName,Address;
+    static String CardCode,CardName,Address,DomEmbarque_ID;
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
@@ -123,6 +131,7 @@ public class MenuAccionView extends Fragment {
             CardCode=Lista.get(s).getCliente_id();
             CardName=Lista.get(s).getNombrecliente();
             Address=Lista.get(s).getDireccion();
+            DomEmbarque_ID=Lista.get(s).getDomembarque_id();
         }
 
         b.putSerializable(ARG_PARAM,Lista);
@@ -200,6 +209,7 @@ public class MenuAccionView extends Fragment {
         cv_cobranza=v.findViewById(R.id.cv_cobranza);
         cv_visita=v.findViewById(R.id.cv_visita);
         cv_lead=v.findViewById(R.id.cv_lead);
+        cv_visit_section=v.findViewById(R.id.cv_visit_section);
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
         switch (BuildConfig.FLAVOR){
@@ -280,7 +290,9 @@ public class MenuAccionView extends Fragment {
             mapView.onCreate(dialog.onSaveInstanceState());
             mapView.onResume();
         });
-
+        cv_visit_section.setOnClickListener(v -> {
+            alertDialogVisitSection().show();
+        });
         return v;
     }
 
@@ -292,8 +304,10 @@ public class MenuAccionView extends Fragment {
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        final EditText editTextAddress = dialog.findViewById(R.id.editTextAddressDialog);
-        final EditText editTextAddressReference = dialog.findViewById(R.id.editTextAddressReferenceDialog);
+        //final EditText editTextAddress = dialog.findViewById(R.id.editTextAddressDialog);
+        //final EditText editTextAddressReference = dialog.findViewById(R.id.editTextAddressReferenceDialog);
+        final TextView editTextAddress = dialog.findViewById(R.id.editTextAddressDialog);
+        final TextView editTextAddressReference = dialog.findViewById(R.id.editTextAddressReferenceDialog);
         editTextAddress.setHint("Client");
         editTextAddressReference.setHint("Address");
         editTextAddress.setEnabled(false);
@@ -339,7 +353,7 @@ public class MenuAccionView extends Fragment {
                                     new LocationListener() {
                                         @Override
                                         public void onLocationChanged(Location location) {
-                                            Toast.makeText(getActivity(), "onLocationChanged", Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(getActivity(), "onLocationChanged", Toast.LENGTH_SHORT).show();
 
                                             latitud = location.getLatitude();
                                             longitud = location.getLongitude();
@@ -408,13 +422,56 @@ public class MenuAccionView extends Fragment {
         });
 
         dialogButton.setOnClickListener(v -> {
+            UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+            UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+            ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
-            direccion=editTextAddress.getText().toString();
-            referencia=editTextAddressReference.getText().toString();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+            Date date = new Date();
+             fecha =dateFormat.format(date);
+            //direccion=editTextAddress.getText().toString();
+            //referencia=editTextAddressReference.getText().toString();
 
 //            mapView=null;
-            dialog.dismiss();
 
+            if(latitude==0||longitude==0)
+            {
+                Toast.makeText(getActivity(), "Calculando Ubicacion..., Guarde Ubicacion Nuevamente!!!", Toast.LENGTH_LONG).show();
+            }else
+                {
+                LeadSQLite leadSQLite = new LeadSQLite(getContext());
+                leadSQLite.addLead(
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        String.valueOf(latitude),
+                        String.valueOf(longitude),
+                        "",
+                        "",
+                        "",
+                        fecha,
+                        SesionEntity.fuerzatrabajo_id,
+                        SesionEntity.usuario_id,
+                        "",
+                        "",
+                        CardCode,
+                        DomEmbarque_ID,
+                        "01"
+                );
+                RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
+                rutaVendedorSQLiteDao.UpdateChkGeolocationRouteSales(
+                        CardCode,
+                        DomEmbarque_ID,
+                        ObjUsuario.compania_id,
+                        fecha
+                );
+
+                dialog.dismiss();
+            }
         });
     }
 
@@ -661,5 +718,120 @@ public class MenuAccionView extends Fragment {
         return  dialog;
     }
 
+    private Dialog alertDialogVisitSection() {
+
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_visit_section);
+        CheckBox chk_start_visitsection,chk_finish_visitsection;
+        Button btn_start_visitsection,btn_finish_visitsection,dialogButtonOK;
+        chk_start_visitsection=dialog.findViewById(R.id.chk_start_visitsection);
+        chk_finish_visitsection=dialog.findViewById(R.id.chk_finish_visitsection);
+        btn_start_visitsection=dialog.findViewById(R.id.btn_start_visitsection);
+        btn_finish_visitsection=dialog.findViewById(R.id.btn_finish_visitsection);
+        dialogButtonOK=dialog.findViewById(R.id.dialogButtonOK);
+
+        SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
+        SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        Date date = new Date();
+        //TextView textTitle = dialog.findViewById(R.id.tv_mensaje);
+        //textTitle.setText("Elija Tipo de Venta:");
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        VisitSectionEntity visitSectionEntity=new VisitSectionEntity();
+        ArrayList<VisitSectionEntity> listVisitSection=new ArrayList<>();
+        VisitSectionSQLite visitSectionSQLite=new VisitSectionSQLite(getContext());
+        listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date));
+
+        for(int i=0;i<listVisitSection.size();i++)
+        {
+            if(listVisitSection.get(i).getLatitudini()!=null)
+            {
+                chk_start_visitsection.setChecked(true);
+                btn_start_visitsection.setEnabled(false);
+                btn_start_visitsection.setClickable(false);
+                Utilitario.disabledButtton(btn_start_visitsection);
+            }
+            if(listVisitSection.get(i).getLatitudfin()!=null)
+            {
+                if(!listVisitSection.get(i).getLatitudfin().equals("0"))
+                {
+                    chk_finish_visitsection.setChecked(true);
+                    btn_finish_visitsection.setEnabled(false);
+                    btn_finish_visitsection.setClickable(false);
+                    Utilitario.disabledButtton(btn_finish_visitsection);
+                }
+            }
+        }
+
+
+        btn_start_visitsection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ArrayList<VisitSectionEntity> listVisitSectionini=new ArrayList<>();
+                UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+                ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
+                visitSectionEntity.setCompania_id(ObjUsuario.compania_id);
+                visitSectionEntity.setFuerzatrabajo_id(ObjUsuario.fuerzatrabajo_id);
+                visitSectionEntity.setUsuario_id(ObjUsuario.usuario_id);
+                visitSectionEntity.setCliente_id(CardCode);
+                visitSectionEntity.setDomembarque_id(DomEmbarque_ID);
+                visitSectionEntity.setLatitudini(String.valueOf(latitude));
+                visitSectionEntity.setLongitudini(String.valueOf(longitude));
+                visitSectionEntity.setDateini(FormatFecha.format(date));
+                visitSectionEntity.setTimeini(dateFormathora.format(date));
+                visitSectionEntity.setLatitudfin( "0");
+                visitSectionEntity.setLongitudfin( "0");
+                visitSectionEntity.setDatefin("0");
+                visitSectionEntity.setTimefin("0");
+                visitSectionEntity.setChkrecibido("0");
+                listVisitSectionini.add(visitSectionEntity);
+                visitSectionSQLite.addVisitSection(listVisitSectionini);
+                chk_start_visitsection.setChecked(true);
+                btn_start_visitsection.setEnabled(false);
+                btn_start_visitsection.setClickable(false);
+                Utilitario.disabledButtton(btn_start_visitsection);
+                Toast.makeText(getActivity(), "Visita Iniciada!!!", Toast.LENGTH_LONG).show();
+            }
+
+        });
+        btn_finish_visitsection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+                ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
+                visitSectionSQLite.UpdateVisitSectionForClient(
+                        CardCode,DomEmbarque_ID,FormatFecha.format(date),String.valueOf(latitude),String.valueOf(longitude),FormatFecha.format(date),dateFormathora.format(date)
+                );
+                chk_finish_visitsection.setChecked(true);
+                btn_finish_visitsection.setEnabled(false);
+                btn_finish_visitsection.setClickable(false);
+                Utilitario.disabledButtton(btn_finish_visitsection);
+
+                RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
+                rutaVendedorSQLiteDao.UpdateChkVisitSection(
+                        CardCode,
+                        DomEmbarque_ID,
+                        ObjUsuario.compania_id,
+                        FormatFecha.format(date)
+                );
+                Toast.makeText(getActivity(), "Visita Finalizada!!!", Toast.LENGTH_LONG).show();
+            }
+        });
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
 
 }

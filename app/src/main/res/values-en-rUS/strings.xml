@@ -78,5 +78,10 @@
     <string name="lbl_f_emision">F.Emisión:</string>
     <string name="lbl_lastpurchase">Last Purchase</string>
     <string name="lbl_chk_geolocation">Geolocation</string>
-    <string name="lbl_route_sales_count_geolocation">Client Geolocation</string>
+    <string name="lbl_route_sales_count_geolocation">Clients Geolocations</string>
+    <string name="lbl_menu_action_update_client_geolocation">Update Geolocation Client</string>
+    <string name="lbl_menu_action_visit_section">Visit Section</string>
+    <string name="lbl_layout_visit_section_start">Start VisitSection</string>
+    <string name="lbl_layout_visit_section_finish">Finish VisitSection</string>
+    <string name="lbl_layout_client_head_visitsection">Duration VisitSection</string>
 </resources>

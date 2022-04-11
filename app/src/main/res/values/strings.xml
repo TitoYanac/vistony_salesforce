@@ -77,7 +77,12 @@
     <string name="lbl_dispatch_date">Fecha Entrega:</string>
     <string name="lbl_address">Fecha Entrega:</string>
     <string name="lbl_chk_geolocation">Geolocalización</string>
-    <string name="lbl_route_sales_count_geolocation">Clientes Localizado</string>
+    <string name="lbl_route_sales_count_geolocation">Clientes Geolocalizados</string>
+    <string name="lbl_menu_action_update_client_geolocation">Actualizar Geolocalizacion Cliente</string>
+    <string name="lbl_menu_action_visit_section">Tramo Visita</string>
+    <string name="lbl_layout_visit_section_start">Inicio Tramo</string>
+    <string name="lbl_layout_visit_section_finish">Final Tramo</string>
+    <string name="lbl_layout_client_head_visitsection">Duracion Visita</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 

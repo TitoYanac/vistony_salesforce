@@ -51,7 +51,8 @@ public class LeadSQLite {
             String direccion,
             String referencias,
             String cardcode,
-            String domembarque_id
+            String domembarque_id,
+            String type
     )
     {
         abrir();
@@ -76,6 +77,7 @@ public class LeadSQLite {
         registro.put("referencias",referencias);
         registro.put("cardcode",cardcode);
         registro.put("domembarque_id",domembarque_id);
+        registro.put("type",type);
         bd.insert("lead",null,registro);
         bd.close();
         return 1;

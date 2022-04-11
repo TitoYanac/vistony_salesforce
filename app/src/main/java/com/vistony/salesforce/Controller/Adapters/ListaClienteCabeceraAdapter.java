@@ -152,6 +152,8 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.tv_lastpurchase = (TextView) convertView.findViewById(R.id.tv_lastpurchase);
             holder.tv_address = (TextView) convertView.findViewById(R.id.tv_address);
             holder.chk_geolocation = (CheckBox) convertView.findViewById(R.id.chk_geolocation);
+            holder.chk_visitsection = (CheckBox) convertView.findViewById(R.id.chk_visitsection);
+
             convertView.setTag(holder);
         } else {
             holder = (ListaClienteCabeceraAdapter.ViewHolder) convertView.getTag();
@@ -173,7 +175,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
         holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));
         holder.tv_address.setText(lead.getDomembarque_id()+"-"+lead.getDireccion());
-        holder.chk_geolocation.setVisibility(View.GONE);
+        //holder.chk_geolocation.setVisibility(View.GONE);
         switch(lead.getMoneda()){
             case "S/":
                 holder.tv_moneda.setText("Soles");
@@ -228,6 +230,29 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                 holder.chk_visita.setChecked(true);
             }
         }
+
+        if(lead.getChkgeolocation()!=null) {
+            if (lead.getChkgeolocation().equals("1")) {
+                holder.chk_geolocation.setChecked(true);
+            } else {
+                holder.chk_geolocation.setChecked(false);
+            }
+        }
+        else {
+            holder.chk_geolocation.setChecked(false);
+        }
+
+        if(lead.getChkvisitsection()!=null) {
+            if (lead.getChkvisitsection().equals("1")) {
+                holder.chk_visitsection.setChecked(true);
+            } else {
+                holder.chk_visitsection.setChecked(false);
+            }
+        }
+        else {
+            holder.chk_visitsection.setChecked(false);
+        }
+
         holder.relativeListaCabezeraCns.setOnClickListener(v -> {
 
 
@@ -317,6 +342,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         TextView tv_lastpurchase;
         TextView tv_address;
         CheckBox chk_geolocation;
+        CheckBox chk_visitsection;
     }
 
 
