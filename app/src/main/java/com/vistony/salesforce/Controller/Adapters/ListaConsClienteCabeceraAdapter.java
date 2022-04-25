@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -123,6 +124,8 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             holder.progressLineCredit=convertView.findViewById(R.id.progressBar);
             holder.tv_lastpurchase = (TextView) convertView.findViewById(R.id.tv_lastpurchase);
             holder.tv_address = (TextView) convertView.findViewById(R.id.tv_address);
+            holder.chk_geolocation = (CheckBox) convertView.findViewById(R.id.chk_geolocation);
+            holder.chk_visitsection = (CheckBox) convertView.findViewById(R.id.chk_visitsection);
             convertView.setTag(holder);
         } else {
             holder = (ListaConsClienteCabeceraAdapter.ViewHolder) convertView.getTag();
@@ -144,7 +147,12 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         holder.tv_linea_credito.setText(Convert.currencyForView(lead.getLinea_credito()));
         holder.tv_linea_credito_usado.setText(Convert.currencyForView(lead.getLinea_credito_usado()));
         ///////////////////////////////////////////////////////////////////////////////////////
-
+        
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            holder.chk_geolocation.setVisibility(View.GONE);
+            holder.chk_visitsection.setVisibility(View.GONE);
+        }
 
         holder.progressLineCredit.setMax(Math.round(Float.parseFloat(""+lead.getLinea_credito())));
 
@@ -233,5 +241,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         ProgressBar progressLineCredit;
         TextView tv_lastpurchase;
         TextView tv_address;
+        CheckBox chk_geolocation;
+        CheckBox chk_visitsection;
     }
 }

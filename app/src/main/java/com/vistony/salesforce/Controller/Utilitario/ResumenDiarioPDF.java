@@ -35,6 +35,7 @@ import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.ResumenDiarioEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.SummaryofeffectivenessEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
@@ -58,7 +59,7 @@ import harmony.java.awt.Color;
 public class ResumenDiarioPDF extends AppCompatActivity {
     private final static String NOMBRE_DIRECTORIO = "ResumenDiario";
     private final static String ETIQUETA_ERROR = "ERROR";
-    DecimalFormat format = new DecimalFormat("#0.00");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +71,10 @@ public class ResumenDiarioPDF extends AppCompatActivity {
         }
     }
 
-    public void generarPdf(Context context, List<HistoricContainerSalesEntity> resumenDiarioEntityList,String fecha) {
+    public void generarPdf(Context context, List<HistoricContainerSalesEntity> resumenDiarioEntityList, String fecha, List<SummaryofeffectivenessEntity> summaryofeffectivenessEntityList) {
         // Creamos el documento.
-        RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(context);
-        VisitaSQLite visitaSQLite=new VisitaSQLite(context);
+        RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(context);
+        VisitaSQLite visitaSQLite = new VisitaSQLite(context);
         Rectangle pagina = new Rectangle(
                 36, 36,
                 //559
@@ -84,13 +85,133 @@ public class ResumenDiarioPDF extends AppCompatActivity {
         );
         Document documento = new Document(pagina);
 
-        ArrayList<String> ObjList=new ArrayList<>();
-        String fechasap="",CardName="",LicTradNum="",Street="",Ubigeo="",Phone="";
-        Set<String> listaCorrelativo ;
-        /*for(int i=0;i<resumenDiarioEntityList.size();i++)
+        ArrayList<String> ObjList = new ArrayList<>();
+        String fechasap = "", CardName = "", LicTradNum = "", Street = "", Ubigeo = "", Phone = "";
+        Set<String> listaCorrelativo;
+        int countVisitTypeCOB=0,countVisitTypeOV=0,cantvisit=0;
+        float amountVisitTypeCOB=0,amountVisitTypeOV=0;
+
+        if (summaryofeffectivenessEntityList==null)
         {
-            //fechasap=resumenDiarioEntityList.get(i).getFechasap();
-        }*/
+
+            try{
+                summaryofeffectivenessEntityList=new ArrayList<>();
+                Log.e("REOS","DocumentCobranzaPDF.generarPdf.Ingresoifllenado_summaryofeffectivenessEntityList:");
+                //Agregar en Ruta
+            SummaryofeffectivenessEntity summaryofeffectivenessEntity=new SummaryofeffectivenessEntity();
+            summaryofeffectivenessEntity.route="Y";
+            if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1")>rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"))
+            {
+                summaryofeffectivenessEntity.clients=String.valueOf (visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1"));
+            }
+            else {
+                summaryofeffectivenessEntity.clients=String.valueOf (rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"));
+            }
+            summaryofeffectivenessEntity.visits=String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1"));
+            summaryofeffectivenessEntity.balanceclients=String.valueOf(rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1"));
+            summaryofeffectivenessEntity.collections =String.valueOf(visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02"));
+            summaryofeffectivenessEntity.amountcollections =String.valueOf(visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02"));
+            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01")>0)
+            {
+                summaryofeffectivenessEntity.salesorders=String.valueOf(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01"));
+            }else
+            {
+                summaryofeffectivenessEntity.salesorders=String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1"));
+            }
+            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01")>0)
+            {
+                summaryofeffectivenessEntity.amountsalesorders=String.valueOf(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01"));
+            }else
+            {
+                summaryofeffectivenessEntity.amountsalesorders=String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"1"));
+            }
+
+                summaryofeffectivenessEntity.orderseffectiveness =Induvis.getAmountRouteeffectiveness(
+                        Double.parseDouble(summaryofeffectivenessEntity.salesorders),
+                    rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+            );
+                summaryofeffectivenessEntity.collectionseffectiveness =Induvis.getAmountRouteeffectiveness(
+                        Double.parseDouble(summaryofeffectivenessEntity.collections),
+                        rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
+                );
+                summaryofeffectivenessEntity.visitseffectiveness =Induvis.getAmountRouteeffectiveness(
+                        Double.parseDouble(summaryofeffectivenessEntity.visits),
+                        rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+                );
+                summaryofeffectivenessEntityList.add(summaryofeffectivenessEntity);
+                //Agregar Fuera de Ruta
+                summaryofeffectivenessEntity=new SummaryofeffectivenessEntity();
+                summaryofeffectivenessEntity.route="N";
+                if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02")>0)
+                {
+                    summaryofeffectivenessEntity.collections =String.valueOf(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02"));
+                }else {
+                    summaryofeffectivenessEntity.collections =String.valueOf( rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0"));
+                }
+
+                if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02")>0)
+                {
+                    summaryofeffectivenessEntity.amountcollections = String.valueOf( visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02"));
+                }else {
+                    summaryofeffectivenessEntity.amountcollections = String.valueOf( rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0"));
+                }
+                if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01")>0)
+                {
+                    summaryofeffectivenessEntity.salesorders =String.valueOf(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01"));
+                }else {
+                    summaryofeffectivenessEntity.salesorders =String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"0"));
+                }
+
+                if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01")>0)
+                {
+                    summaryofeffectivenessEntity.amountsalesorders= String.valueOf(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01"));
+                }else {
+                    summaryofeffectivenessEntity.amountsalesorders= String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"0"));
+                }
+
+                if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0")>0)
+                {
+                    summaryofeffectivenessEntity.visits =  String.valueOf(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0"));
+                }else {
+                    summaryofeffectivenessEntity.visits =  String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"0"));
+                }
+                summaryofeffectivenessEntityList.add(summaryofeffectivenessEntity);
+                Log.e("REOS","DocumentCobranzaPDF.generarPdf.Ingresoifllenadosalida_summaryofeffectivenessEntityList-noroute:");
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+                Log.e("REOS","DocumentCobranzaPDF.generarPdf.e:" + e.toString());
+            }
+        }
+        String countvisitroute="",countclientsroute="",countclientsbalanceroute="",countcollectionsroute="",amountcollectionsroute=""
+               ,countsalesordersroute="",amountsalesordersroute="",effectivenessvisitroute="",effectivenessasalesordersroute="",effectivenesscollectionsroute=""
+                ,countvisitnoroute="",countcollectionsnoroute="",amountcollectionsnoroute="",countsalesordersnoroute="",amountsalesordernoroute="";
+        for(int j=0;j<summaryofeffectivenessEntityList.size();j++)
+        {
+            if(summaryofeffectivenessEntityList.get(j).getRoute().equals("Y"))
+            {
+                countvisitroute=(summaryofeffectivenessEntityList.get(j).getVisits());
+                countclientsroute=(summaryofeffectivenessEntityList.get(j).getClients());
+                countclientsbalanceroute=(summaryofeffectivenessEntityList.get(j).getClients());
+                countcollectionsroute=(summaryofeffectivenessEntityList.get(j).getCollections());
+                amountcollectionsroute=(summaryofeffectivenessEntityList.get(j).getAmountcollections());
+                countsalesordersroute=(summaryofeffectivenessEntityList.get(j).getSalesorders());
+                amountsalesordersroute=(summaryofeffectivenessEntityList.get(j).getAmountsalesorders());
+                effectivenessvisitroute=(summaryofeffectivenessEntityList.get(j).getVisitseffectiveness());
+                effectivenessasalesordersroute=(summaryofeffectivenessEntityList.get(j).getOrderseffectiveness());
+                effectivenesscollectionsroute=(summaryofeffectivenessEntityList.get(j).getCollectionseffectiveness());
+            }
+            else {
+                countvisitnoroute=(summaryofeffectivenessEntityList.get(j).getVisits());
+                countcollectionsnoroute=(summaryofeffectivenessEntityList.get(j).getCollections());
+                amountcollectionsnoroute=(summaryofeffectivenessEntityList.get(j).getAmountcollections());
+                countsalesordersnoroute=(summaryofeffectivenessEntityList.get(j).getSalesorders());
+                amountsalesordernoroute=(summaryofeffectivenessEntityList.get(j).getAmountsalesorders());
+            }
+        }
+
+
+
         fechasap=fecha;
         listaCorrelativo = new HashSet<String>(ObjList);
         Object[] ObjArrayListaCorrelativo = listaCorrelativo.toArray();
@@ -282,7 +403,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tbclientes.addCell(cellTableclientes);
             documento.add(tbclientes);
 
-            int cantvisit=0;
+
             PdfPTable tblvisitados = new PdfPTable(2);
             tblvisitados.setWidthPercentage(100);
             PdfPCell  cellTablevisitados= null;
@@ -290,17 +411,16 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
-            if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1")>rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"))
+            /*if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1")>rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"))
             {
                 cantvisit=(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1"));
             }
             else {
                 cantvisit=(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"));
-            }
+            }*/
             cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(
-                    //visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1")
-                    //rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1")
-                    cantvisit
+                    //cantvisit
+                    countvisitroute
             ),font3));
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -310,7 +430,8 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
             cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(
-                    rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+                    //rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+                    countclientsroute
             ),font3));
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -320,7 +441,8 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvisitados.addCell(cellTablevisitados);
             cellTablevisitados=new PdfPCell(new Phrase(String.valueOf(
-                    rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
+                    //rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
+                    countclientsbalanceroute
             ),font3));
             cellTablevisitados.disableBorderSide(Rectangle.BOX);
             cellTablevisitados.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -355,36 +477,18 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltipo.addCell(cellTableTipo);
-            int countVisitTypeCOB=0,countVisitTypeOV=0;
-            float amountVisitTypeCOB=0,amountVisitTypeOV=0;
-            /*if(visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02")>rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1"))
-            {
-                countVisitTypeCOB=visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02");
-            }else
-                {
-                    countVisitTypeCOB=rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1");
-                }*/
-            countVisitTypeCOB=visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02");
+            //countVisitTypeCOB=visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02");
             cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
-                    //rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1")
-                          //  visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","02")
-                    countVisitTypeCOB
+                    //countVisitTypeCOB
+                    countcollectionsroute
                     ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltipo.addCell(cellTableTipo);
-            /*if(visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02")>rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1"))
-            {
-                amountVisitTypeCOB=visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02");
-            }else
-            {
-                amountVisitTypeCOB=rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1");
-            }*/
-            amountVisitTypeCOB=visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02");
+            //amountVisitTypeCOB=visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02");
             cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
-                    //rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"1")
-                    //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","02")
-                    amountVisitTypeCOB
+                    //amountVisitTypeCOB
+                    amountcollectionsroute
             ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -394,34 +498,36 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltipo.addCell(cellTableTipo);
 
-            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01")>0)
+            /*if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01")>0)
             {
                 countVisitTypeOV=visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01");
             }else
             {
                 countVisitTypeOV=rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1");
-            }
+            }*/
 
             cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1")
                     //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01")
-                    countVisitTypeOV
+                    //countVisitTypeOV
+                    countsalesordersroute
             ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltipo.addCell(cellTableTipo);
 
-            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01")>0)
+            /*if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01")>0)
             {
                 amountVisitTypeOV=visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01");
             }else
             {
                 amountVisitTypeOV=rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"1");
-            }
+            }*/
             cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"1")
                     //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01")
-                    amountVisitTypeOV
+                    //amountVisitTypeOV
+                    amountsalesordersroute
             ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -446,12 +552,13 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tblefectividad.addCell(celltblefectividad);
             try{
                 celltblefectividad=new PdfPCell(new Phrase(
-                        Induvis.getAmountRouteeffectiveness(
+                        /*Induvis.getAmountRouteeffectiveness(
                                 //(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1")),
                                 //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01"),
                                 countVisitTypeOV,
-                                rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
-                        ),font3));
+                                rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")*/
+                        effectivenessasalesordersroute
+                        ,font3));
             }catch (Exception e)
             {
                 e.printStackTrace();
@@ -466,12 +573,13 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tblefectividad.addCell(celltblefectividad);
             try{
                 celltblefectividad=new PdfPCell(new Phrase(
-                        Induvis.getAmountRouteeffectiveness(
+                        /*Induvis.getAmountRouteeffectiveness(
                                 //(rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"1")),
                                 //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","02"),
                                 countVisitTypeCOB,
-                                rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
-                        ),font3));
+                                rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")*/
+                        effectivenesscollectionsroute
+                        ,font3));
             }catch (Exception e)
             {
                 e.printStackTrace();
@@ -486,12 +594,13 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tblefectividad.addCell(celltblefectividad);
             try{
                 celltblefectividad=new PdfPCell(new Phrase(
-                        Induvis.getAmountRouteeffectiveness(
+                        /*Induvis.getAmountRouteeffectiveness(
                                 //(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1")),
                                 //visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1"),
                                 cantvisit,
-                                rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
-                        ),font3));
+                                rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")*/
+                        effectivenessvisitroute
+                        ,font3));
             }catch (Exception e)
             {
                 e.printStackTrace();
@@ -511,29 +620,6 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablenoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblnoruta.addCell(cellTablenoruta);
             documento.add(tblnoruta);
-
-            /*PdfPTable tblvisitadosnoruta = new PdfPTable(2);
-            tblvisitadosnoruta.setWidthPercentage(100);
-            PdfPCell  cellTablevisitadosnoruta= null;
-            cellTablevisitadosnoruta=new PdfPCell(new Phrase("VISITADOS",font6));
-            cellTablevisitadosnoruta.disableBorderSide(Rectangle.BOX);
-            cellTablevisitadosnoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
-            tblvisitadosnoruta.addCell(cellTablevisitadosnoruta);
-            cellTablevisitadosnoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"0")),font3));
-            cellTablevisitadosnoruta.disableBorderSide(Rectangle.BOX);
-            cellTablevisitadosnoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
-            tblvisitadosnoruta.addCell(cellTablevisitadosnoruta);
-            /*cellTablevisitadosnoruta=new PdfPCell(new Phrase("PROGRAMADOS",font3));
-            cellTablevisitadosnoruta.disableBorderSide(Rectangle.BOX);
-            cellTablevisitadosnoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
-            tblvisitadosnoruta.addCell(cellTablevisitadosnoruta);
-            cellTablevisitadosnoruta=new PdfPCell(new Phrase(String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"0")),font3));
-            cellTablevisitadosnoruta.disableBorderSide(Rectangle.BOX);
-            cellTablevisitadosnoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
-
-            tblvisitadosnoruta.addCell(cellTablevisitadosnoruta);
-            documento.add(tblvisitadosnoruta);*/
-
             PdfPTable tbltiponoruta = new PdfPTable(3);
             tbltiponoruta.setWidthPercentage(100);
             PdfPCell  cellTableTiponoruta= null;
@@ -553,32 +639,33 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            int countVisitNoRoute=0,countVisitOVNoRoute=0,countVisitCOBNoRoute=0;
-            float amountVisitOVNoRoute=0,amountVisitCOBNoRoute=0;
-            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02")>0)
+            //int countVisitNoRoute=0,countVisitOVNoRoute=0,countVisitCOBNoRoute=0;
+           //float amountVisitOVNoRoute=0,amountVisitCOBNoRoute=0;
+            /*if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02")>0)
             {
                 countVisitCOBNoRoute= visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02");
             }else {
                 countVisitCOBNoRoute= rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0");
-            }
+            }*/
             cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0")
                     //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02")
-                    countVisitCOBNoRoute
+                    //countVisitCOBNoRoute
+                    countcollectionsnoroute
             ),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02")>0)
+            /*if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02")>0)
             {
                 amountVisitCOBNoRoute= visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02");
             }else {
                 amountVisitCOBNoRoute= rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0");
-            }
+            }*/
             cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"0")
                     //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02")
-                    amountVisitCOBNoRoute
+                    amountcollectionsnoroute
             ) ,font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -587,32 +674,35 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01")>0)
+            /*if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01")>0)
             {
                 countVisitOVNoRoute= visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01");
             }else {
                 countVisitOVNoRoute= rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"0");
-            }
+            }*/
+
             cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"0")
                     //visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01")
-                    countVisitOVNoRoute
+                    //countVisitOVNoRoute
+                    countsalesordersnoroute
             ),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltiponoruta.addCell(cellTableTiponoruta);
 
-            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01")>0)
+            /*if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01")>0)
             {
                 amountVisitOVNoRoute= visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01");
             }else {
                 amountVisitOVNoRoute= rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"0");
-            }
+            }*/
 
             cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"0")
                     //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01")
-                    amountVisitOVNoRoute
+                    //amountVisitOVNoRoute
+                    amountsalesordernoroute
             ),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -621,17 +711,18 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0")>0)
+            /*if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0")>0)
             {
                 countVisitNoRoute= visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0");
             }else {
                 countVisitNoRoute= rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"0");
-            }
+            }*/
 
             cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"0")
                     //visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0")
-                    countVisitNoRoute
+                    //countVisitNoRoute
+                    countvisitnoroute
             ),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);

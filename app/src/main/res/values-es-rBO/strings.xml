@@ -83,4 +83,14 @@
     <string name="lbl_layout_visit_section_start">Inicio Tramo</string>
     <string name="lbl_layout_visit_section_finish">Final Tramo</string>
     <string name="lbl_layout_client_head_visitsection">Duracion Visita</string>
+    <string name="lbl_find_stock_all_warehouse">Todos Almacenes</string>
+    <string name="lbl_find_stock_all_warehouse_code">Código</string>
+    <string name="lbl_find_stock_all_warehouse_stock">Stock</string>
+    <string name="lbl_find_stock_all_warehouse_branch">Sucursal</string>
+    <string name="lbl_warehouses_count">Cantidad</string>
+    <string name="lbl_warehouses_amount">Monto</string>
+    <string name="lbl_historic_status_dispatch_delivery">Entrega</string>
+    <string name="lbl_historic_status_dispatch_type">Tipo</string>
+    <string name="lbl_historic_status_dispatch_reason">Motivo</string>
+    <string name="lbl_historic_status_dispatch_photo">Foto</string>
 </resources>

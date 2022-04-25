@@ -162,9 +162,22 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_baseline_card_giftcard_24"
                     />
+                <TextView
+                    android:id="@+id/lbl_enable_warehouses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_find_stock_all_warehouse"
+                    android:textAppearance="?attr/textAppearanceListItem" />
 
+                <ImageView
+                    android:id="@+id/imv_enable_warehouses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_baseline_warehouse_24_black"
+                    />
 
             </TableRow>
+
         </TableLayout>
 
     </LinearLayout>

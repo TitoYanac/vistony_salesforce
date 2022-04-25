@@ -1,9 +1,18 @@
 package com.vistony.salesforce.View;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +26,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 */
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,10 +36,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
 
 //import android.support.v7.widget.Toolbar;
@@ -37,29 +56,46 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.annotations.SerializedName;
+import com.vistony.salesforce.Controller.Adapters.HistoricoDepositoDialogAnularController;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
+import com.vistony.salesforce.Controller.Adapters.StatusDispatchDialog;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
+import com.vistony.salesforce.Dao.SQLite.StatusDispatchSQLite;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.StatusDispatchEntity;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteDetalleDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -108,9 +144,15 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     private static OnFragmentInteractionListener mListener;
     private SwipeRefreshLayout refreshMasterClient;
     private ClienteRepository clienteRepository;
-
-
+    private FloatingActionButton floatingButtonTakePhoto;
+    private ActivityResultLauncher<Intent> someActivityResultLauncher;
+    private Bitmap imgBitmap;
+    public static ImageView imageViewPhoto;
+    String mCurrentPhotoPath="";
     //ListenerBackPress.setCurrentFragment("FormListaDeudaCliente");
+    private byte[] byteArray;
+    MenuItem update_dispatch_reason;
+
     public static ClienteDetalleView newInstance(Object objeto){
         //Log.e("jpcm","regreso here 1 de "+ListenerBackPress.getCurrentFragment());
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
@@ -173,6 +215,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         tv_cantidad_cliente_detalle = (TextView) v.findViewById(R.id.tv_cantidad_cliente_detalle);
         tv_monto_cliente_detalle = (TextView) v.findViewById(R.id.tv_monto_cliente_detalle);
 
+
         refreshMasterClient=v.findViewById(R.id.refreshClient);
 
         clienteRepository =  new ViewModelProvider(this.getActivity()).get(ClienteRepository.class);
@@ -200,6 +243,14 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         obtenerPametros();
         obtenerSQLiteDDeuda = new ObtenerSQLiteDDeuda();
         obtenerSQLiteDDeuda.execute();
+
+        ClienteDetalleView.this.someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK) {
+                Bundle extras = result.getData().getExtras();
+                imgBitmap = (Bitmap) extras.get("data");
+                imageViewPhoto.setImageBitmap(imgBitmap);
+            }
+        });
 
         return v;
     }
@@ -268,6 +319,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         setHasOptionsMenu(true);
 
         getActivity().setTitle("Documento Con Deuda");
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         if (getArguments() != null) {
 
           Listado= (ArrayList<ListaClienteCabeceraEntity>)getArguments().getSerializable(TAG_1);
@@ -416,9 +468,15 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         inflater.inflate(R.menu.menu_cliente_detalle, menu);
+        update_dispatch_reason = menu.findItem(R.id.update_dispatch_reason);
+        if(!SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            update_dispatch_reason.setVisible(false);
+        }
         super.onCreateOptionsMenu(menu, inflater);
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -428,12 +486,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
                 // Not implemented here
                 return true;
             case R.id.item_pago_adelantado:
-                //int i= listaClienteDetalleAdapter.ArraylistaClienteDetalleEntity.size();
-                //String tag="CobranzaDetalleView";
-                //String dato="Prueba";
-                //mListener.onFragmentInteraction(tag,dato);
-                //menuView.EnviarFragmentCobranza(i);
-                // Do Fragment menu item stuff here
+
                 ArrayList <ListaClienteDetalleEntity> ArraylistaClienteDetalleEntity= new ArrayList <ListaClienteDetalleEntity>();
                 ListaClienteDetalleEntity listaClienteDetalleEntity =  new ListaClienteDetalleEntity();
                 listaClienteDetalleEntity.cliente_id=texto;
@@ -450,30 +503,12 @@ public class ClienteDetalleView extends Fragment implements Serializable {
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,param1);
                 return true;
-            //case R.id.item_Visita:
-                /*ConnectivityManager manager= (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);;
-                NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+            case R.id.update_dispatch_reason:
 
-                if (networkInfo != null) {
-                    if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                        DialogFragment dialogFragment = new VisitaDialogController();
-                        dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
-                    } else {
-                        Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
-                    }
-                }else{
-                    Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
-                }*/
-              //  return true;
-            //case R.id.item_cheque:
-                //int i= listaClienteDetalleAdapter.ArraylistaClienteDetalleEntity.size();
-               // String tag="CobranzaDetalleView";
-                //String dato="Prueba";
-                //mListener.onFragmentInteraction(tag,dato);
-                //menuView.EnviarFragmentCobranza(i);
-                // Do Fragment menu item stuff here
-               // return true;
-
+                //dialogStatusDispatch("Estado Despacho",getContext()).show();
+                androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(texto);
+                dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
+                return true;
             default:
                 break;
         }
@@ -567,4 +602,138 @@ public class ClienteDetalleView extends Fragment implements Serializable {
 
     }
 
+    private Dialog dialogStatusDispatch(String texto, Context context) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog_status_dispatch);
+        Spinner spn_referral_guide,spn_type_dispatch,spn_reason_dispatch;
+        TextView textMsj = dialog.findViewById(R.id.tv_titulo);
+        textMsj.setText(texto);
+        EditText et_comentario;
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        spn_referral_guide = dialog.findViewById(R.id.spn_referral_guide);
+        spn_type_dispatch = dialog.findViewById(R.id.spn_type_dispatch);
+        spn_reason_dispatch = dialog.findViewById(R.id.spn_reason_dispatch);
+        et_comentario = dialog.findViewById(R.id.et_comentario);
+        imageViewPhoto = v.findViewById(R.id.imageViewPhoto);
+        imageViewPhoto.setBackgroundResource(R.drawable.portail);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+        floatingButtonTakePhoto = (FloatingActionButton) dialog.findViewById(R.id.floatingButtonTakePhoto);
+
+        floatingButtonTakePhoto.setOnClickListener(data -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                someActivityResultLauncher.launch(intent);
+               // Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Crea el File
+                /*File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException ex) {
+                    Log.e("log,",""+ex);
+                }
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getContext(), getContext().getPackageName() , photoFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    getActivity().startActivityForResult(intent, 1);
+                }*/
+            }
+        });
+
+        dialogButtonOK.setOnClickListener(v -> {
+            String encoded = null;
+            if (imgBitmap != null) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                imgBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
+                byteArray = stream.toByteArray();
+                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            }
+            SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
+            SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+            Date date = new Date();
+            List<StatusDispatchEntity> listStatusDispatchEntity=new ArrayList<>();
+            UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+            UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+            ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+            StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(getContext());
+
+            StatusDispatchEntity statusDispatchEntity=new StatusDispatchEntity();
+            statusDispatchEntity.compania_id=ObjUsuario.compania_id;
+            statusDispatchEntity.fuerzatrabajo_id=ObjUsuario.fuerzatrabajo_id;
+            statusDispatchEntity.usuario_id=ObjUsuario.usuario_id;
+            statusDispatchEntity.typedispatch_id=spn_type_dispatch.getSelectedItem().toString();
+            statusDispatchEntity.reasondispatch_id=spn_reason_dispatch.getSelectedItem().toString();
+            statusDispatchEntity.entrega_id =spn_referral_guide.getSelectedItem().toString();
+            statusDispatchEntity.cliente_id =texto;
+            statusDispatchEntity.factura_id ="";
+            statusDispatchEntity.chkrecibido ="0";
+            statusDispatchEntity.observation =et_comentario.getText().toString();
+            statusDispatchEntity.foto =encoded;
+            statusDispatchEntity.fecha_registro =FormatFecha.format(date);
+            statusDispatchEntity.hora_registro =dateFormathora.format(date);
+            listStatusDispatchEntity.add(statusDispatchEntity);
+            statusDispatchSQLite.addStatusDispatch(listStatusDispatchEntity);
+
+            dialog.dismiss();
+        });
+
+        dialogButtonCancel.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir =getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        String CurrentDateAndTime = getCurrentDateAndTime();
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        mCurrentPhotoPath = image.getAbsolutePath();
+        String TAG="tag";
+        Log.d(TAG,"el path de la imagen es = " + mCurrentPhotoPath);
+        MenuView.mCurrentPhotoPath=mCurrentPhotoPath;
+        //return file;
+        return image;
+    }
+
+    private String getCurrentDateAndTime() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd-HH-mm-­ss");
+        String formattedDate = df.format(c.getTime());
+        return formattedDate;
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+
+    }
 }

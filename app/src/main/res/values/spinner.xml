@@ -89,5 +89,32 @@
         <item>Se realizo una cotización</item>
     </string-array>
 
+    <string-array name="tipo_despacho" >
+        <item >E-ENTREGADO</item>
+        <item >R-REPROGRAMADO</item>
+        <item >A-ANULADO</item>
+    </string-array>
 
+    <string-array name="motivo_despacho" >
+        <item >001-NO ESTA EL CLIENTE</item>
+        <item >002-LOCAL CERRADO</item>
+        <item >003-CLIENTE NO HIZO PEDIDO</item>
+        <item >004-CLIENTE NO REGOCIO MERCADERIA</item>
+        <item >005-CLIENTE NO ENCUENTRA</item>
+        <item >006-CLIENTE PIDIO EL PRODUCTO ERRADO</item>
+        <item >007-CLIENTE SIN DINERO</item>
+        <item >008-ENVIARON UN PRODUCTO POR OTRO</item>
+        <item >009-ERROR DE DIRECCION</item>
+        <item >010-ERROR DE RAZON SOCIAL</item>
+        <item >011-NO ESTA EL CLIENTE</item>
+        <item >012-LOCAL CERRADO</item>
+        <item >013-PEDIDO DUPLICADO</item>
+        <item >014-ERROR EN DIGITAR CODIGO DEL PRODUCTO SECTORISTA</item>
+        <item >015-ERROR EN DIGITAR CODIGO DEL PRODUCTO DE VENDEDOR</item>
+        <item >016-LOCAL CERRADO FUERA DE HORARIO</item>
+        <item >017-PEDIDO INCOMPLETO POR STOCK</item>
+        <item >018-REPARTO LLEVO PEDIDO INCOMPLETO</item>
+        <item >019-TRANSPORTE NO LLEGO POR TIEMPO POR AVERIA</item>
+        <item >020-TRANSPORTE NO LLEGO POR FALTA DE TIEMPO</item>
+    </string-array>
 </resources>

@@ -693,8 +693,6 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
         }
         parametrofecha=year+mes+dia;
         tv_fecha_historico_cobranza.setText(year + "-" + mes + "-" + dia);
-
-
     }
 
 

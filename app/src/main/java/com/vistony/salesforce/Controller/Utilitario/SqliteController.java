@@ -19,7 +19,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 11;
+    private static final int VERSION = 13;
 
 
     public SqliteController(Context context){
@@ -106,6 +106,11 @@ public class SqliteController extends SQLiteOpenHelper {
 
             //Version 12  --Tramo de Visita
             db.execSQL("CREATE TABLE visitsection (compania_id text,fuerzatrabajo_id text,usuario_id text,cliente_id TEXT,domembarque_id TEXT,latitudini TEXT,longitudini TEXT,dateini TEXT,timeini TEXT,latitudfin TEXT,longitudfin TEXT,datefin TEXT,timefin TEXT,chkrecibido TEXT)");
+
+            //Version 13  -- Distribution Second Phase
+            db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
+            db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT)");
+            db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT)");
     }
 
     @Override
@@ -213,9 +218,34 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE direccioncliente ADD COLUMN latitud TEXT");
             db.execSQL("ALTER TABLE direccioncliente ADD COLUMN longitud TEXT");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chkgeolocation TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chkvisitsection TEXT");
             db.execSQL("ALTER TABLE lead ADD COLUMN cardcode TEXT");
             db.execSQL("ALTER TABLE lead ADD COLUMN domembarque_id TEXT");
             db.execSQL("ALTER TABLE lead ADD COLUMN type TEXT");
+            db.execSQL("CREATE TABLE visitsection (compania_id text,fuerzatrabajo_id text,usuario_id text,cliente_id TEXT,domembarque_id TEXT,latitudini TEXT,longitudini TEXT,dateini TEXT,timeini TEXT,latitudfin TEXT,longitudfin TEXT,datefin TEXT,timefin TEXT,chkrecibido TEXT)");
+        }
+        if(oldVersion==6&&newVersion==13) {
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN codeSMS TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN docentry TEXT");
+            db.execSQL("ALTER TABLE cliente ADD COLUMN lineofbusiness TEXT");
+            db.execSQL("ALTER TABLE cliente ADD COLUMN lastpurchase TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN lastpurchase TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN  units TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN saldosincontado TEXT");
+            db.execSQL("ALTER TABLE visita ADD COLUMN terminopago_id TEXT");
+            db.execSQL("ALTER TABLE visita ADD COLUMN hora_anterior TEXT");
+            db.execSQL("ALTER TABLE documentodeuda ADD COLUMN pymntgroup TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN latitud TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN longitud TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chkgeolocation TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chkvisitsection TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN cardcode TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN domembarque_id TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN type TEXT");
+            db.execSQL("CREATE TABLE visitsection (compania_id text,fuerzatrabajo_id text,usuario_id text,cliente_id TEXT,domembarque_id TEXT,latitudini TEXT,longitudini TEXT,dateini TEXT,timeini TEXT,latitudfin TEXT,longitudfin TEXT,datefin TEXT,timefin TEXT,chkrecibido TEXT)");
+            db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
+            db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT)");
+            db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT)");
         }
     }
 

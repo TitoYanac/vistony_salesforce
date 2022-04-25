@@ -15,10 +15,23 @@ import java.util.ArrayList;
 
 public class DireccionSQLite {
     private ArrayList<DireccionClienteSQLiteEntity> listaDireccionClienteSQLiteEntity;
+    SqliteController sqliteController;
+    SQLiteDatabase bd;
+    private void abrir(){
+        Log.i("SQLite", "Se abre conexion a la base de datos desde " + this.getClass().getName());
+        bd = sqliteController.getWritableDatabase();
+    }
 
+    private void cerrar()
+    {
+        Log.i("SQLite", "Se cierra conexion desde " + this.getClass().getName());
+        sqliteController.close();
+    }
     public DireccionSQLite(Context context){
 
         DataBaseManager.initializeInstance(new SqliteController(context));
+        sqliteController = new SqliteController(context);
+        bd = sqliteController.getWritableDatabase();
     }
 
     public int InsertaDireccionCliente (
@@ -159,6 +172,27 @@ public class DireccionSQLite {
         return LDCliente;
     }
 
+    public int updateCoordenatesAddress(String cliente_id, String domembarque_id,String latitude,String longitude)
+    {
+        int resultado=0;
+
+        try {
+            abrir();
+            ContentValues registro = new ContentValues();
+            registro.put("latitud",latitude);
+            registro.put("longitud",longitude);
+
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("direccioncliente",registro,"cliente_id ='"+cliente_id+"' and domembarque_id = '"+domembarque_id+"' " ,null);
+            cerrar();
+        }catch (Exception e){
+            Log.e("Error"," DireccionSQLitge "+e.getMessage());
+        }finally {
+            cerrar();
+        }
+
+        return resultado;
+    }
 
 
 }

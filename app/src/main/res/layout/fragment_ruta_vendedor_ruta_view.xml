@@ -168,7 +168,9 @@
                 android:focusable="false"
                 android:text="Total Clientes:"
                 android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
+                android:textSize="24dp">
+
+            </TextView>
 
             <TextView
                 android:id="@+id/tv_cantidad_cliente_cabecera_total"

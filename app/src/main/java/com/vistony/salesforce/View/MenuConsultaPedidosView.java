@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.vistony.salesforce.Controller.Utilitario.ResumenDiarioPDF;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.Retrofit.ResumenDiarioRepository;
+import com.vistony.salesforce.Dao.Retrofit.SummaryofeffectivenessRepository;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -60,6 +61,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
     private  int diadespacho,mesdespacho,anodespacho;
     private static DatePickerDialog oyenteSelectorFecha;
     private ResumenDiarioRepository resumenDiarioRepository;
+    private SummaryofeffectivenessRepository summaryofeffectivenessRepository;
     private ProgressDialog pd;
 
     public MenuConsultaPedidosView() {
@@ -103,6 +105,8 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
         cv_resumen_diario=v.findViewById(R.id.cv_resumen_diario);
         cv_consulta_stock=v.findViewById(R.id.cv_consulta_stock);
         resumenDiarioRepository = new ViewModelProvider(getActivity()).get(ResumenDiarioRepository.class);
+        summaryofeffectivenessRepository = new ViewModelProvider(getActivity()).get(SummaryofeffectivenessRepository.class);
+
         cv_ordenventafecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,15 +193,12 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
                 pd = new ProgressDialog(getActivity());
                 pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Resumen Diario", true, false);
                 ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                resumenDiarioRepository.getResumenDiario(SesionEntity.compania_id ,SesionEntity.imei,fechasap,getContext(),fechasap).observe(getActivity(), data -> {
-//                    Log.e("REOS", "resumenDiarioRepository.data" + data.toString());
-                   // Log.e("REOS", "resumenDiarioRepository.data.size()" + data.size());
-
-
+                resumenDiarioRepository.getResumenDiario(SesionEntity.compania_id ,SesionEntity.imei,fechasap,getContext(),fechasap).observe(getActivity(), data1 -> {
+                    summaryofeffectivenessRepository.getSummaryofEffectiveness(SesionEntity.imei,fechasap,fechasap).observe(getActivity(), data2 -> {
                         ResumenDiarioPDF resumenDiarioPDF = new ResumenDiarioPDF();
-                        resumenDiarioPDF.generarPdf(getContext(), data, fechasap);
-
-                    pd.dismiss();
+                        resumenDiarioPDF.generarPdf(getContext(), data1, fechasap,data2);
+                        pd.dismiss();
+                    });
                 });
 
 

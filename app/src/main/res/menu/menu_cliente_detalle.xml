@@ -14,6 +14,12 @@
                 app:showAsAction="always|withText"
                 android:icon="@drawable/ic_looks_one_black_24dp"
                 />
+            <item
+                android:id="@+id/update_dispatch_reason"
+                android:title="Actualizar Estado Despacho"
+                app:showAsAction="always|withText"
+                android:icon="@drawable/ic_looks_two_black_24dp"
+                />
         </menu>
     </item>
 </menu>

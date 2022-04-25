@@ -743,7 +743,7 @@ public class FormulasController {
         for(int j=0;j<listaordenVentaDetalleSQLiteEntity.size();j++){
             String COGSAccountCode="",U_SYP_FECAT_07="",taxOnly="",taxCode="",U_VIST_CTAINGDCTO="",montolineatotal="",PercentDescnt="0";
 
-            //Casuistica Bonificacion
+           //Casuistica Bonificacion
             if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100"))
             {
                 COGSAccountCode="659420";

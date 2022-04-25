@@ -253,6 +253,12 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.chk_visitsection.setChecked(false);
         }
 
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            holder.chk_geolocation.setVisibility(View.GONE);
+            holder.chk_visitsection.setVisibility(View.GONE);
+        }
+
         holder.relativeListaCabezeraCns.setOnClickListener(v -> {
 
 

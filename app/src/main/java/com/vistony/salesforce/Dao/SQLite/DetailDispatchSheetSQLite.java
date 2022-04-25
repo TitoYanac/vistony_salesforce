@@ -192,4 +192,50 @@ public class DetailDispatchSheetSQLite {
         return resultado;
     }
 
+    public ArrayList<HojaDespachoDetalleSQLiteEntity>
+    getDetailDispatchSheetforClient
+            (String cliente_id)
+    {
+
+        listaHojaDespachoSQLiteEntity = new ArrayList<>();
+        HojaDespachoDetalleSQLiteEntity hojaDespachoSQLiteEntity;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
+                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente from detaildispatchsheet A" +
+                        " left outer join cliente B ON  " +
+                        "A.cliente_id=B.cliente_id " +
+                        "  where A.cliente_id='"+cliente_id+"'",null);
+
+        while (fila.moveToNext())
+        {
+            hojaDespachoSQLiteEntity= new HojaDespachoDetalleSQLiteEntity();
+            hojaDespachoSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
+            hojaDespachoSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+            hojaDespachoSQLiteEntity.setUsuario_id(fila.getString(fila.getColumnIndex("usuario_id")));
+            hojaDespachoSQLiteEntity.setControl_id(fila.getString(fila.getColumnIndex("control_id")));
+            hojaDespachoSQLiteEntity.setItem_id(fila.getString(fila.getColumnIndex("item_id")));
+            hojaDespachoSQLiteEntity.setCliente_id(fila.getString(fila.getColumnIndex("cliente_id")));
+            hojaDespachoSQLiteEntity.setDomembarque_id(fila.getString(fila.getColumnIndex("domembarque_id")));
+            hojaDespachoSQLiteEntity.setDireccion(fila.getString(fila.getColumnIndex("direccion")));
+            hojaDespachoSQLiteEntity.setFactura_id(fila.getString(fila.getColumnIndex("factura_id")));
+            hojaDespachoSQLiteEntity.setEntrega_id(fila.getString(fila.getColumnIndex("entrega_id")));
+            hojaDespachoSQLiteEntity.setEntrega(fila.getString(fila.getColumnIndex("entrega")));
+            hojaDespachoSQLiteEntity.setFactura(fila.getString(fila.getColumnIndex("factura")));
+            hojaDespachoSQLiteEntity.setSaldo(fila.getString(fila.getColumnIndex("saldo")));
+            hojaDespachoSQLiteEntity.setEstado(fila.getString(fila.getColumnIndex("estado")));
+            hojaDespachoSQLiteEntity.setFuerzatrabajo_factura_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_factura_id")));
+            hojaDespachoSQLiteEntity.setFuerzatrabajo_factura(fila.getString(fila.getColumnIndex("fuerzatrabajo_factura")));
+            hojaDespachoSQLiteEntity.setTerminopago_id(fila.getString(fila.getColumnIndex("terminopago_id")));
+            hojaDespachoSQLiteEntity.setTerminopago(fila.getString(fila.getColumnIndex("terminopago")));
+            hojaDespachoSQLiteEntity.setPeso(fila.getString(fila.getColumnIndex("peso")));
+            hojaDespachoSQLiteEntity.setComentariodespacho(fila.getString(fila.getColumnIndex("comentariodespacho")));
+            hojaDespachoSQLiteEntity.setNombrecliente(fila.getString(fila.getColumnIndex("nombrecliente")));
+            listaHojaDespachoSQLiteEntity.add(hojaDespachoSQLiteEntity);
+        }
+
+        bd.close();
+        return listaHojaDespachoSQLiteEntity;
+    }
+
 }

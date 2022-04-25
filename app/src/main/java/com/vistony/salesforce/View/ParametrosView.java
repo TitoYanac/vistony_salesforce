@@ -51,9 +51,11 @@ import com.vistony.salesforce.Dao.Retrofit.ListaPromocionWS;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.Retrofit.PromocionCabeceraWS;
 import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleWS;
+import com.vistony.salesforce.Dao.Retrofit.ReasonDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoRepository;
 import com.vistony.salesforce.Dao.Retrofit.StockWS;
 import com.vistony.salesforce.Dao.Retrofit.TerminoPagoWS;
+import com.vistony.salesforce.Dao.Retrofit.TypeDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
@@ -177,6 +179,8 @@ ParametrosView extends Fragment {
     private HeaderDispatchSheetRepository headerDispatchSheetRepository;
     private EscColoursCRepository escColoursCRepository;
     MenuItem seleccionar_todo;
+    private TypeDispatchRepository typeDispatchRepository;
+    private ReasonDispatchRepository reasonDispatchRepository;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -262,6 +266,8 @@ ParametrosView extends Fragment {
         arraylistaparametrosentity = new ArrayList<ListaParametrosEntity>();
         ArrayList<ParametrosSQLiteEntity> listaparametrosSQLiteEntity = new ArrayList<>();
         FormulasController formulasController=new FormulasController(getContext());
+        typeDispatchRepository = new ViewModelProvider(getActivity()).get(TypeDispatchRepository.class);
+        reasonDispatchRepository = new ViewModelProvider(getActivity()).get(ReasonDispatchRepository.class);
 
         //CARGA DE MAESTROS
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
@@ -303,6 +309,8 @@ ParametrosView extends Fragment {
                         parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
                         parametrosSQLite.InsertaParametros("19", "HOJA DESPACHO", "0", getDateTime());
                         parametrosSQLite.InsertaParametros("20", "HOJA DESPACHO DETALLE", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("23", "TIPO DESPACHO", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("24", "MOTIVO DESPACHO", "0", getDateTime());
                         // }
                     } else {
                         if (listaparametrosSQLiteEntity.isEmpty()) {
@@ -402,6 +410,15 @@ ParametrosView extends Fragment {
             Log.e("Jepicame","=>"+data);
         });
 
+        ///////////////////////////COLORES/////////////////////////////////////////////////
+        typeDispatchRepository.geTypeDispatch  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
+
+        ///////////////////////////COLORES/////////////////////////////////////////////////
+        reasonDispatchRepository.geReasonDispatch (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
 
 
 

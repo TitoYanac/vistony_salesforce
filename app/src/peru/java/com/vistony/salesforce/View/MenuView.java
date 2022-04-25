@@ -135,7 +135,8 @@ public class MenuView extends AppCompatActivity
         ConsultaStockView.OnFragmentInteractionListener,
         HistoricContainerSKU.OnFragmentInteractionListener,
         KardexOfPaymentView.OnFragmentInteractionListener,
-        DispatchSheetView.OnFragmentInteractionListener
+        DispatchSheetView.OnFragmentInteractionListener,
+        HistoricStatusDispatchView.OnFragmentInteractionListener
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment,contentHistoryFragment;
@@ -1391,6 +1392,13 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
+            if(tag2.equals("dispatch"))
+            {
+                contentFragment=new HistoricStatusDispatchView() ;
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
         }
 
         if(tag.equals("MenuFormulariosView")){
@@ -1770,6 +1778,17 @@ public class MenuView extends AppCompatActivity
                 ft.remove(PromocionCabeceraFragment);
                 ft.show(ConsultaStockFragment);
                 //ft.add(R.id.content_menu_view, ListadoPromocionView.newInstanceRecibePromocionConsultaStock(Lista), tag2);
+                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            else if(tag2.equals( "warehouses"))
+            {
+                String tag3="consulta_stock";
+                ConsultaStockFragment = getSupportFragmentManager().findFragmentByTag(tag3);
+                ft.hide(ConsultaStockFragment);
+                ft.add(R.id.content_menu_view, WareHousesView
+                        .newInstanceGetItemCode(Lista), tag2);
                 //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("po1p");
                 ft.commit();

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp"
+    android:id="@+id/relativeListWarehouses"
+    >
+
+    <TextView
+        android:id="@+id/lbl_whscode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/lbl_find_stock_all_warehouse_code"
+        />
+    <TextView
+        android:id="@+id/tv_whscode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+
+    <TextView
+        android:id="@+id/lbl_whsname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="Nombre:"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_whsname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+    <TextView
+        android:id="@+id/lbl_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/lbl_find_stock_all_warehouse_stock"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="50dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+
+    <TextView
+        android:id="@+id/lbl_branch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="190dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/lbl_find_stock_all_warehouse_branch"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_branch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="260dp"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+</RelativeLayout>

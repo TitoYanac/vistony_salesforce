@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp"
+    android:id="@+id/relativeListStatusDispatch">
+
+    <TextView
+        android:id="@+id/tv_client"
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+    <TextView
+        android:id="@+id/lbl_referral_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/lbl_historic_status_dispatch_delivery"
+        />
+    <TextView
+        android:id="@+id/tv_referral_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="30dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+
+    <TextView
+        android:id="@+id/lbl_type_dispatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/lbl_historic_status_dispatch_type"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_type_dispatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="50dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+    <TextView
+        android:id="@+id/lbl_reason_dispatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/lbl_historic_status_dispatch_reason"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_reason_dispatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="70dp"
+        android:text=""
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="" />
+
+
+    <TextView
+        android:id="@+id/lbl_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="190dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:text="@string/lbl_historic_status_dispatch_photo"
+
+        />
+
+
+    <ImageView
+        android:id="@+id/imv_historic_status_dispatch_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="235dp"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@drawable/ic_baseline_photo_24" />
+
+    <TextView
+        android:id="@+id/lbl_wsrecibido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="100dp"
+        android:text="Recibido"
+        android:textAppearance="?attr/textAppearanceListItem"
+        tools:text="Recibido" />
+
+    <CheckBox
+        android:id="@+id/chk_wsrecibido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="115dp"
+        android:layout_marginTop="120dp"
+        android:clickable="false"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/lbl_historico_cobranza_respuesta_ws"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="210dp"
+        android:layout_marginTop="100dp"
+        android:text="Respuesta"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <ImageView
+        android:id="@+id/imv_historico_cobranza_respuesta_ws"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="235dp"
+        android:layout_marginTop="130dp"
+        app:srcCompat="@drawable/ic_insert_comment_black_24dp" />
+</RelativeLayout>

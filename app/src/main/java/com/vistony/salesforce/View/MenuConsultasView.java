@@ -31,7 +31,7 @@ public class MenuConsultasView extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private CardView cv_ordenventa,cv_documentofacturado,cv_consulta_cobrado,cv_consulta_deposito,cv_consulta_stock,cv_consulta_orden_venta_estado;
+    private CardView cv_ordenventa,cv_documentofacturado,cv_consulta_cobrado,cv_consulta_deposito,cv_consulta_stock,cv_consulta_orden_venta_estado,cv_dispatch;
     View v;
     OnFragmentInteractionListener mListener;
     public MenuConsultasView() {
@@ -89,6 +89,7 @@ public class MenuConsultasView extends Fragment {
         cv_documentofacturado=v.findViewById(R.id.cv_documentofacturado);
         cv_consulta_cobrado=v.findViewById(R.id.cv_consulta_cobrado);
         cv_consulta_deposito=v.findViewById(R.id.cv_consulta_deposito);
+        cv_dispatch=v.findViewById(R.id.cv_dispatch);
 
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
@@ -174,6 +175,24 @@ public class MenuConsultasView extends Fragment {
             public void onClick(View v) {
                 String Fragment="HistoricoDepositoView";
                 String accion="nuevoinicioHistoricoDepositoView";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,"");
+            }
+        });
+        cv_consulta_deposito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Fragment="HistoricoDepositoView";
+                String accion="nuevoinicioHistoricoDepositoView";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,"");
+            }
+        });
+        cv_dispatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Fragment="MenuConsultasView";
+                String accion="dispatch";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,"");
             }

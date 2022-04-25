@@ -113,6 +113,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
             holder.tv_price_cash = (TextView) convertView.findViewById(R.id.tv_price_cash);
             holder.tv_price_credit = (TextView) convertView.findViewById(R.id.tv_price_credit);
             holder.imv_enable_promotion = (ImageView) convertView.findViewById(R.id.imv_enable_promotion);
+            holder.imv_enable_warehouses = (ImageView) convertView.findViewById(R.id.imv_enable_warehouses);
 
             holder.relativeListaConsultaStock=convertView.findViewById(R.id.relativeListaConsultaStock);
             convertView.setTag(holder);
@@ -174,6 +175,11 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
                 }
 
         );
+
+        holder.imv_enable_warehouses.setOnClickListener(v -> {
+            ConsultaStockView.newInstanceSendWareHouses(lead.getProducto_id());
+        });
+
         return convertView;
     }
     static class ViewHolder {
@@ -186,6 +192,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
         TextView tv_price_credit;
         ImageView imv_enable_promotion;
         RelativeLayout relativeListaConsultaStock;
+        ImageView imv_enable_warehouses;
     }
 
     private Dialog alertaProductoSinStock(android.content.Context context, String texto, ListaProductoEntity lead) {

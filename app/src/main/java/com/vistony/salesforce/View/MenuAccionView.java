@@ -44,12 +44,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
+import com.vistony.salesforce.Controller.Adapters.StatusDispatchDialog;
 import com.vistony.salesforce.Controller.Adapters.VisitaDialogController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Dao.SQLite.LeadSQLite;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
@@ -77,7 +79,7 @@ public class MenuAccionView extends Fragment {
     int validar=0;
     private static String TAG_1 = "text";
     View v;
-    private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead,cv_visit_section;
+    private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead,cv_visit_section,cv_dispatch;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
 
     OnFragmentInteractionListener mListener;
@@ -210,12 +212,15 @@ public class MenuAccionView extends Fragment {
         cv_visita=v.findViewById(R.id.cv_visita);
         cv_lead=v.findViewById(R.id.cv_lead);
         cv_visit_section=v.findViewById(R.id.cv_visit_section);
+        cv_dispatch=v.findViewById(R.id.cv_dispatch);
+
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
-        switch (BuildConfig.FLAVOR){
-            case "paraguay":
-                cv_lead.setVisibility(View.GONE);
-                break;
+
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            cv_lead.setVisibility(View.GONE);
+            cv_visit_section.setVisibility(View.GONE);
         }
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
@@ -279,20 +284,25 @@ public class MenuAccionView extends Fragment {
             //alertaAdvertencia("La Opcion Aun no Esta Habilitada",getContext()).show();
         });
         cv_lead.setOnClickListener(v -> {
-                /*String Fragment="MenuAccionView";
+                String Fragment="MenuAccionView";
                 String accion="lead";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
-                SesionEntity.quotation="N";*/
-            displayDialogMap();
+                SesionEntity.quotation="N";
+            /*displayDialogMap();
             MapsInitializer.initialize(getActivity());
 
             mapView.onCreate(dialog.onSaveInstanceState());
-            mapView.onResume();
+            mapView.onResume();*/
         });
         cv_visit_section.setOnClickListener(v -> {
             alertDialogVisitSection().show();
         });
+        cv_dispatch.setOnClickListener(v -> {
+            androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode);
+            dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
+        });
+
         return v;
     }
 
@@ -425,7 +435,7 @@ public class MenuAccionView extends Fragment {
             UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
             UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
             ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
-
+            DireccionSQLite direccionSQLite= new DireccionSQLite(getContext());
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
             Date date = new Date();
              fecha =dateFormat.format(date);
@@ -469,7 +479,9 @@ public class MenuAccionView extends Fragment {
                         ObjUsuario.compania_id,
                         fecha
                 );
-
+                direccionSQLite.updateCoordenatesAddress(CardCode,
+                        DomEmbarque_ID,String.valueOf(latitude),
+                        String.valueOf(longitude));
                 dialog.dismiss();
             }
         });

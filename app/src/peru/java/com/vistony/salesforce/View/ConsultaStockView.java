@@ -82,6 +82,18 @@ public class ConsultaStockView extends Fragment  implements SearchView.OnQueryTe
         return fragment;
     }
 
+    public static ConsultaStockView newInstanceSendWareHouses(Object objeto) {
+        ConsultaStockView fragment = new ConsultaStockView();
+        Bundle args = new Bundle();
+        String Fragment="ConsultaStockView";
+        String accion="warehouses";
+        String compuesto=Fragment+"-"+accion;
+        mListener.onFragmentInteraction(compuesto,objeto);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

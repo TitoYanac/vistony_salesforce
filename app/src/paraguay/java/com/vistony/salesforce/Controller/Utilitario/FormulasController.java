@@ -1101,7 +1101,10 @@ public class FormulasController {
                         ObjUsuario.fuerzatrabajo_id,
                         ObjUsuario.usuario_id,
                         listaClienteCabeceraEntities.get(i).getLastpurchase(),
-                        listaClienteCabeceraEntities.get(i).getSaldosincontados()
+                        listaClienteCabeceraEntities.get(i).getSaldosincontados(),
+                        listaClienteCabeceraEntities.get(i).getChkgeolocation(),
+                        listaClienteCabeceraEntities.get(i).getChkvisitsection()
+
                 );
             }
 

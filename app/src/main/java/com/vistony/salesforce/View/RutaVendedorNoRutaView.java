@@ -20,6 +20,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteCabeceraDao;
@@ -154,6 +155,11 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
         tv_cantidad_cliente_cabecera_no_ruta_geolocation=v.findViewById(R.id.tv_cantidad_cliente_cabecera_no_ruta_geolocation);
         obtenerRutaVendedorNoRuta=new ObtenerRutaVendedorNoRuta();
         obtenerRutaVendedorNoRuta.execute();
+
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            table_row_no_ruta_geolocation.setVisibility(View.GONE);
+        }
 
         //table_row_no_ruta_geolocation.setVisibility(View.GONE);
         fabagregarclientenoruta.setOnClickListener(view -> {

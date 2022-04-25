@@ -20,6 +20,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteCabeceraDao;
@@ -110,6 +111,10 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         obtenerSQLiteRutaFuerzaTrabajo=new ObtenerSQLiteRutaFuerzaTrabajo();
         obtenerSQLiteRutaFuerzaTrabajo.execute();
 
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            table_row_geolocation.setVisibility(View.GONE);
+        }
         //table_row_geolocation.setVisibility(View.GONE);
         // Implementing setOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
