@@ -9,12 +9,14 @@ import androidx.lifecycle.ViewModel;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.AddressEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SeguridadEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.BuscarClienteView;
@@ -43,17 +45,21 @@ public class ClienteRepository extends ViewModel {
     }
 
     public ArrayList<ClienteSQLiteEntity>getCustomers(String Imei,String Fecha){
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
         Call<ClienteEntityResponse> call=null;
 
-        if(SesionEntity.perfil_id.equals("CHOFER"))
+        if(ObjUsuario.perfil.equals("CHOFER"))
         {
-            Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.perfil_id:"+SesionEntity.perfil_id);
+            Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.perfil_id:"+ObjUsuario.perfil);
             call = Config.getClient().create(Api.class).getClientDelivery(Imei,Fecha);
             Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.call:"+call.toString());
         }
         else
         {
-            Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.perfil_id:"+SesionEntity.perfil_id);
+            Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.perfil_id:"+ObjUsuario.perfil);
             call = Config.getClient().create(Api.class).getCliente(Imei);
             Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.call:"+call.toString());
         }
@@ -70,7 +76,7 @@ public class ClienteRepository extends ViewModel {
 
                         ClienteSQLiteEntity ObjCliente = new ClienteSQLiteEntity();
                         ObjCliente.setCliente_id (clienteEntityResponse.getClienteEntity().get(i).getClienteId());
-                        ObjCliente.setCompania_id (SesionEntity.compania_id);
+                        ObjCliente.setCompania_id (ObjUsuario.compania_id);
                         ObjCliente.setNombrecliente (clienteEntityResponse.getClienteEntity().get(i).getNombre());
                         ObjCliente.setOrden(clienteEntityResponse.getClienteEntity().get(i).getOrdenVisita());
                         ObjCliente.setMoneda(clienteEntityResponse.getClienteEntity().get(i).getMoneda());
@@ -95,7 +101,7 @@ public class ClienteRepository extends ViewModel {
                             List<AddressEntity> listaDirecciones=clienteEntityResponse.getClienteEntity().get(i).getAddress();
 
                             for(AddressEntity direccion:listaDirecciones){
-                                if(direccion.getFuerzatrabajoid().equals(SesionEntity.fuerzatrabajo_id)){
+                                if(direccion.getFuerzatrabajoid().equals(ObjUsuario.fuerzatrabajo_id)){
                                     ObjCliente.setDireccion(direccion.getDireccion());
                                     ObjCliente.setZona(direccion.getZona());
                                     ObjCliente.setZona_id(direccion.getZonaid());

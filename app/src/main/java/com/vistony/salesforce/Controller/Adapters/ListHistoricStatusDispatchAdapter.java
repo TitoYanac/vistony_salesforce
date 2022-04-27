@@ -1,6 +1,10 @@
 package com.vistony.salesforce.Controller.Adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,8 +98,10 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
             holder.tv_type_dispatch = (TextView) convertView.findViewById(R.id.tv_type_dispatch);
             holder.tv_reason_dispatch= (TextView) convertView.findViewById(R.id.tv_reason_dispatch);
             holder.imv_historic_status_dispatch_photo= (ImageView) convertView.findViewById(R.id.imv_historic_status_dispatch_photo);
+            holder.imv_historic_status_dispatch_photo_delivery= (ImageView) convertView.findViewById(R.id.imv_historic_status_dispatch_photo_delivery);
             holder.chk_wsrecibido= (CheckBox) convertView.findViewById(R.id.chk_wsrecibido);
             holder.imv_historico_cobranza_respuesta_ws= (ImageView) convertView.findViewById(R.id.imv_historico_cobranza_respuesta_ws);
+            //holder.imv_historic_status_dispatch_photo.setBackgroundResource(R.drawable.portail);
             convertView.setTag(holder);
         } else {
             holder = (ListHistoricStatusDispatchAdapter.ViewHolder) convertView.getTag();
@@ -108,7 +114,19 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         holder.tv_referral_guide.setText(lead.getEntrega());
         holder.tv_type_dispatch.setText(lead.getTipoDespacho());
         holder.tv_reason_dispatch.setText(lead.getMotivoDespacho());
-
+        byte[] byteArray,byteArray2;
+        Log.e("REOS","ListHistoricStatusDispatchAdapter.lead.getFotoLocal"+lead.getFotoLocal());
+        byteArray = Base64.decode(lead.getFotoLocal(), Base64.DEFAULT);
+        Log.e("REOS","ListHistoricStatusDispatchAdapter.byteArray.tostring"+byteArray.toString());
+        Log.e("REOS","ListHistoricStatusDispatchAdapter.lead.getFotoGuia"+lead.getFotoGuia());
+        byteArray2 = Base64.decode(lead.getFotoGuia(), Base64.DEFAULT);
+        //byte[] pic = intent.getByteArrayExtra("pic");
+        //capturedImage = (ImageView) findViewById(R.id.capturedImage);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        Bitmap bitmap2 = BitmapFactory.decodeByteArray(byteArray2, 0, byteArray2.length);
+        //Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap,holder.imv_historic_status_dispatch_photo.getWidth(),holder.imv_historic_status_dispatch_photo.getHeight(),false);
+        holder.imv_historic_status_dispatch_photo.setImageBitmap(bitmap);
+        holder.imv_historic_status_dispatch_photo_delivery.setImageBitmap(bitmap2);
         return convertView;
     }
 
@@ -118,6 +136,7 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         TextView tv_type_dispatch;
         TextView tv_reason_dispatch;
         ImageView imv_historic_status_dispatch_photo;
+        ImageView imv_historic_status_dispatch_photo_delivery;
         CheckBox chk_wsrecibido;
         ImageView imv_historico_cobranza_respuesta_ws;
     }

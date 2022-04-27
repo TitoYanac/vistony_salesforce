@@ -279,6 +279,9 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                     } else {
                         //Evalua Si la cantidad Pendiente en PromocionCabeceraView es mayor al Valor Caja
                         if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja) {
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.SI: ");
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.valorCaja: "+valorCaja);
                             int x=0;
                             //Inserta sobre la Caja de Texto la Cantidad Actual + 1
                             cantidadPromocion=String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) + 1);
@@ -322,6 +325,9 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                             }
 
                         } else {
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.NO: ");
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.valorCaja: "+valorCaja);
                             Toast.makeText(getContext(), "Cantidad No Permitida", Toast.LENGTH_SHORT).show();
                             if(!holder.tv_cant_promocion.getText().equals("0"))
                             {
@@ -352,8 +358,10 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                     valorCaja =Integer.parseInt(lead.cantidadcompra);
                     Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
                     Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.valorCaja: "+valorCaja);
+                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.holder.tv_cant_promocion.getText(): "+holder.tv_cant_promocion.getText());
                     //Evalua si la Cantidad Pendiente en el Fragment PromocionCabeceraView - la cantidad en el valorCaja es = a 0
-                    if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) - valorCaja == 0) {
+                    //if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) - valorCaja == 0) {
+                        if (Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - valorCaja > 0) {
                         //Inserta sobre la Caja de Texto la Cantidad Actual - 1
                         cantidadPromocion=String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - 1);
                         holder.tv_cant_promocion.setText(cantidadPromocion);
@@ -402,6 +410,9 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                         //Evalua Si la cantidad Pendiente en PromocionCabeceraView es mayor al Valor Caja
                         //if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja) {
                         if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_promocion.getText().toString()) - valorCaja >= 0) {
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.SI: ");
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.valorCaja: "+valorCaja);
                             //Inserta sobre la Caja de Texto la Cantidad Actual + 1
                             cantidadPromocion=String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - 1);
                             holder.tv_cant_promocion.setText(cantidadPromocion);
@@ -431,7 +442,9 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
 
                         } else {
-
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.SI: ");
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.valorCaja: "+valorCaja);
                             Toast.makeText(getContext(), "Cantidad No Permitida", Toast.LENGTH_SHORT).show();
                         }
 
@@ -448,94 +461,6 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                     }
                 //}
             }});
-        /*holder.et_cant_promocion.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String valorCaja;
-                if (String.valueOf(s).equals("")) {
-                    valorCaja = "0";
-                } else {
-                    valorCaja = String.valueOf(Integer.valueOf(String.valueOf(s)) * Integer.valueOf(lead.getCantidadcompra()));
-                }
-
-                if (listaPromocionCabeceraEntities.size() > 1)
-                {
-                    for (int i = 0; i < PromocionCabeceraView.listaOrdenVentaDetalleEntities.size(); i++)
-                    {
-                            if (Integer.parseInt(PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad()) - Integer.parseInt(valorCaja) >  0) {
-                                String calculo;
-                                calculo = String.valueOf(Integer.parseInt(PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad()) - Integer.parseInt(valorCaja));
-                                PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).setOrden_detalle_cantidad(calculo);
-                                lead.setCantidadpromocion(String.valueOf(s));
-                            }
-                            else if (IntegerOf(Integer.parseInt(PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad()) - Integer.parseInt(valorCaja));
-                                PromocionCabeceraView..parseInt(PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad()) - Integer.parseInt(valorCaja)==0)
-                            {
-                                String calculo;Of(Integer.parseInt(PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad()) - Integer.parseInt(valorCaja));
-                                PromocionCabeceraView.
-                                calculo = String.valuelistaOrdenVentaDetalleEntities.get(i).setOrden_detalle_cantidad(calculo);
-                                lead.setCantidadpromocion(String.valueOf(s));
-                                //holder.et_cant_promocion.setKeyListener(null);
-                                holder.relativeListaPromocionCabecera.setEnabled(false);
-                                fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceActivarVincular(""));
-                            }
-                            else {
-                                if (String.valueOf(s).equals("")) {
-                                } else {
-                                    Toast.makeText(getContext(), "Cantidad No Permitida", Toast.LENGTH_SHORT).show();
-                                    fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                    transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceDesactivarVincular(""));
-                                }
-                            }
-
-                            }
-                        //}
-                    }
-
-                else
-                    {
-                    for (int i = 0; i < PromocionCabeceraView.listaOrdenVentaDetalleEntities.size(); i++)
-                    {
-                        if (PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad().equals("0"))
-                        {
-                            holder.et_cant_promocion.setKeyListener(null);
-                            fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                            FragmentTransaction transaction = fragmentManager.beginTransaction();
-                            transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceActivarVincular(""));
-
-
-                        } else {
-                            //if (Integer.parseInt(PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad()) <= Integer.parseInt(valorCaja)) {
-                            if (Integer.parseInt(PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad()) - Integer.parseInt(valorCaja) == 0) {
-                                String calculo;
-                                calculo = String.valueOf(Integer.parseInt(PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad()) - Integer.parseInt(valorCaja));
-                                PromocionCabeceraView.listaOrdenVentaDetalleEntities.get(i).setOrden_detalle_cantidad(calculo);
-                                lead.setCantidadpromocion(String.valueOf(s));
-                            } else {
-                                if (String.valueOf(s).equals("")) {
-                                } else {
-                                    Toast.makeText(getContext(), "Cantidad No Permitida", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-                    }
-                    //fin for
-                    }
-            }
-        });
-        */
-
 
         if((!(lead.listaPromocionDetalleEntities.isEmpty()))&&holder.contentpromociondetalle.getChildCount()==0)
         {

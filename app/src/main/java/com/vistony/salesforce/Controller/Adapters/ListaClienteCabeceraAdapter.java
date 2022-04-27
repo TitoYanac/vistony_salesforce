@@ -17,8 +17,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -153,6 +155,9 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.tv_address = (TextView) convertView.findViewById(R.id.tv_address);
             holder.chk_geolocation = (CheckBox) convertView.findViewById(R.id.chk_geolocation);
             holder.chk_visitsection = (CheckBox) convertView.findViewById(R.id.chk_visitsection);
+            holder.tablerowbalance = (TableRow) convertView.findViewById(R.id.tablerowbalance);
+            holder.linearlayoutlblcredit = (LinearLayout) convertView.findViewById(R.id.linearlayoutlblcredit);
+            holder.linearlayouttvcredit = (LinearLayout) convertView.findViewById(R.id.linearlayouttvcredit);
 
             convertView.setTag(holder);
         } else {
@@ -190,6 +195,14 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                 holder.tv_moneda.setText(lead.getMoneda());
                 break;
         }
+        if(BuildConfig.FLAVOR.equals("ecuador"))
+        {
+            holder.tablerowbalance.setVisibility(View.GONE);
+            holder.progressLineCredit.setVisibility(View.GONE);
+            holder.linearlayoutlblcredit.setVisibility(View.GONE);
+            holder.linearlayouttvcredit.setVisibility(View.GONE);
+        }
+
 
         holder.tv_categoria.setText(lead.getCategoria());
         Log.e("REOS","ListaClienteCabeceraAdapter.getView.Lista.get(i).getLastpurchase())"+lead.getLastpurchase());
@@ -304,8 +317,8 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                listaClienteCabeceraEntity.setChk_cobranza(lead.getFecharuta());
                listaClienteCabeceraEntity.setDocentry(lead.getDocentry());
                listaClienteCabeceraEntity.setLastpurchase(lead.getLastpurchase());
-               ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
-
+               //ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
+                    ArraylistaClienteCabeceraEntity.add(lead);
                String Cliente = "";
                Cliente = "CL01";
                fragment = new ClienteCabeceraView();
@@ -349,6 +362,9 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         TextView tv_address;
         CheckBox chk_geolocation;
         CheckBox chk_visitsection;
+        TableRow tablerowbalance;
+        LinearLayout linearlayoutlblcredit;
+        LinearLayout linearlayouttvcredit;
     }
 
 

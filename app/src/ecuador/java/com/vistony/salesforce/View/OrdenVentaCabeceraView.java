@@ -96,8 +96,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     View v;
     static Button btn_detalle_orden_venta;
     OnFragmentInteractionListener mListener;
-    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag;
-    static String cliente_terminopago,cliente_terminopago_id;
+    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta;
+    static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
     static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;;
     static EditText et_comentario;
@@ -205,7 +205,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         direccionSelecionada=(DireccionCliente)objeto;
         tv_direccion.setText(direccionSelecionada.getDireccion());
-
+        cliente_domembarque_id=direccionSelecionada.getDomembarque_id();
+        Log.e("REOS", "OrdenVentaCabeceraView-newInstanciaNuevaDireccion-cliente_domembarque_id:"+cliente_domembarque_id);
         return ordenVentaView;
     }
 
@@ -333,7 +334,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     totalAcum=listaOrdenVentaCabecera.get(g).getMontototal();
                     confirmationRequestErp=listaOrdenVentaCabecera.get(g).getRecibidoERP().equals("1")?true:false;
                     cliente_terminopago_id=listaOrdenVentaCabecera.get(g).getTerminopago_id();
-
+                    cliente_domembarque_id=listaOrdenVentaCabecera.get(g).getDomembarque_id();
+                    dispatchdate=listaOrdenVentaCabecera.get(g).getDispatchdate();
                     listaAgenciasqliteentity= agenciaSQLiteDao.ObtenerAgencia_porID(
                             listaOrdenVentaCabecera.get(g).getAgencia_id()
                     );
@@ -369,14 +371,14 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 for(int i=0;i<Listado.size();i++){
                     nombrecliente=Listado.get(i).getNombrecliente();
                     codigocliente=Listado.get(i).getCliente_id();
-
                     direccioncliente=Listado.get(i).getDireccion();
-
                     moneda=Listado.get(i).getMoneda();
                     impuesto_id=Listado.get(i).getImpuesto_id();
                     impuesto=Listado.get(i).getImpuesto();
                     rucdni= Listado.get(i).getRucdni();
                     cliente_terminopago_id=Listado.get(i).getTerminopago_id();
+                    cliente_domembarque_id=Listado.get(i).getDomembarque_id();
+                    chkruta=Listado.get(i).getChk_ruta();
                 }
             }else{
                 Log.e("jpcm","ESTA NULO lISTADO");
@@ -558,6 +560,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         if (getArguments() != null) {
             if(listaHistoricoOrdenVentaEntity!=null)
             {
+                tv_dispatch_date.setText(Induvis.getDate(BuildConfig.FLAVOR,dispatchdate) );
                 et_comentario.setText(comentario);
                 //sp_cantidaddescuento.setText
                 values=new ArrayList<>();
@@ -947,8 +950,9 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             listaOrdenVentaCabeceraEntity.orden_cabecera_compania_id= SesionEntity.compania_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_id=ordenventa_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_cliente_id=codigocliente;
-
-            listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id=(direccionSelecionada==null)?Listado.get(i).getDomembarque_id():direccionSelecionada.getDomembarque_id();//  Listado.get(i).getDomembarque_id();
+            Log.e("REOS", "OrdenVentaCabeceraView-RegistrarPedido-cliente_domembarque_id:"+cliente_domembarque_id);
+            listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id=//(direccionSelecionada==null)?Listado.get(i).getDomembarque_id():direccionSelecionada.getDomembarque_id();//  Listado.get(i).getDomembarque_id();
+                    cliente_domembarque_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_domfactura_id=Listado.get(i).getDomfactura_id();
 
             listaOrdenVentaCabeceraEntity.orden_cabecera_fecha_creacion=String.valueOf(sdf.format(calendario.getTime()));
@@ -1005,18 +1009,21 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             listaOrdenVentaCabeceraEntity.orden_cabecera_dispatch_date= parametrofecha;
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);
-            visita.setAddress(listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id);
+            //visita.setAddress(listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id);
+            visita.setAddress(cliente_domembarque_id);
             if(SesionEntity.quotation.equals("Y"))
             {
                 visita.setType("12");
             }else{
                 visita.setType("01");
             }
-
             visita.setObservation("Se genero el pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id()+" para la dirección "+Listado.get(i).getDireccion());
             visita.setLatitude(""+latitude);
             visita.setLongitude(""+longitude);
-
+            visita.setMobileID(ordenventa_id);
+            visita.setStatusRoute(chkruta);
+            visita.setAmount(""+totalSalesOrder.getTotal());
+            visita.setTerminoPago_ID(contado);
             formulasController.RegistraVisita(visita,getActivity(),totalSalesOrder.getTotal());
 
         }

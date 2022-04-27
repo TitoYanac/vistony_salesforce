@@ -3,12 +3,18 @@ package com.vistony.salesforce.Controller.Utilitario;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
+
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 //import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Dao.Retrofit.LoginRepository;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.math.BigDecimal;
@@ -392,6 +398,44 @@ public class Induvis {
         Log.e("REOS","Induvis.getDiferenceDays.numberOFDays"+numberOFDays);
         return numberOFDays;
 
+    }
+
+    static public void refreshGlobalVariables(Context context)
+    {
+        SesionEntity Sesion= new SesionEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        UsuarioSQLiteEntity userEntity=usuarioSQLite.ObtenerUsuarioSesion();
+
+        if(userEntity!=null) {
+            Sesion.compania_id = userEntity.getCompania_id();
+            Sesion.fuerzatrabajo_id = userEntity.getFuerzatrabajo_id();
+            Sesion.nombrecompania = userEntity.getNombrecompania();
+            Sesion.nombrefuerzadetrabajo = userEntity.getNombrefuerzatrabajo();
+            Sesion.nombreusuario = userEntity.getNombreUsuario();
+            Sesion.usuario_id = userEntity.getUsuario_id();
+            Sesion.imei = userEntity.getImei();
+            Sesion.recibo = userEntity.getRecibo();
+            Sesion.almacen_id = userEntity.getAlmacen_id();
+            Sesion.planta_id = userEntity.getPlanta();
+            Sesion.perfil_id = userEntity.getPerfil();
+            Sesion.cogsacct = userEntity.getCogsacct();
+            Sesion.u_vist_ctaingdcto = userEntity.getU_vist_ctaingdcto();
+            Sesion.documentsowner = userEntity.getDocumentsowner();
+            Sesion.U_VIST_SUCUSU = userEntity.getU_VIST_SUCUSU();
+            Sesion.CentroCosto = userEntity.getCentroCosto();
+            Sesion.UnidadNegocio = userEntity.getUnidadNegocio();
+            Sesion.LineaProduccion = userEntity.getLineaProduccion();
+            Sesion.Impuesto_ID = userEntity.getImpuesto_ID();
+            Sesion.Impuesto = userEntity.getImpuesto();
+            Sesion.U_VIS_CashDscnt = userEntity.getU_VIS_CashDscnt();
+            Sesion.FLAG_STOCK = userEntity.getFLAG_STOCK();
+            Sesion.FLAG_BACKUP = userEntity.getFLAG_BACKUP();
+            Sesion.rate = userEntity.getRate();
+            Sesion.Print = userEntity.getPrint();
+            Sesion.activecurrency = userEntity.getActivecurrency();
+            Sesion.phone = userEntity.getPlanta();
+            Sesion.maxDateDeposit = userEntity.getChkbloqueopago();
+        }
     }
 
 }

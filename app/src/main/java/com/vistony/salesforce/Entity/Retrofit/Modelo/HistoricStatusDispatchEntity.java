@@ -49,7 +49,19 @@ public class HistoricStatusDispatchEntity {
     @SerializedName("Entrega")
     private String Entrega;
 
-    public HistoricStatusDispatchEntity(String fuerzaTrabajo_ID, String usuario_ID, String tipoDespacho_ID, String tipoDespacho, String motivoDespacho_ID, String motivoDespacho, String observacion, String latitud, String longitud, String fecha, String hora, String entrega_ID, String cliente_ID, String cliente, String entrega) {
+    private String Factura_ID;
+
+    private String Factura;
+
+    private String FotoLocal;
+
+    private String FotoGuia;
+    public HistoricStatusDispatchEntity(
+            String fuerzaTrabajo_ID, String usuario_ID, String tipoDespacho_ID, String tipoDespacho,
+            String motivoDespacho_ID, String motivoDespacho, String observacion, String latitud,
+            String longitud, String fecha, String hora, String entrega_ID, String cliente_ID,
+            String cliente, String entrega,String factura_ID,String factura,String FotoLocal,String FotoGuia
+    ) {
         FuerzaTrabajo_ID = fuerzaTrabajo_ID;
         Usuario_ID = usuario_ID;
         TipoDespacho_ID = tipoDespacho_ID;
@@ -65,10 +77,46 @@ public class HistoricStatusDispatchEntity {
         Cliente_ID = cliente_ID;
         Cliente = cliente;
         Entrega = entrega;
+        Factura_ID = factura_ID;
+        Factura = factura;
+        FotoLocal = FotoLocal;
+        FotoGuia = FotoGuia;
     }
 
     public HistoricStatusDispatchEntity() {
 
+    }
+
+    public String getFotoLocal() {
+        return FotoLocal;
+    }
+
+    public void setFotoLocal(String fotoLocal) {
+        FotoLocal = fotoLocal;
+    }
+
+    public String getFotoGuia() {
+        return FotoGuia;
+    }
+
+    public void setFotoGuia(String fotoGuia) {
+        FotoGuia = fotoGuia;
+    }
+
+    public String getFactura_ID() {
+        return Factura_ID;
+    }
+
+    public void setFactura_ID(String factura_ID) {
+        Factura_ID = factura_ID;
+    }
+
+    public String getFactura() {
+        return Factura;
+    }
+
+    public void setFactura(String factura) {
+        Factura = factura;
     }
 
     public String getFuerzaTrabajo_ID() {

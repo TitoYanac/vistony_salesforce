@@ -64,9 +64,10 @@ public class StatusDispatchDialog extends DialogFragment {
     private ActivityResultLauncher<Intent> someActivityResultLauncherGuia;
     private Bitmap imgBitmap,imgBitmap2;
     private byte[] byteArray,byteArray2;
-    String cliente_id,entrega_id;
-    public StatusDispatchDialog(String Client_id){
+    String cliente_id,cliente;
+    public StatusDispatchDialog(String Client_id,String cliente){
     this.cliente_id=Client_id;
+        this.cliente=cliente;
     }
     LocationManager locationManager;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
@@ -188,6 +189,7 @@ public class StatusDispatchDialog extends DialogFragment {
                     imgBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
                     byteArray = stream.toByteArray();
                     encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
                 }
                 if (imgBitmap2 != null) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -206,23 +208,31 @@ public class StatusDispatchDialog extends DialogFragment {
                 ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetSQLite=new ArrayList<>();
                 DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(getContext());
                 listDetailDispatchSheetSQLite=detailDispatchSheetSQLite.getDetailDispatchSheetforClient(cliente_id);
-                String entrega_id="",factura_id="";
+                String entrega_id="",factura_id="",entrega="",factura="",typedispatch_id="",typedispatch="",reasondispatch_id="",reasondispatch="";
                 for(int i=0;i<listDetailDispatchSheetSQLite.size();i++)
                 {
                     if(spn_referral_guide.getSelectedItem().toString().equals(listDetailDispatchSheetSQLite.get(i).getEntrega()))
                     {
                         entrega_id=listDetailDispatchSheetSQLite.get(i).getEntrega_id();
                         factura_id=listDetailDispatchSheetSQLite.get(i).getFactura_id();
+                        factura=listDetailDispatchSheetSQLite.get(i).getFactura();
+                        entrega=listDetailDispatchSheetSQLite.get(i).getEntrega();
                     }
                 }
 
+                String[] tipodespacho= spn_type_dispatch.getSelectedItem().toString().split("-");
+                String[] motivodespacho= spn_reason_dispatch.getSelectedItem().toString().split("-");
+                typedispatch_id=tipodespacho[0];
+                typedispatch=tipodespacho[1];
+                reasondispatch_id=motivodespacho[0];
+                reasondispatch=motivodespacho[1];
 
                 StatusDispatchEntity statusDispatchEntity=new StatusDispatchEntity();
                 statusDispatchEntity.compania_id=ObjUsuario.compania_id;
                 statusDispatchEntity.fuerzatrabajo_id=ObjUsuario.fuerzatrabajo_id;
                 statusDispatchEntity.usuario_id=ObjUsuario.usuario_id;
-                statusDispatchEntity.typedispatch_id=spn_type_dispatch.getSelectedItem().toString();
-                statusDispatchEntity.reasondispatch_id=spn_reason_dispatch.getSelectedItem().toString();
+                statusDispatchEntity.typedispatch_id=typedispatch_id;
+                statusDispatchEntity.reasondispatch_id=reasondispatch_id;
                 statusDispatchEntity.entrega_id =entrega_id;
                 statusDispatchEntity.cliente_id =cliente_id;
                 statusDispatchEntity.factura_id =factura_id;
@@ -234,9 +244,14 @@ public class StatusDispatchDialog extends DialogFragment {
                 statusDispatchEntity.fotoGuia = encoded2;
                 statusDispatchEntity.latitud = String.valueOf(latitude) ;
                 statusDispatchEntity.longitud =String.valueOf(longitude);
+                statusDispatchEntity.cliente =cliente;
+                statusDispatchEntity.entrega =String.valueOf(entrega);
+                statusDispatchEntity.factura =String.valueOf(factura);
+                statusDispatchEntity.typedispatch =typedispatch;
+                statusDispatchEntity.reasondispatch =reasondispatch;
                 listStatusDispatchEntity.add(statusDispatchEntity);
                 statusDispatchSQLite.addStatusDispatch(listStatusDispatchEntity);
-
+                Toast.makeText(getContext(), "Despacho Actualizado Correctamente", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });

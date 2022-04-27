@@ -122,4 +122,14 @@
         android:text="Direccion1"
         android:textAppearance="?attr/textAppearanceListItem" />
 
+    <CheckBox
+        android:id="@+id/chk_statusdispatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="140dp"
+        android:text="Direccion1"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
 </RelativeLayout>

@@ -63,6 +63,11 @@ public class StatusDispatchSQLite {
             registro.put("fotoGuia", statusDispatchEntity.get(i).getFotoGuia());
             registro.put("latitud", statusDispatchEntity.get(i).getLatitud());
             registro.put("longitud", statusDispatchEntity.get(i).getLongitud());
+            registro.put("cliente", statusDispatchEntity.get(i).getCliente());
+            registro.put("factura", statusDispatchEntity.get(i).getFactura());
+            registro.put("entrega", statusDispatchEntity.get(i).getEntrega());
+            registro.put("typedispatch", statusDispatchEntity.get(i).getTypedispatch());
+            registro.put("reasondispatch", statusDispatchEntity.get(i).getReasondispatch());
             bd.insert("statusdispatch", null, registro);
         }
 
@@ -124,17 +129,24 @@ public class StatusDispatchSQLite {
             while (fila.moveToNext())
             {
                 historicStatusDispatchEntity= new HistoricStatusDispatchEntity();
-                historicStatusDispatchEntity.setCompania_id(fila.getString(0));
-                historicStatusDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
-                historicStatusDispatchEntity.setUsuario_id (fila.getString(2));
-                historicStatusDispatchEntity.setTypedispatch_id (fila.getString(3));
-                historicStatusDispatchEntity.setReasondispatch_id (fila.getString(4));
-                historicStatusDispatchEntity.setCliente_id (fila.getString(5));
-                historicStatusDispatchEntity.setFactura_id (fila.getString(6));
-                historicStatusDispatchEntity.setEntrega_id (fila.getString(7));
-                historicStatusDispatchEntity.setChkrecibido (fila.getString(8));
-                historicStatusDispatchEntity.setObservation (fila.getString(9));
-                listStatusDispatchEntity.add(statusDispatchEntity);
+                //historicStatusDispatchEntity.setCompania_id(fila.getString(0));
+                //historicStatusDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
+                //historicStatusDispatchEntity.setUsuario_id (fila.getString(2));
+                historicStatusDispatchEntity.setTipoDespacho_ID (fila.getString(3));
+                historicStatusDispatchEntity.setMotivoDespacho_ID(fila.getString(4));
+                historicStatusDispatchEntity.setCliente_ID(fila.getString(5));
+                //historicStatusDispatchEntity.setFactura_id(fila.getString(6));
+                historicStatusDispatchEntity.setEntrega_ID(fila.getString(7));
+                //historicStatusDispatchEntity.setChkrecibido (fila.getString(8));
+                historicStatusDispatchEntity.setObservacion(fila.getString(9));
+                historicStatusDispatchEntity.setFotoLocal(fila.getString(10));
+                historicStatusDispatchEntity.setFotoGuia(fila.getString(13));
+                historicStatusDispatchEntity.setCliente(fila.getString(16));
+                historicStatusDispatchEntity.setEntrega(fila.getString(18));
+                historicStatusDispatchEntity.setFactura(fila.getString(17));
+                historicStatusDispatchEntity.setTipoDespacho(fila.getString(19));
+                historicStatusDispatchEntity.setMotivoDespacho(fila.getString(20));
+                listStatusDispatchEntity.add(historicStatusDispatchEntity);
             }
 
             bd.close();

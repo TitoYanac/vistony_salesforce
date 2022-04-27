@@ -506,8 +506,8 @@ public class ClienteDetalleView extends Fragment implements Serializable {
             case R.id.update_dispatch_reason:
 
                 //dialogStatusDispatch("Estado Despacho",getContext()).show();
-                androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(texto);
-                dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
+                //androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(texto);
+                //dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
                 return true;
             default:
                 break;

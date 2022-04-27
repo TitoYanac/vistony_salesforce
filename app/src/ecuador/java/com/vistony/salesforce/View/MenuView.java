@@ -53,6 +53,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.navigation.NavigationView;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
@@ -1726,11 +1727,13 @@ public class MenuView extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("REOS","MenuView-OnResume");
         registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
     public void onPause() {
+        Log.e("REOS","MenuView-onPause");
         unregisterReceiver(networkStateReceiver);
         super.onPause();
     }
@@ -1748,5 +1751,13 @@ public class MenuView extends AppCompatActivity
             textViewStatus.setTextColor(Color.parseColor("#FFFFFF"));
             textViewStatus.setText("DESCONECTADO");
         }
+    }
+
+    @Override
+    public void onRestart() {
+        Log.e("REOS","MenuView-onRestart");
+        super.onRestart();
+        Induvis.refreshGlobalVariables(this);
+        //registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
     }
 }

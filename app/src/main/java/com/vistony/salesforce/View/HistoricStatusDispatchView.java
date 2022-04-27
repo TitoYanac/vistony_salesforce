@@ -75,6 +75,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
     static double docamount;
     SimpleDateFormat dateFormat,dateFormat2;
     Date date,date2;
+
     public HistoricStatusDispatchView() {
         // Required empty public constructor
     }
@@ -104,6 +105,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
         activity=getActivity();
         lifecycleOwner=getActivity();
         getActivity().setTitle("Consulta Despachos");
+        setHasOptionsMenu(true);
         statusDispatchRepository= new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -116,9 +118,12 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_find_status_dispatch, container, false);
-        btn_get_status_dispatch=v.findViewById(R.id.btn_get_status_dispatch);
+        btn_get_status_dispatch= v.findViewById(R.id.btn_get_status_dispatch);
+        btn_get_status_dispatch.setOnClickListener(this);
         tv_date_historic_status_dispatch=v.findViewById(R.id.tv_date_historic_status_dispatch);
         tv_count_historic_status_dispatch=v.findViewById(R.id.tv_count_historic_status_dispatch);
+        imb_calendario_historic_status_dispatch=(ImageButton)v.findViewById(R.id.imb_calendario_historic_status_dispatch);
+        imb_calendario_historic_status_dispatch.setOnClickListener(this);
         lv_historic_status_dispatch=(ListView) v.findViewById(R.id.lv_historic_status_dispatch);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         dateFormat2 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
@@ -128,6 +133,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
         parametrofecha =dateFormat2.format(date2);
         tv_date_historic_status_dispatch.setText(fecha);
 
+
         return v;
     }
 
@@ -135,7 +141,8 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.imb_calendario_historico_cobranza:
+            case R.id.imb_calendario_historic_status_dispatch:
+                Log.e("REOS","HistoricStatusDispatch-OnClick-imb_calendario_historico_cobranza");
                 final Calendar c1 = Calendar.getInstance();
                 diadespacho = c1.get(Calendar.DAY_OF_MONTH);
                 mesdespacho = c1.get(Calendar.MONTH);
@@ -149,7 +156,8 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
 
 
                 break;
-            case R.id.btn_consultar_fecha_hisorico_cobranza:
+            case R.id.btn_get_status_dispatch:
+                Log.e("REOS","HistoricStatusDispatch-OnClick-btn_consultar_fecha_hisorico_cobranza");
                 getListHistoric(parametrofecha);
                 break;
             default:
@@ -233,6 +241,12 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
                 List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch=new ArrayList<>();
                 StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(context);
                 listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
+                listHistoricStatusDispatchAdapter
+                        =new ListHistoricStatusDispatchAdapter(
+                        activity,
+                        listHistoricStatusDiapatch);
+                lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
+                tv_count_historic_status_dispatch.setText(String.valueOf(listHistoricStatusDiapatch.size()));
                 Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
             }
             pd.dismiss();

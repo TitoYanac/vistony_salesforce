@@ -86,6 +86,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 import io.sentry.Sentry;
 
@@ -158,6 +159,9 @@ public class CobranzaDetalleView extends Fragment {
     String cliente_id_visita,domembarque_id_visita,zona_id_visita;
     private ProgressDialog pd;
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
+    UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+
+
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm","Este es NUEVA ISNTANCIA 1");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
@@ -231,6 +235,8 @@ public class CobranzaDetalleView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hiloVlidarQR = new HiloVlidarQR();
+        usuarioSQLite = new UsuarioSQLite(getContext());
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
         listaClienteDetalleAdapterFragment =  new ArrayList<ListaClienteDetalleEntity>();
         documentoCobranzaPDF = new DocumentoCobranzaPDF();
         documentoSQLite = new DocumentoSQLite(getContext());
@@ -263,7 +269,7 @@ public class CobranzaDetalleView extends Fragment {
         tieneFlash = getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
         listaConfiguracionSQLEntity =  new ArrayList<>();
-        usuarioSQLite = new UsuarioSQLite(getContext());
+
         if (getArguments() != null) {
 
             Listado = (ArrayList<ListaHistoricoCobranzaEntity>)getArguments().getSerializable(ARG_PARAM1);
@@ -839,7 +845,7 @@ public class CobranzaDetalleView extends Fragment {
         switch (item.getItemId()) {
 
             case R.id.guardar:
-                if(SesionEntity.fuerzatrabajo_id==null && SesionEntity.nombrefuerzadetrabajo==null && SesionEntity.compania_id==null){
+                if(SesionEntity.fuerzatrabajo_id==null && SesionEntity.nombrefuerzadetrabajo==null && ObjUsuario.compania_id==null){
                     //if(true){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("Advertencia")
@@ -1074,12 +1080,28 @@ public class CobranzaDetalleView extends Fragment {
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza)
     {
         int resultado=0,recibows=0;
-        String tag="",tag2="",cliente_id="",shipto="",montocobrado="",cardname;
+        String tag="",tag2="",cliente_id="",shipto="",montocobrado="",cardname,valorcobranza="0",chkruta="",contado="0";
         FormulasController formulasController=new FormulasController(getContext());
         cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
-        correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(SesionEntity.compania_id,SesionEntity.usuario_id);
+        correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(ObjUsuario.compania_id,SesionEntity.usuario_id);
+        Random numAleatorio = new Random();
+        int n = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
 
+        for (int k = 0; k < Lista.size(); k++) {
+            valorcobranza=Lista.get(k).getCobrado();
+            chkruta=Lista.get(k).getChkruta();
 
+            if(Lista.get(k).getFechaemision().equals(Lista.get(k).getFechavencimiento()))
+            {
+                contado="1";
+            }
+            else
+            {
+                contado="0";
+            }
+        }
+
+        if(Float.parseFloat(valorcobranza)>=1) {
         String[] separada = SesionEntity.recibo.split("R");
         if(SesionEntity.recibo.equals("0"))
         {
@@ -1136,7 +1158,7 @@ public class CobranzaDetalleView extends Fragment {
                         FormulasController.ObtenerFechaHoraCadena(),
                         String.valueOf(Lista.get(i).getCliente_id()),
                         String.valueOf(Lista.get(i).getDocumento_id()),
-                        SesionEntity.compania_id,
+                        ObjUsuario.compania_id,
                         String.valueOf(Lista.get(i).getImporte()),
                         String.valueOf(Lista.get(i).getSaldo()),
                         String.valueOf(Lista.get(i).getNuevo_saldo()),
@@ -1165,11 +1187,12 @@ public class CobranzaDetalleView extends Fragment {
                         "",
                         "",
                         obtenerHoraActual(),
-                        cardname
-                        ,""
+                        cardname,
+                        String.valueOf(n),
+                        Lista.get(i).getDocentry()
                 );
 
-                ActualizaDocumentoDeuda(SesionEntity.compania_id,
+                ActualizaDocumentoDeuda(ObjUsuario.compania_id,
                         String.valueOf(Lista.get(i).getDocumento_id()),
                         String.valueOf(Lista.get(i).getNuevo_saldo()));
 
@@ -1189,7 +1212,7 @@ public class CobranzaDetalleView extends Fragment {
                         FormulasController.ObtenerFechaHoraCadena(),
                         String.valueOf(Lista.get(i).getCliente_id()),
                         String.valueOf(Lista.get(i).getDocumento_id()),
-                        SesionEntity.compania_id,
+                        ObjUsuario.compania_id,
                         String.valueOf(Lista.get(i).getImporte()),
                         String.valueOf(Lista.get(i).getSaldo()),
                         String.valueOf(Lista.get(i).getNuevo_saldo()),
@@ -1214,11 +1237,12 @@ public class CobranzaDetalleView extends Fragment {
                         "",
                         obtenerHoraActual(),
                         cardname,
-                        ""
+                        String.valueOf(n),
+                        Lista.get(i).getDocentry()
                 );
 
 
-                ActualizaDocumentoDeuda(SesionEntity.compania_id,
+                ActualizaDocumentoDeuda(ObjUsuario.compania_id,
                         String.valueOf(Lista.get(i).getDocumento_id()),
                         String.valueOf(Lista.get(i).getNuevo_saldo()));
 
@@ -1261,7 +1285,11 @@ public class CobranzaDetalleView extends Fragment {
         visita.setObservation("Se genero el recibo "+recibo+" para el cliente: "+cliente_id);
         visita.setLatitude(""+latitude);
         visita.setLongitude(""+longitude);
-
+        visita.setMobileID(recibo);
+        Log.e("REOS", "CobranzaDetalleView-Guardar-chkruta:" + chkruta);
+        visita.setStatusRoute(chkruta);
+        visita.setAmount(valorcobranza);
+        visita.setTerminoPago_ID(contado);
         formulasController.RegistraVisita(visita,getActivity(),montocobrado);
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -1273,7 +1301,16 @@ public class CobranzaDetalleView extends Fragment {
         depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame", "=>" + data);
         });
-
+        }
+        else {
+            et_cobrado_edit.setText(null);
+            Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido, verifique su cobranza por:  "+valorcobranza, Toast.LENGTH_SHORT).show();
+            Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
+            drawable = DrawableCompat.wrap(drawable);
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+            menu_variable.findItem(R.id.guardar).setIcon(drawable);
+            guardar.setEnabled(false);
+        }
         return resultado;
 
     }
@@ -1319,7 +1356,7 @@ public class CobranzaDetalleView extends Fragment {
 
                 if(Conexion.equals("1")){
                     resultadoenviows= CobranzaRepository.EnviarReciboWsRetrofit(
-                            cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
+                            cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(recibo, ObjUsuario.compania_id,SesionEntity.fuerzatrabajo_id),
                             getContext(),
                             "CREATE",
                             "N",
@@ -1499,7 +1536,7 @@ public class CobranzaDetalleView extends Fragment {
                         "1"
                 );
                 resultadowsqrvalidado=String.valueOf(resultado);*/
-                resultado= CobranzaRepository.sendPatchQR(cobranzaDetalleSQLiteDao.getSapCode(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),"Y");
+                resultado= CobranzaRepository.sendPatchQR(cobranzaDetalleSQLiteDao.getSapCode(recibo, ObjUsuario.compania_id,SesionEntity.fuerzatrabajo_id),"Y");
                 resultadowsqrvalidado=String.valueOf(resultado);
             } catch (Exception e){
                 e.printStackTrace();
@@ -1511,7 +1548,7 @@ public class CobranzaDetalleView extends Fragment {
         {
             int resultadowsSQLiteQRvalidado=0;
             CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
-            resultadowsSQLiteQRvalidado=cobranzaDetalleSQLiteDao.ActualizaWSQRValidadoCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result);
+            resultadowsSQLiteQRvalidado=cobranzaDetalleSQLiteDao.ActualizaWSQRValidadoCobranzaDetalle(recibo,ObjUsuario.compania_id,SesionEntity.usuario_id,result);
 
 
 
@@ -1543,7 +1580,7 @@ public class CobranzaDetalleView extends Fragment {
                 SesionEntity.usuario_id,
                 SesionEntity.fuerzatrabajo_id,
                 "11",
-                SesionEntity.compania_id,
+                ObjUsuario.compania_id,
                 montocobrado,
                 "Deposito",
                 bancarizado,
@@ -1560,7 +1597,7 @@ public class CobranzaDetalleView extends Fragment {
             cobranzaDetalleSQLiteDao.ActualizaCobranzaDetalle(
                     SesionEntity.fuerzatrabajo_id+recibo,
                     recibo,
-                    SesionEntity.compania_id,
+                    ObjUsuario.compania_id,
                     "11"
             );
         }
@@ -1598,7 +1635,7 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.usuario_id,
                         SesionEntity.fuerzatrabajo_id,
                         "11",
-                        SesionEntity.compania_id,
+                        ObjUsuario.compania_id,
                         et_cobrado_edit.toString(),
                         "Deposito",
                         bancarizado,
@@ -1615,7 +1652,7 @@ public class CobranzaDetalleView extends Fragment {
                     cobranzaDetalleSQLiteDao.ActualizaCobranzaDetalle(
                             SesionEntity.fuerzatrabajo_id+recibo,
                             recibo,
-                            SesionEntity.compania_id,
+                            ObjUsuario.compania_id,
                             "11"
                     );
                     DepositoRepository depositoRepository =new DepositoRepository(getContext());
@@ -1627,7 +1664,7 @@ public class CobranzaDetalleView extends Fragment {
                                     (
                                             SesionEntity.imei,
                                             "CREATE",
-                                            SesionEntity.compania_id,
+                                            ObjUsuario.compania_id,
                                             "11",
                                             "Deposito",
                                             SesionEntity.fuerzatrabajo_id+recibo,
@@ -1652,7 +1689,7 @@ public class CobranzaDetalleView extends Fragment {
                     //  listaCobranzaDetalleEntity=new ArrayList<CobranzaDetalleSQLiteEntity>();
 
                     //SE REENVIA EL RECIBO AHI VA EL PATCH
-                    chkwsdepositorecibido= CobranzaRepository.sendPatch(cobranzaDetalleSQLiteDao.getSapCode(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),SesionEntity.fuerzatrabajo_id+recibo,"11",recibo);
+                    chkwsdepositorecibido= CobranzaRepository.sendPatch(cobranzaDetalleSQLiteDao.getSapCode(recibo, ObjUsuario.compania_id,SesionEntity.fuerzatrabajo_id),SesionEntity.fuerzatrabajo_id+recibo,"11",recibo);
 
                         /*chkwsdepositorecibido= CobranzaRepository.EnviarReciboWsRetrofit(
                                 cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(listaConsDepositoAdapterFragment.get(i).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
@@ -1801,7 +1838,7 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.usuario_id,
                         SesionEntity.fuerzatrabajo_id,
                         arg0[1],
-                        SesionEntity.compania_id,
+                        ObjUsuario.compania_id,
                         arg0[2],
                         arg0[3],
                         arg0[4],
@@ -1815,7 +1852,7 @@ public class CobranzaDetalleView extends Fragment {
                         depositoRepository.PostCobranzaCabeceraWS
                                 (
                                         SesionEntity.imei,
-                                        SesionEntity.compania_id,
+                                        ObjUsuario.compania_id,
                                         arg0[1],
                                         arg0[3],
                                         arg0[0],
@@ -1835,7 +1872,7 @@ public class CobranzaDetalleView extends Fragment {
                                 );
                 cobranzaCabeceraSQLiteDao.ActualizarCobranzaCabeceraWS(
                         arg0[0],
-                        SesionEntity.compania_id,
+                        ObjUsuario.compania_id,
                         SesionEntity.fuerzatrabajo_id,
                         resultadoccabeceraenviows,
                         "",

@@ -47,6 +47,10 @@ public class ListHistoricStatusDispatchDao {
                         , Lista.get(i).getCliente_ID()
                         , Lista.get(i).getCliente()
                         , Lista.get(i).getEntrega()
+                        , Lista.get(i).getFactura_ID()
+                        , Lista.get(i).getFactura()
+                        ,Lista.get(i).getFotoLocal()
+                        ,Lista.get(i).getFotoGuia()
                 ));
             }
         }catch (Exception e)

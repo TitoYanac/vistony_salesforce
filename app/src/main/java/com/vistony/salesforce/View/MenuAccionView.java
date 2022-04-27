@@ -221,6 +221,13 @@ public class MenuAccionView extends Fragment {
         {
             cv_lead.setVisibility(View.GONE);
             cv_visit_section.setVisibility(View.GONE);
+            cv_dispatch.setVisibility(View.GONE);
+        }
+        else {
+            if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
+            {
+                cv_dispatch.setVisibility(View.GONE);
+            }
         }
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
@@ -299,7 +306,7 @@ public class MenuAccionView extends Fragment {
             alertDialogVisitSection().show();
         });
         cv_dispatch.setOnClickListener(v -> {
-            androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode);
+            androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode,CardName);
             dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
         });
 

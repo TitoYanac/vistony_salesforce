@@ -1083,7 +1083,11 @@ public class FormulasController {
                         chk_ruta,
                         fecharuta,
                         ObjUsuario.fuerzatrabajo_id,
-                        ObjUsuario.usuario_id
+                        ObjUsuario.usuario_id,
+                        listaClienteCabeceraEntities.get(i).getLastpurchase(),
+                        listaClienteCabeceraEntities.get(i).getSaldosincontados(),
+                        listaClienteCabeceraEntities.get(i).getChkgeolocation(),
+                        listaClienteCabeceraEntities.get(i).getChkvisitsection()
                 );
             }
 
@@ -1115,6 +1119,7 @@ public class FormulasController {
         visita.setChkrecibido("0");
 
         VisitaSQLite visitaSQLite = new VisitaSQLite(context);
+        visita.setHour_Before(visitaSQLite.getHourAfter(FormatFecha.format(date)));
         visitaSQLite.InsertaVisita(visita);
 
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(context);

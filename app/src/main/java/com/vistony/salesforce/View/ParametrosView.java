@@ -488,7 +488,7 @@ ParametrosView extends Fragment {
                             case "india":
                             case "ecuador":
                             case "chile":
-                                 clienteRepository = new ClienteRepository();
+                                 clienteRepository = new ClienteRepository(getContext());
                                 LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
@@ -544,7 +544,7 @@ ParametrosView extends Fragment {
                             case "peru":
                                 if(!SesionEntity.perfil_id.equals("CHOFER"))
                                 {
-                                 clienteRepository = new ClienteRepository();
+                                 clienteRepository = new ClienteRepository(getContext());
                                 LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
@@ -556,7 +556,7 @@ ParametrosView extends Fragment {
                                 break;
                             case "bolivia":
                             case "paraguay":
-                                 clienteRepository = new ClienteRepository();
+                                 clienteRepository = new ClienteRepository(getContext());
                                 LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
@@ -594,7 +594,7 @@ ParametrosView extends Fragment {
 
                     ///////////////////////FIN DE TODOS
                     else if (argumento.equals("CLIENTES")) {
-                        ClienteRepository clienteRepository = new ClienteRepository();
+                        ClienteRepository clienteRepository = new ClienteRepository(getContext());
                         LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
                         if (!(LclientesqlSQLiteEntity.isEmpty())) {
                             CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);

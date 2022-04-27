@@ -96,6 +96,16 @@ public class MenuConsultasView extends Fragment {
             cv_ordenventa.setVisibility(View.GONE);
             cv_documentofacturado.setVisibility(View.GONE);
         }
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            cv_dispatch.setVisibility(View.GONE);
+        }
+        else {
+            if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
+            {
+                cv_dispatch.setVisibility(View.GONE);
+            }
+        }
 
         //cv_consulta_stock=v.findViewById(R.id.cv_consulta_stock);
         //cv_consulta_orden_venta_estado=v.findViewById(R.id.cv_consulta_orden_venta_estado);

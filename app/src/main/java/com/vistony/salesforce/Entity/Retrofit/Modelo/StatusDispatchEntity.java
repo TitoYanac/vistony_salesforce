@@ -42,8 +42,19 @@ public class StatusDispatchEntity {
 
     public String longitud;
 
+    public String cliente;
+
+    public String entrega;
+
+    public String factura;
+
+    public String typedispatch;
+
+    public String reasondispatch;
+
     public StatusDispatchEntity(String compania_id, String fuerzatrabajo_id, String usuario_id, String typedispatch_id, String reasondispatch_id, String cliente_id, String factura_id, String entrega_id, String chkrecibido, String observation,
-   String foto,String fecha_registro,String hora_registro,String fotoGuia,String latitud,String longitud
+   String foto,String fecha_registro,String hora_registro,String fotoGuia,String latitud,String longitud,
+                                String cliente,String entrega,String factura,String typedispatch,String reasondispatch
                                 ) {
         this.compania_id = compania_id;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
@@ -61,6 +72,51 @@ public class StatusDispatchEntity {
         this.fotoGuia = fotoGuia;
         this.latitud = latitud;
         this.longitud = longitud;
+        this.cliente = cliente;
+        this.entrega = entrega;
+        this.factura = factura;
+        this.typedispatch = typedispatch;
+        this.reasondispatch = reasondispatch;
+    }
+
+    public String getTypedispatch() {
+        return typedispatch;
+    }
+
+    public void setTypedispatch(String typedispatch) {
+        this.typedispatch = typedispatch;
+    }
+
+    public String getReasondispatch() {
+        return reasondispatch;
+    }
+
+    public void setReasondispatch(String reasondispatch) {
+        this.reasondispatch = reasondispatch;
+    }
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getEntrega() {
+        return entrega;
+    }
+
+    public void setEntrega(String entrega) {
+        this.entrega = entrega;
+    }
+
+    public String getFactura() {
+        return factura;
+    }
+
+    public void setFactura(String factura) {
+        this.factura = factura;
     }
 
     public String getLatitud() {
