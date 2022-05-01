@@ -202,6 +202,10 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.linearlayoutlblcredit.setVisibility(View.GONE);
             holder.linearlayouttvcredit.setVisibility(View.GONE);
         }
+        else if(BuildConfig.FLAVOR.equals("peru"))
+        {
+
+        }
 
 
         holder.tv_categoria.setText(lead.getCategoria());
@@ -266,11 +270,11 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.chk_visitsection.setChecked(false);
         }
 
-        if(!BuildConfig.FLAVOR.equals("peru"))
-        {
+        //if(!BuildConfig.FLAVOR.equals("peru"))
+       // {
             holder.chk_geolocation.setVisibility(View.GONE);
             holder.chk_visitsection.setVisibility(View.GONE);
-        }
+       // }
 
         holder.relativeListaCabezeraCns.setOnClickListener(v -> {
 

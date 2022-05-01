@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -32,6 +33,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,10 +46,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
+import com.vistony.salesforce.Controller.Adapters.ListWareHousesAdapter;
+import com.vistony.salesforce.Controller.Adapters.ListaPendingCollectionAdapter;
 import com.vistony.salesforce.Controller.Adapters.StatusDispatchDialog;
 import com.vistony.salesforce.Controller.Adapters.VisitaDialogController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
+import com.vistony.salesforce.Dao.Adapters.ListWareHouseDao;
+import com.vistony.salesforce.Dao.Adapters.ListaPendingCollectionDao;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -57,6 +63,7 @@ import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Dao.SQLite.VisitSectionSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
+import com.vistony.salesforce.Entity.Adapters.ListaPendingCollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitSectionEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -66,6 +73,7 @@ import com.vistony.salesforce.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -226,6 +234,8 @@ public class MenuAccionView extends Fragment {
         else {
             if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
             {
+                cv_lead.setVisibility(View.GONE);
+                cv_visit_section.setVisibility(View.GONE);
                 cv_dispatch.setVisibility(View.GONE);
             }
         }
@@ -306,8 +316,10 @@ public class MenuAccionView extends Fragment {
             alertDialogVisitSection().show();
         });
         cv_dispatch.setOnClickListener(v -> {
-            androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode,CardName);
-            dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
+            //androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode,CardName);
+            //dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
+            //Intent i= new Intent(getContext(),   MapaView.class);
+            //startActivity(i);
         });
 
         return v;
@@ -497,16 +509,19 @@ public class MenuAccionView extends Fragment {
     private Dialog alertarecibospendientes() {
 
         final Dialog dialog = new Dialog(getContext());
-        dialog.setContentView(R.layout.layout_dialog);
-
+        dialog.setContentView(R.layout.layout_dialog_pendient_collection);
+        CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
+        List<ListaPendingCollectionEntity> listaPendingCollectionEntity=new ArrayList<>();
+        listaPendingCollectionEntity=cobranzaDetalleSQLiteDao.getDateandCollections(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
         TextView textTitle = dialog.findViewById(R.id.text);
         textTitle.setText("ADVERTENCIA");
-
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("Ud. cuenta con recibos de cobranzas pendientes, por favor verificar en CONSULTA COBRADO y realizar el deposito!");
-
+        textMsj.setText("Ud. cuenta con Recibos pendientes de Depositar, por favor verificar en CONSULTA COBRADO y realizar el deposito!");
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        ListView lv_pending_collection = (ListView) dialog.findViewById(R.id.lv_pending_collection);
 
+        ListaPendingCollectionAdapter ListaPendingCollectionAdapter=new ListaPendingCollectionAdapter(getContext(), ListaPendingCollectionDao.getInstance().getLeads(listaPendingCollectionEntity));
+        lv_pending_collection.setAdapter(ListaPendingCollectionAdapter);
 
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);

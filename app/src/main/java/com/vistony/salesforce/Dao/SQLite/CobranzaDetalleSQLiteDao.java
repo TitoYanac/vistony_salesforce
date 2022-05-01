@@ -11,6 +11,7 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
+import com.vistony.salesforce.Entity.Adapters.ListaPendingCollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.JSON.CollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoCobranzaEntity;
@@ -652,6 +653,44 @@ public class CobranzaDetalleSQLiteDao {
 
         bd.close();
         return recibo;
+    }
+
+    public List<ListaPendingCollectionEntity> getDateandCollections (String compania_id, String fuerzatrabajo_id) {
+        List<ListaPendingCollectionEntity> ListaPendingCollectionEntity=new ArrayList<>();
+        ListaPendingCollectionEntity ObjlistaPendingCollectionEntity;
+        String maxdatedeposit="'-"+SesionEntity.maxDateDeposit+" day'";
+        Log.e("REOS", "CobranzaDetalleSQLiteDao-VerificaRecibosPendientesDeposito-maxdatedeposit:" + maxdatedeposit);
+        try {
+            abrir();
+            Cursor fila = bd.rawQuery(
+                    "Select  count(fechacobranza) cantidad,fechacobranza from cobranzadetalle  where compania_id= '"+compania_id+"' " +
+                            //Cambio para Peru
+                            //--------------------------------
+                            //"and fuerzatrabajo_id='"+fuerzatrabajo_id+"' and (fechacobranza< DATE('now','-10 day')) and chkdepositado='0' and chkanulado='0'"
+                            " and fuerzatrabajo_id='"+fuerzatrabajo_id+"' " +
+                            //"and (fechacobranza< strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))-"+Induvis.getMaximoDiasDeposito()+") " +
+                            "and (fechacobranza< strftime ('%Y',date('now','localtime',"+maxdatedeposit+"))||strftime ('%m',date('now','localtime',"+maxdatedeposit+"))||strftime ('%d',date('now','localtime',"+maxdatedeposit+"))) " +
+                            "and chkdepositado='N' and chkanulado='N' " +
+                            "GROUP BY fechacobranza"
+                    //--------------------------------
+                    ,null);
+
+            while (fila.moveToNext()){
+                ObjlistaPendingCollectionEntity=new ListaPendingCollectionEntity();
+                ObjlistaPendingCollectionEntity.setCount(fila.getString(0));
+                ObjlistaPendingCollectionEntity.setDate(fila.getString(1));
+                ListaPendingCollectionEntity.add(ObjlistaPendingCollectionEntity);
+            }
+
+            bd.close();
+        }catch (Exception e){
+            Log.e("REOS", "CobranzaDetalleSQLiteDao-VerificaRecibosPendientesDeposito-e: "+e.toString());
+            e.printStackTrace();
+        }
+        Log.e("REOS", "CobranzaDetalleSQLiteDao-VerificaRecibosPendientesDeposito-recibo:");
+
+        bd.close();
+        return ListaPendingCollectionEntity;
     }
 
     public int EliminarRecibo (String compania_id,String recibo,String usuario_id)

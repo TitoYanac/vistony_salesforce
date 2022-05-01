@@ -221,7 +221,7 @@ public class RutaVendedorSQLiteDao {
                 domfactura_id=listaClienteSQLiteEntity.get(i).getDomfactura_id();
                 ShipToCode=listaClienteSQLiteEntity.get(i).getDomembarque_id();
             }
-            countsalesorder=visitaSQLite.getCountVisitWithType(date,fila.getString(0),"01",checkRuta,fila.getString(1));
+            countsalesorder=visitaSQLite.getCountVisitWithOV(date,fila.getString(0),"01",checkRuta,fila.getString(1));
             countcollection=visitaSQLite.getCountVisitWithType(date,fila.getString(0),"02",checkRuta,fila.getString(1));
             countvisit=visitaSQLite.getCountVisitWithDate(date,fila.getString(0),checkRuta,fila.getString(1));
             if(countsalesorder>0)

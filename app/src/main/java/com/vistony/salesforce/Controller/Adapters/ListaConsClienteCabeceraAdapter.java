@@ -9,8 +9,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -126,6 +128,9 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             holder.tv_address = (TextView) convertView.findViewById(R.id.tv_address);
             holder.chk_geolocation = (CheckBox) convertView.findViewById(R.id.chk_geolocation);
             holder.chk_visitsection = (CheckBox) convertView.findViewById(R.id.chk_visitsection);
+            holder.tablerowbalance = (TableRow) convertView.findViewById(R.id.tablerowbalance);
+            holder.linearlayoutlblcredit = (LinearLayout) convertView.findViewById(R.id.linearlayoutlblcredit);
+            holder.linearlayouttvcredit = (LinearLayout) convertView.findViewById(R.id.linearlayouttvcredit);
             convertView.setTag(holder);
         } else {
             holder = (ListaConsClienteCabeceraAdapter.ViewHolder) convertView.getTag();
@@ -152,6 +157,13 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         {
             holder.chk_geolocation.setVisibility(View.GONE);
             holder.chk_visitsection.setVisibility(View.GONE);
+        }
+        if(BuildConfig.FLAVOR.equals("ecuador"))
+        {
+            holder.tablerowbalance.setVisibility(View.GONE);
+            holder.progressLineCredit.setVisibility(View.GONE);
+            holder.linearlayoutlblcredit.setVisibility(View.GONE);
+            holder.linearlayouttvcredit.setVisibility(View.GONE);
         }
 
         holder.progressLineCredit.setMax(Math.round(Float.parseFloat(""+lead.getLinea_credito())));
@@ -243,5 +255,8 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         TextView tv_address;
         CheckBox chk_geolocation;
         CheckBox chk_visitsection;
+        TableRow tablerowbalance;
+        LinearLayout linearlayoutlblcredit;
+        LinearLayout linearlayouttvcredit;
     }
 }

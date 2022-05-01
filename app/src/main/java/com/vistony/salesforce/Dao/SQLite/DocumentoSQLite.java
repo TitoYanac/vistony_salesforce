@@ -100,7 +100,7 @@ public class DocumentoSQLite {
 
     }
 
-    public int ActualizaNuevoSaldo (String compania_id, String documento_id, String nuevo_saldo)
+    public int ActualizaNuevoSaldo (String compania_id, String documento_id, String nuevo_saldo,String nrofactura)
     {
         int resultado=0;
 
@@ -110,7 +110,7 @@ public class DocumentoSQLite {
             ContentValues registro = new ContentValues();
             registro.put("saldo",nuevo_saldo);
 
-            resultado = sqlite.update("documentodeuda",registro,"documento_id='"+documento_id+"'"+" and compania_id='"+compania_id+"'" ,null);
+            resultado = sqlite.update("documentodeuda",registro,"documento_id='"+documento_id+"'"+" and compania_id='"+compania_id+"' and nrofactura='"+nrofactura+"'" ,null);
 
         }catch (Exception e){
             e.printStackTrace();

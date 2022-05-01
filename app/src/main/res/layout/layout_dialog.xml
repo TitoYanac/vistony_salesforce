@@ -49,6 +49,7 @@
                 android:text=" Asd asda ad asdas as asdas asdas d asdasd asd a"
                 android:textSize="18dp" />
 
+
             <Button
                 android:id="@+id/dialogButtonOK"
                 android:layout_width="wrap_content"

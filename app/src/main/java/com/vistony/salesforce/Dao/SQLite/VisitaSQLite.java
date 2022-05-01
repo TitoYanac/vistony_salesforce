@@ -210,6 +210,34 @@ public class VisitaSQLite {
         bd.close();
         return resultado;
     }
+
+    public int getCountVisitWithOV (
+            String date,
+            String cardcode,
+            String type,
+            String chkruta,
+            String direccion_id
+
+    )
+    {
+        int resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select count(compania_id) from visita where fecha_registro='"+date+"' and cliente_id='"+cardcode+"' and tipo IN ('01','12') and chkruta='"+chkruta+"' and direccion_id='"+direccion_id+"'  ",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
+        return resultado;
+    }
+
     public int getCountVisitWithDate (
             String date,
             String cardcode,

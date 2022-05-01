@@ -364,8 +364,8 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         @Override
         protected Object doInBackground(String... arg0) {
             int CantClientes=0;
-            ClienteRepository clienteRepository = new ClienteRepository();
-            ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getContext());
+            ClienteRepository clienteRepository = new ClienteRepository(getContext());
+            ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getActivity());
             LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei ,tv_fecha_hoja_despacho.getText().toString());
             Log.e("REOS","HojaDespachoView.getMastersDelivery-LclientesqlSQLiteEntity:"+LclientesqlSQLiteEntity.size());
             if (!(LclientesqlSQLiteEntity.isEmpty())) {
