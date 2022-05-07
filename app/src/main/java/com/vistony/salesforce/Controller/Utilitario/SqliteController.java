@@ -291,8 +291,24 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
             db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT)");
             db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT)");
-
         }
+        /*if(oldVersion==13&&newVersion==14) {
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN cliente_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN factura_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN entrega_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chkrecibido TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN observation TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN foto TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN fecha_registro TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN hora_registro TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN fotoGuia TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN latitud TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN longitud TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN cliente TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN factura TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN entrega TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN typedispatch TEXT");
+        }*/
     }
 
     public  static void deleteDatabase(Context mContext){

@@ -19,8 +19,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Config {
     private static Retrofit retrofit = null;
+    private static Retrofit retrofit2 = null;
     private static OkHttpClient client=null;
-
+    private static OkHttpClient client2=null;
     public static Retrofit getClient() {
 
         String baseUrl = "http://salesforce.vistony.com";
@@ -43,20 +44,20 @@ public class Config {
                 break;
         }
         try{
-            if(client==null) {
-                client = new OkHttpClient. Builder()
-                        .connectTimeout(2, TimeUnit.MINUTES)
-                        .writeTimeout(2, TimeUnit.MINUTES)
-                        .readTimeout(2, TimeUnit.MINUTES)
+            if(client2==null) {
+                client2 = new OkHttpClient. Builder()
+                        .connectTimeout(5, TimeUnit.MINUTES)
+                        .writeTimeout(5, TimeUnit.MINUTES)
+                        .readTimeout(5, TimeUnit.MINUTES)
                         .retryOnConnectionFailure(true)
                         .proxy(Proxy.NO_PROXY)
                         .build();
             }
 
-           if(retrofit==null){
-                retrofit = new Retrofit.Builder()
+           if(retrofit2==null){
+               retrofit2 = new Retrofit.Builder()
                             .baseUrl( baseUrl+puerto)
-                            .addConverterFactory(GsonConverterFactory.create()).client(client)
+                            .addConverterFactory(GsonConverterFactory.create()).client(client2)
                             .build();
 
             }
@@ -64,7 +65,7 @@ public class Config {
             e.printStackTrace();
             Log.e("REOS","Config-getClient-e:"+e.toString());
         }
-        return retrofit;
+        return retrofit2;
     }
 
     public static Retrofit getClientLogin() {

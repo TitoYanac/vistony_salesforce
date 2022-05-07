@@ -1408,12 +1408,20 @@ public class CobranzaDetalleSQLiteDao {
 
             while (fila.moveToNext())
             {
+                String QRStatus="";
                 collectionEntity= new CollectionEntity();
                 collectionEntity.setCode(fila.getString(0));
                 collectionEntity.setDeposit(fila.getString(1));
                 collectionEntity.setBankID(fila.getString(2));
                 collectionEntity.setReceip(fila.getString(3));
-                collectionEntity.setQRStatus(fila.getString(4));
+                if((fila.getString(4).equals("1")))
+                {
+                    QRStatus="Y";
+                }
+                else {
+                    QRStatus=fila.getString(4);
+                }
+                collectionEntity.setQRStatus(QRStatus);
                 collectionEntity.setU_VIS_UserID(fila.getString(5));
                 listCollectionEntity.add(collectionEntity);
             }

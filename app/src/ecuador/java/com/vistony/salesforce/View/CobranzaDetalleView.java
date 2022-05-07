@@ -1194,7 +1194,10 @@ public class CobranzaDetalleView extends Fragment {
 
                 ActualizaDocumentoDeuda(ObjUsuario.compania_id,
                         String.valueOf(Lista.get(i).getDocumento_id()),
-                        String.valueOf(Lista.get(i).getNuevo_saldo()));
+                        String.valueOf(Lista.get(i).getNuevo_saldo()),
+                        Lista.get(i).getNrodocumento()
+
+                );
 
             }
         }
@@ -1244,7 +1247,9 @@ public class CobranzaDetalleView extends Fragment {
 
                 ActualizaDocumentoDeuda(ObjUsuario.compania_id,
                         String.valueOf(Lista.get(i).getDocumento_id()),
-                        String.valueOf(Lista.get(i).getNuevo_saldo()));
+                        String.valueOf(Lista.get(i).getNuevo_saldo()),
+                        Lista.get(i).getNrodocumento()
+                );
 
             }
             addDepositPOS(sumacobrado);
@@ -1315,10 +1320,10 @@ public class CobranzaDetalleView extends Fragment {
 
     }
 
-    public int ActualizaDocumentoDeuda(String compania_id,String documento_id,String nuevo_saldo)
+    public int ActualizaDocumentoDeuda(String compania_id,String documento_id,String nuevo_saldo,String nrofactura)
     {
         int resultado=0;
-        resultado= documentoSQLite.ActualizaNuevoSaldo(compania_id,documento_id,nuevo_saldo);
+        resultado= documentoSQLite.ActualizaNuevoSaldo(compania_id,documento_id,nuevo_saldo,nrofactura);
         return resultado;
     }
 
