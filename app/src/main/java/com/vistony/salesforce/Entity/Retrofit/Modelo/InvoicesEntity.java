@@ -24,20 +24,97 @@ public class InvoicesEntity {
     @SerializedName("DocTotal")
     private String importeFactura;
 
+    @SerializedName("Balance")
+    private String saldo;
+
     @SerializedName("Currency")
     private String moneda;
 
     @SerializedName("LegalNumber")
     private String nroFactura;
 
-    @SerializedName("Balance")
-    private String saldo;
-
     @SerializedName("RawBalance")
     private String saldoSinProcesar;
 
+    @SerializedName("IDDriver")
+    private String iddriver;
+
+    @SerializedName("Mobile")
+    private String mobile;
+
+    @SerializedName("U_VIS_SalesOrderID")
+    private String U_VIS_SalesOrderID;
+
+    @SerializedName("FechaDespacho")
+    private String fechadespacho;
+
+    @SerializedName("EstadoDespacho")
+    private String estadodespacho;
+
+    @SerializedName("LegalNumberDelivery")
+    private String legalnumberdelivery;
+
+    @SerializedName("U_SYP_DT_OCUR")
+    private String U_SYP_DT_OCUR;
+
     @SerializedName("PymntGroup")
     private String pymntgroup;
+
+    public String getIddriver() {
+        return iddriver;
+    }
+
+    public void setIddriver(String iddriver) {
+        this.iddriver = iddriver;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getU_VIS_SalesOrderID() {
+        return U_VIS_SalesOrderID;
+    }
+
+    public void setU_VIS_SalesOrderID(String u_VIS_SalesOrderID) {
+        U_VIS_SalesOrderID = u_VIS_SalesOrderID;
+    }
+
+    public String getFechadespacho() {
+        return fechadespacho;
+    }
+
+    public void setFechadespacho(String fechadespacho) {
+        this.fechadespacho = fechadespacho;
+    }
+
+    public String getEstadodespacho() {
+        return estadodespacho;
+    }
+
+    public void setEstadodespacho(String estadodespacho) {
+        this.estadodespacho = estadodespacho;
+    }
+
+    public String getLegalnumberdelivery() {
+        return legalnumberdelivery;
+    }
+
+    public void setLegalnumberdelivery(String legalnumberdelivery) {
+        this.legalnumberdelivery = legalnumberdelivery;
+    }
+
+    public String getU_SYP_DT_OCUR() {
+        return U_SYP_DT_OCUR;
+    }
+
+    public void setU_SYP_DT_OCUR(String u_SYP_DT_OCUR) {
+        U_SYP_DT_OCUR = u_SYP_DT_OCUR;
+    }
 
     public String getPymntgroup() {
         return pymntgroup;

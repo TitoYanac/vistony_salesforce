@@ -1337,6 +1337,7 @@ public class CobranzaDetalleSQLiteDao {
 
             while (fila.moveToNext())
             {
+                String Banking,DepositDirect,PosPay,QRStatus;
                 Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-IniciaLlenadoQuery");
                 collectionEntity= new CollectionEntity();
                 collectionEntity.setItemDetail(fila.getString(fila.getColumnIndex("ItemDetail")));
@@ -1348,13 +1349,63 @@ public class CobranzaDetalleSQLiteDao {
                 collectionEntity.setAmountCharged(fila.getString(fila.getColumnIndex("AmountCharged")));
                 collectionEntity.setIncomeDate(fila.getString(fila.getColumnIndex("IncomeDate")));
                 collectionEntity.setReceip(fila.getString(fila.getColumnIndex("Receip")));
-                collectionEntity.setQRStatus(fila.getString(fila.getColumnIndex("QRStatus")));
-                collectionEntity.setBanking(fila.getString(fila.getColumnIndex("Banking")));
+
+                if(fila.getString(fila.getColumnIndex("QRStatus")).equals("1"))
+                {
+                    QRStatus="Y";
+                }
+                else if(fila.getString(fila.getColumnIndex("QRStatus")).equals("0"))
+                {
+                    QRStatus="N";
+                }
+                else{
+                    QRStatus=fila.getString(fila.getColumnIndex("QRStatus"));
+                }
+
+                //collectionEntity.setQRStatus(fila.getString(fila.getColumnIndex("QRStatus")));
+                collectionEntity.setQRStatus(QRStatus);
+                if(fila.getString(fila.getColumnIndex("Banking")).equals("1"))
+                {
+                    Banking="Y";
+                }
+                else if(fila.getString(fila.getColumnIndex("Banking")).equals("0"))
+                {
+                    Banking="N";
+                }
+                else{
+                    Banking=fila.getString(fila.getColumnIndex("Banking"));
+                }
+                //collectionEntity.setBanking(fila.getString(fila.getColumnIndex("Banking")));
+                collectionEntity.setBanking(Banking);
                 collectionEntity.setCancelReason(fila.getString(fila.getColumnIndex("CancelReason")));
                 collectionEntity.setBankID(fila.getString(fila.getColumnIndex("BankID")));
                 collectionEntity.setCommentary(fila.getString(fila.getColumnIndex("Commentary")));
-                collectionEntity.setDirectDeposit(fila.getString(fila.getColumnIndex("DirectDeposit")));
-                collectionEntity.setPOSPay(fila.getString(fila.getColumnIndex("POSPay")));
+                if(fila.getString(fila.getColumnIndex("DirectDeposit")).equals("1"))
+                {
+                    DepositDirect="Y";
+                }
+                else if(fila.getString(fila.getColumnIndex("DirectDeposit")).equals("0"))
+                {
+                    DepositDirect="N";
+                }
+                else{
+                    DepositDirect=fila.getString(fila.getColumnIndex("DirectDeposit"));
+                }
+                //collectionEntity.setDirectDeposit(fila.getString(fila.getColumnIndex("DirectDeposit")));
+                collectionEntity.setDirectDeposit(DepositDirect);
+                if(fila.getString(fila.getColumnIndex("POSPay")).equals("1"))
+                {
+                    PosPay="Y";
+                }
+                else if(fila.getString(fila.getColumnIndex("POSPay")).equals("0"))
+                {
+                    PosPay="N";
+                }
+                else{
+                    PosPay=fila.getString(fila.getColumnIndex("POSPay"));
+                }
+                //collectionEntity.setPOSPay(fila.getString(fila.getColumnIndex("POSPay")));
+                collectionEntity.setPOSPay(PosPay);
                 Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-Induvis.getTimeSAP-IncomeTime: "+(fila.getString(fila.getColumnIndex("IncomeTime"))));
                 Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-Induvis.getTimeSAP: "+Induvis.getTimeSAP(BuildConfig.FLAVOR,fila.getString(fila.getColumnIndex("IncomeTime"))));
                 collectionEntity.setIncomeTime(Induvis.getTimeSAP(BuildConfig.FLAVOR,fila.getString(fila.getColumnIndex("IncomeTime"))));
@@ -1402,8 +1453,8 @@ public class CobranzaDetalleSQLiteDao {
                             " where (chkdepositado='Y' or  chkdepositado='1')  " +
                             " and (chkwsdepositorecibido='N'or  chkwsdepositorecibido='0')" +
                             " and cobranza_id<>''" +
-                            " and compania_id='"+compania_id+"'" +
-                            " and usuario_id='"+usuario_id+"'  LIMIT 30  "
+                            " and compania_id='"+compania_id+"'  " +
+                            " and usuario_id='"+usuario_id+"'   LIMIT 30  "
                     ,null);
 
             while (fila.moveToNext())

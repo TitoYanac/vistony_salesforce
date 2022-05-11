@@ -306,8 +306,8 @@ public class MenuAccionView extends Fragment {
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
                 SesionEntity.quotation="N";
-            /*displayDialogMap();
-            MapsInitializer.initialize(getActivity());
+            //displayDialogMap();
+            /*MapsInitializer.initialize(getActivity());
 
             mapView.onCreate(dialog.onSaveInstanceState());
             mapView.onResume();*/
@@ -316,9 +316,9 @@ public class MenuAccionView extends Fragment {
             alertDialogVisitSection().show();
         });
         cv_dispatch.setOnClickListener(v -> {
-            //androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode,CardName);
-            //dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
-            //Intent i= new Intent(getContext(),   MapaView.class);
+            androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode,CardName);
+            dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
+            ///Intent i= new Intent(getContext(),   MapaView.class);
             //startActivity(i);
         });
 
@@ -507,7 +507,6 @@ public class MenuAccionView extends Fragment {
     }
 
     private Dialog alertarecibospendientes() {
-
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.layout_dialog_pendient_collection);
         CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
@@ -519,14 +518,10 @@ public class MenuAccionView extends Fragment {
         textMsj.setText("Ud. cuenta con Recibos pendientes de Depositar, por favor verificar en CONSULTA COBRADO y realizar el deposito!");
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         ListView lv_pending_collection = (ListView) dialog.findViewById(R.id.lv_pending_collection);
-
         ListaPendingCollectionAdapter ListaPendingCollectionAdapter=new ListaPendingCollectionAdapter(getContext(), ListaPendingCollectionDao.getInstance().getLeads(listaPendingCollectionEntity));
         lv_pending_collection.setAdapter(ListaPendingCollectionAdapter);
-
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
-
-
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         // if button is clicked, close the custom dialog
         dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -535,10 +530,8 @@ public class MenuAccionView extends Fragment {
                 dialog.dismiss();
             }
         });
-
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         return  dialog;
     }
 

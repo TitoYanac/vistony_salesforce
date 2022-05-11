@@ -71,7 +71,7 @@ android {
         ecuador{
             applicationIdSuffix ".ecuador"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"/ec"')
+            //buildConfigField('String' , 'BASE_EDPOINT', '"/ec"')
             buildConfigField('String' , 'BASE_ENDPOINT', '"ec.get"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"ec.post"')
             versionName "1.0.5"

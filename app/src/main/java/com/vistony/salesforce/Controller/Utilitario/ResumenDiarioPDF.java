@@ -90,7 +90,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
         Set<String> listaCorrelativo;
         int countVisitTypeCOB=0,countVisitTypeOV=0,cantvisit=0;
         float amountVisitTypeCOB=0,amountVisitTypeOV=0;
-
+        fechasap=fecha;
         if (summaryofeffectivenessEntityList==null)
         {
 
