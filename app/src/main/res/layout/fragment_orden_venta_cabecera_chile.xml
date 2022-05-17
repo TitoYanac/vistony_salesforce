@@ -10,14 +10,16 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="130dp"
-        android:fillViewport="true">
+        >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:paddingTop="50dp"
             >
 
             <TableRow
@@ -312,8 +314,6 @@
                     android:background="@drawable/borde_cuadrado"
                     android:enabled="true"
                     android:hint="Ingresar comentario..."
-                    android:maxLength="100"
-                    android:paddingLeft="10dp"
                     android:textAlignment="center"
                     android:textSize="20dp" />
             </TableRow>
@@ -368,169 +368,169 @@
 
             </TableRow>
         </TableLayout>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:layout_gravity="bottom"
+            android:focusable="false">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="gone">
+
+                <TextView
+                    android:id="@+id/lbl_orden_cabecera_galonaje"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:focusable="false"
+                    android:text="Galones:"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    android:textSize="24dp"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_orden_cabecera_galones"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="4"
+                    android:focusable="false"
+                    android:gravity="right"
+                    android:text="0"
+                    android:visibility="gone"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"></TextView>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lbl_orden_cabecera_subtotal"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:focusable="false"
+                    android:text="SubTotal"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_orden_cabecera_subtotal"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="4"
+                    android:focusable="false"
+                    android:gravity="right"
+                    android:text="$0"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"></TextView>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/lbl_orden_cabecera_descuento"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:focusable="false"
+                    android:text="Descuento"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_orden_cabecera_descuento"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="4"
+                    android:focusable="false"
+                    android:gravity="right"
+                    android:text="$0"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"></TextView>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false">
+
+                <TextView
+                    android:id="@+id/lbl_orden_cabecera_igv"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:focusable="false"
+                    android:text="@string/tax_code"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_orden_cabecera_igv"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="4"
+                    android:focusable="false"
+                    android:gravity="right"
+                    android:text="$0"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"></TextView>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="false">
+
+                <TextView
+                    android:id="@+id/lbl_orden_cabecera_total"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:focusable="false"
+                    android:text="Total"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"
+                    android:textStyle="bold"></TextView>
+
+                <TextView
+                    android:id="@+id/tv_orden_cabecera_total"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="4"
+                    android:focusable="false"
+                    android:gravity="right"
+                    android:text="$0"
+                    android:textColor="@color/white"
+                    android:textSize="24dp"
+                    android:textStyle="bold"></TextView>
+            </TableRow>
+        </TableLayout>
+        </LinearLayout>
     </ScrollView>
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        android:focusable="false">
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="gone">
-
-            <TextView
-                android:id="@+id/lbl_orden_cabecera_galonaje"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:focusable="false"
-                android:text="Galones:"
-                android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
-
-            <TextView
-                android:id="@+id/tv_orden_cabecera_galones"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="4"
-                android:focusable="false"
-                android:gravity="right"
-                android:text="0"
-                android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/lbl_orden_cabecera_subtotal"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:focusable="false"
-                android:text="SubTotal"
-                android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
-
-            <TextView
-                android:id="@+id/tv_orden_cabecera_subtotal"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="4"
-                android:focusable="false"
-                android:gravity="right"
-                android:text="$0"
-                android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/lbl_orden_cabecera_descuento"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:focusable="false"
-                android:text="Descuento"
-                android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
-
-            <TextView
-                android:id="@+id/tv_orden_cabecera_descuento"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="4"
-                android:focusable="false"
-                android:gravity="right"
-                android:text="$0"
-                android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="false">
-
-            <TextView
-                android:id="@+id/lbl_orden_cabecera_igv"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:focusable="false"
-                android:text="@string/tax_code"
-                android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
-
-            <TextView
-                android:id="@+id/tv_orden_cabecera_igv"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="4"
-                android:focusable="false"
-                android:gravity="right"
-                android:text="$0"
-                android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="false">
-
-            <TextView
-                android:id="@+id/lbl_orden_cabecera_total"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:focusable="false"
-                android:text="Total"
-                android:textColor="@color/white"
-                android:textSize="24dp"
-                android:textStyle="bold"></TextView>
-
-            <TextView
-                android:id="@+id/tv_orden_cabecera_total"
-                style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="4"
-                android:focusable="false"
-                android:gravity="right"
-                android:text="$0"
-                android:textColor="@color/white"
-                android:textSize="24dp"
-                android:textStyle="bold"></TextView>
-
-        </TableRow>
-    </TableLayout>
-
 </FrameLayout>

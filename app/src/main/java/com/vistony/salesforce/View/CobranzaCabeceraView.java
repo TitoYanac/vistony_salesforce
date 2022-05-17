@@ -16,6 +16,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -53,10 +54,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaCobranzaCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
@@ -340,7 +343,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                         if(position==1)
                         {
                             tipo="Cheque";
-                            tv_fechacobrocheque_edit.setText(dateFormat.format(date));
+                            tv_fechacobrocheque_edit.setText(Induvis.getDate(BuildConfig.FLAVOR,dateFormat.format(date)));
                             fechadiferida=dateFormat.format(date);
                             tv_fechacobrocheque_edit.setVisibility(View.VISIBLE);
                             tv_fechacobrocheque.setVisibility(View.VISIBLE);
