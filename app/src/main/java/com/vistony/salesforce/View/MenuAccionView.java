@@ -234,8 +234,8 @@ public class MenuAccionView extends Fragment {
         else {
             if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
             {
-                cv_lead.setVisibility(View.GONE);
-                cv_visit_section.setVisibility(View.GONE);
+                //cv_lead.setVisibility(View.GONE);
+                //cv_visit_section.setVisibility(View.GONE);
                 cv_dispatch.setVisibility(View.GONE);
             }
         }
@@ -243,6 +243,8 @@ public class MenuAccionView extends Fragment {
         {
             cv_pedido.setVisibility(View.GONE);
             cv_visita.setVisibility(View.GONE);
+            cv_lead.setVisibility(View.GONE);
+            cv_visit_section.setVisibility(View.GONE);
         }
 
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());

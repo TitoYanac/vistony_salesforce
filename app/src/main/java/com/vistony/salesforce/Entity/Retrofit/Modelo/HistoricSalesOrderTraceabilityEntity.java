@@ -21,13 +21,13 @@ public class HistoricSalesOrderTraceabilityEntity {
     @SerializedName("CardName")
     private String nombrecliente;
 
-    @SerializedName("DocTotal")
+    @SerializedName("Amount")
     private String montototalorden;
 
     @SerializedName("ApprovalStatus")
     private String estadoaprobacion;
 
-    @SerializedName("ApprovalCommentary")
+    @SerializedName("Status")
     private String comentarioaprobacion;
 
     @SerializedName("Object")

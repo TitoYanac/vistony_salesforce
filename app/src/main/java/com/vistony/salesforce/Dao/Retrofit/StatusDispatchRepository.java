@@ -29,11 +29,13 @@ public class StatusDispatchRepository  extends ViewModel {
     public MutableLiveData<List<HistoricStatusDispatchEntity>> getHistoricStatusDispatch(
             String Imei,
             String Date){
+        ListHistoricStatusDispatchEntity= new MutableLiveData<>();
         Config.getClient().create(Api.class).geHistoricStatusDispatch(Imei,Date).enqueue(new Callback<HistoricStatusDispatchEntityResponse>() {
             @Override
             public void onResponse(Call<HistoricStatusDispatchEntityResponse> call, Response<HistoricStatusDispatchEntityResponse> response) {
-
                 HistoricStatusDispatchEntityResponse historicStatusDispatchEntityResponse=response.body();
+                Log.e("REOS","StatusDispatchRepository-getHistoricStatusDispatch-call: "+call.toString());
+                Log.e("REOS","StatusDispatchRepository-getHistoricStatusDispatch-response: "+response.toString());
                 if(response.isSuccessful() && historicStatusDispatchEntityResponse.getHistoricStatusDispatch() .size()>0){
                     ListHistoricStatusDispatchEntity.setValue(historicStatusDispatchEntityResponse.getHistoricStatusDispatch());
                 }else

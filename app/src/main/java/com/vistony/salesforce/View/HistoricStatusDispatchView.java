@@ -132,7 +132,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
         fecha =dateFormat.format(date);
         parametrofecha =dateFormat2.format(date2);
         tv_date_historic_status_dispatch.setText(fecha);
-
+        getListHistoric(parametrofecha);
 
         return v;
     }
@@ -158,6 +158,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
                 break;
             case R.id.btn_get_status_dispatch:
                 Log.e("REOS","HistoricStatusDispatch-OnClick-btn_consultar_fecha_hisorico_cobranza");
+                statusDispatchRepository= new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
                 getListHistoric(parametrofecha);
                 break;
             default:
@@ -225,10 +226,10 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
     static private void getListHistoric(String Date)
     {
         pd = new ProgressDialog(activity);
-        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Kardex de Pago de Cliente", true, false);
+        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Estados de Despacho", true, false);
+
         statusDispatchRepository.getHistoricStatusDispatch(SesionEntity.imei, Date).observe(lifecycleOwner, data -> {
-            Convert convert=new Convert();
-            Log.e("Jepicame","=>"+data);
+            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-date:"+data);
             if(data!=null)
             {
                 listHistoricStatusDispatchAdapter
@@ -237,17 +238,30 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
                         data);
                 lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
                 tv_count_historic_status_dispatch.setText(String.valueOf(data.size()));
+                Toast.makeText(context, "Consulta Realizada con Exito", Toast.LENGTH_SHORT).show();
+                Log.e("REOS","HistoricStatusDispatchView-getListHistoric-data!=null:");
             }else {
+                Log.e("REOS","HistoricStatusDispatchView-getListHistoric-data==null:");
                 List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch=new ArrayList<>();
+
                 StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(context);
                 listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
-                listHistoricStatusDispatchAdapter
-                        =new ListHistoricStatusDispatchAdapter(
-                        activity,
-                        listHistoricStatusDiapatch);
-                lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
-                tv_count_historic_status_dispatch.setText(String.valueOf(listHistoricStatusDiapatch.size()));
-                Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
+                if(listHistoricStatusDiapatch.isEmpty())
+                {
+                    Log.e("REOS","HistoricStatusDispatchView-getListHistoric-listHistoricStatusDiapatch.isEmpty():");
+                    lv_historic_status_dispatch.setAdapter(null);
+                    Toast.makeText(context, "No se encontro operaciones en la fecha seleccionada", Toast.LENGTH_SHORT).show();
+                }else {
+                    Log.e("REOS","HistoricStatusDispatchView-getListHistoric-!listHistoricStatusDiapatch.isEmpty():");
+                    listHistoricStatusDispatchAdapter
+                            =new ListHistoricStatusDispatchAdapter(
+                            activity,
+                            listHistoricStatusDiapatch);
+                    lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
+                    tv_count_historic_status_dispatch.setText(String.valueOf(listHistoricStatusDiapatch.size()));
+                    Toast.makeText(context, "Consulta Realizada con Exito", Toast.LENGTH_SHORT).show();
+                }
+
             }
             pd.dismiss();
         });

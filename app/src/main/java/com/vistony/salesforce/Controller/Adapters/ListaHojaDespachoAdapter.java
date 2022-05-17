@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -114,6 +115,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
             holder.tv_nombrefuerzatrabajo = (TextView) convertView.findViewById(R.id.tv_nombrefuerzatrabajo);
             holder.relativeListaHojaDespacho=convertView.findViewById(R.id.relativeListaHojaDespacho);
             holder.tv_terminopago=convertView.findViewById(R.id.tv_terminopago);
+            holder.chk_updatedispatch=convertView.findViewById(R.id.chk_updatedispatch);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -129,6 +131,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         holder.tv_saldo.setText(lead.getSaldo());
         holder.tv_nombrefuerzatrabajo.setText(lead.getNombrefuerzatrabajo());
         holder.tv_terminopago.setText(lead.getTerminopago());
+        holder.chk_updatedispatch.setChecked(lead.isChkupdatedispatch());
         ArraylistaClienteCabeceraEntity=new ArrayList<>();
         /*ArrayList<ClienteSQLiteEntity> listaClienteEnvio=new ArrayList<>();
         ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
@@ -202,7 +205,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         TextView tv_nombrefuerzatrabajo;
         RelativeLayout relativeListaHojaDespacho;
         TextView tv_terminopago;
-
+        CheckBox chk_updatedispatch;
 
     }
 

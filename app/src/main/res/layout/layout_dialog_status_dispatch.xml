@@ -49,11 +49,18 @@
                 android:layout_marginTop="10dp"
                 android:background="@android:color/white"
                 android:clickable="false"
-                android:ems="10"
                 android:gravity="center_horizontal"
                 android:text="Elija la Guia de Remision y seleccione el Estado,Motivo y ponga observacion"
                 android:textSize="15dp"
                 android:textStyle="bold" />
+            <TextView
+                android:id="@+id/txtdocumento"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -112,7 +119,6 @@
                     android:layout_height="wrap_content"
                     android:spinnerMode="dropdown"
                     android:textAlignment="gravity"
-                    android:entries="@array/tipo_despacho"
                     />
             </LinearLayout>
             <LinearLayout
@@ -133,6 +139,7 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:textStyle="bold"
+                    android:textColor="#000000"
                     android:text="Motivo" />
                 <Spinner
                     android:id="@+id/spn_reason_dispatch"
@@ -141,7 +148,6 @@
                     android:layout_height="wrap_content"
                     android:spinnerMode="dropdown"
                     android:textAlignment="gravity"
-                    android:entries="@array/motivo_despacho"
                     />
             </LinearLayout>
             <LinearLayout
@@ -154,7 +160,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
-                    android:layout_marginTop="30dp"
                     android:text="Local Cliente"
                     android:textColor="@color/Black"
                     android:textStyle="bold"
@@ -164,14 +169,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
                     app:srcCompat="@drawable/ic_add_a_photo_black_24dp" />
                 <TextView
                     android:id="@+id/lbl_delivery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
-                    android:layout_marginTop="30dp"
                     android:text="Guia Remision"
                     android:textColor="@color/Black"
                     android:textStyle="bold">
@@ -183,7 +186,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
                     app:srcCompat="@drawable/ic_add_a_photo_black_24dp" />
             </LinearLayout>
             <LinearLayout
@@ -217,6 +219,14 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/borde_cuadrado"
                 android:textSize="20dp" />
+            <TextView
+                android:id="@+id/txtdocumento2"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

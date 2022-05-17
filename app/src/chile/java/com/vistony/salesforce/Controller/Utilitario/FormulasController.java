@@ -2,6 +2,7 @@ package com.vistony.salesforce.Controller.Utilitario;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.lifecycle.LifecycleOwner;
@@ -19,6 +20,7 @@ import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
@@ -31,6 +33,7 @@ import com.vistony.salesforce.Entity.DocumentLine;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
@@ -361,7 +364,8 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDCD(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDMT(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date()
             );
         }
 
@@ -598,6 +602,9 @@ public class FormulasController {
 
         ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaordenVentaDetalleSQLiteEntity=new ArrayList<>();
         ArrayList<DocumentLine> listadoDocumentLines =new ArrayList<>();
+        String fabricante = Build.MANUFACTURER;
+        String modelo = Build.MODEL;
+        String AndroidVersion = android.os.Build.VERSION.RELEASE;
 
         /**OBTIENE TODAS LAS ORDENES DE VENTA CON EL ID**/
         //SOLO DEVOVLERA LA POSICION UNO POR QUE EL ID SOLO PERTENECE A UN OBJETO NO A UNA LISTA DE OBJETOS
@@ -627,7 +634,7 @@ public class FormulasController {
         documentHeader.setComments(ovCabecera.getComentario());
         documentHeader.setDocCurrency(ovCabecera.getMoneda_id());
         documentHeader.setDocDate(Convertirfechahoraafechanumerica(ovCabecera.getFecharegistro()));
-        documentHeader.setDocDueDate(Convertirfechahoraafechanumerica(ovCabecera.getFecharegistro()));
+        documentHeader.setDocDueDate(ovCabecera.getDispatchdate());
         documentHeader.setDocType(ovCabecera.getDocType());
         documentHeader.setU_VIS_SalesOrderID(ovCabecera.getOrdenventa_id());
         documentHeader.setDocumentsOwner(SesionEntity.documentsowner);
@@ -653,7 +660,10 @@ public class FormulasController {
         documentHeader.setU_SYP_VIST_TG(U_SYP_VIST_TG);
         documentHeader.setU_SYP_DOCEXPORT("N");
         documentHeader.setDraft("N");
-
+        documentHeader.setIntent(ovCabecera.getIntent());
+        documentHeader.setBrand(fabricante);
+        documentHeader.setOSVersion(AndroidVersion);
+        documentHeader.setModel(modelo);
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
@@ -1044,6 +1054,12 @@ public class FormulasController {
     {
         int resultado=0;
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao=new RutaVendedorSQLiteDao(Context);
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+        Log.e("REOS","FormulasController.RegistrarRutaVendedor.listaClienteCabeceraEntities.size(): "+listaClienteCabeceraEntities.size());
+        Log.e("REOS","FormulasController.RegistrarRutaVendedor.fecharuta: "+fecharuta);
+        Log.e("REOS","FormulasController.RegistrarRutaVendedor.chk_ruta: "+chk_ruta);
         try
         {
             for (int i=0;i<listaClienteCabeceraEntities.size();i++){
@@ -1075,7 +1091,13 @@ public class FormulasController {
                         "0",
                         "0",
                         chk_ruta,
-                        fecharuta
+                        fecharuta,
+                        ObjUsuario.fuerzatrabajo_id,
+                        ObjUsuario.usuario_id,
+                        listaClienteCabeceraEntities.get(i).getLastpurchase(),
+                        listaClienteCabeceraEntities.get(i).getSaldosincontados(),
+                        listaClienteCabeceraEntities.get(i).getChkgeolocation(),
+                        listaClienteCabeceraEntities.get(i).getChkvisitsection()
                 );
             }
 
@@ -1090,7 +1112,9 @@ public class FormulasController {
 
     public void RegistraVisita(VisitaSQLiteEntity visita, Context context,String monto) {
         visitaRepository = new ViewModelProvider((ViewModelStoreOwner) context).get(VisitaRepository.class);
-
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
         SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
         SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
 
@@ -1098,15 +1122,16 @@ public class FormulasController {
 
 
 
-        visita.setCompania_id(SesionEntity.compania_id);
+        visita.setCompania_id(ObjUsuario.compania_id);
         visita.setDate(FormatFecha.format(date));
         visita.setHour(dateFormathora.format(date));
-        visita.setSlpCode(SesionEntity.fuerzatrabajo_id);
-        visita.setUserId(SesionEntity.usuario_id);
+        visita.setSlpCode(ObjUsuario.fuerzatrabajo_id);
+        visita.setUserId(ObjUsuario.usuario_id);
         visita.setChkenviado("1");
         visita.setChkrecibido("0");
 
         VisitaSQLite visitaSQLite = new VisitaSQLite(context);
+        visita.setHour_Before(visitaSQLite.getHourAfter(FormatFecha.format(date)));
         visitaSQLite.InsertaVisita(visita);
 
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(context);

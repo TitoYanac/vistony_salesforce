@@ -56,7 +56,7 @@ public class ReasonDispatchSQLite {
         return 1;
     }
 
-    public ArrayList<ReasonDispatchEntity> getReasonDispatch (String typedispatch_id)
+    public ArrayList<ReasonDispatchEntity> getReasonDispatchForType (String typedispatch_id)
     {
         //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
         //SQLiteDatabase bd = admin.getWritableDatabase();
@@ -82,7 +82,32 @@ public class ReasonDispatchSQLite {
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return listReasonDispatchEntity;
     }
+    public ArrayList<ReasonDispatchEntity> getReasonDispatch ()
+    {
+        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
+        //SQLiteDatabase bd = admin.getWritableDatabase();
+        listReasonDispatchEntity = new ArrayList<ReasonDispatchEntity>();
+        ReasonDispatchEntity ReasonDispatchEntity;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select * from reasondispatch",null);
 
+        while (fila.moveToNext())
+        {
+            ReasonDispatchEntity= new ReasonDispatchEntity();
+            ReasonDispatchEntity.setCompania_id(fila.getString(0));
+            ReasonDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
+            ReasonDispatchEntity.setUsuario_id(fila.getString(2));
+            ReasonDispatchEntity.setReasondispatch_id(fila.getString(3));
+            ReasonDispatchEntity.setReasondispatch(fila.getString(4));
+            ReasonDispatchEntity.setTypedispatch_id(fila.getString(5));
+            listReasonDispatchEntity.add(ReasonDispatchEntity);
+        }
+
+        bd.close();
+        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        return listReasonDispatchEntity;
+    }
     public int DeleteTableReasonDispatch ()
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);

@@ -7,7 +7,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoOrdenVentaEntity;
 import java.util.List;
 
 public class HistoricSalesOrderTraceabilityEntityResponse {
-    @SerializedName("SalesOrderTraceability")
+    @SerializedName("Traceabilities")
     private List<HistoricSalesOrderTraceabilityEntity> historicSalesOrderTraceabilityEntity;
 
     public void HistoricSalesOrderTraceabilityEntityResponse(List<HistoricSalesOrderTraceabilityEntity> historicSalesOrderTraceabilityEntity) {

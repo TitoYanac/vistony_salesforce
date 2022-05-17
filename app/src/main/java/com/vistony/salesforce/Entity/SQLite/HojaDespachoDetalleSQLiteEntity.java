@@ -22,8 +22,13 @@ public class HojaDespachoDetalleSQLiteEntity {
     public String peso;
     public String comentariodespacho;
     public String nombrecliente;
+    public boolean chkupdatedispatch;
 
-    public HojaDespachoDetalleSQLiteEntity(String compania_id, String fuerzatrabajo_id, String usuario_id, String control_id, String item_id, String cliente_id, String domembarque_id, String direccion, String factura_id, String entrega_id, String entrega, String factura, String saldo, String estado, String fuerzatrabajo_factura_id, String fuerzatrabajo_factura, String terminopago_id, String terminopago, String peso, String comentariodespacho, String nombrecliente) {
+    public HojaDespachoDetalleSQLiteEntity(
+            String compania_id, String fuerzatrabajo_id, String usuario_id, String control_id, String item_id, String cliente_id,
+            String domembarque_id, String direccion, String factura_id, String entrega_id, String entrega, String factura,
+            String saldo, String estado, String fuerzatrabajo_factura_id, String fuerzatrabajo_factura, String terminopago_id,
+            String terminopago, String peso, String comentariodespacho, String nombrecliente,boolean chkupdatedispatch) {
         this.compania_id = compania_id;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
         this.usuario_id = usuario_id;
@@ -45,10 +50,19 @@ public class HojaDespachoDetalleSQLiteEntity {
         this.peso = peso;
         this.comentariodespacho = comentariodespacho;
         this.nombrecliente = nombrecliente;
+        this.chkupdatedispatch = chkupdatedispatch;
     }
 
     public HojaDespachoDetalleSQLiteEntity() {
 
+    }
+
+    public boolean isChkupdatedispatch() {
+        return chkupdatedispatch;
+    }
+
+    public void setChkupdatedispatch(boolean chkupdatedispatch) {
+        this.chkupdatedispatch = chkupdatedispatch;
     }
 
     public String getNombrecliente() {

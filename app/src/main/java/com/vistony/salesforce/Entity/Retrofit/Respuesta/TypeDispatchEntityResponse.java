@@ -7,7 +7,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.WareHousesEntity;
 import java.util.List;
 
 public class TypeDispatchEntityResponse {
-    @SerializedName("Obtener_TypeDispatchResult")
+    @SerializedName("DispatchTypes")
     private List<TypeDispatchEntity> typeDispatchEntity;
     public TypeDispatchEntityResponse(List<TypeDispatchEntity> typeDispatchEntity) {
         this.typeDispatchEntity = typeDispatchEntity;

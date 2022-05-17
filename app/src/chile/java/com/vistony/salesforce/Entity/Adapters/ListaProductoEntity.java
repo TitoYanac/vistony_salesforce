@@ -11,6 +11,15 @@ public class ListaProductoEntity {
     private String precioigv;
     private String gal;
     private String porcentaje_descuento_max;
+    private String stock;
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
 
     public String getPorcentaje_descuento_max() {
         return porcentaje_descuento_max;

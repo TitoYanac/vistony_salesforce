@@ -8,8 +8,10 @@ import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Entity.Adapters.ListaConsultaStockEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Enum.TipoDeCompra;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 public class ListaPrecioDetalleSQLiteDao {
 
     ArrayList<ListaProductoEntity> arraylistaProductoEntity;
+    ArrayList<ListaPrecioDetalleSQLiteEntity> ListaPrecioDetalleSQLiteEntity;
+    ArrayList<ListaConsultaStockEntity> listaConsultaStockEntity;
 
     public ListaPrecioDetalleSQLiteDao(Context context){
         DataBaseManager.initializeInstance(new SqliteController(context));
@@ -34,7 +38,8 @@ public class ListaPrecioDetalleSQLiteDao {
             String tipo,
             String porcentaje_descuento,
             String stock_almacen,
-            String stock_general
+            String stock_general,
+            String units
     ){
         SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
 
@@ -51,6 +56,7 @@ public class ListaPrecioDetalleSQLiteDao {
         registro.put("Tipo",tipo);
         registro.put("stock_almacen",stock_almacen);
         registro.put("stock_general",stock_general);
+        registro.put("units",units);
         sqlite.insert("listapreciodetalle",null,registro);
 
         DataBaseManager.getInstance().closeDatabase();
@@ -259,5 +265,51 @@ public class ListaPrecioDetalleSQLiteDao {
         }
 
         return arraylistaProductoEntity;
+    }
+
+
+    public ArrayList<ListaConsultaStockEntity> ObtenerConsultaStock (Context context){
+
+        listaConsultaStockEntity = new ArrayList<ListaConsultaStockEntity>();
+        ListaConsultaStockEntity consultaStockEntity;
+        PromocionCabeceraSQLiteDao promocionCabeceraSQLiteDao=new PromocionCabeceraSQLiteDao(context);
+        Cursor fila=null;
+
+        try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                    "IFNULL(stock_general,0) stock_general,contado,credito,gal " +
+                    " FROM listapreciodetalle GROUP BY producto_id,producto,umd,stock_almacen,stock_general,contado,credito,gal";
+
+            fila = sqlite.rawQuery(query,null);
+
+            while (fila.moveToNext()) {
+                consultaStockEntity = new ListaConsultaStockEntity();
+                consultaStockEntity.setProducto_id (fila.getString(0));
+                consultaStockEntity.setProducto(fila.getString(1));
+                consultaStockEntity.setUmd(fila.getString(2));
+                consultaStockEntity.setStock(fila.getString(3));
+                consultaStockEntity.setPreciocontadoigv(fila.getString(5));
+                consultaStockEntity.setPreciocreditoigv(fila.getString(6));
+                consultaStockEntity.setGal(fila.getString(7));
+                consultaStockEntity.setPromotionenable(promocionCabeceraSQLiteDao.ObtenerEstadoPromocionConsultaStock(
+                        SesionEntity.compania_id,
+                        SesionEntity.fuerzatrabajo_id,
+                        SesionEntity.usuario_id,
+                        consultaStockEntity.getProducto_id(),
+                        consultaStockEntity.getUmd()
+                ));
+                listaConsultaStockEntity.add(consultaStockEntity);
+            }
+            fila.close();
+
+        }catch (Exception e){
+            Log.e("ErrorSqlite","=>"+e.getMessage());
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
+        //Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.arraylistaProductoEntity: "+arraylistaProductoEntity.size());
+        return listaConsultaStockEntity;
     }
 }

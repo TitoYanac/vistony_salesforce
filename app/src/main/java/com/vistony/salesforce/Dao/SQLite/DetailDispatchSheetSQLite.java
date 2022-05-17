@@ -103,13 +103,18 @@ public class DetailDispatchSheetSQLite {
         abrir();
         Cursor fila = bd.rawQuery(
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
-                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente from detaildispatchsheet A" +
+                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
                         "A.cliente_id=B.cliente_id " +
+                        " left outer join statusdispatch C ON  " +
+                        "A.cliente_id=C.cliente_id  AND " +
+                        "A.entrega_id=C.entrega_id  AND " +
+                        "A.fuerzatrabajo_id=C.fuerzatrabajo_id" +
                         "  where A.control_id='"+codeControl+"'",null);
 
         while (fila.moveToNext())
         {
+            boolean chkupdatedispatch;
             hojaDespachoSQLiteEntity= new HojaDespachoDetalleSQLiteEntity();
             hojaDespachoSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
             hojaDespachoSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
@@ -132,6 +137,14 @@ public class DetailDispatchSheetSQLite {
             hojaDespachoSQLiteEntity.setPeso(fila.getString(fila.getColumnIndex("peso")));
             hojaDespachoSQLiteEntity.setComentariodespacho(fila.getString(fila.getColumnIndex("comentariodespacho")));
             hojaDespachoSQLiteEntity.setNombrecliente(fila.getString(fila.getColumnIndex("nombrecliente")));
+            Log.e("REOS", "DetailDispatchSheetSQLite-getDetailDispatchSheetforCodeControl-chkupdatedispatch" + fila.getString(fila.getColumnIndex("chkupdatedispatch")));
+            if(fila.getString(fila.getColumnIndex("chkupdatedispatch")).equals(""))
+            {
+                chkupdatedispatch=false;
+            }else {
+                chkupdatedispatch=true;
+            }
+            hojaDespachoSQLiteEntity.setChkupdatedispatch(chkupdatedispatch);
             listaHojaDespachoSQLiteEntity.add(hojaDespachoSQLiteEntity);
         }
 

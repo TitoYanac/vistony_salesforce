@@ -3,10 +3,10 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 import com.google.gson.annotations.SerializedName;
 
 public class ReasonDispatchEntity {
-    @SerializedName("reasondispatch_id")
+    @SerializedName("Value")
     public String reasondispatch_id;
 
-    @SerializedName("reasondispatch")
+    @SerializedName("Dscription")
     public String reasondispatch;
 
     @SerializedName("typedispatch_id")

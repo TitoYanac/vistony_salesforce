@@ -44,6 +44,7 @@ public class ListaHojaDespachoDao {
                         , Lista.get(i).getTerminopago()
                         ,Lista.get(i).getCliente_id()
                         ,Lista.get(i).getDomembarque_id()
+                        ,Lista.get(i).isChkupdatedispatch()
                 ));
             }
         }catch (Exception e)

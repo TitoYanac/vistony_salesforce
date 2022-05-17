@@ -17,13 +17,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:paddingTop="5dp"
-                android:paddingRight="5dp">
+                >
                 <ImageButton
                     android:id="@+id/imb_calendario_historic_salesorder_traceability"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
                     android:src="@drawable/ic_baseline_date_range_24_white"
                     android:background="@drawable/custom_border_button_red"
                     />
@@ -31,7 +31,6 @@
                     android:id="@+id/tv_fecha_historic_salesorder_traceability"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
                     android:paddingTop="15dp"
                     android:layout_weight="4"
                     android:enabled="true"
@@ -40,17 +39,17 @@
                     android:text="1900-01-01"
                     android:textSize="20dp"
                     />
+
                 <com.omega_r.libs.OmegaCenterIconButton
                     android:id="@+id/btn_get_historic_salesorder_traceability"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="4"
-                    android:text="CONSULTAR"
                     android:background="@drawable/custom_border_button_red"
-                    android:textColor="@color/white"
                     android:drawableLeft="@drawable/ic_search_white_24dp"
-                    />
+                    android:text="CONSULTAR"
+                    android:textColor="@color/white" />
             </TableRow>
             <TableRow
                 android:layout_width="match_parent"
@@ -60,7 +59,7 @@
                     style="@android:style/TextAppearance.Widget.TextView"
                     android:layout_width="0dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="4"
                     android:background="@color/colorPrimary"
                     android:text="ORDEN DE VENTA"
@@ -82,8 +81,8 @@
         android:background="@color/colorPrimary"
         android:paddingLeft="10dp">
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/lbl_cantidad_facturas"
                 style="@android:style/TextAppearance.Widget.TextView"
@@ -91,19 +90,25 @@
                 android:layout_height="wrap_content"
                 android:text="Cantidad:"
                 android:textColor="@color/white"
-                android:textSize="25dp"></TextView>
+                android:textSize="25dp">
+
+            </TextView>
             <TextView
                 android:id="@+id/tv_count_historic_sales_order_traceability"
                 style="@android:style/TextAppearance.Widget.TextView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:layout_weight="4"
+                android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="25dp"></TextView>
+                android:textSize="25dp">
+
+            </TextView>
         </TableRow>
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/lbl_monto_facturas"
                 style="@android:style/TextAppearance.Widget.TextView"
@@ -111,15 +116,21 @@
                 android:layout_height="wrap_content"
                 android:text="Monto:"
                 android:textColor="@color/white"
-                android:textSize="25dp"></TextView>
+                android:textSize="25dp">
+
+            </TextView>
             <TextView
                 android:id="@+id/tv_amount_historic_sales_order_traceability"
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:layout_weight="4"
+                android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="25dp"></TextView>
+                android:textSize="25dp">
+
+            </TextView>
         </TableRow>
     </TableLayout>
 </FrameLayout>

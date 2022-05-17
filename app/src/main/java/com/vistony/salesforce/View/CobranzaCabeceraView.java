@@ -304,7 +304,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         chkbancarizado = (CheckBox) v.findViewById(R.id.chkbancarizado);
         chkdepositodirecto = (CheckBox) v.findViewById(R.id.chkdepositodirecto);
         imb_consultar_codigo_control= (ImageButton)  v.findViewById(R.id.imb_consultar_codigo_control);
-
+        fechadiferida="19000101";
         if(!SesionEntity.perfil_id.equals("CHOFER"))
         {
             imb_consultar_codigo_control.setVisibility(View.GONE);
@@ -316,7 +316,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
         spntipo.setAdapter(adapter);
         txtfecha.setText(fecha);
-        tv_fechacobrocheque_edit.setText(dateFormat.format(date));
+
         //tv_fechacobrocheque_edit.setText(dataFormatToday.format(date));
         fab = (FloatingActionButton) v.findViewById(R.id.fabagregar);
 
@@ -340,7 +340,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                         if(position==1)
                         {
                             tipo="Cheque";
-
+                            tv_fechacobrocheque_edit.setText(dateFormat.format(date));
+                            fechadiferida=dateFormat.format(date);
                             tv_fechacobrocheque_edit.setVisibility(View.VISIBLE);
                             tv_fechacobrocheque.setVisibility(View.VISIBLE);
                             imv_calendario_cheque.setVisibility(View.VISIBLE);
@@ -471,7 +472,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
             //tv_fechacobrocheque_edit.setText(year + "/" + mes + "/" + dia);
         tv_fechacobrocheque_edit.setText(year + "-" + mes + "-" + dia);
-
+        fechadiferida=year+mes+dia;
         if(tv_fecha_hoja_despacho!=null)
         {
             tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
@@ -805,7 +806,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                                 if(imv_calendario_cheque.getVisibility()==View.VISIBLE)
                                 {
 
-                                    fechadiferida=tv_fechacobrocheque_edit.getText().toString();
+                                    //fechadiferida=tv_fechacobrocheque_edit.getText().toString();
 
                                 }
                                 else

@@ -43,10 +43,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal|center_vertical"
-                android:lines="5"
+
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text=" Asd asda ad asdas as asdas asdas d asdasd asd a"
+                android:text=" "
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/txtdocumento"

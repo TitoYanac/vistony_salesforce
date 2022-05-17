@@ -255,17 +255,17 @@ public interface Api {
             @Query("fecfin") String fecfin
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/TypeDispatch")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/DispatchTypes")
     Call<TypeDispatchEntityResponse> getTypeDispatch(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ReasonDispatch")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies")
     Call<ReasonDispatchEntityResponse> getReasonDispatch(@Query("imei") String imei);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricStatusDispatch")
     Call<HistoricStatusDispatchEntityResponse> geHistoricStatusDispatch(@Query("imei") String imei,@Query("date") String date);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricSalesOrderTraceability")
-    Call<HistoricSalesOrderTraceabilityEntityResponse> geHistoricSalesOrderTraceability(@Query("imei") String imei, @Query("date") String date);
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Traceabilities")
+    Call<HistoricSalesOrderTraceabilityEntityResponse> geHistoricSalesOrderTraceability(@Query("imei") String imei, @Query("fecha") String date);
 
 
 

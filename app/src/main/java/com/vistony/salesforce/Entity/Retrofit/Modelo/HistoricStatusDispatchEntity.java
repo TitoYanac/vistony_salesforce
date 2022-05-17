@@ -2,7 +2,9 @@ package com.vistony.salesforce.Entity.Retrofit.Modelo;
 
 import com.google.gson.annotations.SerializedName;
 
-public class HistoricStatusDispatchEntity {
+import java.io.Serializable;
+
+public class HistoricStatusDispatchEntity implements Serializable  {
 
     @SerializedName("FuerzaTrabajo_ID")
     private String FuerzaTrabajo_ID;

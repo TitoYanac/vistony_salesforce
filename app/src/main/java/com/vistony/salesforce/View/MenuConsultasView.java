@@ -75,10 +75,11 @@ public class MenuConsultasView extends Fragment {
             case "ecuador":
             case "chile":
             case "india":
-            case "paraguay":
+
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view_induvis, container, false);
                 break;
             case "peru":
+            case "paraguay":
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view, container, false);
                 break;
             default:
@@ -115,6 +116,7 @@ public class MenuConsultasView extends Fragment {
                 String Fragment,accion,compuesto;
                 switch (BuildConfig.FLAVOR){
                     case "peru":
+                    case "paraguay":
                          Fragment="MenuConsultasView";
                          accion="menuconsultaspedidoview";
                          compuesto=Fragment+"-"+accion;
@@ -123,7 +125,7 @@ public class MenuConsultasView extends Fragment {
                     case "ecuador":
                     case "chile":
                     case "bolivia":
-                    case "paraguay":
+
                          Fragment="MenuConsultasView";
                          accion="historicoordenventa";
                          compuesto=Fragment+"-"+accion;
@@ -150,6 +152,7 @@ public class MenuConsultasView extends Fragment {
                 String Fragment,accion,compuesto;
                 switch (BuildConfig.FLAVOR){
                     case "peru":
+                    case "paraguay":
                         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
                         {
                             Fragment="HistoricoCobranzaView";
@@ -169,7 +172,7 @@ public class MenuConsultasView extends Fragment {
                     case "ecuador":
                     case "chile":
                     case "bolivia":
-                    case "paraguay":
+
                          Fragment="HistoricoCobranzaView";
                          accion="COBRANZA";
                          compuesto=Fragment+"-"+accion;

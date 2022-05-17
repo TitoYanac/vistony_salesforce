@@ -64,6 +64,7 @@ import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaDetalleDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
@@ -89,6 +90,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 import io.sentry.Sentry;
 
@@ -1086,10 +1088,31 @@ public class CobranzaDetalleView extends Fragment {
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza)
     {
         int resultado=0,recibows=0;
-        String tag="",tag2="",cliente_id="",shipto="",montocobrado="";
+        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0",chkruta="",contado="0";
         FormulasController formulasController=new FormulasController(getContext());
+        Random numAleatorio = new Random();
+        int n = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
+        for (int k = 0; k < Lista.size(); k++) {
+            valorcobranza=Lista.get(k).getCobrado();
+            chkruta=Lista.get(k).getChkruta();
+
+            if(Lista.get(k).getFechaemision().equals(Lista.get(k).getFechavencimiento()))
+            {
+                contado="1";
+            }
+            else
+            {
+                contado="0";
+            }
+        }
+
+        if(Float.parseFloat(valorcobranza)>=1) {
         cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
-        correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(SesionEntity.compania_id,SesionEntity.usuario_id);
+        correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(ObjUsuario.compania_id, ObjUsuario.usuario_id);
 
 
         String[] separada = SesionEntity.recibo.split("R");
@@ -1141,6 +1164,7 @@ public class CobranzaDetalleView extends Fragment {
             for (int i = 0; i < Lista.size(); i++) {
                 montocobrado=Lista.get(i).getCobrado();
                 cliente_id=String.valueOf(Lista.get(i).getCliente_id());
+                cardname = Lista.get(i).getNombrecliente();
                 shipto=Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 resultado = cobranzaDetalleSQLiteDao.InsertaCobranzaDetalle(
@@ -1175,12 +1199,31 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.pagopos,
                         "",
                         "",
-                        obtenerHoraActual()
+                        obtenerHoraActual(),
+                        cardname,
+                        String.valueOf(n),
+                        Lista.get(i).getDocentry()
                 );
 
-                ActualizaDocumentoDeuda(SesionEntity.compania_id,
-                        String.valueOf(Lista.get(i).getDocumento_id()),
-                        String.valueOf(Lista.get(i).getNuevo_saldo()));
+                        if(SesionEntity.perfil_id.equals("CHOFER")){
+                        DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(getContext());
+                        detailDispatchSheetSQLite.UpdateBalanceDetailDispatchSheet(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()));
+
+                        ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()),
+                                Lista.get(i).getNrodocumento()
+                                );
+
+                    }else {
+                        ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()),
+                                Lista.get(i).getNrodocumento()
+                        );
+                    }
 
             }
         }
@@ -1190,6 +1233,7 @@ public class CobranzaDetalleView extends Fragment {
             for (int i = 0; i < Lista.size(); i++) {
                 montocobrado=Lista.get(i).getCobrado();
                 cliente_id=String.valueOf(Lista.get(i).getCliente_id());
+                cardname = Lista.get(i).getNombrecliente();
                 shipto=Lista.get(i).getDomembarque();
                 recibo = String.valueOf(ultimocorrelativorecibo + 1);
                 sumacobrado=String.valueOf(Lista.get(i).getCobrado());
@@ -1220,13 +1264,34 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.pagopos,
                         "",
                         "",
-                        obtenerHoraActual()
+                        obtenerHoraActual(),
+                        cardname,
+                        String.valueOf(n),
+                        Lista.get(i).getDocentry()
                 );
 
 
-                ActualizaDocumentoDeuda(SesionEntity.compania_id,
-                        String.valueOf(Lista.get(i).getDocumento_id()),
-                        String.valueOf(Lista.get(i).getNuevo_saldo()));
+                        if(SesionEntity.perfil_id.equals("CHOFER")){
+                        DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(getContext());
+                        detailDispatchSheetSQLite.UpdateBalanceDetailDispatchSheet(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo())
+
+                        );
+
+                        ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()),
+                                Lista.get(i).getNrodocumento()
+                        );
+
+                    }else {
+                        ActualizaDocumentoDeuda(ObjUsuario.compania_id,
+                                String.valueOf(Lista.get(i).getDocumento_id()),
+                                String.valueOf(Lista.get(i).getNuevo_saldo()),
+                                Lista.get(i).getNrodocumento()
+                        );
+                    }
 
             }
             addDepositPOS(sumacobrado);
@@ -1267,7 +1332,9 @@ public class CobranzaDetalleView extends Fragment {
         visita.setObservation("Se genero el recibo "+recibo+" para el cliente: "+cliente_id);
         visita.setLatitude(""+latitude);
         visita.setLongitude(""+longitude);
-
+        visita.setStatusRoute(chkruta);
+        visita.setAmount(valorcobranza);
+        visita.setTerminoPago_ID(contado);
         formulasController.RegistraVisita(visita,getActivity(),montocobrado);
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -1279,15 +1346,24 @@ public class CobranzaDetalleView extends Fragment {
         depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame", "=>" + data);
         });
-
+        }
+        else {
+            et_cobrado_edit.setText(null);
+            Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido, verifique su cobranza por:  "+valorcobranza, Toast.LENGTH_SHORT).show();
+            Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
+            drawable = DrawableCompat.wrap(drawable);
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+            menu_variable.findItem(R.id.guardar).setIcon(drawable);
+            guardar.setEnabled(false);
+        }
         return resultado;
 
     }
 
-    public int ActualizaDocumentoDeuda(String compania_id,String documento_id,String nuevo_saldo)
+    public int ActualizaDocumentoDeuda(String compania_id,String documento_id,String nuevo_saldo,String nrofactura)
     {
         int resultado=0;
-        resultado= documentoSQLite.ActualizaNuevoSaldo(compania_id,documento_id,nuevo_saldo);
+        resultado= documentoSQLite.ActualizaNuevoSaldo(compania_id,documento_id,nuevo_saldo,nrofactura);
         return resultado;
     }
 

@@ -7,7 +7,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.TypeDispatchEntity;
 import java.util.List;
 
 public class ReasonDispatchEntityResponse {
-    @SerializedName("Obtener_TypeDispatchresult")
+    @SerializedName("Ocurrencies")
     private List<ReasonDispatchEntity> reasonDispatchEntity;
     public ReasonDispatchEntityResponse(List<ReasonDispatchEntity> reasonDispatchEntity) {
         this.reasonDispatchEntity = reasonDispatchEntity;

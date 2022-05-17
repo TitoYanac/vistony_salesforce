@@ -60,6 +60,7 @@ import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricContainerSalesRepository;
+import com.vistony.salesforce.Dao.Retrofit.HistoricSalesOrderTraceabilityRepository;
 import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerDetailRepository;
 import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerHeadRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -136,7 +137,8 @@ public class MenuView extends AppCompatActivity
         HistoricContainerSKU.OnFragmentInteractionListener,
         KardexOfPaymentView.OnFragmentInteractionListener,
         DispatchSheetView.OnFragmentInteractionListener,
-        HistoricStatusDispatchView.OnFragmentInteractionListener
+        HistoricStatusDispatchView.OnFragmentInteractionListener,
+        HistoricSalesOrderTraceabilityView.OnFragmentInteractionListener
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment,contentHistoryFragment;
@@ -1587,6 +1589,14 @@ public class MenuView extends AppCompatActivity
                     ft.replace(R.id.content_menu_view,contentFragment,tag2);
                     ft.addToBackStack("popsssggggersa");
                     ft.commit();
+
+            }
+            if(tag2.equals("seguimiento"))
+            {
+                contentFragment=new HistoricSalesOrderTraceabilityView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
 
             }
         }

@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Entity.Adapters.ListaPendingCollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
 import com.vistony.salesforce.R;
@@ -59,10 +62,10 @@ public class ListHistoricSalesOrderTraceabilityInvoiceAdapter extends ArrayAdapt
 
         // Setup.
         holder.tv_documento_id.setText(lead.getDocumentoId());
-        holder.tv_legalnumber.setText(lead.getLegalnumberdelivery());
-        holder.tv_dateemition.setText(lead.getFechaEmision());
-        holder.tv_amount_invoice.setText(lead.getImporteFactura());
-        holder.tv_balance.setText(lead.getSaldo());
+        holder.tv_legalnumber.setText(lead.getNroFactura());
+        holder.tv_dateemition.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getFechaEmision()));
+        holder.tv_amount_invoice.setText(Convert.currencyForView(lead.getImporteFactura()));
+        holder.tv_balance.setText(Convert.currencyForView(lead.getSaldo()));
 
 
         return convertView;

@@ -106,14 +106,16 @@
         android:textStyle="bold"
         android:text="0"
         android:textSize="18dp" />
+
     <TextView
         android:id="@+id/lbl_historico_facturas_facturacion_lineas_no_facturadas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal|center_vertical"
-        android:layout_marginTop="100dp"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center_horizontal|center_vertical"
         android:text="Tipo:"
+        android:visibility="gone"
         android:textSize="18dp" />
     <TextView
         android:id="@+id/tv_type"
@@ -123,6 +125,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginLeft="120dp"
         android:textStyle="bold"
+        android:visibility="gone"
         android:text="0"
         android:textSize="18dp" />
     <ImageView

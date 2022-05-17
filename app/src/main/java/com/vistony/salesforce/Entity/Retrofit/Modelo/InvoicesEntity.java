@@ -36,7 +36,7 @@ public class InvoicesEntity {
     @SerializedName("RawBalance")
     private String saldoSinProcesar;
 
-    @SerializedName("IDDriver")
+    @SerializedName("Driver")
     private String iddriver;
 
     @SerializedName("Mobile")
@@ -45,16 +45,16 @@ public class InvoicesEntity {
     @SerializedName("U_VIS_SalesOrderID")
     private String U_VIS_SalesOrderID;
 
-    @SerializedName("FechaDespacho")
+    @SerializedName("DeliveryDate")
     private String fechadespacho;
 
-    @SerializedName("EstadoDespacho")
+    @SerializedName("DeliveryStatus")
     private String estadodespacho;
 
     @SerializedName("LegalNumberDelivery")
     private String legalnumberdelivery;
 
-    @SerializedName("U_SYP_DT_OCUR")
+    @SerializedName("Ocurrency")
     private String U_SYP_DT_OCUR;
 
     @SerializedName("PymntGroup")

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
@@ -21,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HistoricSalesOrderTraceabilityRepository {
+public class HistoricSalesOrderTraceabilityRepository   extends ViewModel {
     private BancoSQLite bancoSQLite;
     private ParametrosSQLite parametrosSQLite;
     private MutableLiveData<List<HistoricSalesOrderTraceabilityEntity>> status= new MutableLiveData<>();

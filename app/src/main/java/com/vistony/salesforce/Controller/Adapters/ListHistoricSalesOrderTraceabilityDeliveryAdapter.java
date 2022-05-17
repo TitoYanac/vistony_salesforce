@@ -63,7 +63,7 @@ public class ListHistoricSalesOrderTraceabilityDeliveryAdapter extends ArrayAdap
         // Setup.
         holder.tv_legalnumber.setText(lead.getLegalnumberdelivery() );
         holder.tv_driver.setText(lead.getIddriver());
-        holder.tv_date_dispatch.setText(lead.getFechadespacho());
+        holder.tv_date_dispatch.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getFechadespacho()) );
         holder.tv_status_dispatch.setText(lead.getEstadodespacho());
         holder.tv_ocur_dispatch.setText(lead.getU_SYP_DT_OCUR());
         holder.tv_mobile.setText(lead.getMobile());

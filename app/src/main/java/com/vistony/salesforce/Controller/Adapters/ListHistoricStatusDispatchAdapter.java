@@ -1,19 +1,27 @@
 package com.vistony.salesforce.Controller.Adapters;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.WareHousesEntity;
 import com.vistony.salesforce.R;
 
@@ -31,6 +39,8 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         super(context, 0, objects);
         Context=context;
         this.Listanombres= objects;
+        this.arrayList=new ArrayList<HistoricStatusDispatchEntity>();
+        this.arrayList.addAll(objects);
         inflater = LayoutInflater.from(context);
     }
 
@@ -127,6 +137,25 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         //Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap,holder.imv_historic_status_dispatch_photo.getWidth(),holder.imv_historic_status_dispatch_photo.getHeight(),false);
         holder.imv_historic_status_dispatch_photo.setImageBitmap(bitmap);
         holder.imv_historic_status_dispatch_photo_delivery.setImageBitmap(bitmap2);
+
+        holder.imv_historic_status_dispatch_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getalertPhoto("FOTO DESPACHO",bitmap).show();
+            }
+        });
+        holder.imv_historic_status_dispatch_photo_delivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getalertPhoto("FOTO LOCAL",bitmap2).show();
+            }
+        });
+        holder.imv_historico_cobranza_respuesta_ws.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertamostrarcomentario("Comentario Ws","").show();
+            }
+        });
         return convertView;
     }
 
@@ -139,5 +168,64 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         ImageView imv_historic_status_dispatch_photo_delivery;
         CheckBox chk_wsrecibido;
         ImageView imv_historico_cobranza_respuesta_ws;
+    }
+
+    private Dialog getalertPhoto(String foto,Bitmap bitmap) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_photo_informative);
+
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText(foto);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        ImageView imageViewPhoto = (ImageView) dialog.findViewById(R.id.imageViewPhoto);
+        imageViewPhoto.setImageBitmap(bitmap);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        return  dialog;
+    }
+
+    private Dialog alertamostrarcomentario(String Titulo, String Comentario) {
+
+        final Dialog dialog = new Dialog(Context);
+        dialog.setContentView(R.layout.layout_dialog);
+
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText(Titulo);
+
+        TextView textMsj = dialog.findViewById(R.id.textViewMsj);
+        textMsj.setText((Comentario==null)?"Sin Comentario":Comentario);
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+
+
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+
+
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 }

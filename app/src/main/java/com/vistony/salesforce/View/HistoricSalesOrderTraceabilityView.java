@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -130,6 +131,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
         listview_historic_salesorder_traceability=v.findViewById(R.id.listview_historic_salesorder_traceability);
         imb_calendario_historic_salesorder_traceability.setOnClickListener(this);
         btn_get_historic_salesorder_traceability.setOnClickListener(this);
+        historicSalesOrderTraceabilityRepository= new ViewModelProvider(getActivity()).get(HistoricSalesOrderTraceabilityRepository.class);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
@@ -146,7 +148,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.imb_calendario_historico_facturas:
+            case R.id.imb_calendario_historic_salesorder_traceability:
                 final Calendar c1 = Calendar.getInstance();
                 diahf = c1.get(Calendar.DAY_OF_MONTH);
                 meshf = c1.get(Calendar.MONTH);
@@ -160,7 +162,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
 
 
                 break;
-            case R.id.btnconsultarfechafacturas:
+            case R.id.btn_get_historic_salesorder_traceability:
                 Log.e("jpcm","Execute historico");
 
                 getListHistoric(parametrofecha);
@@ -202,9 +204,9 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if(listaHistoricoFacturasAdapter!=null)
+        if(listHistoricSalesOrderTraceabilityAdapter!=null)
         {
-            listaHistoricoFacturasAdapter.filter(newText);
+            listHistoricSalesOrderTraceabilityAdapter.filter(newText);
         }
         return true;
     }
@@ -220,18 +222,24 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
     static private void getListHistoric(String Date)
     {
         pd = new ProgressDialog(activity);
-        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Kardex de Pago de Cliente", true, false);
+        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Ordenes de Venta", true, false);
         historicSalesOrderTraceabilityRepository.getHistoricSalesOrderTraceabilityRepository  (SesionEntity.imei, Date).observe(lifecycleOwner, data -> {
-            Convert convert=new Convert();
+
             Log.e("Jepicame","=>"+data);
             if(data!=null)
             {
+                Double amount=0.0;
                 listHistoricSalesOrderTraceabilityAdapter
                         =new ListHistoricSalesOrderTraceabilityAdapter(
                         activity,
                         data);
                 listview_historic_salesorder_traceability.setAdapter(listHistoricSalesOrderTraceabilityAdapter);
                 tv_count_historic_sales_order_traceability.setText(String.valueOf(data.size()));
+                for(int i=0;i<data.size();i++)
+                {
+                    amount=amount+Double.parseDouble(data.get(i).getMontototalorden());
+                }
+                tv_amount_historic_sales_order_traceability.setText(Convert.currencyForView(String.valueOf(amount)));
             }else {
                 Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
             }
@@ -251,5 +259,9 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
         ListenerBackPress.setCurrentFragment("HistoricoFacturasView");
         ListenerBackPress.setTemporaIdentityFragment("onAttach");
         super.onAttach(context);
+    }
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(String tag,Object dato);
     }
 }

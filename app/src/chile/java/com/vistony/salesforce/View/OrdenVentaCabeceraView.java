@@ -2,6 +2,7 @@ package com.vistony.salesforce.View;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -32,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -72,6 +74,7 @@ import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -80,7 +83,7 @@ import java.util.Locale;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 import static com.vistony.salesforce.View.OrdenVentaDetalleView.ActualizarResumenMontos;
 
-public class OrdenVentaCabeceraView extends Fragment {
+public class OrdenVentaCabeceraView extends Fragment  implements View.OnClickListener, DatePickerDialog.OnDateSetListener  {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -93,15 +96,15 @@ public class OrdenVentaCabeceraView extends Fragment {
     View v;
     static Button btn_detalle_orden_venta;
     OnFragmentInteractionListener mListener;
-    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag;
-    static String cliente_terminopago,cliente_terminopago_id;
+    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta;
+    static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
     static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id;
-    TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones;
+    TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;
     static EditText et_comentario;
     static TextView tv_terminopago,tv_orden_venta_agencia,tv_direccion;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
     public static ArrayList<ListaHistoricoOrdenVentaEntity> listaHistoricoOrdenVentaEntity=new ArrayList<>();
-    static ImageButton btn_orden_venta_consultar_agencia,btn_consultar_termino_pago,btn_consultar_direccion;
+    static ImageButton btn_orden_venta_consultar_agencia,btn_consultar_termino_pago,btn_consultar_direccion,btn_dispatch_date;
     static ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
     static HiloObtenerResumenOrdenVenta hiloObtenerResumenOrdenVenta;
     static MenuItem guardar_orden_venta,enviar_erp,generarpdf;
@@ -136,6 +139,12 @@ public class OrdenVentaCabeceraView extends Fragment {
     String cantidaddescuento,historicoOVcantidaddescuento;
     private OrdenVentaRepository ordenVentaRepository;
     private static DireccionCliente direccionSelecionada;
+    SimpleDateFormat dateFormat;
+    Date date;
+    String fecha,parametrofecha;
+    private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
+    private static DatePickerDialog oyenteSelectorFecha;
+    Induvis induvis;
 
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
@@ -200,7 +209,7 @@ public class OrdenVentaCabeceraView extends Fragment {
 
         direccionSelecionada=(DireccionCliente)objeto;
         tv_direccion.setText(direccionSelecionada.getDireccion());
-
+        cliente_domembarque_id=direccionSelecionada.getDomembarque_id();
         return ordenVentaView;
     }
 
@@ -269,6 +278,10 @@ public class OrdenVentaCabeceraView extends Fragment {
         listaOrdenVentaDetalleEntities=new ArrayList<>();
 
         values=new ArrayList<String>();
+        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        date = new Date();
+        fecha =dateFormat.format(date);
+        parametrofecha=fecha;
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -324,7 +337,8 @@ public class OrdenVentaCabeceraView extends Fragment {
                     totalAcum=listaOrdenVentaCabecera.get(g).getMontototal();
                     confirmationRequestErp=listaOrdenVentaCabecera.get(g).getRecibidoERP().equals("1")?true:false;
                     cliente_terminopago_id=listaOrdenVentaCabecera.get(g).getTerminopago_id();
-
+                    cliente_domembarque_id=listaOrdenVentaCabecera.get(g).getDomembarque_id();
+                    dispatchdate=listaOrdenVentaCabecera.get(g).getDispatchdate();
                     listaAgenciasqliteentity= agenciaSQLiteDao.ObtenerAgencia_porID(
                             listaOrdenVentaCabecera.get(g).getAgencia_id()
                     );
@@ -368,6 +382,8 @@ public class OrdenVentaCabeceraView extends Fragment {
                     impuesto=Listado.get(i).getImpuesto();
                     rucdni= Listado.get(i).getRucdni();
                     cliente_terminopago_id=Listado.get(i).getTerminopago_id();
+                    cliente_domembarque_id=Listado.get(i).getDomembarque_id();
+                    chkruta=Listado.get(i).getChk_ruta();
                 }
             }else{
                 Log.e("jpcm","ESTA NULO lISTADO");
@@ -436,12 +452,15 @@ public class OrdenVentaCabeceraView extends Fragment {
         tv_orden_cabecera_galones=v.findViewById(R.id.tv_orden_cabecera_galones);
         btn_orden_venta_consultar_agencia=v.findViewById(R.id.btn_orden_venta_consultar_agencia);
         chk_descuento_contado=(CheckBox) v.findViewById(R.id.chk_descuento_contado);
-
+        tv_dispatch_date=v.findViewById(R.id.tv_dispatch_date);
         tv_ruc.setText(rucdni);
 
         tv_cliente.setText(nombrecliente);
         tv_direccion.setText(direccioncliente);
         listaTerminopago=terminoPagoSQLiteDao.ObtenerTerminoPagoporID(cliente_terminopago_id,SesionEntity.compania_id);
+        btn_dispatch_date = (ImageButton) v.findViewById(R.id.btn_dispatch_date);
+        btn_dispatch_date.setOnClickListener(this);
+        tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
 
 
 
@@ -938,7 +957,8 @@ public class OrdenVentaCabeceraView extends Fragment {
             listaOrdenVentaCabeceraEntity.orden_cabecera_id=ordenventa_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_cliente_id=codigocliente;
 
-            listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id=(direccionSelecionada==null)?Listado.get(i).getDomembarque_id():direccionSelecionada.getDomembarque_id();//  Listado.get(i).getDomembarque_id();
+            listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id=//(direccionSelecionada==null)?Listado.get(i).getDomembarque_id():direccionSelecionada.getDomembarque_id();//  Listado.get(i).getDomembarque_id();
+                    cliente_domembarque_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_domfactura_id=Listado.get(i).getDomfactura_id();
 
             listaOrdenVentaCabeceraEntity.orden_cabecera_fecha_creacion=String.valueOf(sdf.format(calendario.getTime()));
@@ -992,9 +1012,11 @@ public class OrdenVentaCabeceraView extends Fragment {
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDCD="";
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDMT="01";
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_STATUS="V";
+            listaOrdenVentaCabeceraEntity.orden_cabecera_dispatch_date= parametrofecha;
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);
-            visita.setAddress(listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id);
+            //visita.setAddress(listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id);
+            visita.setAddress(cliente_domembarque_id);
             if(SesionEntity.quotation.equals("Y"))
             {
                 visita.setType("12");
@@ -1005,7 +1027,10 @@ public class OrdenVentaCabeceraView extends Fragment {
             visita.setObservation("Se genero el pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id()+" para la dirección "+Listado.get(i).getDireccion());
             visita.setLatitude(""+latitude);
             visita.setLongitude(""+longitude);
-
+            visita.setMobileID(ordenventa_id);
+            visita.setStatusRoute(chkruta);
+            visita.setAmount(""+totalSalesOrder.getTotal());
+            visita.setTerminoPago_ID(contado);
             formulasController.RegistraVisita(visita,getActivity(),totalSalesOrder.getTotal());
 
         }
@@ -1318,4 +1343,42 @@ public class OrdenVentaCabeceraView extends Fragment {
         return  dialog;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.btn_dispatch_date:
+                final Calendar c1 = Calendar.getInstance();
+                day_dispatch_date = c1.get(Calendar.DAY_OF_MONTH);
+                mes_dispatch_date = c1.get(Calendar.MONTH);
+                ano_dispatch_date = c1.get(Calendar.YEAR);
+                oyenteSelectorFecha = new DatePickerDialog(getContext(),this,
+                        ano_dispatch_date,
+                        mes_dispatch_date,
+                        day_dispatch_date
+                );
+                oyenteSelectorFecha.show();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        String ano="",mes="",dia="";
+
+        mes=String.valueOf(month+1);
+        dia=String.valueOf(dayOfMonth);
+        if(mes.length()==1)
+        {
+            mes='0'+mes;
+        }
+        if(dia.length()==1)
+        {
+            dia='0'+dia;
+        }
+        parametrofecha=year+mes+dia;
+        tv_dispatch_date.setText(year + "-" + mes + "-" + dia);
+    }
 }
