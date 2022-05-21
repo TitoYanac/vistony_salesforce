@@ -217,6 +217,7 @@ public class CobranzaCabeceraSQLiteDao {
 
             while (fila.moveToNext())
             {
+                String deposito_id="";
                 DepositEntity deposito= new DepositEntity();
                 deposito.setDeposit(fila.getString(0));
                 deposito.setUserID(fila.getString(1));
@@ -226,7 +227,19 @@ public class CobranzaCabeceraSQLiteDao {
                 //deposito.setChkdepositado(fila.getString(5));
                 //deposito.setChkanulado(fila.getString(6));
                 deposito.setSlpCode(fila.getString(7));
-                deposito.setIncomeType((fila.getString(8).equals("Deposito"))?"DE":"CH");
+                if(fila.getString(8).equals("Deposito"))
+                {
+                    deposito_id="DE";
+                }
+                else if(fila.getString(8).equals("Cheque"))
+                {
+                    deposito_id="CH";
+                }
+                else if(fila.getString(8).equals("ChequeDia"))
+                {
+                    deposito_id="CHD";
+                }
+                deposito.setIncomeType(deposito_id);
                 deposito.setBanking((fila.getString(9)));
                 deposito.setDeferredDate(fila.getString(10));
                 //deposito.setChkwsrecibido(fila.getString(11));

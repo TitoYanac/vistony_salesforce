@@ -154,6 +154,7 @@ public class Induvis {
                 impuesto=0.14942529;
                 break;
             case "paraguay":
+                impuesto=0.10;
                 break;
         }
 
@@ -176,6 +177,7 @@ public class Induvis {
                 impuesto="14.942529";
                 break;
             case "paraguay":
+                impuesto="10";
                 break;
         }
 
@@ -218,6 +220,7 @@ public class Induvis {
                 impuesto="IGV";
                 break;
             case "paraguay":
+                impuesto="IVA_10";
                 break;
         }
         return impuesto;
@@ -402,6 +405,7 @@ public class Induvis {
 
     static public void refreshGlobalVariables(Context context)
     {
+        Log.e("REOS","Induvis-refreshGlobalVariables-");
         SesionEntity Sesion= new SesionEntity();
         UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
         UsuarioSQLiteEntity userEntity=usuarioSQLite.ObtenerUsuarioSesion();

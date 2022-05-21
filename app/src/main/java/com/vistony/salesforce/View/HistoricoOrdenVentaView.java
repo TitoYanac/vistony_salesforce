@@ -304,7 +304,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         case "bolivia":
                                         case "ecuador":
                                         case "chile":
-
+                                        case "paraguay":
                                             if(listaOrdenVentaSQLite.get(l).getQuotation()==null)
                                             {
                                                 listaOrdenVentaSQLite.get(l).setQuotation("N");
@@ -394,7 +394,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         case "bolivia":
                                         case "ecuador":
                                         case "chile":
-
+                                        case "paraguay":
                                             if(listaOrdenVentaSQLite.get(k).getQuotation()==null)
                                             {
                                                 listaOrdenVentaSQLite.get(k).setQuotation("N");

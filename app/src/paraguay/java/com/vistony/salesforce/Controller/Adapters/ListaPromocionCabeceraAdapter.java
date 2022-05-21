@@ -179,6 +179,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
             case "ecuador":
             case "chile":
             case "india":
+            case "paraguay":
                 holder.imv_valorizar.setVisibility(View.GONE);
                 holder.lbl_valorizacion.setVisibility(View.GONE);
                 break;

@@ -14,6 +14,7 @@ public class ListaConsDepositoEntity {
     public boolean checkbox;
     public String tv_txtbancarizado;
     public String tv_txtpagodirecto;
+    public String collectioncheck;
 
     public ListaConsDepositoEntity(String cliente_id,
                                    String nombrecliente,
@@ -27,7 +28,8 @@ public class ListaConsDepositoEntity {
                                    String nuevosaldo,
                                    boolean checkbox,
                                    String tv_txtbancarizado,
-                                   String tv_txtpagodirecto
+                                   String tv_txtpagodirecto,
+                                   String collectioncheck
     ) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
@@ -42,6 +44,15 @@ public class ListaConsDepositoEntity {
         this.recibo = recibo;
         this.tv_txtbancarizado= tv_txtbancarizado;
         this.tv_txtpagodirecto = tv_txtpagodirecto;
+        this.collectioncheck = collectioncheck;
+    }
+
+    public String getCollectioncheck() {
+        return collectioncheck;
+    }
+
+    public void setCollectioncheck(String collectioncheck) {
+        this.collectioncheck = collectioncheck;
     }
 
     public String getTv_txtpagodirecto() {

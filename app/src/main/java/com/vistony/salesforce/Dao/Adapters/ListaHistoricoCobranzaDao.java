@@ -84,6 +84,7 @@ public class ListaHistoricoCobranzaDao {
                         ,Lista.get(i).getMensajeWS()
                         ,Lista.get(i).getHoracobranza()
                         ,Lista.get(i).getDocentry()
+                        ,Lista.get(i).getCollectioncheck()
                 ));
             }
         }catch (Exception e)

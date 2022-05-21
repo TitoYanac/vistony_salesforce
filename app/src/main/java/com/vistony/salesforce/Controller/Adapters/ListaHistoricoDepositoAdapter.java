@@ -144,6 +144,7 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         }
 
         // Lead actual.
+        String typeDeposit="";
         final ListaHistoricoDepositoEntity lead = getItem(position);
         DecimalFormat format =  new DecimalFormat("#0.00");
         // Setup.
@@ -158,24 +159,25 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
 
         //)
         );
-        holder.tv_tipo_ingreso.setText(lead.getTipoingreso());
-
-        /*String[] sourceSplitefechadiferida= lead.getFechadiferida().split(" ");
-        String  FechaDiferida="";
-            if(sourceSplitefechadiferida.length>1)
+        if(BuildConfig.FLAVOR.equals("chile"))
+        {
+            if(lead.getTipoingreso().equals("Cheque"))
             {
-                FechaDiferida=sourceSplitefechadiferida[0];
-                String HoraDiferida=sourceSplitefechadiferida[1];
-            }else
-                {
-                 FechaDiferida=sourceSplitefechadiferida[0];
-                }
-        String[] sourceSplitemision2= FechaDiferida.split("/");
-        final String anioemision= sourceSplitemision2[0];
-        String mesemision= sourceSplitemision2[1];
-        String diaemision= sourceSplitemision2[2];
-        String fechadiferida=diaemision+"-"+mesemision+"-"+anioemision;*/
-        //holder.tv_fecha_diferida.setText(fechadiferida);
+                typeDeposit="Cheque Diferido";
+            }
+            else if(lead.getTipoingreso().equals("Deposito"))
+            {
+                typeDeposit = "Deposito Efectivo";
+            }
+            else {
+                typeDeposit=lead.getTipoingreso();
+            }
+        }
+        else {
+            typeDeposit=lead.getTipoingreso();
+        }
+        //holder.tv_tipo_ingreso.setText(lead.getTipoingreso());
+        holder.tv_tipo_ingreso.setText(typeDeposit);
         holder.tv_fecha_diferida.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getFechadiferida()));
         //holder.chkdepositado.setChecked(lead.isCheckbox());
         final View finalConvertView = convertView;

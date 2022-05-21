@@ -543,22 +543,24 @@ public class MenuAccionView extends Fragment {
         final Dialog dialog = new Dialog(getContext());
         switch (BuildConfig.FLAVOR) {
 
-            case "chile":
+
             case "ecuador":
             case "bolivia":
             case "paraguay":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza_induvis);
                 break;
             case "peru":
+            case "chile":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
                 break;
         }
 
 
-        CardView cv_cobranza_ordinaria,cv_cobranza_deposito_directo,cv_cobranza_pago_pos,cv_cobranza_kardex_pago;
+        CardView cv_cobranza_ordinaria,cv_cobranza_deposito_directo,cv_cobranza_pago_pos,cv_cobranza_kardex_pago,cv_collection_check;
         cv_cobranza_ordinaria=dialog.findViewById(R.id.cv_cobranza_ordinaria);
         cv_cobranza_deposito_directo=dialog.findViewById(R.id.cv_cobranza_deposito_directo);
         cv_cobranza_pago_pos=dialog.findViewById(R.id.cv_cobranza_pago_pos);
+        cv_collection_check=dialog.findViewById(R.id.cv_collection_check);
         //cv_cobranza_kardex_pago=dialog.findViewById(R.id.cv_cobranza_kardex_pago);
         kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
 
@@ -587,6 +589,7 @@ public class MenuAccionView extends Fragment {
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
                 SesionEntity.pagodirecto="N";
                 SesionEntity.pagopos="N";
+                SesionEntity.collectioncheck="N";
                 dialog.dismiss();
             }
         });
@@ -600,6 +603,7 @@ public class MenuAccionView extends Fragment {
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
                 SesionEntity.pagodirecto="Y";
                 SesionEntity.pagopos="N";
+                SesionEntity.collectioncheck="N";
                 dialog.dismiss();
             }
         });
@@ -613,6 +617,21 @@ public class MenuAccionView extends Fragment {
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
                 SesionEntity.pagodirecto="N";
                 SesionEntity.pagopos="Y";
+                SesionEntity.collectioncheck="N";
+                dialog.dismiss();
+            }
+        });
+        cv_collection_check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //alertatiporecibos().show();
+                String Fragment="MenuAccionView";
+                String accion="cobranza";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                SesionEntity.pagodirecto="N";
+                SesionEntity.pagopos="N";
+                SesionEntity.collectioncheck="Y";
                 dialog.dismiss();
             }
         });

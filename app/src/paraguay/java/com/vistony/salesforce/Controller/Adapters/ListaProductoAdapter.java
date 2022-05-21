@@ -142,6 +142,7 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
                             break;
                         case "peru":
                         case "bolivia":
+                        case "paraguay":
                             Double Stock=0.0;
                             try
                             {

@@ -93,6 +93,9 @@
     <string name="lbl_historic_status_dispatch_type">Tipo</string>
     <string name="lbl_historic_status_dispatch_reason">Motivo</string>
     <string name="lbl_historic_status_dispatch_photo">Foto</string>
+    <string name="lbl_cheque">Cheque</string>
+    <string name="lbl_deferred_date">Fecha Diferida</string>
+    <string name="lbl_find_dispatch">Consulta Despachos</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 

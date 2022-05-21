@@ -30,6 +30,15 @@ public class CollectionEntity {
     private String Model;
     private String Brand;
     private String OSVersion;
+    private String CollectionCheck;
+
+    public String getCollectionCheck() {
+        return CollectionCheck;
+    }
+
+    public void setCollectionCheck(String collectionCheck) {
+        CollectionCheck = collectionCheck;
+    }
 
     public String getModel() {
         return Model;

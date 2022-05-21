@@ -34,8 +34,17 @@ public class ListaHistoricoCobranzaEntity implements Serializable {
     public String mensajeWS;
     public String horacobranza;
     public String docentry;
+    public String collectioncheck;
 
-    public ListaHistoricoCobranzaEntity(String bancarizacion, String banco_id, String cliente_id, String cliente_nombre, String comentario, String compania_id, String deposito_id, String detalle_item, String documento_id, String estado, String estadoqr, String fechacobranza, String fechadeposito, String fuerzatrabajo_id, String importedocumento, String montocobrado, String motivoanulacion, String nro_documento, String nuevosaldodocumento, String recibo, String saldodocumento, String tipoingreso, String usuario_id, boolean chkconciliado, String chkwsrecibido, String depositodirecto, String pagopos, String codesap, String mensajeWS, String horacobranza, String docentry) {
+    public ListaHistoricoCobranzaEntity(
+            String bancarizacion, String banco_id, String cliente_id, String cliente_nombre,
+            String comentario, String compania_id, String deposito_id, String detalle_item,
+            String documento_id, String estado, String estadoqr, String fechacobranza,
+            String fechadeposito, String fuerzatrabajo_id, String importedocumento, String montocobrado,
+            String motivoanulacion, String nro_documento, String nuevosaldodocumento, String recibo,
+            String saldodocumento, String tipoingreso, String usuario_id, boolean chkconciliado,
+            String chkwsrecibido, String depositodirecto, String pagopos, String codesap,
+            String mensajeWS, String horacobranza, String docentry,String collectioncheck) {
         this.bancarizacion = bancarizacion;
         this.banco_id = banco_id;
         this.cliente_id = cliente_id;
@@ -67,9 +76,18 @@ public class ListaHistoricoCobranzaEntity implements Serializable {
         this.mensajeWS = mensajeWS;
         this.horacobranza = horacobranza;
         this.docentry = docentry;
+        this.collectioncheck = collectioncheck;
     }
 
     public ListaHistoricoCobranzaEntity() {
+    }
+
+    public String getCollectioncheck() {
+        return collectioncheck;
+    }
+
+    public void setCollectioncheck(String collectioncheck) {
+        this.collectioncheck = collectioncheck;
     }
 
     public String getDocentry() {

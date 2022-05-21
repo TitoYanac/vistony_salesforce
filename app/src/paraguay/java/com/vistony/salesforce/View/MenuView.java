@@ -161,6 +161,7 @@ public class MenuView extends AppCompatActivity
     Fragment BuscarClienteFragment;
     Fragment KardexOfPaymentFragment;
     Fragment HistoricContainerSaleFragment;
+    Fragment ConsultaStockFragment;
 
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     private static int TAKE_PICTURE = 1888;
@@ -223,6 +224,7 @@ public class MenuView extends AppCompatActivity
         BuscarClienteFragment = new Fragment();
         KardexOfPaymentFragment = new Fragment();
         HistoricContainerSaleFragment = new Fragment();
+        ConsultaStockFragment= new Fragment();
 
         arraylistConfiguracionentity= new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao =  new ConfiguracionSQLiteDao(this);
@@ -1566,6 +1568,14 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
 
             }
+            if(tag2.equals("seguimiento"))
+            {
+                contentFragment=new HistoricSalesOrderTraceabilityView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+
+            }
         }
         if(tag.equals("KardexOfPaymentView"))
         {
@@ -1728,6 +1738,44 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
                 HistoricContainerSKU.newInstanceRecibirCliente(Lista);
+            }
+        }
+        if(tag.equals("ConsultaStockView"))
+        {
+            if(tag2.equals( "listadopromocion"))
+            {
+                String tag3="consulta_stock";
+                ConsultaStockFragment = getSupportFragmentManager().findFragmentByTag(tag3);
+                ft.hide(ConsultaStockFragment);
+                ft.add(R.id.content_menu_view, ListadoPromocionView.newInstanceRecibePromocionConsultaStock(Lista), tag2);
+                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            else if(tag2.equals( "mostrarConsultaStock"))
+            {
+                Induvis.setTituloContenedor("Consulta Stock",this);
+                String tag3="consulta_stock",tag4="promociondetalle";
+                PromocionCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tag4);
+                ConsultaStockFragment = getSupportFragmentManager().findFragmentByTag(tag3);
+
+                ft.remove(PromocionCabeceraFragment);
+                ft.show(ConsultaStockFragment);
+                //ft.add(R.id.content_menu_view, ListadoPromocionView.newInstanceRecibePromocionConsultaStock(Lista), tag2);
+                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            else if(tag2.equals( "warehouses"))
+            {
+                String tag3="consulta_stock";
+                ConsultaStockFragment = getSupportFragmentManager().findFragmentByTag(tag3);
+                ft.hide(ConsultaStockFragment);
+                ft.add(R.id.content_menu_view, WareHousesView
+                        .newInstanceGetItemCode(Lista), tag2);
+                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
             }
         }
     }

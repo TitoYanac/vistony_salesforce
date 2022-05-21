@@ -13,12 +13,14 @@
     android:id="@+id/realtive_ruta">
 
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_comision_detalle"
         android:layout_width="380dp"
         android:layout_height="150dp"
-        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground">
@@ -37,30 +39,29 @@
 
         <View
             android:id="@+id/v_gradiente_comisiones_detalle"
-            android:background="@drawable/linea_rectangular_gradiente_muy_bajo"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_marginTop="40dp"
-            />
+            android:background="@drawable/linea_rectangular_gradiente_muy_bajo" />
+
         <TextView
             android:id="@+id/lbl_comisionesdetalle_cuota"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="80dp"
             android:text="Cuota"
-            android:textAppearance="?attr/textAppearanceListItem"
-            />
+            android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
             android:id="@+id/tv_comisionesdetalle_cuota"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
             android:layout_marginStart="70dp"
+            android:layout_marginTop="80dp"
             android:text="Cuota1"
-            android:textStyle="bold"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/lbl_comisionesdetalle_avance"
@@ -69,18 +70,18 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="100dp"
             android:text="Avance"
-            android:textAppearance="?attr/textAppearanceListItem"
-            />
+            android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
             android:id="@+id/tv_comisionesdetalle_avance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
             android:layout_marginTop="100dp"
             android:text="Avance1"
-            android:layout_marginStart="70dp"
-            android:textStyle="bold"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/lbl_comisionesdetalle_umd"
             android:layout_width="wrap_content"
@@ -88,18 +89,17 @@
             android:layout_marginStart="210dp"
             android:layout_marginTop="80dp"
             android:text="UMD"
-            android:textAppearance="?attr/textAppearanceListItem"
-            />
+            android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
             android:id="@+id/tv_comisionesdetalle_umd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="290dp"
             android:layout_marginTop="80dp"
             android:text="UMD"
-            android:layout_marginLeft="290dp"
-            android:textStyle="bold"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/lbl_comisionesdetalle_porcentaje"
@@ -108,18 +108,17 @@
             android:layout_marginStart="210dp"
             android:layout_marginTop="100dp"
             android:text="% Avance"
-            android:textAppearance="?attr/textAppearanceListItem"
-            />
+            android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
             android:id="@+id/tv_comisionesdetalle_porcentaje"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="290dp"
             android:layout_marginTop="100dp"
             android:text="%"
-            android:layout_marginLeft="290dp"
-            android:textStyle="bold"
-            android:textAppearance="?attr/textAppearanceListItem"/>
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/imv_get_legend"

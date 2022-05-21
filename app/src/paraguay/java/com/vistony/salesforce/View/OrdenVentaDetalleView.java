@@ -301,6 +301,7 @@ public class OrdenVentaDetalleView extends Fragment {
                 case "ecuador":
                 case "chile":
                 case "bolivia":
+                case "paraguay":
                     ObtenerProductos();
                     break;
                 /*case "bolivia":

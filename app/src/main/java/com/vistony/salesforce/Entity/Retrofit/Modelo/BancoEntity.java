@@ -11,8 +11,19 @@ public class BancoEntity {
     @SerializedName("BankName")
     private String Nombre_Banco;
 
-    @SerializedName("Unique")
+    @SerializedName("SingleDeposit")
     private String OperacionUnica;
+
+    @SerializedName("PagoPOS")
+    private String PagoPOS;
+
+    public String getPagoPOS() {
+        return PagoPOS;
+    }
+
+    public void setPagoPOS(String pagoPOS) {
+        PagoPOS = pagoPOS;
+    }
 
     @NonNull
     public String getBanco_ID() {

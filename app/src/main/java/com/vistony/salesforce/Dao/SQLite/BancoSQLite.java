@@ -49,7 +49,9 @@ public class BancoSQLite {
             registro.put("banco_id",bancos.get(i).getBanco_ID());
             registro.put("compania_id",SesionEntity.compania_id);
             registro.put("nombrebanco",bancos.get(i).getNombre_Banco());
-
+            registro.put("singledeposit",bancos.get(i).getOperacionUnica());
+            //registro.put("pagopos",bancos.get(i).getPagoPOS());
+            registro.put("pagopos","Y");
             bd.insert("banco",null,registro);
         }
 
@@ -162,6 +164,29 @@ public class BancoSQLite {
         return listaBancoSQLiteEntity;
     }
 
+    public ArrayList<BancoSQLiteEntity> ObtenerBancoPOS ()
+    {
+        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
+        //SQLiteDatabase bd = admin.getWritableDatabase();
+        listaBancoSQLiteEntity = new ArrayList<BancoSQLiteEntity>();
+        BancoSQLiteEntity bancoSQLiteEntity;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select * from banco WHERE pagopos='Y'",null);
+
+        while (fila.moveToNext())
+        {
+            bancoSQLiteEntity= new BancoSQLiteEntity();
+            bancoSQLiteEntity.setBanco_id(fila.getString(0));
+            bancoSQLiteEntity.setCompania_id(fila.getString(1));
+            bancoSQLiteEntity.setNombrebanco(fila.getString(2));
+            listaBancoSQLiteEntity.add(bancoSQLiteEntity);
+        }
+
+        bd.close();
+        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        return listaBancoSQLiteEntity;
+    }
 
 
 }

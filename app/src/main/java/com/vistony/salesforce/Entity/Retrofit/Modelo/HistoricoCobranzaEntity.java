@@ -86,6 +86,17 @@ public class HistoricoCobranzaEntity {
     @SerializedName("DocEntry")
     private String docentry;
 
+    @SerializedName("CollectionCheck")
+    private String collectioncheck;
+
+    public String getCollectioncheck() {
+        return collectioncheck;
+    }
+
+    public void setCollectioncheck(String collectioncheck) {
+        this.collectioncheck = collectioncheck;
+    }
+
     public String getDocentry() {
         return docentry;
     }

@@ -255,9 +255,9 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
 
         Utilitario.disabledButtton(btn_detalle_orden_venta);
-        Utilitario.disabledImageButtton(btn_consultar_direccion);
-        Utilitario.disabledImageButtton(btn_consultar_termino_pago);
-        Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia);
+        Utilitario.disabledImageButtton(btn_consultar_direccion,context);
+        Utilitario.disabledImageButtton(btn_consultar_termino_pago,context);
+        Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia,context);
         Utilitario.disabledSpinner(spnmoneda);
         //Utilitario.disabledImageButtton(btn_dispatch_date);
         //Utilitario.disabledEditText(et_comentario);
@@ -653,10 +653,10 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
 
                 Utilitario.disabledButtton(btn_detalle_orden_venta);
-                Utilitario.disabledImageButtton(btn_consultar_direccion);
-                Utilitario.disabledImageButtton(btn_consultar_termino_pago);
-                Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia);
-                Utilitario.disabledImageButtton(btn_dispatch_date);
+                Utilitario.disabledImageButtton(btn_consultar_direccion,context);
+                Utilitario.disabledImageButtton(btn_consultar_termino_pago,context);
+                Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia,context);
+                Utilitario.disabledImageButtton(btn_dispatch_date,context);
                 Utilitario.disabledSpinner(spnmoneda);
 
                 if(et_comentario.getText().length()==0){
@@ -828,7 +828,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
 
         dialogButtonOK.setOnClickListener(v -> {
-            Utilitario.disabledImageButtton(btn_dispatch_date);
+            Utilitario.disabledImageButtton(btn_dispatch_date,context);
             RegistrarOrdenVentaBD ();
             Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
             dialog.dismiss();

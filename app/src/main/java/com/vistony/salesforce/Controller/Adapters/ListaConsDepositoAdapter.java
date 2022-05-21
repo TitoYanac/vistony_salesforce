@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 */
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,7 @@ public class ListaConsDepositoAdapter extends
             holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
             holder.tv_txtbancarizado = (TextView) convertView.findViewById(R.id.tv_txtbancarizado);
             holder.tv_txtpagodirecto = (TextView) convertView.findViewById(R.id.tv_txtpagodirecto);
-
+            holder.tv_collectioncheck= (TextView) convertView.findViewById(R.id.tv_collectioncheck);
 
 
 
@@ -141,6 +142,13 @@ public class ListaConsDepositoAdapter extends
             holder.checkBox = new CheckBox(context);
         }
 
+        if(lead.getCollectioncheck().equals("Y")){
+            holder.tv_collectioncheck.setText("SI");
+        }
+        else {
+            holder.tv_collectioncheck.setText("NO");
+        }
+
 
         //holder.checkBox.setTag(position);
 
@@ -170,7 +178,7 @@ public class ListaConsDepositoAdapter extends
                                                  @Override
                                                  public void onClick(View v) {
                                                      String validacheck="",validabancarizado="",validapagodirecto="";
-                                                     int cantpagodirecto=0,cantbancarizado=0,cantcobronormal=0,cantcobrosnobancarizados=0;
+                                                     int cantpagodirecto=0,cantbancarizado=0,cantcobronormal=0,cantcobrosnobancarizados=0,countcollectioncheck=0;
                                                      //int cantcobrosnobancarizados=0;
                                                      boolean estado=holder.checkBox.isChecked();
                                                      //Colocar Check
@@ -197,6 +205,12 @@ public class ListaConsDepositoAdapter extends
                                                              )
                                                              {
                                                                  cantpagodirecto++;
+                                                             }
+                                                             //Validacion de Cheques de Cobranza
+                                                             if(ArraylistaConsDepositoEntity.get(j).getCollectioncheck().equals("Y")&&ArraylistaConsDepositoEntity.get(j).isCheckbox()
+                                                             )
+                                                             {
+                                                                 countcollectioncheck++;
                                                              }
                                                              else if(
                                                                      ArraylistaConsDepositoEntity.get(j).getTv_txtbancarizado().equals("N")
@@ -263,9 +277,25 @@ public class ListaConsDepositoAdapter extends
                                                          }
                                                      }
                                                      //Evalua si es
-                                                     else if(cantpagodirecto>0&&(cantcobronormal>0||cantbancarizado>0))
+                                                     else if(cantpagodirecto>0&&(cantcobronormal>0||cantbancarizado>0||countcollectioncheck>0))
                                                      {
                                                          Toast.makeText(getContext(),"Un Recibo que ingreso Como Pago Directo solo debe vincularse a otro Recibo como pago Directo", Toast.LENGTH_SHORT).show();
+                                                         holder.checkBox.setChecked(false);
+                                                         for(int k=0;k<ArraylistaConsDepositoEntity.size();k++)
+                                                         {
+                                                             ////busca la posicion en la lista y quita el check
+                                                             if(position==k)
+                                                             {
+                                                                 ArraylistaConsDepositoEntity.get(k).setCheckbox(false);
+                                                             }
+                                                         }
+
+                                                     }
+                                                     //Evalua si se cuenta con un cheque en la seleccion
+
+                                                     else if(countcollectioncheck >0&&(cantcobronormal>0||cantbancarizado>0||cantpagodirecto>0))
+                                                     {
+                                                         Toast.makeText(getContext(),"Un Recibo ingresado como cheque solo puede vincularse a otro Recibo como Cheque", Toast.LENGTH_SHORT).show();
                                                          holder.checkBox.setChecked(false);
                                                          for(int k=0;k<ArraylistaConsDepositoEntity.size();k++)
                                                          {
@@ -303,6 +333,10 @@ public class ListaConsDepositoAdapter extends
                                                          transaction.add(R.id.content_menu_view, consDepositoView.nuevaInstancia(ArraylistaConsDepositoEntity));
 
                                                      }
+                                                     Log.e("REOS","ListaConsDepositoAdapter-holder.checkBox.setOnClickListener-cantpagodirecto: "+cantpagodirecto);
+                                                     Log.e("REOS","ListaConsDepositoAdapter-holder.checkBox.setOnClickListener-cantcobronormal: "+cantcobronormal);
+                                                     Log.e("REOS","ListaConsDepositoAdapter-holder.checkBox.setOnClickListener-cantbancarizado: "+cantbancarizado);
+                                                     Log.e("REOS","ListaConsDepositoAdapter-holder.checkBox.setOnClickListener-countcollectioncheck: "+countcollectioncheck);
                                                  }
                                                //convertView.notifyDataSetChanged();
                                            }
@@ -332,6 +366,7 @@ public class ListaConsDepositoAdapter extends
         //TextView tv_fecha;
         TextView tv_txtbancarizado;
         TextView tv_txtpagodirecto;
+        TextView tv_collectioncheck;
         CheckBox checkBox;
 
     }
@@ -361,6 +396,7 @@ public class ListaConsDepositoAdapter extends
                     listaConsDepositoEntity.checkbox=ArraylistaConsDepositoEntity.get(i).isCheckbox();
                     listaConsDepositoEntity.tv_txtbancarizado=ArraylistaConsDepositoEntity.get(i).getTv_txtbancarizado();
                     listaConsDepositoEntity.tv_txtpagodirecto=ArraylistaConsDepositoEntity.get(i).getTv_txtpagodirecto();
+                    listaConsDepositoEntity.collectioncheck=ArraylistaConsDepositoEntity.get(i).getCollectioncheck();
                     ObjetoListaConsDepositoEntity.add(listaConsDepositoEntity);
                 }
             }

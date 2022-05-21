@@ -1353,7 +1353,8 @@ public class CobranzaDetalleView extends Fragment {
                             obtenerHoraActual(),
                             cardname,
                             String.valueOf(n),
-                            Lista.get(i).getDocentry()
+                            Lista.get(i).getDocentry(),
+                            SesionEntity.collectioncheck
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1418,7 +1419,8 @@ public class CobranzaDetalleView extends Fragment {
                             obtenerHoraActual(),
                             cardname,
                             String.valueOf(n),
-                            Lista.get(i).getDocentry()
+                            Lista.get(i).getDocentry(),
+                            SesionEntity.collectioncheck
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1496,8 +1498,8 @@ public class CobranzaDetalleView extends Fragment {
                 telefono = listClienteSQlite.get(i).getTelefonofijo();
             }
             String mPhoneNumber = "";
-        /*TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-        String mPhoneNumber="";
+        TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS)
                 != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(),
@@ -1505,8 +1507,8 @@ public class CobranzaDetalleView extends Fragment {
                         != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                                 getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             mPhoneNumber = tMgr.getLine1Number();
-        }*/
-        /*if(!SesionEntity.perfil_id.equals("CHOFER"))
+        }
+        if(!SesionEntity.perfil_id.equals("CHOFER"))
         {
             mPhoneNumber = SesionEntity.phone;
             Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-mPhoneNumber:" + mPhoneNumber);
@@ -1517,7 +1519,7 @@ public class CobranzaDetalleView extends Fragment {
                 sendSMS(telefono);
                 Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
             }
-        }*/
+        }
 
             /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             //UpdateSendReceipt();

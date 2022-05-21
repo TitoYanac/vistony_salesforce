@@ -2228,4 +2228,12 @@ public class MenuView extends AppCompatActivity
             textViewStatus.setText("DESCONECTADO");
         }
     }
+
+    @Override
+    public void onRestart() {
+        Log.e("REOS","MenuView-onRestart");
+        super.onRestart();
+        Induvis.refreshGlobalVariables(this);
+        //registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
 }

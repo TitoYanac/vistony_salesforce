@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.provider.Settings;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,7 +15,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Dao.Retrofit.LoginRepository;
@@ -33,12 +37,26 @@ public class Utilitario {
         btn.setEnabled(false);
         btn.setBackgroundColor(Color.parseColor("#FF686A6F"));
     }
-    public static void disabledImageButtton(ImageButton btn){
+    public static void disabledImageButtton(ImageButton btn,Context context){
+        Drawable borderdrawable;
+        borderdrawable= ResourcesCompat.getDrawable(context.getResources() , R.drawable.custom_border_button_grey, null);
         btn.setClickable(false);
         btn.setEnabled(false);
-        btn.setBackgroundColor(Color.parseColor("#FF686A6F"));
-    }
+        btn.setBackground (borderdrawable);
 
+    }
+    public static void enableImageButtton(ImageButton btn,Context context){
+        Drawable borderdrawable;
+        borderdrawable= ResourcesCompat.getDrawable(context.getResources() , R.drawable.custom_border_button_red, null);
+        btn.setClickable(true);
+        btn.setEnabled(true);
+        btn.setBackground (borderdrawable);
+    }
+    public static void enableTextView(TextView tv){
+        tv.setClickable(true);
+        tv.setEnabled(true);
+        tv.setTextColor(Color.parseColor("#000000"));
+    }
     public static void disabledSpinner(Spinner spn){
         spn.setEnabled(false);
         spn.setClickable(false);
@@ -48,7 +66,11 @@ public class Utilitario {
         editText.setEnabled(false);
         editText.setClickable(false);
     }
-
+    public static void disabledTextView(TextView tv){
+        tv.setClickable(false);
+        tv.setEnabled(false);
+        tv.setTextColor(Color.parseColor("#FF686A6F"));
+    }
     public static void disabledCheckBox(CheckBox chk){
         chk.setEnabled(false);
         chk.setClickable(false);

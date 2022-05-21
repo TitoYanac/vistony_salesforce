@@ -79,24 +79,20 @@
                     android:text="" />
 
                 <TextView
-                    android:id="@+id/tv_vacio"
+                    android:id="@+id/tv_collectioncheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Pago POS"
-                    android:visibility="invisible"
-                    tools:visibility="gone" />
+                    android:text="@string/lbl_cheque" />
 
                 <CheckBox
-                    android:id="@+id/chk_vacio"
+                    android:id="@+id/chk_collectioncheck"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
                     android:clickable="false"
                     android:focusable="false"
-                    android:text=""
-                    android:visibility="invisible"
-                    tools:visibility="gone" />
+                    android:text="" />
             </TableRow>
 
             <TableRow
@@ -138,8 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Pago POS"
-                    tools:visibility="gone" />
+                    android:text="Pago POS"/>
 
                 <CheckBox
                     android:id="@+id/chk_pago_pos"
@@ -148,8 +143,7 @@
                     android:checked="false"
                     android:clickable="false"
                     android:focusable="false"
-                    android:text=""
-                    tools:visibility="gone" />
+                    android:text="" />
             </TableRow>
 
         </TableLayout>

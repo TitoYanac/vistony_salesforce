@@ -1199,7 +1199,8 @@ public class CobranzaDetalleView extends Fragment {
                             obtenerHoraActual(),
                             cardname,
                             String.valueOf(n),
-                            Lista.get(i).getDocentry()
+                            Lista.get(i).getDocentry(),
+                            SesionEntity.collectioncheck
                     );
 
                     ActualizaDocumentoDeuda(ObjUsuario.compania_id,
@@ -1248,7 +1249,8 @@ public class CobranzaDetalleView extends Fragment {
                             obtenerHoraActual(),
                             cardname,
                             String.valueOf(n),
-                            Lista.get(i).getDocentry()
+                            Lista.get(i).getDocentry(),
+                            SesionEntity.collectioncheck
                     );
 
 

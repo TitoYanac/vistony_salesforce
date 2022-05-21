@@ -101,7 +101,8 @@ public class CobranzaDetalleSQLiteDao {
                                        String horacobranza,
                                        String cardname,
                                        String codeSMS,
-                                       String docentry
+                                       String docentry,
+                                       String collectioncheck
     )
     {
         int resultado;
@@ -143,6 +144,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("cardname",cardname);
             registro.put("codeSMS",codeSMS);
             registro.put("docentry",docentry);
+            registro.put("collectioncheck",collectioncheck);
             bd.insert("cobranzadetalle", null, registro);
 
             resultado=1;
@@ -241,6 +243,12 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setMensajews(fila.getString(30));
                 cobdetalleentity.setHoracobranza(fila.getString(31));
                 cobdetalleentity.setCardname (fila.getString(33));
+                if(fila.getString(36)==null) {
+                    cobdetalleentity.setCollectioncheck("N");
+                }
+                else {
+                    cobdetalleentity.setCollectioncheck(fila.getString(36));
+                }
                 //cobdetalleentity.setCompania_id(fila.getString(3));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
@@ -1325,7 +1333,8 @@ public class CobranzaDetalleSQLiteDao {
                             "a.pagopos as POSPay, " +
                             "IFNULL(a.horacobranza,'') as IncomeTime, " +
                             "IFNULL(docentry,0 )  AS documentoentry, " +
-                            "IFNULL(a.countsend,'1') as countsend " +
+                            "IFNULL(a.countsend,'1') as countsend," +
+                            "IFNULL(a.collectioncheck,'N') as collectioncheck " +
                             " from cobranzadetalle a " +
                             " where (chkwsrecibido='N' or  chkwsrecibido='0') " +
                             //" and chkwsdepositorecibido='0'" +
@@ -1424,6 +1433,7 @@ public class CobranzaDetalleSQLiteDao {
                 }
                 collectionEntity.setBrand(brand);
                 collectionEntity.setOSVersion(osVersion);
+                collectionEntity.setCollectionCheck(fila.getString(fila.getColumnIndex("collectioncheck")));
                 listCollectionEntity.add(collectionEntity);
 
                 UpdateCountSend(fila.getString(fila.getColumnIndex("Receip")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));

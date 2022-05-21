@@ -58,11 +58,11 @@
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv_cobranza_ordinaria"
                         android:layout_width="340dp"
-                        android:layout_height="150dp"
+                        android:layout_height="130dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
-                        android:background="@drawable/border"
+                        android:background="@drawable/borde_cardview_comisiones_rojo"
                         >
 
                         <LinearLayout
@@ -104,7 +104,7 @@
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv_cobranza_deposito_directo"
                         android:layout_width="340dp"
-                        android:layout_height="150dp"
+                        android:layout_height="130dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -152,7 +152,7 @@
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv_cobranza_pago_pos"
                         android:layout_width="340dp"
-                        android:layout_height="150dp"
+                        android:layout_height="130dp"
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:focusable="true"
@@ -184,9 +184,7 @@
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
-
-
-            <!--<LinearLayout
+            <LinearLayout
                     android:id="@+id/fourthFile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -196,9 +194,9 @@
                     >
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/cv_cobranza_kardex_pago"
+                        android:id="@+id/cv_collection_check"
                         android:layout_width="340dp"
-                        android:layout_height="150dp"
+                        android:layout_height="130dp"
                         android:background="@drawable/border"
                         android:clickable="true"
                         android:focusable="true"
@@ -216,18 +214,18 @@
                                 android:layout_height="64dp"
                                 android:background="@drawable/cerclebackgroundpurple"
                                 android:padding="10dp"
-                                android:src="@drawable/ic_history_black_24dp"
+                                android:src="@mipmap/cheque_bancario_64"
 
                                 />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Kardex de Pago"
+                                android:text="@string/lbl_cheque"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
-                </LinearLayout>-->
+                </LinearLayout>
 
 
             </LinearLayout>

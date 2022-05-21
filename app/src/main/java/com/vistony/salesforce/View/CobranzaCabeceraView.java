@@ -60,6 +60,7 @@ import com.vistony.salesforce.Controller.Adapters.ListaCobranzaCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
@@ -136,10 +137,10 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao;
     public static MenuItem abrir,guardar_deposito,agregar_foto_deposito;
     ArrayList<String> ListaTipo;
-    ImageView imv_calendario_cheque;
+    ImageButton imv_calendario_cheque;
     private  int diadespacho,mesdespacho,anodespacho,hora,minutos,diadespacho2,mesdespacho2,anodespacho2;
     private static DatePickerDialog oyenteSelectorFecha3;
-    static CheckBox chkbancarizado,chkdepositodirecto;
+    static CheckBox chkbancarizado,chkdepositodirecto,chk_check;
     static ArrayList<ListaConsDepositoEntity> listaAdd= new ArrayList<ListaConsDepositoEntity>();
     String Grupo="",Sumacobrado="";
     BigDecimal sumacobrado;
@@ -188,7 +189,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         cobranzaCabeceraView.setArguments(b);
         listaConsDepositoAdapterFragment= (ArrayList<ListaConsDepositoEntity>) objeto;
         //int p=0;
-        int bancarizados=0,depositodirecto=0;
+        int bancarizados=0,depositodirecto=0,count_check=0;
         for(int k=0;k<Lista.size();k++)
         {
             if(Lista.get(k).getTv_txtbancarizado().equals("Y"))
@@ -198,6 +199,10 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             if(Lista.get(k).getTv_txtpagodirecto().equals("Y"))
             {
                 depositodirecto++;
+            }
+            if(Lista.get(k).getCollectioncheck().equals("Y"))
+            {
+                count_check++;
             }
         }
 
@@ -212,6 +217,11 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         {
             chkdepositodirecto.setChecked(true);
         }
+        if(count_check>0)
+        {
+            chk_check.setChecked(true);
+        }
+
         obtenerListaCobranzas.execute();
         return cobranzaCabeceraView;
 
@@ -301,19 +311,28 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         txtsumacobrado=(TextView) v.findViewById(R.id.txtsumacobrado);
         listViewCobranzaCabecera = (ListView) v.findViewById(R.id.listViewCobranzaCabecera);
         spntipo = (Spinner)v.findViewById(R.id.spntipo);
-        imv_calendario_cheque = (ImageView) v.findViewById(R.id.imv_calendario_cheque);
+        imv_calendario_cheque = (ImageButton) v.findViewById(R.id.imv_calendario_cheque);
         imv_calendario_cheque.setOnClickListener(this);
         tv_fechacobrocheque = (TextView) v.findViewById(R.id.tv_fechacobrocheque);
         chkbancarizado = (CheckBox) v.findViewById(R.id.chkbancarizado);
         chkdepositodirecto = (CheckBox) v.findViewById(R.id.chkdepositodirecto);
+        chk_check = (CheckBox) v.findViewById(R.id.chk_check);
+
         imb_consultar_codigo_control= (ImageButton)  v.findViewById(R.id.imb_consultar_codigo_control);
         fechadiferida="19000101";
         if(!SesionEntity.perfil_id.equals("CHOFER"))
         {
             imb_consultar_codigo_control.setVisibility(View.GONE);
         }
+        String [] valores = null;
+        if(BuildConfig.FLAVOR.equals("chile"))
+        {
+            valores = new String[]{"Deposito Efectivo","Cheque Diferido","Cheque Dia"};
+        }else {
+            valores =  new String[]{"Deposito","Cheque"};
+        }
 
-        String [] valores =  new String[]{"Deposito","Cheque"};
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, valores);
 
@@ -348,6 +367,21 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                             tv_fechacobrocheque_edit.setVisibility(View.VISIBLE);
                             tv_fechacobrocheque.setVisibility(View.VISIBLE);
                             imv_calendario_cheque.setVisibility(View.VISIBLE);
+                            Utilitario.enableTextView(tv_fechacobrocheque_edit);
+                            Utilitario.enableTextView(tv_fechacobrocheque);
+                            Utilitario.enableImageButtton(imv_calendario_cheque,getContext());
+                        }
+                        if(position==2)
+                        {
+                            tipo="ChequeDia";
+                            tv_fechacobrocheque_edit.setText(Induvis.getDate(BuildConfig.FLAVOR,dateFormat.format(date)));
+                            fechadiferida=dateFormat.format(date);
+                            tv_fechacobrocheque_edit.setVisibility(View.VISIBLE);
+                            tv_fechacobrocheque.setVisibility(View.VISIBLE);
+                            imv_calendario_cheque.setVisibility(View.VISIBLE);
+                            Utilitario.disabledTextView(tv_fechacobrocheque_edit);
+                            Utilitario.disabledTextView(tv_fechacobrocheque);
+                            Utilitario.disabledImageButtton(imv_calendario_cheque,getContext());
                         }
                     }
                     @Override
@@ -460,25 +494,33 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        String ano="",mes="",dia="";
+        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        date = new Date();
+        fecha =dateFormat.format(date);
 
-        mes=String.valueOf(month+1);
-        dia=String.valueOf(dayOfMonth);
-        if(mes.length()==1)
-        {
-            mes='0'+mes;
-        }
-        if(dia.length()==1)
-        {
-            dia='0'+dia;
-        }
 
+            String ano = "", mes = "", dia = "";
+
+            mes = String.valueOf(month + 1);
+            dia = String.valueOf(dayOfMonth);
+            if (mes.length() == 1) {
+                mes = '0' + mes;
+            }
+            if (dia.length() == 1) {
+                dia = '0' + dia;
+            }
+        Log.e("REOS","CobranzaCabeceraView-onDateSet-fecha"+fecha);
+        Log.e("jpcm","CobranzaCabeceraView-onDateSet-year+month+dayOfMonth"+year+mes+dia);
+        if(Integer.parseInt(fecha)<=Integer.parseInt(year+mes+dia))
+        {
             //tv_fechacobrocheque_edit.setText(year + "/" + mes + "/" + dia);
-        tv_fechacobrocheque_edit.setText(year + "-" + mes + "-" + dia);
-        fechadiferida=year+mes+dia;
-        if(tv_fecha_hoja_despacho!=null)
-        {
-            tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
+            tv_fechacobrocheque_edit.setText(year + "-" + mes + "-" + dia);
+            fechadiferida = year + mes + dia;
+            if (tv_fecha_hoja_despacho != null) {
+                tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
+            }
+        }else {
+            Toast.makeText(getContext(), "La fecha es menor a la Actual, seleccione nuevamente", Toast.LENGTH_SHORT).show();
         }
     }
 

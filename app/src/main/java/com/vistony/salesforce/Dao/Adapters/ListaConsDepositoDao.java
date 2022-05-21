@@ -78,6 +78,7 @@ public class ListaConsDepositoDao {
                         ,estado
                         ,Lista.get(i).getChkbancarizado()
                         ,Lista.get(i).getPagodirecto()
+                        ,Lista.get(i).getCollectioncheck()
                         )
                 );
 
