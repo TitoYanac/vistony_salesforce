@@ -511,7 +511,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             }
         Log.e("REOS","CobranzaCabeceraView-onDateSet-fecha"+fecha);
         Log.e("jpcm","CobranzaCabeceraView-onDateSet-year+month+dayOfMonth"+year+mes+dia);
-        if(Integer.parseInt(fecha)<=Integer.parseInt(year+mes+dia))
+        if(Integer.parseInt(fecha)<Integer.parseInt(year+mes+dia))
         {
             //tv_fechacobrocheque_edit.setText(year + "/" + mes + "/" + dia);
             tv_fechacobrocheque_edit.setText(year + "-" + mes + "-" + dia);
@@ -520,7 +520,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
             }
         }else {
-            Toast.makeText(getContext(), "La fecha es menor a la Actual, seleccione nuevamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "La fecha debe ser mayor a la actual, seleccione nuevamente", Toast.LENGTH_SHORT).show();
         }
     }
 

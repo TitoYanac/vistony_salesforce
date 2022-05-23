@@ -25,6 +25,8 @@ public class Config {
     public static Retrofit getClient() {
 
         String baseUrl = "http://salesforce.vistony.com";
+        //String baseUrl = "http://200.107.154.233";
+
         String puerto = "";
         switch (BuildConfig.FLAVOR) {
             case "chile":
@@ -71,6 +73,8 @@ public class Config {
     public static Retrofit getClientLogin() {
 
         String baseUrl = "http://salesforce.vistony.com";
+        //String baseUrl = "http://200.107.154.233";
+
         String puerto = "";
         switch (BuildConfig.FLAVOR) {
             case "chile":

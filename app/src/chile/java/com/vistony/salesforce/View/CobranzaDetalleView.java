@@ -1421,7 +1421,12 @@ public class CobranzaDetalleView extends Fragment {
                     SesionEntity.compania_id,
                     bank_id
             );
+
         }
+        ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
+        cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
+            Log.e("REOS-ParametrosView-depositedPendingCollection","=>"+data);
+        });
         Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
     }
 
