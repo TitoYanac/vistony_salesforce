@@ -7,65 +7,67 @@ import com.google.gson.annotations.SerializedName;
 public class SummaryofeffectivenessEntity {
 
     @NonNull
-    @SerializedName("route")
+    @SerializedName("Route")
     public String route;
 
     @NonNull
-    @SerializedName("clients")
+    @SerializedName("Customers")
     public String clients;
 
     @NonNull
-    @SerializedName("visits")
+    @SerializedName("Visit")
     public String visits;
 
     @NonNull
-    @SerializedName("salesorders")
+    @SerializedName("SalesOrder")
     public String salesorders;
 
     @NonNull
-    @SerializedName("collections")
+    @SerializedName("Collection")
     public String collections;
 
     @NonNull
-    @SerializedName("balanceclients")
+    @SerializedName("Debtor")
     public String balanceclients;
 
     @NonNull
-    @SerializedName("amountsalesorders")
+    @SerializedName("AmountSO")
     public String amountsalesorders;
 
     @NonNull
-    @SerializedName("amountcollections")
+    @SerializedName("AmountCll")
     public String amountcollections;
 
     @NonNull
-    @SerializedName("orderseffectiveness")
+    @SerializedName("OrdersEff")
     public String orderseffectiveness;
 
     @NonNull
-    @SerializedName("collectionseffectiveness")
+    @SerializedName("CollctnEff")
     public String collectionseffectiveness;
 
     @NonNull
-    @SerializedName("visitseffectiveness")
+    @SerializedName("VisitEff")
     public String visitseffectiveness;
 
     @NonNull
-    @SerializedName("coverageclients")
+    @SerializedName("CusCoverage")
     public String coverageclients;
 
     @NonNull
-    @SerializedName("coverage")
+    @SerializedName("Coverage")
     public String coverage;
 
     @NonNull
-    @SerializedName("coverageeffectiveness")
+    @SerializedName("CoverageEff")
     public String coverageeffectiveness;
 
     @NonNull
     public String getVisitseffectiveness() {
         return visitseffectiveness;
     }
+
+
 
     public void setVisitseffectiveness(@NonNull String visitseffectiveness) {
         this.visitseffectiveness = visitseffectiveness;

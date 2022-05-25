@@ -13,6 +13,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Entity.Adapters.ListKardexOfPaymentEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaParametrosEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaSeguimientoFacturasEntity;
@@ -66,10 +69,10 @@ public class ListKardexOfPaymentAdapter extends ArrayAdapter<ListKardexOfPayment
 
         // Setup.
         holder.tv_legalnumber.setText(lead.getLegalnumber());
-        holder.tv_invoicedate.setText(lead.getInvoicedate());
-        holder.tv_duedate.setText(lead.getDuedate());
-        holder.tv_DocAmount.setText(lead.getDocAmount());
-        holder.tv_balance.setText(lead.getBalance());
+        holder.tv_invoicedate.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getInvoicedate()) );
+        holder.tv_duedate.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getDuedate()) );
+        holder.tv_DocAmount.setText(Convert.currencyForView(lead.getDocAmount()));
+        holder.tv_balance.setText(Convert.currencyForView(lead.getBalance()));
         holder.chk_invoice.setChecked(lead.isInvoice());
         holder.tv_paymentterms.setText (lead.getPaymentterms());
         holder.chk_invoice.setOnClickListener(new View.OnClickListener() {

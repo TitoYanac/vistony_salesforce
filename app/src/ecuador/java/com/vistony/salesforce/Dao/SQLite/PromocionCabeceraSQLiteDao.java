@@ -311,4 +311,108 @@ public class PromocionCabeceraSQLiteDao {
         bd.close();
         return listaPromocionCabeceraSQLiteEntity;
     }
+    public ArrayList<ListaPromocionCabeceraEntity> ObtenerPromocionCabeceraConsultaStock (
+            String compania_id,
+            String fuerzatrabajo_id,
+            String usuario_id,
+            String producto_id,
+            String umd
+    )
+    {
+        ArrayList<ListaPromocionCabeceraEntity>  listaPromocionCabeceraSQLiteEntity = new ArrayList<>();
+        ListaPromocionCabeceraEntity listaPromocionCabeceraEntity;
+        ArrayList<PromocionDetalleSQLiteEntity> listaPromocionDetalleEntities=new ArrayList<>();
+        PromocionDetalleSQLiteDao promocionDetalleSQLiteDao=new PromocionDetalleSQLiteDao(context);
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select * from promocioncabecera where compania_id='" + compania_id + "' and fuerzatrabajo_id='" + fuerzatrabajo_id + "' and usuario_id='" + usuario_id + "' " +
+                        "and producto_id='" + producto_id + "' and umd='" + umd + "' order by CAST(cantidad AS INTEGER)",null);
+
+        while (fila.moveToNext())
+        {
+            listaPromocionCabeceraEntity= new ListaPromocionCabeceraEntity();
+            listaPromocionCabeceraEntity.setLista_promocion_id(fila.getString(1));
+            listaPromocionCabeceraEntity.setPromocion_id(fila.getString(2));
+            listaPromocionCabeceraEntity.setProducto_id(fila.getString(3));
+            listaPromocionCabeceraEntity.setProducto(fila.getString(4));
+            listaPromocionCabeceraEntity.setUmd(fila.getString(5));
+            listaPromocionCabeceraEntity.setCantidadcompra(fila.getString(6));
+            Log.e("REOS","PromocionCabeceraSQLiteDao-ObtenerPromocionCabeceraConsultaStock-listaPromocionCabeceraEntity.getCantidadCompra: "+listaPromocionCabeceraEntity.getCantidadcompra());
+            listaPromocionCabeceraEntity.setPreciobase(fila.getString(9));
+            listaPromocionCabeceraEntity.setDescuento(fila.getString(10));
+
+
+            if(Integer.parseInt(listaPromocionCabeceraEntity.getDescuento())>0 ){
+                listaPromocionDetalleEntities=promocionDetalleSQLiteDao.ObtenerPromocionDetalleConsultaStock(
+                        SesionEntity.compania_id,
+                        listaPromocionCabeceraEntity.getLista_promocion_id(),
+                        listaPromocionCabeceraEntity.getPromocion_id()
+                );
+
+                PromocionDetalleSQLiteEntity promocionDetalleSQLiteEntity= new PromocionDetalleSQLiteEntity();
+                promocionDetalleSQLiteEntity.setCompania_id(SesionEntity.compania_id);
+                promocionDetalleSQLiteEntity.setLista_promocion_id(listaPromocionCabeceraEntity.getLista_promocion_id());
+                promocionDetalleSQLiteEntity.setPromocion_detalle_id(String.valueOf((listaPromocionDetalleEntities.size())+1));
+                promocionDetalleSQLiteEntity.setProducto_id("DESCUENTO");
+                promocionDetalleSQLiteEntity.setProducto("% DESCUENTO");
+                promocionDetalleSQLiteEntity.setUmd("%");
+                promocionDetalleSQLiteEntity.setCantidad(listaPromocionCabeceraEntity.getDescuento());
+                promocionDetalleSQLiteEntity.setFuerzatrabajo_id(SesionEntity.fuerzatrabajo_id);
+                promocionDetalleSQLiteEntity.setUsuario_id(SesionEntity.usuario_id);
+                promocionDetalleSQLiteEntity.setPreciobase("0");
+                promocionDetalleSQLiteEntity.setChkdescuento("0");
+                promocionDetalleSQLiteEntity.setDescuento("0");
+
+                listaPromocionDetalleEntities.add(promocionDetalleSQLiteEntity);
+
+            }else
+            {
+                listaPromocionDetalleEntities=promocionDetalleSQLiteDao.ObtenerPromocionDetalleConsultaStock(
+                        SesionEntity.compania_id,
+                        listaPromocionCabeceraEntity.getLista_promocion_id(),
+                        listaPromocionCabeceraEntity.getPromocion_id()
+                );
+            }
+
+            Log.e("REOS","PromocionCabeceraSQLiteDao: "+listaPromocionDetalleEntities.size());
+            listaPromocionCabeceraEntity.setListaPromocionDetalleEntities(listaPromocionDetalleEntities);
+            listaPromocionCabeceraSQLiteEntity.add(listaPromocionCabeceraEntity);
+        }
+        bd.close();
+        return listaPromocionCabeceraSQLiteEntity;
+    }
+
+    public boolean ObtenerEstadoPromocionConsultaStock (
+            String compania_id,
+            String fuerzatrabajo_id,
+            String usuario_id,
+            String producto_id,
+            String umd
+
+    )
+    {
+        boolean estado;
+        int resultado=0;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select  count(compania_id)  from promocioncabecera where compania_id='" + compania_id + "' and fuerzatrabajo_id='" + fuerzatrabajo_id + "' and usuario_id='" + usuario_id + "' " +
+                        "and producto_id='" + producto_id + "' and umd='" + umd + "'",null);
+
+        while (fila.moveToNext())
+        {
+            resultado= Integer.parseInt(fila.getString(0));
+
+        }
+        if(resultado>0)
+        {
+            estado=true;
+        }else
+        {
+            estado=false;
+        }
+        fila.close();
+        bd.close();
+        return estado;
+    }
+
 }

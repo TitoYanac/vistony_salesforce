@@ -1,6 +1,7 @@
 package com.vistony.salesforce.Dao.Retrofit;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -26,12 +27,16 @@ public class SummaryofeffectivenessRepository extends ViewModel {
             String Imei,
             String FecIni,
             String FecFin){
+        summaryofeffectivenessEntityList= new MutableLiveData<>();
         Config.getClient().create(Api.class).getSummaryofEffectiveness(Imei,FecIni,FecFin).enqueue(new Callback<SummaryofeffectivenessEntityResponse>() {
             @Override
             public void onResponse(Call<SummaryofeffectivenessEntityResponse> call, Response<SummaryofeffectivenessEntityResponse> response) {
 
                 SummaryofeffectivenessEntityResponse summaryofeffectivenessEntityResponse=response.body();
+                Log.e("REOS","SummaryofeffectivenessRepository-getSummaryofEffectiveness-call"+call);
+                Log.e("REOS","SummaryofeffectivenessRepository-getSummaryofEffectiveness-response"+response);
                 if(response.isSuccessful() && summaryofeffectivenessEntityResponse.getSummaryofeffectivenessEntities() .size()>0){
+                    Log.e("REOS","SummaryofeffectivenessRepository-getSummaryofEffectiveness-summaryofeffectivenessEntityResponse:"+summaryofeffectivenessEntityResponse.toString());
                     summaryofeffectivenessEntityList.setValue(summaryofeffectivenessEntityResponse.getSummaryofeffectivenessEntities());
                 }else
                 {

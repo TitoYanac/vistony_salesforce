@@ -50,8 +50,8 @@ public class BancoSQLite {
             registro.put("compania_id",SesionEntity.compania_id);
             registro.put("nombrebanco",bancos.get(i).getNombre_Banco());
             registro.put("singledeposit",bancos.get(i).getOperacionUnica());
-            //registro.put("pagopos",bancos.get(i).getPagoPOS());
-            registro.put("pagopos","Y");
+            registro.put("pagopos",bancos.get(i).getPagoPOS());
+            //registro.put("pagopos","Y");
             bd.insert("banco",null,registro);
         }
 

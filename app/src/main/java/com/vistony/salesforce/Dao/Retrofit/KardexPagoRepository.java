@@ -30,7 +30,7 @@ public class KardexPagoRepository  extends ViewModel {
 
 
     public MutableLiveData<List<KardexPagoEntity>> getKardexPago(String Imei, String CardCode, Context context){
-
+        status= new MutableLiveData<>();
         Config.getClient().create(Api.class).getKardexPago(CardCode).enqueue(new Callback<KardexPagoEntityResponse>() {
             @Override
             public void onResponse(Call<KardexPagoEntityResponse> call, Response<KardexPagoEntityResponse> response) {

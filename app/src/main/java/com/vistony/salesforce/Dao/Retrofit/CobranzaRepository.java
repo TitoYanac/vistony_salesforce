@@ -396,7 +396,7 @@ public class CobranzaRepository extends ViewModel {
                     ObjLHCobranza.motivoanulacion=historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getMotivoanulacion();
                     ObjLHCobranza.codesap=historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getCodesap();
                     ObjLHCobranza.mensajeWS="Recibo Registrado Correctamente";
-
+                    ObjLHCobranza.collectioncheck=historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getCollectioncheck();
                     Log.e("REOS","CobranzaRepository-getHistoricoCobranza-historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getCodesap(): "+historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getCodesap());
                     LHDCobranza.add(ObjLHCobranza);
                     Log.e("REOS","CobranzaRepository-getHistoricoCobranza-Lista: "+LHDCobranza.size());

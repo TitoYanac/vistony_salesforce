@@ -902,6 +902,7 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setSap_code(fila.getString(29));
                 cobdetalleentity.setMensajews(fila.getString(30));
                 cobdetalleentity.setHoracobranza(fila.getString(31));
+                cobdetalleentity.setCollectioncheck(fila.getString(36));
                 //cobdetalleentity.setCompania_id(fila.getString(3));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }

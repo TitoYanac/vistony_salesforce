@@ -2104,7 +2104,7 @@ public class MenuView extends AppCompatActivity
                     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
                 } else {
-                    Toast.makeText(this, "El QR Scaneado no coindice con el Generado", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "El QR Scaneado no coindice con el Generado: "+QRScaneado, Toast.LENGTH_LONG).show();
                 }
             }
         }

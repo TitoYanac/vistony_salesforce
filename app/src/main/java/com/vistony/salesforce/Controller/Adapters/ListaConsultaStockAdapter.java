@@ -232,7 +232,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
         listaProductoEntity.setProducto_id(lead.getProducto_id());
         listaProductoEntity.setProducto(lead.getProducto());
         listaProductoEntity.setUmd(lead.getUmd());
-        listaProductoEntity.setStock(lead.getStock());
+        //listaProductoEntity.setStock_general(lead.getStock_general());
         listaProductoEntity.setPreciobase(lead.getPreciobase());
         listaProductoEntity.setPrecioigv(lead.getPrecioigv()) ;
         listaProductoEntity.setGal(lead.getGal());

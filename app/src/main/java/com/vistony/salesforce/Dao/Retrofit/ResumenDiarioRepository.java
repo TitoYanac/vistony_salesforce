@@ -38,7 +38,7 @@ public class ResumenDiarioRepository extends ViewModel {
             String fechafin
 
     ){
-
+        status= new MutableLiveData<>();
         Config.getClient().create(Api.class).getDailySummary(Imei,fechaini,fechafin).enqueue(new Callback<HistoricContainerSalesEntityResponse>() {
             @Override
             public void onResponse(Call<HistoricContainerSalesEntityResponse> call, Response<HistoricContainerSalesEntityResponse> response) {

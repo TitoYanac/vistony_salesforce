@@ -544,13 +544,14 @@ public class MenuAccionView extends Fragment {
         switch (BuildConfig.FLAVOR) {
 
 
-            case "ecuador":
+
             case "bolivia":
             case "paraguay":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza_induvis);
                 break;
             case "peru":
             case "chile":
+            case "ecuador":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
                 break;
         }
@@ -567,6 +568,10 @@ public class MenuAccionView extends Fragment {
         if(SesionEntity.perfil_id.equals("CHOFER"))
         {
             cv_cobranza_deposito_directo.setVisibility(View.GONE);
+        }
+        if(!BuildConfig.FLAVOR.equals("chile"))
+        {
+            cv_collection_check.setVisibility(View.GONE);
         }
 
         TextView textTitle = dialog.findViewById(R.id.text);

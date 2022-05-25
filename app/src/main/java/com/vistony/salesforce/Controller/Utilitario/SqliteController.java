@@ -20,7 +20,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 13;
+    private static final int VERSION = 14;
 
 
     public SqliteController(Context context){
@@ -326,6 +326,13 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
             db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT)");
             db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT)");
+        }
+        if(oldVersion==13&&newVersion==14) {
+            db.execSQL("ALTER TABLE banco ADD COLUMN pagopos TEXT");
+            db.execSQL("ALTER TABLE banco ADD COLUMN singledeposit TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collectioncheck TEXT");
+
+
         }
         /*if(oldVersion==13&&newVersion==14) {
             db.execSQL("ALTER TABLE statusdispatch ADD COLUMN cliente_id TEXT");

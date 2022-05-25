@@ -91,131 +91,136 @@ public class ResumenDiarioPDF extends AppCompatActivity {
         int countVisitTypeCOB=0,countVisitTypeOV=0,cantvisit=0;
         float amountVisitTypeCOB=0,amountVisitTypeOV=0;
         fechasap=fecha;
-        if (summaryofeffectivenessEntityList==null)
-        {
 
-            try{
-                summaryofeffectivenessEntityList=new ArrayList<>();
-                Log.e("REOS","DocumentCobranzaPDF.generarPdf.Ingresoifllenado_summaryofeffectivenessEntityList:");
-                //Agregar en Ruta
-            SummaryofeffectivenessEntity summaryofeffectivenessEntity=new SummaryofeffectivenessEntity();
-            summaryofeffectivenessEntity.route="Y";
-            if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1")>rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"))
-            {
-                summaryofeffectivenessEntity.clients=String.valueOf (visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1"));
-            }
-            else {
-                summaryofeffectivenessEntity.clients=String.valueOf (rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"));
-            }
-            summaryofeffectivenessEntity.visits=String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1"));
-            summaryofeffectivenessEntity.balanceclients=String.valueOf(rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1"));
-            summaryofeffectivenessEntity.collections =String.valueOf(visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02"));
-            summaryofeffectivenessEntity.amountcollections =String.valueOf(visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02"));
-            if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01")>0)
-            {
-                summaryofeffectivenessEntity.salesorders=String.valueOf(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01"));
-            }else
-            {
-                summaryofeffectivenessEntity.salesorders=String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1"));
-            }
-            if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01")>0)
-            {
-                summaryofeffectivenessEntity.amountsalesorders=String.valueOf(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01"));
-            }else
-            {
-                summaryofeffectivenessEntity.amountsalesorders=String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"1"));
-            }
+        try {
 
-                summaryofeffectivenessEntity.orderseffectiveness =Induvis.getAmountRouteeffectiveness(
-                        Double.parseDouble(summaryofeffectivenessEntity.salesorders),
-                    rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
-            );
-                summaryofeffectivenessEntity.collectionseffectiveness =Induvis.getAmountRouteeffectiveness(
-                        Double.parseDouble(summaryofeffectivenessEntity.collections),
-                        rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
-                );
-                summaryofeffectivenessEntity.visitseffectiveness =Induvis.getAmountRouteeffectiveness(
-                        Double.parseDouble(summaryofeffectivenessEntity.visits),
-                        rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
-                );
-                summaryofeffectivenessEntityList.add(summaryofeffectivenessEntity);
-                //Agregar Fuera de Ruta
-                summaryofeffectivenessEntity=new SummaryofeffectivenessEntity();
-                summaryofeffectivenessEntity.route="N";
-                if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02")>0)
-                {
-                    summaryofeffectivenessEntity.collections =String.valueOf(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02"));
-                }else {
-                    summaryofeffectivenessEntity.collections =String.valueOf( rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0"));
-                }
-
-                if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02")>0)
-                {
-                    summaryofeffectivenessEntity.amountcollections = String.valueOf( visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02"));
-                }else {
-                    summaryofeffectivenessEntity.amountcollections = String.valueOf( rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0"));
-                }
-                if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01")>0)
-                {
-                    summaryofeffectivenessEntity.salesorders =String.valueOf(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01"));
-                }else {
-                    summaryofeffectivenessEntity.salesorders =String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"0"));
-                }
-
-                if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01")>0)
-                {
-                    summaryofeffectivenessEntity.amountsalesorders= String.valueOf(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01"));
-                }else {
-                    summaryofeffectivenessEntity.amountsalesorders= String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"0"));
-                }
-
-                if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0")>0)
-                {
-                    summaryofeffectivenessEntity.visits =  String.valueOf(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0"));
-                }else {
-                    summaryofeffectivenessEntity.visits =  String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"0"));
-                }
-                summaryofeffectivenessEntityList.add(summaryofeffectivenessEntity);
-                Log.e("REOS","DocumentCobranzaPDF.generarPdf.Ingresoifllenadosalida_summaryofeffectivenessEntityList-noroute:");
-            }catch (Exception e)
-            {
-                e.printStackTrace();
-                Log.e("REOS","DocumentCobranzaPDF.generarPdf.e:" + e.toString());
-            }
-        }
         String countvisitroute="",countclientsroute="",countclientsbalanceroute="",countcollectionsroute="",amountcollectionsroute=""
                ,countsalesordersroute="",amountsalesordersroute="",effectivenessvisitroute="",effectivenessasalesordersroute="",effectivenesscollectionsroute=""
-                ,countvisitnoroute="",countcollectionsnoroute="",amountcollectionsnoroute="",countsalesordersnoroute="",amountsalesordernoroute="";
-        for(int j=0;j<summaryofeffectivenessEntityList.size();j++)
-        {
-            if(summaryofeffectivenessEntityList.get(j).getRoute().equals("Y"))
+                ,countvisitnoroute="",countcollectionsnoroute="",amountcollectionsnoroute="",countsalesordersnoroute="",amountsalesordernoroute="",conectivity="";
+            //Log.e("REOS","ResumenDiarioPDF-generarPdf-summaryofeffectivenessEntityList.size.()"+summaryofeffectivenessEntityList.size());
+            if (summaryofeffectivenessEntityList==null)
             {
-                countvisitroute=(summaryofeffectivenessEntityList.get(j).getVisits());
-                countclientsroute=(summaryofeffectivenessEntityList.get(j).getClients());
-                countclientsbalanceroute=(summaryofeffectivenessEntityList.get(j).getClients());
-                countcollectionsroute=(summaryofeffectivenessEntityList.get(j).getCollections());
-                amountcollectionsroute=(summaryofeffectivenessEntityList.get(j).getAmountcollections());
-                countsalesordersroute=(summaryofeffectivenessEntityList.get(j).getSalesorders());
-                amountsalesordersroute=(summaryofeffectivenessEntityList.get(j).getAmountsalesorders());
-                effectivenessvisitroute=(summaryofeffectivenessEntityList.get(j).getVisitseffectiveness());
-                effectivenessasalesordersroute=(summaryofeffectivenessEntityList.get(j).getOrderseffectiveness());
-                effectivenesscollectionsroute=(summaryofeffectivenessEntityList.get(j).getCollectionseffectiveness());
+                try{
+                    conectivity="OFFLINE";
+                    summaryofeffectivenessEntityList=new ArrayList<>();
+                    Log.e("REOS","DocumentCobranzaPDF.generarPdf.Ingresoifllenado_summaryofeffectivenessEntityList:");
+                    //Agregar en Ruta
+                    SummaryofeffectivenessEntity summaryofeffectivenessEntity=new SummaryofeffectivenessEntity();
+                    summaryofeffectivenessEntity.route="Y";
+                    if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1")>rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"))
+                    {
+                        summaryofeffectivenessEntity.visits=String.valueOf (visitaSQLite.getCountVisitWithTypeVisit(fechasap,"1"));
+                    }
+                    else {
+                        summaryofeffectivenessEntity.visits=String.valueOf (rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"));
+                    }
+                    summaryofeffectivenessEntity.clients=String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1"));
+                    summaryofeffectivenessEntity.balanceclients=String.valueOf(rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1"));
+                    summaryofeffectivenessEntity.collections =String.valueOf(visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02"));
+                    summaryofeffectivenessEntity.amountcollections =String.valueOf(visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02"));
+                    if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01")>0)
+                    {
+                        summaryofeffectivenessEntity.salesorders=String.valueOf(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"1","01"));
+                    }else
+                    {
+                        summaryofeffectivenessEntity.salesorders=String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"1"));
+                    }
+                    if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01")>0)
+                    {
+                        summaryofeffectivenessEntity.amountsalesorders=String.valueOf(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01"));
+                    }else
+                    {
+                        summaryofeffectivenessEntity.amountsalesorders=String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"1"));
+                    }
+
+                    summaryofeffectivenessEntity.orderseffectiveness =Induvis.getAmountRouteeffectiveness(
+                            Double.parseDouble(summaryofeffectivenessEntity.salesorders),
+                            rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+                    );
+                    summaryofeffectivenessEntity.collectionseffectiveness =Induvis.getAmountRouteeffectiveness(
+                            Double.parseDouble(summaryofeffectivenessEntity.collections),
+                            rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
+                    );
+                    summaryofeffectivenessEntity.visitseffectiveness =Induvis.getAmountRouteeffectiveness(
+                            Double.parseDouble(summaryofeffectivenessEntity.visits),
+                            rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+                    );
+                    summaryofeffectivenessEntityList.add(summaryofeffectivenessEntity);
+                    //Agregar Fuera de Ruta
+                    summaryofeffectivenessEntity=new SummaryofeffectivenessEntity();
+                    summaryofeffectivenessEntity.route="N";
+                    if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02")>0)
+                    {
+                        summaryofeffectivenessEntity.collections =String.valueOf(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","02"));
+                    }else {
+                        summaryofeffectivenessEntity.collections =String.valueOf( rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0"));
+                    }
+
+                    if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02")>0)
+                    {
+                        summaryofeffectivenessEntity.amountcollections = String.valueOf( visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02"));
+                    }else {
+                        summaryofeffectivenessEntity.amountcollections = String.valueOf( rutaVendedorSQLiteDao.ObtenerCantidadCobranzaRutaVendedor(fechasap,"0"));
+                    }
+                    if(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01")>0)
+                    {
+                        summaryofeffectivenessEntity.salesorders =String.valueOf(visitaSQLite.getCountVisitWithTypeOVCOB(fechasap,"0","01"));
+                    }else {
+                        summaryofeffectivenessEntity.salesorders =String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadPedidoRutaVendedor(fechasap,"0"));
+                    }
+
+                    if(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01")>0)
+                    {
+                        summaryofeffectivenessEntity.amountsalesorders= String.valueOf(visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01"));
+                    }else {
+                        summaryofeffectivenessEntity.amountsalesorders= String.valueOf(rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"0"));
+                    }
+
+                    if(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0")>0)
+                    {
+                        summaryofeffectivenessEntity.visits =  String.valueOf(visitaSQLite.getCountVisitWithTypeVisit(fechasap,"0"));
+                    }else {
+                        summaryofeffectivenessEntity.visits =  String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"0"));
+                    }
+                    summaryofeffectivenessEntityList.add(summaryofeffectivenessEntity);
+                    Log.e("REOS","DocumentCobranzaPDF.generarPdf.Ingresoifllenadosalida_summaryofeffectivenessEntityList-noroute:");
+                }catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Log.e("REOS","DocumentCobranzaPDF.generarPdf.e:" + e.toString());
+                }
+            }else {
+                conectivity="ONLINE";
             }
-            else {
-                countvisitnoroute=(summaryofeffectivenessEntityList.get(j).getVisits());
-                countcollectionsnoroute=(summaryofeffectivenessEntityList.get(j).getCollections());
-                amountcollectionsnoroute=(summaryofeffectivenessEntityList.get(j).getAmountcollections());
-                countsalesordersnoroute=(summaryofeffectivenessEntityList.get(j).getSalesorders());
-                amountsalesordernoroute=(summaryofeffectivenessEntityList.get(j).getAmountsalesorders());
+
+                for (int j = 0; j < summaryofeffectivenessEntityList.size(); j++) {
+                    if (summaryofeffectivenessEntityList.get(j).getRoute().equals("Y")) {
+                        countvisitroute = (summaryofeffectivenessEntityList.get(j).getVisits());
+                        countclientsroute = (summaryofeffectivenessEntityList.get(j).getClients());
+                        countclientsbalanceroute = (summaryofeffectivenessEntityList.get(j).getBalanceclients());
+                        countcollectionsroute = (summaryofeffectivenessEntityList.get(j).getCollections());
+                        amountcollectionsroute = (summaryofeffectivenessEntityList.get(j).getAmountcollections());
+                        countsalesordersroute = (summaryofeffectivenessEntityList.get(j).getSalesorders());
+                        amountsalesordersroute = (summaryofeffectivenessEntityList.get(j).getAmountsalesorders());
+                        effectivenessvisitroute = (summaryofeffectivenessEntityList.get(j).getVisitseffectiveness());
+                        effectivenessasalesordersroute = (summaryofeffectivenessEntityList.get(j).getOrderseffectiveness());
+                        effectivenesscollectionsroute = (summaryofeffectivenessEntityList.get(j).getCollectionseffectiveness());
+                    } else {
+                        countvisitnoroute = (summaryofeffectivenessEntityList.get(j).getVisits());
+                        countcollectionsnoroute = (summaryofeffectivenessEntityList.get(j).getCollections());
+                        amountcollectionsnoroute = (summaryofeffectivenessEntityList.get(j).getAmountcollections());
+                        countsalesordersnoroute = (summaryofeffectivenessEntityList.get(j).getSalesorders());
+                        amountsalesordernoroute = (summaryofeffectivenessEntityList.get(j).getAmountsalesorders());
+                    }
+
             }
-        }
 
 
 
         fechasap=fecha;
         listaCorrelativo = new HashSet<String>(ObjList);
         Object[] ObjArrayListaCorrelativo = listaCorrelativo.toArray();
-        try {
+
             File f = crearFichero(fechasap+".pdf");
 
             // Creamos el flujo de datos de salida para el fichero donde
@@ -313,6 +318,14 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvendedor.addCell(cellTablevendedor);
             cellTablevendedor = new PdfPCell(new Phrase(Induvis.getTime(BuildConfig.FLAVOR, obtenerHoraActual()) ,font3));
+            cellTablevendedor.disableBorderSide(Rectangle.BOX);
+            cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblvendedor.addCell(cellTablevendedor);
+            cellTablevendedor = new PdfPCell(new Phrase("CONECTIVIDAD",font6));
+            cellTablevendedor.disableBorderSide(Rectangle.BOX);
+            cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblvendedor.addCell(cellTablevendedor);
+            cellTablevendedor = new PdfPCell(new Phrase(conectivity ,font3));
             cellTablevendedor.disableBorderSide(Rectangle.BOX);
             cellTablevendedor.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblvendedor.addCell(cellTablevendedor);
@@ -488,7 +501,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             //amountVisitTypeCOB=visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02");
             cellTableTipo=new PdfPCell(new Phrase(String.valueOf(
                     //amountVisitTypeCOB
-                    amountcollectionsroute
+                    Convert.currencyForView(amountcollectionsroute)
             ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -527,7 +540,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
                     //rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"1")
                     //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"1","01")
                     //amountVisitTypeOV
-                    amountsalesordersroute
+                   Convert.currencyForView(amountsalesordersroute)
             ),font3));
             cellTableTipo.disableBorderSide(Rectangle.BOX);
             cellTableTipo.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -665,7 +678,8 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(
                     //rutaVendedorSQLiteDao.ObtenerMontoCobranzaRutaVendedor(SesionEntity.compania_id,fechasap,"0")
                     //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","02")
-                    amountcollectionsnoroute
+                    Convert.currencyForView(amountcollectionsnoroute)
+
             ) ,font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -702,7 +716,8 @@ public class ResumenDiarioPDF extends AppCompatActivity {
                     //rutaVendedorSQLiteDao.ObtenerMontoPedidoRutaVendedor(SesionEntity.compania_id,fechasap,"0")
                     //visitaSQLite.getSumVisitWithTypeOVCOB(fechasap,"0","01")
                     //amountVisitOVNoRoute
-                    amountsalesordernoroute
+                    Convert.currencyForView(amountsalesordernoroute)
+
             ),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -727,7 +742,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltiponoruta.addCell(cellTableTiponoruta);
-            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf("0")));
+            cellTableTiponoruta=new PdfPCell(new Phrase(String.valueOf(Convert.currencyForView("0")),font3));
             cellTableTiponoruta.disableBorderSide(Rectangle.BOX);
             cellTableTiponoruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbltiponoruta.addCell(cellTableTiponoruta);

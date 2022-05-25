@@ -86,7 +86,7 @@ public class HistoricoCobranzaEntity {
     @SerializedName("DocEntry")
     private String docentry;
 
-    @SerializedName("CollectionCheck")
+    @SerializedName("Check")
     private String collectioncheck;
 
     public String getCollectioncheck() {

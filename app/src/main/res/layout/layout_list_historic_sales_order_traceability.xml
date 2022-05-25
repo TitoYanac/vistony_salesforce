@@ -78,12 +78,12 @@
     <TextView
         android:id="@+id/tv_cond_venta"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_marginLeft="95dp"
         android:layout_marginTop="70dp"
         android:text="Cond.Vent1"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/lbl_status_aprob"
@@ -130,7 +130,7 @@
         android:layout_height="50dp"
         android:layout_marginLeft="300dp"
         android:layout_marginTop="145dp"
-        app:srcCompat="@drawable/ic_baseline_local_shipping_24"
+        app:srcCompat="@drawable/ic_baseline_local_shipping_24_2"
 
         />
 

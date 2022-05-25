@@ -7,7 +7,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.WareHousesEntity;
 import java.util.List;
 
 public class SummaryofeffectivenessEntityResponse {
-    @SerializedName("Obtener_Summaryofeffectiveness")
+    @SerializedName("Effecetiveness")
 
     private List<SummaryofeffectivenessEntity> summaryofeffectivenessEntityList;
 

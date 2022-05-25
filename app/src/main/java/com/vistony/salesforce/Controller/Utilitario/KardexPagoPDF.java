@@ -329,15 +329,16 @@ public class KardexPagoPDF extends AppCompatActivity {
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblLineas.addCell(cellLineasDetalle);
 
-                        String fecha,año,mes,dia;
+                        /*String fecha,año,mes,dia;
                         String[] sourceemision= ListKardexPagoEntity.get(j).getTaxDate().split(" ");
                         fecha= sourceemision[0];
                         String[] sourcefechadesordenada= fecha.split("/");
                         año=sourcefechadesordenada[2];
                         mes=sourcefechadesordenada[0];
-                        dia=sourcefechadesordenada[1];
+                        dia=sourcefechadesordenada[1];*/
 
-                        cellLineasDetalle = new PdfPCell(new Phrase(dia+"/"+mes+"/"+año, font3));
+                        //cellLineasDetalle = new PdfPCell(new Phrase(dia+"/"+mes+"/"+año, font3));
+                        cellLineasDetalle = new PdfPCell(new Phrase( Induvis.getDate(BuildConfig.FLAVOR, ListKardexPagoEntity.get(j).getTaxDate()), font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblLineas.addCell(cellLineasDetalle);
@@ -346,13 +347,14 @@ public class KardexPagoPDF extends AppCompatActivity {
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblLineas.addCell(cellLineasDetalle);
 
-                        sourceemision= ListKardexPagoEntity.get(j).getDocDueDate().split(" ");
+                        /*sourceemision= ListKardexPagoEntity.get(j).getDocDueDate().split(" ");
                         fecha= sourceemision[0];
                         sourcefechadesordenada= fecha.split("/");
                         año=sourcefechadesordenada[2];
                         mes=sourcefechadesordenada[0];
-                        dia=sourcefechadesordenada[1];
-                        cellLineasDetalle = new PdfPCell(new Phrase(dia+"/"+mes+"/"+año, font3));
+                        dia=sourcefechadesordenada[1];*/
+                        //cellLineasDetalle = new PdfPCell(new Phrase(dia+"/"+mes+"/"+año, font3));
+                        cellLineasDetalle = new PdfPCell(new Phrase(Induvis.getDate(BuildConfig.FLAVOR, ListKardexPagoEntity.get(j).getDocDueDate()) , font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblLineas.addCell(cellLineasDetalle);
@@ -360,7 +362,7 @@ public class KardexPagoPDF extends AppCompatActivity {
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblLineas.addCell(cellLineasDetalle);
-                        cellLineasDetalle = new PdfPCell(new Phrase(ListKardexPagoEntity.get(j).getDocCur()+" "+ListKardexPagoEntity.get(j).getDocTotal(), font3));
+                        cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListKardexPagoEntity.get(j).getDocTotal()) , font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblLineas.addCell(cellLineasDetalle);
@@ -368,7 +370,7 @@ public class KardexPagoPDF extends AppCompatActivity {
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblLineas.addCell(cellLineasDetalle);
-                        cellLineasDetalle = new PdfPCell(new Phrase(ListKardexPagoEntity.get(j).getDocCur()+" "+ListKardexPagoEntity.get(j).getsALDO(), font3));
+                        cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListKardexPagoEntity.get(j).getsALDO()) , font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tblLineas.addCell(cellLineasDetalle);
@@ -420,14 +422,15 @@ public class KardexPagoPDF extends AppCompatActivity {
                         celltbldatarecibos.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tbldatarecibos.addCell(celltbldatarecibos);
 
-                        String fecha,año,mes,dia;
+                        /*String fecha,año,mes,dia;
                         String[] sourceemision= ListKardexPagoEntity.get(j).getfECHADEPAGO().split(" ");
                         fecha= sourceemision[0];
                         String[] sourcefechadesordenada= fecha.split("/");
                         año=sourcefechadesordenada[2];
                         mes=sourcefechadesordenada[0];
-                        dia=sourcefechadesordenada[1];
-                        celltbldatarecibos = new PdfPCell(new Phrase(dia+"/"+mes+"/"+año, font3));
+                        dia=sourcefechadesordenada[1];*/
+                        //celltbldatarecibos = new PdfPCell(new Phrase(dia+"/"+mes+"/"+año, font3));
+                        celltbldatarecibos = new PdfPCell(new Phrase(Induvis.getDate(BuildConfig.FLAVOR,ListKardexPagoEntity.get(j).getfECHADEPAGO() ) , font3));
                         celltbldatarecibos.disableBorderSide(Rectangle.BOX);
                         celltbldatarecibos.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tbldatarecibos.addCell(celltbldatarecibos);
@@ -448,7 +451,7 @@ public class KardexPagoPDF extends AppCompatActivity {
                         celltbldatarecibos.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tbldatarecibos.addCell(celltbldatarecibos);
 
-                        celltbldatarecibos = new PdfPCell(new Phrase(ListKardexPagoEntity.get(j).getImporteCobrado(), font3));
+                        celltbldatarecibos = new PdfPCell(new Phrase(Convert.currencyForView(ListKardexPagoEntity.get(j).getImporteCobrado()) , font3));
                         celltbldatarecibos.disableBorderSide(Rectangle.BOX);
                         celltbldatarecibos.setHorizontalAlignment(Element.ALIGN_LEFT);
                         tbldatarecibos.addCell(celltbldatarecibos);

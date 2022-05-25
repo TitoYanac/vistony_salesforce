@@ -326,7 +326,6 @@ ParametrosView extends Fragment {
                             parametrosSQLite.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
                             parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
                             parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
                             parametrosSQLite.InsertaParametros("21", "COLORES CABECERA", "0", getDateTime());
                             parametrosSQLite.InsertaParametros("22", "COLORES DETALLE", "0", getDateTime());
                         }

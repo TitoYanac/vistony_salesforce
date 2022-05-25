@@ -49,13 +49,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
+import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerDetailRepository;
+import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerHeadRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
+import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
@@ -116,7 +121,12 @@ public class MenuView extends AppCompatActivity
         HistoricoOrdenVentaView.OnFragmentInteractionListener,
         PromocionDetalleView.OnFragmentInteractionListener,
         ConsStockView.OnFragmentInteractionListener,
-        PromocionCabeceraEditarDescuentoView.OnFragmentInteractionListener
+        PromocionCabeceraEditarDescuentoView.OnFragmentInteractionListener,
+        ConsultaStockView.OnFragmentInteractionListener,
+        MenuConsultaCobradoView.OnFragmentInteractionListener,
+        KardexOfPaymentView.OnFragmentInteractionListener,
+        MenuConsultasFacturasView.OnFragmentInteractionListener,
+        HistoricContainerSKU.OnFragmentInteractionListener
 
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
@@ -144,7 +154,14 @@ public class MenuView extends AppCompatActivity
     Fragment PromocionCabeceraFragment;
     Fragment PromocionDetalleFragment;
     TableRow tablerowzona;
+    Fragment QuotasPerCustomerFragment;
+    Fragment MenuConsultaCobranzaFragment;
+    Fragment BuscarClienteFragment;
+    Fragment KardexOfPaymentFragment;
+    Fragment HistoricContainerSaleFragment;
 
+    static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
+    QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
     private File file = new File(ruta_fotos);
@@ -202,6 +219,14 @@ public class MenuView extends AppCompatActivity
         DireccionClienteFragment = new Fragment();
         ConsClienteFragment =new Fragment();
         historicoOrdenVentaFragment = new Fragment();
+        QuotasPerCustomerFragment = new Fragment();
+        MenuConsultaCobranzaFragment = new Fragment();
+        BuscarClienteFragment = new Fragment();
+        KardexOfPaymentFragment = new Fragment();
+        HistoricContainerSaleFragment = new Fragment();
+
+        quotasPerCustomerRepository = new ViewModelProvider(this).get(QuotasPerCustomerHeadRepository.class);
+        quotasPerCustomerDetailRepository = new ViewModelProvider(this).get(QuotasPerCustomerDetailRepository.class);
         arraylistConfiguracionentity= new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao =  new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -333,7 +358,7 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_formularios).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
@@ -699,7 +724,7 @@ public class MenuView extends AppCompatActivity
                 TAG_FRAGMENT="config_print";
                 break;
             case R.id.nav_comisiones:
-                contentFragment=new ComisionesView();
+                contentFragment=new ContenedorComisionesView();
                 fragmentSeleccionado=true;
                 TAG_FRAGMENT="config_print";
                 break;
@@ -1004,6 +1029,13 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
+            else if(tag2.equals("MENUCOBRANZA"))
+            {
+                contentFragment=new MenuConsultaCobradoView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
         }else if(tag.equals("MantenimientoClienteView")){
             tag2="MantenimientoClienteView";
             contentFragment=new MapaClienteView();
@@ -1251,6 +1283,13 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
+            if(tag2.equals("menuconsultaspedidoview"))
+            {
+                contentFragment=new MenuConsultaPedidosView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
             if(tag2.equals("historicofacturas"))
             {
                 contentFragment=new HistoricoFacturasView();
@@ -1268,6 +1307,20 @@ public class MenuView extends AppCompatActivity
             if(tag2.equals("Consulta_Orden_Venta_Estado"))
             {
                 //contentFragment=new HistoricoOrdenVentaEstadoView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("menuconsultasfacturaview"))
+            {
+                contentFragment=new MenuConsultasFacturasView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("dispatch"))
+            {
+                contentFragment=new HistoricStatusDispatchView() ;
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
@@ -1344,6 +1397,55 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popuuuploo");
                 ft.commit();
             }
+            else if(tag2.equals("agregarquotaspercustomer"))
+            {
+                contentFragment=new BuscarClienteView();
+                String tagBuscarClienteView="dialogoagregarcliente";
+                String tagQuotasPerCustomer="QUOTAS";
+                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
+                ft.hide(BuscarClienteFragment);
+                QuotasPerCustomerFragment  =getSupportFragmentManager().findFragmentByTag(tagQuotasPerCustomer);
+                //ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.show(QuotasPerCustomerFragment);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                String nomblecliente="",cliente_id="";
+                if(Lista!=null)
+                {
+
+                    ArrayList<ListaClienteCabeceraEntity>Listado=(ArrayList<ListaClienteCabeceraEntity>) Lista;
+                    for(int i=0;i<Listado.size();i++)
+                    {
+                        nomblecliente=Listado.get(i).getNombrecliente();
+                        cliente_id=Listado.get(i).getCliente_id();
+                    }
+                    Induvis.setTituloContenedor( nomblecliente,this);
+
+                }
+                QuotasPerCustomerView.newInstanceRecibirCliente(Lista);
+                quotasPerCustomerRepository.getQuotasPerCustomer(SesionEntity.fuerzatrabajo_id,this,cliente_id).observe(this, data -> {
+                    Log.e("Jepicame","=>"+data);
+                });
+                quotasPerCustomerDetailRepository.getQuotasPerCustomerDetail (SesionEntity.fuerzatrabajo_id,this,cliente_id).observe(this, data -> {
+                    Log.e("Jepicame","=>"+data);
+                });
+
+            }
+            else if(tag2.equals("agregarquotaspercustomerDialog"))
+            {
+                contentFragment=new BuscarClienteView();
+                String tagBuscarClienteView="dialogoagregarclienteMenu";
+                String tagQuotasPerCustomer="MENUCOBRANZA";
+                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
+                ft.remove(BuscarClienteFragment);
+                MenuConsultaCobranzaFragment  =getSupportFragmentManager().findFragmentByTag(tagQuotasPerCustomer);
+                //ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.show(MenuConsultaCobranzaFragment);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                MenuConsultaCobradoView.newInstanceRecibirCliente(Lista);
+
+            }
         }
         if(tag.equals("RutaVendedorNorutaView"))
         {
@@ -1388,6 +1490,225 @@ public class MenuView extends AppCompatActivity
                 ft.add(R.id.content_menu_view, OrdenVentaCabeceraView.newInstanceHistoricoOrdenVenta(Lista,tag2),tagOrdenVentaCabeceraView);
                 ft.addToBackStack("po1p");
                 ft.commit();
+            }
+        }
+        if(tag.equals("MenuConsultasPedidosView"))
+        {
+
+            if(tag2.equals("iniciar"))
+            {
+                tag2="historicoordenventa";
+                String tagOrdenVentaCabeceraView="consultaordenventa";
+                historicoOrdenVentaFragment = getSupportFragmentManager().findFragmentByTag(tag2);
+                OrdenVentaCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaCabeceraView);
+                ft.hide(historicoOrdenVentaFragment);
+                ft.add(R.id.content_menu_view, OrdenVentaCabeceraView.newInstanceHistoricoOrdenVenta(Lista,tag2),tagOrdenVentaCabeceraView);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            if(tag2.equals("consulta_stock"))
+            {
+                contentFragment=new ConsultaStockView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+
+            }
+            if(tag2.equals("seguimiento"))
+            {
+                contentFragment=new HistoricSalesOrderTraceabilityView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+
+            }
+        }
+        if(tag.equals("QuotasPerCustomer"))
+        {
+            if(tag2.equals("dialogoagregarcliente"))
+            {
+                contentFragment=new BuscarClienteView();
+                String tagQUOTAS="QUOTAS";
+                QuotasPerCustomerFragment  =getSupportFragmentManager().findFragmentByTag(tagQUOTAS);
+                ft.hide(QuotasPerCustomerFragment);
+                //ft.add(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("dialogoagregarclienteMenu"))
+            {
+                contentFragment=new BuscarClienteView();
+                String tagMenuCobranza="MENUCOBRANZA";
+                MenuConsultaCobranzaFragment  =getSupportFragmentManager().findFragmentByTag(tagMenuCobranza);
+                ft.hide(MenuConsultaCobranzaFragment);
+                //ft.add(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+        }
+        if(tag.equals("KardexOfPaymentView"))
+        {
+            if(tag2.equals( "start"))
+            {
+                contentFragment=new KardexOfPaymentView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals( "findClient"))
+            {
+                contentFragment=new BuscarClienteView();
+                String taKardexOfPaymentView="start";
+                KardexOfPaymentFragment  =getSupportFragmentManager().findFragmentByTag(taKardexOfPaymentView);
+                ft.hide(KardexOfPaymentFragment);
+                //ft.add(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals( "sendClient"))
+            {
+                String tagBuscarClienteView="findClient";
+                String tagKardexOfPaymentView="start";
+                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
+                KardexOfPaymentFragment  =getSupportFragmentManager().findFragmentByTag(tagKardexOfPaymentView);
+                ft.remove(BuscarClienteFragment);
+                ft.show(KardexOfPaymentFragment);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                KardexOfPaymentView.newInstanceRecibirLista(Lista);
+                this.setTitle("Kardex de Pago");
+            }
+        }
+        if(tag.equals("MenuConsultasFacturasView"))
+        {
+            if(tag2.equals("historiccontainersaleview"))
+            {
+                contentFragment=new HistoricContainerSaleView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("historiccontainersaleviewSKU"))
+            {
+                contentFragment=new HistoricContainerSKU();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+        }
+        if(tag.equals("HistoricContainerSaleView"))
+        {
+            if(tag2.equals("dialogoagregarclienteSKU"))
+            {
+                contentFragment=new BuscarClienteView();
+                String tagHistoricContainerSale="historiccontainersaleviewSKU";
+                HistoricContainerSaleFragment=getSupportFragmentManager().findFragmentByTag(tagHistoricContainerSale);
+                ft.hide(HistoricContainerSaleFragment);
+                //ft.add(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("dialogoagregarcliente"))
+            {
+                contentFragment=new BuscarClienteView();
+                String tagHistoricContainerSale="historiccontainersaleview";
+                HistoricContainerSaleFragment=getSupportFragmentManager().findFragmentByTag(tagHistoricContainerSale);
+                ft.hide(HistoricContainerSaleFragment);
+                //ft.add(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("recibircliente"))
+            {
+
+                contentFragment=new BuscarClienteView();
+                String tagBuscarClienteView="dialogoagregarcliente";
+                String tagHistoricContainerSale="historiccontainersaleview";
+                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
+                ft.hide(BuscarClienteFragment);
+                HistoricContainerSaleFragment=getSupportFragmentManager().findFragmentByTag(tagHistoricContainerSale);
+                //ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.show(HistoricContainerSaleFragment);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                HistoricContainerSaleView.newInstanceRecibirCliente(Lista);
+                if(Lista!=null)
+                {
+                    String nomblecliente="";
+                    ArrayList<ListaClienteCabeceraEntity>Listado=(ArrayList<ListaClienteCabeceraEntity>) Lista;
+                    for(int i=0;i<Listado.size();i++)
+                    {
+                        nomblecliente=Listado.get(i).getNombrecliente();
+                    }
+                    Induvis.setTituloContenedor( nomblecliente,this);
+
+                }
+                /*dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                date = new Date();
+                fecha =dateFormat.format(date);
+
+                HistoricContainerSaleView.newInstanceRecibirCliente(Lista);
+                historicContainerSalesRepository = new ViewModelProvider(this).get(HistoricContainerSalesRepository.class);
+                try {
+                    historicContainerSalesRepository.getHistoricContainerSales(
+                            SesionEntity.imei,
+                            this,
+                            HistoricContainerSaleView.CardCode,
+                            Induvis.changeMonth(fecha,-6),
+                            fecha,
+                            "FOCOS",
+                            "FOCOS"
+                    ).observe(this, data -> {
+                        HistoricContainerSaleFocoView.newInstanceListarClienteFoco(data);
+                        Log.e("REOS","RESPUESTAFOCO"+data);
+                    });
+                    historicContainerSalesRepository.getHistoricContainerSales(
+                            SesionEntity.imei,
+                            this,
+                            HistoricContainerSaleView.CardCode,
+                            Induvis.changeMonth(fecha,-6),
+                            fecha,
+                            "FAMILIA",
+                            "FAMILIA"
+                    ).observe(this, data -> {
+                        HistoricContainerSalesFamilyView.newInstanceListarClienteFamily(data);
+                        Log.e("REOS","RESPUESTAFAMILIA"+data);
+                    });
+                    historicContainerSalesRepository.getHistoricContainerSales(
+                            SesionEntity.imei,
+                            this,
+                            HistoricContainerSaleView.CardCode,
+                            Induvis.changeMonth(fecha,-6),
+                            fecha,
+                            "SEMAFORO",
+                            "SEMAFORO"
+                    ).observe(this, data -> {
+                        Log.e("REOS","RESPUESTASEMAFORO"+data);
+                        HistoricContainerSalesSemaforoView.newInstanceListarClienteSemaforo(data);
+                    });
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                */
+            }
+            if(tag2.equals("recibirclienteSKU"))
+            {
+                contentFragment=new BuscarClienteView();
+                String tagBuscarClienteView="dialogoagregarclienteSKU";
+                String tagHistoricContainerSale="historiccontainersaleviewSKU";
+                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
+                ft.hide(BuscarClienteFragment);
+                HistoricContainerSaleFragment=getSupportFragmentManager().findFragmentByTag(tagHistoricContainerSale);
+                //ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.show(HistoricContainerSaleFragment);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                HistoricContainerSKU.newInstanceRecibirCliente(Lista);
             }
         }
 

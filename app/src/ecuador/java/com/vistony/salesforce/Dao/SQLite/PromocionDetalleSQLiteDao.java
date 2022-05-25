@@ -185,4 +185,36 @@ public class PromocionDetalleSQLiteDao {
         bd.close();
         return resultado;
     }
+
+    public ArrayList<PromocionDetalleSQLiteEntity> ObtenerPromocionDetalleConsultaStock (
+            String compania_id,
+            String lista_promocion_id,
+            String promocion_id
+    )
+    {
+        listaPromocionDetalleSQLiteEntity = new ArrayList<PromocionDetalleSQLiteEntity>();
+        PromocionDetalleSQLiteEntity promocionDetalleSQLiteEntity;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select * from promociondetalle  where compania_id= '"+compania_id+"' and lista_promocion_id= '"+lista_promocion_id+"' and promocion_id= '"+promocion_id+"'",null);
+
+        while (fila.moveToNext()) {
+            promocionDetalleSQLiteEntity = new PromocionDetalleSQLiteEntity();
+            promocionDetalleSQLiteEntity.setCompania_id(fila.getString(0));
+            promocionDetalleSQLiteEntity.setLista_promocion_id(fila.getString(1));
+            promocionDetalleSQLiteEntity.setPromocion_id(fila.getString(2));
+            promocionDetalleSQLiteEntity.setPromocion_detalle_id(fila.getString(3));
+            promocionDetalleSQLiteEntity.setProducto_id(fila.getString(4));
+            promocionDetalleSQLiteEntity.setProducto(fila.getString(5));
+            promocionDetalleSQLiteEntity.setUmd(fila.getString(6));
+            promocionDetalleSQLiteEntity.setCantidad(fila.getString(7));
+            promocionDetalleSQLiteEntity.setFuerzatrabajo_id(fila.getString(8));
+            promocionDetalleSQLiteEntity.setUsuario_id(fila.getString(9));
+            promocionDetalleSQLiteEntity.setChkdescuento(fila.getString(11));
+            promocionDetalleSQLiteEntity.setDescuento(fila.getString(12));
+            listaPromocionDetalleSQLiteEntity.add(promocionDetalleSQLiteEntity);
+        }
+        bd.close();
+        return listaPromocionDetalleSQLiteEntity;
+    }
 }

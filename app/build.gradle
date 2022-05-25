@@ -74,7 +74,7 @@ android {
             //buildConfigField('String' , 'BASE_EDPOINT', '"/ec"')
             buildConfigField('String' , 'BASE_ENDPOINT', '"ec.get"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"ec.post"')
-            versionName "1.0.5"
+            versionName "1.0.6"
             manifestPlaceholders = [country:"Ecuador"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"EC"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')

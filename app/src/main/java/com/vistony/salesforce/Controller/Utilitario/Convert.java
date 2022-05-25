@@ -158,22 +158,24 @@ public class Convert {
             {
                 listKardexOfPaymentEntity=new ListKardexOfPaymentEntity();
                 listKardexOfPaymentEntity.legalnumber=ListKardexPagoEntity.get(i).getNumAtCard();
-                String fecha,año,mes,dia;
+                /*String fecha,año,mes,dia;
                 String[] sourceemision= ListKardexPagoEntity.get(i).getTaxDate().split(" ");
                 fecha= sourceemision[0];
                 String[] sourcefechadesordenada= fecha.split("/");
                 año=sourcefechadesordenada[2];
                 mes=sourcefechadesordenada[0];
-                dia=sourcefechadesordenada[1];
-                listKardexOfPaymentEntity.invoicedate=dia+"/"+mes+"/"+año;
-                String fecha2,año2,mes2,dia2;
+                dia=sourcefechadesordenada[1];*/
+                //listKardexOfPaymentEntity.invoicedate=dia+"/"+mes+"/"+año;
+                listKardexOfPaymentEntity.invoicedate=ListKardexPagoEntity.get(i).getTaxDate();
+                /*String fecha2,año2,mes2,dia2;
                 String[] sourceemision2= ListKardexPagoEntity.get(i).getDocDueDate().split(" ");
                 fecha2= sourceemision2[0];
                 String[] sourcefechadesordenada2= fecha2.split("/");
                 año2=sourcefechadesordenada2[2];
                 mes2=sourcefechadesordenada2[0];
-                dia2=sourcefechadesordenada2[1];
-                listKardexOfPaymentEntity.duedate=dia2+"/"+mes2+"/"+año2;
+                dia2=sourcefechadesordenada2[1];*/
+                //listKardexOfPaymentEntity.duedate=dia2+"/"+mes2+"/"+año2;
+                listKardexOfPaymentEntity.duedate=ListKardexPagoEntity.get(i).getDocDueDate();
                 listKardexOfPaymentEntity.DocAmount=ListKardexPagoEntity.get(i).getDocTotal();
                 listKardexOfPaymentEntity.balance=ListKardexPagoEntity.get(i).getsALDO();
                 listKardexOfPaymentEntity.invoice=false;
@@ -194,22 +196,24 @@ public class Convert {
                     {
                         listKardexOfPaymentEntity=new ListKardexOfPaymentEntity();
                         listKardexOfPaymentEntity.legalnumber=ListKardexPagoEntity.get(i).getNumAtCard();
-                        String fecha,año,mes,dia;
+                        /*String fecha,año,mes,dia;
                         String[] sourceemision= ListKardexPagoEntity.get(i).getTaxDate().split(" ");
                         fecha= sourceemision[0];
                         String[] sourcefechadesordenada= fecha.split("/");
                         año=sourcefechadesordenada[2];
                         mes=sourcefechadesordenada[0];
                         dia=sourcefechadesordenada[1];
-                        listKardexOfPaymentEntity.invoicedate=dia+"/"+mes+"/"+año;
-                        String fecha2,año2,mes2,dia2;
+                        listKardexOfPaymentEntity.invoicedate=dia+"/"+mes+"/"+año;*/
+                        listKardexOfPaymentEntity.invoicedate=ListKardexPagoEntity.get(i).getTaxDate();
+                        /*String fecha2,año2,mes2,dia2;
                         String[] sourceemision2= ListKardexPagoEntity.get(i).getDocDueDate().split(" ");
                         fecha2= sourceemision2[0];
                         String[] sourcefechadesordenada2= fecha2.split("/");
                         año2=sourcefechadesordenada2[2];
                         mes2=sourcefechadesordenada2[0];
                         dia2=sourcefechadesordenada2[1];
-                        listKardexOfPaymentEntity.duedate=dia2+"/"+mes2+"/"+año2;
+                        listKardexOfPaymentEntity.duedate=dia2+"/"+mes2+"/"+año2;*/
+                        listKardexOfPaymentEntity.duedate=ListKardexPagoEntity.get(i).getDocDueDate();
                         listKardexOfPaymentEntity.DocAmount=ListKardexPagoEntity.get(i).getDocTotal();
                         listKardexOfPaymentEntity.balance=ListKardexPagoEntity.get(i).getsALDO();
                         listKardexOfPaymentEntity.invoice=false;

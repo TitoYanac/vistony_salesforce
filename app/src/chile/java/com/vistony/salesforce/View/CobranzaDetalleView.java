@@ -154,7 +154,7 @@ public class CobranzaDetalleView extends Fragment {
     ArrayList<UsuarioSQLiteEntity> listaUsuarioSQLiteEntity;
     ArrayList<ListaHistoricoCobranzaEntity> Listado = new ArrayList<>();
     private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=2;
-    String Estadochkbancarizado="",Estadodepositodirecto="",Estadopagopos="",Estadopagoadelantado="",StatusCollectionCheck;
+    String Estadochkbancarizado="",Estadodepositodirecto="",Estadopagopos="",Estadopagoadelantado="",StatusCollectionCheck="N";
     private CobranzaRepository cobranzaRepository;
     private DepositoRepository depositoRepository;
     double latitude, longitude;
@@ -1028,6 +1028,10 @@ public class CobranzaDetalleView extends Fragment {
 
 
                                 documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual());
+                                ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
+                                cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
+                                    Log.e("REOS-ParametrosView-depositedPendingCollection","=>"+data);
+                                });
                                 //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
                                 Toast.makeText(getContext(), "Se creo tu archivo pdf", Toast.LENGTH_SHORT).show();
                             }else{
@@ -1423,10 +1427,7 @@ public class CobranzaDetalleView extends Fragment {
             );
 
         }
-        ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
-            Log.e("REOS-ParametrosView-depositedPendingCollection","=>"+data);
-        });
+
         Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
     }
 

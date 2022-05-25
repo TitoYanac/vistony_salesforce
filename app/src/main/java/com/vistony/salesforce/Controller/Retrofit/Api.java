@@ -248,11 +248,11 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/WareHouses")
     Call<WareHousesEntityResponse> getWareHouses(@Query("imei") String imei,@Query("ItemCode") String ItemCode);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/SummaryofEffectiveness")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Effectiveness")
     Call<SummaryofeffectivenessEntityResponse> getSummaryofEffectiveness(
             @Query("imei") String imei,
-            @Query("fecini") String fecini,
-            @Query("fecfin") String fecfin
+            @Query("startDate") String fecini,
+            @Query("endDate") String fecfin
     );
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/DispatchTypes")
