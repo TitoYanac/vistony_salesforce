@@ -33,6 +33,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerDetailEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerHeadEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerInvoiceEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.io.ByteArrayOutputStream;
@@ -173,7 +174,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase("Doc.Id",font3));
+            cellCabecera = new PdfPCell(new Phrase("Doc.ID",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
@@ -205,11 +206,11 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase("Ubigeo",font3));
+            cellCabecera = new PdfPCell(new Phrase("Moneda",font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase(Ubigeo,font3));
+            cellCabecera = new PdfPCell(new Phrase(SesionEntity.currency,font3));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblCabecera.addCell(cellCabecera);
@@ -302,7 +303,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
-                celltblresumencuotas = new PdfPCell(new Phrase(quotasPerCustomerInvoiceEntity.get(l).getImportefactura() ,font3));
+                celltblresumencuotas = new PdfPCell(new Phrase(Convert.currencyForView(quotasPerCustomerInvoiceEntity.get(l).getImportefactura())  ,font3));
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
@@ -310,7 +311,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
-                celltblresumencuotas = new PdfPCell(new Phrase(quotasPerCustomerInvoiceEntity.get(l).getSaldo(),font3));
+                celltblresumencuotas = new PdfPCell(new Phrase(Convert.currencyForView(quotasPerCustomerInvoiceEntity.get(l).getSaldo()) ,font3));
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
@@ -318,7 +319,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
-                celltblresumencuotas = new PdfPCell(new Phrase(quotasPerCustomerInvoiceEntity.get(l).getMontocuota() ,font6));
+                celltblresumencuotas = new PdfPCell(new Phrase(Convert.currencyForView(quotasPerCustomerInvoiceEntity.get(l).getMontocuota()) ,font6));
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
@@ -390,7 +391,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);
-                celltbldetallecuotas = new PdfPCell(new Phrase(quotasPerCustomerDetailEntity.get(l).getVencido(),font3));
+                celltbldetallecuotas = new PdfPCell(new Phrase(Convert.currencyForView(quotasPerCustomerDetailEntity.get(l).getVencido()),font3));
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);
@@ -398,7 +399,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);
-                celltbldetallecuotas = new PdfPCell(new Phrase(quotasPerCustomerDetailEntity.get(l).getCorriente(),font3));
+                celltbldetallecuotas = new PdfPCell(new Phrase(Convert.currencyForView(quotasPerCustomerDetailEntity.get(l).getCorriente()),font3));
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);
@@ -406,7 +407,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);
-                celltbldetallecuotas = new PdfPCell(new Phrase(quotasPerCustomerDetailEntity.get(l).getPedido(),font3));
+                celltbldetallecuotas = new PdfPCell(new Phrase(Convert.currencyForView(quotasPerCustomerDetailEntity.get(l).getPedido()),font3));
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);
@@ -414,7 +415,7 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);
-                celltbldetallecuotas = new PdfPCell(new Phrase(quotasPerCustomerDetailEntity.get(l).getTotal(),font6));
+                celltbldetallecuotas = new PdfPCell(new Phrase(Convert.currencyForView(quotasPerCustomerDetailEntity.get(l).getTotal()),font6));
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);

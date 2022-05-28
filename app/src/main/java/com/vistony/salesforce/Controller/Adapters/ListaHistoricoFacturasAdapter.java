@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoFacturasHistorialDespachosDao;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoFacturasLineasNoFacturadasDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoFacturasHistorialDespachosWS;
@@ -136,7 +137,7 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
         holder.tv_historico_facturas_orden_venta_ERP_id.setText(lead.getOrdenventa_erp_id());
         holder.tv_historico_facturas_rucdnni.setText(lead.getRucdni());
         holder.tv_historico_facturas_nombrecliente.setText(lead.getNombrecliente());
-        holder.tv_historico_facturas_monto.setText(lead.getMontoimporteordenventa());
+        holder.tv_historico_facturas_monto.setText(Convert.currencyForView(lead.getMontoimporteordenventa()));
         holder.tv_cond_venta.setText(lead.getTerminopago());
 
         holder.imv_historico_orden_venta_facturacion.setOnClickListener(new View.OnClickListener() {

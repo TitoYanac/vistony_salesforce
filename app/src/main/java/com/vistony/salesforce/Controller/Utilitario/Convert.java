@@ -8,6 +8,8 @@ import java.util.Locale;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Adapters.ListKardexOfPaymentEntity;
@@ -47,7 +49,7 @@ public class Convert {
         switch (BuildConfig.FLAVOR){
             case "chile":
                 amountRedonded =new BigDecimal(amount).setScale(0, RoundingMode.HALF_UP);
-                locale=new Locale("ES","EC");
+                locale=new Locale("ES","CL");
                 break;
             case "ecuador":
                 amountRedonded =new BigDecimal(amount).setScale(3, RoundingMode.HALF_UP);
@@ -223,5 +225,13 @@ public class Convert {
                 }
         }
         return ListKardexOfPaymentEntity;
+    }
+
+    public static void setMarginsView (View view, int left, int top, int right, int bottom) {
+        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            p.setMargins(left, top, right, bottom);
+            view.requestLayout();
+        }
     }
 }

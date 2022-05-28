@@ -810,7 +810,20 @@ public class CobranzaDetalleView extends Fragment {
             generarpdf.setIcon(R.drawable.ic_warning_yellow_24dp);
             Toast.makeText(getContext(), "Advertencia: Impresora No Vinculada - Revisar en Configuracion"+comentario, Toast.LENGTH_SHORT).show();
         }*/
+        if (SesionEntity.Print.equals("Y")) {
+            //vinculaimpresora="1"; ///para chile no se requiere impresora
+            listaConfiguracionSQLEntity = configuracionSQLiteDao.ObtenerConfiguracion();
+            for (int i = 0; i < listaConfiguracionSQLEntity.size(); i++) {
+                vinculaimpresora = listaConfiguracionSQLEntity.get(i).getVinculaimpresora();
+            }
+            if (vinculaimpresora.equals("0")) {
+                generarpdf.setIcon(R.drawable.ic_warning_yellow_24dp);
+                Toast.makeText(getContext(), "Advertencia: Impresora No Vinculada - Revisar en Configuracion" + comentario, Toast.LENGTH_SHORT).show();
+            }
 
+        } else {
+            vinculaimpresora = "1";
+        }
         super.onCreateOptionsMenu(menu, inflater);
 
     }
@@ -911,10 +924,10 @@ public class CobranzaDetalleView extends Fragment {
                                 Toast.makeText(getContext(), "No puedes Guardar un Recibo con valor 0 ", Toast.LENGTH_SHORT).show();
                             }else{
 
-                                /*if(vinculaimpresora.equals("0")){
+                                if(vinculaimpresora.equals("0")){
                                     //generarpdf.setEnabled(true);
                                     Toast.makeText(getContext(), "Impresora No Vinculada - Favor de Vincular para proseguir", Toast.LENGTH_SHORT).show();
-                                }else{*/
+                                }else{
                                     switch(SesionEntity.pagopos) {
                                         case "Y":
                                             tipocobranza = "Cobranza/Deposito";
@@ -942,10 +955,10 @@ public class CobranzaDetalleView extends Fragment {
                                         //imbcomentariorecibo.setColorFilter(Color.BLACK);
                                         imbcomentariorecibo.setEnabled(false);
 
-                                        //if(vinculaimpresora.equals("1"))
-                                        //{
+                                        if(vinculaimpresora.equals("1"))
+                                        {
                                             generarpdf.setEnabled(true);
-                                        //}
+                                        }
 
                                         tv_recibo.setText(recibo);
                                         imbaceptar.setEnabled(false);
@@ -964,7 +977,7 @@ public class CobranzaDetalleView extends Fragment {
                                     }
                                 }
 
-                            //}
+                            }
 
 
                         })
@@ -1034,6 +1047,9 @@ public class CobranzaDetalleView extends Fragment {
 
                                 documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual());
                                 //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
+                                if (SesionEntity.Print.equals("Y")) {
+                                    //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
+                                }
                                 Toast.makeText(getContext(), "Se creo tu archivo pdf", Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(getContext(), "No se creo el archivo pdf", Toast.LENGTH_SHORT).show();

@@ -59,12 +59,12 @@
     <TextView
         android:id="@+id/tv_historico_facturas_nombrecliente"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginLeft="95dp"
         android:layout_marginTop="90dp"
         android:text="Cliente01"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/lbl_cond_venta"
@@ -78,12 +78,12 @@
     <TextView
         android:id="@+id/tv_cond_venta"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="20dp"
         android:layout_marginLeft="95dp"
         android:layout_marginTop="70dp"
         android:text="Cond.Vent1"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/lbl_monto_orden_venta"

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:orientation="vertical"
+    android:id="@+id/relativeListaProducto"
+    >
+
+    <TextView
+        android:id="@+id/lbl_pricelist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="ListaPrecio"
+        android:textAppearance="?attr/textAppearanceListItem"
+        />
+    <TextView
+        android:id="@+id/tv_pricelist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="110dp"
+        android:layout_marginTop="0dp"
+        android:text="ID1"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem"
+        />
+
+    <TextView
+        android:id="@+id/lbl_pricelist_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="20dp"
+        android:text="Monto"
+        android:textAppearance="?attr/textAppearanceListItem"  />
+    <TextView
+        android:id="@+id/tv_pricelist_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="110dp"
+        android:layout_marginTop="20dp"
+        android:text="Pack"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem"
+        />
+
+
+
+
+
+
+
+
+</RelativeLayout>

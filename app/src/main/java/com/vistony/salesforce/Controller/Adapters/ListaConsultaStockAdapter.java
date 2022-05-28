@@ -12,14 +12,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaConsultaStockEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ConsultaStockView;
@@ -114,6 +120,10 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
             holder.tv_price_credit = (TextView) convertView.findViewById(R.id.tv_price_credit);
             holder.imv_enable_promotion = (ImageView) convertView.findViewById(R.id.imv_enable_promotion);
             holder.imv_enable_warehouses = (ImageView) convertView.findViewById(R.id.imv_enable_warehouses);
+            holder.lbl_price_credit = (TextView) convertView.findViewById(R.id.lbl_price_credit);
+            holder.lbl_precio_cash = (TextView) convertView.findViewById(R.id.lbl_precio_cash);
+            holder.content=(ViewGroup) convertView.findViewById(R.id.content);
+            holder.tablerowpricelist = (TableRow) convertView.findViewById(R.id.tablerowpricelist);
 
             holder.relativeListaConsultaStock=convertView.findViewById(R.id.relativeListaConsultaStock);
             convertView.setTag(holder);
@@ -128,10 +138,41 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
         holder.tv_productoid.setText(lead.getProducto_id());
         holder.tv_producto.setText(lead.getProducto());
         holder.tv_umd.setText(lead.getUmd());
-        holder.tv_price_cash.setText(lead.getPreciocontadoigv());
-        holder.tv_price_credit.setText(lead.getPreciocreditoigv());
+        holder.tv_price_cash.setText(Convert.currencyForView(lead.getPreciocontadoigv()) );
+        holder.tv_price_credit.setText(Convert.currencyForView(lead.getPreciocreditoigv()) );
         holder.tv_stock.setText(lead.getStock());
         holder.tv_gal.setText(lead.getGal());
+
+        if(BuildConfig.FLAVOR.equals("chile"))
+        {
+            holder.tv_price_cash.setVisibility(View.GONE);
+            holder.tv_price_credit.setVisibility(View.GONE);
+            holder.lbl_price_credit.setVisibility(View.GONE);
+            holder.lbl_precio_cash.setVisibility(View.GONE);
+            if(holder.content.getChildCount()==0)
+            {
+                ArrayList<ListaPrecioDetalleSQLiteEntity> ArraylistPrecioDetalle=new ArrayList();
+                ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(getContext());
+                ArraylistPrecioDetalle=listaPrecioDetalleSQLiteDao.ObtenerConsultaPriceListInduvis(lead.producto_id,getContext());
+
+                for(int i=0;i<ArraylistPrecioDetalle.size();i++)
+                {
+                    LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                    int id = R.layout.layout_list_pricelist;
+                    RelativeLayout relativeLayout = (RelativeLayout) layoutInflater.inflate(id, null, false);
+                    TextView lbl_pricelist = (TextView) relativeLayout.findViewById(R.id.lbl_pricelist);
+                    TextView tv_pricelist = (TextView) relativeLayout.findViewById(R.id.tv_pricelist);
+                    TextView lbl_pricelist_amount = (TextView) relativeLayout.findViewById(R.id.lbl_pricelist_amount);
+                    TextView tv_pricelist_amount = (TextView) relativeLayout.findViewById(R.id.tv_pricelist_amount);
+
+
+                    tv_pricelist.setText(ArraylistPrecioDetalle.get(i).getTypo());
+                    tv_pricelist_amount.setText(Convert.currencyForView(ArraylistPrecioDetalle.get(i).getContado()));
+                    holder.content.addView(relativeLayout);
+                }
+            }
+
+        }
 
         if(lead.isPromotionenable())
         {
@@ -143,10 +184,12 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
         }else
         {
             Resources res = getContext().getResources(); // need this to fetch the drawable
-            Drawable draw = res.getDrawable(R.drawable.ic_baseline_card_giftcard_24);
+            Drawable draw = res.getDrawable(R.drawable.ic_baseline_card_giftcard_gray_vistony_24);
             holder.imv_enable_promotion.setImageDrawable(draw);
             holder.imv_enable_promotion.setEnabled(false);
         }
+
+
 
         holder.imv_enable_promotion.setOnClickListener(v -> {
                     Log.e("REOS", "ListaProductoAdapter.relativeListaProducto.lead.getStock():" + lead.getStock());
@@ -181,6 +224,8 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
             ConsultaStockView.newInstanceSendWareHouses(lead.getProducto_id());
         });
 
+
+
         return convertView;
     }
     static class ViewHolder {
@@ -191,6 +236,10 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
         TextView tv_gal;
         TextView tv_price_cash;
         TextView tv_price_credit;
+        TextView lbl_price_credit;
+        TextView lbl_precio_cash;
+        ViewGroup content;
+        TableRow tablerowpricelist;
         ImageView imv_enable_promotion;
         RelativeLayout relativeListaConsultaStock;
         ImageView imv_enable_warehouses;

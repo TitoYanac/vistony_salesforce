@@ -32,6 +32,7 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ClienteCabeceraView;
 import com.vistony.salesforce.View.RutaVendedorView;
@@ -195,6 +196,8 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                 holder.tv_moneda.setText(lead.getMoneda());
                 break;
         }
+        SesionEntity.currency=lead.getMoneda();
+        Log.e("REOS","ListaClienteCabeceraAdapter-getView-SesionEntity.currency: "+SesionEntity.currency);
         if(BuildConfig.FLAVOR.equals("ecuador"))
         {
             holder.tablerowbalance.setVisibility(View.GONE);

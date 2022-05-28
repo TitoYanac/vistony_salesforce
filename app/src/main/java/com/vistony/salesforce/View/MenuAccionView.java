@@ -255,6 +255,7 @@ public class MenuAccionView extends Fragment {
             switch (BuildConfig.FLAVOR){
 
                 case "peru":
+                case "paraguay":
                     String Fragment="MenuAccionView";
                     String accion="pedido";
                     String compuesto=Fragment+"-"+accion;
@@ -264,7 +265,7 @@ public class MenuAccionView extends Fragment {
                 case "ecuador":
                 case "bolivia":
                 case "chile":
-                case "paraguay":
+
                     alertatipoventa().show();
                     break;
             }

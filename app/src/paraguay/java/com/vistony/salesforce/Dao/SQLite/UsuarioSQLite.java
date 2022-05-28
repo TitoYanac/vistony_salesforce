@@ -190,6 +190,9 @@ public class UsuarioSQLite {
                     usuarioSQLiteEntity.setLenguage(fila.getString(fila.getColumnIndex("Language")));
                     usuarioSQLiteEntity.setImei(fila.getString(fila.getColumnIndex("imei")));
                     usuarioSQLiteEntity.setRate(fila.getString(fila.getColumnIndex("rate")));
+                    usuarioSQLiteEntity.setPrint(fila.getString(fila.getColumnIndex("print")));
+                    usuarioSQLiteEntity.setActivecurrency(fila.getString(fila.getColumnIndex("activecurrency")));
+                    usuarioSQLiteEntity.setPlanta (fila.getString(fila.getColumnIndex("planta")));
                 } while (fila.moveToNext());
             }
 

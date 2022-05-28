@@ -43,5 +43,6 @@ public class SesionEntity {
     public static String phone ="";
     public static String maxDateDeposit ="";
     public static String collectioncheck ="N";
+    public static String currency ="";
 }
 

@@ -420,4 +420,36 @@ public class ListaPrecioDetalleSQLiteDao {
         return listaConsultaStockEntity;
     }
 
+    public ArrayList<ListaPrecioDetalleSQLiteEntity> ObtenerConsultaPriceListInduvis (String Product_id,Context context ){
+
+        ArrayList<ListaPrecioDetalleSQLiteEntity>  listaPrecioDetalleSQLiteEntity = new ArrayList<>();
+        ListaPrecioDetalleSQLiteEntity objPrecioDetalleSQLiteEntity;
+        Cursor fila=null;
+
+        try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            String query="SELECT contado,credito,Tipo " +
+                    " FROM listapreciodetalle WHERE producto_id = '"+Product_id+"' GROUP BY contado,credito,Tipo";
+
+            fila = sqlite.rawQuery(query,null);
+
+            while (fila.moveToNext()) {
+                objPrecioDetalleSQLiteEntity = new ListaPrecioDetalleSQLiteEntity();
+                objPrecioDetalleSQLiteEntity.setContado(fila.getString(0));
+                objPrecioDetalleSQLiteEntity.setCredito(fila.getString(1));
+                objPrecioDetalleSQLiteEntity.setTypo(fila.getString(2));
+                listaPrecioDetalleSQLiteEntity.add(objPrecioDetalleSQLiteEntity);
+            }
+            fila.close();
+
+        }catch (Exception e){
+            Log.e("ErrorSqlite","=>"+e.getMessage());
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
+        //Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.arraylistaProductoEntity: "+arraylistaProductoEntity.size());
+        return listaPrecioDetalleSQLiteEntity;
+    }
+
 }

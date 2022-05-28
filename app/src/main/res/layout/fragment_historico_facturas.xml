@@ -23,7 +23,7 @@
                     android:id="@+id/imb_calendario_historico_facturas"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:src="@drawable/ic_baseline_date_range_24_white"
                     android:background="@drawable/custom_border_button_red"
                     />
@@ -31,7 +31,7 @@
                     android:id="@+id/tv_fecha_historico_facturas"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:paddingTop="15dp"
                     android:layout_weight="4"
                     android:enabled="true"
@@ -44,7 +44,7 @@
                     android:id="@+id/btnconsultarfechafacturas"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="0dp"
                     android:layout_weight="4"
                     android:text="CONSULTAR"
                     android:background="@drawable/custom_border_button_red"
@@ -98,8 +98,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:layout_weight="4"
                 android:textColor="@color/white"
-                android:textSize="25dp"></TextView>
+                android:textSize="25dp"
+                android:gravity="right"
+                >
+            </TextView>
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -118,6 +122,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:gravity="right"
+                android:layout_weight="4"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
         </TableRow>

@@ -55,6 +55,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.BixolonPrinterController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
@@ -195,6 +196,7 @@ public class MenuView extends AppCompatActivity
     QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
     private  String recibovalidado = "";
     private ConnectivityManager manager;
+    private static BixolonPrinterController bxlPrinter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,6 +236,8 @@ public class MenuView extends AppCompatActivity
         cobranzaRepository = new ViewModelProvider(this).get(CobranzaRepository.class);
         quotasPerCustomerRepository = new ViewModelProvider(this).get(QuotasPerCustomerHeadRepository.class);
         quotasPerCustomerDetailRepository = new ViewModelProvider(this).get(QuotasPerCustomerDetailRepository.class);
+        bxlPrinter = new BixolonPrinterController(this);
+
         cobranzaRepository.PendingCollectionQR(this).observe(MenuView.this, data -> {
             Log.e("Jepicame","=>"+data);
         });
@@ -1497,6 +1501,7 @@ public class MenuView extends AppCompatActivity
                 ft.add(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
+                BuscarClienteView.newInstanceFlujoNoRuta(Lista);
             }
         }
         if(tag.equals("DireccionClienteView"))
@@ -2142,5 +2147,11 @@ public class MenuView extends AppCompatActivity
     private void obtenerTituloFormulario()
     {
         setTitle(Induvis.getTituloVentaString());
+    }
+
+    public static BixolonPrinterController getPrinterInstance()
+    {
+        Log.e("REOS","MenuView-getPrinterInstance-Inicio");
+        return bxlPrinter;
     }
 }

@@ -232,18 +232,20 @@ public class MenuConsultaCobradoView extends Fragment {
             quotasPerCustomerDetailRepository.getQuotasPerCustomerDetail (SesionEntity.fuerzatrabajo_id,getContext(),CardCode).observe(getActivity(), data2 ->
             {
                 //Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.data1.size():"+data2.size());
-                if(!data2.isEmpty()&&!data1.isEmpty())
-                {
-                    Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.solicitarGenerarPDF:");
-                    QuotasPerCustomerPDF quotasPerCustomerPDF=new QuotasPerCustomerPDF();
-                    quotasPerCustomerPDF.generarPdf(getContext(),
-                            data1,
-                            data2,
-                            Listado
-                    );
-                }
 
-                if(data1.isEmpty()||data2.isEmpty()||data1==null||data2==null)
+                if(data1!=null&&data2!=null)
+                {
+                    if (!data2.isEmpty() && !data1.isEmpty()) {
+                        Log.e("REOS", "MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.generarPdf.solicitarGenerarPDF:");
+                        QuotasPerCustomerPDF quotasPerCustomerPDF = new QuotasPerCustomerPDF();
+                        quotasPerCustomerPDF.generarPdf(getContext(),
+                                data1,
+                                data2,
+                                Listado
+                        );
+                    }
+                }
+                if(data1==null||data2==null)
                 {
                     Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Cálculo", Toast.LENGTH_SHORT).show();
                     alertdialogInformative(getContext(),"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();

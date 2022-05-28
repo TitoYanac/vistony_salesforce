@@ -138,7 +138,14 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
                 Log.e("REOS","ListaClienteDetalleAdapter: "+lead.domembarque);
                 direccion=lead.direccion.toString();
                 documento_id=lead.documento_id.toString();
-                nrodocumento=lead.getNrodocumento().toString();
+                if(lead.getNrodocumento()==null)
+                {
+                    nrodocumento="";
+                }
+                else {
+                    nrodocumento=lead.getNrodocumento().toString();
+                }
+
                 fechaemision=lead.getFechaemision().toString();
                 fechavencimiento=lead.getFechavencimiento().toString();
                 importe=lead.getImporte().toString();
