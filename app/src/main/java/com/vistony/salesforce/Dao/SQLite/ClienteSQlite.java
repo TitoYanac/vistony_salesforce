@@ -268,12 +268,14 @@ public class ClienteSQlite {
                     "Select " +
                             "a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
                             "a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lista_precio" +
-                            ",a.domfactura_id,a.lastpurchase,a.lineofbusiness FROM cliente a " +
+                            ",a.domfactura_id,a.lastpurchase,a.lineofbusiness,g.terminopago,g.contado FROM cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
                             " and a.cliente_id=b.cliente_id " +
                             " INNER JOIN (SELECT compania_id,cliente_id,zona_id,domembarque_id,direccion FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id,domembarque_id,direccion) d ON a.compania_id=d.compania_id " +
                             " and a.cliente_id=d.cliente_id " +
+                            " LEFT JOIN  terminopago g ON" +
+                            "  g.terminopago_id=a.terminopago_id " +
                             "where a.cliente_id not in (Select cliente_id from rutavendedor where fecharuta='"+fecha+"') "  +
                             " GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,a.domfactura_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.lista_precio,a.lineofbusiness",null);
 
@@ -307,6 +309,8 @@ public class ClienteSQlite {
                 clienteentity.setLista_precio(fila.getString(21));
                 clienteentity.setLastpurchase(fila.getString(24));
                 clienteentity.setLineofbussiness(fila.getString(25));
+                clienteentity.setTerminopago(fila.getString(26));
+                clienteentity.setContado(fila.getString(27));
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }
         }catch (Exception e){
@@ -418,7 +422,7 @@ public class ClienteSQlite {
                     "SELECT DISTINCT a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,d.direccion,d.zona_id,a.ordenvisita,a.zona," +
                             "a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio," +
                             "a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lastpurchase,IFNULL(SUM(e.saldo),0) as saldonocontados,(case when d.latitud='0' or d.latitud is null then '0' else '1' end) as geolocalizado" +
-                            ",(case when f.latitudini is not null and f.latitudini is not null then '1' else '0' end) as duracionvisita  from cliente a" +
+                            ",(case when f.latitudini is not null and f.latitudini is not null then '1' else '0' end) as duracionvisita,g.terminopago,g.contado  from cliente a" +
                             " LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id and a.cliente_id=b.cliente_id " +
                             "INNER JOIN (SELECT compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud) d ON a.compania_id=d.compania_id " +
@@ -427,6 +431,8 @@ public class ClienteSQlite {
                             " a.compania_id=e.compania_id and a.cliente_id=e.cliente_id " +
                             " LEFT JOIN visitsection f ON "+
                             " a.compania_id=f.compania_id and a.cliente_id=f.cliente_id and a.domembarque_id=f.domembarque_id and f.dateini=strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))  " +
+                            " LEFT JOIN terminopago g ON "+
+                            " a.terminopago_id=g.terminopago_id " +
                             "WHERE d.zona_id IN (SELECT zona_id FROM rutafuerzatrabajo WHERE fechainicioruta=" +
                             //"date('now') " +
                             " strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))" +
@@ -463,6 +469,8 @@ public class ClienteSQlite {
                 clienteentity.setSaldosincontados(fila.getString(23));
                 clienteentity.setChkgeolocation(fila.getString(24));
                 clienteentity.setChkvisitsection(fila.getString(25));
+                clienteentity.setTerminopago(fila.getString(26));
+                clienteentity.setContado(fila.getString(27));
                 Log.e("REOS","ClienteSQlite-ObtenerClientePorZonaCompleto-clienteentity.getSaldoSincontados: "+clienteentity.getSaldosincontados());
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }

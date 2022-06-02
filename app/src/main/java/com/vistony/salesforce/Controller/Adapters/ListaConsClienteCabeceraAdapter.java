@@ -131,6 +131,9 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             holder.tablerowbalance = (TableRow) convertView.findViewById(R.id.tablerowbalance);
             holder.linearlayoutlblcredit = (LinearLayout) convertView.findViewById(R.id.linearlayoutlblcredit);
             holder.linearlayouttvcredit = (LinearLayout) convertView.findViewById(R.id.linearlayouttvcredit);
+            holder.tv_paymentterms = (TextView) convertView.findViewById(R.id.tv_paymentterms);
+            holder.tablerowpaymentterms = (TableRow) convertView.findViewById(R.id.tablerowpaymentterms);
+
             convertView.setTag(holder);
         } else {
             holder = (ListaConsClienteCabeceraAdapter.ViewHolder) convertView.getTag();
@@ -152,7 +155,8 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         holder.tv_linea_credito.setText(Convert.currencyForView(lead.getLinea_credito()));
         holder.tv_linea_credito_usado.setText(Convert.currencyForView(lead.getLinea_credito_usado()));
         ///////////////////////////////////////////////////////////////////////////////////////
-        
+        holder.tv_paymentterms.setText(lead.getTerminopago());
+
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
             holder.chk_geolocation.setVisibility(View.GONE);
@@ -164,6 +168,10 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             holder.progressLineCredit.setVisibility(View.GONE);
             holder.linearlayoutlblcredit.setVisibility(View.GONE);
             holder.linearlayouttvcredit.setVisibility(View.GONE);
+        }
+        else if(BuildConfig.FLAVOR.equals("paraguay")){
+            holder.tablerowpaymentterms.setVisibility(View.GONE);
+
         }
 
         holder.progressLineCredit.setMax(Math.round(Float.parseFloat(""+lead.getLinea_credito())));
@@ -197,6 +205,8 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             listaClienteCabeceraEntity.setTipocambio(lead.getTipocambio());
             listaClienteCabeceraEntity.setLastpurchase (lead.getLastpurchase());
             listaClienteCabeceraEntity.setLineofbussiness (lead.getLineofbussiness());
+            listaClienteCabeceraEntity.setTerminopago (lead.getTerminopago());
+            listaClienteCabeceraEntity.setContado (lead.getContado());
                     Log.e("REOS","ListaConsClienteCabeceraAdapter.getView.lead.getLineofbussiness(): "+lead.getLineofbussiness());
             ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
 
@@ -258,5 +268,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         TableRow tablerowbalance;
         LinearLayout linearlayoutlblcredit;
         LinearLayout linearlayouttvcredit;
+        TextView tv_paymentterms;
+        TableRow tablerowpaymentterms;
     }
 }

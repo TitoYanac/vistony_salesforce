@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 
@@ -49,7 +50,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omega_r.libs.OmegaCenterIconButton;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoCobranzaPDF;
 import com.vistony.salesforce.Controller.Adapters.ListaCobranzaDetalleAdapter;
@@ -155,6 +158,7 @@ public class CobranzaDetalleView extends Fragment {
     String cliente_id_visita,domembarque_id_visita,zona_id_visita;
     private ProgressDialog pd;
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
+    FloatingActionButton fab_invoice_cancelation;
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm","Este es NUEVA ISNTANCIA 1");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
@@ -385,9 +389,14 @@ public class CobranzaDetalleView extends Fragment {
         tv_recibo = (TextView) v.findViewById(R.id.tv_recibo);
         chk_bancarizado = (CheckBox) v.findViewById(R.id.chk_bancarizado);
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
+        fab_invoice_cancelation = (FloatingActionButton) v.findViewById(R.id.fab_invoice_cancelation);
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo= (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
 
+        if(BuildConfig.FLAVOR.equals("paraguay"))
+        {
+            fab_invoice_cancelation.setVisibility(View.GONE);
+        }
 
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
                                                    @Override
@@ -799,18 +808,18 @@ public class CobranzaDetalleView extends Fragment {
             }
         }
 
-        //vinculaimpresora="1"; ///para chile no se requiere impresora
-        listaConfiguracionSQLEntity=configuracionSQLiteDao.ObtenerConfiguracion();
+        vinculaimpresora="1"; ///para chile no se requiere impresora
+        /*listaConfiguracionSQLEntity=configuracionSQLiteDao.ObtenerConfiguracion();
         for(int i=0;i<listaConfiguracionSQLEntity.size();i++)
         {
             vinculaimpresora=listaConfiguracionSQLEntity.get(i).getVinculaimpresora();
-        }
+        }*/
         /*if(vinculaimpresora.equals("0"))
         {
             generarpdf.setIcon(R.drawable.ic_warning_yellow_24dp);
             Toast.makeText(getContext(), "Advertencia: Impresora No Vinculada - Revisar en Configuracion"+comentario, Toast.LENGTH_SHORT).show();
         }*/
-        if (SesionEntity.Print.equals("Y")) {
+        /*if (SesionEntity.Print.equals("Y")) {
             //vinculaimpresora="1"; ///para chile no se requiere impresora
             listaConfiguracionSQLEntity = configuracionSQLiteDao.ObtenerConfiguracion();
             for (int i = 0; i < listaConfiguracionSQLEntity.size(); i++) {
@@ -823,7 +832,7 @@ public class CobranzaDetalleView extends Fragment {
 
         } else {
             vinculaimpresora = "1";
-        }
+        }*/
         super.onCreateOptionsMenu(menu, inflater);
 
     }
@@ -1049,6 +1058,16 @@ public class CobranzaDetalleView extends Fragment {
                                 //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
                                 if (SesionEntity.Print.equals("Y")) {
                                     //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
+                                    try {
+
+
+                                       // Intent intent = new Intent();
+                                       // intent.setComponent(new ComponentName("com.iyaltamizh.bluetoothprint", "com.iyaltamizh.bluetoothprint.Print"));
+                                      //  intent.putExtra("content","Hello World\n\n Content from test app\n");
+                                       // startActivity(intent);
+                                    }catch (Exception e){
+                                        Log.e("REOS", "CobranzaDetalleView-Imprimir-e:" + e.toString());
+                                    }
                                 }
                                 Toast.makeText(getContext(), "Se creo tu archivo pdf", Toast.LENGTH_SHORT).show();
                             }else{

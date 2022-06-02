@@ -159,6 +159,8 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.tablerowbalance = (TableRow) convertView.findViewById(R.id.tablerowbalance);
             holder.linearlayoutlblcredit = (LinearLayout) convertView.findViewById(R.id.linearlayoutlblcredit);
             holder.linearlayouttvcredit = (LinearLayout) convertView.findViewById(R.id.linearlayouttvcredit);
+            holder.tv_paymentterms = (TextView) convertView.findViewById(R.id.tv_paymentterms);
+            holder.tablerowpaymentterms = (TableRow) convertView.findViewById(R.id.tablerowpaymentterms);
 
             convertView.setTag(holder);
         } else {
@@ -181,6 +183,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
         holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));
         holder.tv_address.setText(lead.getDomembarque_id()+"-"+lead.getDireccion());
+        holder.tv_paymentterms.setText(lead.getTerminopago());
         //holder.chk_geolocation.setVisibility(View.GONE);
         switch(lead.getMoneda()){
             case "S/":
@@ -205,9 +208,9 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.linearlayoutlblcredit.setVisibility(View.GONE);
             holder.linearlayouttvcredit.setVisibility(View.GONE);
         }
-        else if(BuildConfig.FLAVOR.equals("peru"))
+        else if(BuildConfig.FLAVOR.equals("paraguay"))
         {
-
+            holder.tablerowpaymentterms.setVisibility(View.GONE);
         }
 
 
@@ -324,6 +327,8 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                listaClienteCabeceraEntity.setChk_cobranza(lead.getFecharuta());
                listaClienteCabeceraEntity.setDocentry(lead.getDocentry());
                listaClienteCabeceraEntity.setLastpurchase(lead.getLastpurchase());
+                    listaClienteCabeceraEntity.setTerminopago(lead.getTerminopago());
+                    listaClienteCabeceraEntity.setContado( lead.getContado());
                //ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
                     ArraylistaClienteCabeceraEntity.add(lead);
                String Cliente = "";
@@ -372,6 +377,8 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         TableRow tablerowbalance;
         LinearLayout linearlayoutlblcredit;
         LinearLayout linearlayouttvcredit;
+        TextView tv_paymentterms;
+        TableRow tablerowpaymentterms;
     }
 
 

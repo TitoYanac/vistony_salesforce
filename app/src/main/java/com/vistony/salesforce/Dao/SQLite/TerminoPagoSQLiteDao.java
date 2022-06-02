@@ -70,9 +70,9 @@ public class TerminoPagoSQLiteDao {
 
         String query="Select * from terminopago where compania_id= '"+compania_id+"' and   (CAST(dias_vencimiento AS INTEGER)) <= (CAST('"+dias_vencimiento+"' AS INTEGER))";
 
-        /*if(BuildConfig.FLAVOR.equals("ecuador")){
+        if(BuildConfig.FLAVOR.equals("paraguay")){
             query="Select * from terminopago";
-        }*/
+        }
 
         Cursor fila = bd.rawQuery(query,null);
 

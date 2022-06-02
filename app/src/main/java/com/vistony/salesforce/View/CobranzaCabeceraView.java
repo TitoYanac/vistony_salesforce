@@ -155,6 +155,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     Spinner spn_control_despacho_id;
     ImageButton imb_consultar_codigo_control;
     TextView tv_fecha_hoja_despacho;
+    static int bancarizados=0,depositodirectos=0,count_check=0;
+    static Context context;
     public CobranzaCabeceraView() {
         // Required empty public constructor
     }
@@ -189,7 +191,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         cobranzaCabeceraView.setArguments(b);
         listaConsDepositoAdapterFragment= (ArrayList<ListaConsDepositoEntity>) objeto;
         //int p=0;
-        int bancarizados=0,depositodirecto=0,count_check=0;
+
         for(int k=0;k<Lista.size();k++)
         {
             if(Lista.get(k).getTv_txtbancarizado().equals("Y"))
@@ -198,7 +200,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             }
             if(Lista.get(k).getTv_txtpagodirecto().equals("Y"))
             {
-                depositodirecto++;
+                depositodirectos++;
             }
             if(Lista.get(k).getCollectioncheck().equals("Y"))
             {
@@ -213,7 +215,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             spntipo.setEnabled(false);
 
         }
-        if(depositodirecto>0)
+        if(depositodirectos>0)
         {
             chkdepositodirecto.setChecked(true);
         }
@@ -223,6 +225,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         }
 
         obtenerListaCobranzas.execute();
+        updateTypeDeposit();
         return cobranzaCabeceraView;
 
     }
@@ -274,7 +277,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         //dataFormatToday = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         ListaTipo = new ArrayList<String>();
-
+        context=getContext();
         obtenerLista =new ObtenerListaCobranzas();
         date = new Date();
 
@@ -452,6 +455,29 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
 
        return v;
+    }
+
+    public static void updateTypeDeposit()
+    {
+        String [] valores = null;
+        if(BuildConfig.FLAVOR.equals("chile"))
+        {
+            if(count_check>0){
+                valores = new String[]{"Deposito Efectivo","Cheque Diferido","Cheque Dia"};
+            }else {
+                valores =  new String[]{"Deposito Efectivo"};
+            }
+
+
+        }else {
+            valores =  new String[]{"Deposito","Cheque"};
+        }
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+                android.R.layout.simple_list_item_1, android.R.id.text1, valores);
+
+        spntipo.setAdapter(adapter);
     }
 
     @Override

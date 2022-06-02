@@ -33,8 +33,16 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
     public String linea_credito_usado;
     public String lastpurchase;
     public String lineofbussiness;
+    public String terminopago;
+    public String contado;
 
-    public ListaConsClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta,String lastpurchase,String lineofbussiness) {
+    public ListaConsClienteCabeceraEntity(
+            String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id,
+            String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id,
+            String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id,
+            String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta,String lastpurchase,String lineofbussiness
+            ,String terminopago,String contado
+    ) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -65,10 +73,28 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
         this.fecharuta = fecharuta;
         this.lastpurchase = lastpurchase;
         this.lineofbussiness = lineofbussiness;
+        this.terminopago = terminopago;
+        this.contado = contado;
     }
 
     public ListaConsClienteCabeceraEntity() {
 
+    }
+
+    public String getTerminopago() {
+        return terminopago;
+    }
+
+    public void setTerminopago(String terminopago) {
+        this.terminopago = terminopago;
+    }
+
+    public String getContado() {
+        return contado;
+    }
+
+    public void setContado(String contado) {
+        this.contado = contado;
     }
 
     public String getLineofbussiness() {

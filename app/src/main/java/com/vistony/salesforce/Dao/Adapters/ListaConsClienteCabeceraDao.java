@@ -63,6 +63,8 @@ public class ListaConsClienteCabeceraDao {
                         ,Lista.get(i).getFecharuta()
                         ,Lista.get(i).getLastpurchase()
                         ,Lista.get(i).getLineofbussiness()
+                        ,Lista.get(i).getTerminopago()
+                        ,Lista.get(i).getContado()
                 ));
                 Log.e("REOS","ListaConsClienteCabeceraDao.getLeads.Lista.get(i).getLineofbussiness(): "+Lista.get(i).getLineofbussiness());
             }

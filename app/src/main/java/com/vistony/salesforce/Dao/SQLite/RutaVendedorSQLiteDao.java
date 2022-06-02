@@ -75,7 +75,9 @@ public class RutaVendedorSQLiteDao {
              String lastpurchase,
              String saldosincontado,
              String chkgeolocation,
-             String chkvisitsection
+             String chkvisitsection,
+             String terminopago,
+             String contado
     )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
@@ -117,6 +119,9 @@ public class RutaVendedorSQLiteDao {
             registro.put("saldosincontado", saldosincontado);
             registro.put("chkgeolocation", chkgeolocation);
             registro.put("chkvisitsection", chkvisitsection);
+            registro.put("terminopago", terminopago);
+            registro.put("contado", contado);
+
             bd.insert("rutavendedor", null, registro);
         }catch (Exception e)
         {
@@ -273,6 +278,8 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setLastpurchase(fila.getString(30));
             ObjListaClienteCabeceraEntity.setChkgeolocation(fila.getString(32));
             ObjListaClienteCabeceraEntity.setChkvisitsection(fila.getString(33));
+            ObjListaClienteCabeceraEntity.setTerminopago(fila.getString(34));
+            ObjListaClienteCabeceraEntity.setContado(fila.getString(35));
             Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getLastpurchase"+ObjListaClienteCabeceraEntity.getLastpurchase());
             listaClienteCabeceraEntity.add(ObjListaClienteCabeceraEntity);
         }

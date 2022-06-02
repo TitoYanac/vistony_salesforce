@@ -98,7 +98,7 @@ public class MenuAccionView extends Fragment {
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     LocationManager locationManager;
-    static String CardCode,CardName,Address,DomEmbarque_ID;
+    static String CardCode,CardName,Address,DomEmbarque_ID,Contado;
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
@@ -133,15 +133,18 @@ public class MenuAccionView extends Fragment {
 
 
         for(int s=0;s<Lista.size();s++){
-            Log.e("JEPICAMEE","=>"+Lista.get(s).getDireccion());
-            Log.e("JEPICAMEE","=>"+Lista.get(s).getDomembarque_id());
-            Log.e("JEPICAMEE","=>"+Lista.get(s).getDomfactura_id());
-            Log.e("JEPICAMEE","=>"+Lista.get(s).getCliente_id());
-            Log.e("JEPICAMEE","=>"+Lista.get(s).getZona_id());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getDireccion()=>"+Lista.get(s).getDireccion());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getDomembarque_id()=>"+Lista.get(s).getDomembarque_id());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getDomfactura_id()=>"+Lista.get(s).getDomfactura_id());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getCliente_id()=>"+Lista.get(s).getCliente_id());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getZona_id()=>"+Lista.get(s).getZona_id());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getTerminopago()=>"+Lista.get(s).getTerminopago());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getContado()=>"+Lista.get(s).getContado());
             CardCode=Lista.get(s).getCliente_id();
             CardName=Lista.get(s).getNombrecliente();
             Address=Lista.get(s).getDireccion();
             DomEmbarque_ID=Lista.get(s).getDomembarque_id();
+            Contado=Lista.get(s).getContado();
         }
 
         b.putSerializable(ARG_PARAM,Lista);
@@ -574,6 +577,12 @@ public class MenuAccionView extends Fragment {
         {
             cv_collection_check.setVisibility(View.GONE);
         }
+        else {
+            if(Contado.equals("1"))
+            {
+                cv_collection_check.setVisibility(View.GONE);
+            }
+        }
 
         TextView textTitle = dialog.findViewById(R.id.text);
         textTitle.setText("Elija Tipo de Cobranza:");
@@ -887,5 +896,8 @@ public class MenuAccionView extends Fragment {
 
         return  dialog;
     }
+
+
+
 
 }

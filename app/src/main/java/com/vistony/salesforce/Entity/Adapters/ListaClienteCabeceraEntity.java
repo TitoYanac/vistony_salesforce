@@ -39,8 +39,15 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String saldosincontados;
     private String chkgeolocation;
     private String chkvisitsection;
+    private String terminopago;
+    private String contado;
 
-    public ListaClienteCabeceraEntity(String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id, String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String linea_credito_usado, String fecharuta, String lista_precio, String docentry, String lastpurchase, String lineofbussiness, String saldosincontados,String chkgeolocation,String chkvisitsection) {
+    public ListaClienteCabeceraEntity(
+            String cliente_id,
+            String nombrecliente,
+            String direccion,
+            String saldo,
+            int imvclientecabecera, String moneda, String domembarque_id, String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String linea_credito_usado, String fecharuta, String lista_precio, String docentry, String lastpurchase, String lineofbussiness, String saldosincontados,String chkgeolocation,String chkvisitsection,String terminopago,String contado) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -77,7 +84,25 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.saldosincontados = saldosincontados;
         this.chkgeolocation = chkgeolocation;
         this.chkvisitsection = chkvisitsection;
+        this.terminopago = terminopago;
+        this.contado = contado;
 
+    }
+
+    public String getContado() {
+        return contado;
+    }
+
+    public void setContado(String contado) {
+        this.contado = contado;
+    }
+
+    public String getTerminopago() {
+        return terminopago;
+    }
+
+    public void setTerminopago(String terminopago) {
+        this.terminopago = terminopago;
     }
 
     public String getChkvisitsection() {

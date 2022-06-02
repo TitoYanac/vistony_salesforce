@@ -109,7 +109,7 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
     {
         Log.e("REOS","ProductoView.cargarProductosSqlite.codigoCliente: "+codigoCliente);
         Log.e("REOS","ProductoView.cargarProductosSqlite.terminoPago:"+terminoPago);
-
+        Log.e("REOS","ProductoView.cargarProductosSqlite.chkpricelist:"+chkpricelist);
         if(chkpricelist.equals("true"))
         {
             ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetallePriceList(codigoCliente,terminoPago,pricelist);

@@ -677,10 +677,10 @@ public class FormulasController {
         ///ALTO RIESGO ASUMIDO/////////
 
             //Agregar el Tipo de Lista de Precio, con contado no ingresa al flujo
-        documentHeader.setDraft("N");
+        //documentHeader.setDraft("N");
         //Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.Excede_SesionEntity.TipoCompra:" + SesionEntity.TipoCompra);
         Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.Excede_SesionEntity.contado:" + SesionEntity.contado);
-            if(ovCabecera.getExcede_lineacredito().equals("1")&&!SesionEntity.contado.equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
+           /* if(ovCabecera.getExcede_lineacredito().equals("1")&&!SesionEntity.contado.equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
                 //documentHeader.setApCredit("Y");
                 documentHeader.setDraft(Induvis.getStatusDraft());
                 //documentHeader.setComments(documentHeader.getComments()+" Regla: Excede Linea de Credito");
@@ -707,7 +707,7 @@ public class FormulasController {
                 documentHeader.setDraft(Induvis.getStatusDraft());
                 //documentHeader.setComments(documentHeader.getComments()+" Regla: Cambio de Termino de Pago");
                 Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.getPaymentGroupCode():" + Induvis.getStatusDraft());
-            }
+            }*/
 
 
 
@@ -793,22 +793,24 @@ public class FormulasController {
         /*ecuador no tiene modelado aprovaciones por descuento*/
 
         Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.ContadorLineasConDescuento:" + String.valueOf(ContadorLineasConDescuento));
-        if(ContadorLineasConDescuento>0){ //SE AGREGO UN DESCUENTO FUERA DE LO PERMITIDO
+        /*if(ContadorLineasConDescuento>0){ //SE AGREGO UN DESCUENTO FUERA DE LO PERMITIDO
             //documentHeader.setApPrcnt("Y");
             documentHeader.setDraft(Induvis.getStatusDraft());
             //documentHeader.setComments(documentHeader.getComments()+" Regla: Descuento en Linea");
         }else{
             //documentHeader.setApPrcnt("N");
-        }
+        }*/
+
         documentHeader.setApCredit("N");
         documentHeader.setApDues("N");
         documentHeader.setApPrcnt("N");
         documentHeader.setApTPag("N");
+        documentHeader.setDraft("Y");
 
-        if(SesionEntity.quotation.equals("Y"))
+        /*if(SesionEntity.quotation.equals("Y"))
         {
             documentHeader.setDraft("N");
-        }
+        }*/
 
         documentHeader.setDocumentLines(listadoDocumentLines);
 
@@ -1103,7 +1105,9 @@ public class FormulasController {
                         listaClienteCabeceraEntities.get(i).getLastpurchase(),
                         listaClienteCabeceraEntities.get(i).getSaldosincontados(),
                         listaClienteCabeceraEntities.get(i).getChkgeolocation(),
-                        listaClienteCabeceraEntities.get(i).getChkvisitsection()
+                        listaClienteCabeceraEntities.get(i).getChkvisitsection(),
+                        listaClienteCabeceraEntities.get(i).getTerminopago(),
+                        listaClienteCabeceraEntities.get(i).getContado()
 
                 );
             }

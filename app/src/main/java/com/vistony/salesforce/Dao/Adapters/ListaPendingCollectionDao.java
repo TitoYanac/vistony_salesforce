@@ -27,7 +27,7 @@ public class ListaPendingCollectionDao {
     }
 
     public List<ListaPendingCollectionEntity> getLeads(List<ListaPendingCollectionEntity> Lista) {
-        Lista.size();
+        leads.clear();
         try {
             for( int i=0;i<Lista.size();i++)
             {

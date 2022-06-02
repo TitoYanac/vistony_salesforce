@@ -119,6 +119,8 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
             listaClienteCabeceraEntity.setUbigeo_id ( listaConsClienteCabeceraEntities.get(i).getUbigeo_id());
             listaClienteCabeceraEntity.setTipocambio ( listaConsClienteCabeceraEntities.get(i).getTipocambio());
             listaClienteCabeceraEntity.setLastpurchase ( listaConsClienteCabeceraEntities.get(i).getLastpurchase());
+            listaClienteCabeceraEntity.setTerminopago ( listaConsClienteCabeceraEntities.get(i).getTerminopago());
+            listaClienteCabeceraEntity.setContado ( listaConsClienteCabeceraEntities.get(i).getContado());
             listaClienteCabeceraEntities.add(listaClienteCabeceraEntity);
         }
         clienteagregado=true;

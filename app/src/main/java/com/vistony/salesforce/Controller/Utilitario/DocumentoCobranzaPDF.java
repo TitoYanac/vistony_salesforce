@@ -172,42 +172,46 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             //DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL);
 
             documento.open();
-            /*PdfContentByte waterMar = writer.getDirectContentUnder();
-            // Comience a configurar la marca de agua
-            waterMar.beginText();
-            // Establecer transparencia de marca de agua
-            PdfGState gs = new PdfGState();
-            // Establece la opacidad de la fuente de relleno en0.4f
-            gs.setFillOpacity(0.1f);
-            //
-            Bitmap bitmap2=null;
-            bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo);
 
-            ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
-            bitmap2.compress(Bitmap.CompressFormat.PNG, 100 ,stream2);
-            Image imagen2 = Image.getInstance(stream2.toByteArray());
-            imagen2.setAlignment(Element.ALIGN_CENTER);
-            //
+            if(!BuildConfig.FLAVOR.equals("peru"))
+            {
+                PdfContentByte waterMar = writer.getDirectContentUnder();
+                // Comience a configurar la marca de agua
+                waterMar.beginText();
+                // Establecer transparencia de marca de agua
+                PdfGState gs = new PdfGState();
+                // Establece la opacidad de la fuente de relleno en0.4f
+                gs.setFillOpacity(0.1f);
+                //
+                Bitmap bitmap2 = null;
+                bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo);
 
-            //Image image = Image.getInstance("d:/tomatocc.jpg");
-            // establecer coordenadas posición absoluta X Y
-            imagen2.setAbsolutePosition(100, 500);
-            // Establecer el radio de rotación
-            imagen2.setRotation(0); // Rotar radianes
-            // Establecer el ángulo de rotación
-            imagen2.setRotationDegrees(0);// Ángulo de rotación
-            // Establecer zoom proporcional
-            imagen2.scalePercent(90); // Escala proporcionalmente
-            imagen2.scaleAbsolute(500,500); // Tamaño personalizado
-            // Establecer transparencia
-            waterMar.setGState(gs);
-            // Añadir imagen de marca de agua
-            waterMar.addImage(imagen2);
-            // Establecer transparencia
-            waterMar.setGState(gs);
-            // Finalizar configuración
-            waterMar.endText();
-            waterMar.stroke();*/
+                ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
+                bitmap2.compress(Bitmap.CompressFormat.PNG, 100, stream2);
+                Image imagen2 = Image.getInstance(stream2.toByteArray());
+                imagen2.setAlignment(Element.ALIGN_CENTER);
+                //
+
+                //Image image = Image.getInstance("d:/tomatocc.jpg");
+                // establecer coordenadas posición absoluta X Y
+                imagen2.setAbsolutePosition(100, 500);
+                // Establecer el radio de rotación
+                imagen2.setRotation(0); // Rotar radianes
+                // Establecer el ángulo de rotación
+                imagen2.setRotationDegrees(0);// Ángulo de rotación
+                // Establecer zoom proporcional
+                imagen2.scalePercent(90); // Escala proporcionalmente
+                imagen2.scaleAbsolute(500, 500); // Tamaño personalizado
+                // Establecer transparencia
+                waterMar.setGState(gs);
+                // Añadir imagen de marca de agua
+                waterMar.addImage(imagen2);
+                // Establecer transparencia
+                waterMar.setGState(gs);
+                // Finalizar configuración
+                waterMar.endText();
+                waterMar.stroke();
+            }
 
             Font font = FontFactory.getFont(FontFactory.HELVETICA, 28,
                     Font.BOLD, Color.black);
