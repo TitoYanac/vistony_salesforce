@@ -37,6 +37,8 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.OrdenVentaDetalleView;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,10 +121,10 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         holder.tv_orden_detalle_producto.setText(lead.getOrden_detalle_producto());
         holder.tv_orden_detalle_umd.setText(lead.getOrden_detalle_producto_id());
         holder.tv_orden_detalle_stock.setText(Convert.numberForView2 (lead.getOrden_detalle_stock()));
-        holder.tv_orden_detalle_precio.setText(Convert.numberForView2(lead.getOrden_detalle_precio_unitario()));
+        holder.tv_orden_detalle_precio.setText(Convert.currencyForView (lead.getOrden_detalle_precio_unitario()));
         holder.et_orden_detalle_cantidad.setText(lead.getOrden_detalle_cantidad());
         holder.tv_orden_detalle_galon_unitario.setText(Convert.numberForView2(lead.getOrden_detalle_gal()));
-        holder.tv_orden_detalle_precio_igv.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(),SesionEntity.Impuesto)));
+        holder.tv_orden_detalle_precio_igv.setText(Convert.currencyForView (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(),SesionEntity.Impuesto)));
 
         // holder.tv_orden_detalle_porcentaje_descuento.setText(String.valueOf(format.format(Float.parseFloat(lead.getOrden_detalle_stock_general()))));
         /*if(lead.isOrden_detalle_chk_descuentocontado())
@@ -834,31 +836,213 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
             }
         }
 
-        holder.tv_orden_detalle_igv.setText(Convert.numberForView2(lead.getOrden_detalle_monto_igv()));
+        holder.tv_orden_detalle_igv.setText(Convert.currencyForView (lead.getOrden_detalle_monto_igv()));
 
         holder.et_orden_detalle_cantidad.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean procesado = false;
+                boolean FLAG_STOCK=(SesionEntity.FLAG_STOCK.equals("Y"))?true:false;
+                boolean result_flag=true;
 
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    String valor="0";
+
+                    if(v.length()>0){
+                        valor=v.getText().toString();
+
+                        Double cantidadNum=0.0,stockNum=0.0;
+
+                        try{
+                            cantidadNum=Double.parseDouble(valor);
+                            stockNum=Double.parseDouble(lead.getOrden_detalle_stock());
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+
+                        if(cantidadNum==0){
+                            Toast.makeText(Context, "La cantidad no puede ser 0", Toast.LENGTH_SHORT).show();
+                            holder.et_orden_detalle_cantidad.setBackgroundResource(R.drawable.borde_editext_ov_rojo);
+                            holder.et_orden_detalle_cantidad.setTextColor(ContextCompat.getColor(getContext(), R.color.Rojo_Vistony));
+                        }else{
+                            Log.e("JEPICMA","Stock flag=>"+FLAG_STOCK);
+                            Log.e("JEPICMA","Stock flag=>"+cantidadNum+"-"+stockNum);
+                            if(FLAG_STOCK){ //informativo
+                                if(cantidadNum>stockNum){
+                                    Toast.makeText(Context, "La cantidad ingresada excede el stock actual", Toast.LENGTH_SHORT).show();
+                                    holder.et_orden_detalle_cantidad.setBackgroundResource(R.drawable.borde_editext_ov_rojo);
+                                    holder.et_orden_detalle_cantidad.setTextColor(ContextCompat.getColor(getContext(), R.color.Rojo_Vistony));
+                                }else{
+                                    holder.et_orden_detalle_cantidad.setBackgroundResource(R.drawable.borde_editext_ov_negro);
+                                    holder.et_orden_detalle_cantidad.setTextColor(ContextCompat.getColor(getContext(), R.color.Black));
+                                }
+                            }else{ //restrictivo
+                                if(cantidadNum>stockNum){
+                                    Toast.makeText(Context, "La cantidad ingresada excede el stock actual", Toast.LENGTH_SHORT).show();
+                                    holder.et_orden_detalle_cantidad.setBackgroundResource(R.drawable.borde_editext_ov_rojo);
+                                    holder.et_orden_detalle_cantidad.setTextColor(ContextCompat.getColor(getContext(), R.color.Rojo_Vistony));
+                                    holder.et_orden_detalle_cantidad.setText(null);
+                                    result_flag=false;
+                                }else{
+                                    holder.et_orden_detalle_cantidad.setBackgroundResource(R.drawable.borde_editext_ov_negro);
+                                    holder.et_orden_detalle_cantidad.setTextColor(ContextCompat.getColor(getContext(), R.color.Black));
+                                }
+                            }
+                        }
+                    }
+
+                    //ejecuta calculo dependiendo el resultado del flag
+                    if(result_flag) {
+
+                        lead.setOrden_detalle_cantidad(valor);
+                        lead.setOrden_detalle_montosubtotal(formulasController.getTotalPerLine(lead.getOrden_detalle_precio_unitario(), lead.getOrden_detalle_cantidad()));
+
+                        String montoToalDsct = formulasController.CalcularMontoTotalconDescuento(
+                                lead.getOrden_detalle_montosubtotal(),
+                                lead.getOrden_detalle_monto_descuento()
+                        );
+
+                        BigDecimal acumImpuesto=new BigDecimal(lead.getOrden_detalle_monto_igv());
+
+                        //lead.setOrden_detalle_montototallinea(acumImpuesto.add(new BigDecimal(montoToalDsct)).setScale(6,RoundingMode.HALF_UP).toString() );
+                        lead.setOrden_detalle_montototallinea(acumImpuesto.add(new BigDecimal(montoToalDsct)).setScale(0, RoundingMode.HALF_UP).toString() );
+
+                        //Mostrar total en moneda de acuerdo a la region
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                        holder.tv_orden_detalle_total.setText(Convert.currencyForView(lead.getOrden_detalle_montosubtotal()));
+                        ///////////////////////////////////////////////////////////////////////////////////////
+                        holder.tv_orden_detalle_galon_acumulado.setText(Convert.multiplicacion(lead.getOrden_detalle_cantidad(),lead.getOrden_detalle_gal()));
+
+                        /*for(int i=0;i<OrdenVentaDetalleView.listadoProductosAgregados.size();i++){
+                            if(i==(Integer.parseInt(lead.getOrden_detalle_item())-1)){
+
+                                String montoLineaCUMOXD=formulasController.CalcularMontoTotalconDescuento(
+                                        lead.getOrden_detalle_montosubtotal(),
+                                        lead.getOrden_detalle_monto_descuento()
+                                );
+
+                                BigDecimal montoPorLinea123=new BigDecimal(montoLineaCUMOXD);
+
+                                lead.setOrden_detalle_monto_igv(formulasController.CalcularMontoImpuestoOrdenDetallePromocionLinea(lead));
+                                lead.setOrden_detalle_montototallinea(montoPorLinea123.add(new BigDecimal(lead.getOrden_detalle_monto_igv())).setScale(0,RoundingMode.HALF_UP).toString());
+
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotalcondescuento(lead.getOrden_detalle_montosubtotalcondescuento());
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotal(lead.getOrden_detalle_montosubtotal());
+
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_monto_igv(lead.getOrden_detalle_monto_igv());
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montototallinea(
+                                        //String.valueOf (Float.parseFloat (holder.tv_orden_detalle_total.getText().toString())+Float.parseFloat(lead.getOrden_detalle_monto_igv()))
+                                        lead.getOrden_detalle_montototallinea()
+                                );
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_cantidad(valor);
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_gal(String.valueOf(holder.tv_orden_detalle_galon_unitario.getText()));
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_gal_acumulado(String.valueOf(holder.tv_orden_detalle_galon_acumulado.getText()));
+                            }
+                        }*/
+
+                        for(int i=0;i<OrdenVentaDetalleView.listadoProductosAgregados.size();i++)
+                        {
+                            if(i==(Integer.parseInt(lead.getOrden_detalle_item())-1))
+                            {
+                                lead.setOrden_detalle_monto_igv(formulasController.CalcularMontoImpuestoOrdenDetallePromocionLinea(lead));
+                                lead.setOrden_detalle_montototallinea(
+                                        String.valueOf(Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
+                                                lead.getOrden_detalle_montosubtotal(),
+                                                lead.getOrden_detalle_monto_descuento()
+                                                ))
+                                                        +
+                                                        Float.parseFloat( lead.getOrden_detalle_monto_igv())
+                                        ));
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotalcondescuento(lead.getOrden_detalle_montosubtotalcondescuento());
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotal(lead.getOrden_detalle_montosubtotal());
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_monto_igv(lead.getOrden_detalle_monto_igv());
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montototallinea(
+                                        //String.valueOf (Float.parseFloat (holder.tv_orden_detalle_total.getText().toString())+Float.parseFloat(lead.getOrden_detalle_monto_igv()))
+                                        lead.getOrden_detalle_montototallinea()
+                                );
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_cantidad(valor);
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_gal(String.valueOf(holder.tv_orden_detalle_galon_unitario.getText()));
+                                OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_gal_acumulado(String.valueOf(holder.tv_orden_detalle_galon_acumulado.getText()));
+                            }
+                        }
+                        Log.e("REOS","ListaOrdenVentaDetalleAdapter.listaPromocionCabecera:"+listaPromocionCabecera.size());
+                        if (listaPromocionCabecera.isEmpty()){
+
+                            listaPromocionCabecera=promocionCabeceraSQLiteDao.ObtenerPromocionCabecera(
+                                    SesionEntity.compania_id,
+                                    SesionEntity.fuerzatrabajo_id,
+                                    SesionEntity.usuario_id,
+                                    lead.getOrden_detalle_producto_id(),
+                                    lead.getOrden_detalle_umd(),
+                                    lead.getOrden_detalle_cantidad(),
+                                    SesionEntity.contado,
+                                    lead.getOrden_detalle_terminopago_id(),
+                                    lead.getOrden_detalle_cardcode()
+                            );
+                            Log.e("REOS","ListaOrdenVentaDetalleAdapter.listaPromocionCabecera:"+listaPromocionCabecera.size());
+                            Log.e("REOS","ListaOrdenVentaDetalleAdapter.lead.getOrden_detalle_terminopago_id()listaPromocionCabecera:"+lead.getOrden_detalle_terminopago_id());
+                            Log.e("REOS","ListaOrdenVentaDetalleAdapter.lead.getOrden_detalle_cardcode():"+lead.getOrden_detalle_cardcode());
+                        }
+                        actualizarlistapromocioncabecera(lead);
+                        if (!listaPromocionCabecera.isEmpty()){
+                            Resources res = getContext().getResources(); // need this to fetch the drawable
+                            Drawable draw = res.getDrawable( R.drawable.ic_baseline_card_giftcard_blue_24);
+                            holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                            holder.imv_consultar_promocion_cabecera.setEnabled(true);
+                            lead.setOrden_detalle_promocion_habilitada("1");
+
+                        }
+                        else {
+                            Resources res = getContext().getResources(); // need this to fetch the drawable
+                            Drawable draw = res.getDrawable( R.drawable.ic_baseline_card_giftcard_24);
+                            holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                            holder.imv_consultar_promocion_cabecera.setEnabled(false);
+                            lead.setOrden_detalle_promocion_habilitada("0");
+                        }
+                        // Ocultar teclado virtual
+                        InputMethodManager imm =
+                                (InputMethodManager) getContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+                        procesado = true;
+
+                        //OrdenVentaDetalleView.listaPromocionCabecera=listaPromocionCabecera;
+                        ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity= new ArrayList<>();
+                        listaOrdenVentaDetalleEntity.add(lead);
+                        fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.content_menu_view, ordenVentaDetalleView.newInstanceActualizaLista(listaOrdenVentaDetalleEntity));
+                        ActualizaListaOrdenDetallePromocion(lead);
+
+                        /*procesado = true;
+
+                        ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity= new ArrayList<>();
+                        listaOrdenVentaDetalleEntity.add(lead);
+
+                        fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.content_menu_view, ordenVentaDetalleView.newInstanceActualizaLista(listaOrdenVentaDetalleEntity));
+
+                        ActualizaListaOrdenDetallePromocion(lead);*/
+
+                    }
+                }
+
+                /*if (actionId == EditorInfo.IME_ACTION_SEND) {
 
                     String valor="0";
                     if(v.length()==0)
                     {
                         valor="0";
+
                     }
                     else {
                         valor=String.valueOf(Integer.parseInt(v.getText().toString()));
                     }
                     lead.setOrden_detalle_cantidad(valor);
 
-                    //holder.tv_orden_detalle_total.setText(
                     lead.setOrden_detalle_montosubtotal(formulasController.getTotalPerLine(lead.getOrden_detalle_precio_unitario(),lead.getOrden_detalle_cantidad())
-                            //String.valueOf (
-                            //Float.valueOf ((lead.getOrden_detalle_cantidad()))*Float.valueOf(String.valueOf(lead.getOrden_detalle_precio_unitario())))
                     );
-                    //holder.tv_orden_detalle_total.setText(lead.getOrden_detalle_montototallinea());
                     lead.setOrden_detalle_montototallinea(
                             String.valueOf(Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
                                     lead.getOrden_detalle_montosubtotal(),
@@ -878,13 +1062,6 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     {
                         if(i==(Integer.parseInt(lead.getOrden_detalle_item())-1))
                         {
-                            /*lead.setOrden_detalle_monto_igv(
-                                    formulasController.CalcularMontoImpuestoPorLinea(
-                                            lead.getOrden_detalle_montosubtotal(),
-                                            lead.getOrden_detalle_monto_descuento(),
-                                            "18"
-                                    )
-                            );*/
                             lead.setOrden_detalle_monto_igv(formulasController.CalcularMontoImpuestoOrdenDetallePromocionLinea(lead));
                             lead.setOrden_detalle_montototallinea(
                                     String.valueOf(Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
@@ -894,9 +1071,6 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                                                     +
                                                     Float.parseFloat( lead.getOrden_detalle_monto_igv())
                                     ));
-                            //prueba
-                            //OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_item(lead.getOrden_detalle_item());
-                            //
                             OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotalcondescuento(lead.getOrden_detalle_montosubtotalcondescuento());
                             OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_montosubtotal(lead.getOrden_detalle_montosubtotal());
                             OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_monto_igv(lead.getOrden_detalle_monto_igv());
@@ -909,16 +1083,6 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                             OrdenVentaDetalleView.listadoProductosAgregados.get(i).setOrden_detalle_gal_acumulado(String.valueOf(holder.tv_orden_detalle_galon_acumulado.getText()));
                         }
                     }
-                    /*=promocionCabeceraSQLiteDao.ObtenerPromocionCabeceraUnidad(
-
-                            SesionEntity.compania_id,
-                            SesionEntity.fuerzatrabajo_id,
-                            SesionEntity.usuario_id,
-                            lead.getOrden_detalle_producto_id(),
-                            lead.getOrden_detalle_umd(),
-                            lead.getOrden_detalle_cantidad(),
-                            SesionEntity.contado
-                    );*/
                     Log.e("REOS","ListaOrdenVentaDetalleAdapter.listaPromocionCabecera:"+listaPromocionCabecera.size());
                     if (listaPromocionCabecera.isEmpty()){
 
@@ -968,7 +1132,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     transaction.replace(R.id.content_menu_view, ordenVentaDetalleView.newInstanceActualizaLista(listaOrdenVentaDetalleEntity));
                     ActualizaListaOrdenDetallePromocion(lead);
 
-                }
+                }*/
                 return procesado;
             }
         });
@@ -1020,9 +1184,11 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                 //tv_orden_venta_detalle_lista_promocion_promocion_id.setText(lead.getOrden_detalle_lista_promocion_cabecera().get(i).getPromocion_id());
                 tv_orden_venta_detalle_lista_promocion_promocion_id.setText(lead.getOrden_detalle_lista_promocion_cabecera().get(i).getCantidadcompra());
                 tv_orden_venta_detalle_lista_promocion_cantidad_promocion.setText(lead.getOrden_detalle_lista_promocion_cabecera().get(i).getCantidadpromocion());
-                tv_orden_venta_detalle_lista_promocion_preciobase.setText(format.format(Float.parseFloat(String.valueOf(formulasController.ObtenerCalculoPromocionDetalle(
+                tv_orden_venta_detalle_lista_promocion_preciobase.setText(
+                        Convert.currencyForView(format.format(Float.parseFloat(String.valueOf(formulasController.ObtenerCalculoPromocionDetalle(
                         lead.getOrden_detalle_lista_promocion_cabecera(), i
-                )))));
+                )))))
+                );
                 tv_orden_venta_detalle_lista_promocion_cantidad_lineas.setText(String.valueOf(
                         formulasController.ObtenerCantidadLineasPromocionDetalle(lead.getOrden_detalle_lista_promocion_cabecera(),
                                 i
@@ -1047,7 +1213,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-formulasController.applyDiscountPercentageForLine(lead.getOrden_detalle_montototallinea(),lead.getOrden_detalle_porcentaje_descuento()):"+formulasController.applyDiscountPercentageForLine(lead.getOrden_detalle_montototallinea(),lead.getOrden_detalle_porcentaje_descuento()));
         Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_montosubtotal():"+lead.getOrden_detalle_montosubtotal());
         Log.e("REOS","ListaOrdenVentaDetalleAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_montosubtotalcondescuento():"+lead.getOrden_detalle_montosubtotalcondescuento());
-        holder.tv_orden_detalle_total_igv.setText(Convert.numberForView2( formulasController.CalcularMontoTotalconDescuento(lead.getOrden_detalle_montototallinea(),formulasController.applyDiscountPercentageForLine(lead.getOrden_detalle_montosubtotal(),lead.getOrden_detalle_porcentaje_descuento()))));
+        holder.tv_orden_detalle_total_igv.setText(Convert.currencyForView ( formulasController.CalcularMontoTotalconDescuento(lead.getOrden_detalle_montototallinea(),formulasController.applyDiscountPercentageForLine(lead.getOrden_detalle_montosubtotal(),lead.getOrden_detalle_porcentaje_descuento()))));
         return convertView;
     }
 

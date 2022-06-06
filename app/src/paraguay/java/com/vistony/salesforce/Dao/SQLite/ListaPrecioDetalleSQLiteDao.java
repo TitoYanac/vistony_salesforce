@@ -99,6 +99,7 @@ public class ListaPrecioDetalleSQLiteDao {
                     listaProductoEntity.setProducto(fila.getString(1));
                     listaProductoEntity.setUmd(fila.getString(2));
                     listaProductoEntity.setStock(fila.getString(3));
+                    listaProductoEntity.setStockgeneral(fila.getString(4));
                     listaProductoEntity.setPreciobase(fila.getString(5));
                     listaProductoEntity.setPrecioigv(fila.getString(6));
                     listaProductoEntity.setGal(fila.getString(7));
@@ -154,6 +155,7 @@ public class ListaPrecioDetalleSQLiteDao {
                     listaProductoEntity.setProducto(fila.getString(1));
                     listaProductoEntity.setUmd(fila.getString(2));
                     listaProductoEntity.setStock(fila.getString(3));
+                    listaProductoEntity.setStockgeneral(fila.getString(4));
                     listaProductoEntity.setPreciobase(fila.getString(5));
                     listaProductoEntity.setPrecioigv(fila.getString(6));
                     listaProductoEntity.setGal(fila.getString(7));

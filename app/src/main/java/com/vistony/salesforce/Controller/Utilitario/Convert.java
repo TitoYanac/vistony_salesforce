@@ -64,7 +64,7 @@ public class Convert {
                 locale=new Locale("ES","BO");
                 break;
             case "paraguay":
-                amountRedonded =new BigDecimal(amount).setScale(2, RoundingMode.HALF_UP);
+                amountRedonded =new BigDecimal(amount).setScale(0, RoundingMode.HALF_UP);
                 locale=new Locale("ES","PY");
                 break;
         }

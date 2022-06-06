@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -123,9 +124,9 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         holder.tv_productoid.setText(lead.getProducto_id());
         holder.tv_producto.setText(lead.getProducto());
         holder.tv_umd.setText(lead.getUmd());
-        holder.tv_precio.setText(formulasController.ObtenerCalculoPrecioImpuesto(lead.getPreciobase(), SesionEntity.Impuesto));
+        holder.tv_precio.setText(Convert.currencyForView(formulasController.ObtenerCalculoPrecioImpuesto(lead.getPreciobase(), SesionEntity.Impuesto)));
         //holder.tv_igv.setText(lead.getPrecioigv());
-        holder.tv_igv.setText(lead.getStock());
+        holder.tv_igv.setText(lead.getStockgeneral());
         holder.tv_stock.setText(lead.getStock());
         holder.tv_gal.setText(lead.getGal());
         //holder.tv_precio_impuesto.setText(formulasController.ObtenerCalculoPrecioImpuesto(lead.getPreciobase(), SesionEntity.Impuesto));

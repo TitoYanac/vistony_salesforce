@@ -220,7 +220,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
 
         clienteRepository =  new ViewModelProvider(this.getActivity()).get(ClienteRepository.class);
 
-        clienteRepository.updateInformationClient(imei,ruccliente,getContext()).observe(this.getActivity(), data -> {
+        /*clienteRepository.updateInformationClient(imei,ruccliente,getContext()).observe(this.getActivity(), data -> {
             /*switch(data){
                 case "if":
                     Toast.makeText(getContext(), "Documentos actualizados...", Toast.LENGTH_SHORT).show();
@@ -231,14 +231,14 @@ public class ClienteDetalleView extends Fragment implements Serializable {
                 case "onFailure":
                     Toast.makeText(getContext(), "Revisar conección a internet...", Toast.LENGTH_SHORT).show();
                     break;
-            }*/
-        });
+            }
+        });*/
 
 
-        refreshMasterClient.setOnRefreshListener(() -> {
+        /*refreshMasterClient.setOnRefreshListener(() -> {
             clienteRepository.updateInformationClient(imei,ruccliente,getContext());
             refreshMasterClient.setRefreshing(false);
-        });
+        });*/
 
         obtenerPametros();
         obtenerSQLiteDDeuda = new ObtenerSQLiteDDeuda();

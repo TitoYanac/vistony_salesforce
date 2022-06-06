@@ -1115,7 +1115,9 @@ public class FormulasController {
                         listaClienteCabeceraEntities.get(i).getLastpurchase(),
                         listaClienteCabeceraEntities.get(i).getSaldosincontados(),
                         listaClienteCabeceraEntities.get(i).getChkgeolocation(),
-                        listaClienteCabeceraEntities.get(i).getChkvisitsection()
+                        listaClienteCabeceraEntities.get(i).getChkvisitsection(),
+                        listaClienteCabeceraEntities.get(i).getTerminopago(),
+                        listaClienteCabeceraEntities.get(i).getContado()
                 );
             }
 

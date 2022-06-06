@@ -399,10 +399,10 @@ ParametrosView extends Fragment {
             Log.e("Jepicame","=>"+data);
         });
 
-        ///////////////////////////// PRICE LIST \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        /*///////////////////////////// PRICE LIST \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         priceListRepository.getAddAllPriceList(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
-        });
+        });*/
 
         ///////////////////////////COLORES/////////////////////////////////////////////////
         escColoursCRepository.getEscColours(SesionEntity.imei,getContext()).observe(getActivity(), data -> {

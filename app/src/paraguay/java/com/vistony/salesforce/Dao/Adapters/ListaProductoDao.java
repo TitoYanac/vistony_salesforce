@@ -51,7 +51,7 @@ public class ListaProductoDao {
                 listaProductoEntity.setPrecioigv(Lista.get(i).getPrecioigv());
                 listaProductoEntity.setGal(Lista.get(i).getGal());
                 listaProductoEntity.setPorcentaje_descuento_max(Lista.get(i).getPorcentaje_descuento_max());
-
+                listaProductoEntity.setStockgeneral(Lista.get(i).getStockgeneral());
                 saveLead(listaProductoEntity);
             }
         }catch (Exception e)

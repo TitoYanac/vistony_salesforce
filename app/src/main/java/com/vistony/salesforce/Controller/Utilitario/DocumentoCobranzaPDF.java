@@ -173,7 +173,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
 
             documento.open();
 
-            if(!BuildConfig.FLAVOR.equals("peru"))
+            /*if(!BuildConfig.FLAVOR.equals("peru"))
             {
                 PdfContentByte waterMar = writer.getDirectContentUnder();
                 // Comience a configurar la marca de agua
@@ -211,7 +211,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
                 // Finalizar configuración
                 waterMar.endText();
                 waterMar.stroke();
-            }
+            }*/
 
             Font font = FontFactory.getFont(FontFactory.HELVETICA, 28,
                     Font.BOLD, Color.black);
