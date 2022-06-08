@@ -138,7 +138,8 @@ public class MenuView extends AppCompatActivity
         KardexOfPaymentView.OnFragmentInteractionListener,
         DispatchSheetView.OnFragmentInteractionListener,
         HistoricStatusDispatchView.OnFragmentInteractionListener,
-        HistoricSalesOrderTraceabilityView.OnFragmentInteractionListener
+        HistoricSalesOrderTraceabilityView.OnFragmentInteractionListener,
+        HistoricSalesAnalysisByRoute.OnFragmentInteractionListener
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment,contentHistoryFragment;
@@ -1397,6 +1398,13 @@ public class MenuView extends AppCompatActivity
             if(tag2.equals("dispatch"))
             {
                 contentFragment=new HistoricStatusDispatchView() ;
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("historic_analysis_by_route"))
+            {
+                contentFragment=new HistoricSalesAnalysisByRoute() ;
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();

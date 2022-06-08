@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/HistoricSalesOrderTraceability"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.HistoricSalesOrderTraceabilityView">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
+                >
+                <TextView
+                    android:id="@+id/lbl_cliente"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:hint=""
+                    android:text="@string/lbl_day_route"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/Black"
+                    android:textAllCaps="true"
+                    />
+                <Spinner
+                    android:id="@+id/spn_route_day"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:entries="@array/DiasRuta"
+                    android:paddingLeft="10dp"
+                    android:spinnerMode="dropdown"
+                    android:textAlignment="gravity" />
+
+                <com.omega_r.libs.OmegaCenterIconButton
+                    android:id="@+id/btn_get_historic_sales_analysis_by_route"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_border_button_red"
+                    android:drawableLeft="@drawable/ic_search_white_24dp"
+                    android:text="@string/lbl_btn_get"
+                    android:textColor="@color/white" />
+            </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/txtdocumento"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="4"
+                    android:background="@color/colorPrimary"
+                    android:text="@string/lbl_sales_of_class_commerce"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+            </TableRow>
+        </TableLayout>
+
+
+        <ListView
+            android:id="@+id/listview_historic_sales_analysis_by_route"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp">
+        </ListView>
+    </LinearLayout>
+</FrameLayout>

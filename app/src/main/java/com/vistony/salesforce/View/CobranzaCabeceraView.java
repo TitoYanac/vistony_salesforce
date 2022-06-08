@@ -180,7 +180,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     }
 
     public static CobranzaCabeceraView newInstancia (Object objeto){
-
+        bancarizados=0;
+        depositodirectos=0;
+        count_check=0;
         CobranzaCabeceraView cobranzaCabeceraView = new CobranzaCabeceraView();
         ArrayList<String> Listado = new ArrayList<String>();
         Bundle b = new Bundle();
@@ -206,6 +208,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             {
                 count_check++;
             }
+            Log.e("REOS","CobranzaCabeceraView-newInstancia-bancarizados"+bancarizados);
+            Log.e("REOS","CobranzaCabeceraView-newInstancia-depositodirectos"+depositodirectos);
+            Log.e("REOS","CobranzaCabeceraView-newInstancia-count_check"+count_check);
         }
 
         if(bancarizados>0)

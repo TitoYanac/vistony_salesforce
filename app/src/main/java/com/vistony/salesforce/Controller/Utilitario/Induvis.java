@@ -200,6 +200,7 @@ public class Induvis {
                 agencia="P1004361020";
                 break;
             case "paraguay":
+                agencia="P80035312-9";
                 break;
         }
 

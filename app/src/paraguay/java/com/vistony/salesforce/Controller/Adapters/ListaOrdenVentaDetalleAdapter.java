@@ -57,7 +57,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
     ListaOrdenVentaDetalleListaPromocionAdapter listaOrdenVentaDetalleListaPromocionAdapter;
     FormulasController formulasController=new FormulasController(getContext());
     boolean[] itemChecked;
-    DecimalFormat format = new DecimalFormat("#0.00");
+
     //DecimalFormat formatInteger = new DecimalFormat("#0");
     public ListaOrdenVentaDetalleAdapter(android.content.Context context, List<ListaOrdenVentaDetalleEntity> objects) {
 
@@ -695,11 +695,11 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
 
         if(lead.getOrden_detalle_cantidad().isEmpty())
         {
-            holder.tv_orden_detalle_galon_acumulado.setText (format.format( Float.parseFloat("0")*Float.parseFloat(lead.getOrden_detalle_gal())));
+            holder.tv_orden_detalle_galon_acumulado.setText (String.valueOf ( Float.parseFloat("0")*Float.parseFloat(lead.getOrden_detalle_gal())));
         }
         else
         {
-            holder.tv_orden_detalle_galon_acumulado.setText( (format.format(Float.parseFloat(lead.getOrden_detalle_cantidad())*Float.parseFloat(lead.getOrden_detalle_gal()))));
+            holder.tv_orden_detalle_galon_acumulado.setText( (String.valueOf (Float.parseFloat(lead.getOrden_detalle_cantidad())*Float.parseFloat(lead.getOrden_detalle_gal()))));
         }
        /* listaOrdenVentaDetalleListaPromocionAdapter =
                 new ListaOrdenVentaDetalleListaPromocionAdapter(getContext(),
@@ -1185,7 +1185,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                 tv_orden_venta_detalle_lista_promocion_promocion_id.setText(lead.getOrden_detalle_lista_promocion_cabecera().get(i).getCantidadcompra());
                 tv_orden_venta_detalle_lista_promocion_cantidad_promocion.setText(lead.getOrden_detalle_lista_promocion_cabecera().get(i).getCantidadpromocion());
                 tv_orden_venta_detalle_lista_promocion_preciobase.setText(
-                        Convert.currencyForView(format.format(Float.parseFloat(String.valueOf(formulasController.ObtenerCalculoPromocionDetalle(
+                        Convert.currencyForView(String.valueOf(Float.parseFloat(String.valueOf(formulasController.ObtenerCalculoPromocionDetalle(
                         lead.getOrden_detalle_lista_promocion_cabecera(), i
                 )))))
                 );
@@ -1431,7 +1431,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                             listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento(),
                             Induvis.getImpuestoString()
                     );
-                    listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea = String.valueOf(format.format(Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
+                    listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea = String.valueOf((Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
                             listaOrdenVentaDetallePromocionEntity.getOrden_detalle_montosubtotal(),
                             listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento()
                             ))
@@ -1503,7 +1503,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                                     listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento(),
                                     Induvis.getImpuestoString()
                             );
-                            listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea = String.valueOf(format.format(Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
+                            listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea = String.valueOf((Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
                                     listaOrdenVentaDetallePromocionEntity.getOrden_detalle_montosubtotal(),
                                     listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento()
                                     ))
@@ -1611,7 +1611,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                             listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento(),
                             Induvis.getImpuestoString()
                     );
-                    listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea = String.valueOf(format.format(Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
+                    listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea = String.valueOf((Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
                             listaOrdenVentaDetallePromocionEntity.getOrden_detalle_montosubtotal(),
                             listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento()
                             ))
@@ -1708,7 +1708,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                         listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento(),
                         Induvis.getImpuestoString()
                 );
-                listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea = String.valueOf(format.format(Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
+                listaOrdenVentaDetallePromocionEntity.orden_detalle_montototallinea = String.valueOf((Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
                         listaOrdenVentaDetallePromocionEntity.getOrden_detalle_montosubtotal(),
                         listaOrdenVentaDetallePromocionEntity.getOrden_detalle_monto_descuento()
                         ))

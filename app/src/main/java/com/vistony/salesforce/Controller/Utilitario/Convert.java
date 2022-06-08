@@ -3,6 +3,7 @@ package com.vistony.salesforce.Controller.Utilitario;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import android.icu.text.DecimalFormat;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Adapters.ListKardexOfPaymentEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesAnalysisByRouteEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
 
 public class Convert {
@@ -233,5 +235,52 @@ public class Convert {
             p.setMargins(left, top, right, bottom);
             view.requestLayout();
         }
+    }
+
+    public static List<HistoricSalesAnalysisByRouteEntity> getConvertListHistoricSalesAnalysisByRoute(List<HistoricSalesAnalysisByRouteEntity> listHistoricSalesAnalysisByRouteEntity)
+    {
+        List<HistoricSalesAnalysisByRouteEntity> ListConvertHistoricSalesAnalysisByRouteEntity=new ArrayList<>();
+        HistoricSalesAnalysisByRouteEntity historicSalesAnalysisByRouteEntity;
+        ArrayList<String> commercialclass = new ArrayList<String>();
+
+        for(int i=0;i<listHistoricSalesAnalysisByRouteEntity.size();i++)
+        {
+            commercialclass.add(listHistoricSalesAnalysisByRouteEntity.get(i).getClase_comercial());
+        }
+        HashSet<String> hashCommercialclass = new HashSet<String>(commercialclass);
+
+        for (String strCommercialclass : hashCommercialclass)
+        {
+            Log.e("REOS","Convert-getConvertListHistoricSalesAnalysisByRoute-strCommercialclass-"+strCommercialclass);
+        }
+        for (String strCommercialclass : hashCommercialclass)
+        {
+            Log.e("REOS","Convert-getConvertListHistoricSalesAnalysisByRoute-hashCommercialclass-"+hashCommercialclass);
+            float gal_anio_actual_period_actual=0,gal_anio_actual_pe=0,
+                    gal_promedio_trimestre_anio_anterior=0,month_before_year_before=0
+                    ,gal_anio_actual_period_actual_quote=0,gal_anio_actual_period_actual_advance=0;
+            historicSalesAnalysisByRouteEntity=new HistoricSalesAnalysisByRouteEntity();
+            historicSalesAnalysisByRouteEntity.clase_comercial=strCommercialclass;
+                for(int g=0;g<listHistoricSalesAnalysisByRouteEntity.size();g++)
+                {
+
+                    if(strCommercialclass.equals(listHistoricSalesAnalysisByRouteEntity.get(g).getClase_comercial()))
+                    {
+                        gal_anio_actual_period_actual=gal_anio_actual_period_actual+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getGalanioactualperiodoactual());
+                        gal_promedio_trimestre_anio_anterior=gal_promedio_trimestre_anio_anterior+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioanterior());
+                        month_before_year_before=month_before_year_before+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getGalanioanteriorperiodoactual());
+                        gal_anio_actual_period_actual_quote=gal_anio_actual_period_actual_quote+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getCuota());
+                        gal_anio_actual_period_actual_advance=gal_anio_actual_period_actual_advance+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getPorcentajeavancecuota());
+                    }
+
+                }
+            historicSalesAnalysisByRouteEntity.galanioactualperiodoactual = String.valueOf(gal_anio_actual_period_actual) ;
+            historicSalesAnalysisByRouteEntity.promediotrimestreanioanterior = String.valueOf(gal_promedio_trimestre_anio_anterior);
+            historicSalesAnalysisByRouteEntity.galanioanteriorperiodoactual  = String.valueOf(month_before_year_before);
+            historicSalesAnalysisByRouteEntity.cuota = String.valueOf(gal_anio_actual_period_actual_quote);
+            historicSalesAnalysisByRouteEntity.porcentajeavancecuota  = String.valueOf(gal_anio_actual_period_actual_advance);
+            ListConvertHistoricSalesAnalysisByRouteEntity.add(historicSalesAnalysisByRouteEntity);
+        }
+        return ListConvertHistoricSalesAnalysisByRouteEntity;
     }
 }

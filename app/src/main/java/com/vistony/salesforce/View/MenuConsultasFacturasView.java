@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Dao.Retrofit.ResumenDiarioRepository;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -32,7 +33,7 @@ public class MenuConsultasFacturasView extends Fragment {
     private String mParam2;
     View v;
     public static OnFragmentInteractionListener mListener;
-    CardView cv_facturaporfecha,cv_historico_venta;
+    CardView cv_facturaporfecha,cv_historico_venta,cv_historic_analysis_by_route;
 
     public MenuConsultasFacturasView() {
         // Required empty public constructor
@@ -73,6 +74,13 @@ public class MenuConsultasFacturasView extends Fragment {
         v= inflater.inflate(R.layout.fragment_menu_consultas_facturas_view, container, false);
         cv_historico_venta=v.findViewById(R.id.cv_historico_venta);
         cv_facturaporfecha=v.findViewById(R.id.cv_facturaporfecha);
+        cv_historic_analysis_by_route=v.findViewById(R.id.cv_historic_analysis_by_route);
+
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            cv_historic_analysis_by_route.setVisibility(View.GONE);
+        }
+
         cv_historico_venta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +101,19 @@ public class MenuConsultasFacturasView extends Fragment {
                 //AlertaObtenerResumenDiario("Seleccione la Fecha a generar el Reporte del Dia:").show();
             }
         });
+
+        cv_historic_analysis_by_route.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Fragment="MenuConsultasView";
+                String accion="historic_analysis_by_route";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,"");
+                //AlertaObtenerResumenDiario("Seleccione la Fecha a generar el Reporte del Dia:").show();
+            }
+        });
+
+
 
         return v;
     }

@@ -97,4 +97,14 @@
     <string name="lbl_cheque">Check</string>
     <string name="lbl_deferred_date">Deferred Date</string>
     <string name="lbl_find_dispatch">Find Dispatch</string>
+    <string name="lbl_day_route">Route Day</string>
+    <string name="lbl_sales_of_class_commerce">Sales of Class Commerce</string>
+    <string name="lbl_btn_get">Get</string>
+    <string name="lbl_class_commercial">Class Commerce</string>
+    <string name="lbl_quote">Quote</string>
+    <string name="lbl_advance_percent">% advance</string>
+    <string name="lbl_prom_trim_anio_actual">Prom%</string>
+    <string name="lbl_prom_percent">Prom%</string>
+    <string name="lbl_month_before_year_before">Mes Antes</string>
+    <string name="lbl_percent_month_before_year_before">21/22</string>
 </resources>

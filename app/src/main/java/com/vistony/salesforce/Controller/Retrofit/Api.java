@@ -19,6 +19,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursCEntityRespons
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursDEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HeaderDispatchSheetEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricContainerSalesEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricSalesAnalysisByRouteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricSalesOrderTraceabilityEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricStatusDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
@@ -267,7 +268,8 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Traceabilities")
     Call<HistoricSalesOrderTraceabilityEntityResponse> geHistoricSalesOrderTraceability(@Query("imei") String imei, @Query("fecha") String date);
 
-
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/AnalysisRoute")
+    Call<HistoricSalesAnalysisByRouteEntityResponse> geHistoricSalesAnalysisByRoute (@Query("imei") String imei, @Query("dia") String date);
 
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);

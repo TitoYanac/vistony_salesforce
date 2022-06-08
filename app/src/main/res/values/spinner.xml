@@ -117,4 +117,19 @@
         <item >019-TRANSPORTE NO LLEGO POR TIEMPO POR AVERIA</item>
         <item >020-TRANSPORTE NO LLEGO POR FALTA DE TIEMPO</item>
     </string-array>
+
+    <string-array name="DiasRuta" >
+        <item >LUNES</item>
+        <item >MARTES</item>
+        <item >MIERCOLES</item>
+        <item >JUEVES</item>
+        <item >VIERNES</item>
+        <item >SABADO</item>
+        <item >LUNES2</item>
+        <item >MARTES2</item>
+        <item >MIERCOLES2</item>
+        <item >JUEVES2</item>
+        <item >VIERNES2</item>
+        <item >SABADO2</item>
+    </string-array>
 </resources>

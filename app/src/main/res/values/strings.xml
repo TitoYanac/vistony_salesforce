@@ -96,6 +96,16 @@
     <string name="lbl_cheque">Cheque</string>
     <string name="lbl_deferred_date">Fecha Diferida</string>
     <string name="lbl_find_dispatch">Consulta Despachos</string>
+    <string name="lbl_day_route">Día Ruta</string>
+    <string name="lbl_sales_of_class_commerce">Venta por Clase Commercial</string>
+    <string name="lbl_btn_get">Consultar</string>
+    <string name="lbl_class_commercial">Clase Comercial</string>
+    <string name="lbl_quote">Cuota</string>
+    <string name="lbl_advance_percent">% Avance</string>
+    <string name="lbl_prom_trim_anio_actual">Prom Trim</string>
+    <string name="lbl_prom_percent">Prom%</string>
+    <string name="lbl_month_before_year_before">Mes Antes</string>
+    <string name="lbl_percent_month_before_year_before">21/22</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
