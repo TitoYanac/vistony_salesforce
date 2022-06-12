@@ -335,6 +335,26 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN contado TEXT");
 
         }
+
+        if(oldVersion==11&&newVersion==14) {
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN latitud TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN longitud TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chkgeolocation TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chkvisitsection TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN cardcode TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN domembarque_id TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN type TEXT");
+            db.execSQL("CREATE TABLE visitsection (compania_id text,fuerzatrabajo_id text,usuario_id text,cliente_id TEXT,domembarque_id TEXT,latitudini TEXT,longitudini TEXT,dateini TEXT,timeini TEXT,latitudfin TEXT,longitudfin TEXT,datefin TEXT,timefin TEXT,chkrecibido TEXT)");
+            db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
+            db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT)");
+            db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT)");
+            db.execSQL("ALTER TABLE banco ADD COLUMN pagopos TEXT");
+            db.execSQL("ALTER TABLE banco ADD COLUMN singledeposit TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collectioncheck TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN terminopago TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN contado TEXT");
+
+        }
         if(oldVersion==6&&newVersion==14) {
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN codeSMS TEXT");
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN docentry TEXT");

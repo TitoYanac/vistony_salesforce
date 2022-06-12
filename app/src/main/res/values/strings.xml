@@ -106,6 +106,13 @@
     <string name="lbl_prom_percent">Prom%</string>
     <string name="lbl_month_before_year_before">Mes Antes</string>
     <string name="lbl_percent_month_before_year_before">21/22</string>
+    <string name="lbl_indicator_month_before">% Anterior</string>
+    <string name="lbl_indicator_biannual">% Semestral</string>
+    <string name="lbl_indicator_percent_quota">% Cuota</string>
+    <string name="lbl_formula">Formula</string>
+    <string name="lbl_variable1">Variable1</string>
+    <string name="lbl_variable2">Variable2</string>
+    <string name="lbl_resultado">Resultado</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 

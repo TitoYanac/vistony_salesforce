@@ -3,6 +3,7 @@ package com.vistony.salesforce.Controller.Utilitario;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -258,7 +259,8 @@ public class Convert {
             Log.e("REOS","Convert-getConvertListHistoricSalesAnalysisByRoute-hashCommercialclass-"+hashCommercialclass);
             float gal_anio_actual_period_actual=0,gal_anio_actual_pe=0,
                     gal_promedio_trimestre_anio_anterior=0,month_before_year_before=0
-                    ,gal_anio_actual_period_actual_quote=0,gal_anio_actual_period_actual_advance=0;
+                    ,gal_anio_actual_period_actual_quote=0,gal_anio_actual_period_actual_advance=0
+                    ,gal_promedio_semestre_anio_actual=0,gal_promedio_semestre_anio_anterior=0;
             historicSalesAnalysisByRouteEntity=new HistoricSalesAnalysisByRouteEntity();
             historicSalesAnalysisByRouteEntity.clase_comercial=strCommercialclass;
                 for(int g=0;g<listHistoricSalesAnalysisByRouteEntity.size();g++)
@@ -266,21 +268,114 @@ public class Convert {
 
                     if(strCommercialclass.equals(listHistoricSalesAnalysisByRouteEntity.get(g).getClase_comercial()))
                     {
+
+                        Log.e("REOS","Convert-if-getConvertListHistoricSalesAnalysisByRoute-listHistoricSalesAnalysisByRouteEntity.get(g).getClase_comercial():"+listHistoricSalesAnalysisByRouteEntity.get(g).getClase_comercial());
+                        Log.e("REOS","Convert-if-getConvertListHistoricSalesAnalysisByRoute-listHistoricSalesAnalysisByRouteEntity.get(g).getCardname():"+listHistoricSalesAnalysisByRouteEntity.get(g).getCardname());
+                        Log.e("REOS","Convert-if-getConvertListHistoricSalesAnalysisByRoute-listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioactual():"+listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioactual());
+                        Log.e("REOS","Convert-if-getConvertListHistoricSalesAnalysisByRoute-listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioanterior():"+listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioanterior());
+                        Log.e("REOS","Convert-if-getConvertListHistoricSalesAnalysisByRoute-consolidado:"+listHistoricSalesAnalysisByRouteEntity.get(g).getClase_comercial()+"-"+listHistoricSalesAnalysisByRouteEntity.get(g).getCardname()+"-"+listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioactual());
+                        Log.e("REOS","Convert-if-getConvertListHistoricSalesAnalysisByRoute-consolidado:"+listHistoricSalesAnalysisByRouteEntity.get(g).getClase_comercial()+"-"+listHistoricSalesAnalysisByRouteEntity.get(g).getCardname()+"-"+listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioanterior());
+                        //Comparativo Mes Actual vs Mes Año Anterior
                         gal_anio_actual_period_actual=gal_anio_actual_period_actual+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getGalanioactualperiodoactual());
-                        gal_promedio_trimestre_anio_anterior=gal_promedio_trimestre_anio_anterior+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioanterior());
                         month_before_year_before=month_before_year_before+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getGalanioanteriorperiodoactual());
+
+                        //Comparativo Semestre Actual vs Semestre Anterior
+                        gal_promedio_semestre_anio_actual=gal_promedio_semestre_anio_actual+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioactual());
+                        gal_promedio_semestre_anio_anterior=gal_promedio_semestre_anio_anterior+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getPromediotrimestreanioanterior());
+
+                        //Comparativo con Cuota de Clase Comercial
                         gal_anio_actual_period_actual_quote=gal_anio_actual_period_actual_quote+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getCuota());
-                        gal_anio_actual_period_actual_advance=gal_anio_actual_period_actual_advance+Float.parseFloat(listHistoricSalesAnalysisByRouteEntity.get(g).getPorcentajeavancecuota());
                     }
 
                 }
+                //Comparativo Mes Actual vs Mes Año Anterior
             historicSalesAnalysisByRouteEntity.galanioactualperiodoactual = String.valueOf(gal_anio_actual_period_actual) ;
-            historicSalesAnalysisByRouteEntity.promediotrimestreanioanterior = String.valueOf(gal_promedio_trimestre_anio_anterior);
             historicSalesAnalysisByRouteEntity.galanioanteriorperiodoactual  = String.valueOf(month_before_year_before);
+                    if(gal_anio_actual_period_actual==0||month_before_year_before==0)
+                    {
+                        historicSalesAnalysisByRouteEntity.prom2122=String.valueOf("0");
+                    }
+                    else {
+                        historicSalesAnalysisByRouteEntity.prom2122=(String.valueOf((Float.parseFloat(historicSalesAnalysisByRouteEntity.galanioactualperiodoactual) / Float.parseFloat(historicSalesAnalysisByRouteEntity.galanioanteriorperiodoactual)) * 100));
+                    }
+
+
+            //Comparativo Semestre Actual vs Semestre Anterior
+
+            historicSalesAnalysisByRouteEntity.promediotrimestreanioanterior = String.valueOf(gal_promedio_semestre_anio_anterior);
+            historicSalesAnalysisByRouteEntity.promediotrimestreanioactual = String.valueOf(gal_promedio_semestre_anio_actual);
+            Log.e("REOS","Convert-getConvertListHistoricSalesAnalysisByRoute-historicSalesAnalysisByRouteEntity.clase_comercial:"+historicSalesAnalysisByRouteEntity.clase_comercial);
+            Log.e("REOS","Convert-getConvertListHistoricSalesAnalysisByRoute-historicSalesAnalysisByRouteEntity.promediotrimestreanioactual:"+historicSalesAnalysisByRouteEntity.promediotrimestreanioactual);
+            Log.e("REOS","Convert-getConvertListHistoricSalesAnalysisByRoute-historicSalesAnalysisByRouteEntity.promediotrimestreanioanterior:"+historicSalesAnalysisByRouteEntity.promediotrimestreanioanterior);
+            if(gal_promedio_semestre_anio_anterior==0||gal_promedio_semestre_anio_actual==0)
+            {
+                historicSalesAnalysisByRouteEntity.Prom=String.valueOf("0");
+            }
+            else {
+                Log.e("REOS","Convert-getConvertListHistoricSalesAnalysisByRoute-historicSalesAnalysisByRouteEntity.promediotrimestreanioactual:"+historicSalesAnalysisByRouteEntity.promediotrimestreanioactual);
+                Log.e("REOS","Convert-getConvertListHistoricSalesAnalysisByRoute-historicSalesAnalysisByRouteEntity.promediotrimestreanioactual:"+historicSalesAnalysisByRouteEntity.promediotrimestreanioactual);
+                historicSalesAnalysisByRouteEntity.Prom=(String.valueOf((Float.parseFloat(historicSalesAnalysisByRouteEntity.promediotrimestreanioactual) / Float.parseFloat(historicSalesAnalysisByRouteEntity.promediotrimestreanioanterior)) * 100));
+            }
+            //historicSalesAnalysisByRouteEntity.Prom=String.valueOf(gal_promedio_semestre_anio_actual/gal_promedio_trimestre_anio_anterior);
+
+            //Comparativo con Cuota de Clase Comercial
             historicSalesAnalysisByRouteEntity.cuota = String.valueOf(gal_anio_actual_period_actual_quote);
-            historicSalesAnalysisByRouteEntity.porcentajeavancecuota  = String.valueOf(gal_anio_actual_period_actual_advance);
+            if(gal_anio_actual_period_actual==0||gal_anio_actual_period_actual_quote==0)
+            {
+                historicSalesAnalysisByRouteEntity.porcentajeavancecuota=String.valueOf("0");
+            }
+            else {
+                historicSalesAnalysisByRouteEntity.porcentajeavancecuota  = String.valueOf(gal_anio_actual_period_actual/gal_anio_actual_period_actual_quote);
+            }
+
+
+
             ListConvertHistoricSalesAnalysisByRouteEntity.add(historicSalesAnalysisByRouteEntity);
         }
+        /*List<Float> slist=new ArrayList<>();
+        for( int i=0;i<ListConvertHistoricSalesAnalysisByRouteEntity.size();i++)
+        {
+            slist.add(Float.parseFloat(ListConvertHistoricSalesAnalysisByRouteEntity.get(i).getGalanioactualperiodoactual()+String.valueOf(i)));
+            Log.e("REOS","ListHistoricSalesAnalysisByRouteDao-getLeads-lead.getId()"+Float.parseFloat(ListConvertHistoricSalesAnalysisByRouteEntity.get(i).getGalanioactualperiodoactual()+String.valueOf(i)));
+        }
+        Collections.sort(slist, Collections.reverseOrder());
+        Log.e("REOS","ListHistoricSalesAnalysisByRouteDao-saveLead-slist"+slist);
+        System.out.println("After Sorting: "+ slist);
+        //ArrayList<String> commercialclass = new ArrayList<String>();
+        //HashSet<String> hashCommercialclass = new HashSet<String>(commercialclass);
+        for (Float strCommercialclass : slist) {
+            Log.e("REOS", "ListHistoricSalesAnalysisByRouteDao-saveLead-forearch-strCommercialclass" + strCommercialclass);
+            for(int g=0;g<Lista.size();g++)
+            {
+
+                if (strCommercialclass==Float.parseFloat(Lista.get(g).getGalanioactualperiodoactual() + String.valueOf(g)))
+                {
+                    saveLead(new HistoricSalesAnalysisByRouteEntity(
+                            Lista.get(g).getCliente_id()
+                            , Lista.get(g).getCardname()
+                            , Lista.get(g).getShiptocode()
+                            , Lista.get(g).getStreet()
+                            , Lista.get(g).getTerritoryid()
+                            , Lista.get(g).getTerritory()
+                            , Lista.get(g).getSlpcode()
+                            , Lista.get(g).getDia()
+                            , Lista.get(g).getClase_comercial()
+                            , Lista.get(g).getGalanioactualperiodoactual()
+                            , Lista.get(g).getGalanioactual1periodoanterior()
+                            , Lista.get(g).getGalanioactual2periodoAnterior()
+                            , Lista.get(g).getGalanioanteriorperiodoactual()
+                            , Lista.get(g).getGalanioanterior1periodoanterior()
+                            , Lista.get(g).getGalanioanterior2periodoanterior()
+                            , Lista.get(g).getPromediotrimestreanioactual()
+                            , Lista.get(g).getPromediotrimestreanioanterior()
+                            , Lista.get(g).getProm()
+                            , Lista.get(g).getProm2122()
+                            , Lista.get(g).getCuota()
+                            , Lista.get(g).getPorcentajeavancecuota()
+                            , Lista.get(g).getGalanioactualperiodoactual() + String.valueOf(g)
+                    ));
+                }
+            }*/
         return ListConvertHistoricSalesAnalysisByRouteEntity;
     }
 }

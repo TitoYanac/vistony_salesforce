@@ -69,6 +69,16 @@ public class HistoricSalesAnalysisByRouteEntity {
     @SerializedName("Indicator3")
     public String porcentajeavancecuota;
 
+    public String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getCardname() {
         return cardname;
     }
@@ -235,5 +245,34 @@ public class HistoricSalesAnalysisByRouteEntity {
 
     public void setPorcentajeavancecuota(String porcentajeavancecuota) {
         this.porcentajeavancecuota = porcentajeavancecuota;
+    }
+
+    public HistoricSalesAnalysisByRouteEntity(String cliente_id, String cardname, String shiptocode, String street, String territoryid, String territory, String slpcode, String dia, String clase_comercial, String galanioactualperiodoactual, String galanioactual1periodoanterior, String galanioactual2periodoAnterior, String galanioanteriorperiodoactual, String galanioanterior1periodoanterior, String galanioanterior2periodoanterior, String promediotrimestreanioactual, String promediotrimestreanioanterior, String prom, String prom2122, String cuota, String porcentajeavancecuota
+            ,String id) {
+        this.cliente_id = cliente_id;
+        this.cardname = cardname;
+        this.shiptocode = shiptocode;
+        this.street = street;
+        this.territoryid = territoryid;
+        this.territory = territory;
+        this.slpcode = slpcode;
+        this.dia = dia;
+        this.clase_comercial = clase_comercial;
+        this.galanioactualperiodoactual = galanioactualperiodoactual;
+        this.galanioactual1periodoanterior = galanioactual1periodoanterior;
+        this.galanioactual2periodoAnterior = galanioactual2periodoAnterior;
+        this.galanioanteriorperiodoactual = galanioanteriorperiodoactual;
+        this.galanioanterior1periodoanterior = galanioanterior1periodoanterior;
+        this.galanioanterior2periodoanterior = galanioanterior2periodoanterior;
+        this.promediotrimestreanioactual = promediotrimestreanioactual;
+        this.promediotrimestreanioanterior = promediotrimestreanioanterior;
+        Prom = prom;
+        this.prom2122 = prom2122;
+        this.cuota = cuota;
+        this.porcentajeavancecuota = porcentajeavancecuota;
+        this. id=id;
+    }
+    public HistoricSalesAnalysisByRouteEntity() {
+
     }
 }

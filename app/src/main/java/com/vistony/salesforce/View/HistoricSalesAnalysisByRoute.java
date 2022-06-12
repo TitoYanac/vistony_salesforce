@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.vistony.salesforce.Controller.Adapters.ListHistoricSalesAnalysisByRouteAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListHistoricSalesOrderTraceabilityAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Dao.Adapters.ListHistoricSalesAnalysisByRouteDao;
+import com.vistony.salesforce.Dao.Adapters.ListaClienteDetalleDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricSalesAnalysisByRouteRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricSalesOrderTraceabilityRepository;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesAnalysisByRouteEntity;
@@ -90,6 +92,7 @@ public class HistoricSalesAnalysisByRoute extends Fragment implements View.OnCli
         activity=getActivity();
         lifecycleOwner=getActivity();
         historicSalesAnalysisByRouteEntityList=new ArrayList<>();
+        getActivity().setTitle("Analisis de Venta por Ruta");
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -155,7 +158,7 @@ public class HistoricSalesAnalysisByRoute extends Fragment implements View.OnCli
                 listHistoricSalesAnalysisByRouteAdapter
                         =new ListHistoricSalesAnalysisByRouteAdapter(
                         activity,
-                        Convert.getConvertListHistoricSalesAnalysisByRoute(data));
+                        ListHistoricSalesAnalysisByRouteDao.getInstance().getLeads(Convert.getConvertListHistoricSalesAnalysisByRoute(data)));
                 listview_historic_sales_analysis_by_route.setAdapter((listHistoricSalesAnalysisByRouteAdapter));
                 //for(int i=0;i<data.size();i++)
                 //{

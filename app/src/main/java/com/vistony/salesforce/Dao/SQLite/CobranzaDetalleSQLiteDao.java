@@ -575,7 +575,7 @@ public class CobranzaDetalleSQLiteDao {
         return resultado;
     }
 
-    public int ActualizaValidacionQRCobranzaDetalle (String recibo, String compania_id,String fuerzatrabajo_id)
+    public int ActualizaValidacionQRCobranzaDetalle (String recibo, String compania_id,String usuario_id)
     {
         int resultado=0;
         String chkdepositado="1";
@@ -587,11 +587,11 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("chkqrvalidado","Y");
             //registro.put("precio",pre);
             bd = sqliteController.getWritableDatabase();
-            resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and fuerzatrabajo_id='"+fuerzatrabajo_id+"'" ,null);
+            resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
             bd.close();
         }catch (Exception e){
             e.printStackTrace();
-            Log.e("error",""+e);
+            Log.e("REOS","CobranzaDetalleSQliteDao-ActualizaValidacionQRCobranzaDetalle-e"+e);
             resultado=0;
         }
 

@@ -1964,15 +1964,26 @@ public class MenuView extends AppCompatActivity
                         e.printStackTrace();
                     }
 
+                    try {
+
+
                     ImageCameraController imageCameraController = new ImageCameraController();
                     imageCameraController.SaveImage (this,bitmap2);
-
-                    if(cobranzaCabeceraSQLiteDao.ActualizaValidacionQRCobranzaDetalle(recibovalidado,SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id)==1){
+                    Log.e("REOS","MenuView-onActivityResult-recibovalidado: "+recibovalidado);
+                    Log.e("REOS","MenuView-onActivityResult-SesionEntity.compania_id,: "+SesionEntity.compania_id);
+                    Log.e("REOS","MenuView-onActivityResult-SesionEntity.usuario_id: "+SesionEntity.usuario_id);
+                    Log.e("REOS","MenuView-onActivityResult-SesionEntity.actualizacion: "+cobranzaCabeceraSQLiteDao.ActualizaValidacionQRCobranzaDetalle(recibovalidado,SesionEntity.compania_id,SesionEntity.usuario_id));
+                    if(cobranzaCabeceraSQLiteDao.ActualizaValidacionQRCobranzaDetalle(recibovalidado,SesionEntity.compania_id,SesionEntity.usuario_id)==1){
+                        Log.e("REOS","MenuView-onActivityResult-ingresoiftrue");
                         fragmentManager = this.getSupportFragmentManager();
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         transaction.add(R.id.content_menu_view, cobranzaDetalleView.nuevainstancia("0"));
                         cobranzaRepository.PendingCollectionQR(getApplicationContext());
 
+                    }
+                    }catch (Exception e)
+                    {
+                        Log.e("REOS","MenuView-onActivityResult-error-e: "+e.toString());
                     }
                     break;
                 case 21:  //deposito tomar foto

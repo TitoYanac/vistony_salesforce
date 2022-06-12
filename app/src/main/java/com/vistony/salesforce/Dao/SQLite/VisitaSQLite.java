@@ -82,7 +82,7 @@ public class VisitaSQLite {
         String osVersion = android.os.Build.VERSION.RELEASE;
         try {
             abrir();
-            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend,IFNULL(chkruta,0) AS chkruta ,IFNULL(id_trans_mobile,0) AS id_trans_mobile ,IFNULL(amount,0) AS amount,IFNULL(hora_anterior,0)  AS hora_anterior FROM VISITA WHERE chkrecibido='0' LIMIT 30", null);
+            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend,IFNULL(chkruta,0) AS chkruta ,IFNULL(id_trans_mobile,0) AS id_trans_mobile ,IFNULL(amount,0) AS amount,IFNULL(hora_anterior,0)  AS hora_anterior FROM VISITA WHERE chkrecibido='0' AND fecha_registro>='20220601' LIMIT 30", null);
 
             if (fila.moveToFirst()) {
                 do {
@@ -94,8 +94,7 @@ public class VisitaSQLite {
                     visita.setDate(fila.getString(fila.getColumnIndex("fecha_registro")));
                     visita.setHour(fila.getString(fila.getColumnIndex("hora_registro")));
                     visita.setTerritory(fila.getString(fila.getColumnIndex("zona_id")));
-                    visita.setSlpCode(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
-                    visita.setUserId(fila.getString(fila.getColumnIndex("usuario_id")));
+
                     visita.setType(fila.getString(fila.getColumnIndex("tipo")));
                     visita.setObservation(fila.getString(fila.getColumnIndex("observacion")));
                     visita.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
@@ -116,6 +115,10 @@ public class VisitaSQLite {
                     visita.setMobileID (fila.getString(fila.getColumnIndex("id_trans_mobile")));
                     visita.setAmount (fila.getString(fila.getColumnIndex("amount")));
                     visita.setHour_Before (fila.getString(fila.getColumnIndex("hora_anterior")));
+
+                    visita.setSlpCode(SesionEntity.fuerzatrabajo_id);
+                    visita.setUserId(SesionEntity.usuario_id);
+
                     listaVisitaSQLiteEntity.add(visita);
 
                     UpdateCountSend(fila.getString(fila.getColumnIndex("id")), SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));

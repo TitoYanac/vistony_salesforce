@@ -10,13 +10,9 @@
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_comision_detalle"
-        android:layout_width="380dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:id="@+id/cv_sales_analysis_by_route_client"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground">
@@ -41,96 +37,114 @@
             android:background="@drawable/linea_rectangular_gradiente_muy_bajo" />-->
 
         <TextView
-            android:id="@+id/lbl_comisionesdetalle_cuota"
+            android:id="@+id/lbl_month_current"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="80dp"
-            android:text="Año Anterior"
+            android:layout_marginTop="70dp"
+            android:text="Gl Periodo Actual "
+            android:textSize="20dp"
+
+            android:textAppearance="?attr/textAppearanceListItem"
+            />
+
+        <TextView
+            android:id="@+id/tv_month_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="240dp"
+            android:layout_marginTop="70dp"
+            android:text="Variable1"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:textAlignment="textEnd"
+            android:textAppearance="?attr/textAppearanceListItem"
+
+            />
+
+        <TextView
+            android:id="@+id/lbl_indicator_month_before"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="100dp"
+            android:text="@string/lbl_indicator_month_before"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
-            android:id="@+id/tv_gal_anio_actual_period_actual_quote"
+            android:id="@+id/tv_indicator_month_before"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="80dp"
-            android:text="Cuota1"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="100dp"
+            android:text="@string/lbl_indicator_month_before"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold" />
 
+
         <TextView
-            android:id="@+id/lbl_comisionesdetalle_avance"
+            android:id="@+id/lbl_indicator_biannual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="100dp"
-            android:text="Mes Actual"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="130dp"
+            android:text="@string/lbl_indicator_biannual"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
-            android:id="@+id/tv_gal_anio_actual_period_actual"
+            android:id="@+id/tv_indicator_biannual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="100dp"
-            android:text="Avance1"
+            android:layout_marginLeft="160dp"
+            android:layout_marginTop="130dp"
+            android:text="@string/lbl_indicator_biannual"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/lbl_comisionesdetalle_umd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="210dp"
-            android:layout_marginTop="80dp"
-            android:text="UMD"
-            android:textAppearance="?attr/textAppearanceListItem" />
 
-        <TextView
-            android:id="@+id/tv_comisionesdetalle_umd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="290dp"
-            android:layout_marginTop="80dp"
-            android:text="GL"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/lbl_comisionesdetalle_porcentaje"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="210dp"
-            android:layout_marginTop="100dp"
-            android:text="% Avance"
-            android:textAppearance="?attr/textAppearanceListItem" />
 
-        <TextView
-            android:id="@+id/tv_gal_anio_actual_period_actual_advance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="290dp"
-            android:layout_marginTop="100dp"
-            android:text="%"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textStyle="bold" />
+
 
         <ImageView
-            android:id="@+id/imv_get_legend"
+            android:id="@+id/imv_detail_mes_anterior"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="310dp"
-            android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_baseline_legend_toggle_24" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="100dp"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            app:srcCompat="@drawable/ic_baseline_visibility_24" />
 
-        <LinearLayout
-            android:id="@+id/content"
+        <ImageView
+            android:id="@+id/imv_detail_semestral"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:background="@drawable/borde_cuadrado"
-            android:orientation="vertical"></LinearLayout>
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="130dp"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            app:srcCompat="@drawable/ic_baseline_visibility_24" />
+
+        <ImageView
+            android:id="@+id/imv_alert_detail_mes_anterior"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="250dp"
+            android:layout_marginTop="100dp"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            app:srcCompat="@drawable/ic_baseline_dangerous_24" />
+        <ImageView
+            android:id="@+id/imv_alert_detail_semestral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="250dp"
+            android:layout_marginTop="130dp"
+            android:textColor="@color/Black"
+            android:textStyle="bold"
+            app:srcCompat="@drawable/ic_baseline_dangerous_24" />
+
 
     </androidx.cardview.widget.CardView>
 
