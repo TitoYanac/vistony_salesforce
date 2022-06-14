@@ -157,7 +157,7 @@ public class ListHistoricSalesAnalysisByRouteAdapter extends ArrayAdapter<Histor
         holder.tv_quota_percent.setText(Convert.numberForView(lead.getPorcentajeavancecuota()));
         holder.tv_indicator_month_before.setText(Convert.numberForView(lead.getProm2122()));
         holder.tv_month_current.setText(Convert.numberForView2(lead.getGalanioactualperiodoactual()));
-
+        holder.layout.removeAllViews();
         if(Float.parseFloat(lead.getProm())>=0&&Float.parseFloat(lead.getProm())<80)
         {
             Resources res = getContext().getResources(); // need this to fetch the drawable

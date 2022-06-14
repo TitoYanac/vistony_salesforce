@@ -181,7 +181,7 @@ ParametrosView extends Fragment {
     MenuItem seleccionar_todo;
     private TypeDispatchRepository typeDispatchRepository;
     private ReasonDispatchRepository reasonDispatchRepository;
-
+    private RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository;
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
         Bundle args = new Bundle();
@@ -268,7 +268,7 @@ ParametrosView extends Fragment {
         FormulasController formulasController=new FormulasController(getContext());
         typeDispatchRepository = new ViewModelProvider(getActivity()).get(TypeDispatchRepository.class);
         reasonDispatchRepository = new ViewModelProvider(getActivity()).get(ReasonDispatchRepository.class);
-
+        rutaFuerzaTrabajoRepository = new ViewModelProvider(getActivity()).get(RutaFuerzaTrabajoRepository.class);
         //CARGA DE MAESTROS
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
         switch (BuildConfig.FLAVOR){
@@ -418,7 +418,10 @@ ParametrosView extends Fragment {
         reasonDispatchRepository.geReasonDispatch (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
         });
-
+        ///////////////////////////Ruta de Trabajo/////////////////////////////////////////////////
+        rutaFuerzaTrabajoRepository.getInsertDBWorkPath  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
 
 
 
@@ -523,13 +526,15 @@ ParametrosView extends Fragment {
                                     parametrosSQLite.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
                                 }
 
-                                RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
+                                /*RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
                                 LRutaFuerzaTrabajo = rutaFuerzaTrabajoRepository.getRutaFuerzaTrabajoWS(SesionEntity.imei);
                                 if (LRutaFuerzaTrabajo!=null) {
                                     rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo();
                                     CantRutaFuerzaTrabajo = registrarRutaFuerzaTrabajoSQLite(LRutaFuerzaTrabajo);
                                     parametrosSQLite.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
-                                }
+                                }*/
+
+
                                 MotivoVisitaWS motivoVisitaWS = new MotivoVisitaWS(getContext());
                                 LMVisita = motivoVisitaWS.getMotivoVisitaWS (SesionEntity.imei, SesionEntity.compania_id);
                                 if (!(LMVisita.isEmpty())) {
@@ -680,14 +685,15 @@ ParametrosView extends Fragment {
                     else if (argumento.equals("RUTA FUERZATRABAJO")) {
 
                         Log.e("JPCM","FUERZA DE TRABAJO DESCARGANDO");
-                        RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
+                        /*RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
                         LRutaFuerzaTrabajo = rutaFuerzaTrabajoRepository.getRutaFuerzaTrabajoWS(SesionEntity.imei);
 
                         if (!(LRutaFuerzaTrabajo.isEmpty())) {
                             rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo();
                             CantRutaFuerzaTrabajo = registrarRutaFuerzaTrabajoSQLite(LRutaFuerzaTrabajo);
                             parametrosSQLite.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
-                        }
+                        }*/
+
                     }else if (argumento.equals("MOTIVO VISITA")) {
                         MotivoVisitaWS motivoVisitaWS = new MotivoVisitaWS(getContext());
                         LMVisita = motivoVisitaWS.getMotivoVisitaWS (SesionEntity.imei, SesionEntity.compania_id);
@@ -1144,7 +1150,7 @@ ParametrosView extends Fragment {
         return resultado;
     }
 
-    public int registrarRutaFuerzaTrabajoSQLite(List<RutaFuerzaTrabajoSQLiteEntity> Lista)
+    /*public int registrarRutaFuerzaTrabajoSQLite(List<RutaFuerzaTrabajoSQLiteEntity> Lista)
     {
         rutaFuerzaTrabajoSQLiteDao = new RutaFuerzaTrabajoSQLiteDao(getContext());
         int resultado=0;
@@ -1167,7 +1173,7 @@ ParametrosView extends Fragment {
             System.out.println(e.getMessage());
         }
         return resultado;
-    }
+    }*/
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

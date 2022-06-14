@@ -7,18 +7,23 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.RutaFuerzaTrabajoEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.UserEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaFuerzaTrabajoSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RutaFuerzaTrabajoSQLiteDao {
     SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<RutaFuerzaTrabajoSQLiteEntity> listaRutaFuerzaTrabajoSQLiteEntity;
-
+    Context context;
     public RutaFuerzaTrabajoSQLiteDao(Context context)
     {
         sqliteController = new SqliteController(context);
+        this.context=context;
     }
     public void abrir(){
         Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
@@ -32,7 +37,7 @@ public class RutaFuerzaTrabajoSQLiteDao {
         sqliteController.close();
     }
 
-
+    /*
     public int InsertaRutaFuerzaTrabajo (
             String compania_id,
             String zona_id,
@@ -53,6 +58,34 @@ public class RutaFuerzaTrabajoSQLiteDao {
         registro.put("fechainicioruta",fechainicioruta);
         registro.put("estado",estado);
         bd.insert("rutafuerzatrabajo",null,registro);
+        bd.close();
+        return 1;
+    }*/
+
+
+    public int InsertWorkPath (List<RutaFuerzaTrabajoEntity> rutaFuerzaTrabajoEntity)
+    {
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
+        usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
+        abrir();
+        try {
+            Log.e("REOS", "RutaFuerzaTrabajoSQLiteDao.InsertWorkPath.rutaFuerzaTrabajoEntity.size(): " + rutaFuerzaTrabajoEntity.size());
+            ContentValues registro = new ContentValues();
+            for (int i = 0; i < rutaFuerzaTrabajoEntity.size(); i++) {
+                registro.put("compania_id",usuarioSQLiteEntity.getCompania_id());
+                registro.put("zona_id",rutaFuerzaTrabajoEntity.get(i).getZona_id());
+                registro.put("zona",rutaFuerzaTrabajoEntity.get(i).getZona());
+                registro.put("dia",rutaFuerzaTrabajoEntity.get(i).getDia());
+                registro.put("frecuencia",rutaFuerzaTrabajoEntity.get(i).getFrecuencia());
+                registro.put("fechainicioruta",rutaFuerzaTrabajoEntity.get(i).getFechainicioruta());
+                registro.put("estado",rutaFuerzaTrabajoEntity.get(i).getEstado());
+                bd.insert("rutafuerzatrabajo", null, registro);
+            }
+        }
+        catch (Exception e){
+            Log.e("REOS", "RutaFuerzaTrabajoSQLiteDao.InsertWorkPath.e: " + e.toString());
+        }
         bd.close();
         return 1;
     }
@@ -210,6 +243,28 @@ public class RutaFuerzaTrabajoSQLiteDao {
         }
         bd.close();
         return resultado;
+    }
+
+    public ArrayList<String>  getDayWorkPath ()
+    {
+        try {
+            ArrayList<String> days = new  ArrayList<String>();
+            abrir();
+            Cursor fila = bd.rawQuery(
+                    "Select dia from rutafuerzatrabajo group by dia",null);
+
+            if (fila.moveToFirst()) {
+                do {
+                    days.add(fila.getString(fila.getColumnIndex("dia")));
+                } while (fila.moveToNext());
+            }
+            bd.close();
+            return days;
+        }catch (Exception e){
+            e.printStackTrace();
+            bd.close();
+            return null;
+        }
     }
 
 }

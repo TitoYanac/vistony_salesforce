@@ -139,7 +139,8 @@ public class MenuView extends AppCompatActivity
         DispatchSheetView.OnFragmentInteractionListener,
         HistoricStatusDispatchView.OnFragmentInteractionListener,
         HistoricSalesOrderTraceabilityView.OnFragmentInteractionListener,
-        HistoricSalesAnalysisByRoute.OnFragmentInteractionListener
+        HistoricSalesAnalysisByRoute.OnFragmentInteractionListener,
+        CanvasView.OnFragmentInteractionListener
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment,contentHistoryFragment;
@@ -1146,7 +1147,14 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
 
             }
+            if(tag2.equals("canvas"))
+            {
+                contentFragment=new CanvasView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
 
+            }
         }
 
         if(tag.equals("OrdenVentaCabeceraView")){

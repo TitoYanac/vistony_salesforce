@@ -87,7 +87,7 @@ public class MenuAccionView extends Fragment {
     int validar=0;
     private static String TAG_1 = "text";
     View v;
-    private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead,cv_visit_section,cv_dispatch;
+    private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead,cv_visit_section,cv_dispatch,cv_canvas;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
 
     OnFragmentInteractionListener mListener;
@@ -224,10 +224,17 @@ public class MenuAccionView extends Fragment {
         cv_lead=v.findViewById(R.id.cv_lead);
         cv_visit_section=v.findViewById(R.id.cv_visit_section);
         cv_dispatch=v.findViewById(R.id.cv_dispatch);
+        cv_canvas=v.findViewById(R.id.cv_canvas);
 
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
 
+        cv_canvas.setOnClickListener(v -> {
+            String Fragment="MenuAccionView";
+            String accion="canvas";
+            String compuesto=Fragment+"-"+accion;
+            mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+        });
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
             cv_lead.setVisibility(View.GONE);

@@ -26,6 +26,11 @@
     app:showAsAction="ifRoom"/>
 
 
-
+    <item
+        android:id="@+id/edit_signature"
+        android:enabled="false"
+        android:icon="@drawable/ic_edit_black_24dp"
+        android:title="@string/lbl_edit_signature"
+        app:showAsAction="ifRoom"/>
 
 </menu>

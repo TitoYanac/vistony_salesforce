@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -27,6 +28,7 @@ import com.vistony.salesforce.Dao.Adapters.ListHistoricSalesAnalysisByRouteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteDetalleDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricSalesAnalysisByRouteRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricSalesOrderTraceabilityRepository;
+import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoRepository;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesAnalysisByRouteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
@@ -64,6 +66,8 @@ public class HistoricSalesAnalysisByRoute extends Fragment implements View.OnCli
     static Activity activity;
     static ListHistoricSalesAnalysisByRouteAdapter listHistoricSalesAnalysisByRouteAdapter;
     public static List<HistoricSalesAnalysisByRouteEntity> historicSalesAnalysisByRouteEntityList;
+    RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository;
+
     public HistoricSalesAnalysisByRoute() {
         // Required empty public constructor
     }
@@ -110,7 +114,11 @@ public class HistoricSalesAnalysisByRoute extends Fragment implements View.OnCli
         listview_historic_sales_analysis_by_route=v.findViewById(R.id.listview_historic_sales_analysis_by_route);
         btn_get_historic_sales_analysis_by_route.setOnClickListener(this);
         historicSalesAnalysisByRouteRepository= new ViewModelProvider(getActivity()).get(HistoricSalesAnalysisByRouteRepository.class);
-
+        rutaFuerzaTrabajoRepository = new ViewModelProvider(getActivity()).get(RutaFuerzaTrabajoRepository.class);
+        ArrayList<String> dayList = rutaFuerzaTrabajoRepository.getDayDB(getContext());
+        ArrayAdapter<String> adapterDay = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,dayList);
+        spn_route_day.setAdapter(adapterDay);
+        adapterDay.notifyDataSetChanged();
     return v;
     }
 
@@ -148,7 +156,7 @@ public class HistoricSalesAnalysisByRoute extends Fragment implements View.OnCli
     static private void getListHistoricSales(String Day)
     {
         pd = new ProgressDialog(activity);
-        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Ordenes de Venta", true, false);
+        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Analisis de Venta", true, false);
         historicSalesAnalysisByRouteRepository.getHistoricSalesAnalysisByRoute  (SesionEntity.imei, Day).observe(lifecycleOwner, data -> {
             historicSalesAnalysisByRouteEntityList=data;
             Log.e("Jepicame","=>"+data);
