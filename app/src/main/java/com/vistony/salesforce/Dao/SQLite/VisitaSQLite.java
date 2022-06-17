@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
@@ -80,6 +81,10 @@ public class VisitaSQLite {
         String brand = Build.MANUFACTURER;
         String model = Build.MODEL;
         String osVersion = android.os.Build.VERSION.RELEASE;
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
         try {
             abrir();
             Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend,IFNULL(chkruta,0) AS chkruta ,IFNULL(id_trans_mobile,0) AS id_trans_mobile ,IFNULL(amount,0) AS amount,IFNULL(hora_anterior,0)  AS hora_anterior FROM VISITA WHERE chkrecibido='0' AND fecha_registro>='20220601' LIMIT 30", null);
@@ -116,12 +121,12 @@ public class VisitaSQLite {
                     visita.setAmount (fila.getString(fila.getColumnIndex("amount")));
                     visita.setHour_Before (fila.getString(fila.getColumnIndex("hora_anterior")));
 
-                    visita.setSlpCode(SesionEntity.fuerzatrabajo_id);
-                    visita.setUserId(SesionEntity.usuario_id);
+                    visita.setSlpCode(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+                    visita.setUserId(fila.getString(fila.getColumnIndex("usuario_id")));
 
                     listaVisitaSQLiteEntity.add(visita);
 
-                    UpdateCountSend(fila.getString(fila.getColumnIndex("id")), SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
+                    UpdateCountSend(fila.getString(fila.getColumnIndex("id")), ObjUsuario.compania_id,ObjUsuario.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
                 } while (fila.moveToNext());
             }
 

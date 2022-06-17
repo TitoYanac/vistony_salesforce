@@ -21,6 +21,7 @@ import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import io.sentry.Sentry;
 
@@ -165,6 +166,8 @@ public class CobranzaDetalleSQLiteDao {
 
         for (int i = 0; i < historicoCobranzaEntityResponse.getHistoricoCobranza().size(); i++) {
             ContentValues registro = new ContentValues();
+            Random numAleatorio = new Random();
+            int codeSMS = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
             registro.put("cobranza_id", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getDeposito_id());
             registro.put("cliente_id", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getCliente_id());
             registro.put("documento_id", historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getDocumento_id());
@@ -196,6 +199,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("horacobranza",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza());
             registro.put("cardname",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getNombrecliente());
             registro.put("docentry",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getDocentry());
+            registro.put("codeSMS",String.valueOf(codeSMS));
             bd.insert("cobranzadetalle", null, registro);
         }
 

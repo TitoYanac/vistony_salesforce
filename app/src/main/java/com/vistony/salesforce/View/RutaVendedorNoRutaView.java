@@ -158,12 +158,12 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
         obtenerRutaVendedorNoRuta=new ObtenerRutaVendedorNoRuta();
         obtenerRutaVendedorNoRuta.execute();
 
-        if(!BuildConfig.FLAVOR.equals("peru"))
+        /*if(!BuildConfig.FLAVOR.equals("peru"))
         {
             table_row_no_ruta_geolocation.setVisibility(View.GONE);
-        }
+        }*/
 
-        //table_row_no_ruta_geolocation.setVisibility(View.GONE);
+        table_row_no_ruta_geolocation.setVisibility(View.GONE);
         fabagregarclientenoruta.setOnClickListener(view -> {
             String Fragment="RutaVendedorNorutaView";
             String accion="agregarClienteNoRuta";

@@ -42,11 +42,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="70dp"
-            android:text="Gl Periodo Actual "
-            android:textSize="20dp"
-
+            android:text="Periodo Actual - GAL "
             android:textAppearance="?attr/textAppearanceListItem"
-            />
+
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tv_month_current"
@@ -55,10 +54,10 @@
             android:layout_marginStart="240dp"
             android:layout_marginTop="70dp"
             android:text="Variable1"
-            android:textSize="20dp"
-            android:textStyle="bold"
             android:textAlignment="textEnd"
             android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="20dp"
+            android:textStyle="bold"
 
             />
 
@@ -75,7 +74,7 @@
             android:id="@+id/tv_indicator_month_before"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="160dp"
+            android:layout_marginStart="190dp"
             android:layout_marginTop="100dp"
             android:text="@string/lbl_indicator_month_before"
             android:textAppearance="?attr/textAppearanceListItem"
@@ -95,15 +94,11 @@
             android:id="@+id/tv_indicator_biannual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="160dp"
+            android:layout_marginLeft="190dp"
             android:layout_marginTop="130dp"
             android:text="@string/lbl_indicator_biannual"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold" />
-
-
-
-
 
 
         <ImageView
@@ -135,6 +130,7 @@
             android:textColor="@color/Black"
             android:textStyle="bold"
             app:srcCompat="@drawable/ic_baseline_dangerous_24" />
+
         <ImageView
             android:id="@+id/imv_alert_detail_semestral"
             android:layout_width="wrap_content"
@@ -145,7 +141,25 @@
             android:textStyle="bold"
             app:srcCompat="@drawable/ic_baseline_dangerous_24" />
 
+        <TextView
+            android:id="@+id/lbl_percent_semestral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="230dp"
+            android:layout_marginTop="130dp"
+            android:text="@string/lbl_percent"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/lbl_percent_anio_anterior"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="230dp"
+            android:layout_marginTop="100dp"
+            android:text="@string/lbl_percent"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
 

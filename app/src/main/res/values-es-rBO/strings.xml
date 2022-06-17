@@ -114,4 +114,5 @@
     <string name="lbl_variable2">Variable2</string>
     <string name="lbl_resultado">Resultado</string>
     <string name="lbl_edit_signature">Editar Firma</string>
+    <string name="lbl_percent">%</string>
 </resources>

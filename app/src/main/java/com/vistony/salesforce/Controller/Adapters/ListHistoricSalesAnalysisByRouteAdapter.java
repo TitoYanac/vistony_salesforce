@@ -357,7 +357,7 @@ public class ListHistoricSalesAnalysisByRouteAdapter extends ArrayAdapter<Histor
                                             ,HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.get(i).getGalanioanteriorperiodoactual()
                                             ,HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.get(i).getProm2122()).show();*/
 
-                                    Toast.makeText(getContext(), "Prueba imv_detail_mes_anterior", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "Prueba imv_detail_mes_anterior", Toast.LENGTH_SHORT).show();
                                     for(int j=0;j<HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.size();j++) {
                                         if(lead.clase_comercial.equals(HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.get(j).getClase_comercial())){
                                             if(tv_class_commercial.getText().equals(HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.get(j).getCardname()))
@@ -379,7 +379,7 @@ public class ListHistoricSalesAnalysisByRouteAdapter extends ArrayAdapter<Histor
                                             ,HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.get(i).getPromediotrimestreanioanterior()
                                             ,HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.get(i).getProm()
                                     ).show();*/
-                                    Toast.makeText(getContext(), "Prueba imv_detail_semestral", Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getContext(), "Prueba imv_detail_semestral", Toast.LENGTH_SHORT).show();
                                     for(int j=0;j<HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.size();j++) {
                                         if(lead.clase_comercial.equals(HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.get(j).getClase_comercial())){
                                             if(tv_class_commercial.getText().equals(HistoricSalesAnalysisByRoute.historicSalesAnalysisByRouteEntityList.get(j).getCardname()))

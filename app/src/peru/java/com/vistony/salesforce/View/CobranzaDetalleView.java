@@ -53,6 +53,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoCobranzaPDF;
@@ -129,7 +130,7 @@ public class CobranzaDetalleView extends Fragment {
     static public ImageView imvprueba;
     CheckBox chkpagoadelantado, chk_bancarizado, chk_pago_directo, chk_pago_pos;
     ;
-    MenuItem generarpdf, validarqr, guardar;
+    MenuItem generarpdf, validarqr, guardar,edit_signature;
     TextView tv_recibo;
     public static CheckBox chk_validacionqr;
     static HiloVlidarQR hiloVlidarQR;
@@ -163,6 +164,7 @@ public class CobranzaDetalleView extends Fragment {
     private ProgressDialog pd;
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
     static Context context;
+    FloatingActionButton fab_invoice_cancelation;
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm", "Este es NUEVA ISNTANCIA 1");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
@@ -402,8 +404,9 @@ public class CobranzaDetalleView extends Fragment {
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo = (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
+        fab_invoice_cancelation =  (FloatingActionButton) v.findViewById(R.id.fab_invoice_cancelation);
 
-
+        fab_invoice_cancelation.setVisibility(View.GONE);
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
                                                    @Override
                                                    public void onClick(View view) {
@@ -746,6 +749,9 @@ public class CobranzaDetalleView extends Fragment {
         guardar = menu.findItem(R.id.guardar);
         generarpdf = menu.findItem(R.id.generarpdf);
         validarqr = menu.findItem(R.id.validarqr);
+        edit_signature = menu.findItem(R.id.edit_signature);
+
+        edit_signature.setVisible(false);
         menu_variable = menu;
 
 
@@ -2279,7 +2285,7 @@ public class CobranzaDetalleView extends Fragment {
                 );
                 if(resultado>0)
                 {
-                    cobranzaDetalleSQLiteDao.ActualizaValidacionQRCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
+                    cobranzaDetalleSQLiteDao.ActualizaValidacionQRCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id);
                     chk_validacionqr.setChecked(true);
                     cobranzaRepository.PendingCollectionQR(context);
                     Toast.makeText(getContext(), "Codigo Actualizado Correctamente!!!", Toast.LENGTH_SHORT).show();

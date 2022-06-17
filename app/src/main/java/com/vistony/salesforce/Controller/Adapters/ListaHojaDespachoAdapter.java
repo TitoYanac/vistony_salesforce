@@ -142,6 +142,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         {
             holder.tv_cliente.setText(listaClienteEnvio.get(i).getNombrecliente());
         }*/
+        holder.chk_updatedispatch.setVisibility(View.GONE);
         holder.tv_cliente.setText(lead.getNombrecliente());
         //holder.tv_cliente.setText(lead.getNombrecliente());
         holder.relativeListaHojaDespacho.setOnClickListener(new View.OnClickListener() {

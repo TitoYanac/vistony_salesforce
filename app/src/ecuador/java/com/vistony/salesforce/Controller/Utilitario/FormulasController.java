@@ -1056,7 +1056,7 @@ public class FormulasController {
 
                 resultado=rutaVendedorSQLiteDao.InsertaRutaVendedor(
                         listaClienteCabeceraEntities.get(i).getCliente_id(),
-                        listaClienteCabeceraEntities.get(i).getCompania_id(),
+                        ObjUsuario.compania_id,
                         listaClienteCabeceraEntities.get(i).getNombrecliente(),
                         listaClienteCabeceraEntities.get(i).getDomembarque_id(),
                         listaClienteCabeceraEntities.get(i).getDomfactura_id(),

@@ -228,7 +228,9 @@ public class MenuAccionView extends Fragment {
 
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
-
+        cv_canvas.setVisibility(View.GONE);
+        cv_visit_section.setVisibility(View.GONE);
+        //cv_lead.setVisibility(View.GONE);
         cv_canvas.setOnClickListener(v -> {
             String Fragment="MenuAccionView";
             String accion="canvas";
@@ -255,6 +257,7 @@ public class MenuAccionView extends Fragment {
             cv_visita.setVisibility(View.GONE);
             cv_lead.setVisibility(View.GONE);
             cv_visit_section.setVisibility(View.GONE);
+            cv_dispatch.setVisibility(View.GONE);
         }
 
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
@@ -311,6 +314,8 @@ public class MenuAccionView extends Fragment {
             }else{
                 Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
             }
+            //DialogFragment dialogFragment = new VisitaDialogController(objetoMenuAccionView);
+            //dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
             //alertaAdvertencia("La Opcion Aun no Esta Habilitada",getContext()).show();
         });
         cv_lead.setOnClickListener(v -> {

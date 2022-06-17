@@ -87,6 +87,7 @@ public class VisitaDialogController extends DialogFragment {
                 Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
             }
         }
+
         //final EditText textMotivo = dialog.findViewById(R.id.textEditMotivo);
         //textMotivo.setSingleLine(false);
         //textMotivo.setGravity(Gravity.LEFT | Gravity.TOP);
