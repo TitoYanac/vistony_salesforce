@@ -257,7 +257,7 @@ public class MenuAccionView extends Fragment {
             cv_visita.setVisibility(View.GONE);
             cv_lead.setVisibility(View.GONE);
             cv_visit_section.setVisibility(View.GONE);
-            cv_dispatch.setVisibility(View.GONE);
+            //cv_dispatch.setVisibility(View.GONE);
         }
 
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
@@ -320,15 +320,15 @@ public class MenuAccionView extends Fragment {
         });
         cv_lead.setOnClickListener(v -> {
                 String Fragment="MenuAccionView";
-                String accion="lead";
+                String accion="leadUpdateClient";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
                 SesionEntity.quotation="N";
             //displayDialogMap();
-            /*MapsInitializer.initialize(getActivity());
+            //MapsInitializer.initialize(getActivity());
 
-            mapView.onCreate(dialog.onSaveInstanceState());
-            mapView.onResume();*/
+            //mapView.onCreate(dialog.onSaveInstanceState());
+            //mapView.onResume();
         });
         cv_visit_section.setOnClickListener(v -> {
             alertDialogVisitSection().show();

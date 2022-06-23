@@ -33,7 +33,7 @@
 
     <application
         android:name="androidx.multidex.MultiDexApplication"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="${country} ${appName}"
         android:supportsRtl="true"

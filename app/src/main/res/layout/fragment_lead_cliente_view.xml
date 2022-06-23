@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.LeadClientesView">
+    tools:context=".View.LeadClientesView_">
 
     <ImageView
         android:id="@+id/imageViewPhoto"
@@ -56,8 +56,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
-                    app:counterMaxLength="15"
-                    app:errorEnabled="true">
+                    app:counterMaxLength="100"
+                    app:errorEnabled="true"
+                    android:id="@+id/ti_card_name"
+                    >
 
                     <EditText
                         android:id="@+id/editTextCardName"
@@ -76,7 +78,9 @@
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:id="@+id/ti_TextCardCode"
+                    >
 
                     <EditText
                         android:id="@+id/editTextCardCode"
@@ -95,7 +99,9 @@
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:id="@+id/ti_commercial_name"
+                    >
 
                     <EditText
                         android:id="@+id/editTextCardNameComercial"
@@ -108,13 +114,32 @@
                         android:inputType="textPersonName"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="100"
+                    app:errorEnabled="true">
 
+                    <EditText
+                        android:id="@+id/editTextStreet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:ems="10"
+                        android:hint="@string/lbl_street"
+                        android:inputType="textPersonName"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:id="@+id/ti_textphone"
+                    >
 
                     <EditText
                         android:id="@+id/editTextPhone"
@@ -153,7 +178,9 @@
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:id="@+id/ti_TextContactPerson"
+                    >
 
                     <EditText
                         android:id="@+id/editTextContactPerson"
@@ -172,7 +199,9 @@
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:id="@+id/ti_TextEmail"
+                    >
 
                     <EditText
                         android:id="@+id/editTextEmail"
@@ -192,7 +221,9 @@
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:id="@+id/ti_TextWeb"
+                    >
 
                     <EditText
                         android:id="@+id/editTextWeb"

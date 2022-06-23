@@ -106,14 +106,6 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         holder.tv_cantidadcompra.setText(lead.getCantidadcompra());
         holder.tv_cant_promocion.setText(lead.getCantidadpromocion());
         holder.tv_porcentajedescuentocabecera.setText(lead.getDescuento());
-        /*
-        final PromocionDetalleSQLiteDao promocionDetalleSQLiteDao=new PromocionDetalleSQLiteDao(getContext());
-        ArrayList<PromocionDetalleSQLiteEntity> listaPromocionDetalleSQLiteEntity=new ArrayList<>();
-        listaPromocionDetalleSQLiteEntity=promocionDetalleSQLiteDao.ObtenerPromocionDetalle(
-                SesionEntity.compania_id,
-                lead.getLista_promocion_id(),
-                lead.getPromocion_id()
-        );*/
         String contado="",credito="";
         ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
         listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
@@ -128,23 +120,11 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
         if(SesionEntity.flagquerystock.equals("Y"))
         {
-            /*FirebaseCrashlytics.getInstance().setUserId(SesionEntity.fuerzatrabajo_id);
-            FirebaseCrashlytics.getInstance().setCustomKey("NameSalesForce",SesionEntity.nombrefuerzadetrabajo);
-            FirebaseCrashlytics.getInstance().setCustomKey("Country", BuildConfig.FLAVOR);*/
-
             holder.tv_cant_promocion.setVisibility(View.GONE);
             holder.imv_incrementar.setVisibility(View.GONE);
             holder.imv_decrementar.setVisibility(View.GONE);
             holder.imv_editar_promocion_detalle.setVisibility(View.GONE);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.e: "+contado);
-            /*holder.tv_cash.setText(promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
-                    SesionEntity.compania_id,
-                    lead.getLista_promocion_id(),
-                    lead.getPromocion_id()));
-            holder.tv_credit.setText(promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
-                    SesionEntity.compania_id,
-                    lead.getLista_promocion_id(),
-                    lead.getPromocion_id()));*/
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.contado: "+contado);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.credito: "+credito);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.formulasController.applyDiscountPercentageForLine): "+formulasController.applyDiscountPercentageForLine(
@@ -157,29 +137,6 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                             credito,lead.getCantidadcompra()
                     ),lead.getDescuento()
             ));
-
-            /*holder.tv_price_cash_pack.setText(
-                    formulasController.CalcularMontoTotalconDescuento(
-                            formulasController.getTotalPerLine(
-                                    contado,lead.getCantidadcompra()
-                            ),
-                            formulasController.applyDiscountPercentageForLine(
-                                    formulasController.getTotalPerLine(
-                                            contado,lead.getCantidadcompra()
-                                    ),lead.getDescuento()
-                            )
-                    ));
-            holder.tv_price_credit_pack.setText(
-                    formulasController.CalcularMontoTotalconDescuento(
-                            formulasController.getTotalPerLine(
-                                    credito,lead.getCantidadcompra()
-                            ),
-                            formulasController.applyDiscountPercentageForLine(
-                                    formulasController.getTotalPerLine(
-                                            credito,lead.getCantidadcompra()
-                                    ),lead.getDescuento()
-                            )
-                    ));*/
         }
 
         holder.imv_valorizar.setOnClickListener(new View.OnClickListener() {
@@ -484,39 +441,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                 tv_cant_producto_promocion_umd.setText(lead.listaPromocionDetalleEntities.get(i).getUmd());
                 holder.contentpromociondetalle.addView(relativeLayout);
             }
-            /*if(Integer.parseInt(lead.getDescuento().toString())>0)
-            {
-                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-                int id = R.layout.layout_lista_promocion_detalle;
-                RelativeLayout relativeLayout = (RelativeLayout) layoutInflater.inflate(id, null, false);
-                TextView tv_id_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_id_promocion_detalle);
-                TextView tv_producto_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_producto_promocion_detalle);
-                TextView tv_cant_producto_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_cant_producto_promocion_detalle);
-                TextView tv_cant_producto_promocion_umd = (TextView) relativeLayout.findViewById(R.id.tv_cant_producto_promocion_umd);
-
-                //tv_orden_venta_detalle_lista_promocion_id.setText(lead.getOrden_detalle_lista_promocion_cabecera().get(i).getLista_promocion_id());
-
-                tv_id_promocion_detalle.setText("DESC");
-                tv_producto_promocion_detalle.setText("% DESCUENTO");
-                //tv_producto_promocion_detalle.setText(lead.getCantidadcompra());
-                tv_cant_producto_promocion_detalle.setText(lead.getDescuento());
-                tv_cant_producto_promocion_umd.setText("%");
-                holder.contentpromociondetalle.addView(relativeLayout);
-            }*/
-
         }
-
-        //ViewGroup.LayoutParams layoutParams = holder.lv_promocion_detalle.getLayoutParams();
-        //layoutParams.height = (int) context.getResources().getDimension(R.dimen.rowheight) * holder.lv_promocion_detalle.getCount();
-        //holder.lv_promocion_detalle.setLayoutParams(layoutParams);
-        //listaPromocionDetalleAdapter = new ListaPromocionDetalleAdapter(getContext(), ListaPromocionDetalleDao.getInstance().getLeads(listaPromocionDetalleSQLiteEntity));
-        //holder.lv_promocion_detalle.setAdapter(listaPromocionDetalleAdapter);
-        //holder.lv_promocion_detalle.setEnabled(false);
-        //holder.lv_promocion_detalle.setClickable(false);
-        // holder.lv_promocion_detalle.setFocusable(false);
-        //ScrollDisabledListView scrollDisabledListView=new ScrollDisabledListView(context);
-        //scrollDisabledListView.setAdapter(listaPromocionDetalleAdapter);
-        //holder.lv_promocion_detalle.setNestedScrollingEnabled(true);
         return convertView;
 
 
@@ -744,13 +669,6 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
             dialog.dismiss();
 
         });
-
-        /*dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });*/
         return  dialog;
     }
 

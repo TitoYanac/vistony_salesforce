@@ -104,6 +104,8 @@ public class CobranzaDetalleSQLiteDao {
                                        String codeSMS,
                                        String docentry,
                                        String collectioncheck
+                                        ,String e_signature
+                                        ,String chkesignature
     )
     {
         int resultado;
@@ -146,6 +148,9 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("codeSMS",codeSMS);
             registro.put("docentry",docentry);
             registro.put("collectioncheck",collectioncheck);
+            registro.put("e_signature",e_signature);
+            registro.put("chkesignature",chkesignature);
+
             bd.insert("cobranzadetalle", null, registro);
 
             resultado=1;
@@ -1765,6 +1770,29 @@ public class CobranzaDetalleSQLiteDao {
         }
         bd.close();
         return resultado;
+    }
+
+    public int UpdateE_Signature (String compania_id,String usuario_id,String recibo,String e_signature)
+    {
+        int resultado=0;
+        abrir();
+        try {
+
+            ContentValues registro = new ContentValues();
+            registro.put("e_signature",e_signature);
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            resultado=0;
+        }
+
+        bd.close();
+        return  resultado;
     }
 
 }

@@ -58,6 +58,7 @@ public class VisitaRepository extends ViewModel {
         Log.e("REOS", "VisitaRepository-sendVisit-json"+json);
         if(json!=null){
             RequestBody jsonRequest = RequestBody.create(json,MediaType.parse("application/json; charset=utf-8"));
+            Log.e("REOS", "VisitaRepository-sendVisit-sendVisit"+Config.getClient().create(Api.class).sendVisit(jsonRequest).toString());
             Config.getClient().create(Api.class).sendVisit(jsonRequest).enqueue(new Callback<VisitaEntity>() {
                 @Override
                 public void onResponse(Call<VisitaEntity> call, Response<VisitaEntity> response) {

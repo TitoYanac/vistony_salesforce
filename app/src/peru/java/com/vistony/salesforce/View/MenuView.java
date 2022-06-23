@@ -60,7 +60,6 @@ import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricContainerSalesRepository;
-import com.vistony.salesforce.Dao.Retrofit.HistoricSalesOrderTraceabilityRepository;
 import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerDetailRepository;
 import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerHeadRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -80,7 +79,6 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -1130,19 +1128,20 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("po1p");
                 ft.commit();
             }
+            if(tag2.equals("leadUpdateClient"))
+            {
+                contentFragment=new LeadClientesView();
+                //ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view,LeadClientesView.newInstancia(Lista,tag2),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+
+            }
             if(tag2.equals("lead"))
             {
-                //String tagClienteCabeceraView="inicioClienteCabeceraView";
-                /*String tagRutaVendedorView="inicioRutaVendedorView";
-                MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
-                ft.remove(MenuAccionViewFragment);
-                tag2="inicioClienteCabeceraView";
-                ft.add(R.id.content_menu_view,ClienteDetalleView.newInstance(Lista),tag2);
-                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
-                ft.addToBackStack("po1p");
-                ft.commit();*/
                 contentFragment=new LeadClientesView();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                //ft.add(R.id.content_menu_view,LeadClientesView.newInstancia(Lista),tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
 

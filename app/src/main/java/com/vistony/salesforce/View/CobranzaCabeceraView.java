@@ -1331,7 +1331,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         imb_consultar_fecha_hoja_despacho.setOnClickListener(this);
 
 
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
         tv_fecha_hoja_despacho.setText(fecha);

@@ -24,7 +24,7 @@ public class ListaComisionesDetalleDao {
     public DocumentoDeudaSQLiteEntity documentoDeudaSQLiteEntity;
     public ClienteSQlite clienteSQlite;
     ArrayList<ClienteSQLiteEntity> listaclienteSQLiteEntity;
-    DecimalFormat format = new DecimalFormat("#0.00");
+    //DecimalFormat format = new DecimalFormat("#0.00");
 
     public static ListaComisionesDetalleDao getInstance() {
         return repository;
@@ -58,7 +58,7 @@ public class ListaComisionesDetalleDao {
                                 ,Lista.get(i).getUmd()
                                 ,Lista.get(i).getAvance()
                                 ,Lista.get(i).getCuota()
-                                ,(String.valueOf (format.format(Float.parseFloat(Lista.get(i).getPorcentajeavance())*100)))//+"%"
+                                ,Lista.get(i).getPorcentajeavance()
                                 ,Lista.get(i).getEsc_colours()
                                 ,Lista.get(i).getHidedata()
                         )

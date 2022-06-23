@@ -115,8 +115,8 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         {
             table_row_geolocation.setVisibility(View.GONE);
         }*/
-        table_row_geolocation.setVisibility(View.GONE);
-        // Implementing setOnRefreshListener on SwipeRefreshLayout
+        //table_row_geolocation.setVisibility(View.GONE);
+        //Implementing setOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

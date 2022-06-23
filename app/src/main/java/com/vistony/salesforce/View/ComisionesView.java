@@ -85,7 +85,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
     static TextView tv_ano,tv_periodo;
     static String dia,mes,ano;
     ViewGroup layout;
-    static DecimalFormat format = new DecimalFormat("#0");
+    //static DecimalFormat format = new DecimalFormat("#0");
     public ComisionesView() {
         // Required empty public constructor
     }
@@ -231,7 +231,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         for(int i=0;i<Lista.size();i++)
         {
             float valor=0;
-            valor=(Float.parseFloat (Lista.get(i).getPorcentajeavance())*100);
+            valor=(Float.parseFloat (Lista.get(i).getPorcentajeavance()));
             entries.add(new BarEntry(i,valor));
         }
         return entries;

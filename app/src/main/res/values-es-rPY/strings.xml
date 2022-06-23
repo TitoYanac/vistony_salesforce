@@ -115,4 +115,7 @@
     <string name="lbl_resultado">Resultado</string>
     <string name="lbl_edit_signature">Editar Firma</string>
     <string name="lbl_percent">%</string>
+    <string name="lbl_street">Direccion</string>
+    <string name="lbl_signature">Firma Manuscrita Electronica</string>
+    <string name="lbl_sub_signature">Escriba su Firma</string>
 </resources>

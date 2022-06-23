@@ -30,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,11 +43,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Dao.Retrofit.LeadClienteViewModel;
+import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -71,20 +74,48 @@ public class LeadClientesView extends Fragment {
     private Double latitud = null, longitud = null;
     private Spinner spinner;
     private EditText editTextComentary, editTextCardCode, editTextCardName, editTextCardNameComercial,
-            editTextPhone, editTextCellPhone, editTextContactPerson, editTextEmail, editTextWeb, editTextCoordenates;
+            editTextPhone, editTextCellPhone, editTextContactPerson, editTextEmail, editTextWeb, editTextCoordenates
+            ,editTextStreet;
     private Button buttonSendGPS;
-    private String direccion = "Sin dirección", referencia = "Sin referencias";
+    static private String direccion = "Sin dirección", referencia = "Sin referencias",type;
     final String message = "Este campo no puede ir vacio";
     private boolean status = true;
     private GoogleMap myGoogleMap;
     private Dialog dialog;
+    com.google.android.material.textfield.TextInputLayout ti_commercial_name,ti_card_name,
+            ti_textphone,ti_TextContactPerson,ti_TextEmail,ti_TextWeb,ti_TextCardCode;
+    static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque;
 
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String tag, Object dato);
     }
 
+    public static Fragment newInstancia (Object param1,String id) {
+        LeadClientesView fragment = new LeadClientesView();
+        ArrayList<ListaClienteCabeceraEntity> Lista = (ArrayList<ListaClienteCabeceraEntity>) param1;
+        for(int i=0;i<Lista.size();i++)
+        {
+            cliente_id=Lista.get(i).getCliente_id();
+            nombrecliente=Lista.get(i).getNombrecliente();
+            domebarque_id=Lista.get(i).getDomembarque_id();
+            domebarque=Lista.get(i).getDireccion();
+            zona_id=Lista.get(i).getZona_id();
+        }
+        type=id;
+        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+cliente_id);
+        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+nombrecliente);
+        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+domebarque_id);
+        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+domebarque);
+        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+zona_id);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if(type.equals("leadUpdateClient"))
+        {
+            getActivity().setTitle("Actualizar Direccion Cliente");
+        }
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -112,15 +143,34 @@ public class LeadClientesView extends Fragment {
         editTextEmail = v.findViewById(R.id.editTextEmail);
         editTextWeb = v.findViewById(R.id.editTextWeb);
         editTextCoordenates = v.findViewById(R.id.editTextCoordenates);
-
         editTextComentary = v.findViewById(R.id.editTextComent);
         spinner = v.findViewById(R.id.spinner);
         buttonSendGPS = v.findViewById(R.id.buttonSendGPS);
         btnUpload = v.findViewById(R.id.btnSubtmit);
-
         imageViewPhoto.setBackgroundResource(R.drawable.portail);
-
         leadClienteViewModel = new ViewModelProvider(this).get(LeadClienteViewModel.class);
+        ti_commercial_name = v.findViewById(R.id.ti_commercial_name);
+        ti_textphone = v.findViewById(R.id.ti_textphone);
+        ti_TextContactPerson = v.findViewById(R.id.ti_TextContactPerson);
+        ti_TextEmail = v.findViewById(R.id.ti_TextEmail);
+        ti_TextWeb = v.findViewById(R.id.ti_TextWeb);
+        ti_TextCardCode = v.findViewById(R.id.ti_TextCardCode);
+        editTextStreet = v.findViewById(R.id.editTextStreet);
+
+        ti_commercial_name.setVisibility(View.GONE);
+        ti_textphone.setVisibility(View.GONE);
+        ti_TextContactPerson.setVisibility(View.GONE);
+        //ti_TextEmail.setVisibility(View.GONE);
+        spinner.setVisibility(View.GONE);
+        ti_TextWeb.setVisibility(View.GONE);
+        ti_TextCardCode.setVisibility(View.GONE);
+
+        editTextCardName.setText(nombrecliente);
+        editTextStreet.setText(domebarque);
+
+        editTextCardName.setEnabled(false);
+        editTextCardCode.setEnabled(false);
+        editTextStreet.setEnabled(false);
 
         floatingButtonTakePhoto.setOnClickListener(data -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -160,19 +210,22 @@ public class LeadClientesView extends Fragment {
         if (editTextCardName.getText().length() == 0) {
             editTextCardName.setError(message);
             acount = acount + 1;
-        } /*else if (editTextCardCode.getText().length() == 0) {
+        /*} else if (editTextCardCode.getText().length() == 0) {
             editTextCardCode.setError(message);
             acount = acount + 1;
         } else if (editTextCardNameComercial.getText().length() == 0) {
             editTextCardNameComercial.setError(message);
-            acount = acount + 1;
+            acount = acount + 1;*/
         } else if (editTextCellPhone.getText().length() == 0) {
             editTextCellPhone.setError(message);
             acount = acount + 1;
-        } else if (editTextContactPerson.getText().length() == 0) {
+        /*} else if (editTextContactPerson.getText().length() == 0) {
             editTextContactPerson.setError(message);
+            acount = acount + 1;*/
+        } else if (editTextEmail.getText().length() == 0) {
+            editTextEmail.setError(message);
             acount = acount + 1;
-        }*/ else if (editTextCoordenates.getText().length() == 0) {
+        }else if (editTextCoordenates.getText().length() == 0) {
             editTextCoordenates.setError(message);
             acount = acount + 1;
         }
@@ -185,6 +238,11 @@ public class LeadClientesView extends Fragment {
             imgBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
             byteArray = stream.toByteArray();
             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }
+        else {
+            acount = acount + 1;
+
+
         }
 
         if (acount == 0) {
@@ -212,7 +270,7 @@ public class LeadClientesView extends Fragment {
             parametros.put("Longitude", "" + longitud);
             parametros.put("DateTime", "" + formattedDate);
             parametros.put("photo", encoded);
-
+            parametros.put("type", type);
             leadClienteViewModel.sendLead(parametros, getContext()).observe(this.getActivity(), data -> {
                 if (data.equals("init")) {
                     btnUpload.setEnabled(false);
@@ -227,6 +285,7 @@ public class LeadClientesView extends Fragment {
                     Toast.makeText(getActivity(), "Lead enviado", Toast.LENGTH_SHORT).show();
 
                     clearEditText();
+
                 } else {
                     btnUpload.setEnabled(true);
                     btnUpload.setClickable(true);
@@ -262,11 +321,13 @@ public class LeadClientesView extends Fragment {
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        final EditText editTextAddress = dialog.findViewById(R.id.editTextAddressDialog);
-        final EditText editTextAddressReference = dialog.findViewById(R.id.editTextAddressReferenceDialog);
+        final TextView editTextAddress = dialog.findViewById(R.id.editTextAddressDialog);
+        final TextView editTextAddressReference = dialog.findViewById(R.id.editTextAddressReferenceDialog);
 
-        editTextAddress.setText((direccion.equals("Sin dirección") ? "" : direccion));
-        editTextAddressReference.setText((referencia.equals("Sin referencias") ? "" : referencia));
+        //editTextAddress.setText((direccion.equals("Sin dirección") ? "" : direccion));
+        //editTextAddressReference.setText((referencia.equals("Sin referencias") ? "" : referencia));
+        editTextAddress.setText(nombrecliente);
+        editTextAddressReference.setText(domebarque);
 
         ImageView image = dialog.findViewById(R.id.image);
         image.setImageResource(R.mipmap.logo_circulo);
@@ -317,10 +378,11 @@ public class LeadClientesView extends Fragment {
                                             editTextCoordenates.setText(latitud + "," + longitud);
 
                                             if (status) {
-                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
                                                 status = false;
                                             } else {
                                                 myGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                                //myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                                             }
 
                                         }
@@ -420,7 +482,7 @@ public class LeadClientesView extends Fragment {
         ////////////////////////////////////////////////////////////////////////////////////////////
 
         dialogButtonExit.setOnClickListener(v -> {
-           // mapView=null;
+            // mapView=null;
             dialog.dismiss();
         });
 
@@ -428,8 +490,6 @@ public class LeadClientesView extends Fragment {
 
             direccion=editTextAddress.getText().toString();
             referencia=editTextAddressReference.getText().toString();
-
-//            mapView=null;
             dialog.dismiss();
 
         });

@@ -40,7 +40,8 @@
                 android:layout_height="wrap_content"
                 app:counterEnabled="true"
                 app:counterMaxLength="15"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                >
 
                 <!--<EditText
                     android:id="@+id/editTextAddressDialog"
@@ -52,7 +53,8 @@
                     android:hint="Address"
                     android:inputType="text"
                     android:text="" />
-                    -->                <TextView
+                    -->
+                <TextView
                 android:id="@+id/lbl_TextAddressDialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

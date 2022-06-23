@@ -106,83 +106,23 @@ public class ListaComisionesDetalleAdapter  extends
         holder.tv_comisionesdetalle_porcentaje.setText(lead.getPorcentajeavance());
         ArrayList<ListaComisionesDetalleEntity> listaComisionesDetalleEntities = new ArrayList<>();
         listaComisionesDetalleEntities.add(lead);
-
-
-
-        Drawable gradiente,bordecardview;
-        /*if (Float.parseFloat(lead.getPorcentajeavance()) >= 0 && Float.parseFloat(lead.getPorcentajeavance()) <= 30)
-        {
-
-            int h = holder.v_gradiente_comisiones_detalle.getHeight();
-            ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
-            mDrawable.getPaint().setShader(new LinearGradient(0, 0, 0, h, Color.parseColor("#d50000"), Color.parseColor("#ff5722"), Shader.TileMode.REPEAT));
-            holder.v_gradiente_comisiones_detalle.setBackgroundDrawable(mDrawable);
-
-            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_gradiente_muy_bajo, null);
-            //holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
-
-        } else if (Float.parseFloat(lead.getPorcentajeavance()) >= 31 && Float.parseFloat(lead.getPorcentajeavance()) <= 60)
-        {
-            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_gradiente_bajo, null);
-            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
-
-        } else if (Float.parseFloat(lead.getPorcentajeavance()) >= 61 && Float.parseFloat(lead.getPorcentajeavance()) <= 85)
-        {
-            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_gradiente_medio, null);
-            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
-
-        } else if (Float.parseFloat(lead.getPorcentajeavance()) >= 86 && Float.parseFloat(lead.getPorcentajeavance()) <= 99)
-        {
-            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_gradiente_alto, null);
-            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
-        } else if (Float.parseFloat(lead.getPorcentajeavance()) > 99)
-        {
-            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_gradiente_muy_alto, null);
-            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
-        }*/
-        Log.e("REOS","ListaComisionesDetalleAdapter-getView-lead.getCodecolor():"+lead.getCodecolor());
-        Log.e("REOS","ListaComisionesDetalleAdapter-getView-Float.parseFloat(lead.getPorcentajeavance()):"+Float.parseFloat(lead.getPorcentajeavance()));
         ArrayList<EscColoursDEntity> escColoursDEntityArrayList=new ArrayList<>();
         EscColoursDSQLiteDao escColoursDSQLiteDao=new EscColoursDSQLiteDao(getContext());
         escColoursDEntityArrayList=escColoursDSQLiteDao.GetEscColours(
                 lead.getCodecolor(),
-                Float.parseFloat(lead.getPorcentajeavance())
+                Float.parseFloat(lead.getPorcentajeavance()
+                )
         );
-        Log.e("REOS","ListaComisionesDetalleAdapter-getView-escColoursDEntityArrayList.size():"+escColoursDEntityArrayList.size());
         for(int i=0;i<escColoursDEntityArrayList.size();i++)
         {
-            /*int h = holder.v_gradiente_comisiones_detalle.getHeight();
-            ShapeDrawable mDrawable = new ShapeDrawable(new RectShape());
-            mDrawable.getPaint().setShader(new LinearGradient(0, 0, 0, h, Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()), Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax()), Shader.TileMode.REPEAT));
-            */
+
             GradientDrawable layer3 = new GradientDrawable();
-            //layer3.setCornerRadius(20);
-            //layer1.setShape(GradientDrawable.RECTANGLE);
             layer3.setShape(GradientDrawable.RECTANGLE);
             layer3.setGradientType(GradientDrawable.LINEAR_GRADIENT);
             
             layer3.setColors(new int[] { Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()),Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax())}); // please input your color from resource for color-4 getResources().getColor(R.color.color2),
 
             holder.v_gradiente_comisiones_detalle.setBackgroundDrawable(layer3);
-
-            /*int[] colors=new int[2];
-            colors[0]=Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin());
-            colors[1]=Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax());
-            GradientDrawable gradientDrawable=new GradientDrawable();
-            LinearGradient linearGradient=new LinearGradient();
-            //        setStroke(10,Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()));
-            //gradientDrawable.setStroke(10,Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()));
-            gradientDrawable.setCornerRadius(30);*/
-            /*if (background instanceof ShapeDrawable) {
-                ShapeDrawable shapeDrawable = (ShapeDrawable) background;
-                shapeDrawable.getPaint().setColor(ContextCompat.getColor(context,R.color.green));
-            } else if (background instanceof GradientDrawable) {
-                GradientDrawable gradientDrawable = (GradientDrawable) background;
-                gradientDrawable.setColor(ContextCompat.getColor(context,R.color.green));
-            } else if (background instanceof ColorDrawable) {
-                ColorDrawable colorDrawable = (ColorDrawable) background;
-                colorDrawable.setColor(ContextCompat.getColor(context,R.color.green));
-            }*/
             GradientDrawable layer1 = new GradientDrawable();
             layer1.setShape(GradientDrawable.RECTANGLE);
             layer1.setSize(33,33);
@@ -198,51 +138,10 @@ public class ListaComisionesDetalleAdapter  extends
 
             LayerDrawable layerDrawable = new LayerDrawable(new Drawable[]
                     {layer2,insetLayer2});
-
-            //Color.parseColor() method allow us to convert
-            // a hexadecimal color string to an integer value (int color)
-            /*            int[] colors = {Color.parseColor(escColoursDEntityArrayList.get(i).getColourmin()),Color.parseColor(escColoursDEntityArrayList.get(i).getColourmax())};
-
-            //create a new gradient color
-                        GradientDrawable gd = new GradientDrawable(
-                                GradientDrawable.Orientation.TOP_BOTTOM, colors);
-            gd.setShape(GradientDrawable.RECTANGLE);
-            gd.setSize(33,33);
-            gd.setColor(Color.WHITE);
-                        gd.setCornerRadius(10f);*/
-            //apply the button background to newly created drawable gradient
-                        //btn.setBackground(gd);
-
-            //bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_rojo, null);
             holder.cv_comision_detalle.setBackground(layerDrawable);
 
 
         }
-
-        /*if (Float.parseFloat(lead.getPorcentajeavance()) >= 0 && Float.parseFloat(lead.getPorcentajeavance()) <= 79.99)
-        {
-            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_color_solido_rojo, null);
-            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
-            bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_rojo, null);
-            holder.cv_comision_detalle.setBackground(bordecardview);
-
-        } else if (Float.parseFloat(lead.getPorcentajeavance()) >= 80 && Float.parseFloat(lead.getPorcentajeavance()) <= 99.99)
-        {
-            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_color_solido_amarillo, null);
-            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
-            bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_amarillo, null);
-            holder.cv_comision_detalle.setBackground(bordecardview);
-
-
-        } else if (Float.parseFloat(lead.getPorcentajeavance()) >= 100)
-        {
-            gradiente = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.linea_rectangular_color_solido_verde, null);
-            holder.v_gradiente_comisiones_detalle.setBackground(gradiente);
-            bordecardview = ResourcesCompat.getDrawable(getContext().getResources() , R.drawable.borde_cardview_comisiones_verde, null);
-            holder.cv_comision_detalle.setBackground(bordecardview);
-        }*/
-
-
 
         if(lead.getHidedate().equals("Y"))
         {

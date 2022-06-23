@@ -805,7 +805,8 @@ ParametrosView extends Fragment {
                                         "",
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getDocentry(),
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getCollectioncheck()
-
+                                        ,""
+                                        ,"0"
                                 );
                     }
                 }

@@ -1,5 +1,7 @@
 package com.vistony.salesforce.View;
 
+import static com.vistony.salesforce.Controller.Utilitario.CifradoController.md5;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,8 +11,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
@@ -28,6 +33,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.os.Environment;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +47,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,11 +58,18 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.JsonSyntaxException;
+import com.hitomi.cmlibrary.CircleMenu;
+import com.hitomi.cmlibrary.OnMenuSelectedListener;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
+import com.vistony.salesforce.Controller.Retrofit.Api;
+import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Controller.Utilitario.Canvas;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoCobranzaPDF;
 import com.vistony.salesforce.Controller.Adapters.ListaCobranzaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
@@ -71,6 +85,7 @@ import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaDetalleDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
@@ -83,15 +98,27 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
+import org.json.JSONException;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
 
 import io.sentry.Sentry;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CobranzaDetalleView extends Fragment {
     //ListaClienteDetalleAdapter listaClienteDetalleAdapter;
@@ -129,7 +156,6 @@ public class CobranzaDetalleView extends Fragment {
     EnviarWSCobranzaDetalle enviarWSCobranzaDetalle;
     static public ImageView imvprueba;
     CheckBox chkpagoadelantado, chk_bancarizado, chk_pago_directo, chk_pago_pos;
-    ;
     MenuItem generarpdf, validarqr, guardar,edit_signature;
     TextView tv_recibo;
     public static CheckBox chk_validacionqr;
@@ -164,7 +190,10 @@ public class CobranzaDetalleView extends Fragment {
     private ProgressDialog pd;
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
     static Context context;
-    FloatingActionButton fab_invoice_cancelation;
+    FloatingActionButton fab_invoice_cancelation,fab_edit_signature;
+    String arrayCircle[] = {"Guardar","Generar","Validar","Firma"};
+    ImageView imv_prueba_mostrarfirma;
+
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm", "Este es NUEVA ISNTANCIA 1");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
@@ -405,7 +434,30 @@ public class CobranzaDetalleView extends Fragment {
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo = (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
         fab_invoice_cancelation =  (FloatingActionButton) v.findViewById(R.id.fab_invoice_cancelation);
+        CircleMenu circleMenu = v.findViewById(R.id.circleMenu);
+        fab_edit_signature =  (FloatingActionButton) v.findViewById(R.id.fab_edit_signature);
+        imv_prueba_mostrarfirma =  (ImageView) v.findViewById(R.id.imv_prueba_mostrarfirma);
 
+
+        circleMenu.setMainMenu(Color.parseColor("#0957C3"),R.drawable.ic_baseline_add_24,R.drawable.ic_baseline_cancel_24_white)
+                        .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_save_black_24dp)
+                        .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_print_black_24dp)
+                        .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_menu_camera)
+                        .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_edit_black_24dp)
+                .setOnMenuSelectedListener(new OnMenuSelectedListener() {
+                    @Override
+                    public void onMenuSelected(int index) {
+                        Toast.makeText(getContext(),"You Selected"+arrayCircle[index],Toast.LENGTH_LONG).show();
+                    }
+                })
+        ;
+        fab_edit_signature.setOnClickListener(new View.OnClickListener() {
+                                                   @Override
+                                                   public void onClick(View view) {
+                                                       getAlertEditSignature(getContext()).show();
+                                                   }
+                                               }
+        );
         fab_invoice_cancelation.setVisibility(View.GONE);
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
                                                    @Override
@@ -415,6 +467,7 @@ public class CobranzaDetalleView extends Fragment {
                                                    }
                                                }
         );
+
 
         getActivity().setTitle("Cobranza");
         listViewCobranzaDetalle = (ListView) v.findViewById(R.id.listViewCobranzaCabecera);
@@ -1361,6 +1414,8 @@ public class CobranzaDetalleView extends Fragment {
                             String.valueOf(n),
                             Lista.get(i).getDocentry(),
                             SesionEntity.collectioncheck
+                            ,""
+                            ,"0"
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1427,6 +1482,8 @@ public class CobranzaDetalleView extends Fragment {
                             String.valueOf(n),
                             Lista.get(i).getDocentry(),
                             SesionEntity.collectioncheck
+                            ,""
+                            ,"0"
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1499,7 +1556,7 @@ public class CobranzaDetalleView extends Fragment {
             //Enviar SMS
             ArrayList<ClienteSQLiteEntity> listClienteSQlite = new ArrayList<>();
             ClienteSQlite clienteSQlite = new ClienteSQlite(getContext());
-            listClienteSQlite = clienteSQlite.ObtenerDatosCliente(cliente_id, SesionEntity.compania_id);
+            listClienteSQlite = clienteSQlite.ObtenerDatosCliente(cliente_id, ObjUsuario.compania_id);
             for (int i = 0; i < listClienteSQlite.size(); i++) {
                 telefono = listClienteSQlite.get(i).getTelefonofijo();
             }
@@ -2366,6 +2423,121 @@ public class CobranzaDetalleView extends Fragment {
                 dialog.dismiss();
             }
         });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
+    private Dialog getAlertEditSignature(Context context) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog_edit_signature);
+        RelativeLayout rl_edit_signature=(RelativeLayout) dialog.findViewById(R.id.rl_edit_signature);
+        Paint mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setColor(Color.BLACK);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeWidth(12);
+        rl_edit_signature.addView(new Canvas(getActivity(),mPaint));
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+                ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+                CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
+                String encoded = null;
+                Bitmap imgBitmap;
+                byte[] byteArray;
+                rl_edit_signature.setDrawingCacheEnabled(true);
+                imgBitmap = Bitmap.createBitmap(rl_edit_signature.getDrawingCache());
+                rl_edit_signature.setDrawingCacheEnabled(false);
+
+                try {
+
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                imgBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
+                byteArray = stream.toByteArray();
+                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                /////////////////////////
+
+                /*ImageIO.write(img, "png", baos);
+                baos.flush();
+                byte[] imageInByte = baos.toByteArray();
+                baos.close();*/
+                ///////////////////////
+                String imagenString = new String(byteArray);
+                String url="";
+                MutableLiveData <Object> status= new MutableLiveData<>();
+                cobranzaDetalleSQLiteDao.UpdateE_Signature(
+                        ObjUsuario.compania_id
+                        ,ObjUsuario.usuario_id
+                        ,recibo
+                        ,imagenString);
+
+                    //url="https://reclamos.vistonyapp.com/upload/image?"+imagenString;
+                    //Log.e("REOS","CobranzaDetalleView-onReponse-url-"+url);
+                    RequestBody binaryConvert = RequestBody.create(imagenString, MediaType.parse("application/binary; charset=utf-8"));
+                    Log.e("REOS","CobranzaDetalleView-onReponse-binaryConvert-"+binaryConvert.toString());
+                    Config.getClient().create(Api.class).postPrueba(binaryConvert).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if(response.isSuccessful()) {
+                                Log.e("REOS","CobranzaDetalleView-onReponse-response-"+response.toString());
+                            }else{
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable error) {
+
+                            String message="Error no definido";
+
+                            if(error instanceof SocketTimeoutException){
+                                message="El tiempo de respuesta expiro";
+                            }else if(error instanceof UnknownHostException){
+                                message="No tiene conexión a internet";
+                            }else if (error instanceof ConnectException) {
+                                message="El servidor no responde";
+                            } else if (error instanceof JSONException || error instanceof JsonSyntaxException) {
+                                message="Error en el parceo";
+                            } else if (error instanceof IOException) {
+                                message=error.getMessage();
+                            }
+
+                            status.setValue(message);
+
+                        }
+                    });
+                }catch (Exception e){
+                    Log.e("REOS","CobranzaDetalleView-getAlertEditSignature-error-"+e.toString());
+                }
+                //imv_prueba_mostrarfirma.setImageBitmap(imgBitmap);
+                Toast.makeText(getContext(), "Firma Guardada Correctamente", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 

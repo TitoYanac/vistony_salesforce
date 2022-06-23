@@ -228,7 +228,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
         pd = new ProgressDialog(activity);
         pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Estados de Despacho", true, false);
 
-        statusDispatchRepository.getHistoricStatusDispatch(SesionEntity.imei, Date).observe(lifecycleOwner, data -> {
+        /*statusDispatchRepository.getHistoricStatusDispatch(SesionEntity.imei, Date).observe(lifecycleOwner, data -> {
             Log.e("REOS","HistoricStatusDispatchView-getListHistoric-date:"+data);
             if(data!=null)
             {
@@ -262,9 +262,30 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
                     Toast.makeText(context, "Consulta Realizada con Exito", Toast.LENGTH_SHORT).show();
                 }
 
+            }*/
+
+            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-data==null:");
+            List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch=new ArrayList<>();
+
+            StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(context);
+            listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
+            if(listHistoricStatusDiapatch.isEmpty())
+            {
+                Log.e("REOS","HistoricStatusDispatchView-getListHistoric-listHistoricStatusDiapatch.isEmpty():");
+                lv_historic_status_dispatch.setAdapter(null);
+                Toast.makeText(context, "No se encontro operaciones en la fecha seleccionada", Toast.LENGTH_SHORT).show();
+            }else {
+                Log.e("REOS","HistoricStatusDispatchView-getListHistoric-!listHistoricStatusDiapatch.isEmpty():");
+                listHistoricStatusDispatchAdapter
+                        =new ListHistoricStatusDispatchAdapter(
+                        activity,
+                        listHistoricStatusDiapatch);
+                lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
+                tv_count_historic_status_dispatch.setText(String.valueOf(listHistoricStatusDiapatch.size()));
+                Toast.makeText(context, "Consulta Realizada con Exito", Toast.LENGTH_SHORT).show();
             }
             pd.dismiss();
-        });
+        //});
     }
 
 }

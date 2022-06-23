@@ -15,13 +15,13 @@ android {
         }
     }
 
-    compileSdkVersion 29
+    compileSdkVersion 30
     //buildToolsVersion "29.0.3"
     defaultConfig {
             //applicationId "com.vistony.salesforceHuawey"
             applicationId "com.vistony.salesforce"
             minSdkVersion 27
-            targetSdkVersion 29
+            targetSdkVersion 30
             versionCode 1
             versionName "0.0.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -203,4 +203,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf'
     implementation 'com.github.funriser:StepProgress:0.1.0'
     implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.0.0'
+
+    //Circles Menu
+    implementation 'com.github.Hitomis:CircleMenu:v1.1.0'
 }

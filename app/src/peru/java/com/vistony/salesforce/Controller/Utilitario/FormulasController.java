@@ -350,11 +350,13 @@ public class FormulasController {
 
     //Ya esta
     public void RegistrarPedidoenBD(ArrayList<ListaOrdenVentaCabeceraEntity> listaOrdenVentaCabeceraEntities,ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity) {
-
-
         String OrdenVenta_id="",impuesto_id="",producto="",almacen_id="",comentariodescuentocontado="";
         int cantidadlistaOrdenVentaDetallepromocion=0;
         comentariodescuentocontado=ObtenerComentarioChkDescuentoContado(listaOrdenVentaDetalleEntity);
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
 
         for(int i=0;i<listaOrdenVentaCabeceraEntities.size();i++){
 
@@ -425,7 +427,7 @@ public class FormulasController {
                 contador++;
 
                 ordenVentaDetalleSQLiteDao.InsertaOrdenVentaDetalle(
-                        SesionEntity.compania_id,
+                        ObjUsuario.compania_id,
                         OrdenVenta_id,
                         ""+contador,
                         listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id(),
@@ -455,7 +457,7 @@ public class FormulasController {
                     cantidadlistaOrdenVentaDetallepromocion++;
                     Log.e("REOS","FormulasController-OrdenVentaDetallePromocionsin Lineas de Promocion-listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre():"+listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre());
                     ordenVentaDetallePromocionSQLiteDao.InsertaOrdenVentaDetallePromocion(
-                            SesionEntity.compania_id,
+                            ObjUsuario.compania_id,
                             OrdenVenta_id,
                             String.valueOf(cantidadlistaOrdenVentaDetallepromocion),
                             listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_producto_id(),
@@ -491,7 +493,7 @@ public class FormulasController {
                         int contadorpromocion=0;
                         contadorpromocion=contador;
                         ordenVentaDetalleSQLiteDao.InsertaOrdenVentaDetalle(
-                                SesionEntity.compania_id,
+                                ObjUsuario.compania_id,
                                 OrdenVenta_id,
                                 ""+contador,
                                 listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id(),
@@ -531,7 +533,7 @@ public class FormulasController {
                                             listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_promocion_cabecera().get(k).getListaPromocionDetalleEntities().get(l).getCantidad());
                                     contador++;
                                     ordenVentaDetalleSQLiteDao.InsertaOrdenVentaDetalle(
-                                            SesionEntity.compania_id,
+                                            ObjUsuario.compania_id,
                                             OrdenVenta_id,
                                             String.valueOf(contador),
                                             listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_promocion_cabecera().get(k).getListaPromocionDetalleEntities().get(l).getProducto_id(),
@@ -574,7 +576,7 @@ public class FormulasController {
                         cantidadlistaOrdenVentaDetallepromocion++;
                         Log.e("REOS","FormulasController-OrdenVentaDetallePromocioncon Lineas de Promocion-listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre():"+listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre());
                             ordenVentaDetallePromocionSQLiteDao.InsertaOrdenVentaDetallePromocion(
-                                    SesionEntity.compania_id,
+                                    ObjUsuario.compania_id,
                                     OrdenVenta_id,
                                     String.valueOf(cantidadlistaOrdenVentaDetallepromocion),
 
