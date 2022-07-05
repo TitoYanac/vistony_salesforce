@@ -90,6 +90,8 @@ public class ListaClienteCabeceraDao {
                         ,Lista.get(i).getChkvisitsection()
                         ,Lista.get(i).getTerminopago()
                         ,Lista.get(i).getContado()
+                        ,Lista.get(i).getLatitud()
+                        ,Lista.get(i).getLongitud()
                 ));
                 Log.e("REOS","ListaClienteCabeceraDao.getLeads.Lista.get(i).getLastpurchase())"+Lista.get(i).getLastpurchase());
                 Log.e("REOS","ListaClienteCabeceraDao.getLeads.Lista.get(i).getChk_ruta())"+Lista.get(i).getChk_ruta());

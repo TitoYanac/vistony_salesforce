@@ -119,4 +119,6 @@
     <string name="lbl_street">Street</string>
     <string name="lbl_signature">Firma Manuscrita Electronica</string>
     <string name="lbl_sub_signature">Escriba su Firma</string>
+    <string name="lbl_e_signature">E-Firma</string>
+    <string name="lbl_read_e_signature">Consultar E-Firma</string>
 </resources>

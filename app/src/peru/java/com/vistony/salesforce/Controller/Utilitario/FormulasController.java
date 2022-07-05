@@ -1120,6 +1120,8 @@ public class FormulasController {
                         listaClienteCabeceraEntities.get(i).getChkvisitsection(),
                         listaClienteCabeceraEntities.get(i).getTerminopago(),
                         listaClienteCabeceraEntities.get(i).getContado()
+                        ,listaClienteCabeceraEntities.get(i).getLatitud()
+                        ,listaClienteCabeceraEntities.get(i).getLongitud()
                 );
             }
 

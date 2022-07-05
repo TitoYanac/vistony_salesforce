@@ -140,11 +140,20 @@ public class MenuAccionView extends Fragment {
             Log.e("REOS","MenuAccionView-Lista.get(s).getZona_id()=>"+Lista.get(s).getZona_id());
             Log.e("REOS","MenuAccionView-Lista.get(s).getTerminopago()=>"+Lista.get(s).getTerminopago());
             Log.e("REOS","MenuAccionView-Lista.get(s).getContado()=>"+Lista.get(s).getContado());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getCorreo()=>"+Lista.get(s).getCorreo());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getChkgeolocation()=>"+Lista.get(s).getChkgeolocation());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getTelefonofijo()=>"+Lista.get(s).getTelefonofijo());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getTelefonomovil()=>"+Lista.get(s).getTelefonomovil());
             CardCode=Lista.get(s).getCliente_id();
             CardName=Lista.get(s).getNombrecliente();
             Address=Lista.get(s).getDireccion();
             DomEmbarque_ID=Lista.get(s).getDomembarque_id();
             Contado=Lista.get(s).getContado();
+
+            if(Lista.get(s).getTelefonofijo()==null||Lista.get(s).getCorreo()==null||Lista.get(s).getChkgeolocation()==null)
+            {
+                SesionEntity.updateclient="Y";
+            }
         }
 
         b.putSerializable(ARG_PARAM,Lista);
@@ -231,6 +240,16 @@ public class MenuAccionView extends Fragment {
         cv_canvas.setVisibility(View.GONE);
         cv_visit_section.setVisibility(View.GONE);
         //cv_lead.setVisibility(View.GONE);
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
+            {
+
+                if(SesionEntity.updateclient.equals("Y")) {
+                    alertaAdvertencia("Tiene Datos de Clientes pendientes de Actualizar, desea actualizarlo ahora?", getContext()).show();
+                }
+            }
+        }
         cv_canvas.setOnClickListener(v -> {
             String Fragment="MenuAccionView";
             String accion="canvas";
@@ -740,6 +759,11 @@ public class MenuAccionView extends Fragment {
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
 
         dialogButtonOK.setOnClickListener(v -> {
+            String Fragment="MenuAccionView";
+            String accion="leadUpdateClient";
+            String compuesto=Fragment+"-"+accion;
+            mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+            SesionEntity.quotation="N";
             dialog.dismiss();
         });
 

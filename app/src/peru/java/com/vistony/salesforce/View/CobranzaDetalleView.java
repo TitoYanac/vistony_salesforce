@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
@@ -155,7 +156,7 @@ public class CobranzaDetalleView extends Fragment {
     private OnFragmentInteractionListener mListener;
     EnviarWSCobranzaDetalle enviarWSCobranzaDetalle;
     static public ImageView imvprueba;
-    CheckBox chkpagoadelantado, chk_bancarizado, chk_pago_directo, chk_pago_pos;
+    CheckBox chkpagoadelantado, chk_bancarizado, chk_pago_directo, chk_pago_pos,chk_E_signature;
     MenuItem generarpdf, validarqr, guardar,edit_signature;
     TextView tv_recibo;
     public static CheckBox chk_validacionqr;
@@ -431,14 +432,16 @@ public class CobranzaDetalleView extends Fragment {
         tv_recibo = (TextView) v.findViewById(R.id.tv_recibo);
         chk_bancarizado = (CheckBox) v.findViewById(R.id.chk_bancarizado);
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
+        chk_E_signature = (CheckBox) v.findViewById(R.id.chk_E_signature);
+
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo = (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
         fab_invoice_cancelation =  (FloatingActionButton) v.findViewById(R.id.fab_invoice_cancelation);
         CircleMenu circleMenu = v.findViewById(R.id.circleMenu);
         fab_edit_signature =  (FloatingActionButton) v.findViewById(R.id.fab_edit_signature);
         imv_prueba_mostrarfirma =  (ImageView) v.findViewById(R.id.imv_prueba_mostrarfirma);
-
-
+        circleMenu.setVisibility(View.GONE);
+        imv_prueba_mostrarfirma.setVisibility(View.GONE);
         circleMenu.setMainMenu(Color.parseColor("#0957C3"),R.drawable.ic_baseline_add_24,R.drawable.ic_baseline_cancel_24_white)
                         .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_save_black_24dp)
                         .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_print_black_24dp)
@@ -454,7 +457,13 @@ public class CobranzaDetalleView extends Fragment {
         fab_edit_signature.setOnClickListener(new View.OnClickListener() {
                                                    @Override
                                                    public void onClick(View view) {
-                                                       getAlertEditSignature(getContext()).show();
+                                                       //getAlertEditSignature(getContext()).show();
+                                                       if (!(Listado == null))
+                                                       {
+                                                           getAlertEditSignatureRead(getContext()).show();
+                                                       }else {
+                                                           getAlertEditSignature(getContext()).show();
+                                                       }
                                                    }
                                                }
         );
@@ -1415,7 +1424,7 @@ public class CobranzaDetalleView extends Fragment {
                             Lista.get(i).getDocentry(),
                             SesionEntity.collectioncheck
                             ,""
-                            ,"0"
+                            ,"N"
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1483,7 +1492,7 @@ public class CobranzaDetalleView extends Fragment {
                             Lista.get(i).getDocentry(),
                             SesionEntity.collectioncheck
                             ,""
-                            ,"0"
+                            ,"N"
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -2430,7 +2439,10 @@ public class CobranzaDetalleView extends Fragment {
     }
 
     private Dialog getAlertEditSignature(Context context) {
-
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+        String E_signature="";
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.layout_dialog_edit_signature);
         RelativeLayout rl_edit_signature=(RelativeLayout) dialog.findViewById(R.id.rl_edit_signature);
@@ -2444,12 +2456,12 @@ public class CobranzaDetalleView extends Fragment {
         mPaint.setStrokeWidth(12);
         rl_edit_signature.addView(new Canvas(getActivity(),mPaint));
 
+
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
-        // if button is clicked, close the custom dialog
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -2486,11 +2498,15 @@ public class CobranzaDetalleView extends Fragment {
                         ObjUsuario.compania_id
                         ,ObjUsuario.usuario_id
                         ,recibo
-                        ,imagenString);
+                        ,encoded);
+                    chk_E_signature.setChecked(true);
+                    cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
+                        Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
+                    });
 
                     //url="https://reclamos.vistonyapp.com/upload/image?"+imagenString;
                     //Log.e("REOS","CobranzaDetalleView-onReponse-url-"+url);
-                    RequestBody binaryConvert = RequestBody.create(imagenString, MediaType.parse("application/binary; charset=utf-8"));
+                    /*RequestBody binaryConvert = RequestBody.create(imagenString, MediaType.parse("application/binary; charset=utf-8"));
                     Log.e("REOS","CobranzaDetalleView-onReponse-binaryConvert-"+binaryConvert.toString());
                     Config.getClient().create(Api.class).postPrueba(binaryConvert).enqueue(new Callback<Void>() {
                         @Override
@@ -2522,12 +2538,59 @@ public class CobranzaDetalleView extends Fragment {
                             status.setValue(message);
 
                         }
-                    });
+                    });*/
                 }catch (Exception e){
                     Log.e("REOS","CobranzaDetalleView-getAlertEditSignature-error-"+e.toString());
                 }
                 //imv_prueba_mostrarfirma.setImageBitmap(imgBitmap);
                 Toast.makeText(getContext(), "Firma Guardada Correctamente", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
+    private Dialog getAlertEditSignatureRead(Context context) {
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+        String E_signature="";
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog_edit_signature_read);
+        ImageView iv_edit_signature=(ImageView) dialog.findViewById(R.id.iv_edit_signature);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+
+        CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
+        E_signature=cobranzaDetalleSQLiteDao.getE_Signature(
+                recibo,
+                ObjUsuario.compania_id,
+                ObjUsuario.fuerzatrabajo_id
+        );
+
+        byte[] byteArray;
+        byteArray = Base64.decode(E_signature, Base64.DEFAULT);
+        Log.e("REOS","ListHistoricStatusDispatchAdapter.byteArray.tostring"+byteArray.toString());
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        iv_edit_signature.setImageBitmap(bitmap);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
                 dialog.dismiss();
             }
         });

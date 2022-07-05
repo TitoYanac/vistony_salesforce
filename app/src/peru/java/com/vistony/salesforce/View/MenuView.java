@@ -173,6 +173,7 @@ public class MenuView extends AppCompatActivity
     Fragment KardexOfPaymentFragment;
     Fragment HojaDespachoView;
     Fragment HojaDespachoFragment;
+    Fragment LeadFragment;
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
@@ -250,7 +251,7 @@ public class MenuView extends AppCompatActivity
         KardexOfPaymentFragment = new Fragment();
         HojaDespachoView = new Fragment();
         HojaDespachoFragment = new Fragment();
-
+        LeadFragment = new Fragment();
         arraylistConfiguracionentity= new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao =  new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -926,6 +927,16 @@ public class MenuView extends AppCompatActivity
 
                 ft.commit();
             }
+            if(tag2.equals("inicioRutaVendedorViewLead"))
+            {
+                String tagLeadClientesView="leadUpdateClient";
+                LeadFragment = getSupportFragmentManager().findFragmentByTag(tagLeadClientesView);
+                ft.remove(LeadFragment);
+                ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("2pop");
+
+                ft.commit();
+            }
 
         }
         else if(tag.equals("CobranzaCabeceraView")){
@@ -1130,7 +1141,10 @@ public class MenuView extends AppCompatActivity
             }
             if(tag2.equals("leadUpdateClient"))
             {
-                contentFragment=new LeadClientesView();
+
+                String tagRutaVendedorView="inicioRutaVendedorView";
+                MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
+                ft.remove(MenuAccionViewFragment);
                 //ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.add(R.id.content_menu_view,LeadClientesView.newInstancia(Lista,tag2),tag2);
                 ft.addToBackStack("popsssggggersa");

@@ -56,8 +56,11 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
     ListaHistoricoFacturasLineasNoFacturadasAdapter listaHistoricoFacturasLineasNoFacturadasAdapter;
     private ProgressDialog pd;
     ListaHistoricoFacturasHistorialDespachoAdapter listaHistoricoFacturasHistorialDespachoAdapter;
-
-    public ListHistoricSalesOrderTraceabilityAdapter(android.content.Context context, List<HistoricSalesOrderTraceabilityEntity> objects) {
+    String date;
+    public ListHistoricSalesOrderTraceabilityAdapter(
+            android.content.Context context,
+            List<HistoricSalesOrderTraceabilityEntity> objects,
+            String Date) {
 
         super(context, 0, objects);
         Context=context;
@@ -65,7 +68,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
         inflater = LayoutInflater.from(Context);
         this.arrayList=new ArrayList<HistoricSalesOrderTraceabilityEntity>();
         this.arrayList.addAll(objects);
-
+        this.date=Date;
     }
 
 
@@ -136,10 +139,15 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             holder.imv_historic_delivery = (ImageView) convertView.findViewById(R.id.imv_historic_delivery);
             holder.imv_historic_order_aprob = (ImageView) convertView.findViewById(R.id.imv_historic_order_aprob);
             holder.imv_historic_orders = (ImageView) convertView.findViewById(R.id.imv_historic_orders);
-
+            holder.imv_historic_pend_rev = (ImageView) convertView.findViewById(R.id.imv_historic_pend_rev);
             holder.tv_cond_venta = (TextView) convertView.findViewById(R.id.tv_cond_venta);
             holder.tv_status_aprob = (TextView) convertView.findViewById(R.id.tv_status_aprob);
             holder.your_state_progress_bar_id  = (StateProgressBar) convertView.findViewById(R.id.your_state_progress_bar_id);
+            holder.tv_date_order_aprob = (TextView) convertView.findViewById(R.id.tv_date_order_aprob);
+            holder.tv_date_orders = (TextView) convertView.findViewById(R.id.tv_date_orders);
+            holder.tv_date_pend_rev = (TextView) convertView.findViewById(R.id.tv_date_pend_rev);
+            holder.tv_date_invoice = (TextView) convertView.findViewById(R.id.tv_date_invoice);
+            holder.tv_date_delivery = (TextView) convertView.findViewById(R.id.tv_date_delivery);
             convertView.setTag(holder);
         } else {
             holder = (ListHistoricSalesOrderTraceabilityAdapter.ViewHolder) convertView.getTag();
@@ -305,17 +313,32 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Facturado y Proceso Despacho y Entregado");
             }
         }
-        else {
-            String[] descriptionData = {"Orden\nVenta", "Aprobacion\nOrden", "Facturacion", "Entrega\nMercaderia"};
+        else if(BuildConfig.FLAVOR.equals("peru")) {
+            String[] descriptionData = {"Orden\nVenta","Pend.\nRevision", "Aprobacion\nOrden", "Factura", "Entrega\nMercaderia"};
             holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
             Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:"+statusDispatch);
-            if(lead.getInvoices()==null&&!lead.getComentarioaprobacion().equals("Aprobado"))
+
+            if(lead.getInvoices()==null&&lead.getComentarioaprobacion().equals("Pendiente Revisión"))
+            {
+                holder.your_state_progress_bar_id.setAllStatesCompleted(false);
+                holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+                holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+                holder.imv_historic_pend_rev.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+                holder.imv_historic_order_aprob.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
+                holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
+                holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
+                holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.gray));
+                //holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+                Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Aprobacion");
+            }
+            else if(lead.getInvoices()==null&&!lead.getComentarioaprobacion().equals("Aprobado"))
             {
                 holder.your_state_progress_bar_id.setAllStatesCompleted(false);
                 Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta sin Aprobacion");
                 holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
                 holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 holder.imv_historic_order_aprob.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
+                holder.imv_historic_pend_rev.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
                 holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
                 holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
                 holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.gray));
@@ -324,9 +347,10 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             else if(lead.getInvoices()==null&&lead.getComentarioaprobacion().equals("Aprobado"))
             {
                 holder.your_state_progress_bar_id.setAllStatesCompleted(false);
-                holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+                holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
                 holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 holder.imv_historic_order_aprob.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+                holder.imv_historic_pend_rev.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
                 holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
                 holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.gray));
@@ -342,8 +366,10 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.gray));
+                holder.imv_historic_pend_rev.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 //holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Facturado y Proceso Despacho");
+
             }
             else if(lead.getInvoices()!=null&&lead.getComentarioaprobacion().equals("Aprobado")&&statusDispatch.equals("Entregado"))
             {
@@ -353,10 +379,19 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 holder.imv_historic_order_aprob.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+                holder.imv_historic_pend_rev.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
                 holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.gray));
-                //holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                //holder.imv_historic_delivery.setColorFilter(0957C3);
-                //holder.imv_historic_delivery.setBackgroundColor(Color.RED);
+
+
+                holder.tv_date_orders.setText(Induvis.getDateShort(date));
+                for(int i=0;i<lead.getInvoices().size();i++)
+                {
+
+                    holder.tv_date_delivery.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechadespacho()));
+                    holder.tv_date_invoice.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechaEmision()));
+                }
+
+
                 Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Facturado y Proceso Despacho y Entregado");
             }
         }
@@ -510,6 +545,13 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
         ImageView imv_historic_delivery;
         ImageView imv_historic_order_aprob;
         ImageView imv_historic_orders;
+        ImageView imv_historic_pend_rev;
+        TextView tv_date_order_aprob;
+        TextView tv_date_orders;
+        TextView tv_date_pend_rev;
+        TextView tv_date_invoice;
+        TextView tv_date_delivery;
+
     }
 
 }

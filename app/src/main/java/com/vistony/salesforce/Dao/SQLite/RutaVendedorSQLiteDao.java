@@ -76,8 +76,10 @@ public class RutaVendedorSQLiteDao {
              String saldosincontado,
              String chkgeolocation,
              String chkvisitsection,
-             String terminopago,
-             String contado
+             String terminopago
+             ,String contado
+             ,String latitud
+             ,String longitud
     )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
@@ -121,6 +123,8 @@ public class RutaVendedorSQLiteDao {
             registro.put("chkvisitsection", chkvisitsection);
             registro.put("terminopago", terminopago);
             registro.put("contado", contado);
+            registro.put("latitud", latitud);
+            registro.put("longitud", longitud);
 
             bd.insert("rutavendedor", null, registro);
         }catch (Exception e)

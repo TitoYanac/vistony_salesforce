@@ -44,5 +44,6 @@ public class SesionEntity {
     public static String maxDateDeposit ="";
     public static String collectioncheck ="N";
     public static String currency ="";
+    public static String updateclient ="N";
 }
 

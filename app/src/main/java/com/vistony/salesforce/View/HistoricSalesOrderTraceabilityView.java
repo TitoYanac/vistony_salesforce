@@ -72,9 +72,9 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
     private  int diahf,meshf,yearF;
     private SearchView mSearchView;
     static ListaHistoricoFacturasAdapter listaHistoricoFacturasAdapter;
-    SimpleDateFormat dateFormat;
+    SimpleDateFormat dateFormat,dateFormat2;
     Date date;
-    String fecha;
+    static String fecha,fecha2;
     static private ProgressDialog pd;
     static LifecycleOwner lifecycleOwner;
     static Context context;
@@ -133,8 +133,10 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
         btn_get_historic_salesorder_traceability.setOnClickListener(this);
         historicSalesOrderTraceabilityRepository= new ViewModelProvider(getActivity()).get(HistoricSalesOrderTraceabilityRepository.class);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat2 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
+        fecha2=dateFormat2.format(date);
         tv_fecha_historic_salesorder_traceability.setText(fecha);
         parametrofecha=fecha;
         return v;
@@ -186,6 +188,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
             dia='0'+dia;
         }
         parametrofecha=year + "-" + mes + "-" + dia;
+        fecha2=year + "" + mes + "" + dia;
         tv_fecha_historic_salesorder_traceability.setText(year + "-" + mes + "-" + dia);
     }
 
@@ -232,7 +235,8 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
                 listHistoricSalesOrderTraceabilityAdapter
                         =new ListHistoricSalesOrderTraceabilityAdapter(
                         activity,
-                        data);
+                        data,
+                        fecha2);
                 listview_historic_salesorder_traceability.setAdapter(listHistoricSalesOrderTraceabilityAdapter);
                 tv_count_historic_sales_order_traceability.setText(String.valueOf(data.size()));
                 for(int i=0;i<data.size();i++)

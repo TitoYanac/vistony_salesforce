@@ -41,13 +41,20 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String chkvisitsection;
     private String terminopago;
     private String contado;
+    private String latitud;
+    private String longitud;
 
     public ListaClienteCabeceraEntity(
             String cliente_id,
             String nombrecliente,
             String direccion,
             String saldo,
-            int imvclientecabecera, String moneda, String domembarque_id, String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String linea_credito_usado, String fecharuta, String lista_precio, String docentry, String lastpurchase, String lineofbussiness, String saldosincontados,String chkgeolocation,String chkvisitsection,String terminopago,String contado) {
+            int imvclientecabecera, String moneda, String domembarque_id, String domfactura_id, String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito, String terminopago_id, String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id, String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String linea_credito_usado, String fecharuta, String lista_precio, String docentry, String lastpurchase, String lineofbussiness, String saldosincontados,String chkgeolocation,String chkvisitsection,String terminopago
+            ,String contado
+            ,String latitud
+            ,String longitud
+
+    ) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.direccion = direccion;
@@ -86,7 +93,24 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.chkvisitsection = chkvisitsection;
         this.terminopago = terminopago;
         this.contado = contado;
+        this.latitud = latitud;
+        this.longitud = longitud;
+    }
 
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
     }
 
     public String getContado() {

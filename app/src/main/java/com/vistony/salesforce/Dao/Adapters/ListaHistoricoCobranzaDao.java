@@ -85,6 +85,8 @@ public class ListaHistoricoCobranzaDao {
                         ,Lista.get(i).getHoracobranza()
                         ,Lista.get(i).getDocentry()
                         ,Lista.get(i).getCollectioncheck()
+                        ,Lista.get(i).getE_signature()
+                        ,Lista.get(i).getChkesignature()
                 ));
             }
         }catch (Exception e)

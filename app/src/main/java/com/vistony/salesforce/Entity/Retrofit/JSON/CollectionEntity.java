@@ -31,6 +31,15 @@ public class CollectionEntity {
     private String Brand;
     private String OSVersion;
     private String CollectionCheck;
+    private String E_Signature;
+
+    public String getE_Signature() {
+        return E_Signature;
+    }
+
+    public void setE_Signature(String e_Signature) {
+        E_Signature = e_Signature;
+    }
 
     public String getCollectionCheck() {
         return CollectionCheck;

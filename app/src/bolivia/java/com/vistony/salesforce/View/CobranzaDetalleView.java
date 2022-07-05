@@ -49,6 +49,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hitomi.cmlibrary.CircleMenu;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoCobranzaPDF;
@@ -122,7 +124,7 @@ public class CobranzaDetalleView extends Fragment {
     EnviarWSCobranzaDetalle enviarWSCobranzaDetalle;
     static public ImageView imvprueba;
     CheckBox chkpagoadelantado,chk_bancarizado,chk_pago_directo,chk_pago_pos;;
-    MenuItem generarpdf,validarqr,guardar;
+    MenuItem generarpdf,validarqr,guardar,edit_signature;
     TextView tv_recibo;
     public static CheckBox chk_validacionqr;
     static HiloVlidarQR hiloVlidarQR;
@@ -155,6 +157,9 @@ public class CobranzaDetalleView extends Fragment {
     String cliente_id_visita,domembarque_id_visita,zona_id_visita;
     private ProgressDialog pd;
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
+    FloatingActionButton fab_invoice_cancelation,fab_edit_signature;
+    ImageView imv_prueba_mostrarfirma;
+    CircleMenu circleMenu;
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm","Este es NUEVA ISNTANCIA 1");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
@@ -386,7 +391,15 @@ public class CobranzaDetalleView extends Fragment {
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo= (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
+        fab_invoice_cancelation =  (FloatingActionButton) v.findViewById(R.id.fab_invoice_cancelation);
+        circleMenu = v.findViewById(R.id.circleMenu);
+        fab_edit_signature =  (FloatingActionButton) v.findViewById(R.id.fab_edit_signature);
+        imv_prueba_mostrarfirma =  (ImageView) v.findViewById(R.id.imv_prueba_mostrarfirma);
 
+        circleMenu.setVisibility(View.GONE);
+        imv_prueba_mostrarfirma.setVisibility(View.GONE);
+        fab_edit_signature.setVisibility(View.GONE);
+        fab_invoice_cancelation.setVisibility(View.GONE);
 
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
                                                    @Override
@@ -750,8 +763,10 @@ public class CobranzaDetalleView extends Fragment {
         guardar = menu.findItem(R.id.guardar);
         generarpdf = menu.findItem(R.id.generarpdf);
         validarqr = menu.findItem(R.id.validarqr);
+        edit_signature = menu.findItem(R.id.edit_signature);
         menu_variable=menu;
 
+        edit_signature.setVisible(false);
 
 
 
@@ -1189,6 +1204,8 @@ public class CobranzaDetalleView extends Fragment {
                             String.valueOf(n),
                             Lista.get(i).getDocentry(),
                             SesionEntity.collectioncheck
+                            ,""
+                            ,"N"
                     );
 
                     ActualizaDocumentoDeuda(ObjUsuario.compania_id,
@@ -1239,6 +1256,8 @@ public class CobranzaDetalleView extends Fragment {
                             String.valueOf(n),
                             Lista.get(i).getDocentry(),
                             SesionEntity.collectioncheck
+                            ,""
+                            ,"N"
                     );
 
 

@@ -115,6 +115,10 @@ public interface Api {
     //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollectionQR(@Path("codeSap") String codeSap, @Body RequestBody params);
 
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
+        //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
+    Call<CobranzaDetalleEntity> updateCollectionSignature(@Path("codeSap") String codeSap, @Body RequestBody params);
+
     @Multipart
     @POST
     Call<ResponseBody> sendBackup(@Url String url, @Part MultipartBody.Part fileSqlite);

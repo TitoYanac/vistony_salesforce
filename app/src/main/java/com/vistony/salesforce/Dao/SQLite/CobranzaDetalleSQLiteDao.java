@@ -17,6 +17,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoCobranzaEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
@@ -204,7 +205,9 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("horacobranza",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getFechacobranza());
             registro.put("cardname",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getNombrecliente());
             registro.put("docentry",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getDocentry());
-            registro.put("codeSMS",String.valueOf(codeSMS));
+            registro.put("collectioncheck","N");
+            registro.put("e_signature","");
+            registro.put("chkesignature","N");
             bd.insert("cobranzadetalle", null, registro);
         }
 
@@ -981,26 +984,13 @@ public class CobranzaDetalleSQLiteDao {
     {
         int resultado=0;
         String chkdepositado="1";
-        //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
-        // SQLiteDatabase bd = admin.getWritableDatabase();
         abrir();
         try {
 
             ContentValues registro = new ContentValues();
             registro.put("chkwsqrvalidado",chkwsqrvalidado);
-            //registro.put("precio",pre);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
-
-            /*Cursor fila = bd.rawQuery(
-                    "update cobranzadetalle set cobranza_id = '"+cobranza_id+ "'" +
-                            //+ ",chkdepositado = '"+chkdepositado+"'"+
-                            " where recibo= '"+recibo+"'"
-                            //+ " and compania_id= '"+compania_id+"'"
-                    ,null);
-            */
-
-            //resultado=1;
             bd.close();
         }catch (Exception e)
         {
@@ -1009,7 +999,6 @@ public class CobranzaDetalleSQLiteDao {
             Log.e("REOS","CobranzaDetalleSQLiteDao-ActualizaWSQRValidadoCobranzaDetalle-error: "+e.toString());
             resultado=0;
         }
-
         bd.close();
         return  resultado;
     }
@@ -1317,6 +1306,10 @@ public class CobranzaDetalleSQLiteDao {
     {
         ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
         CollectionEntity collectionEntity;
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
         String brand = Build.MANUFACTURER;
         String model = Build.MODEL;
         String osVersion = android.os.Build.VERSION.RELEASE;
@@ -1443,10 +1436,13 @@ public class CobranzaDetalleSQLiteDao {
                 }
                 collectionEntity.setBrand(brand);
                 collectionEntity.setOSVersion(osVersion);
-                collectionEntity.setCollectionCheck(fila.getString(fila.getColumnIndex("collectioncheck")));
+                //if(BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("peru"))
+                //{
+                    collectionEntity.setCollectionCheck(fila.getString(fila.getColumnIndex("collectioncheck")));
+                //}
                 listCollectionEntity.add(collectionEntity);
 
-                UpdateCountSend(fila.getString(fila.getColumnIndex("Receip")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
+                UpdateCountSend(fila.getString(fila.getColumnIndex("Receip")),ObjUsuario.compania_id,ObjUsuario.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
             }
 
             bd.close();
@@ -1793,6 +1789,76 @@ public class CobranzaDetalleSQLiteDao {
 
         bd.close();
         return  resultado;
+    }
+
+    public ArrayList<CollectionEntity> ObtenerCobranzaDetallePendienteEnvioE_SignatureJSON (String compania_id,String usuario_id)
+    {
+        ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
+        CollectionEntity collectionEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select sap_code,recibo,e_signature from cobranzadetalle" +
+                            " where usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"' and e_signature<>'' and chkesignature='N'"
+                    ,null);
+            while (fila.moveToNext())
+            {
+                collectionEntity= new CollectionEntity();
+                collectionEntity.setCode(fila.getString(0));
+                collectionEntity.setReceip(fila.getString(1));
+                collectionEntity.setE_Signature(fila.getString(2));
+                listCollectionEntity.add(collectionEntity);
+            }
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+
+        bd.close();
+        return listCollectionEntity;
+    }
+
+    public int UpdateDBCollectionE_Signature (String recibo, String compania_id,String usuario_id,String chkesignature)
+    {
+        int resultado=0;
+        abrir();
+        try {
+
+            ContentValues registro = new ContentValues();
+            registro.put("chkesignature",chkesignature);
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("cobranzadetalle",registro,"recibo='"+recibo+"'"+" and compania_id='"+compania_id+"'"+" and usuario_id='"+usuario_id+"'" ,null);
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS","CobranzaDetalleSQLiteDao-UpdateDBCollectionE_Signature-error: "+e.toString());
+            resultado=0;
+        }
+        bd.close();
+        return  resultado;
+    }
+
+    public String getE_Signature(String Recibo,String Compania_id,String fuerzatrabajo_id){
+        String rpta="";
+        try {
+            abrir();
+            Cursor fila = bd.rawQuery(
+                    "Select e_signature from cobranzadetalle where recibo=? and compania_id=? and fuerzatrabajo_id=?",new String[]{Recibo,Compania_id,fuerzatrabajo_id});
+
+            while (fila.moveToNext()){
+                rpta=fila.getString(fila.getColumnIndex("e_signature"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            bd.close();
+        }
+
+        return rpta;
     }
 
 }

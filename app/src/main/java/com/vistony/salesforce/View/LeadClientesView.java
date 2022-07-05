@@ -84,14 +84,15 @@ public class LeadClientesView extends Fragment {
     private Dialog dialog;
     com.google.android.material.textfield.TextInputLayout ti_commercial_name,ti_card_name,
             ti_textphone,ti_TextContactPerson,ti_TextEmail,ti_TextWeb,ti_TextCardCode;
-    static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque;
-
+    static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque,correo,chkgeolocation,telefonofijo,telefonomovil;
+    static Object object;
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String tag, Object dato);
     }
 
     public static Fragment newInstancia (Object param1,String id) {
         LeadClientesView fragment = new LeadClientesView();
+        object=param1;
         ArrayList<ListaClienteCabeceraEntity> Lista = (ArrayList<ListaClienteCabeceraEntity>) param1;
         for(int i=0;i<Lista.size();i++)
         {
@@ -100,13 +101,27 @@ public class LeadClientesView extends Fragment {
             domebarque_id=Lista.get(i).getDomembarque_id();
             domebarque=Lista.get(i).getDireccion();
             zona_id=Lista.get(i).getZona_id();
+            correo=Lista.get(i).getCorreo();
+            chkgeolocation=Lista.get(i).getChkgeolocation();
+            telefonofijo=Lista.get(i).getTelefonofijo();
+            telefonomovil=Lista.get(i).getTelefonomovil();
+            Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+Lista.get(i).getCliente_id());
+            Log.e("REOS","LeadClientesView-newInstancia-nombrecliente:"+Lista.get(i).getNombrecliente());
+            Log.e("REOS","LeadClientesView-newInstancia-domebarque_id:"+Lista.get(i).getDomembarque_id());
+            Log.e("REOS","LeadClientesView-newInstancia-domebarque:"+Lista.get(i).getDireccion());
+            Log.e("REOS","LeadClientesView-newInstancia-zona_id:"+Lista.get(i).getZona_id());
+            Log.e("REOS","LeadClientesView-newInstancia-contado"+Lista.get(i).getContado());
+            Log.e("REOS","LeadClientesView-newInstancia-correo"+Lista.get(i).getCorreo());
+            Log.e("REOS","LeadClientesView-newInstancia-chkgeolocation"+Lista.get(i).getChkgeolocation());
+            Log.e("REOS","LeadClientesView-newInstancia-telefonofijo"+Lista.get(i).getTelefonofijo());
+            Log.e("REOS","LeadClientesView-newInstancia-telefonomovil"+Lista.get(i).getTelefonomovil());
+            Log.e("REOS","LeadClientesView-newInstancia-latitud"+Lista.get(i).getLatitud());
+            Log.e("REOS","LeadClientesView-newInstancia-longitud"+Lista.get(i).getLongitud());
+
         }
+        Log.e("REOS","LeadClientesView-newInstancia-type "+type);
         type=id;
-        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+cliente_id);
-        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+nombrecliente);
-        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+domebarque_id);
-        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+domebarque);
-        Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+zona_id);
+
         return fragment;
     }
 
@@ -125,7 +140,7 @@ public class LeadClientesView extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle(getResources().getString(R.string.lead_cliente));
+
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         dialog = new Dialog(getActivity());
@@ -167,6 +182,8 @@ public class LeadClientesView extends Fragment {
 
         editTextCardName.setText(nombrecliente);
         editTextStreet.setText(domebarque);
+        editTextEmail.setText(correo);
+        editTextCellPhone.setText(telefonofijo);
 
         editTextCardName.setEnabled(false);
         editTextCardCode.setEnabled(false);
@@ -200,6 +217,12 @@ public class LeadClientesView extends Fragment {
             mapView.onResume();
 
         });
+        if(type.equals("leadUpdateClient"))
+        {
+            getActivity().setTitle("Actualizar Cliente");
+        }else {
+            getActivity().setTitle(getResources().getString(R.string.lead_cliente));
+        }
 
         return v;
     }
@@ -271,12 +294,24 @@ public class LeadClientesView extends Fragment {
             parametros.put("DateTime", "" + formattedDate);
             parametros.put("photo", encoded);
             parametros.put("type", type);
+            parametros.put("CardCode", cliente_id);
+            parametros.put("domembarque_id", domebarque_id);
             leadClienteViewModel.sendLead(parametros, getContext()).observe(this.getActivity(), data -> {
                 if (data.equals("init")) {
                     btnUpload.setEnabled(false);
                     btnUpload.setClickable(false);
                     btnUpload.setText("Enviado Lead...");
                     btnUpload.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.custom_border_button_onclick));
+                    String Fragment="RutaVendedorView";
+                    String accion="inicioRutaVendedorViewLead";
+                    String compuesto=Fragment+"-"+accion;
+                    if(mListener!=null) {
+                        mListener.onFragmentInteraction(compuesto, object
+                        );
+                    }
+                    SesionEntity.updateclient="N";
+
+
                 } else if (data.equals("successful")) {
                     btnUpload.setEnabled(true);
                     btnUpload.setClickable(true);
