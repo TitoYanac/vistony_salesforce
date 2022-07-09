@@ -387,9 +387,15 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE banco ADD COLUMN singledeposit TEXT");
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collectioncheck TEXT");
         }
-        /*if(oldVersion==14&&newVersion==15) {
+        if(oldVersion==14&&newVersion==15) {
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN e_signature TEXT");
-        }*/
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN chkesignature TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN terminopago TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN contado TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN latitud TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN longitud TEXT");
+
+        }
 
     }
 

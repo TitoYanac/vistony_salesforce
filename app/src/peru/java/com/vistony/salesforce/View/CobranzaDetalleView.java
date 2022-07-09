@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -191,7 +192,7 @@ public class CobranzaDetalleView extends Fragment {
     private ProgressDialog pd;
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
     static Context context;
-    FloatingActionButton fab_invoice_cancelation,fab_edit_signature;
+    static FloatingActionButton fab_invoice_cancelation,fab_edit_signature;
     String arrayCircle[] = {"Guardar","Generar","Validar","Firma"};
     ImageView imv_prueba_mostrarfirma;
 
@@ -245,7 +246,11 @@ public class CobranzaDetalleView extends Fragment {
         CobranzaDetalleView fragment = new CobranzaDetalleView();
         chk_validacionqr.setChecked(true);
         cobranzaRepository.PendingCollectionQR(context);
-
+        fab_edit_signature.setEnabled(true);
+        fab_edit_signature.setClickable(true);
+        //fab_edit_signature.setBackgroundDrawable(new ColorDrawable(Color.RED));
+        //fab_edit_signature.setBackgroundColor(Color.RED);
+        fab_edit_signature.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#D6001C")));
         //hiloVlidarQR.execute();
         return fragment;
 
@@ -458,12 +463,13 @@ public class CobranzaDetalleView extends Fragment {
                                                    @Override
                                                    public void onClick(View view) {
                                                        //getAlertEditSignature(getContext()).show();
-                                                       if (!(Listado == null))
+                                                       /*if (!(Listado == null))
                                                        {
                                                            getAlertEditSignatureRead(getContext()).show();
                                                        }else {
                                                            getAlertEditSignature(getContext()).show();
-                                                       }
+                                                       }*/
+                                                       getAlertEditSignature(getContext()).show();
                                                    }
                                                }
         );
@@ -1588,8 +1594,8 @@ public class CobranzaDetalleView extends Fragment {
             if (telefono.equals(mPhoneNumber)) {
                 Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
             } else {
-                sendSMS(telefono);
-                Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
+                //sendSMS(telefono);
+                //Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -1616,14 +1622,6 @@ public class CobranzaDetalleView extends Fragment {
         return resultado;
 
     }
-
-   /* public void UpdateQRStatus (){
-        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        CobranzaRepository cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
-        cobranzaRepository.PendingCollectionQR(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
-    }*/
 
     public int ActualizaDocumentoDeuda(String compania_id,String documento_id,String nuevo_saldo,String nrofactura)
     {

@@ -17,7 +17,10 @@ import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
 import com.vistony.salesforce.Entity.Retrofit.JSON.CollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaItemEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.SignatureEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.SignatureREntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.SignatureEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -999,35 +1002,35 @@ public class CobranzaRepository extends ViewModel {
         if(cobranzaDetalleSQLiteDao==null){
             cobranzaDetalleSQLiteDao =new CobranzaDetalleSQLiteDao(contexto);
         }
-        ArrayList<CollectionEntity> listCollection=null;
+        ArrayList<SignatureEntity> listCollection=null;
         listCollection = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendienteEnvioE_SignatureJSON(ObjUsuario.compania_id, ObjUsuario.usuario_id);
         Log.e("REOS","CobranzaRepository-UpdateCollectionSignatureList-UpdateCollection-listCollection.size(): "+listCollection.size());
         if(listCollection!=null && listCollection.size()>0){
             json = gson.toJson(listCollection);
-            json = "{ \"Collections\":" + json + "}";
+            json = "{ \"signatures\":" + json + "}";
         }
         Log.e("REOS","CobranzaRepository-UpdateCollectionSignatureList-UpdateCollection-json: "+json);
         if(json!=null){
             RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
             Log.e("REOS", "CobranzaRepository-UpdateCollectionSignatureList-UpdateCollection-jsonRequest: " + jsonRequest.toString());
-            Config.getClient().create(Api.class).updateCollectionSignature(listCollection.get(0).getCode(), jsonRequest).enqueue(new Callback<CobranzaDetalleEntity>() {
+            Config.getClient().create(Api.class).updateCollectionSignature(jsonRequest).enqueue(new Callback<SignatureEntityResponse>() {
                 @Override
-                public void onResponse(Call<CobranzaDetalleEntity> call, Response<CobranzaDetalleEntity> response) {
+                public void onResponse(Call<SignatureEntityResponse> call, Response<SignatureEntityResponse> response) {
                     UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
                     UsuarioSQLite usuarioSQLite=new UsuarioSQLite(contexto);
                     ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
-                    CobranzaDetalleEntity cobranzaDetalleEntity = response.body();
+                    SignatureEntityResponse signatureEntityResponse = response.body();
                     ArrayList<String> responseData=new ArrayList<>();
-                    if (response.isSuccessful() && cobranzaDetalleEntity != null) {
+                    if (response.isSuccessful() && signatureEntityResponse != null) {
                         responseData = new ArrayList<>();
-                        for (CobranzaItemEntity respuesta : cobranzaDetalleEntity.getCobranzaItem()) {
-                            Log.e("REOS","CobranzaRepository-PendingCollectionSignatureList-UpdateCollectionSignatureList-respuesta.getRecibo(): "+respuesta.getRecibo());
+                        for (SignatureREntity respuesta : signatureEntityResponse.getSignatureREntity()) {
+                            Log.e("REOS","CobranzaRepository-PendingCollectionSignatureList-UpdateCollectionSignatureList-respuesta.getRecibo(): "+respuesta.getReceipt ());
                             Log.e("REOS","CobranzaRepository-PendingCollectionSignatureList-UpdateCollectionSignatureList-SesionEntity.compania_id: "+SesionEntity.compania_id);
                             Log.e("REOS","CobranzaRepository-PendingCollectionSignatureList-UpdateCollectionSignatureList-SesionEntity.usuario_id: "+SesionEntity.usuario_id);
-                            if (respuesta.getCode() != null && respuesta.getErrorCode().equals("0")) {
+                            if (respuesta.getCode() != null && respuesta.getErrorCode().equals("N")) {
                                 cobranzaDetalleSQLiteDao.UpdateDBCollectionE_Signature(
-                                        respuesta.getRecibo(),
+                                        respuesta.getReceipt(),
                                         ObjUsuario.compania_id,
                                         ObjUsuario.usuario_id,
                                         "Y"
@@ -1043,7 +1046,7 @@ public class CobranzaRepository extends ViewModel {
                     }
                 }
                 @Override
-                public void onFailure(Call<CobranzaDetalleEntity> call, Throwable t) {
+                public void onFailure(Call<SignatureEntityResponse> call, Throwable t) {
                     callback.onResponseErrorSap(t.getMessage());
                     call.cancel();
                 }

@@ -1000,6 +1000,7 @@ public class MenuView extends AppCompatActivity
                 String tagCobranzaDetalleView="COBRANZA";
                 Fragment cobranzaDetalleView;
                 cobranzaDetalleView = getSupportFragmentManager().findFragmentByTag("popX");
+
                 ft.replace(R.id.content_menu_view,CobranzaDetalleView.newInstancia(Lista),tag2);
                 ft.addToBackStack("popssdddd");
                 ft.commit();

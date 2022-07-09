@@ -272,7 +272,9 @@
         android:layout_marginRight="30dp"
         android:layout_marginBottom="250dp"
         android:src="@drawable/ic_edit_black_24dp"
-        app:backgroundTint="@color/Rojo_Vistony" />
+        android:enabled="false"
+        android:clickable="false"
+        app:backgroundTint="@color/gray" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_invoice_cancelation"

@@ -15,6 +15,7 @@ import com.vistony.salesforce.Entity.Adapters.ListaPendingCollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.JSON.CollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoCobranzaEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.SignatureEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
@@ -1791,10 +1792,10 @@ public class CobranzaDetalleSQLiteDao {
         return  resultado;
     }
 
-    public ArrayList<CollectionEntity> ObtenerCobranzaDetallePendienteEnvioE_SignatureJSON (String compania_id,String usuario_id)
+    public ArrayList<SignatureEntity> ObtenerCobranzaDetallePendienteEnvioE_SignatureJSON (String compania_id, String usuario_id)
     {
-        ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
-        CollectionEntity collectionEntity;
+        ArrayList<SignatureEntity> listCollectionEntity=new ArrayList<>();
+        SignatureEntity collectionEntity;
         abrir();
         try {
             Cursor fila = bd.rawQuery(
@@ -1803,10 +1804,11 @@ public class CobranzaDetalleSQLiteDao {
                     ,null);
             while (fila.moveToNext())
             {
-                collectionEntity= new CollectionEntity();
+                collectionEntity= new SignatureEntity();
                 collectionEntity.setCode(fila.getString(0));
-                collectionEntity.setReceip(fila.getString(1));
-                collectionEntity.setE_Signature(fila.getString(2));
+                collectionEntity.setReceipt(fila.getString(1));
+                //collectionEntity.setData(fila.getString(2));
+                collectionEntity.setData("Prueba Data Base64");
                 listCollectionEntity.add(collectionEntity);
             }
             bd.close();

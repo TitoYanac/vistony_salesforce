@@ -317,8 +317,32 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             String[] descriptionData = {"Orden\nVenta","Pend.\nRevision", "Aprobacion\nOrden", "Factura", "Entrega\nMercaderia"};
             holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
             Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:"+statusDispatch);
+            if(lead.getInvoices()==null&&lead.getComentarioaprobacion().equals("Cancelado"))
+            {
+                holder.your_state_progress_bar_id.setAllStatesCompleted(false);
+                /*holder.your_state_progress_bar_id.setStateNumberForegroundColor(
+                        ContextCompat.getColor(getContext(),R.color.Rojo_Vistony)
+                );*/
+                holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
+                        (
+                        ContextCompat.getColor(getContext(),R.color.Rojo_Vistony)
+                );
+                holder.your_state_progress_bar_id.setForegroundColor
+                        (
+                                ContextCompat.getColor(getContext(),R.color.Rojo_Vistony)
+                        );
 
-            if(lead.getInvoices()==null&&lead.getComentarioaprobacion().equals("Pendiente Revisión"))
+                holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+                holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(),R.color.Rojo_Vistony));
+                holder.imv_historic_pend_rev.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
+                holder.imv_historic_order_aprob.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
+                holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
+                holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
+                holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.gray));
+                //holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+                Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Aprobacion");
+            }
+            else if(lead.getInvoices()==null&&lead.getComentarioaprobacion().equals("Pendiente Revisión"))
             {
                 holder.your_state_progress_bar_id.setAllStatesCompleted(false);
                 holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);

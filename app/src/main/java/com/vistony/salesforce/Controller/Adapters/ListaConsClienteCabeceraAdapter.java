@@ -164,10 +164,10 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         }
         if(BuildConfig.FLAVOR.equals("ecuador"))
         {
-            holder.tablerowbalance.setVisibility(View.GONE);
-            holder.progressLineCredit.setVisibility(View.GONE);
-            holder.linearlayoutlblcredit.setVisibility(View.GONE);
-            holder.linearlayouttvcredit.setVisibility(View.GONE);
+            //holder.tablerowbalance.setVisibility(View.GONE);
+            //holder.progressLineCredit.setVisibility(View.GONE);
+            //holder.linearlayoutlblcredit.setVisibility(View.GONE);
+            //holder.linearlayouttvcredit.setVisibility(View.GONE);
         }
         else if(BuildConfig.FLAVOR.equals("paraguay")){
             holder.tablerowpaymentterms.setVisibility(View.GONE);

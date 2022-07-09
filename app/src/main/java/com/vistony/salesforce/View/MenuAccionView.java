@@ -305,8 +305,8 @@ public class MenuAccionView extends Fragment {
 
         cv_cobranza.setOnClickListener(v -> {
 
-            //if(!SesionEntity.perfil_id.equals("CHOFER"))
-            //{
+            if(!SesionEntity.perfil_id.equals("CHOFER"))
+            {
             //Prueba Patricia Avila
                validar=CobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
                 if(validar>0){
@@ -314,9 +314,9 @@ public class MenuAccionView extends Fragment {
                 }else{
                     alertatiporecibos().show();
                 }
-            //}else {
-            // alertatiporecibos().show();
-           // }
+            }else {
+               alertatiporecibos().show();
+            }
         });
 
         cv_visita.setOnClickListener(v -> {
@@ -582,11 +582,12 @@ public class MenuAccionView extends Fragment {
 
             case "bolivia":
             case "paraguay":
+            case "ecuador":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza_induvis);
                 break;
             case "peru":
             case "chile":
-            case "ecuador":
+            //case "ecuador":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
                 break;
         }

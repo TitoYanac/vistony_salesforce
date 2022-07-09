@@ -31,14 +31,14 @@ public class CollectionEntity {
     private String Brand;
     private String OSVersion;
     private String CollectionCheck;
-    private String E_Signature;
+    private String Data;
 
-    public String getE_Signature() {
-        return E_Signature;
+    public String getData() {
+        return Data;
     }
 
-    public void setE_Signature(String e_Signature) {
-        E_Signature = e_Signature;
+    public void setData(String data) {
+        Data = data;
     }
 
     public String getCollectionCheck() {

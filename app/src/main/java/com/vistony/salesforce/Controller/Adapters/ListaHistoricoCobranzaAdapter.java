@@ -200,10 +200,11 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
                 fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                //ArrayList<ListaHistoricoCobranzaEntity> Lista = new ArrayList<>();
-                //Lista.add(lead);
-                //transaction.add(R.id.content_menu_view, historicoCobranzaView.newInstancias(Lista));
-                transaction.add(R.id.content_menu_view, historicoCobranzaView.newInstancias(lead));
+                ArrayList<ListaHistoricoCobranzaEntity> Lista = new ArrayList<>();
+                Lista.add(lead);
+                transaction.add(R.id.content_menu_view, historicoCobranzaView.newInstancias(Lista));
+
+                //transaction.add(R.id.content_menu_view, historicoCobranzaView.newInstancias(lead));
             }
         });
 

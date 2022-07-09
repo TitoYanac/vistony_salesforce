@@ -72,14 +72,14 @@ public class MenuConsultasView extends Fragment {
         // Inflate the layout for this fragment
         switch (BuildConfig.FLAVOR){
             case "bolivia":
-            case "ecuador":
+            //case "ecuador":
             case "india":
-
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view_induvis, container, false);
                 break;
             case "peru":
             case "paraguay":
             case "chile":
+            case "ecuador":
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view, container, false);
                 break;
             default:
@@ -119,12 +119,13 @@ public class MenuConsultasView extends Fragment {
                     case "peru":
                     case "paraguay":
                     case "chile":
+                    case "ecuador":
                          Fragment="MenuConsultasView";
                          accion="menuconsultaspedidoview";
                          compuesto=Fragment+"-"+accion;
                         mListener.onFragmentInteraction(compuesto,"");
                         break;
-                    case "ecuador":
+                    //case "ecuador":
                     case "bolivia":
 
                          Fragment="MenuConsultasView";
@@ -155,6 +156,7 @@ public class MenuConsultasView extends Fragment {
                     case "peru":
                     case "paraguay":
                     case "chile":
+                    case "ecuador":
                         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
                         {
                             Fragment="HistoricoCobranzaView";
@@ -171,7 +173,7 @@ public class MenuConsultasView extends Fragment {
                             }
 
                         break;
-                    case "ecuador":
+                    //case "ecuador":
                     case "bolivia":
 
                          Fragment="HistoricoCobranzaView";

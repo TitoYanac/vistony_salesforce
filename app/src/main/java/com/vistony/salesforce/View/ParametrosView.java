@@ -423,6 +423,12 @@ ParametrosView extends Fragment {
             Log.e("Jepicame","=>"+data);
         });
 
+        //Enviar Firma Electronica
+        cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
+            Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
+        });
+
+
 
 
         fabdescargarparametros.setOnClickListener(view -> {

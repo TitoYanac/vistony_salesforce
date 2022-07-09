@@ -45,6 +45,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.ReasonDispatchEntityResp
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ResumenDiarioEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.RutaFuerzaTrabajoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.SignatureEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.StockEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SummaryofeffectivenessEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.TerminoPagoEntityResponse;
@@ -114,10 +115,6 @@ public interface Api {
     @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollectionQR(@Path("codeSap") String codeSap, @Body RequestBody params);
-
-    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
-        //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
-    Call<CobranzaDetalleEntity> updateCollectionSignature(@Path("codeSap") String codeSap, @Body RequestBody params);
 
     @Multipart
     @POST
@@ -277,6 +274,12 @@ public interface Api {
 
     @POST ("https://reclamos.vistonyapp.com/upload/image")
     Call<Void> postPrueba(@Body RequestBody params);
+
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/signature")
+        //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
+    Call<SignatureEntityResponse> updateCollectionSignature(@Body RequestBody params);
+
+
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);
     //@GET
