@@ -267,7 +267,9 @@
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:id="@+id/ti_editTextComments"
+                    >
 
                     <EditText
                         android:id="@+id/editTextComent"

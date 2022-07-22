@@ -258,7 +258,7 @@ public class MenuAccionView extends Fragment {
         });
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
-            cv_lead.setVisibility(View.GONE);
+            //cv_lead.setVisibility(View.GONE);
             cv_visit_section.setVisibility(View.GONE);
             cv_dispatch.setVisibility(View.GONE);
         }
@@ -603,7 +603,7 @@ public class MenuAccionView extends Fragment {
 
         if(SesionEntity.perfil_id.equals("CHOFER"))
         {
-            cv_cobranza_deposito_directo.setVisibility(View.GONE);
+            //cv_cobranza_deposito_directo.setVisibility(View.GONE);
         }
         if(!BuildConfig.FLAVOR.equals("chile"))
         {

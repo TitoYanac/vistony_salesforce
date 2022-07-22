@@ -68,6 +68,7 @@ import com.google.gson.JsonSyntaxException;
 import com.hitomi.cmlibrary.CircleMenu;
 import com.hitomi.cmlibrary.OnMenuSelectedListener;
 import com.omega_r.libs.OmegaCenterIconButton;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
@@ -447,6 +448,20 @@ public class CobranzaDetalleView extends Fragment {
         imv_prueba_mostrarfirma =  (ImageView) v.findViewById(R.id.imv_prueba_mostrarfirma);
         circleMenu.setVisibility(View.GONE);
         imv_prueba_mostrarfirma.setVisibility(View.GONE);
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            fab_edit_signature.setVisibility(View.GONE);
+        }
+        else{
+            if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+            {
+                fab_edit_signature.setVisibility(View.GONE);
+            }
+            else {
+
+            }
+
+        }
         circleMenu.setMainMenu(Color.parseColor("#0957C3"),R.drawable.ic_baseline_add_24,R.drawable.ic_baseline_cancel_24_white)
                         .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_save_black_24dp)
                         .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_print_black_24dp)

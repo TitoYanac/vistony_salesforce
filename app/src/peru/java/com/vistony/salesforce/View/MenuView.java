@@ -138,7 +138,8 @@ public class MenuView extends AppCompatActivity
         HistoricStatusDispatchView.OnFragmentInteractionListener,
         HistoricSalesOrderTraceabilityView.OnFragmentInteractionListener,
         HistoricSalesAnalysisByRoute.OnFragmentInteractionListener,
-        CanvasView.OnFragmentInteractionListener
+        CanvasView.OnFragmentInteractionListener,
+        CurrencyChargedView.OnFragmentInteractionListener
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment,contentHistoryFragment;
@@ -369,7 +370,7 @@ public class MenuView extends AppCompatActivity
                 onNavigationItemSelected(navigationView.getMenu().getItem(1).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(4).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(5).setVisible(false));
-                onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
+                //onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
                 break;
             case "Vendedor":
             case "VENDEDOR":
@@ -419,7 +420,7 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_formularios).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_configuracion_general).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
@@ -799,7 +800,9 @@ public class MenuView extends AppCompatActivity
                 TAG_FRAGMENT="config_print";
                 break;
             case R.id.nav_dinero_cobrado:
-                //contentFragment=new HojaDespachoView();
+                contentFragment=new CurrencyChargedView();
+                fragmentSeleccionado=true;
+                TAG_FRAGMENT="money_charged";
                 break;
             case R.id.nav_asistencia_chofer:
                 //contentFragment=new HojaDespachoView();

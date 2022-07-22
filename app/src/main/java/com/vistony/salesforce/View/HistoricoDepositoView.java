@@ -143,28 +143,7 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
         listconsdepositos.setOnItemClickListener(this);
         return v;
     }
-/*
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
-        ListenerBackPress.setCurrentFragment("HistoricoDepositoView");
-
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-   @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.e("jpcm","ME EJCUTO CUANDO QUEIROOO NEL");
-       // mListener = null;
-    }
-*/
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -306,15 +285,6 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
 
                 arraylistahistoricodespositoentity = new ArrayList<ListaHistoricoDepositoEntity>();
                 DepositoRepository depositoRepository=new DepositoRepository(getContext());
-
-                /*
-                arraylistahistoricodespositoentity=historicoDepositoWSDao.consultarHistoricoDeposito(
-                        SesionEntity.imei,
-                        SesionEntity.compania_id,
-                        tv_fechainidep.getText().toString(),
-                        tv_fechafindep.getText().toString(),
-                        SesionEntity.fuerzatrabajo_id
-                );*/
                 Log.e("REOS","Response-HistoricoDepositoView-depositoRepository.getHistoricoDeposito: "+SesionEntity.imei+"-"+fechainisap+"-"+fechafinsap);
                 arraylistahistoricodespositoentity=depositoRepository.getHistoricoDeposito(
                         SesionEntity.imei,
@@ -375,53 +345,7 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                                     estado="Pendiente";
                                 }
                                 listaHistoricoDepositoEntity.estado=estado;
-                                String dia="",mes="",anio="",fecha="";
-                                //Peru
-                                /*Log.e("REOS", "HistoricoDepositoView-ObtenerHistoricoDeposito-listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito(): "+listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito());
-                                String[] separada = listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito().split("-");
-                                if(separada.length>1)
-                                {
-                                    dia=separada[0];
-                                    mes=separada[1];
-                                    anio=separada[2];
-                                }
-
-                                String FechaDeposito=dia+"/"+mes+"/"+anio+" 00:00:00.000";
-                                Log.e("REOS","HistoricoDepositoView:FechaDeposito: "+FechaDeposito);
-
-                                listaHistoricoDepositoEntity.fechadeposito=FechaDeposito;*/
                                 listaHistoricoDepositoEntity.fechadeposito=listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito();
-                                //listaCobranzaCabeceraSQLiteEntity.get(l).getFechadeposito();
-                                /*String diadiferido="",mesdiferido="",aniodiferido="",fechadiferido="",horadiferido,diferido;
-                                Log.e("REOS", "HistoricoDepositoView-ObtenerHistoricoDeposito-listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido(): "+listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido());
-                                String[] separadadiferido = listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido().split(" ");
-                                Log.e("REOS","HistoricoDepositoView:separadadiferido: "+separadadiferido);
-
-                                fechadiferido=separadadiferido[0];
-                                Log.e("REOS","HistoricoDepositoView:fechadiferido: "+fechadiferido);
-                                horadiferido=separadadiferido[1];
-
-                                //Peru
-                                //-------------------
-                                //String[] separarfechadiferida = fechadiferido.split("/");
-                                String[] separarfechadiferida = fechadiferido.split("-");
-                                //-------------------
-
-                                    diadiferido=separarfechadiferida[0];
-                                    mesdiferido=separarfechadiferida[1];
-                                    aniodiferido=separarfechadiferida[2];
-                                if(diadiferido.length()==1)
-                                {
-                                    diadiferido="0"+diadiferido;
-                                }
-
-                                diferido=aniodiferido+"/"+mesdiferido+"/"+diadiferido+" 00:00:00.000";
-
-
-                                listaHistoricoDepositoEntity.fechadiferida=
-                                        //listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido()
-                                        diferido
-                                ;*/
                                 listaHistoricoDepositoEntity.fechadiferida= listaCobranzaCabeceraSQLiteEntity.get(l).getFechadiferido();
                                 listaHistoricoDepositoEntity.fuerzatrabajo_id=listaCobranzaCabeceraSQLiteEntity.get(l).getFuerzatrabajo_id();
                                 listaHistoricoDepositoEntity.montodeposito=listaCobranzaCabeceraSQLiteEntity.get(l).getTotalmontocobrado();

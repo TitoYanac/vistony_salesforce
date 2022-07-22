@@ -58,6 +58,7 @@ public class ClienteSQlite {
             registro.put("DueDays",Lista.get(i).getDueDays());
             registro.put("lineofbusiness",Lista.get(i).getLineofbusiness());
             registro.put("LastPurchase",Lista.get(i).getLastpurchase());
+            registro.put("correo",Lista.get(i).getCorreo());
             sqlite.insert("cliente",null,registro);
         }
 
@@ -421,7 +422,7 @@ public class ClienteSQlite {
              fila = sqlite.rawQuery(
                     "SELECT DISTINCT a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,d.direccion,d.zona_id,a.ordenvisita,a.zona," +
                             "a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio," +
-                            "a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lastpurchase,IFNULL(SUM(e.saldo),0) as saldonocontados,(case when d.latitud='0' or d.latitud is null then '0' else '1' end) as geolocalizado" +
+                            "a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.linea_credito_usado,a.lastpurchase,IFNULL(SUM(e.saldo),0) as saldonocontados,(case when d.latitud='0' or d.latitud is null then '0' else '1' end) as geolocalizado" +
                             ",(case when f.latitudini is not null and f.latitudini is not null then '1' else '0' end) as duracionvisita,g.terminopago,g.contado,d.latitud,d.longitud  from cliente a" +
                             " LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id and a.cliente_id=b.cliente_id " +

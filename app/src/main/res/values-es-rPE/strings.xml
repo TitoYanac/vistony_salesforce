@@ -79,7 +79,7 @@
     <string name="lbl_lastpurchase">Ult.Compra</string>
     <string name="lbl_chk_geolocation">Geolocalizacion</string>
     <string name="lbl_route_sales_count_geolocation">Clientes Geolocalizados</string>
-    <string name="lbl_menu_action_update_client_geolocation">Actualizar Geolocalizacion Cliente</string>
+    <string name="lbl_menu_action_update_client_geolocation">Actualizar Datos Cliente</string>
     <string name="lbl_menu_action_visit_section">Tramo Visita</string>
     <string name="lbl_layout_visit_section_start">Inicio Tramo</string>
     <string name="lbl_layout_visit_section_finish">Final Tramo</string>
@@ -121,4 +121,11 @@
     <string name="lbl_sub_signature">Escriba su Firma</string>
     <string name="lbl_e_signature">E-Firma</string>
     <string name="lbl_read_e_signature">Consultar E-Firma</string>
+    <string name="lbl_money_charged">Dinero Cobrado</string>
+    <string name="lbl_amount_charged">Monto Cobrado</string>
+    <string name="lbl_amount_reported">Monto Reportado</string>
+    <string name="lbl_number_transaction">N° Operacion</string>
+    <string name="lbl_currency">Moneda</string>
+    <string name="lbl_currency_type">Tipo</string>
+    <string name="lbl_currency_unit">Unidad</string>
 </resources>

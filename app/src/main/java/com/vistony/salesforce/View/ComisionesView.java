@@ -308,7 +308,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         barChart.setFitBars(true);
         //barChart.setVisibleXRange(0,100);
         //barChart.setMaxVisibleValueCount();
-        barChart.setVisibleYRange(0,100,null);
+        barChart.setVisibleYRange(0,10,null);
         axisX(barChart.getXAxis());
         axisLeft(barChart.getAxisLeft());
         axisRight(barChart.getAxisRight());

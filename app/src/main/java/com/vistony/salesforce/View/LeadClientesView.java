@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omega_r.libs.OmegaCenterIconButton;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Dao.Retrofit.LeadClienteViewModel;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -83,9 +85,11 @@ public class LeadClientesView extends Fragment {
     private GoogleMap myGoogleMap;
     private Dialog dialog;
     com.google.android.material.textfield.TextInputLayout ti_commercial_name,ti_card_name,
-            ti_textphone,ti_TextContactPerson,ti_TextEmail,ti_TextWeb,ti_TextCardCode;
-    static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque,correo,chkgeolocation,telefonofijo,telefonomovil;
+            ti_textphone,ti_TextContactPerson,ti_TextEmail,ti_TextWeb,ti_TextCardCode,ti_editTextComments;
+    static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque,correo,chkgeolocation,telefonofijo,telefonomovil,rucdni;
     static Object object;
+    LinearLayout linearLayoutGps;
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String tag, Object dato);
     }
@@ -105,6 +109,7 @@ public class LeadClientesView extends Fragment {
             chkgeolocation=Lista.get(i).getChkgeolocation();
             telefonofijo=Lista.get(i).getTelefonofijo();
             telefonomovil=Lista.get(i).getTelefonomovil();
+            rucdni=Lista.get(i).getRucdni();
             Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+Lista.get(i).getCliente_id());
             Log.e("REOS","LeadClientesView-newInstancia-nombrecliente:"+Lista.get(i).getNombrecliente());
             Log.e("REOS","LeadClientesView-newInstancia-domebarque_id:"+Lista.get(i).getDomembarque_id());
@@ -171,23 +176,49 @@ public class LeadClientesView extends Fragment {
         ti_TextWeb = v.findViewById(R.id.ti_TextWeb);
         ti_TextCardCode = v.findViewById(R.id.ti_TextCardCode);
         editTextStreet = v.findViewById(R.id.editTextStreet);
+        linearLayoutGps = v.findViewById(R.id.linearLayoutGps);
+        ti_editTextComments = v.findViewById(R.id.ti_editTextComments);
 
-        ti_commercial_name.setVisibility(View.GONE);
-        ti_textphone.setVisibility(View.GONE);
-        ti_TextContactPerson.setVisibility(View.GONE);
-        //ti_TextEmail.setVisibility(View.GONE);
-        spinner.setVisibility(View.GONE);
-        ti_TextWeb.setVisibility(View.GONE);
-        ti_TextCardCode.setVisibility(View.GONE);
-
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            ti_commercial_name.setVisibility(View.GONE);
+            ti_textphone.setVisibility(View.GONE);
+            ti_TextContactPerson.setVisibility(View.GONE);
+            spinner.setVisibility(View.GONE);
+            ti_TextWeb.setVisibility(View.GONE);
+            ti_TextCardCode.setVisibility(View.GONE);
+            editTextCardName.setEnabled (false);
+            editTextCardCode.setEnabled(false);
+            editTextStreet.setEnabled(false);
+            editTextCellPhone.setEnabled(false);
+            ti_textphone.setEnabled(false);
+            editTextEmail.setEnabled(false);
+        }
+        else if(BuildConfig.FLAVOR.equals("ecuador"))
+        {
+            ti_commercial_name.setVisibility(View.GONE);
+            //ti_textphone.setVisibility(View.GONE);
+            ti_TextContactPerson.setVisibility(View.GONE);
+            spinner.setVisibility(View.GONE);
+            ti_TextWeb.setVisibility(View.GONE);
+            //ti_TextCardCode.setVisibility(View.GONE);
+            linearLayoutGps.setVisibility(View.GONE);
+            ti_editTextComments.setVisibility(View.GONE);
+            floatingButtonTakePhoto.setVisibility(View.GONE);
+            editTextCardName.setEnabled (false);
+            editTextCardCode.setEnabled(false);
+            editTextStreet.setEnabled(false);
+            editTextCellPhone.setEnabled(false);
+            ti_textphone.setEnabled(false);
+            editTextEmail.setEnabled(false);
+            btnUpload.setText("ACEPTAR");
+        }
+        editTextCardCode.setText(rucdni);
         editTextCardName.setText(nombrecliente);
         editTextStreet.setText(domebarque);
         editTextEmail.setText(correo);
-        editTextCellPhone.setText(telefonofijo);
-
-        editTextCardName.setEnabled(false);
-        editTextCardCode.setEnabled(false);
-        editTextStreet.setEnabled(false);
+        editTextCellPhone.setText(telefonomovil);
+        editTextPhone.setText(telefonofijo);
 
         floatingButtonTakePhoto.setOnClickListener(data -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -205,7 +236,21 @@ public class LeadClientesView extends Fragment {
         });
 
         btnUpload.setOnClickListener(e -> {
-            sendLeadApi();
+
+            if(BuildConfig.FLAVOR.equals("peru"))
+            {
+                sendLeadApi();
+            }
+            else if(BuildConfig.FLAVOR.equals("ecuador"))
+            {
+                String Fragment="RutaVendedorView";
+                String accion="inicioRutaVendedorViewLead";
+                String compuesto=Fragment+"-"+accion;
+                if(mListener!=null) {
+                    mListener.onFragmentInteraction(compuesto, object
+                    );
+                }
+            }
         });
 
         buttonSendGPS.setOnClickListener(e -> {

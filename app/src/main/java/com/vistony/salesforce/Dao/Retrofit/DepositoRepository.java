@@ -9,11 +9,15 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.Gson;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Controller.Utilitario.KardexPagoPDF;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoDepositoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.DepositEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesOrderTraceabilityEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoDepositoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DepositList;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricSalesOrderTraceabilityEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoDepositoEntityResponse;
 import com.vistony.salesforce.Entity.SesionEntity;
 
@@ -21,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -33,7 +38,7 @@ public class DepositoRepository extends ViewModel {
     private static String resultado="N";
     private CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao;
     private ArrayList<ListaHistoricoDepositoEntity> LHDeposito =  new ArrayList<>();
-
+    private MutableLiveData<List<HistoricoDepositoEntity>> status= new MutableLiveData<>();
     public DepositoRepository(final Context context){
         this.context=context;
     }
@@ -322,6 +327,34 @@ public class DepositoRepository extends ViewModel {
             callback.onResponseErrorSap("No hay Depositos pendientes de enviar");
         }
     }
+
+    public MutableLiveData<List<HistoricoDepositoEntity>> getHistoricDeposits(String Imei,String FechaDepositoIni,String FechaDepositoFin){
+
+        Config.getClient().create(Api.class).getHistoricoDeposito(Imei,FechaDepositoIni,FechaDepositoFin).enqueue(new Callback<HistoricoDepositoEntityResponse>() {
+            @Override
+            public void onResponse(Call<HistoricoDepositoEntityResponse> call, Response<HistoricoDepositoEntityResponse> response) {
+                Log.e("REOS","KardexPagoRepository.getKardexPago.call:" + call.toString());
+                KardexPagoPDF kardexPagoPDF=new KardexPagoPDF();
+                HistoricoDepositoEntityResponse historicoDepositoEntityResponse=response.body();
+                Log.e("REOS","KardexPagoRepository.getKardexPago.response:" + response.toString());
+                if(response.isSuccessful() && historicoDepositoEntityResponse.getHistoricoDeposito() .size()>0){
+                    Log.e("REOS","KardexPagoRepository.getKardexPago.Ingreso:");
+                    //Log.e("REOS","KardexPagoRepository.getKardexPago.kardexPagoEntityResponse.getKardexPagoEntity():"+kardexPagoEntityResponse.getKardexPagoEntity().size());
+                    //kardexPagoPDF.generarPdf(context, kardexPagoEntityResponse.getKardexPagoEntity());
+                    status.setValue(historicoDepositoEntityResponse.getHistoricoDeposito());
+                }else
+                {
+                    status.setValue(null);
+                }
+            }
+            @Override
+            public void onFailure(Call<HistoricoDepositoEntityResponse> call, Throwable t) {
+                status.setValue(null);
+            }
+        });
+        return status;
+    }
+
 }
 
 interface DepositCallback {

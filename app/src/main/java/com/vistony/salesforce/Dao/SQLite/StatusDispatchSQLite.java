@@ -159,4 +159,24 @@ public class StatusDispatchSQLite {
         bd.close();
         return listStatusDispatchEntity;
     }
+
+    public int UpdateResultStatusDispatch (String Entrega_id){
+        int status=0;
+
+        try {
+            abrir();
+
+            ContentValues registro = new ContentValues();
+            registro.put("chkrecibido","1");
+
+            bd.update("statusdispatch",registro,"entrega_id=?",new String[]{Entrega_id});
+            status=1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            bd.close();
+        }
+
+        return status;
+    }
 }

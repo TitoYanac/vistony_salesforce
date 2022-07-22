@@ -159,6 +159,7 @@ public class MenuView extends AppCompatActivity
     Fragment BuscarClienteFragment;
     Fragment KardexOfPaymentFragment;
     Fragment HistoricContainerSaleFragment;
+    Fragment LeadFragment;
 
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
@@ -225,6 +226,7 @@ public class MenuView extends AppCompatActivity
         BuscarClienteFragment = new Fragment();
         KardexOfPaymentFragment = new Fragment();
         HistoricContainerSaleFragment = new Fragment();
+        LeadFragment = new Fragment();
 
         quotasPerCustomerRepository = new ViewModelProvider(this).get(QuotasPerCustomerHeadRepository.class);
         quotasPerCustomerDetailRepository = new ViewModelProvider(this).get(QuotasPerCustomerDetailRepository.class);
@@ -870,6 +872,16 @@ public class MenuView extends AppCompatActivity
 
                 ft.commit();
             }
+            if(tag2.equals("inicioRutaVendedorViewLead"))
+            {
+                String tagLeadClientesView="leadUpdateClient";
+                LeadFragment = getSupportFragmentManager().findFragmentByTag(tagLeadClientesView);
+                ft.remove(LeadFragment);
+                ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("2pop");
+
+                ft.commit();
+            }
 
         }
         else if(tag.equals("CobranzaCabeceraView")){
@@ -1071,6 +1083,27 @@ public class MenuView extends AppCompatActivity
                 //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("po1p");
                 ft.commit();
+            }
+            if(tag2.equals("leadUpdateClient"))
+            {
+
+                String tagRutaVendedorView="inicioRutaVendedorView";
+                MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
+                ft.remove(MenuAccionViewFragment);
+                //ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view,LeadClientesView.newInstancia(Lista,tag2),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+
+            }
+            if(tag2.equals("lead"))
+            {
+                contentFragment=new LeadClientesView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                //ft.add(R.id.content_menu_view,LeadClientesView.newInstancia(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+
             }
 
         }
@@ -1462,6 +1495,7 @@ public class MenuView extends AppCompatActivity
                 ft.add(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
+                BuscarClienteView.newInstanceFlujoNoRuta(Lista);
             }
         }
         if(tag.equals("DireccionClienteView"))

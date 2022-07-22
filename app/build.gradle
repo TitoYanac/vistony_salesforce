@@ -71,9 +71,9 @@ android {
             applicationIdSuffix ".ecuador"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //buildConfigField('String' , 'BASE_EDPOINT', '"/ec"')
-            buildConfigField('String' , 'BASE_ENDPOINT', '"ec.get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"ec.post.qa"')
-            versionName "1.0.6"
+            buildConfigField('String' , 'BASE_ENDPOINT', '"ec.get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"ec.post"')
+            versionName "1.0.7"
             manifestPlaceholders = [country:"Ecuador"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"EC"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')

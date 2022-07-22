@@ -121,4 +121,11 @@
     <string name="lbl_sub_signature">Escriba su Firma</string>
     <string name="lbl_e_signature">E-Firma</string>
     <string name="lbl_read_e_signature">Consultar E-Firma</string>
+    <string name="lbl_money_charged">Money Charged</string>
+    <string name="lbl_amount_charged">Monto Cobrado</string>
+    <string name="lbl_amount_reported">Monto Reportado</string>
+    <string name="lbl_number_transaction">N° Transacction</string>
+    <string name="lbl_currency">Currency</string>
+    <string name="lbl_currency_type">Tipo</string>
+    <string name="lbl_currency_unit">Unidad</string>
 </resources>

@@ -199,7 +199,7 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
         for(int i=0;i<Lista.size();i++)
         {
             float valor=0;
-            valor=(Float.parseFloat (Lista.get(i).getPorcentajeavance())*100);
+            valor=(Float.parseFloat (Lista.get(i).getPorcentajeavance()));
             entries.add(new BarEntry(i,valor));
         }
         return entries;
@@ -276,7 +276,7 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
         barChartAvanceAnterior.setFitBars(true);
         //barChart.setVisibleXRange(0,100);
         //barChart.setMaxVisibleValueCount();
-        barChartAvanceAnterior.setVisibleYRange(0,100,null);
+        barChartAvanceAnterior.setVisibleYRange(0,10,null);
         axisX(barChartAvanceAnterior.getXAxis());
         axisLeft(barChartAvanceAnterior.getAxisLeft());
         axisRight(barChartAvanceAnterior.getAxisRight());

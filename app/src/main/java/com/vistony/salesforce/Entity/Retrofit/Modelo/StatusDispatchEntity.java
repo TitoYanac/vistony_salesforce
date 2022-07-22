@@ -52,6 +52,15 @@ public class StatusDispatchEntity {
 
     public String reasondispatch;
 
+    @SerializedName("ErrorCode")
+    private String haveError;
+
+    @SerializedName("Message")
+    private String Message;
+
+    @SerializedName("IdStatusDispatch")
+    private String idStatusDispatch;
+
     public StatusDispatchEntity(String compania_id, String fuerzatrabajo_id, String usuario_id, String typedispatch_id, String reasondispatch_id, String cliente_id, String factura_id, String entrega_id, String chkrecibido, String observation,
    String foto,String fecha_registro,String hora_registro,String fotoGuia,String latitud,String longitud,
                                 String cliente,String entrega,String factura,String typedispatch,String reasondispatch
@@ -77,6 +86,30 @@ public class StatusDispatchEntity {
         this.factura = factura;
         this.typedispatch = typedispatch;
         this.reasondispatch = reasondispatch;
+    }
+
+    public String getHaveError() {
+        return haveError;
+    }
+
+    public void setHaveError(String haveError) {
+        this.haveError = haveError;
+    }
+
+    public String getMessage() {
+        return Message;
+    }
+
+    public void setMessage(String message) {
+        Message = message;
+    }
+
+    public String getIdStatusDispatch() {
+        return idStatusDispatch;
+    }
+
+    public void setIdStatusDispatch(String idStatusDispatch) {
+        this.idStatusDispatch = idStatusDispatch;
     }
 
     public String getTypedispatch() {

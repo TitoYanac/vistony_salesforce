@@ -46,6 +46,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.ResumenDiarioEntityRespo
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.RutaFuerzaTrabajoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SignatureEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.StatusDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.StockEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SummaryofeffectivenessEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.TerminoPagoEntityResponse;
@@ -177,6 +178,11 @@ public interface Api {
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/PriceListHead")
     Call<PriceListEntityResponse> getPriceList(@Query("imei") String imei);
+
+
+    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/StatusDispatch")
+        //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Visit")
+    Call<StatusDispatchEntityResponse> sendStatusDispatch (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricalSales/Variable")
     Call<HistoricContainerSalesEntityResponse> getDailySummary(

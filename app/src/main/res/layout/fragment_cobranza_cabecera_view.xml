@@ -274,9 +274,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"
+            android:src="@drawable/ic_baseline_add_24"
             app:backgroundTint="@color/Rojo_Vistony"
-            app:elevation="100dp"
-            android:src="@drawable/ic_baseline_add_24" />
+            app:elevation="100dp" />
 
     </RelativeLayout>
 

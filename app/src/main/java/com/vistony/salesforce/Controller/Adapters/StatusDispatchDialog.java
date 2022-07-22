@@ -43,6 +43,8 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
+import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
+import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
 import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.ReasonDispatchSQLite;
 import com.vistony.salesforce.Dao.SQLite.StatusDispatchSQLite;
@@ -72,21 +74,25 @@ public class StatusDispatchDialog extends DialogFragment {
     private Bitmap imgBitmap,imgBitmap2;
     private byte[] byteArray,byteArray2;
     String cliente_id,cliente;
-    public StatusDispatchDialog(String Client_id,String cliente){
-    this.cliente_id=Client_id;
-        this.cliente=cliente;
-    }
     LocationManager locationManager;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     private GPSController gpsController;
     private Location mLocation;
     double latitude, longitude;
+    StatusDispatchRepository statusDispatchRepository;
+
+    public StatusDispatchDialog(String Client_id,String cliente){
+    this.cliente_id=Client_id;
+        this.cliente=cliente;
+    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //final View view = getActivity().getLayoutInflater().inflate(R.layout.layout_dialog_status_dispatch, null);
         locationManager = (LocationManager) getActivity(). getSystemService(LOCATION_SERVICE);
+        statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
+
         if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
             // AlertNoGps();
             androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
@@ -322,6 +328,12 @@ public class StatusDispatchDialog extends DialogFragment {
                     statusDispatchEntity.reasondispatch = reasondispatch;
                     listStatusDispatchEntity.add(statusDispatchEntity);
                     statusDispatchSQLite.addStatusDispatch(listStatusDispatchEntity);
+
+                    /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                    statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+                        Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
+                    });
+
 
                     ////Visitas
                     FormulasController formulasController=new FormulasController(getContext());

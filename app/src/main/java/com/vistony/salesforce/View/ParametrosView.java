@@ -53,6 +53,7 @@ import com.vistony.salesforce.Dao.Retrofit.PromocionCabeceraWS;
 import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleWS;
 import com.vistony.salesforce.Dao.Retrofit.ReasonDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoRepository;
+import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.StockWS;
 import com.vistony.salesforce.Dao.Retrofit.TerminoPagoWS;
 import com.vistony.salesforce.Dao.Retrofit.TypeDispatchRepository;
@@ -182,6 +183,8 @@ ParametrosView extends Fragment {
     private TypeDispatchRepository typeDispatchRepository;
     private ReasonDispatchRepository reasonDispatchRepository;
     private RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository;
+    private StatusDispatchRepository statusDispatchRepository;
+
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
         Bundle args = new Bundle();
@@ -269,6 +272,7 @@ ParametrosView extends Fragment {
         typeDispatchRepository = new ViewModelProvider(getActivity()).get(TypeDispatchRepository.class);
         reasonDispatchRepository = new ViewModelProvider(getActivity()).get(ReasonDispatchRepository.class);
         rutaFuerzaTrabajoRepository = new ViewModelProvider(getActivity()).get(RutaFuerzaTrabajoRepository.class);
+        statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
         //CARGA DE MAESTROS
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
         switch (BuildConfig.FLAVOR){
@@ -426,6 +430,11 @@ ParametrosView extends Fragment {
         //Enviar Firma Electronica
         cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
             Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
+        });
+
+        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+            Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
         });
 
 

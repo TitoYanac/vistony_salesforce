@@ -29,14 +29,15 @@
         android:text="1"
 
         android:textAppearance="?attr/textAppearanceListItem" />
+
     <TextView
         android:id="@+id/lbl_rucdnni"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="30dp"
-        android:text="RUC/DNI:"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:text="@string/ruc"
+        android:textAppearance="?attr/textAppearanceListItem" />
     <TextView
         android:id="@+id/tv_historico_facturas_rucdnni"
         android:layout_width="wrap_content"

@@ -1102,7 +1102,9 @@ public class CobranzaDetalleView extends Fragment {
         String tag="",tag2="",cliente_id="",shipto="",montocobrado="",cardname,valorcobranza="0",chkruta="",contado="0";
         FormulasController formulasController=new FormulasController(getContext());
         cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
-        correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(ObjUsuario.compania_id,SesionEntity.usuario_id);
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+        correlativorecibo=cobranzaDetalleSQLiteDao.ObtenerUltimoRecibo(ObjUsuario.compania_id,ObjUsuario.usuario_id);
         Random numAleatorio = new Random();
         int n = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
 
@@ -1186,14 +1188,14 @@ public class CobranzaDetalleView extends Fragment {
                         fecha,
                         recibo,
                         String.valueOf(Lista.get(i).getNrodocumento()),
-                        SesionEntity.fuerzatrabajo_id,
+                        ObjUsuario.fuerzatrabajo_id,
                         bancarizado,
                         //Peru - Cambio necesario para letras
                         //------------------
                         //"0",
                         String.valueOf(Lista.get(i).getNrodocumento()),
                         //------------------
-                        SesionEntity.usuario_id,
+                        ObjUsuario.usuario_id,
                         comentario,
                         "N",
                         "Y",
@@ -1245,10 +1247,10 @@ public class CobranzaDetalleView extends Fragment {
                         fecha,
                         recibo,
                         String.valueOf(Lista.get(i).getNrodocumento()),
-                        SesionEntity.fuerzatrabajo_id,
+                        ObjUsuario.fuerzatrabajo_id,
                         bancarizado,
                         "",
-                        SesionEntity.usuario_id,
+                        ObjUsuario.usuario_id,
                         comentario,
                         "Y",
                         "Y",
@@ -1607,8 +1609,8 @@ public class CobranzaDetalleView extends Fragment {
         }
         ValidaSQLite=cobranzaCabeceraSQLiteDao.InsertaCobranzaCabecera(
                 SesionEntity.fuerzatrabajo_id+recibo,
-                SesionEntity.usuario_id,
-                SesionEntity.fuerzatrabajo_id,
+                ObjUsuario.usuario_id,
+                ObjUsuario.fuerzatrabajo_id,
                 "11",
                 ObjUsuario.compania_id,
                 montocobrado,

@@ -227,7 +227,6 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
         pd = new ProgressDialog(activity);
         pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Ordenes de Venta", true, false);
         historicSalesOrderTraceabilityRepository.getHistoricSalesOrderTraceabilityRepository  (SesionEntity.imei, Date).observe(lifecycleOwner, data -> {
-
             Log.e("Jepicame","=>"+data);
             if(data!=null)
             {

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_currency_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="0dp"
+            android:text=""
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="@color/Black"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lbl_currency_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/lbl_currency_type"
+            android:textAppearance="?attr/textAppearanceListItem"
+
+            />
+
+        <Spinner
+            android:id="@+id/spn_currency_type"
+            style="@android:style/Widget.Holo.Light.Spinner"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="4"
+            android:entries="@array/currency_type"
+            android:spinnerMode="dropdown"
+            android:textAlignment="gravity"
+
+            />
+
+
+        <TextView
+            android:id="@+id/lbl_currency_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="90dp"
+            android:text="@string/lbl_currency_unit"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <Spinner
+            android:id="@+id/spn_currency_unit"
+            style="@android:style/Widget.Holo.Light.Spinner"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="80dp"
+            android:layout_weight="4"
+            android:popupBackground="#E6000000"
+            android:spinnerMode="dropdown"
+            android:textAlignment="gravity" />
+
+        <TextView
+            android:id="@+id/lbl_currency_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="145dp"
+            android:text="@string/CantidadParametro"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <EditText
+            android:id="@+id/et_currency_quantity"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="240dp"
+            android:layout_marginTop="140dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/borde_editext_ov_rojo"
+            android:digits="0123456789"
+            android:ems="9"
+            android:hint="0"
+            android:imeOptions="actionSend"
+            android:inputType="number"
+            android:maxLength="5"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="@color/Rojo_Vistony"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imv_clear_currency_detail"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="290dp"
+            app:srcCompat="@drawable/ic_delete_black_24dp" />
+
+        <TextView
+            android:id="@+id/lbl_currency_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="185dp"
+            android:text="@string/lbl_warehouses_amount"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <TextView
+            android:id="@+id/tv_currency_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="240dp"
+            android:layout_marginTop="185dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:text="@string/lbl_warehouses_amount"
+            android:textAppearance="?attr/textAppearanceListItem" />
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
