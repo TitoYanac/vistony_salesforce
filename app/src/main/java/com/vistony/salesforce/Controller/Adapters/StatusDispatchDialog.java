@@ -8,12 +8,15 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -33,6 +36,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -41,6 +45,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
+import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
@@ -62,6 +67,8 @@ import com.vistony.salesforce.View.HistoricoDepositoView;
 import com.vistony.salesforce.View.LoginView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +87,9 @@ public class StatusDispatchDialog extends DialogFragment {
     private Location mLocation;
     double latitude, longitude;
     StatusDispatchRepository statusDispatchRepository;
-
+    public static String mCurrentPhotoPathG="",mCurrentPhotoPathL="";
+    String Entrega_id="";
+    File filelocal,fileguia;
     public StatusDispatchDialog(String Client_id,String cliente){
     this.cliente_id=Client_id;
         this.cliente=cliente;
@@ -152,9 +161,11 @@ public class StatusDispatchDialog extends DialogFragment {
         ArrayList<String> sppOcurrencies=new ArrayList<>();
         listDetailDispatchSheetSQLite=detailDispatchSheetSQLite.getDetailDispatchSheetforClient(cliente_id);
         String direccion_id,zona_id;
+
         for(int i=0;i<listDetailDispatchSheetSQLite.size();i++)
         {
             sppdelivery.add(listDetailDispatchSheetSQLite.get(i).getEntrega());
+            Entrega_id=listDetailDispatchSheetSQLite.get(i).getEntrega_id();
         }
         ArrayAdapter<String> adapterdelivery = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,sppdelivery);
         spn_referral_guide.setAdapter(adapterdelivery);
@@ -180,18 +191,52 @@ public class StatusDispatchDialog extends DialogFragment {
 
         this.someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK) {
-                Bundle extras = result.getData().getExtras();
-                imgBitmap = (Bitmap) extras.get("data");
-                imageViewPhoto.setImageBitmap(imgBitmap);
+
+                Bitmap bitmap2=null;
+                try {
+                    File file = new File(mCurrentPhotoPathL);
+                    bitmap2 = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file));
+                    ImageCameraController imageCameraController = new ImageCameraController();
+                    filelocal= imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega_id,"L");
+
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+                imgBitmap=bitmap2;
+                imageViewPhoto.setImageBitmap(bitmap2);
+
+                //Bundle extras = result.getData().getExtras();
+                //imgBitmap = (Bitmap) extras.get("data");
+                //imageViewPhoto.setImageBitmap(imgBitmap);
             }
         });
 
-        this.someActivityResultLauncherGuia = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        this.someActivityResultLauncherGuia = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult()
+                , result -> {
+
             if (result.getResultCode() == RESULT_OK) {
-                Bundle extras = result.getData().getExtras();
-                imgBitmap2 = (Bitmap) extras.get("data");
-                imageViewPhoto2.setImageBitmap(imgBitmap2);
+                Bitmap bitmap2=null;
+                try {
+                File file = new File(mCurrentPhotoPathG);
+
+
+                    bitmap2 = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file));
+                    ImageCameraController imageCameraController = new ImageCameraController();
+                    fileguia=imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega_id,"G");
+
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+                imgBitmap2=bitmap2;
+                imageViewPhoto2.setImageBitmap(bitmap2);
+
+
+                //Bundle extras = result.getData().getExtras();
+                //imgBitmap2 = (Bitmap) extras.get("data");
+                //imageViewPhoto2.setImageBitmap(imgBitmap2);
             }
+
         });
        /* floatingButtonTakePhoto.setOnClickListener(data -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -236,17 +281,49 @@ public class StatusDispatchDialog extends DialogFragment {
         imv_historic_status_dispatch_delivery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    someActivityResultLauncherGuia.launch(intent);
+                // Crea el File
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile(Entrega_id,"G");
+                } catch (IOException ex) {
+                    Log.e("log,",""+ex);
                 }
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    //startActivityForResult(intent,20);
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        someActivityResultLauncherGuia.launch(intent);
+                    }
+                }
+
         }});
         imv_historic_status_dispatch_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                //Intent intent = new Intent(MediaStore.EXTRA);
+                //if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                 //   someActivityResultLauncher.launch(intent);
+                //}
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    someActivityResultLauncher.launch(intent);
+                // Crea el File
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile(Entrega_id,"L");
+                } catch (IOException ex) {
+                    Log.e("log,",""+ex);
+                }
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    //startActivityForResult(intent,20);
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        someActivityResultLauncher.launch(intent);
+                    }
                 }
             }});
 
@@ -256,16 +333,17 @@ public class StatusDispatchDialog extends DialogFragment {
                 String encoded = null,encoded2 = null;
                 if (imgBitmap != null) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    imgBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
+                    imgBitmap.compress(Bitmap.CompressFormat.JPEG, 35, stream);
                     byteArray = stream.toByteArray();
-                    encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-
+                    //encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    encoded = new String(byteArray);
                 }
                 if (imgBitmap2 != null) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    imgBitmap2.compress(Bitmap.CompressFormat.PNG, 80, stream);
+                    imgBitmap2.compress(Bitmap.CompressFormat.JPEG, 35, stream);
                     byteArray2 = stream.toByteArray();
-                    encoded2 = Base64.encodeToString(byteArray2, Base64.DEFAULT);
+                    //encoded2 = Base64.encodeToString(byteArray2, Base64.DEFAULT);
+                    encoded2 = new String(byteArray2);
                 }
                 if(imgBitmap != null||imgBitmap2 != null) {
                     SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
@@ -315,10 +393,14 @@ public class StatusDispatchDialog extends DialogFragment {
                     statusDispatchEntity.factura_id = factura_id;
                     statusDispatchEntity.chkrecibido = "0";
                     statusDispatchEntity.observation = et_comentario.getText().toString();
-                    statusDispatchEntity.foto = encoded;
+                    //statusDispatchEntity.foto = encoded;
+                    //statusDispatchEntity.foto = entrega_id+"_L.JPG";
+                    statusDispatchEntity.foto = filelocal.toString();
                     statusDispatchEntity.fecha_registro = FormatFecha.format(date);
                     statusDispatchEntity.hora_registro = dateFormathora.format(date);
-                    statusDispatchEntity.fotoGuia = encoded2;
+                    //statusDispatchEntity.fotoGuia = encoded2;
+                    //statusDispatchEntity.fotoGuia = entrega_id+"_G.JPG";
+                    statusDispatchEntity.fotoGuia = fileguia.toString();
                     statusDispatchEntity.latitud = String.valueOf(latitude);
                     statusDispatchEntity.longitud = String.valueOf(longitude);
                     statusDispatchEntity.cliente = cliente;
@@ -371,5 +453,25 @@ public class StatusDispatchDialog extends DialogFragment {
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         return  dialog;
+    }
+
+    private File createImageFile(String entrega_id,String type) throws IOException {
+
+        //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = entrega_id+"_"+type;
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(imageFileName,".jpg",storageDir);
+        if(type.equals("G"))
+        {
+            mCurrentPhotoPathG=image.getAbsolutePath();
+        }
+        else if(type.equals("L"))
+        {
+            mCurrentPhotoPathL = image.getAbsolutePath();
+        }
+
+
+        return image;
     }
 }

@@ -1002,8 +1002,8 @@ public class CobranzaRepository extends ViewModel {
         if(cobranzaDetalleSQLiteDao==null){
             cobranzaDetalleSQLiteDao =new CobranzaDetalleSQLiteDao(contexto);
         }
-        ArrayList<SignatureEntity> listCollection=null;
-        listCollection = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendienteEnvioE_SignatureJSON(ObjUsuario.compania_id, ObjUsuario.usuario_id);
+        ArrayList<CollectionEntity> listCollection=null;
+        listCollection = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendienteEnvioE_SignatureJSON(ObjUsuario.compania_id, ObjUsuario.usuario_id,contexto);
         Log.e("REOS","CobranzaRepository-UpdateCollectionSignatureList-UpdateCollection-listCollection.size(): "+listCollection.size());
         if(listCollection!=null && listCollection.size()>0){
             json = gson.toJson(listCollection);
@@ -1013,7 +1013,7 @@ public class CobranzaRepository extends ViewModel {
         if(json!=null){
             RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
             Log.e("REOS", "CobranzaRepository-UpdateCollectionSignatureList-UpdateCollection-jsonRequest: " + jsonRequest.toString());
-            Config.getClient().create(Api.class).updateCollectionSignature(jsonRequest).enqueue(new Callback<SignatureEntityResponse>() {
+            Config.getClient().create(Api.class).updateCollectionSignature(SesionEntity.imei, jsonRequest).enqueue(new Callback<SignatureEntityResponse>() {
                 @Override
                 public void onResponse(Call<SignatureEntityResponse> call, Response<SignatureEntityResponse> response) {
                     UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();

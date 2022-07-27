@@ -34,6 +34,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.vistony.salesforce.Controller.Adapters.ListaHojaDespachoAdapter;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.Adapters.ListaHojaDespachoDao;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.Retrofit.DetailDispatchSheetRepository;
@@ -84,10 +85,10 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
     SimpleDateFormat dateFormat;
     Date date;
     String fecha;
-    TextView tv_fecha_hoja_despacho,tv_cantidad_despachos,tv_total_deuda;
+    TextView tv_fecha_hoja_despacho,tv_cantidad_despachos,tv_total_deuda,tv_status_despachos;
     Button btn_consultar_fecha_despacho;
     private ProgressDialog pd;
-    DecimalFormat format = new DecimalFormat("#0.00");
+    //DecimalFormat format = new DecimalFormat("#0.00");
     ClienteRepository clienteRepository;
     List<ClienteSQLiteEntity> LclientesqlSQLiteEntity;
     ParametrosSQLite parametrosSQLite;
@@ -152,6 +153,8 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         tv_fecha_hoja_despacho=v.findViewById(R.id.tv_fecha_hoja_despacho);
         tv_cantidad_despachos=v.findViewById(R.id.tv_cantidad_despachos);
         tv_total_deuda=v.findViewById(R.id.tv_total_deuda);
+        tv_status_despachos=v.findViewById(R.id.tv_status_despachos);
+
         btn_consultar_fecha_despacho=v.findViewById(R.id.btn_consultar_fecha_despacho);
         imb_consultar_fecha_hoja_despacho.setOnClickListener(this);
         imb_consultar_codigo_control.setOnClickListener(this);
@@ -327,13 +330,18 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         lista_despachos.setAdapter(listaHojaDespachoAdapter);
 
         Double total_deuda=0.0;
+        Integer total_status_dispatch=0;
         for(int i=0;i<listDetailDispatchSheetSQLite.size();i++)
         {
             total_deuda=total_deuda+Double.parseDouble(listDetailDispatchSheetSQLite.get(i).getSaldo());
+            if(listDetailDispatchSheetSQLite.get(i).isChkupdatedispatch())
+            {
+                total_status_dispatch++;
+            }
         }
         tv_cantidad_despachos.setText(String.valueOf(listDetailDispatchSheetSQLite.size()));
-        tv_total_deuda.setText(String.valueOf(format.format(total_deuda)));
-
+        tv_total_deuda.setText(Convert.currencyForView(String.valueOf((total_deuda))));
+        tv_status_despachos.setText(String.valueOf(total_status_dispatch));
     }
 
     @Override

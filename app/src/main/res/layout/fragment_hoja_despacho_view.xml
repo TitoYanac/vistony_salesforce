@@ -145,9 +145,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Cantidad Despacho:"
+                android:text="@string/lbl_distpatch_route"
                 android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
+                android:textSize="24dp">
+
+            </TextView>
 
             <TextView
                 android:id="@+id/tv_cantidad_despachos"
@@ -155,11 +157,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
+                android:layout_marginRight="10dp"
                 android:focusable="false"
                 android:text="0"
                 android:textColor="@color/white"
                 android:gravity="right"
-                android:textSize="24dp"></TextView>
+                android:textSize="24dp">
+
+            </TextView>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/lbl_status_despachos"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="@string/lbl_status_distpatch"
+                android:textColor="@color/white"
+                android:textSize="24dp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_status_despachos"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:layout_marginRight="10dp"
+                android:text="0"
+                android:textColor="@color/white"
+                android:gravity="right"
+                android:textSize="24dp">
+
+            </TextView>
 
         </TableRow>
         <TableRow
@@ -173,9 +212,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Total Deuda:"
+                android:text="Deuda"
                 android:textColor="@color/white"
-                android:textSize="24dp"></TextView>
+                android:textSize="24dp">
+
+            </TextView>
 
             <TextView
                 android:id="@+id/tv_total_deuda"
@@ -184,11 +225,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:focusable="false"
+                android:layout_marginRight="10dp"
                 android:text="0"
                 android:textColor="@color/white"
                 android:gravity="right"
-                android:textSize="24dp"></TextView>
+                android:textSize="24dp">
+            </TextView>
 
         </TableRow>
-    </TableLayout>-->
+    </TableLayout>
 </FrameLayout>

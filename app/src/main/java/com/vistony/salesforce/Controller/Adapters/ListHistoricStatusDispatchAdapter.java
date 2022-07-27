@@ -19,10 +19,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.WareHousesEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
@@ -111,6 +113,8 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
             holder.imv_historic_status_dispatch_photo_delivery= (ImageView) convertView.findViewById(R.id.imv_historic_status_dispatch_photo_delivery);
             holder.chk_wsrecibido= (CheckBox) convertView.findViewById(R.id.chk_wsrecibido);
             holder.imv_historico_cobranza_respuesta_ws= (ImageView) convertView.findViewById(R.id.imv_historico_cobranza_respuesta_ws);
+            holder.imv_observation= (ImageView) convertView.findViewById(R.id.imv_observation);
+
             //holder.imv_historic_status_dispatch_photo.setBackgroundResource(R.drawable.portail);
             convertView.setTag(holder);
         } else {
@@ -124,7 +128,8 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         holder.tv_referral_guide.setText(lead.getEntrega());
         holder.tv_type_dispatch.setText(lead.getTipoDespacho());
         holder.tv_reason_dispatch.setText(lead.getMotivoDespacho());
-        byte[] byteArray,byteArray2;
+        alertdialogInformative(getContext(),lead.getObservacion());
+        /*byte[] byteArray,byteArray2;
         Log.e("REOS","ListHistoricStatusDispatchAdapter.lead.getFotoLocal"+lead.getFotoLocal());
         byteArray = Base64.decode(lead.getFotoLocal(), Base64.DEFAULT);
         Log.e("REOS","ListHistoricStatusDispatchAdapter.byteArray.tostring"+byteArray.toString());
@@ -133,21 +138,37 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         //byte[] pic = intent.getByteArrayExtra("pic");
         //capturedImage = (ImageView) findViewById(R.id.capturedImage);
         Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        Bitmap bitmap2 = BitmapFactory.decodeByteArray(byteArray2, 0, byteArray2.length);
+        Bitmap bitmap2 = BitmapFactory.decodeByteArray(byteArray2, 0, byteArray2.length);*/
         //Bitmap bitmap1 = Bitmap.createScaledBitmap(bitmap,holder.imv_historic_status_dispatch_photo.getWidth(),holder.imv_historic_status_dispatch_photo.getHeight(),false);
+        /*ImageCameraController imageCameraController=new ImageCameraController();
+        Bitmap bitmap,bitmap2;
+        byte[] byteArray,byteArray2;
+        byteArray=imageCameraController.getImageSDtoByte(getContext(),lead.getFotoLocal());
+        byteArray2=imageCameraController.getImageSDtoByte(getContext(),lead.getFotoGuia());
+        bitmap=BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        bitmap2=BitmapFactory.decodeByteArray(byteArray2, 0, byteArray2.length);
         holder.imv_historic_status_dispatch_photo.setImageBitmap(bitmap);
-        holder.imv_historic_status_dispatch_photo_delivery.setImageBitmap(bitmap2);
+        holder.imv_historic_status_dispatch_photo_delivery.setImageBitmap(bitmap2);*/
 
         holder.imv_historic_status_dispatch_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getalertPhoto("FOTO DESPACHO",bitmap).show();
+                ImageCameraController imageCameraController=new ImageCameraController();
+                imageCameraController.OpenImageDispacth(getContext(),lead.getFotoLocal());
+                /*ImageCameraController imageCameraController=new ImageCameraController();
+                byte[] byteArray,byteArray2;
+                byteArray=imageCameraController.getImageSDtoByte(getContext(),lead.getFotoLocal());
+                Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                getalertPhoto("FOTO DESPACHO",bitmap).show();*/
+
             }
         });
         holder.imv_historic_status_dispatch_photo_delivery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getalertPhoto("FOTO LOCAL",bitmap2).show();
+                //getalertPhoto("FOTO LOCAL",bitmap2).show();
+                ImageCameraController imageCameraController=new ImageCameraController();
+                imageCameraController.OpenImageDispacth(getContext(),lead.getFotoGuia());
             }
         });
         holder.imv_historico_cobranza_respuesta_ws.setOnClickListener(new View.OnClickListener() {
@@ -168,6 +189,8 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         ImageView imv_historic_status_dispatch_photo_delivery;
         CheckBox chk_wsrecibido;
         ImageView imv_historico_cobranza_respuesta_ws;
+        ImageView imv_observation;
+
     }
 
     private Dialog getalertPhoto(String foto,Bitmap bitmap) {
@@ -223,6 +246,39 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
             }
         });
 
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+    private Dialog alertdialogInformative(Context context,String texto) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText("IMPORTANTE!!!");
+        /*if(SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            textViewMsj.setText("El SMS fue enviado Correctamente!!!");
+        }
+        else
+        {
+            textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
+        }*/
+        textViewMsj.setText(texto);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 

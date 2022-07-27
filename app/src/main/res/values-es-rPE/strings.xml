@@ -128,4 +128,6 @@
     <string name="lbl_currency">Moneda</string>
     <string name="lbl_currency_type">Tipo</string>
     <string name="lbl_currency_unit">Unidad</string>
+    <string name="lbl_distpatch_route">Programados</string>
+    <string name="lbl_status_distpatch">Estado Actualizado</string>
 </resources>

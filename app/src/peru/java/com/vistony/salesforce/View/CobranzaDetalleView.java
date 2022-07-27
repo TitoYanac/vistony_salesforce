@@ -156,13 +156,11 @@ public class CobranzaDetalleView extends Fragment {
     DocumentoSQLite documentoSQLite;
     int resultado = 0, correlativorecibo = 0, ultimocorrelativorecibo = 0, correlativorecibows = 0;
     private OnFragmentInteractionListener mListener;
-    EnviarWSCobranzaDetalle enviarWSCobranzaDetalle;
     static public ImageView imvprueba;
     CheckBox chkpagoadelantado, chk_bancarizado, chk_pago_directo, chk_pago_pos,chk_E_signature;
     MenuItem generarpdf, validarqr, guardar,edit_signature;
     TextView tv_recibo;
     public static CheckBox chk_validacionqr;
-    static HiloVlidarQR hiloVlidarQR;
     ListaClienteDetalleEntity listaClienteDetalleEntity;
     ClienteSQlite clienteSQlite;
     ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity;
@@ -184,14 +182,13 @@ public class CobranzaDetalleView extends Fragment {
     ArrayList<ListaHistoricoCobranzaEntity> Listado = new ArrayList<>();
     private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 2;
     String Estadochkbancarizado = "", Estadodepositodirecto = "", Estadopagopos = "", Estadopagoadelantado = "";
-    HiloCobranzaPOS hiloCobranzaPOS;
+
     static private CobranzaRepository cobranzaRepository;
     private DepositoRepository depositoRepository;
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     String cliente_id_visita, domembarque_id_visita, zona_id_visita;
     private ProgressDialog pd;
-    HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
     static Context context;
     static FloatingActionButton fab_invoice_cancelation,fab_edit_signature;
     String arrayCircle[] = {"Guardar","Generar","Validar","Firma"};
@@ -278,14 +275,12 @@ public class CobranzaDetalleView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hiloVlidarQR = new HiloVlidarQR();
         listaClienteDetalleAdapterFragment = new ArrayList<ListaClienteDetalleEntity>();
         documentoCobranzaPDF = new DocumentoCobranzaPDF();
         documentoSQLite = new DocumentoSQLite(getContext());
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         listaCobranzaDetalleEntities = new ArrayList<CobranzaDetalleSQLiteEntity>();
         clienteSQlite = new ClienteSQlite(getContext());
-        hiloCobranzaPOS = new HiloCobranzaPOS();
         cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
         depositoRepository = new ViewModelProvider(getActivity()).get(DepositoRepository.class);
         context=getContext();
@@ -1261,11 +1256,6 @@ public class CobranzaDetalleView extends Fragment {
                                         DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
                                         menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
                                     }
-
-
-
-
-
                                 documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual());
 
                                 if (SesionEntity.Print.equals("Y")) {
@@ -1446,6 +1436,7 @@ public class CobranzaDetalleView extends Fragment {
                             SesionEntity.collectioncheck
                             ,""
                             ,"N"
+                            ,""
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1514,6 +1505,7 @@ public class CobranzaDetalleView extends Fragment {
                             SesionEntity.collectioncheck
                             ,""
                             ,"N"
+                            ,""
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1668,220 +1660,6 @@ public class CobranzaDetalleView extends Fragment {
         Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
     }
 
-
-
-    private class EnviarWSCobranzaDetalle extends AsyncTask<String, Void, Object> {
-
-        @Override
-        protected String doInBackground(String... arg1) {
-            String resultadoenviows="0";
-            try {
-
-                if(Conexion.equals("1")){
-                    resultadoenviows= CobranzaRepository.EnviarReciboWsRetrofit(
-                            cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
-                            getContext(),
-                            "CREATE",
-                            "N",
-                            "N",
-                            "",
-                            "N"
-                    );
-
-                }
-
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-            return String.valueOf(resultadoenviows);
-        }
-
-        protected void onPostExecute(Object result)
-        {
-            try {
-                if(result.equals("1")){
-                    //actualzia el estado a uno pero ni bien se envia a la web service se actualiza
-                    //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
-
-                    Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
-                    drawable = DrawableCompat.wrap(drawable);
-                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
-                    menu_variable.findItem(R.id.guardar).setIcon(drawable);
-                    Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                    drawable2 = DrawableCompat.wrap(drawable2);
-                    DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
-                    menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                    //guardar.setEnabled(false);
-                    //imbcomentariorecibo.setColorFilter(Color.BLACK);
-                    imbcomentariorecibo.setEnabled(false);
-
-                    if(vinculaimpresora.equals("1"))
-                    {
-                        generarpdf.setEnabled(true);
-                    }
-
-                    tv_recibo.setText(recibo);
-                    imbaceptar.setEnabled(false);
-                    imbcancelar.setEnabled(false);
-                    et_cobrado_edit.setEnabled(false);
-
-                    Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-                }else
-                {
-
-                    if(Conexion.equals("1"))
-                    {
-                        //cobranzaDetalleSQLiteDao.EliminarRecibo(SesionEntity.compania_id,recibo,SesionEntity.usuario_id);
-                        //Toast.makeText(getContext(), "No Se Envio la Cobranza, Revisar Conexion a Internet", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(Conexion.equals("0"))
-                    {
-                        //cobranzaDetalleSQLiteDao.ActualizaConexionWSCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result.toString());
-                        Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
-                        drawable = DrawableCompat.wrap(drawable);
-                        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
-                        menu_variable.findItem(R.id.guardar).setIcon(drawable);
-                        Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                        drawable2 = DrawableCompat.wrap(drawable2);
-                        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
-                        menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                        guardar.setEnabled(false);
-                        //imbcomentariorecibo.setColorFilter(Color.BLACK);
-                        imbcomentariorecibo.setEnabled(false);
-                        generarpdf.setEnabled(true);
-                        tv_recibo.setText(recibo);
-                        Toast.makeText(getContext(), "Se guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            }
-            catch (Exception e)
-            {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-            }
-            /*String resultadoenviows="0";
-            //recibo="R0"+String.valueOf(correlativorecibo);
-            int resultado=0,recibows=0;
-            String tag="",tag2="";
-            String[] separada = SesionEntity.recibo.split("R");
-            if(SesionEntity.recibo.equals("0"))
-            {
-                tag2=SesionEntity.recibo;
-            }
-            else
-            {
-                if(separada.length>1)
-                {
-                    tag=separada[0];
-                    tag2=separada[1];
-                }
-                else
-                {
-                    tag=separada[0];
-                }
-            }
-
-            if(tag.equals(""))
-            {
-                tag="0";
-            }
-
-
-            recibows=Integer.parseInt(tag);
-            if(correlativorecibo>=recibows)
-            {
-                ultimocorrelativorecibo=correlativorecibo;
-            }
-            else
-            {
-                ultimocorrelativorecibo=recibows;
-            }
-            //correlativorecibo=correlativorecibo+1;
-            recibo=String.valueOf(ultimocorrelativorecibo+1);
-            resultadoenviows=cobranzaDetalleWSDao.enviarRecibo(cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(recibo, SesionEntity.compania_id)
-                    ,SesionEntity.imei,SesionEntity.usuario_id,comentario,SesionEntity.fuerzatrabajo_id);
-            if(resultadoenviows.equals("1"))
-            {
-
-                //Toast.makeText(getContext(), "Se Envio al Sistema Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-                resultado=GuardarCobranzaSQLite(listaClienteDetalleAdapterFragment);
-                if(resultado>0)
-                {
-                    Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
-                    drawable = DrawableCompat.wrap(drawable);
-                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
-                    menu_variable.findItem(R.id.guardar).setIcon(drawable);
-                    Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                    drawable2 = DrawableCompat.wrap(drawable2);
-                    DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
-                    menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                    guardar.setEnabled(false);
-                    imbcomentariorecibo.setColorFilter(Color.BLACK);
-                    imbcomentariorecibo.setEnabled(false);
-                    //Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-
-                }else
-                {
-                   // Toast.makeText(getContext(), "No se Guardo la Cobranza", Toast.LENGTH_SHORT).show();
-                }
-
-            }else
-            {
-
-                Toast.makeText(getContext(), "No Se Envio la Cobranza, Revisar Conexion a Internet", Toast.LENGTH_SHORT).show();
-            }
-*/
-            if(tipocobranza.equals("Cobranza/Deposito"))
-            {
-                hiloCobranzaPOS = new HiloCobranzaPOS();
-                hiloCobranzaPOS.execute();
-            }
-
-        }
-    }
-
-    private  class HiloVlidarQR extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... arg1) {
-            String resultadowsqrvalidado="0";
-            String resultado="0";
-            try {
-
-                /*resultado=CobranzaRepository.EnviarReciboWsRetrofit(
-                        cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
-                        getContext(),
-                        "UPDATE",
-                        "0",
-                        comentario,
-                        "0",
-                        "1"
-                );
-                resultadowsqrvalidado=String.valueOf(resultado);*/
-                resultado= CobranzaRepository.sendPatchQR(cobranzaDetalleSQLiteDao.getSapCode(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),"Y");
-                resultadowsqrvalidado=String.valueOf(resultado);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-            return resultadowsqrvalidado;
-        }
-
-        protected void onPostExecute(String result)
-        {
-            int resultadowsSQLiteQRvalidado=0;
-            CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
-            resultadowsSQLiteQRvalidado=cobranzaDetalleSQLiteDao.ActualizaWSQRValidadoCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id,result);
-
-
-
-            hiloVlidarQR = new HiloVlidarQR();
-            //chk_validacionqr.setChecked(true);
-            //Toast.makeText(getContext(), "Acabo la Secuencia de Camara", Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
     private void addDepositPOS(String montocobrado)
     {
         CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao=new CobranzaCabeceraSQLiteDao(getContext());
@@ -1927,145 +1705,6 @@ public class CobranzaDetalleView extends Fragment {
         Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
     }
 
-    private class HiloCobranzaPOS extends AsyncTask<String, Void, Object>
-    {
-
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando Datos de Cobranza POS", true, false);
-        }
-        @Override
-        protected String doInBackground(String... arg1) {
-            String resultadoccabeceraenviows="0";
-            CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao=new CobranzaCabeceraSQLiteDao(getContext());
-            // BigDecimal bigDecimal=new BigDecimal(et_cobrado.toString());
-
-            String Validacion="";
-            try {
-                int ValidaSQLite=0;
-                String bancarizado="";
-                if(chk_bancarizado.isChecked())
-                {
-                    bancarizado="Y";
-                }
-                else
-                {
-                    bancarizado="N";
-                }
-                ValidaSQLite=cobranzaCabeceraSQLiteDao.InsertaCobranzaCabecera(
-                        SesionEntity.fuerzatrabajo_id+recibo,
-                        SesionEntity.usuario_id,
-                        SesionEntity.fuerzatrabajo_id,
-                        "11",
-                        SesionEntity.compania_id,
-                        et_cobrado_edit.toString(),
-                        "Deposito",
-                        bancarizado,
-                        "19000101",
-                        fecha,
-                        SesionEntity.pagodirecto,
-                        "N"
-                );
-
-                if(ValidaSQLite==1)
-                {
-                    Validacion=String.valueOf(ValidaSQLite);
-
-                    cobranzaDetalleSQLiteDao.ActualizaCobranzaDetalle(
-                            SesionEntity.fuerzatrabajo_id+recibo,
-                            recibo,
-                            SesionEntity.compania_id,
-                            "11"
-                    );
-                    DepositoRepository depositoRepository =new DepositoRepository(getContext());
-
-
-
-                    resultadoccabeceraenviows=
-                            depositoRepository.PostCobranzaCabeceraWS
-                                    (
-                                            SesionEntity.imei,
-                                            "CREATE",
-                                            SesionEntity.compania_id,
-                                            "11",
-                                            "Deposito",
-                                            SesionEntity.fuerzatrabajo_id+recibo,
-                                            SesionEntity.usuario_id,
-                                            fecha,
-                                            cobrado.setScale(3,RoundingMode.HALF_UP).toString(),
-                                            "Pendiente",
-                                            "",
-                                            SesionEntity.fuerzatrabajo_id,
-                                            bancarizado,
-                                            "19000101",
-                                            "",
-                                            SesionEntity.pagodirecto,
-                                            "N"
-                                    );
-
-
-                    //resultadoccabeceraenviows=String.valueOf(resultado);
-                    //for(int i=0;i<listaConsDepositoAdapterFragment.size();i++)
-                    //{
-                    String chkwsdepositorecibido="0";
-                    //  listaCobranzaDetalleEntity=new ArrayList<CobranzaDetalleSQLiteEntity>();
-
-                    //SE REENVIA EL RECIBO AHI VA EL PATCH
-                    chkwsdepositorecibido= CobranzaRepository.sendPatch(cobranzaDetalleSQLiteDao.getSapCode(recibo, SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),SesionEntity.fuerzatrabajo_id+recibo,"11",recibo);
-
-                        /*chkwsdepositorecibido= CobranzaRepository.EnviarReciboWsRetrofit(
-                                cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(listaConsDepositoAdapterFragment.get(i).getRecibo(), SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id),
-                                getContext(),
-                                "UPDATE",
-                                "0",
-                                "0",
-                                Banco,
-                                "1"
-                        );*/
-                    //resultadowsqrvalidado=String.valueOf(resultado);
-
-                    //}
-
-
-                    //cobranzaCabeceraSQLiteDao.ActualizarCobranzaCabeceraWS(Grupo,SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id,resultadoccabeceraenviows);
-                }
-                //Log.e("jpcm","------->"+fechadiferida);
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-                Log.e("REOS","COBRANZACABECERA:error"+e);
-            }
-            return Validacion;
-        }
-
-        protected void onPostExecute(Object result)
-        {
-            //getActivity().setTitle("Deposito");
-            if(result.equals("1"))
-            {
-                /*etgrupo.setEnabled(false);
-                txtfecha.setEnabled(false);
-                spnbanco.setEnabled(false);
-                spnbanco.setClickable(false);*/
-
-                Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
-                /*String fragment = "", accion = "", compuesto = "";
-                fragment = "CobranzaCabeceraView";
-                accion = "nuevoinicio";
-                compuesto = fragment + "-" + accion;
-                Object object = null;
-                mListener.onFragmentInteraction(compuesto, object);*/
-            }
-            else
-            {
-                Toast.makeText(getContext(), "Deposito No se Pudo registrar revisar Acceso a Internet", Toast.LENGTH_SHORT).show();
-            }
-            pd.dismiss();
-        }
-    }
 
     public int aceptarQR()
     {
@@ -2086,143 +1725,6 @@ public class CobranzaDetalleView extends Fragment {
         objCamara.startPreview();
         linternaOn = true;
     }
-
-
-/*
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-
-        super.onActivityCreated(savedInstanceState);
-
-        if (
-                ContextCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED)
-        {
-
-            requestPermissions(new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
-        }
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE:
-            {
-                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED))
-                {
-
-                } else
-                {
-                       /* while (ContextCompat.checkSelfPermission(this,
-                                Manifest.permission.READ_PHONE_STATE)
-                                != PackageManager.PERMISSION_GRANTED )
-
-                    if ((ContextCompat.checkSelfPermission(getContext(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED))
-                    {
-                        // ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA},
-                        //        MY_PERMISSIONS_REQUEST_CAMERA
-                        //1
-                        // );
-                        requestPermissions(new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
-                    }
-                    //break;
-                    //}
-                }
-                break;
-            }
-        }
-
-    }
-*/
-
-    private class HiloEnviarWSCobranzaCabecera extends AsyncTask<String, Void, Object>
-    {
-
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Guardando Datos de Deposito", true, false);
-        }
-        @Override
-        protected String doInBackground(String... arg0) {
-            String Validacion="";
-            try {
-                String comentario="",resultadoccabeceraenviows="";
-                int ValidaSQLite=0;
-                CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao=new CobranzaCabeceraSQLiteDao(getContext());
-                DepositoRepository depositoRepository =new DepositoRepository(getContext());
-                ValidaSQLite=cobranzaCabeceraSQLiteDao.InsertaCobranzaCabecera(
-                        arg0[0],
-                        SesionEntity.usuario_id,
-                        SesionEntity.fuerzatrabajo_id,
-                        arg0[1],
-                        SesionEntity.compania_id,
-                        arg0[2],
-                        arg0[3],
-                        arg0[4],
-                        arg0[5],
-                        arg0[6],
-                        arg0[7],
-                        "Y"
-                );
-
-                resultadoccabeceraenviows=
-                        depositoRepository.PostCobranzaCabeceraWS
-                                (
-                                        SesionEntity.imei,
-                                        SesionEntity.compania_id,
-                                        arg0[1],
-                                        arg0[3],
-                                        arg0[0],
-                                        SesionEntity.usuario_id,
-                                        arg0[6],
-                                        arg0[2],
-                                        "0",
-                                        SesionEntity.fuerzatrabajo_id,
-                                        arg0[4],
-                                        arg0[5],
-                                        "N",
-                                        arg0[7],
-                                        "",
-                                        "N",
-                                        "N"
-
-                                );
-                cobranzaCabeceraSQLiteDao.ActualizarCobranzaCabeceraWS(arg0[0],SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id,resultadoccabeceraenviows,"","");
-                cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
-                cobranzaDetalleSQLiteDao.ActualizaConexionWSDepositoCobranzaDetalle(
-                        recibo,SesionEntity.compania_id,SesionEntity.usuario_id,resultadoccabeceraenviows
-                );
-                Validacion=String.valueOf(ValidaSQLite);
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-                Validacion="0";
-            }
-            return Validacion;
-        }
-
-        protected void onPostExecute(Object result)
-        {
-            if(result.equals("1"))
-            {
-                Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                Toast.makeText(getContext(), "Deposito No se Pudo registrar revisar Acceso a Internet", Toast.LENGTH_SHORT).show();
-            }
-            pd.dismiss();
-        }
-    }
-
 
     private Dialog alertatypegeneratedocumentcollection() {
 
@@ -2496,7 +1998,7 @@ public class CobranzaDetalleView extends Fragment {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 imgBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
                 byteArray = stream.toByteArray();
-                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                //encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
                 /////////////////////////
 
                 /*ImageIO.write(img, "png", baos);
@@ -2511,7 +2013,8 @@ public class CobranzaDetalleView extends Fragment {
                         ObjUsuario.compania_id
                         ,ObjUsuario.usuario_id
                         ,recibo
-                        ,encoded);
+                        //,encoded);
+                        ,imagenString);
                     chk_E_signature.setChecked(true);
                     cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
                         Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);

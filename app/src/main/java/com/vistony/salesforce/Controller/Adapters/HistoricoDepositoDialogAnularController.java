@@ -622,6 +622,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                                         ,SesionEntity.collectioncheck
                                         ,""
                                         ,"0"
+                                        ,""
                                 );
 
                     }

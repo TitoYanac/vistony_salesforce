@@ -428,9 +428,9 @@ ParametrosView extends Fragment {
         });
 
         //Enviar Firma Electronica
-        cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
-            Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
-        });
+        //cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
+        //    Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
+        //});
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
@@ -822,6 +822,7 @@ ParametrosView extends Fragment {
                                         ListaCobranzaDetalleSQLiteEntity.get(i).getCollectioncheck()
                                         ,""
                                         ,"0"
+                                        ,""
                                 );
                     }
                 }

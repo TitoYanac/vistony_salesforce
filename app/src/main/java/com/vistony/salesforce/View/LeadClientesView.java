@@ -221,6 +221,13 @@ public class LeadClientesView extends Fragment {
         editTextPhone.setText(telefonofijo);
 
         floatingButtonTakePhoto.setOnClickListener(data -> {
+            /*if (picturefile != null) {
+                Uri pictureUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() +
+                        ".provider", picturefile);
+                imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri); //This makes the image to save in full rather than just a low quality scaled-down thumbnail.
+            }*/
+
+            //startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                 someActivityResultLauncher.launch(intent);

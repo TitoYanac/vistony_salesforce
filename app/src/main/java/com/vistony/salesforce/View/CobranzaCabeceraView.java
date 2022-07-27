@@ -157,6 +157,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     TextView tv_fecha_hoja_despacho;
     static int bancarizados=0,depositodirectos=0,count_check=0;
     static Context context;
+    String calendar;
     public CobranzaCabeceraView() {
         // Required empty public constructor
     }
@@ -542,16 +543,23 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             }
         Log.e("REOS","CobranzaCabeceraView-onDateSet-fecha"+fecha);
         Log.e("jpcm","CobranzaCabeceraView-onDateSet-year+month+dayOfMonth"+year+mes+dia);
-        if(Integer.parseInt(fecha)<Integer.parseInt(year+mes+dia))
+        if(calendar.equals("imv_calendario_cheque"))
         {
-            //tv_fechacobrocheque_edit.setText(year + "/" + mes + "/" + dia);
-            tv_fechacobrocheque_edit.setText(year + "-" + mes + "-" + dia);
-            fechadiferida = year + mes + dia;
+            if(Integer.parseInt(fecha)<Integer.parseInt(year+mes+dia))
+            {
+                //tv_fechacobrocheque_edit.setText(year + "/" + mes + "/" + dia);
+                tv_fechacobrocheque_edit.setText(year + "-" + mes + "-" + dia);
+                fechadiferida = year + mes + dia;
+
+            }else {
+                Toast.makeText(getContext(), "La fecha debe ser mayor a la actual, seleccione nuevamente", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else if(calendar.equals("imb_consultar_fecha_hoja_despacho"))
+        {
             if (tv_fecha_hoja_despacho != null) {
                 tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
             }
-        }else {
-            Toast.makeText(getContext(), "La fecha debe ser mayor a la actual, seleccione nuevamente", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -560,6 +568,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         switch (v.getId())
         {
             case R.id.imv_calendario_cheque:
+                calendar="imv_calendario_cheque";
                 final Calendar c1 = Calendar.getInstance();
                 diadespacho = c1.get(Calendar.DAY_OF_MONTH);
                 mesdespacho = c1.get(Calendar.MONTH);
@@ -575,6 +584,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
                 break;
             case R.id.imb_consultar_fecha_hoja_despacho:
+                calendar="imb_consultar_fecha_hoja_despacho";
                 final Calendar c2 = Calendar.getInstance();
                 diadespacho2 = c2.get(Calendar.DAY_OF_MONTH);
                 mesdespacho2 = c2.get(Calendar.MONTH);
@@ -1169,7 +1179,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         imb_consultar_fecha_hoja_despacho.setOnClickListener(this);
 
 
-        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
         tv_fecha_hoja_despacho.setText(fecha);

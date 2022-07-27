@@ -32,6 +32,51 @@ public class CollectionEntity {
     private String OSVersion;
     private String CollectionCheck;
     private String Data;
+    private String CardName;
+    private String SlpName;
+    private String LegalNumber;
+    private String CodeSMS;
+    private String Phone;
+
+    public String getPhone() {
+        return Phone;
+    }
+
+    public void setPhone(String phone) {
+        Phone = phone;
+    }
+
+    public String getCodeSMS() {
+        return CodeSMS;
+    }
+
+    public void setCodeSMS(String codeSMS) {
+        CodeSMS = codeSMS;
+    }
+
+    public String getLegalNumber() {
+        return LegalNumber;
+    }
+
+    public void setLegalNumber(String legalNumber) {
+        LegalNumber = legalNumber;
+    }
+
+    public String getSlpName() {
+        return SlpName;
+    }
+
+    public void setSlpName(String slpName) {
+        SlpName = slpName;
+    }
+
+    public String getCardName() {
+        return CardName;
+    }
+
+    public void setCardName(String cardName) {
+        CardName = cardName;
+    }
 
     public String getData() {
         return Data;

@@ -17,6 +17,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricoCobranzaEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SignatureEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
+import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -108,6 +109,7 @@ public class CobranzaDetalleSQLiteDao {
                                        String collectioncheck
                                         ,String e_signature
                                         ,String chkesignature
+                                       ,String phone
     )
     {
         int resultado;
@@ -152,7 +154,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("collectioncheck",collectioncheck);
             registro.put("e_signature",e_signature);
             registro.put("chkesignature",chkesignature);
-
+            registro.put("phone",phone);
             bd.insert("cobranzadetalle", null, registro);
 
             resultado=1;
@@ -1792,23 +1794,57 @@ public class CobranzaDetalleSQLiteDao {
         return  resultado;
     }
 
-    public ArrayList<SignatureEntity> ObtenerCobranzaDetallePendienteEnvioE_SignatureJSON (String compania_id, String usuario_id)
+    public ArrayList<CollectionEntity> ObtenerCobranzaDetallePendienteEnvioE_SignatureJSON (String compania_id, String usuario_id,Context context)
     {
-        ArrayList<SignatureEntity> listCollectionEntity=new ArrayList<>();
-        SignatureEntity collectionEntity;
+        ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
+        CollectionEntity collectionEntity;
         abrir();
         try {
             Cursor fila = bd.rawQuery(
-                    "Select sap_code,recibo,e_signature from cobranzadetalle" +
+                    "Select * from cobranzadetalle" +
                             " where usuario_id= '"+usuario_id+"'" +" and compania_id= '"+compania_id+"' and e_signature<>'' and chkesignature='N'"
                     ,null);
             while (fila.moveToNext())
             {
-                collectionEntity= new SignatureEntity();
-                collectionEntity.setCode(fila.getString(0));
-                collectionEntity.setReceipt(fila.getString(1));
-                //collectionEntity.setData(fila.getString(2));
-                collectionEntity.setData("Prueba Data Base64");
+                collectionEntity= new CollectionEntity();
+                collectionEntity.setCardCode(fila.getString(fila.getColumnIndex("CardCode")));
+                ClienteSQlite clienteSQlite=new ClienteSQlite(context);
+                ArrayList<ClienteSQLiteEntity> listClientes=new ArrayList<>();
+
+                listClientes=clienteSQlite.ObtenerDatosCliente(collectionEntity.getCardCode(),compania_id);
+                for(int i=0;i<listClientes.size();i++)
+                {
+                    collectionEntity.setCardName(listClientes.get(i).getNombrecliente());
+                }
+                collectionEntity.setSlpCode(fila.getString(fila.getColumnIndex("SlpCode")));
+                collectionEntity.setSlpCode(SesionEntity.nombrefuerzadetrabajo);
+                collectionEntity.setIncomeDate(fila.getString(fila.getColumnIndex("IncomeDate")));
+                collectionEntity.setReceip(fila.getString(fila.getColumnIndex("Receip")));
+                collectionEntity.setLegalNumber(fila.getString(fila.getColumnIndex("motivoanulacion")));
+                collectionEntity.setDocTotal(fila.getString(fila.getColumnIndex("DocTotal")));
+                collectionEntity.setBalance(fila.getString(fila.getColumnIndex("Balance")));
+                collectionEntity.setAmountCharged(fila.getString(fila.getColumnIndex("AmountCharged")));
+                collectionEntity.setNewBalance(fila.getString(fila.getColumnIndex("NewBalance")));
+                collectionEntity.setCodeSMS(fila.getString(fila.getColumnIndex("codeSMS")));
+                collectionEntity.setPhone(fila.getString(fila.getColumnIndex("codeSMS")));
+
+                collectionEntity.setDocNum(fila.getString(fila.getColumnIndex("DocNum")));
+                collectionEntity.setQRStatus(fila.getString(fila.getColumnIndex("QRStatus")));
+                collectionEntity.setBanking(fila.getString(fila.getColumnIndex("Banking")));
+                collectionEntity.setCancelReason(fila.getString(fila.getColumnIndex("CancelReason")));
+                collectionEntity.setBankID(fila.getString(fila.getColumnIndex("BankID")));
+                collectionEntity.setCommentary(fila.getString(fila.getColumnIndex("Commentary")));
+                collectionEntity.setDirectDeposit(fila.getString(fila.getColumnIndex("DirectDeposit")));
+                collectionEntity.setPOSPay(fila.getString(fila.getColumnIndex("POSPay")));
+                Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-Induvis.getTimeSAP-IncomeTime: "+(fila.getString(fila.getColumnIndex("IncomeTime"))));
+                Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetallePendientesFormatoJSON-Induvis.getTimeSAP: "+Induvis.getTimeSAP(BuildConfig.FLAVOR,fila.getString(fila.getColumnIndex("IncomeTime"))));
+                collectionEntity.setIncomeTime(Induvis.getTimeSAP(BuildConfig.FLAVOR,fila.getString(fila.getColumnIndex("IncomeTime"))));
+                collectionEntity.setStatus("P");
+                collectionEntity.setDeposit("");
+                collectionEntity.setUserID(fila.getString(fila.getColumnIndex("UserID")));
+
+                collectionEntity.setDocEntryFT(fila.getString(fila.getColumnIndex("documentoentry")));
+                collectionEntity.setIntent (fila.getString(fila.getColumnIndex("countsend")));
                 listCollectionEntity.add(collectionEntity);
             }
             bd.close();
