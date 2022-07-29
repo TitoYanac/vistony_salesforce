@@ -130,4 +130,7 @@
     <string name="lbl_currency_unit">Unidad</string>
     <string name="lbl_distpatch_route">Total Programados</string>
     <string name="lbl_status_distpatch">Total Estado Actualizado</string>
+    <string name="lbl_status">Status</string>
+    <string name="lbl_send">Send</string>
+    <string name="lbl_find_quotation">Consulta Cotizacion</string>
 </resources>

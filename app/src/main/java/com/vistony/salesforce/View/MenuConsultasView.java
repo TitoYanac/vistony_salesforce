@@ -31,7 +31,7 @@ public class MenuConsultasView extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private CardView cv_ordenventa,cv_documentofacturado,cv_consulta_cobrado,cv_consulta_deposito,cv_consulta_stock,cv_consulta_orden_venta_estado,cv_dispatch;
+    private CardView cv_ordenventa,cv_documentofacturado,cv_consulta_cobrado,cv_consulta_deposito,cv_consulta_stock,cv_consulta_orden_venta_estado,cv_dispatch,cv_quotation;
     View v;
     OnFragmentInteractionListener mListener;
     public MenuConsultasView() {
@@ -72,7 +72,6 @@ public class MenuConsultasView extends Fragment {
         // Inflate the layout for this fragment
         switch (BuildConfig.FLAVOR){
             case "bolivia":
-            //case "ecuador":
             case "india":
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view_induvis, container, false);
                 break;
@@ -91,6 +90,7 @@ public class MenuConsultasView extends Fragment {
         cv_consulta_cobrado=v.findViewById(R.id.cv_consulta_cobrado);
         cv_consulta_deposito=v.findViewById(R.id.cv_consulta_deposito);
         cv_dispatch=v.findViewById(R.id.cv_dispatch);
+        cv_quotation=v.findViewById(R.id.cv_quotation);
 
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
@@ -109,8 +109,17 @@ public class MenuConsultasView extends Fragment {
             }
         }
 
-        //cv_consulta_stock=v.findViewById(R.id.cv_consulta_stock);
-        //cv_consulta_orden_venta_estado=v.findViewById(R.id.cv_consulta_orden_venta_estado);
+        cv_quotation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Fragment="MenuConsultasView";
+                //String accion="historicofacturas";
+                String accion="menuconsultacotizacion";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,"");
+            }
+        });
+
         cv_ordenventa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -24,7 +24,8 @@ public class Config {
     private static OkHttpClient client2=null;
     public static Retrofit getClient() {
 
-        String baseUrl = "http://salesforce.vistony.com";
+        //String baseUrl = "http://salesforce.vistony.com";
+        String baseUrl = "https://salesforce.vistony.pe";
         //String baseUrl = "http://200.107.154.233";
 
         String puerto = "";
@@ -39,7 +40,7 @@ public class Config {
                 puerto = ":8050";
                 break;
             case "peru":
-                puerto = ":8001";
+                //puerto = ":8001";
                 break;
             case "paraguay":
                 puerto = ":8051";
@@ -72,8 +73,9 @@ public class Config {
 
     public static Retrofit getClientLogin() {
 
-        String baseUrl = "http://salesforce.vistony.com";
+       // String baseUrl = "http://salesforce.vistony.com";
         //String baseUrl = "http://200.107.154.233";
+        String baseUrl = "http://salesforce.vistony.pe";
 
         String puerto = "";
         switch (BuildConfig.FLAVOR) {
@@ -87,7 +89,7 @@ public class Config {
                 puerto = ":8050";
                 break;
             case "peru":
-                puerto = ":8001";
+               // puerto = ":8001";
                 break;
             case "paraguay":
                 puerto = ":8051";

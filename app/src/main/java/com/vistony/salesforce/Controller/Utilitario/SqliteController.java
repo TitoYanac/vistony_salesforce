@@ -69,7 +69,7 @@ public class SqliteController extends SQLiteOpenHelper {
                 "usuario_id text, chkwsrecibido text,banco_id text,chkwsdepositorecibido text,chkwsqrvalidado text,comentario text,chkwsanulado text,chkupdate text,chkwsupdate text,pagodirecto text,pagopos text,sap_code TEXT,mensajeWS TEXT,horacobranza TEXT,countsend TEXT, cardname TEXT, codeSMS TEXT,docentry TEXT,collectioncheck TEXT" +
                 ",e_signature TEXT,chkesignature TEXT,phone TEXT" +
                 ")");
-        db.execSQL("CREATE TABLE cobranzadetalleSMS (id INTEGER PRIMARY KEY AUTOINCREMENT,recibo TEXT,e_signature TEXT,chkesignature TEXT,phone TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,date TEXT,hour TEXT)");
+        db.execSQL("CREATE TABLE cobranzadetalleSMS (id INTEGER PRIMARY KEY AUTOINCREMENT,recibo TEXT,phone TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,date TEXT,hour TEXT,chk_send TEXT)");
         db.execSQL("CREATE TABLE visita (id TEXT,compania_id TEXT,cliente_id TEXT,direccion_id TEXT,fecha_registro TEXT,hora_registro TEXT,zona_id TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,tipo TEXT,motivo TEXT,observacion TEXT,chkenviado TEXT,chkrecibido TEXT,latitud TEXT,longitud TEXT,countsend TEXT,chkruta TEXT,id_trans_mobile TEXT,amount TEXT,terminopago_id TEXT,hora_anterior TEXT)");
 
         //Pedidos

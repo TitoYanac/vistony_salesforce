@@ -139,7 +139,11 @@ public class MenuView extends AppCompatActivity
         HistoricSalesOrderTraceabilityView.OnFragmentInteractionListener,
         HistoricSalesAnalysisByRoute.OnFragmentInteractionListener,
         CanvasView.OnFragmentInteractionListener,
-        CurrencyChargedView.OnFragmentInteractionListener
+        CurrencyChargedView.OnFragmentInteractionListener,
+        MenuConsultaCotizacionView.OnFragmentInteractionListener,
+        HistoricQuotationView.OnFragmentInteractionListener
+
+
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment,contentHistoryFragment;
@@ -1434,6 +1438,13 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
+            if(tag2.equals("menuconsultacotizacion"))
+            {
+                contentFragment=new MenuConsultaCotizacionView() ;
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
         }
 
         if(tag.equals("MenuFormulariosView")){
@@ -1892,6 +1903,15 @@ public class MenuView extends AppCompatActivity
                 //ft.add(R.id.content_menu_view,ClienteDetalleView.newInstance(Lista),tag3);
                 ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("2pop");
+                ft.commit();
+            }
+        }
+        if(tag.equals("MenuConsultaCotizacionView")){
+            if(tag2.equals("HistoricQuotation"))
+            {
+                contentFragment=new HistoricQuotationView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
         }

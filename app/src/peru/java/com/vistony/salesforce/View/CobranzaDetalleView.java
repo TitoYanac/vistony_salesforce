@@ -82,6 +82,7 @@ import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSMSSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
@@ -111,9 +112,12 @@ import java.math.RoundingMode;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 import io.sentry.Sentry;
@@ -1029,59 +1033,32 @@ public class CobranzaDetalleView extends Fragment {
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*FormulasController formulasController=new FormulasController(getContext());
-                if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
-                {
-                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.SEND_SMS},1);
-                }
-                SmsManager smsManager=SmsManager.getDefault();
-                try
-                {
-                    //SmsManager sms = SmsManager.getDefault();
-                    ArrayList<String> parts = smsManager.divideMessage(formulasController.convertirCadenaEnvioSMS(listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha));
-                    //sms.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
-                    smsManager.sendMultipartTextMessage(
-                            et_numero_telefonico.getText().toString()
-                            , null
-                            //, formulasController.convertirCadenaEnvioSMS(listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha)
-                            ,parts
-                            , null
-                            , null);
-                    Toast.makeText(getContext(), "Mensaje de Texto Enviado Correctamente", Toast.LENGTH_SHORT).show();
-                }
-                catch (Exception e)
-                {
-                    Log.e("REOS","CobranzaDetalleView-alertaEnviarSMS-Erroe-"+e.toString());
-                }*/
                 TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
                 String mPhoneNumber="";
-                /*try {
-                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS)
-                            != PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(getContext(),
-                                    Manifest.permission.READ_PHONE_NUMBERS)
-                                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                        mPhoneNumber = tMgr.getLine1Number();
-                    }
-                }catch (Exception e)
-                {
-                    Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-e:" + e.toString());
-                }*/
                 mPhoneNumber=SesionEntity.phone;
+                sendSMS(et_numero_telefonico.getText().toString());
 
+                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+                UsuarioSQLiteEntity objUsuario=new UsuarioSQLiteEntity();
+                objUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+                CobranzaDetalleSMSSQLiteDao cobranzaDetalleSMSSQLiteDao=new CobranzaDetalleSMSSQLiteDao(getContext());
 
-                Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-et_numero_telefonico.getText().toString():" + et_numero_telefonico.getText().toString());
-                Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-mPhoneNumber:" + mPhoneNumber);
-                /*if(et_numero_telefonico.getText().toString().equals(mPhoneNumber))
-                {
-                    Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {*/
-                    sendSMS(et_numero_telefonico.getText().toString());
-                    dialog.dismiss();
-                //}
+                SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
+                SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                Date date = new Date();
+
+                cobranzaDetalleSMSSQLiteDao.InsertaCobranzaDetalleSMS(
+                        recibo
+                        , et_numero_telefonico.getText().toString()
+                        ,objUsuario.compania_id
+                        ,objUsuario.fuerzatrabajo_id
+                        ,objUsuario.usuario_id
+                        ,FormatFecha.format(date)
+                        ,dateFormathora.format(date)
+                        ,"N"
+                );
+
+                dialog.dismiss();
 
             }
         });

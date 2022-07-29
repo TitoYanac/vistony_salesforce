@@ -35,14 +35,13 @@ public class CobranzaDetalleSMSSQLiteDao {
 
     public int InsertaCobranzaDetalleSMS (
                                          String recibo
-                                        ,String e_signature
-                                        ,String chkesignature
                                         ,String phone
                                         ,String compania_id
                                         ,String fuerzatrabajo_id
                                         ,String usuario_id
                                         ,String date
                                         ,String hour
+                                        ,String chk_send
     )
     {
         int resultado;
@@ -50,14 +49,13 @@ public class CobranzaDetalleSMSSQLiteDao {
         try {
             ContentValues registro = new ContentValues();
             registro.put("recibo",recibo);
-            registro.put("e_signature",e_signature);
-            registro.put("chkesignature",chkesignature);
             registro.put("phone",phone);
             registro.put("compania_id",compania_id);
             registro.put("fuerzatrabajo_id",fuerzatrabajo_id);
             registro.put("usuario_id",usuario_id);
             registro.put("date",date);
             registro.put("hour",hour);
+            registro.put("chk_send",chk_send);
             bd.insert("cobranzadetalleSMS", null, registro);
 
             resultado=1;
