@@ -80,6 +80,7 @@ public class UsuarioSQLite {
                 registro.put("print", vendedor.get(i).getSettings().get(0).getUsePrinter());
                 registro.put("activecurrency", vendedor.get(i).getSettings().get(0).getChangeCurrency());
                 registro.put("planta", vendedor.get(i).getPhone());
+                registro.put("quotation", vendedor.get(i).getQuotation());
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.rate: " + vendedor.get(i).getRate());
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.vendedor.get(i).getNombreusuario(): " + vendedor.get(i).getNombreusuario());
                 bd.insert("usuario", null, registro);
@@ -196,6 +197,7 @@ public class UsuarioSQLite {
                     usuarioSQLiteEntity.setPrint(fila.getString(fila.getColumnIndex("print")));
                     usuarioSQLiteEntity.setActivecurrency(fila.getString(fila.getColumnIndex("activecurrency")));
                     usuarioSQLiteEntity.setPlanta (fila.getString(fila.getColumnIndex("planta")));
+                    usuarioSQLiteEntity.setMigratequotation (fila.getString(fila.getColumnIndex("quotation")));
                 } while (fila.moveToNext());
             }
 

@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -93,6 +94,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
     List<ClienteSQLiteEntity> LclientesqlSQLiteEntity;
     ParametrosSQLite parametrosSQLite;
     GetAsyncTaskCustomer getAsyncTaskCustomer;
+    TableRow table_row_status_dispatch;
     public DispatchSheetView() {
         // Required empty public constructor
     }
@@ -154,7 +156,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         tv_cantidad_despachos=v.findViewById(R.id.tv_cantidad_despachos);
         tv_total_deuda=v.findViewById(R.id.tv_total_deuda);
         tv_status_despachos=v.findViewById(R.id.tv_status_despachos);
-
+        table_row_status_dispatch=v.findViewById(R.id.table_row_status_dispatch);
         btn_consultar_fecha_despacho=v.findViewById(R.id.btn_consultar_fecha_despacho);
         imb_consultar_fecha_hoja_despacho.setOnClickListener(this);
         imb_consultar_codigo_control.setOnClickListener(this);
@@ -164,6 +166,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         fecha =dateFormat.format(date);
         tv_fecha_hoja_despacho.setText(fecha);
         obtenerTituloFormulario();
+        table_row_status_dispatch.setVisibility(View.GONE);
 
 
         return v;

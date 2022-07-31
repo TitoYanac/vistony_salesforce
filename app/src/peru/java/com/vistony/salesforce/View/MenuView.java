@@ -374,7 +374,7 @@ public class MenuView extends AppCompatActivity
                 onNavigationItemSelected(navigationView.getMenu().getItem(1).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(4).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(5).setVisible(false));
-                //onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
+                onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
                 break;
             case "Vendedor":
             case "VENDEDOR":

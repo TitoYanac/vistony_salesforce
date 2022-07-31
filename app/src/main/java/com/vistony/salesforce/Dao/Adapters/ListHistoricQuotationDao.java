@@ -41,6 +41,7 @@ public class ListHistoricQuotationDao {
                         , Lista.get(i).getSlpcode()
                         , Lista.get(i).getAutorization()
                         , Lista.get(i).getReadygeneration()
+                        , Lista.get(i).getSalesorder()
                 ));
             }
         }catch (Exception e)

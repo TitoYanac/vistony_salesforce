@@ -148,7 +148,9 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center">
+                android:gravity="center"
+                android:id="@+id/tablerow_e_signature"
+                >
 
                 <TextView
                     android:id="@+id/tv_check1"

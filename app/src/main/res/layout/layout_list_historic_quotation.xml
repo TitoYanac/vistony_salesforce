@@ -10,14 +10,15 @@
     android:paddingTop="8dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="8dp">
+
     <TextView
         android:id="@+id/lbl_docnum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="10dp"
-        android:text="@string/head_codigo"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:text="@string/Quotation"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_docnum"
@@ -60,8 +61,8 @@
         android:layout_height="20dp"
         android:layout_marginLeft="95dp"
         android:layout_marginTop="50dp"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/lbl_amount_quotation"
@@ -80,6 +81,7 @@
         android:layout_marginTop="70dp"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textStyle="bold" />
+
     <TextView
         android:id="@+id/lbl_status_aprovval"
         android:layout_width="wrap_content"
@@ -102,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="140dp"
         android:text="@string/send"
         android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -111,15 +113,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="110dp"
-        android:layout_marginTop="145dp"
+        android:layout_marginTop="165dp"
         app:srcCompat="@drawable/ic_menu_send" />
+
+    <TextView
+        android:id="@+id/lbl_historic_salesorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="110dp"
+        android:text="Orden Venta"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
+    <TextView
+        android:id="@+id/tv_historic_salesorder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="110dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"
+        />
 
     <TextView
         android:id="@+id/lbl_historic_quotation_response"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="200dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginLeft="175dp"
+        android:layout_marginTop="140dp"
         android:text="Respuesta"
         android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -127,8 +148,8 @@
         android:id="@+id/imv_historic_quotation_response"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="220dp"
-        android:layout_marginTop="145dp"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="165dp"
         app:srcCompat="@drawable/ic_insert_comment_black_24dp" />
 
 </RelativeLayout>

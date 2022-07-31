@@ -51,7 +51,7 @@ public class SqliteController extends SQLiteOpenHelper {
         //Sistema
         db.execSQL("create table parametros (parametro_id text,nombreparametro text, cantidadregistros text, fechacarga text)");
         db.execSQL("create table configuracion (papel text,tamanio text, totalrecibos text, secuenciarecibos text,modeloimpresora text, direccionimpresora text,tipoimpresora text,vinculaimpresora text )");
-        db.execSQL("create table usuario (compania_id text,fuerzatrabajo_id text ,nombrecompania text, nombrefuerzatrabajo text,nombreusuario text,usuario_id text,recibo text, chksesion text, online text,perfil text,chkbloqueopago text,listaPrecios_id_1 text,listaPrecios_id_2 text,planta text,almacen_id text,CogsAcct text,U_VIST_CTAINGDCTO text,DocumentsOwner text,U_VIST_SUCUSU text,CentroCosto text,UnidadNegocio text,LineaProduccion text,Impuesto_ID text,Impuesto text,U_VIS_CashDscnt text,Language text,Country text,flag_stock TEXT,flag_backup TEXT,imei TEXT,rate TEXT,print TEXT,activecurrency TEXT)");
+        db.execSQL("create table usuario (compania_id text,fuerzatrabajo_id text ,nombrecompania text, nombrefuerzatrabajo text,nombreusuario text,usuario_id text,recibo text, chksesion text, online text,perfil text,chkbloqueopago text,listaPrecios_id_1 text,listaPrecios_id_2 text,planta text,almacen_id text,CogsAcct text,U_VIST_CTAINGDCTO text,DocumentsOwner text,U_VIST_SUCUSU text,CentroCosto text,UnidadNegocio text,LineaProduccion text,Impuesto_ID text,Impuesto text,U_VIS_CashDscnt text,Language text,Country text,flag_stock TEXT,flag_backup TEXT,imei TEXT,rate TEXT,print TEXT,activecurrency TEXT,quotation TEXT)");
 
         //Cobranzas
         //Maestros
@@ -389,13 +389,15 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collectioncheck TEXT");
         }
         if(oldVersion==14&&newVersion==15) {
+            db.execSQL("ALTER TABLE usuario ADD COLUMN quotation TEXT");
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN e_signature TEXT");
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN chkesignature TEXT");
-            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN terminopago TEXT");
-            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN contado TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN phone TEXT");
+            //db.execSQL("ALTER TABLE rutavendedor ADD COLUMN terminopago TEXT");
+            //db.execSQL("ALTER TABLE rutavendedor ADD COLUMN contado TEXT");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN latitud TEXT");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN longitud TEXT");
-
+            db.execSQL("CREATE TABLE cobranzadetalleSMS (id INTEGER PRIMARY KEY AUTOINCREMENT,recibo TEXT,phone TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,date TEXT,hour TEXT,chk_send TEXT)");
         }
 
     }

@@ -323,6 +323,7 @@ public class LoginView extends AppCompatActivity{
             Sesion.activecurrency=userEntity.getActivecurrency();
             Sesion.phone=userEntity.getPlanta();
             Sesion.maxDateDeposit=userEntity.getChkbloqueopago();
+            Sesion.migratequotation=userEntity.getMigratequotation();
             Log.e("REOS","LoginView.Sesion.rate: "+Sesion.rate);
             Log.e("REOS","LoginView.Sesion.U_VIS_CashDscnt: "+Sesion.U_VIS_CashDscnt);
             Log.e("REOS","LoginView.Sesion.maxDateDeposit: "+Sesion.maxDateDeposit);

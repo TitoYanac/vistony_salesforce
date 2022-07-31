@@ -65,6 +65,19 @@ public class UserEntity {
     private String phone;
 
     @NonNull
+    @SerializedName("Quotation")
+    private String quotation;
+
+    @NonNull
+    public String getQuotation() {
+        return quotation;
+    }
+
+    public void setQuotation(@NonNull String quotation) {
+        this.quotation = quotation;
+    }
+
+    @NonNull
     public String getPhone() {
         return phone;
     }

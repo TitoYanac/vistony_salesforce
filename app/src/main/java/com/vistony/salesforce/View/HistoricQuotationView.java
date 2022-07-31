@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 import com.vistony.salesforce.Controller.Adapters.ListHistoricQuotationAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListHistoricSalesAnalysisByRouteAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Adapters.ListHistoricQuotationDao;
 import com.vistony.salesforce.Dao.Adapters.ListHistoricSalesAnalysisByRouteDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricSalesOrderTraceabilityRepository;
@@ -74,6 +76,9 @@ public class HistoricQuotationView extends Fragment implements View.OnClickListe
     String parametrofecha="";
     SimpleDateFormat dateFormat;
     Date date;
+    static ViewModelStoreOwner viewModelStoreOwner;
+
+
     public HistoricQuotationView() {
         // Required empty public constructor
     }
@@ -102,12 +107,13 @@ public class HistoricQuotationView extends Fragment implements View.OnClickListe
         context=getContext();
         activity=getActivity();
         lifecycleOwner=getActivity();
+        viewModelStoreOwner=getActivity();
         setHasOptionsMenu(true);
         quotationRepository= new ViewModelProvider(getActivity()).get(QuotationRepository.class);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = new Date();
         parametrofecha =dateFormat.format(date);
-
+        Induvis.setTituloContenedor("Cotizacion por Fecha",getActivity());
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -167,20 +173,26 @@ public class HistoricQuotationView extends Fragment implements View.OnClickListe
             Log.e("REOS","HistoricQuotationView-getListHistoricQuotation-data: "+data);
             if(data!=null)
             {
-                Double amount=0.0;
+                Float amount=0.f;
                 listHistoricQuotationAdapter
                         =new ListHistoricQuotationAdapter(
                         activity,
-                        ListHistoricQuotationDao.getInstance().getLeads(data));
+                        ListHistoricQuotationDao.getInstance().getLeads(data),viewModelStoreOwner,lifecycleOwner);
                 lv_historic_quotation_detail.setAdapter((listHistoricQuotationAdapter));
                 tv_quantity_quotation.setText(String.valueOf(data.size()));
                 for(int i=0;i<data.size();i++)
                 {
-                 //   amount=amount+Double.parseDouble(data.get(i).getAmounttotal());
+                    Log.e("REOS","HistoricQuotationView-getListHistoricQuotation-data: "+data);
+                    amount=amount+Float.parseFloat(data.get(i).getAmounttotal());
                 }
-                //tv_amount_quotation.setText(Convert.currencyForView(String.valueOf(amount)));
+                tv_amount_quotation.setText(Convert.currencyForView(String.valueOf(amount)));
+                Toast.makeText(context, "Cotizaciones Obtenidas Correctamente", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(context, "No se encontraron Cotizaciones", Toast.LENGTH_SHORT).show();
+                lv_historic_quotation_detail.setAdapter(null);
+                tv_quantity_quotation.setText(("0"));
+                tv_amount_quotation.setText(Convert.currencyForView("0"));
+
             }
             pd.dismiss();
         });

@@ -133,6 +133,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             holder.linearlayouttvcredit = (LinearLayout) convertView.findViewById(R.id.linearlayouttvcredit);
             holder.tv_paymentterms = (TextView) convertView.findViewById(R.id.tv_paymentterms);
             holder.tablerowpaymentterms = (TableRow) convertView.findViewById(R.id.tablerowpaymentterms);
+            holder.ll_geolocation = (LinearLayout) convertView.findViewById(R.id.ll_geolocation);
 
             convertView.setTag(holder);
         } else {
@@ -156,7 +157,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         holder.tv_linea_credito_usado.setText(Convert.currencyForView(lead.getLinea_credito_usado()));
         ///////////////////////////////////////////////////////////////////////////////////////
         holder.tv_paymentterms.setText(lead.getTerminopago());
-
+        holder.ll_geolocation.setVisibility(View.GONE);
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
             holder.chk_geolocation.setVisibility(View.GONE);
@@ -270,5 +271,6 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         LinearLayout linearlayouttvcredit;
         TextView tv_paymentterms;
         TableRow tablerowpaymentterms;
+        LinearLayout ll_geolocation;
     }
 }

@@ -24,22 +24,67 @@ public class QuotationEntity {
     @SerializedName("CardName")
     private String cardname;
 
-    @SerializedName("AmountTotal")
+    @SerializedName("DocumentTotal")
     private String amounttotal;
 
-    @SerializedName("ApprovalStatus")
+    @SerializedName("StatusAproveed")
     private String approvalstatus;
 
     @SerializedName("SlpCode")
     private String slpcode;
 
-    @SerializedName("Autorization")
+    @SerializedName("Autorizado")
     private String autorization;
 
-    @SerializedName("ReadyGeneration")
+    @SerializedName("ReadyGenerateOv")
     private String readygeneration;
 
-    public QuotationEntity(String object, String docnum, String docentry, String cardcode, String lictradnum, String docdate, String cardname, String amounttotal, String approvalstatus, String slpcode, String autorization, String readygeneration) {
+    @SerializedName("Code")
+    private String code;
+
+    @SerializedName("ErrorCode")
+    private String errorCode;
+
+    @SerializedName("SalesOrder")
+    private String salesorder;
+
+    @SerializedName("Message")
+    private String message;
+
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public String getSalesorder() {
+        return salesorder;
+    }
+
+    public void setSalesorder(String salesorder) {
+        this.salesorder = salesorder;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public QuotationEntity(String object, String docnum, String docentry, String cardcode, String lictradnum, String docdate, String cardname, String amounttotal, String approvalstatus, String slpcode, String autorization, String readygeneration,String salesorder) {
         this.object = object;
         this.docnum = docnum;
         this.docentry = docentry;
@@ -52,7 +97,11 @@ public class QuotationEntity {
         this.slpcode = slpcode;
         this.autorization = autorization;
         this.readygeneration = readygeneration;
+        this.salesorder = salesorder;
+
     }
+
+
 
     public String getObject() {
         return object;

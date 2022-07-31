@@ -92,11 +92,20 @@ public class MenuConsultasView extends Fragment {
         cv_dispatch=v.findViewById(R.id.cv_dispatch);
         cv_quotation=v.findViewById(R.id.cv_quotation);
 
+        if(SesionEntity.migratequotation.equals("N"))
+        {
+            cv_quotation.setVisibility(View.GONE);
+        }
+        else {
+            cv_quotation.setVisibility(View.VISIBLE);
+        }
+
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
             cv_ordenventa.setVisibility(View.GONE);
             cv_documentofacturado.setVisibility(View.GONE);
-            //cv_dispatch.setVisibility(View.GONE);
+            cv_dispatch.setVisibility(View.GONE);
+            cv_quotation.setVisibility(View.GONE);
         }
         if(!BuildConfig.FLAVOR.equals("peru"))
         {

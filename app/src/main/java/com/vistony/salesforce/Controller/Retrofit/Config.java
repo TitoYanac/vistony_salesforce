@@ -24,8 +24,12 @@ public class Config {
     private static OkHttpClient client2=null;
     public static Retrofit getClient() {
 
+        //Produccion-------------------------------
         //String baseUrl = "http://salesforce.vistony.com";
+        //------------------------------------------
+        //Pruebas QA---------------
         String baseUrl = "https://salesforce.vistony.pe";
+        //------------------
         //String baseUrl = "http://200.107.154.233";
 
         String puerto = "";
@@ -40,7 +44,12 @@ public class Config {
                 puerto = ":8050";
                 break;
             case "peru":
+                //Produccion----------
                 //puerto = ":8001";
+                //--------------------
+                //Pruebas QA-------------
+                puerto = "";
+                //-----------------------
                 break;
             case "paraguay":
                 puerto = ":8051";
@@ -73,9 +82,13 @@ public class Config {
 
     public static Retrofit getClientLogin() {
 
-       // String baseUrl = "http://salesforce.vistony.com";
+        //Produccion-------------------------------
+        //String baseUrl = "http://salesforce.vistony.com";
+        //------------------------------------------
+        //Pruebas QA---------------
+        String baseUrl = "https://salesforce.vistony.pe";
+        //------------------
         //String baseUrl = "http://200.107.154.233";
-        String baseUrl = "http://salesforce.vistony.pe";
 
         String puerto = "";
         switch (BuildConfig.FLAVOR) {
@@ -89,7 +102,12 @@ public class Config {
                 puerto = ":8050";
                 break;
             case "peru":
-               // puerto = ":8001";
+                //Produccion----------
+                //puerto = ":8001";
+                //--------------------
+                //Pruebas QA-------------
+                puerto = "";
+                //-----------------------
                 break;
             case "paraguay":
                 puerto = ":8051";

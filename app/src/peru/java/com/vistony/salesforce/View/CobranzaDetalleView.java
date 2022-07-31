@@ -50,6 +50,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -197,6 +198,7 @@ public class CobranzaDetalleView extends Fragment {
     static FloatingActionButton fab_invoice_cancelation,fab_edit_signature;
     String arrayCircle[] = {"Guardar","Generar","Validar","Firma"};
     ImageView imv_prueba_mostrarfirma;
+    TableRow tablerow_e_signature;
 
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm", "Este es NUEVA ISNTANCIA 1");
@@ -438,6 +440,7 @@ public class CobranzaDetalleView extends Fragment {
         chk_bancarizado = (CheckBox) v.findViewById(R.id.chk_bancarizado);
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
         chk_E_signature = (CheckBox) v.findViewById(R.id.chk_E_signature);
+        tablerow_e_signature=v.findViewById(R.id.tablerow_e_signature);
 
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo = (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
@@ -447,9 +450,14 @@ public class CobranzaDetalleView extends Fragment {
         imv_prueba_mostrarfirma =  (ImageView) v.findViewById(R.id.imv_prueba_mostrarfirma);
         circleMenu.setVisibility(View.GONE);
         imv_prueba_mostrarfirma.setVisibility(View.GONE);
+
+        fab_edit_signature.setVisibility(View.GONE);
+        tablerow_e_signature.setVisibility(View.GONE);
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
             fab_edit_signature.setVisibility(View.GONE);
+            tablerow_e_signature.setVisibility(View.GONE);
+
         }
         else{
             if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
@@ -1578,8 +1586,9 @@ public class CobranzaDetalleView extends Fragment {
             if (telefono.equals(mPhoneNumber)) {
                 Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
             } else {
-                //sendSMS(telefono);
-                //Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
+                //telefono="990249315";
+                sendSMS(telefono);
+                Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
             }
         }
 

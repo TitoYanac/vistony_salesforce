@@ -240,7 +240,7 @@ public class MenuAccionView extends Fragment {
         cv_canvas.setVisibility(View.GONE);
         cv_visit_section.setVisibility(View.GONE);
         //cv_lead.setVisibility(View.GONE);
-        if(BuildConfig.FLAVOR.equals("peru"))
+       /* if(BuildConfig.FLAVOR.equals("peru"))
         {
             if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
             {
@@ -249,7 +249,7 @@ public class MenuAccionView extends Fragment {
                     alertaAdvertencia("Tiene Datos de Clientes pendientes de Actualizar, desea actualizarlo ahora?", getContext()).show();
                 }
             }
-        }
+        }*/
         cv_canvas.setOnClickListener(v -> {
             String Fragment="MenuAccionView";
             String accion="canvas";
@@ -265,7 +265,7 @@ public class MenuAccionView extends Fragment {
         else {
             if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
             {
-                //cv_lead.setVisibility(View.GONE);
+                cv_lead.setVisibility(View.GONE);
                 //cv_visit_section.setVisibility(View.GONE);
                 cv_dispatch.setVisibility(View.GONE);
             }
@@ -276,7 +276,7 @@ public class MenuAccionView extends Fragment {
             cv_visita.setVisibility(View.GONE);
             cv_lead.setVisibility(View.GONE);
             cv_visit_section.setVisibility(View.GONE);
-            //cv_dispatch.setVisibility(View.GONE);
+            cv_dispatch.setVisibility(View.GONE);
         }
 
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
@@ -603,7 +603,7 @@ public class MenuAccionView extends Fragment {
 
         if(SesionEntity.perfil_id.equals("CHOFER"))
         {
-            //cv_cobranza_deposito_directo.setVisibility(View.GONE);
+            cv_cobranza_deposito_directo.setVisibility(View.GONE);
         }
         if(!BuildConfig.FLAVOR.equals("chile"))
         {

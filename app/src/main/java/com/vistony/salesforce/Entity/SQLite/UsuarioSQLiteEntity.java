@@ -34,6 +34,15 @@ public class UsuarioSQLiteEntity {
     public String rate;
     public String print;
     public String activecurrency;
+    public String migratequotation;
+
+    public String getMigratequotation() {
+        return migratequotation;
+    }
+
+    public void setMigratequotation(String migratequotation) {
+        this.migratequotation = migratequotation;
+    }
 
     public String getActivecurrency() {
         return activecurrency;
