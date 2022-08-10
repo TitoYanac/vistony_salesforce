@@ -56,10 +56,12 @@ import com.vistony.salesforce.Dao.Adapters.ListWareHouseDao;
 import com.vistony.salesforce.Dao.Adapters.ListaPendingCollectionDao;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
+import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Dao.SQLite.LeadSQLite;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.StatusDispatchSQLite;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Dao.SQLite.VisitSectionSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
@@ -98,7 +100,7 @@ public class MenuAccionView extends Fragment {
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     LocationManager locationManager;
-    static String CardCode,CardName,Address,DomEmbarque_ID,Contado;
+    static String CardCode,CardName,Address,DomEmbarque_ID,Contado,Control_id,Item_id;
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
@@ -111,6 +113,8 @@ public class MenuAccionView extends Fragment {
     private boolean status = true;
     private String direccion = "Sin dirección", referencia = "Sin referencias";
     private Dialog dialog;
+    String fechainicio="",timeini="";
+    private StatusDispatchRepository statusDispatchRepository;
 
     public MenuAccionView() {
         // Required empty public constructor
@@ -149,7 +153,8 @@ public class MenuAccionView extends Fragment {
             Address=Lista.get(s).getDireccion();
             DomEmbarque_ID=Lista.get(s).getDomembarque_id();
             Contado=Lista.get(s).getContado();
-
+            Control_id=Lista.get(s).getControl_id();
+            Item_id=Lista.get(s).getItem_id();
             if(Lista.get(s).getTelefonofijo()==null||Lista.get(s).getCorreo()==null||Lista.get(s).getChkgeolocation()==null)
             {
                 SesionEntity.updateclient="Y";
@@ -238,7 +243,7 @@ public class MenuAccionView extends Fragment {
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
         cv_canvas.setVisibility(View.GONE);
-        cv_visit_section.setVisibility(View.GONE);
+        //cv_visit_section.setVisibility(View.GONE);
         //cv_lead.setVisibility(View.GONE);
        /* if(BuildConfig.FLAVOR.equals("peru"))
         {
@@ -275,8 +280,8 @@ public class MenuAccionView extends Fragment {
             cv_pedido.setVisibility(View.GONE);
             cv_visita.setVisibility(View.GONE);
             cv_lead.setVisibility(View.GONE);
-            cv_visit_section.setVisibility(View.GONE);
-            cv_dispatch.setVisibility(View.GONE);
+            //cv_visit_section.setVisibility(View.GONE);
+            //0cv_dispatch.setVisibility(View.GONE);
         }
 
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
@@ -353,7 +358,7 @@ public class MenuAccionView extends Fragment {
             alertDialogVisitSection().show();
         });
         cv_dispatch.setOnClickListener(v -> {
-            androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode,CardName);
+            androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode,CardName,Control_id,Item_id,DomEmbarque_ID);
             dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
             ///Intent i= new Intent(getContext(),   MapaView.class);
             //startActivity(i);
@@ -821,6 +826,7 @@ public class MenuAccionView extends Fragment {
     private Dialog alertDialogVisitSection() {
 
         final Dialog dialog = new Dialog(getContext());
+        fechainicio="";timeini="";
         dialog.setContentView(R.layout.layout_dialog_visit_section);
         CheckBox chk_start_visitsection,chk_finish_visitsection;
         Button btn_start_visitsection,btn_finish_visitsection,dialogButtonOK;
@@ -842,7 +848,7 @@ public class MenuAccionView extends Fragment {
         ArrayList<VisitSectionEntity> listVisitSection=new ArrayList<>();
         VisitSectionSQLite visitSectionSQLite=new VisitSectionSQLite(getContext());
         listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date));
-
+        statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
         for(int i=0;i<listVisitSection.size();i++)
         {
             if(listVisitSection.get(i).getLatitudini()!=null)
@@ -862,6 +868,8 @@ public class MenuAccionView extends Fragment {
                     Utilitario.disabledButtton(btn_finish_visitsection);
                 }
             }
+            fechainicio=listVisitSection.get(i).getDateini();
+            timeini=listVisitSection.get(i).getTimeini();
         }
 
 
@@ -912,13 +920,25 @@ public class MenuAccionView extends Fragment {
                 btn_finish_visitsection.setClickable(false);
                 Utilitario.disabledButtton(btn_finish_visitsection);
 
-                RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
-                rutaVendedorSQLiteDao.UpdateChkVisitSection(
-                        CardCode,
-                        DomEmbarque_ID,
-                        ObjUsuario.compania_id,
-                        FormatFecha.format(date)
-                );
+                if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("chofer"))
+                {
+                    StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(getContext());
+                    statusDispatchSQLite.UpdateTimeStatusDispatch(CardCode, DomEmbarque_ID,timeini,dateFormathora.format(date));
+
+                    /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                    statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+                        Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
+                    });
+
+                }else {
+                    RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
+                    rutaVendedorSQLiteDao.UpdateChkVisitSection(
+                            CardCode,
+                            DomEmbarque_ID,
+                            ObjUsuario.compania_id,
+                            FormatFecha.format(date)
+                    );
+                }
                 Toast.makeText(getActivity(), "Visita Finalizada!!!", Toast.LENGTH_LONG).show();
             }
         });

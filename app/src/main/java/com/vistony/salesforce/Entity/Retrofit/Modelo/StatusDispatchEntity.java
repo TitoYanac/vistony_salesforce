@@ -9,11 +9,11 @@ public class StatusDispatchEntity {
 
     public String usuario_id;
 
-    @SerializedName("typedispatch_id")
-    public String typedispatch_id;
+    @SerializedName("Delivered")
+    public String Delivered;
 
-    @SerializedName("reasondispatch_id")
-    public String reasondispatch_id;
+    @SerializedName("ReturnReason")
+    public String ReturnReason;
 
     @SerializedName("cliente_id")
     public String cliente_id;
@@ -27,8 +27,8 @@ public class StatusDispatchEntity {
     @SerializedName("chkrecibido")
     public String chkrecibido;
 
-    @SerializedName("observation")
-    public String observation;
+    @SerializedName("Comments")
+    public String Comments;
 
     public String foto;
 
@@ -36,7 +36,7 @@ public class StatusDispatchEntity {
 
     public String hora_registro;
 
-    public String fotoGuia;
+    public String PhotoDocument;
 
     public String latitud;
 
@@ -53,32 +53,50 @@ public class StatusDispatchEntity {
     public String reasondispatch;
 
     @SerializedName("ErrorCode")
-    private String haveError;
+    public String haveError;
 
     @SerializedName("Message")
-    private String Message;
+    public String Message;
 
     @SerializedName("IdStatusDispatch")
-    private String idStatusDispatch;
+    public String idStatusDispatch;
 
-    public StatusDispatchEntity(String compania_id, String fuerzatrabajo_id, String usuario_id, String typedispatch_id, String reasondispatch_id, String cliente_id, String factura_id, String entrega_id, String chkrecibido, String observation,
-   String foto,String fecha_registro,String hora_registro,String fotoGuia,String latitud,String longitud,
-                                String cliente,String entrega,String factura,String typedispatch,String reasondispatch
+    @SerializedName("LineId")
+    public String LineId;
+
+    public String PhotoStore;
+
+    @SerializedName("DocEntry")
+    public String DocEntry;
+
+    public String Address;
+
+    public String checkintime;
+
+    public String checkouttime;
+
+    public String chk_timestatus;
+
+    public StatusDispatchEntity(String compania_id, String fuerzatrabajo_id, String usuario_id, String Delivered, String ReturnReason, String cliente_id, String factura_id, String entrega_id, String chkrecibido, String Comments,
+                                String foto, String fecha_registro, String hora_registro, String PhotoDocument, String latitud, String longitud,
+                                String cliente, String entrega, String factura, String typedispatch, String reasondispatch, String LineId
+            , String PhotoStore,String DocEntry,String Address,String checkintime,String checkouttime
+                                ,String chk_timestatus
                                 ) {
         this.compania_id = compania_id;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
         this.usuario_id = usuario_id;
-        this.typedispatch_id = typedispatch_id;
-        this.reasondispatch_id = reasondispatch_id;
+        this.Delivered = Delivered;
+        this.ReturnReason = ReturnReason;
         this.cliente_id = cliente_id;
         this.factura_id = factura_id;
         this.entrega_id = entrega_id;
         this.chkrecibido = chkrecibido;
-        this.observation = observation;
+        this.Comments = Comments;
         this.foto = foto;
         this.fecha_registro = fecha_registro;
         this.hora_registro = hora_registro;
-        this.fotoGuia = fotoGuia;
+        this.PhotoDocument = PhotoDocument;
         this.latitud = latitud;
         this.longitud = longitud;
         this.cliente = cliente;
@@ -86,6 +104,71 @@ public class StatusDispatchEntity {
         this.factura = factura;
         this.typedispatch = typedispatch;
         this.reasondispatch = reasondispatch;
+        this.LineId=LineId;
+        this.PhotoStore = PhotoStore;
+        this.DocEntry=DocEntry;
+        this.Address=Address;
+        this.checkintime=checkintime;
+        this.checkouttime=checkouttime;
+        this.chk_timestatus=chk_timestatus;
+
+    }
+
+    public String getChk_timestatus() {
+        return chk_timestatus;
+    }
+
+    public void setChk_timestatus(String chk_timestatus) {
+        this.chk_timestatus = chk_timestatus;
+    }
+
+    public String getCheckintime() {
+        return checkintime;
+    }
+
+    public void setCheckintime(String checkintime) {
+        this.checkintime = checkintime;
+    }
+
+    public String getCheckouttime() {
+        return checkouttime;
+    }
+
+    public void setCheckouttime(String checkouttime) {
+        this.checkouttime = checkouttime;
+    }
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    public String getDocEntry() {
+        return DocEntry;
+    }
+
+    public void setDocEntry(String docEntry) {
+        DocEntry = docEntry;
+    }
+
+    public String getPhotoStore() {
+        return PhotoStore;
+    }
+
+    public void setPhotoStore(String photoStore) {
+        PhotoStore = photoStore;
+    }
+
+
+    public String getLineId() {
+        return LineId;
+    }
+
+    public void setLineId(String lineId) {
+        LineId = lineId;
     }
 
     public String getHaveError() {
@@ -168,12 +251,12 @@ public class StatusDispatchEntity {
         this.longitud = longitud;
     }
 
-    public String getFotoGuia() {
-        return fotoGuia;
+    public String getPhotoDocument() {
+        return PhotoDocument;
     }
 
-    public void setFotoGuia(String fotoGuia) {
-        this.fotoGuia = fotoGuia;
+    public void setPhotoDocument(String photoDocument) {
+        this.PhotoDocument = photoDocument;
     }
 
     public String getFoto() {
@@ -227,21 +310,21 @@ public class StatusDispatchEntity {
         this.usuario_id = usuario_id;
     }
 
-    public String getTypedispatch_id() {
-        return typedispatch_id;
+    public String getDelivered() {
+        return Delivered;
     }
 
-    public void setTypedispatch_id(String typedispatch_id) {
-        this.typedispatch_id = typedispatch_id;
+    public void setDelivered(String delivered) {
+        this.Delivered = delivered;
     }
 
-    public String getReasondispatch_id() {
-        return reasondispatch_id;
+    public String getReturnReason() {
+        return ReturnReason;
     }
 
 
-    public void setReasondispatch_id(String reasondispatch_id) {
-        this.reasondispatch_id = reasondispatch_id;
+    public void setReturnReason(String returnReason) {
+        this.ReturnReason = returnReason;
     }
 
     public String getCliente_id() {
@@ -276,11 +359,11 @@ public class StatusDispatchEntity {
         this.chkrecibido = chkrecibido;
     }
 
-    public String getObservation() {
-        return observation;
+    public String getComments() {
+        return Comments;
     }
 
-    public void setObservation(String observation) {
-        this.observation = observation;
+    public void setComments(String comments) {
+        this.Comments = comments;
     }
 }

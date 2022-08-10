@@ -437,7 +437,10 @@ ParametrosView extends Fragment {
             Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
         });
 
-
+        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+            Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
+        });
 
 
         fabdescargarparametros.setOnClickListener(view -> {

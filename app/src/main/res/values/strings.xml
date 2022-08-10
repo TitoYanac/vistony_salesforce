@@ -181,4 +181,6 @@
     <string name="lbl_sub_signature">Escriba su Firma</string>
     <string name="lbl_e_signature">E-Firma</string>
     <string name="lbl_read_e_signature">Consultar E-Firma</string>
+    <string name="lbl_visit_start">Vist.Ini</string>
+    <string name="lbl_visit_end">Vist.Fin</string>
 </resources>

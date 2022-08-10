@@ -24,8 +24,20 @@ public class HeaderDispatchSheetEntity {
     @SerializedName("OverallWeight")
     private String peso_total;
 
+    //@SerializedName("Details")
     @SerializedName("Detail")
     private List<DetailDispatchSheetEntity> ListDedailDispatch;
+
+    @SerializedName("TotalDocument")
+    private String TotalDocument;
+
+    public String getTotalDocument() {
+        return TotalDocument;
+    }
+
+    public void setTotalDocument(String totalDocument) {
+        TotalDocument = totalDocument;
+    }
 
     public List<DetailDispatchSheetEntity> getListDedailDispatch() {
         return ListDedailDispatch;

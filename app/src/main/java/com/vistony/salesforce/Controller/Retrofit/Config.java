@@ -27,7 +27,7 @@ public class Config {
         //Produccion-------------------------------
         //String baseUrl = "http://salesforce.vistony.com";
         //------------------------------------------
-        //Pruebas QA---------------
+        //Pruebas QA--------------- Nueva Produccion
         String baseUrl = "https://salesforce.vistony.pe";
         //------------------
         //String baseUrl = "http://200.107.154.233";
@@ -47,7 +47,7 @@ public class Config {
                 //Produccion----------
                 //puerto = ":8001";
                 //--------------------
-                //Pruebas QA-------------
+                //Pruebas QA------------- Nueva Produccion
                 puerto = "";
                 //-----------------------
                 break;
@@ -85,7 +85,7 @@ public class Config {
         //Produccion-------------------------------
         //String baseUrl = "http://salesforce.vistony.com";
         //------------------------------------------
-        //Pruebas QA---------------
+        //Pruebas QA--------------- Nueva Produccion
         String baseUrl = "https://salesforce.vistony.pe";
         //------------------
         //String baseUrl = "http://200.107.154.233";
@@ -105,7 +105,7 @@ public class Config {
                 //Produccion----------
                 //puerto = ":8001";
                 //--------------------
-                //Pruebas QA-------------
+                //Pruebas QA------------- Nueva Produccion
                 puerto = "";
                 //-----------------------
                 break;

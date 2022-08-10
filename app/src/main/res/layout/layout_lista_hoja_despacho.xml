@@ -126,10 +126,11 @@
         android:id="@+id/chk_updatedispatch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="240dp"
         android:layout_marginTop="0dp"
         android:clickable="false"
-        android:text="Despacho Actualizado" />
+        android:text="Entrega"
+        android:textSize="16dp" />
     <!--<CheckBox
         android:id="@+id/chk_statusdispatch"
         android:layout_width="wrap_content"
@@ -139,5 +140,31 @@
         android:layout_marginTop="140dp"
         android:text="Direccion1"
         android:textAppearance="?attr/textAppearanceListItem" />-->
+    <TextView
+        android:id="@+id/tv_visita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="5dp"
+        android:text="Visita: "
+        android:textAppearance="?attr/textAppearanceListItem" />
 
+    <CheckBox
+        android:id="@+id/chk_visit_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:clickable="false"
+        android:text="Inicio"
+        android:textSize="16dp" />
+
+    <CheckBox
+        android:id="@+id/chk_visit_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="110dp"
+        android:clickable="false"
+        android:text="Fin"
+        android:textSize="16dp" />
 </RelativeLayout>

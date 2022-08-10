@@ -92,6 +92,7 @@ public interface Api {
     Call<ClienteEntityResponse> getClienteInformation (@Query("imei") String imei,@Query("cliente") String cliente);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/Customer")
+    //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
     Call<ClienteEntityResponse> getClientDelivery (@Query("imei") String imei,@Query("fecha") String fecha);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/WorkPath")
@@ -181,7 +182,7 @@ public interface Api {
     Call<PriceListEntityResponse> getPriceList(@Query("imei") String imei);
 
 
-    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/StatusDispatch")
+    @PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
         //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Visit")
     Call<StatusDispatchEntityResponse> sendStatusDispatch (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
@@ -240,6 +241,7 @@ public interface Api {
     );
 
     //@GET("/AppVistonySalesTest/ServicioApp.svc/Obtener_DespachoC/{Imei},{Compania_ID},{FuerzaTrabajo_ID},{FechaDespacho}") //Maestro de Hoja de Despacho Cabecera
+    //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/List")
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
     Call<HeaderDispatchSheetEntityResponse> getHeaderDispatchSheet (
             @Query("imei") String Imei
@@ -290,7 +292,7 @@ public interface Api {
     Call<QuotationEntityResponse> geHistoricQuotation (@Body RequestBody params);
 
     @POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Quotation/({docEntry})/CreateSalesOrder")
-    Call<SalesOrderEntityResponse> sendQuotation (@Path("docEntry") int docEntry);
+    Call<SalesOrderEntityResponse> sendQuotation (@Path("docEntry") int docEntry,@Body RequestBody params);
 
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);

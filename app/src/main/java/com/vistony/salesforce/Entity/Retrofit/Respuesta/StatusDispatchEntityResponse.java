@@ -8,7 +8,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.StatusDispatchEntity;
 import java.util.List;
 
 public class StatusDispatchEntityResponse {
-    @SerializedName("StatusDispatch")
+    @SerializedName("Dispatch")
     private List<StatusDispatchEntity> statusDispatchEntity;
 
     public void setStatusDispatch(List<StatusDispatchEntity> statusDispatchEntity) {

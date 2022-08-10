@@ -83,9 +83,9 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
     private  int dia,mes,año;
     private SearchView mSearchView;
     ImageButton imb_consultar_fecha_hoja_despacho,imb_consultar_codigo_control;
-    SimpleDateFormat dateFormat;
-    Date date;
-    String fecha;
+    SimpleDateFormat dateFormat,dateFormat2;
+    Date date,date2;
+    String fecha,parametrofecha;
     TextView tv_fecha_hoja_despacho,tv_cantidad_despachos,tv_total_deuda,tv_status_despachos;
     Button btn_consultar_fecha_despacho;
     private ProgressDialog pd;
@@ -163,10 +163,13 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         btn_consultar_fecha_despacho.setOnClickListener(this);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = new Date();
+        dateFormat2= new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        date2 = new Date();
+        parametrofecha =dateFormat2.format(date2);
         fecha =dateFormat.format(date);
         tv_fecha_hoja_despacho.setText(fecha);
         obtenerTituloFormulario();
-        table_row_status_dispatch.setVisibility(View.GONE);
+        //table_row_status_dispatch.setVisibility(View.GONE);
 
 
         return v;
@@ -229,7 +232,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
                     }
                 });*/
                 Log.e("REOS","HojaDespachoView.btn_consultar_fecha_despacho: tv_fecha_hoja_despacho.getText().toString()-"+tv_fecha_hoja_despacho.getText().toString());
-                getMastersDelivery(SesionEntity.imei,tv_fecha_hoja_despacho.getText().toString(),getContext());
+                getMastersDelivery(SesionEntity.imei,parametrofecha,getContext());
                 break;
             case R.id.imb_consultar_codigo_control:
                 Log.e("REOS","HojaDespachoView.btnconsultarfecha: Ingreso");
@@ -361,7 +364,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         {
             dia='0'+dia;
         }
-
+        parametrofecha=year+mes+dia;
         tv_fecha_hoja_despacho.setText(year + "-" + mes + "-" + dia);
     }
 
@@ -389,193 +392,6 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
             pd.dismiss();
         }
     }
-    /*public class ObtenerSQLiteHojaDespachoCabecera extends AsyncTask<String, Void, Object> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Hoja Despacho", true, false);
-        }
-        @Override
-        protected Object doInBackground(String... arg0) {
-            ArrayList<HojaDespachoCabeceraSQLiteEntity> listaHojaDespachoCabeceraSQLiteEntity=new ArrayList<>();
-            try {
-
-
-                HeaderDispatchSheetSQLite hojaDespachoCabeceraSQLiteDao=new HeaderDispatchSheetSQLite(getContext());
-                listaHojaDespachoCabeceraSQLiteEntity=hojaDespachoCabeceraSQLiteDao.ObtenerHojaDespachoCabeceraporFecha(tv_fecha_hoja_despacho.getText().toString());
-                if(listaHojaDespachoCabeceraSQLiteEntity.isEmpty()) {
-                    SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
-                    Date date2 = new Date();
-                    String fecha2 =dateFormat2.format(date2);
-
-                    FormulasController formulasController = new FormulasController(getContext());
-                    int CantClientes, CantBancos, CantDocumentosDeuda,CantHojaDespachoCabecera,CantHojaDespachoDetalle;
-                    ArrayList<ClienteSQLiteEntity> LclientesqlSQLiteEntity = new ArrayList<>();
-                    ArrayList<BancoSQLiteEntity> LBanco = new ArrayList<>();
-                    ArrayList<DocumentoDeudaSQLiteEntity> LDDeuda = new ArrayList<>();
-                    ArrayList<HojaDespachoCabeceraSQLiteEntity> LHDCabecera = new ArrayList<>();
-                    ArrayList<HojaDespachoDetalleSQLiteEntity> LHDDetalle = new ArrayList<>();
-
-                    ClienteWS clienteWS = new ClienteWS(getContext());
-                    BancoWS bancoWS = new BancoWS(getContext());
-                    DocumentoDeudaWS documentoDeudaWS = new DocumentoDeudaWS(getContext());
-                    HojaDespachoCabeceraWS hojaDespachoCabeceraWS = new HojaDespachoCabeceraWS(getContext());
-                    HojaDespachoDetalleWS hojaDespachoDetalleWS = new HojaDespachoDetalleWS(getContext());
-
-                    ClienteSQliteDAO clienteSQliteDAO = new ClienteSQliteDAO(getContext());
-                    BancoSQLiteDAO bancoSQLiteDAO = new BancoSQLiteDAO(getContext());
-                    DocumentoDeudaSQLiteDao documentoDeudaSQLiteDao = new DocumentoDeudaSQLiteDao(getContext());
-                    DetailDispatchSheetSQLite hojaDespachoDetalleSQLiteDao=new DetailDispatchSheetSQLite(getContext());
-
-                    ParametrosSQLiteDao parametrosSQLiteDao = new ParametrosSQLiteDao(getContext());
-                    LclientesqlSQLiteEntity = clienteWS.getClienteWS(SesionEntity.imei, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id, tv_fecha_hoja_despacho.getText().toString());
-                    if (!(LclientesqlSQLiteEntity.isEmpty())) {
-                        clienteSQliteDAO.LimpiarTablaCliente();
-                        CantClientes = formulasController.registrarClienteSQLite(LclientesqlSQLiteEntity);
-                        parametrosSQLiteDao.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), fecha2);
-                    }
-
-                    LBanco = bancoWS.getBancoWS(SesionEntity.imei, SesionEntity.compania_id);
-                    if (!(LBanco.isEmpty())) {
-                        bancoSQLiteDAO.LimpiarTablaBanco();
-                        CantBancos = formulasController.registrarBancoSQLite(LBanco);
-                        parametrosSQLiteDao.ActualizaCantidadRegistros("2", "BANCOS", String.valueOf(CantBancos), fecha2);
-                    }
-
-                    LDDeuda = documentoDeudaWS.getDocumentoDeuda(SesionEntity.imei, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id, tv_fecha_hoja_despacho.getText().toString());
-
-                    if (!(LDDeuda.isEmpty())) {
-                        documentoDeudaSQLiteDao.LimpiarTablaDocumentoDeuda();
-                        CantDocumentosDeuda = formulasController.registrarDocumentoDeudaSQLite(LDDeuda);
-                        parametrosSQLiteDao.ActualizaCantidadRegistros("3", "DOCUMENTOS", String.valueOf(CantDocumentosDeuda), fecha2);
-                    }
-
-
-
-                    LHDCabecera = hojaDespachoCabeceraWS.getHojaDespachoCabeceraWS(SesionEntity.imei, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id, tv_fecha_hoja_despacho.getText().toString());
-                    Log.e("REOS", "ParametrosView.CargaParametros-LHDCabecera.size(): " + LHDCabecera.size());
-                    if (!(LHDCabecera.isEmpty())) {
-                        hojaDespachoCabeceraSQLiteDao.LimpiarTablaHojaDespachoCabecera();
-                        CantHojaDespachoCabecera = formulasController.registrarHojaDespachoCabecera(LHDCabecera);
-                        Log.e("REOS", "ParametrosView.CargaParametros-CantHojaDespachoCabecera: " + CantHojaDespachoCabecera);
-                        parametrosSQLiteDao.ActualizaCantidadRegistros("15", "HOJA DESPACHO CABECERA", String.valueOf(CantHojaDespachoCabecera), fecha2);
-                    }
-
-                    LHDDetalle = hojaDespachoDetalleWS.getHojaDespachoDetalleWS(SesionEntity.imei, SesionEntity.compania_id, SesionEntity.fuerzatrabajo_id, tv_fecha_hoja_despacho.getText().toString());
-                    Log.e("REOS", "ParametrosView.CargaParametros-LHDDetalle.size(): " + LHDDetalle.size());
-                    if (!(LHDDetalle.isEmpty())) {
-                        hojaDespachoDetalleSQLiteDao.LimpiarTablaHojaDespachoDetalle();
-                        CantHojaDespachoDetalle = formulasController.registrarHojaDespachoDetalle(LHDDetalle);
-                        Log.e("REOS", "ParametrosView.CargaParametros-CantHojaDespachoDetalle: " + CantHojaDespachoDetalle);
-                        parametrosSQLiteDao.ActualizaCantidadRegistros("18", "HOJA DESPACHO DETALLE", String.valueOf(CantHojaDespachoDetalle), fecha2);
-                    }
-
-                    listaHojaDespachoCabeceraSQLiteEntity = hojaDespachoCabeceraSQLiteDao.ObtenerHojaDespachoCabeceraporFecha(tv_fecha_hoja_despacho.getText().toString());
-                }
-            } catch (Exception e) {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-                Log.e("REOS","HojaDespachoView.ObtenerSQLiteHojaDespachoCabecera.Error: "+e.toString());
-            }
-            return listaHojaDespachoCabeceraSQLiteEntity;
-        }
-
-        protected void onPostExecute(Object result) {
-            //getActivity().setTitle("Hoja Despacho");
-            ArrayList<HojaDespachoCabeceraSQLiteEntity> Lista = (ArrayList<HojaDespachoCabeceraSQLiteEntity>) result;
-           // Log.e("REOS","HojaDespachoView.ObtenerSQLiteHojaDespachoCabecera.Lista: "+e.toString());
-            if(Lista.isEmpty())
-            {
-                Toast.makeText(getContext(), "No se encontro Codigo de Control Registrado", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                String [] Lista_Control_ID= new String [Lista.size()];
-                int Contador=0;
-                for(int i=0;i<Lista.size();i++)
-                {
-                    //if (esValorUnico(Lista.get(i).getControl_id(),Lista)) {
-                        Lista_Control_ID[Contador] = Lista.get(i).getControl_id();
-                        Contador++;
-                    //}
-                }
-                CargaSpinnerControl(Lista_Control_ID);
-            }
-            pd.dismiss();
-        }
-    }
-    */
-
-
-    /*public class ObtenerSQLiteHojaDespachoDetalle extends AsyncTask<String, Void, Object> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Hoja Despacho Detalle", true, false);
-        }
-        @Override
-        protected Object doInBackground(String... arg0) {
-            ArrayList<HojaDespachoDetalleSQLiteEntity> listaHojaDespachoDetalleSQLiteEntity=new ArrayList<>();
-            try {
-                DetailDispatchSheetSQLite hojaDespachoDetalleSQLiteDao=new DetailDispatchSheetSQLite(getContext());
-                listaHojaDespachoDetalleSQLiteEntity=hojaDespachoDetalleSQLiteDao.ObtenerHojaDespachoDetalleporControlID(spn_control_id.getSelectedItem().toString());
-
-            } catch (Exception e) {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-                Log.e("REOS","HojaDespachoView.ObtenerSQLiteHojaDespachoDetalle.Error: "+e.toString());
-            }
-            return listaHojaDespachoDetalleSQLiteEntity;
-        }
-
-        protected void onPostExecute(Object result) {
-            //getActivity().setTitle("Hoja Despacho");
-            ArrayList<HojaDespachoDetalleSQLiteEntity> Lista = (ArrayList<HojaDespachoDetalleSQLiteEntity>) result;
-            // Log.e("REOS","HojaDespachoView.ObtenerSQLiteHojaDespachoCabecera.Lista: "+e.toString());
-            if(Lista.isEmpty())
-            {
-                ConnectivityManager manager= (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);;
-                NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-
-                if (networkInfo != null) {
-                    if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                        Toast.makeText(getContext(), "No se encontro Codigo de Control Registrado", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
-                    }
-                }else{
-                    Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
-                }
-            }
-            else
-            {
-                listaHojaDespachoAdapter = new ListaHojaDespachoAdapter(getActivity(), ListaHojaDespachoDao.getInstance().getLeads(Lista,getContext()));
-                lista_despachos.setAdapter(listaHojaDespachoAdapter);
-
-                Double total_deuda=0.0;
-                for(int i=0;i<Lista.size();i++)
-                {
-                    total_deuda=total_deuda+Double.parseDouble(Lista.get(i).getSaldo());
-                }
-                tv_cantidad_despachos.setText(String.valueOf(Lista.size()));
-                tv_total_deuda.setText(String.valueOf(format.format(total_deuda)));
-                /*String [] Lista_Control_ID= new String [Lista.size()];
-                int Contador=0;
-                for(int i=0;i<Lista.size();i++)
-                {
-                    //if (esValorUnico(Lista.get(i).getControl_id(),Lista)) {
-                    Lista_Control_ID[Contador] = Lista.get(i).getControl_id();
-                    Contador++;
-                    //}
-                }
-                CargaSpinnerControl(Lista_Control_ID);|
-            }
-            pd.dismiss();
-        }
-    }*/
-
     public static boolean esValorUnico(String valor, ArrayList<HojaDespachoDetalleSQLiteEntity> arreglo) {
         int contador = 0;
         for (int x = 0; x < arreglo.size(); x++) {

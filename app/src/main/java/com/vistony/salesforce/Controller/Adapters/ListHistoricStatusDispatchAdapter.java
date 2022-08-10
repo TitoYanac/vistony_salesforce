@@ -128,7 +128,7 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         holder.tv_referral_guide.setText(lead.getEntrega());
         holder.tv_type_dispatch.setText(lead.getTipoDespacho());
         holder.tv_reason_dispatch.setText(lead.getMotivoDespacho());
-        alertdialogInformative(getContext(),lead.getObservacion());
+        //alertdialogInformative(getContext(),lead.getObservacion());
         /*byte[] byteArray,byteArray2;
         Log.e("REOS","ListHistoricStatusDispatchAdapter.lead.getFotoLocal"+lead.getFotoLocal());
         byteArray = Base64.decode(lead.getFotoLocal(), Base64.DEFAULT);
@@ -149,7 +149,12 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         bitmap2=BitmapFactory.decodeByteArray(byteArray2, 0, byteArray2.length);
         holder.imv_historic_status_dispatch_photo.setImageBitmap(bitmap);
         holder.imv_historic_status_dispatch_photo_delivery.setImageBitmap(bitmap2);*/
-
+        /*ImageCameraController imageCameraController=new ImageCameraController();
+        imageCameraController.getImageSDtoByte(getContext(), lead.getFotoGuia());
+        byte[] byteArray;
+        byteArray=imageCameraController.getImageSDtoByte(getContext(),lead.getFotoLocal());
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        holder.imageViewPhoto.setImageBitmap(bitmap);*/
         holder.imv_historic_status_dispatch_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,6 +182,12 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
                 alertamostrarcomentario("Comentario Ws","").show();
             }
         });
+        holder.imv_observation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertamostrarcomentario("Observacion",lead.getObservacion()).show();
+            }
+        });
         return convertView;
     }
 
@@ -190,6 +201,7 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         CheckBox chk_wsrecibido;
         ImageView imv_historico_cobranza_respuesta_ws;
         ImageView imv_observation;
+        ImageView imageViewPhoto;
 
     }
 

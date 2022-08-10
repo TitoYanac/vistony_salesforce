@@ -116,6 +116,8 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
             holder.relativeListaHojaDespacho=convertView.findViewById(R.id.relativeListaHojaDespacho);
             holder.tv_terminopago=convertView.findViewById(R.id.tv_terminopago);
             holder.chk_updatedispatch=convertView.findViewById(R.id.chk_updatedispatch);
+            holder.chk_visit_start=convertView.findViewById(R.id.chk_visit_start);
+            holder.chk_visit_end=convertView.findViewById(R.id.chk_visit_end);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -132,6 +134,8 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         holder.tv_nombrefuerzatrabajo.setText(lead.getNombrefuerzatrabajo());
         holder.tv_terminopago.setText(lead.getTerminopago());
         holder.chk_updatedispatch.setChecked(lead.isChkupdatedispatch());
+        holder.chk_visit_start.setChecked(lead.isChkvisitsectionstart());
+        holder.chk_visit_end.setChecked(lead.isChkvisitsectionend());
         ArraylistaClienteCabeceraEntity=new ArrayList<>();
         /*ArrayList<ClienteSQLiteEntity> listaClienteEnvio=new ArrayList<>();
         ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
@@ -142,7 +146,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         {
             holder.tv_cliente.setText(listaClienteEnvio.get(i).getNombrecliente());
         }*/
-        holder.chk_updatedispatch.setVisibility(View.GONE);
+        //.holder.chk_updatedispatch.setVisibility(View.GONE);
         holder.tv_cliente.setText(lead.getNombrecliente());
         //holder.tv_cliente.setText(lead.getNombrecliente());
         holder.relativeListaHojaDespacho.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +191,8 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
                                                                             listaClienteCabeceraEntity.setChk_cobranza("0");
                                                                             listaClienteCabeceraEntity.setChk_ruta("0");
                                                                             listaClienteCabeceraEntity.setChk_cobranza("0");
+                                                                            listaClienteCabeceraEntity.setControl_id(lead.getControl_id());
+                                                                            listaClienteCabeceraEntity.setItem_id(lead.getItem_id());
                                                                             ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
                                                                         }
                                                                         fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
@@ -207,6 +213,8 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         RelativeLayout relativeListaHojaDespacho;
         TextView tv_terminopago;
         CheckBox chk_updatedispatch;
+        CheckBox chk_visit_start;
+        CheckBox chk_visit_end;
 
     }
 

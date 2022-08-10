@@ -1,5 +1,7 @@
 package com.vistony.salesforce.Dao.Retrofit;
 
+import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +11,7 @@ import com.google.gson.Gson;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Controller.Utilitario.KardexPagoPDF;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesAnalysisByRouteEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotationEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
@@ -61,25 +64,32 @@ public class QuotationRepository  extends ViewModel {
         return status;
     }
 
-    public MutableLiveData<List<SalesOrderEntity>> sendQuotation(String Imei, String DocEntry){
+    public MutableLiveData<List<SalesOrderEntity>> sendQuotation(
+            String Imei,
+            String DocEntry,
+            Context context
+
+    ){
         statusPost= new MutableLiveData<>();
-        /*String  jsonHead=null,jsonDetail=null;
+        String  json=null;
         Log.e("REOS","QuotationRepository.sendQuotation.Imei:" + Imei);
         Log.e("REOS","QuotationRepository.sendQuotation.DocEntry:" + DocEntry);
+        String fabricante = Build.MANUFACTURER;
+        String modelo = Build.MODEL;
+        String AndroidVersion = android.os.Build.VERSION.RELEASE;
         if(Imei!=null && DocEntry!=null){
-            jsonDetail = "{ \"DocEntryFT\":\"" + DocEntry + "\",\"Imei\":\""+Imei+"\" }";
-            jsonHead = "{ \"Quotation\":[" + jsonDetail + "]}";
+            json = "{ \"OsVersion\":\"" + AndroidVersion + "\",\"AppVersion\":\""+ Utilitario.getVersion(context)+"\" ,\"ModelDevice\":\""+modelo+"\",\"Brand\":\""+fabricante+"\"}";
         }
 
-        RequestBody jsonRequest = RequestBody.create(jsonHead, MediaType.parse("application/json; charset=utf-8"));*/
+        RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
         int docentry=Integer.parseInt(DocEntry);
-        Config.getClient().create(Api.class).sendQuotation(docentry).enqueue(new Callback<SalesOrderEntityResponse>() {
+        Config.getClient().create(Api.class).sendQuotation(docentry,jsonRequest).enqueue(new Callback<SalesOrderEntityResponse>() {
             @Override
             public void onResponse(Call<SalesOrderEntityResponse> call, Response<SalesOrderEntityResponse> response) {
                 Log.e("REOS","QuotationRepository.sendQuotation.call:" + call.toString());
                 SalesOrderEntityResponse salesOrderEntityResponse=response.body();
                 Log.e("REOS","QuotationRepository.sendQuotation.response:" + response.toString());
-                if(response.isSuccessful() && salesOrderEntityResponse.getSalesOrderEntity().size()>0){
+                if(response.code()==200&& salesOrderEntityResponse.getSalesOrderEntity().size()>0){
                     Log.e("REOS","QuotationRepository.sendQuotation.Ingreso:");
                     statusPost.setValue(salesOrderEntityResponse.getSalesOrderEntity());
                 }else

@@ -132,4 +132,6 @@
     <string name="lbl_status">Estado</string>
     <string name="lbl_send">Enviar</string>
     <string name="lbl_find_quotation">Consulta Cotizacion</string>
+    <string name="lbl_visit_start">Vist.Ini</string>
+    <string name="lbl_visit_end">Vist.Fin</string>
 </resources>

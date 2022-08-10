@@ -1227,6 +1227,9 @@ public class CobranzaDetalleView extends Fragment {
                         String.valueOf(n),
                         Lista.get(i).getDocentry(),
                         SesionEntity.collectioncheck
+                        ,""
+                        ,"N"
+                        ,""
                 );
 
                         if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1301,6 +1304,9 @@ public class CobranzaDetalleView extends Fragment {
                         String.valueOf(n),
                         Lista.get(i).getDocentry(),
                         SesionEntity.collectioncheck
+                        ,""
+                        ,"N"
+                        ,""
                 );
                         if(SesionEntity.perfil_id.equals("CHOFER")){
                         DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(getContext());

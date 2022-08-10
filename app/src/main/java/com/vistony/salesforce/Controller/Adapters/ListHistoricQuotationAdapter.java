@@ -173,31 +173,39 @@ public class ListHistoricQuotationAdapter  extends ArrayAdapter<QuotationEntity>
                                                         quotationRepository= new ViewModelProvider(viewModelStoreOwner).get(QuotationRepository.class);
                                                         pd = new ProgressDialog(Context);
                                                         pd = ProgressDialog.show(Context, "Por favor espere", "Migrando Cotizacion a Orden de Venta", true, false);
-                                                        quotationRepository.sendQuotation(SesionEntity.imei, lead.getDocentry()).observe(lifecycleOwner, data -> {
-                                                            Log.e("REOS","HistoricQuotationView-getListHistoricQuotation-data: "+data);
-                                                            if(data!=null)
-                                                            {
-                                                                for(int i=0;i<data.size();i++)
-                                                                {
-                                                                    holder.tv_historic_salesorder.setText(data.get(i).getDocNum());
-                                                                    docentry=data.get(i).getDocEntry();
-                                                                    docnum=data.get(i).getDocEntry();
-                                                                    message=data.get(i).getMessage();
-                                                                    error=data.get(i).getErrorCode();
-                                                                }
-                                                                if(error.equals("0"))
-                                                                {
+                                                        try {
+                                                            quotationRepository.sendQuotation(SesionEntity.imei, lead.getDocentry(),getContext()).observe(lifecycleOwner, data -> {
+                                                                Log.e("REOS", "HistoricQuotationView-getListHistoricQuotation-data: " + data);
+                                                                if (data != null) {
+                                                                    for (int i = 0; i < data.size(); i++) {
+                                                                        holder.tv_historic_salesorder.setText(data.get(i).getDocNum());
+                                                                        docentry = data.get(i).getDocEntry();
+                                                                        docnum = data.get(i).getDocEntry();
+                                                                        message = data.get(i).getMessage();
+                                                                        error = data.get(i).getErrorCode();
+                                                                    }
+                                                                    if (error.equals("1")) {
+                                                                        Toast.makeText(Context, "No se pudo Migrar la Cotizacion", Toast.LENGTH_SHORT).show();
+                                                                    }else {
+                                                                        Toast.makeText(Context, "Cotizacion Migrada Correctamente", Toast.LENGTH_SHORT).show();
+                                                                        holder.imv_historic_quotation_send.setColorFilter(ContextCompat.getColor(getContext(), R.color.gray));
+                                                                        holder.imv_historic_quotation_send.setEnabled(false);
+                                                                        holder.tv_status_aprovval.setText("DOCUMENTO GENERADO");
+                                                                    }
 
-                                                                }
-                                                                Toast.makeText(Context, "Cotizacion Migrada Correctamente", Toast.LENGTH_SHORT).show();
-                                                                holder.imv_historic_quotation_send.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
-                                                                holder.imv_historic_quotation_send.setEnabled(false);
-                                                            }else {
-                                                                Toast.makeText(Context, "No se pudo Migrar la Cotizacion", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                            pd.dismiss();
-                                                        });
 
+                                                                } else {
+                                                                    Toast.makeText(Context, "No se pudo Migrar la Cotizacion", Toast.LENGTH_SHORT).show();
+                                                                }
+
+                                                                pd.dismiss();
+                                                            });
+                                                        }catch (Exception e)
+                                                        {
+                                                            e.printStackTrace();
+                                                            Toast.makeText(Context, "No se pudo Migrar la Cotizacion", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        //pd.dismiss();
                                                     }
                                                 }
 

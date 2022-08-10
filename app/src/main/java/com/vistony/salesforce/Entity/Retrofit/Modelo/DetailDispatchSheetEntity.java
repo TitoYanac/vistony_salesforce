@@ -15,6 +15,7 @@ public class DetailDispatchSheetEntity {
     @SerializedName("ShipToCode")
     private String domembarque_id;
 
+    //@SerializedName("Address2")
     @SerializedName("Address")
     private String direccion;
 

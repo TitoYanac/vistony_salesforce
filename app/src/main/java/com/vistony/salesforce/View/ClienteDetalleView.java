@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,7 +42,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -56,18 +54,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.annotations.SerializedName;
-import com.vistony.salesforce.Controller.Adapters.HistoricoDepositoDialogAnularController;
 import com.vistony.salesforce.Controller.Adapters.ListaClienteDetalleAdapter;
-import com.vistony.salesforce.Controller.Adapters.StatusDispatchDialog;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
@@ -89,7 +82,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -468,11 +460,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
         inflater.inflate(R.menu.menu_cliente_detalle, menu);
-        update_dispatch_reason = menu.findItem(R.id.update_dispatch_reason);
-        if(!SesionEntity.perfil_id.equals("CHOFER"))
-        {
-            update_dispatch_reason.setVisible(false);
-        }
+
         super.onCreateOptionsMenu(menu, inflater);
 
     }
@@ -502,12 +490,6 @@ public class ClienteDetalleView extends Fragment implements Serializable {
                 String accion="inicio";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,param1);
-                return true;
-            case R.id.update_dispatch_reason:
-
-                //dialogStatusDispatch("Estado Despacho",getContext()).show();
-                //androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(texto);
-                //dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
                 return true;
             default:
                 break;
@@ -666,13 +648,13 @@ public class ClienteDetalleView extends Fragment implements Serializable {
             statusDispatchEntity.compania_id=ObjUsuario.compania_id;
             statusDispatchEntity.fuerzatrabajo_id=ObjUsuario.fuerzatrabajo_id;
             statusDispatchEntity.usuario_id=ObjUsuario.usuario_id;
-            statusDispatchEntity.typedispatch_id=spn_type_dispatch.getSelectedItem().toString();
-            statusDispatchEntity.reasondispatch_id=spn_reason_dispatch.getSelectedItem().toString();
+            statusDispatchEntity.Delivered =spn_type_dispatch.getSelectedItem().toString();
+            statusDispatchEntity.ReturnReason =spn_reason_dispatch.getSelectedItem().toString();
             statusDispatchEntity.entrega_id =spn_referral_guide.getSelectedItem().toString();
             statusDispatchEntity.cliente_id =texto;
             statusDispatchEntity.factura_id ="";
             statusDispatchEntity.chkrecibido ="0";
-            statusDispatchEntity.observation =et_comentario.getText().toString();
+            statusDispatchEntity.Comments =et_comentario.getText().toString();
             statusDispatchEntity.foto =encoded;
             statusDispatchEntity.fecha_registro =FormatFecha.format(date);
             statusDispatchEntity.hora_registro =dateFormathora.format(date);

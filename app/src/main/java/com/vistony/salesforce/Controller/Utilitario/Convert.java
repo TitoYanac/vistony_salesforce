@@ -153,6 +153,14 @@ public class Convert {
         return amountRedonded.toString();
     }
 
+    public static String numberForViewDecimals(String amount,int decimals){
+        if(amount.equals("")){
+            amount="0";
+        }
+        Locale locale=null;
+        BigDecimal amountRedonded=new BigDecimal(amount).setScale(decimals, RoundingMode.HALF_UP);
+        return amountRedonded.toString();
+    }
     public static List<ListKardexOfPaymentEntity> getConvertListKardexOfPayment(List<KardexPagoEntity> ListKardexPagoEntity)
     {
         List<ListKardexOfPaymentEntity> ListKardexOfPaymentEntity=new ArrayList<>();

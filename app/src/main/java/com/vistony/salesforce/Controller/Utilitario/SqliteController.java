@@ -117,7 +117,7 @@ public class SqliteController extends SQLiteOpenHelper {
             //Version 13  -- Distribution Second Phase
             db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
             db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT)");
-            db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT)");
+            db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT,control_id TEXT,item_id TEXT,domembarque_id text,checkintime text,checkouttime text,chk_timestatus text)");
     }
 
     @Override
@@ -393,11 +393,13 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN e_signature TEXT");
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN chkesignature TEXT");
             db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN phone TEXT");
-            //db.execSQL("ALTER TABLE rutavendedor ADD COLUMN terminopago TEXT");
-            //db.execSQL("ALTER TABLE rutavendedor ADD COLUMN contado TEXT");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN latitud TEXT");
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN longitud TEXT");
             db.execSQL("CREATE TABLE cobranzadetalleSMS (id INTEGER PRIMARY KEY AUTOINCREMENT,recibo TEXT,phone TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,date TEXT,hour TEXT,chk_send TEXT)");
+        }
+        if(oldVersion==15&&newVersion==16) {
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN control_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN item_id TEXT");
         }
 
     }

@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -47,7 +48,7 @@ public class ImageCameraController {
         try {
             FileOutputStream fOut = new FileOutputStream(file);
 
-            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 35, fOut);
+            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 10, fOut);
             fOut.flush();
             fOut.close();
             MakeSureFileWasCreatedThenMakeAvabile(file);
@@ -77,7 +78,7 @@ public class ImageCameraController {
         try {
             FileOutputStream fOut = new FileOutputStream(file);
 
-            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 35, fOut);
+            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 10, fOut);
             fOut.flush();
             fOut.close();
             MakeSureFileWasCreatedThenMakeAvabile(file);
@@ -118,19 +119,39 @@ public class ImageCameraController {
         Toast.makeText(TheThis, "Imagen guardada en la galería.", Toast.LENGTH_SHORT).show();
     }
 
-    public byte[] getImageSDtoByte(Context context,String Entrega_id) {
+    public byte[] getImageSDtoByte(Context context,String file_path) {
         TheThis = context;
-        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + NameOfFolder + "/"+Entrega_id;
-
-
-        Bitmap bitmap = BitmapFactory.decodeFile(file_path);
-        ByteArrayOutputStream blob = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0 /* Ignored for PNGs */, blob);
-        byte[] bitmapdata = blob.toByteArray();
-
-        Log.e("REOS","ImageCameraController-getImageSDtoByte-file_path-"+file_path);
+        Log.e("REOS","ImageCameraController-getImageSDtoByte-file_path-Ingreso"+file_path);
+        byte[] bitmapdata=null;
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(file_path);
+            ByteArrayOutputStream blob = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 10 /* Ignored for PNGs */, blob);
+            bitmapdata = blob.toByteArray();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        Log.e("REOS","ImageCameraController-getImageSDtoByte-file_path-Salio"+file_path);
 
         return bitmapdata;
+    }
+
+    public String getBASE64(String file_path) {
+        String encoded=null;
+        Log.e("REOS","ImageCameraController-getImageSDtoByte-file_path-Ingreso"+file_path);
+        byte[] bitmapdata=null;
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(file_path);
+            ByteArrayOutputStream blob = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 10 /* Ignored for PNGs */, blob);
+            bitmapdata = blob.toByteArray();
+            encoded = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        Log.e("REOS","ImageCameraController-getImageSDtoByte-file_path-Salio"+file_path);
+
+        return encoded;
     }
 
     public void OpenImageDispacth(Context context,String Entrega_id)

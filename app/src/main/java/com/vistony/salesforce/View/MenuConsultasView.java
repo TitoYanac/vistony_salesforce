@@ -104,7 +104,7 @@ public class MenuConsultasView extends Fragment {
         {
             cv_ordenventa.setVisibility(View.GONE);
             cv_documentofacturado.setVisibility(View.GONE);
-            cv_dispatch.setVisibility(View.GONE);
+            //cv_dispatch.setVisibility(View.GONE);
             cv_quotation.setVisibility(View.GONE);
         }
         if(!BuildConfig.FLAVOR.equals("peru"))

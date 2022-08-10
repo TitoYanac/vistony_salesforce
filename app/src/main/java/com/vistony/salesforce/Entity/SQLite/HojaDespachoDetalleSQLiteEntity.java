@@ -23,12 +23,18 @@ public class HojaDespachoDetalleSQLiteEntity {
     public String comentariodespacho;
     public String nombrecliente;
     public boolean chkupdatedispatch;
+    public boolean chkvisitsectionstart;
+    public boolean chkvisitsectionend;
 
     public HojaDespachoDetalleSQLiteEntity(
             String compania_id, String fuerzatrabajo_id, String usuario_id, String control_id, String item_id, String cliente_id,
             String domembarque_id, String direccion, String factura_id, String entrega_id, String entrega, String factura,
             String saldo, String estado, String fuerzatrabajo_factura_id, String fuerzatrabajo_factura, String terminopago_id,
-            String terminopago, String peso, String comentariodespacho, String nombrecliente,boolean chkupdatedispatch) {
+            String terminopago, String peso, String comentariodespacho, String nombrecliente
+            ,boolean chkupdatedispatch
+            ,boolean chkvisitsectionstart
+            ,boolean chkvisitsectionend
+    ) {
         this.compania_id = compania_id;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
         this.usuario_id = usuario_id;
@@ -51,10 +57,28 @@ public class HojaDespachoDetalleSQLiteEntity {
         this.comentariodespacho = comentariodespacho;
         this.nombrecliente = nombrecliente;
         this.chkupdatedispatch = chkupdatedispatch;
+        this.chkvisitsectionstart = chkvisitsectionstart;
+        this.chkvisitsectionend = chkvisitsectionend;
     }
 
     public HojaDespachoDetalleSQLiteEntity() {
 
+    }
+
+    public boolean isChkvisitsectionstart() {
+        return chkvisitsectionstart;
+    }
+
+    public void setChkvisitsectionstart(boolean chkvisitsectionstart) {
+        this.chkvisitsectionstart = chkvisitsectionstart;
+    }
+
+    public boolean isChkvisitsectionend() {
+        return chkvisitsectionend;
+    }
+
+    public void setChkvisitsectionend(boolean chkvisitsectionend) {
+        this.chkvisitsectionend = chkvisitsectionend;
     }
 
     public boolean isChkupdatedispatch() {

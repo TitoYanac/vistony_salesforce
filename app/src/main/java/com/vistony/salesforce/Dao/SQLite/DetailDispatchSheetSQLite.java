@@ -103,18 +103,29 @@ public class DetailDispatchSheetSQLite {
         abrir();
         Cursor fila = bd.rawQuery(
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
-                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch from detaildispatchsheet A" +
+                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
+                        ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin " +
+                        //", '0' timeini, '0' timefin " +
+                        "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
                         "A.cliente_id=B.cliente_id " +
                         " left outer join statusdispatch C ON  " +
                         "A.cliente_id=C.cliente_id  AND " +
                         "A.entrega_id=C.entrega_id  AND " +
                         "A.fuerzatrabajo_id=C.fuerzatrabajo_id" +
+                        " left outer join (SELECT control_id,fechahojadespacho,fuerzatrabajo_id FROM headerdispatchsheet group by control_id,fechahojadespacho,fuerzatrabajo_id ) D ON  " +
+                        "A.fuerzatrabajo_id=D.fuerzatrabajo_id  AND " +
+                        "A.control_id=D.control_id   " +
+                        " left outer join visitsection E ON  " +
+                        "D.fuerzatrabajo_id=E.fuerzatrabajo_id  AND " +
+                        "D.fechahojadespacho=E.dateini AND " +
+                        "A.cliente_id=E.cliente_id AND " +
+                        "A.domembarque_id=E.domembarque_id   " +
                         "  where A.control_id='"+codeControl+"'",null);
 
         while (fila.moveToNext())
         {
-            boolean chkupdatedispatch;
+            boolean chkupdatedispatch,chkvisitsectionstart,chkvisitsectionend;
             hojaDespachoSQLiteEntity= new HojaDespachoDetalleSQLiteEntity();
             hojaDespachoSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
             hojaDespachoSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
@@ -145,6 +156,22 @@ public class DetailDispatchSheetSQLite {
                 chkupdatedispatch=true;
             }
             hojaDespachoSQLiteEntity.setChkupdatedispatch(chkupdatedispatch);
+            if(fila.getString(fila.getColumnIndex("timeini")).equals("0"))
+            {
+                chkvisitsectionstart=false;
+            }else {
+                chkvisitsectionstart=true;
+            }
+            hojaDespachoSQLiteEntity.setChkvisitsectionstart (chkvisitsectionstart);
+            if(fila.getString(fila.getColumnIndex("timefin")).equals("0"))
+            {
+                chkvisitsectionend=false;
+            }else {
+                chkvisitsectionend=true;
+            }
+            hojaDespachoSQLiteEntity.setChkvisitsectionend (chkvisitsectionend);
+
+
             listaHojaDespachoSQLiteEntity.add(hojaDespachoSQLiteEntity);
         }
 

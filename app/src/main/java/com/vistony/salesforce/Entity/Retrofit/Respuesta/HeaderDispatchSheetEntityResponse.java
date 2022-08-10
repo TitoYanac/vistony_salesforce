@@ -6,6 +6,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.HeaderDispatchSheetEntity;
 import java.util.List;
 
 public class HeaderDispatchSheetEntityResponse {
+    //@SerializedName("Dispatch")
     @SerializedName("Obtener_DespachoCResult")
     private List<HeaderDispatchSheetEntity> headerDispatchSheetEntity;
 

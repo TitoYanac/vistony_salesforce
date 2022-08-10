@@ -8,7 +8,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -20,7 +19,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,21 +32,16 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
-import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
-import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
-import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
 import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.ReasonDispatchSQLite;
@@ -62,9 +55,6 @@ import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.View.ClienteDetalleView;
-import com.vistony.salesforce.View.HistoricoDepositoView;
-import com.vistony.salesforce.View.LoginView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -80,7 +70,7 @@ public class StatusDispatchDialog extends DialogFragment {
     private ActivityResultLauncher<Intent> someActivityResultLauncherGuia;
     private Bitmap imgBitmap,imgBitmap2;
     private byte[] byteArray,byteArray2;
-    String cliente_id,cliente;
+    String cliente_id,cliente,control_id,item_id,address;
     LocationManager locationManager;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     private GPSController gpsController;
@@ -90,9 +80,12 @@ public class StatusDispatchDialog extends DialogFragment {
     public static String mCurrentPhotoPathG="",mCurrentPhotoPathL="";
     String Entrega_id="";
     File filelocal,fileguia;
-    public StatusDispatchDialog(String Client_id,String cliente){
+    public StatusDispatchDialog(String Client_id,String cliente,String control_id,String item_id,String address){
     this.cliente_id=Client_id;
-        this.cliente=cliente;
+    this.cliente=cliente;
+        this.control_id=control_id;
+        this.item_id=item_id;
+        this.address=address;
     }
 
     @NonNull
@@ -333,17 +326,17 @@ public class StatusDispatchDialog extends DialogFragment {
                 String encoded = null,encoded2 = null;
                 if (imgBitmap != null) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    imgBitmap.compress(Bitmap.CompressFormat.JPEG, 35, stream);
+                    imgBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
                     byteArray = stream.toByteArray();
-                    //encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    encoded = new String(byteArray);
+                    encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    //encoded = new String(byteArray);
                 }
                 if (imgBitmap2 != null) {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    imgBitmap2.compress(Bitmap.CompressFormat.JPEG, 35, stream);
+                    imgBitmap2.compress(Bitmap.CompressFormat.JPEG, 10, stream);
                     byteArray2 = stream.toByteArray();
-                    //encoded2 = Base64.encodeToString(byteArray2, Base64.DEFAULT);
-                    encoded2 = new String(byteArray2);
+                    encoded2 = Base64.encodeToString(byteArray2, Base64.DEFAULT);
+                    //encoded2 = new String(byteArray2);
                 }
                 if(imgBitmap != null||imgBitmap2 != null) {
                     SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
@@ -386,13 +379,13 @@ public class StatusDispatchDialog extends DialogFragment {
                     statusDispatchEntity.compania_id = ObjUsuario.compania_id;
                     statusDispatchEntity.fuerzatrabajo_id = ObjUsuario.fuerzatrabajo_id;
                     statusDispatchEntity.usuario_id = ObjUsuario.usuario_id;
-                    statusDispatchEntity.typedispatch_id = typedispatch_id;
-                    statusDispatchEntity.reasondispatch_id = reasondispatch_id;
+                    statusDispatchEntity.Delivered = typedispatch_id;
+                    statusDispatchEntity.ReturnReason = reasondispatch_id;
                     statusDispatchEntity.entrega_id = entrega_id;
                     statusDispatchEntity.cliente_id = cliente_id;
                     statusDispatchEntity.factura_id = factura_id;
                     statusDispatchEntity.chkrecibido = "0";
-                    statusDispatchEntity.observation = et_comentario.getText().toString();
+                    statusDispatchEntity.Comments = et_comentario.getText().toString();
                     //statusDispatchEntity.foto = encoded;
                     //statusDispatchEntity.foto = entrega_id+"_L.JPG";
                     statusDispatchEntity.foto = filelocal.toString();
@@ -400,14 +393,22 @@ public class StatusDispatchDialog extends DialogFragment {
                     statusDispatchEntity.hora_registro = dateFormathora.format(date);
                     //statusDispatchEntity.fotoGuia = encoded2;
                     //statusDispatchEntity.fotoGuia = entrega_id+"_G.JPG";
-                    statusDispatchEntity.fotoGuia = fileguia.toString();
+                    statusDispatchEntity.PhotoDocument = fileguia.toString();
                     statusDispatchEntity.latitud = String.valueOf(latitude);
                     statusDispatchEntity.longitud = String.valueOf(longitude);
+                    //statusDispatchEntity.latitud = encoded;
+                    //statusDispatchEntity.longitud = encoded2;
                     statusDispatchEntity.cliente = cliente;
                     statusDispatchEntity.entrega = String.valueOf(entrega);
                     statusDispatchEntity.factura = String.valueOf(factura);
                     statusDispatchEntity.typedispatch = typedispatch;
                     statusDispatchEntity.reasondispatch = reasondispatch;
+                    statusDispatchEntity.DocEntry=control_id;
+                    statusDispatchEntity.LineId=item_id;
+                    statusDispatchEntity.Address=address;
+                    statusDispatchEntity.checkintime="0";
+                    statusDispatchEntity.checkouttime="0";
+                    statusDispatchEntity.chk_timestatus="0";
                     listStatusDispatchEntity.add(statusDispatchEntity);
                     statusDispatchSQLite.addStatusDispatch(listStatusDispatchEntity);
 
