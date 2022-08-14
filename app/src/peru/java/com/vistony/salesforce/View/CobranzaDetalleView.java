@@ -405,12 +405,12 @@ public class CobranzaDetalleView extends Fragment {
                 try {
 
 
-                for (int g = 0; g < listaClienteDetalleAdapterFragment.size(); g++) {
-                    cliente_id_visita = listaClienteDetalleAdapterFragment.get(g).getCliente_id();
-                    domembarque_id_visita = listaClienteDetalleAdapterFragment.get(g).getDomembarque();
-                    zona_id_visita = listaClienteDetalleAdapterFragment.get(g).getZona_id();
-                    Log.e("REOS", "CobranzaDetalleView-onCreate-chkruta"+listaClienteDetalleAdapterFragment.get(g).getChkruta());
-                }
+                    for (int g = 0; g < listaClienteDetalleAdapterFragment.size(); g++) {
+                        cliente_id_visita = listaClienteDetalleAdapterFragment.get(g).getCliente_id();
+                        domembarque_id_visita = listaClienteDetalleAdapterFragment.get(g).getDomembarque();
+                        zona_id_visita = listaClienteDetalleAdapterFragment.get(g).getZona_id();
+                        Log.e("REOS", "CobranzaDetalleView-onCreate-chkruta"+listaClienteDetalleAdapterFragment.get(g).getChkruta());
+                    }
                 }catch (Exception e)
                 {
                     Log.e("REOS", "CobranzaDetalleView-onCreate-pago.e"+e.toString());
@@ -470,10 +470,10 @@ public class CobranzaDetalleView extends Fragment {
 
         }
         circleMenu.setMainMenu(Color.parseColor("#0957C3"),R.drawable.ic_baseline_add_24,R.drawable.ic_baseline_cancel_24_white)
-                        .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_save_black_24dp)
-                        .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_print_black_24dp)
-                        .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_menu_camera)
-                        .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_edit_black_24dp)
+                .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_save_black_24dp)
+                .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_print_black_24dp)
+                .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_menu_camera)
+                .addSubMenu(Color.parseColor("#0957C3"),R.drawable.ic_edit_black_24dp)
                 .setOnMenuSelectedListener(new OnMenuSelectedListener() {
                     @Override
                     public void onMenuSelected(int index) {
@@ -482,18 +482,18 @@ public class CobranzaDetalleView extends Fragment {
                 })
         ;
         fab_edit_signature.setOnClickListener(new View.OnClickListener() {
-                                                   @Override
-                                                   public void onClick(View view) {
-                                                       //getAlertEditSignature(getContext()).show();
+                                                  @Override
+                                                  public void onClick(View view) {
+                                                      //getAlertEditSignature(getContext()).show();
                                                        /*if (!(Listado == null))
                                                        {
                                                            getAlertEditSignatureRead(getContext()).show();
                                                        }else {
                                                            getAlertEditSignature(getContext()).show();
                                                        }*/
-                                                       getAlertEditSignature(getContext()).show();
-                                                   }
-                                               }
+                                                      getAlertEditSignature(getContext()).show();
+                                                  }
+                                              }
         );
         fab_invoice_cancelation.setVisibility(View.GONE);
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
@@ -970,9 +970,9 @@ public class CobranzaDetalleView extends Fragment {
                     builder.show();
                 } else {
 
-                            fecha = obtenerFechaActual();
-                            guardar.setEnabled(false);
-                            alertaGuardarCobranza().show();
+                    fecha = obtenerFechaActual();
+                    guardar.setEnabled(false);
+                    alertaGuardarCobranza().show();
 
 
                 }
@@ -982,21 +982,21 @@ public class CobranzaDetalleView extends Fragment {
                 if (SesionEntity.Print.equals("Y")) {
                     alertaGenerarPDF().show();
                 } else
+                {
+                    if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
                     {
-                        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
-                        {
-                            alertaGenerarPDF().show();
-                            Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
-                            drawable3 = DrawableCompat.wrap(drawable3);
-                            DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white ));
-                            menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
-                            validarqr.setEnabled(true);
-                            chk_validacionqr.setChecked(true);
-                        }else{
-                            alertatypegeneratedocumentcollection().show();
-                        }
-
+                        alertaGenerarPDF().show();
+                        Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
+                        drawable3 = DrawableCompat.wrap(drawable3);
+                        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white ));
+                        menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
+                        validarqr.setEnabled(true);
+                        chk_validacionqr.setChecked(true);
+                    }else{
+                        alertatypegeneratedocumentcollection().show();
                     }
+
+                }
 
 
                 return true;
@@ -1012,9 +1012,9 @@ public class CobranzaDetalleView extends Fragment {
                         alertaEnviarSMS(getContext()).show();
                     }
                     else
-                        {
-                            alertatypevalidatedocumentcollection().show();
-                        }
+                    {
+                        alertatypevalidatedocumentcollection().show();
+                    }
 
                 }
                 return false;
@@ -1132,13 +1132,13 @@ public class CobranzaDetalleView extends Fragment {
                                                 menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
                                                 validarqr.setEnabled(true);
                                             }else
-                                                {
-                                                    Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
-                                                    drawable3 = DrawableCompat.wrap(drawable3);
-                                                    DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
-                                                    menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
-                                                    validarqr.setEnabled(true);
-                                                }
+                                            {
+                                                Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
+                                                drawable3 = DrawableCompat.wrap(drawable3);
+                                                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
+                                                menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
+                                                validarqr.setEnabled(true);
+                                            }
 
 
                                         }
@@ -1229,18 +1229,18 @@ public class CobranzaDetalleView extends Fragment {
                                     menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
                                 }
                                 else
-                                    {
-                                        Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
-                                        drawable = DrawableCompat.wrap(drawable);
-                                        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
-                                        menu_variable.findItem(R.id.validarqr).setIcon(drawable);
-                                        validarqr.setEnabled(true); //no aplica validar qr //peru si
+                                {
+                                    Drawable drawable = menu_variable.findItem(R.id.validarqr).getIcon();
+                                    drawable = DrawableCompat.wrap(drawable);
+                                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
+                                    menu_variable.findItem(R.id.validarqr).setIcon(drawable);
+                                    validarqr.setEnabled(true); //no aplica validar qr //peru si
 
-                                        Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                                        drawable2 = DrawableCompat.wrap(drawable2);
-                                        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
-                                        menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                                    }
+                                    Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                                    drawable2 = DrawableCompat.wrap(drawable2);
+                                    DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
+                                    menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+                                }
                                 documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual());
 
                                 if (SesionEntity.Print.equals("Y")) {
@@ -1327,9 +1327,9 @@ public class CobranzaDetalleView extends Fragment {
                 contado="1";
             }
             else
-                {
-                    contado="0";
-                }
+            {
+                contado="0";
+            }
         }
 
         if(Float.parseFloat(valorcobranza)>=1) {
@@ -1434,7 +1434,7 @@ public class CobranzaDetalleView extends Fragment {
                                 String.valueOf(Lista.get(i).getDocumento_id()),
                                 String.valueOf(Lista.get(i).getNuevo_saldo()),
                                 Lista.get(i).getNrodocumento()
-                                );
+                        );
 
                     }else {
                         ActualizaDocumentoDeuda(ObjUsuario.compania_id,
@@ -1568,29 +1568,29 @@ public class CobranzaDetalleView extends Fragment {
                 telefono = listClienteSQlite.get(i).getTelefonofijo();
             }
             String mPhoneNumber = "";
-        TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.READ_PHONE_NUMBERS)
-                        != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            mPhoneNumber = tMgr.getLine1Number();
-        }
-        if(!SesionEntity.perfil_id.equals("CHOFER"))
-        {
-            mPhoneNumber = SesionEntity.phone;
-            Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-mPhoneNumber:" + mPhoneNumber);
-            Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-telefono:" + telefono);
-            if (telefono.equals(mPhoneNumber)) {
-                Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
-            } else {
-                //telefono="990249315";
-                sendSMS(telefono);
-                Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS)
+                    != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.READ_PHONE_NUMBERS)
+                            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                mPhoneNumber = tMgr.getLine1Number();
             }
-        }
+            if(!SesionEntity.perfil_id.equals("CHOFER"))
+            {
+                mPhoneNumber = SesionEntity.phone;
+                Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-mPhoneNumber:" + mPhoneNumber);
+                Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-telefono:" + telefono);
+                if (telefono.equals(mPhoneNumber)) {
+                    Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
+                } else {
+                    //telefono="990249315";
+                    sendSMS(telefono);
+                    Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
+                }
+            }
 
             /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             //UpdateSendReceipt();
@@ -1859,9 +1859,9 @@ public class CobranzaDetalleView extends Fragment {
                     dialog.dismiss();
                 }
                 else
-                    {
-                        Toast.makeText(getContext(), "El codigo Ingresado no es el Correcto, Intente Nuevamente!!!", Toast.LENGTH_SHORT).show();
-                    }
+                {
+                    Toast.makeText(getContext(), "El codigo Ingresado no es el Correcto, Intente Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
@@ -1922,9 +1922,9 @@ public class CobranzaDetalleView extends Fragment {
             textViewMsj.setText("El SMS fue enviado Correctamente!!!");
         }
         else
-            {
-                textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
-            }
+        {
+            textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
+        }
         // if button is clicked, close the custom dialog
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1981,26 +1981,26 @@ public class CobranzaDetalleView extends Fragment {
                 try {
 
 
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                imgBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
-                byteArray = stream.toByteArray();
-                //encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                /////////////////////////
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    imgBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
+                    byteArray = stream.toByteArray();
+                    //encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    /////////////////////////
 
                 /*ImageIO.write(img, "png", baos);
                 baos.flush();
                 byte[] imageInByte = baos.toByteArray();
                 baos.close();*/
-                ///////////////////////
-                String imagenString = new String(byteArray);
-                String url="";
-                MutableLiveData <Object> status= new MutableLiveData<>();
-                cobranzaDetalleSQLiteDao.UpdateE_Signature(
-                        ObjUsuario.compania_id
-                        ,ObjUsuario.usuario_id
-                        ,recibo
-                        //,encoded);
-                        ,imagenString);
+                    ///////////////////////
+                    String imagenString = new String(byteArray);
+                    String url="";
+                    MutableLiveData <Object> status= new MutableLiveData<>();
+                    cobranzaDetalleSQLiteDao.UpdateE_Signature(
+                            ObjUsuario.compania_id
+                            ,ObjUsuario.usuario_id
+                            ,recibo
+                            //,encoded);
+                            ,imagenString);
                     chk_E_signature.setChecked(true);
                     cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
                         Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);

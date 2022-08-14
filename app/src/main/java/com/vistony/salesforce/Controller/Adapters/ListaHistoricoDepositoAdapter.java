@@ -146,7 +146,7 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         // Lead actual.
         String typeDeposit="";
         final ListaHistoricoDepositoEntity lead = getItem(position);
-        DecimalFormat format =  new DecimalFormat("#0.00");
+        //DecimalFormat format =  new DecimalFormat("#0.00");
         // Setup.
         holder.tv_deposito_id.setText(lead.getDeposito_id());
        // holder.tv_monto.setText(format.format(Float.parseFloat(lead.getMontodeposito())));
@@ -159,7 +159,7 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
 
         //)
         );
-        if(BuildConfig.FLAVOR.equals("chile"))
+        /*if(BuildConfig.FLAVOR.equals("chile"))
         {
             if(lead.getTipoingreso().equals("Cheque"))
             {
@@ -175,9 +175,9 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         }
         else {
             typeDeposit=lead.getTipoingreso();
-        }
-        //holder.tv_tipo_ingreso.setText(lead.getTipoingreso());
-        holder.tv_tipo_ingreso.setText(typeDeposit);
+        }*/
+        holder.tv_tipo_ingreso.setText(lead.getTipoingreso());
+        //holder.tv_tipo_ingreso.setText(typeDeposit);
         holder.tv_fecha_diferida.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getFechadiferida()));
         //holder.chkdepositado.setChecked(lead.isCheckbox());
         final View finalConvertView = convertView;

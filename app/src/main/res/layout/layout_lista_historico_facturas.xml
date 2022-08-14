@@ -104,6 +104,7 @@
         android:textStyle="bold"
         android:text="0.00"
         android:textAppearance="?attr/textAppearanceListItem" />
+
     <TextView
         android:id="@+id/lbl_historico_facturas_reparto"
         android:layout_width="wrap_content"
@@ -111,6 +112,7 @@
         android:layout_marginLeft="200dp"
         android:layout_marginTop="125dp"
         android:text="Despacho"
+        android:textStyle="bold"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <ImageView
@@ -120,6 +122,7 @@
         android:layout_marginLeft="220dp"
         android:layout_marginTop="150dp"
         app:srcCompat="@mipmap/camion_reparto_64" />
+
     <TextView
         android:id="@+id/lbl_historico_facturas_facturacion"
         android:layout_width="wrap_content"
@@ -127,6 +130,7 @@
         android:layout_marginLeft="100dp"
         android:layout_marginTop="125dp"
         android:text="Factura"
+        android:textStyle="bold"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <ImageView

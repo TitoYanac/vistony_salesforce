@@ -40,6 +40,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hitomi.cmlibrary.CircleMenu;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
@@ -132,8 +134,8 @@ public class CobranzaDetalleView extends Fragment {
     int resultado=0,correlativorecibo=0,ultimocorrelativorecibo=0,correlativorecibows=0;
     private OnFragmentInteractionListener mListener;
     static public ImageView imvprueba;
-    CheckBox chkpagoadelantado,chk_bancarizado,chk_pago_directo,chk_pago_pos,chk_collectioncheck;
-    MenuItem generarpdf,validarqr,guardar;
+    CheckBox chkpagoadelantado,chk_bancarizado,chk_pago_directo,chk_pago_pos,chk_collectioncheck,chk_E_signature;
+    MenuItem generarpdf,validarqr,guardar,edit_signature;
     TextView tv_recibo;
     public static CheckBox chk_validacionqr;
     ListaClienteDetalleEntity listaClienteDetalleEntity;
@@ -162,8 +164,11 @@ public class CobranzaDetalleView extends Fragment {
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     String cliente_id_visita,domembarque_id_visita,zona_id_visita;
-    FloatingActionButton fab_invoice_cancelation;
+    FloatingActionButton fab_invoice_cancelation,fab_edit_signature;
     private ProgressDialog pd;
+    ImageView imv_prueba_mostrarfirma;
+    TableRow tablerow_e_signature;
+
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm","Este es NUEVA ISNTANCIA 1");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
@@ -392,10 +397,22 @@ public class CobranzaDetalleView extends Fragment {
         tv_recibo = (TextView) v.findViewById(R.id.tv_recibo);
         chk_bancarizado = (CheckBox) v.findViewById(R.id.chk_bancarizado);
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
+        chk_E_signature = (CheckBox) v.findViewById(R.id.chk_E_signature);
+        tablerow_e_signature=v.findViewById(R.id.tablerow_e_signature);
         chk_collectioncheck  = (CheckBox) v.findViewById(R.id.chk_collectioncheck);
         fab_invoice_cancelation = v.findViewById(R.id.fab_invoice_cancelation);
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
-
+        imbcomentariorecibo = (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
+        fab_invoice_cancelation =  (FloatingActionButton) v.findViewById(R.id.fab_invoice_cancelation);
+        CircleMenu circleMenu = v.findViewById(R.id.circleMenu);
+        fab_edit_signature =  (FloatingActionButton) v.findViewById(R.id.fab_edit_signature);
+        imv_prueba_mostrarfirma =  (ImageView) v.findViewById(R.id.imv_prueba_mostrarfirma);
+        circleMenu.setVisibility(View.GONE);
+        imv_prueba_mostrarfirma.setVisibility(View.GONE);
+        fab_edit_signature.setVisibility(View.GONE);
+        tablerow_e_signature.setVisibility(View.GONE);
+        chk_bancarizado.setEnabled(false);
+        fab_invoice_cancelation.setVisibility(View.GONE);
 
         switch (BuildConfig.FLAVOR){
             case "chile":
@@ -761,6 +778,9 @@ public class CobranzaDetalleView extends Fragment {
         guardar = menu.findItem(R.id.guardar);
         generarpdf = menu.findItem(R.id.generarpdf);
         validarqr = menu.findItem(R.id.validarqr);
+        edit_signature = menu.findItem(R.id.edit_signature);
+
+        edit_signature.setVisible(false);
         menu_variable=menu;
 
 

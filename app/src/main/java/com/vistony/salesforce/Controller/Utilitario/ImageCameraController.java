@@ -31,36 +31,72 @@ import java.util.Date;
 
 public class ImageCameraController {
     private Context TheThis;
-    private String NameOfFolder = "/RECIBOS";
+    static private String NameOfFolder = "/RECIBOS";
 
+    /*
+    public void SaveImage(Context context, Bitmap ImageToSave) {
+        TheThis = context;
+        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + NameOfFolder;
+        String CurrentDateAndTime = getCurrentDateAndTime();
+        File dir = new File(file_path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(dir,SesionEntity.imagen+SesionEntity.compania_id+SesionEntity.fuerzatrabajo_id+CurrentDateAndTime + ".JPG");
+        try {
+            FileOutputStream fOut = new FileOutputStream(file);
+            //ImageToSave.compress(Bitmap.CompressFormat.JPEG, 10, fOut);
+            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 35, fOut);
+            fOut.flush();
+            fOut.close();
+            MakeSureFileWasCreatedThenMakeAvabile(file);
+            AbleToSave();
+        }
+        catch(FileNotFoundException e) {
+            UnableToSave();
+            Log.e("REOS","ImageCameraController-SaveImage-FileNotFoundException-e:"+e.toString());
+        }
+        catch(IOException e) {
+            UnableToSave();
+            Log.e("REOS","ImageCameraController-SaveImage-IOException-e:"+e.toString());
+        }
+    }*/
     public void SaveImage(Context context, Bitmap ImageToSave) {
         TheThis = context;
         String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + NameOfFolder;
         String CurrentDateAndTime = getCurrentDateAndTime();
         File dir = new File(file_path);
 
-        if (!dir.exists()) {
+       /* if (!dir.exists()) {
             dir.mkdirs();
         }
 
         File file = new File(dir,SesionEntity.imagen+SesionEntity.compania_id+SesionEntity.fuerzatrabajo_id+CurrentDateAndTime + ".JPG");
-
+        */
         try {
+            File file = crearFichero(SesionEntity.imagen+SesionEntity.compania_id+SesionEntity.fuerzatrabajo_id+CurrentDateAndTime + ".JPG");
+            //File f = crearFichero(recibo+".pdf");
             FileOutputStream fOut = new FileOutputStream(file);
-
-            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 10, fOut);
+            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 35, fOut);
             fOut.flush();
             fOut.close();
             MakeSureFileWasCreatedThenMakeAvabile(file);
             AbleToSave();
         }
-
         catch(FileNotFoundException e) {
             UnableToSave();
         }
         catch(IOException e) {
             UnableToSave();
         }
+    }
+
+    public static File crearFichero(String nombreFichero) throws IOException {
+        File ruta = getRuta();
+        File fichero = null;
+        if (ruta != null)
+            fichero = new File(ruta, nombreFichero);
+        return fichero;
     }
 
     public File SaveImageStatusDispatch(Context context, Bitmap ImageToSave,String Entrega_id,String type) {
@@ -192,6 +228,27 @@ public class ImageCameraController {
             Toast.makeText(context, "Es necesario que instales algun visor de PDF", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public static File getRuta() {
+
+        // El fichero sera almacenado en un directorio dentro del directorio
+        // Descargas
+        File ruta = null;
+        if (Environment.MEDIA_MOUNTED.equals(Environment
+                .getExternalStorageState())) {
+            //ruta = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),NOMBRE_DIRECTORIO);
+            ruta = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),NameOfFolder);
+            if (ruta != null) {
+                if (!ruta.mkdirs()) {
+                    if (!ruta.exists()) {
+                        return null;
+                    }
+                }
+            }
+        } else {
+        }
+        return ruta;
     }
 }
 

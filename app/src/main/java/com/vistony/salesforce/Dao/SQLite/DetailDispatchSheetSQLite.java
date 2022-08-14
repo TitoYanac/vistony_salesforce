@@ -77,13 +77,16 @@ public class DetailDispatchSheetSQLite {
             registro.put("factura_id",detailDispatchSheetEntity.get(i).getFactura_id());
             registro.put("entrega_id",detailDispatchSheetEntity.get(i).getEntrega_id());
             registro.put("entrega",detailDispatchSheetEntity.get(i).getEntrega());
-            registro.put("factura",detailDispatchSheetEntity.get(i).getFactura());
+            //registro.put("factura",detailDispatchSheetEntity.get(i).getFactura());
+            registro.put("factura",detailDispatchSheetEntity.get(i).getEntrega());
             registro.put("saldo",detailDispatchSheetEntity.get(i).getSaldo());
             registro.put("estado",detailDispatchSheetEntity.get(i).getEstado());
             registro.put("fuerzatrabajo_factura_id",detailDispatchSheetEntity.get(i).getFuerzatrabajo_id());
-            registro.put("fuerzatrabajo_factura",detailDispatchSheetEntity.get(i).getFuerzatrabajo());
+            //registro.put("fuerzatrabajo_factura",detailDispatchSheetEntity.get(i).getFuerzatrabajo());
+            registro.put("fuerzatrabajo_factura","3JAVIER VERGARA");
             registro.put("terminopago_id",detailDispatchSheetEntity.get(i).getTerminoPago_id());
-            registro.put("terminopago",detailDispatchSheetEntity.get(i).getTerminoPago());
+            //registro.put("terminopago",detailDispatchSheetEntity.get(i).getTerminoPago());
+            registro.put("terminopago","Contado");
             registro.put("peso",detailDispatchSheetEntity.get(i).getPeso());
             registro.put("comentariodespacho",detailDispatchSheetEntity.get(i).getComentario_despacho());
             bd.insert("detaildispatchsheet",null,registro);
@@ -118,7 +121,7 @@ public class DetailDispatchSheetSQLite {
                         "A.control_id=D.control_id   " +
                         " left outer join visitsection E ON  " +
                         "D.fuerzatrabajo_id=E.fuerzatrabajo_id  AND " +
-                        "D.fechahojadespacho=E.dateini AND " +
+                        "D.control_id=E.idref AND " +
                         "A.cliente_id=E.cliente_id AND " +
                         "A.domembarque_id=E.domembarque_id   " +
                         "  where A.control_id='"+codeControl+"'",null);
@@ -241,8 +244,8 @@ public class DetailDispatchSheetSQLite {
         HojaDespachoDetalleSQLiteEntity hojaDespachoSQLiteEntity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
-                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente from detaildispatchsheet A" +
+                "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,IFNULL(A.entrega,'') entrega,A.factura," +
+                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,IFNULL(B.nombrecliente,'') nombrecliente from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
                         "A.cliente_id=B.cliente_id " +
                         "  where A.cliente_id='"+cliente_id+"'",null);

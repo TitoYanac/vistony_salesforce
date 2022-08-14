@@ -418,10 +418,7 @@ ParametrosView extends Fragment {
             Log.e("Jepicame","=>"+data);
         });
 
-        ///////////////////////////COLORES/////////////////////////////////////////////////
-        reasonDispatchRepository.geReasonDispatch (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
+
         ///////////////////////////Ruta de Trabajo/////////////////////////////////////////////////
         rutaFuerzaTrabajoRepository.getInsertDBWorkPath  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
@@ -432,16 +429,23 @@ ParametrosView extends Fragment {
         //    Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
         //});
 
-        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
-            Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
-        });
+        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+        {
+            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+                Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
+            });
 
-        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
-            Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
-        });
+            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+                Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
+            });
 
+            ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
+            reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+        }
 
         fabdescargarparametros.setOnClickListener(view -> {
             Object objeto=null,object2=null;

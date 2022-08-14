@@ -14,7 +14,7 @@ public class BancoEntity {
     @SerializedName("SingleDeposit")
     private String OperacionUnica;
 
-    @SerializedName("POS")
+    @SerializedName("Post")
     private String PagoPOS;
 
     public String getPagoPOS() {

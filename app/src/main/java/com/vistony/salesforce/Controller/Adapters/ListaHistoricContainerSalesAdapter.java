@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Entity.Adapters.ListaAgenciaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricContainerSalesEntity;
@@ -110,7 +112,7 @@ public class ListaHistoricContainerSalesAdapter extends ArrayAdapter<ListaHistor
 
         if(tipo.equals("SKU"))
         {
-            String fecha,año,mes,dia;
+            /*String fecha,año,mes,dia;
             String[] sourcefechacuota= lead.getAnio().split(" ");
             fecha= sourcefechacuota[0];
             String[] sourcefechadesordenada= fecha.split("/");
@@ -125,17 +127,20 @@ public class ListaHistoricContainerSalesAdapter extends ArrayAdapter<ListaHistor
             if(dia.length()==1)
             {
                 dia='0'+dia;
-            }
-            holder.tv_periodo.setText(año+"/"+mes+"/"+dia);
+            }*/
+            holder.tv_periodo.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getAnio()));
             Induvis induvis=new Induvis();
             Long day=0L;
             try {
-                day=induvis.getDiferenceDays(año +"-"+ mes +"-"+ dia);
+                day=induvis.getDiferenceDays(Induvis.getDate(BuildConfig.FLAVOR,lead.getAnio()));
             }catch (Exception e){
                 Log.e("REOS","ListaHistoricContainerSalesAdapter.e"+e.toString());
             }
             if(day>90) {
                 holder.relativeListahistoriccontainersalessku.setBackground(new ColorDrawable(Color.parseColor("#eF9a9a")));
+            }
+            else {
+                holder.relativeListahistoriccontainersalessku.setBackground(new ColorDrawable(Color.parseColor("#FFFFFF")));
             }
             holder.tv_galouns.setText(lead.getGaloun());
         }else

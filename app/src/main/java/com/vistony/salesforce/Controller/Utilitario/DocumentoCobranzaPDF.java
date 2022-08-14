@@ -156,7 +156,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
 
             ByteArrayOutputStream streamqr = new ByteArrayOutputStream();
 
-            bitmapqr.compress(Bitmap.CompressFormat.PNG, 100, streamqr);
+            bitmapqr.compress(Bitmap.CompressFormat.PNG, 50, streamqr);
             Image imagenqr = Image.getInstance(streamqr.toByteArray());
             imagenqr.setAlignment(Element.ALIGN_CENTER);
 

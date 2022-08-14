@@ -273,14 +273,15 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
 
-                String fecha,año,mes,dia;
+                /*String fecha,año,mes,dia;
                 String[] sourceemision= quotasPerCustomerInvoiceEntity.get(l).getFechaemision().split(" ");
                 fecha= sourceemision[0];
                 String[] sourcefechadesordenada= fecha.split("/");
                 año=sourcefechadesordenada[2];
                 mes=sourcefechadesordenada[0];
-                dia=sourcefechadesordenada[1];
-                celltblresumencuotas = new PdfPCell(new Phrase(dia+"/"+mes+"/"+año,font6));
+                dia=sourcefechadesordenada[1];*/
+                celltblresumencuotas = new PdfPCell(new Phrase(Induvis.getDate(
+                        BuildConfig.FLAVOR,quotasPerCustomerInvoiceEntity.get(l).getFechaemision()),font6));
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
@@ -288,14 +289,16 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
-                String fecha2,año2,mes2,dia2;
+                /*String fecha2,año2,mes2,dia2;
                 String[] sourceemision2= quotasPerCustomerInvoiceEntity.get(l).getFechavencimiento() .split(" ");
                 fecha2= sourceemision2[0];
                 String[] sourcefechadesordenada2= fecha2.split("/");
                 año2=sourcefechadesordenada2[2];
                 mes2=sourcefechadesordenada2[0];
                 dia2=sourcefechadesordenada2[1];
-                celltblresumencuotas = new PdfPCell(new Phrase(dia2+"/"+mes2+"/"+año2,font3));
+                celltblresumencuotas = new PdfPCell(new Phrase(dia2+"/"+mes2+"/"+año2,font3));*/
+                celltblresumencuotas = new PdfPCell(new Phrase(Induvis.getDate(
+                        BuildConfig.FLAVOR,quotasPerCustomerInvoiceEntity.get(l).getFechavencimiento()),font3));
                 celltblresumencuotas.disableBorderSide(Rectangle.BOX);
                 celltblresumencuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblresumencuotas.addCell(celltblresumencuotas);
@@ -376,14 +379,16 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);
-                String fecha,año,mes,dia;
+                /*String fecha,año,mes,dia;
                 String[] sourceemision= quotasPerCustomerDetailEntity.get(l).getFecha().split(" ");
                 fecha= sourceemision[0];
                 String[] sourcefechadesordenada= fecha.split("/");
                 año=sourcefechadesordenada[2];
                 mes=sourcefechadesordenada[0];
                 dia=sourcefechadesordenada[1];
-                celltbldetallecuotas = new PdfPCell(new Phrase(dia+"/"+mes+"/"+año,font3));
+                celltbldetallecuotas = new PdfPCell(new Phrase(dia+"/"+mes+"/"+año,font3));*/
+                celltbldetallecuotas = new PdfPCell(new Phrase(Induvis.getDate(
+                        BuildConfig.FLAVOR,quotasPerCustomerDetailEntity.get(l).getFecha()),font3));
                 celltbldetallecuotas.disableBorderSide(Rectangle.BOX);
                 celltbldetallecuotas.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tbldetallecuotas.addCell(celltbldetallecuotas);

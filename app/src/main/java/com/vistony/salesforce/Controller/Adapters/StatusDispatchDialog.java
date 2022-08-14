@@ -152,9 +152,10 @@ public class StatusDispatchDialog extends DialogFragment {
         ArrayList<String> sppdelivery=new ArrayList<>();
         ArrayList<String> spptypeDispatch=new ArrayList<>();
         ArrayList<String> sppOcurrencies=new ArrayList<>();
+        Log.e("REOS","StatusDispatchDialog.onCreateDialog.cliente_id:"+cliente_id);
         listDetailDispatchSheetSQLite=detailDispatchSheetSQLite.getDetailDispatchSheetforClient(cliente_id);
         String direccion_id,zona_id;
-
+        Log.e("REOS","StatusDispatchDialog.onCreateDialog.listDetailDispatchSheetSQLite.size():"+listDetailDispatchSheetSQLite.size());
         for(int i=0;i<listDetailDispatchSheetSQLite.size();i++)
         {
             sppdelivery.add(listDetailDispatchSheetSQLite.get(i).getEntrega());

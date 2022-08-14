@@ -26,7 +26,7 @@ public class ListaHojaDespachoDao {
     }
 
     private void saveLead(ListaHojaDespachoEntity lead) {
-        leads.put(lead.getNrofactura(), lead);
+        leads.put(lead.getItem_id(), lead);
     }
 
     public List<ListaHojaDespachoEntity> getLeads(ArrayList<HojaDespachoDetalleSQLiteEntity> Lista) {

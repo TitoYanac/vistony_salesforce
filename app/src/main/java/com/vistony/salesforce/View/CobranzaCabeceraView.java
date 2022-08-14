@@ -334,13 +334,13 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             imb_consultar_codigo_control.setVisibility(View.GONE);
         }
         String [] valores = null;
-        if(BuildConfig.FLAVOR.equals("chile"))
+        /*if(BuildConfig.FLAVOR.equals("chile"))
         {
             valores = new String[]{"Deposito Efectivo","Cheque Diferido","Cheque Dia"};
         }else {
             valores =  new String[]{"Deposito","Cheque"};
-        }
-
+        }*/
+        valores =  new String[]{"Deposito","Cheque"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, valores);
@@ -466,7 +466,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     public static void updateTypeDeposit()
     {
         String [] valores = null;
-        if(BuildConfig.FLAVOR.equals("chile"))
+        //Cambio Chile Mejoras sin efecto
+        /*if(BuildConfig.FLAVOR.equals("chile"))
         {
             if(count_check>0){
                 valores = new String[]{"Deposito Efectivo","Cheque Diferido","Cheque Dia"};
@@ -477,9 +478,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
         }else {
             valores =  new String[]{"Deposito","Cheque"};
-        }
+        }*/
 
-
+        valores =  new String[]{"Deposito","Cheque"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_list_item_1, android.R.id.text1, valores);
 

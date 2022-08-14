@@ -172,6 +172,12 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             }
         }
 
+        holder.tv_date_order_aprob.setVisibility(View.GONE);
+        holder.tv_date_orders.setVisibility(View.GONE);
+        holder.tv_date_pend_rev.setVisibility(View.GONE);
+        holder.tv_date_invoice.setVisibility(View.GONE);
+        holder.tv_date_delivery.setVisibility(View.GONE);
+
         if(BuildConfig.FLAVOR.equals("chile"))
         {
             Resources res = getContext().getResources(); // need this to fetch the drawable
@@ -180,7 +186,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             String[] descriptionData = {"Borrador", "Orden\nVenta", "Facturacion"};
             holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
             holder.imv_historic_delivery.setVisibility(View.GONE);
-
+            holder.imv_historic_pend_rev.setVisibility(View.GONE);
             Convert.setMarginsView(holder.imv_historic_orders,120, 400, 200, 145);
             Convert.setMarginsView(holder.imv_historic_order_aprob,450, 400, 200, 145);
             Convert.setMarginsView(holder.imv_historic_invoices,780, 400, 0, 145);

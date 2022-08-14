@@ -15,6 +15,15 @@ public class VisitSectionEntity {
     private String datefin;
     private String timefin;
     private String chkrecibido;
+    private String idref;
+
+    public String getIdref() {
+        return idref;
+    }
+
+    public void setIdref(String idref) {
+        this.idref = idref;
+    }
 
     public String getCompania_id() {
         return compania_id;

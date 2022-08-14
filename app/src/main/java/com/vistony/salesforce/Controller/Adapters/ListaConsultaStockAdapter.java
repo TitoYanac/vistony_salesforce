@@ -124,6 +124,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
             holder.lbl_precio_cash = (TextView) convertView.findViewById(R.id.lbl_precio_cash);
             holder.content=(ViewGroup) convertView.findViewById(R.id.content);
             holder.tablerowpricelist = (TableRow) convertView.findViewById(R.id.tablerowpricelist);
+            holder.tablerow_promotion = (TableRow) convertView.findViewById(R.id.tablerow_promotion);
 
             holder.relativeListaConsultaStock=convertView.findViewById(R.id.relativeListaConsultaStock);
             convertView.setTag(holder);
@@ -149,6 +150,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
             holder.tv_price_credit.setVisibility(View.GONE);
             holder.lbl_price_credit.setVisibility(View.GONE);
             holder.lbl_precio_cash.setVisibility(View.GONE);
+            holder.tablerow_promotion.setVisibility(View.GONE);
             if(holder.content.getChildCount()==0)
             {
                 ArrayList<ListaPrecioDetalleSQLiteEntity> ArraylistPrecioDetalle=new ArrayList();
@@ -243,6 +245,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
         ImageView imv_enable_promotion;
         RelativeLayout relativeListaConsultaStock;
         ImageView imv_enable_warehouses;
+        TableRow tablerow_promotion;
     }
 
     private Dialog alertaProductoSinStock(android.content.Context context, String texto, ListaProductoEntity lead) {

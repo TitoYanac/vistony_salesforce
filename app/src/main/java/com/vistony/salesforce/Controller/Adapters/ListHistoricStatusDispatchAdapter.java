@@ -128,6 +128,11 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         holder.tv_referral_guide.setText(lead.getEntrega());
         holder.tv_type_dispatch.setText(lead.getTipoDespacho());
         holder.tv_reason_dispatch.setText(lead.getMotivoDespacho());
+
+        if(lead.getChk_Recibido().equals("1")||lead.getChk_Recibido().equals("Y"))
+        {
+            holder.chk_wsrecibido.setChecked(true);
+        }
         //alertdialogInformative(getContext(),lead.getObservacion());
         /*byte[] byteArray,byteArray2;
         Log.e("REOS","ListHistoricStatusDispatchAdapter.lead.getFotoLocal"+lead.getFotoLocal());

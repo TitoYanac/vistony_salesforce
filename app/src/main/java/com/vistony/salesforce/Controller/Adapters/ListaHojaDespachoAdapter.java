@@ -160,39 +160,53 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
                                                                         Log.e("REOS","ListaHojaDespachoAdapter.SesionEntity.compania_id:"+SesionEntity.compania_id);
                                                                         listaClienteEnvio=clienteSQliteDAO.ObtenerDatosCliente(lead.cliente_id,SesionEntity.compania_id);
                                                                         Log.e("REOS","ListaHojaDespachoAdapter.listaClienteEnvio.size:"+listaClienteEnvio.size());
-                                                                        for(int i=0;i<listaClienteEnvio.size();i++)
-                                                                        {
-                                                                            listaClienteCabeceraEntity=new ListaClienteCabeceraEntity();
-                                                                            holder.tv_cliente.setText(listaClienteEnvio.get(i).getNombrecliente());
-                                                                            listaClienteCabeceraEntity.setCliente_id(listaClienteEnvio.get(i).getCliente_id());
-                                                                            listaClienteCabeceraEntity.setNombrecliente(listaClienteEnvio.get(i).getNombrecliente());
-                                                                            listaClienteCabeceraEntity.setDireccion(lead.getDireccion());
-                                                                            listaClienteCabeceraEntity.setSaldo(lead.getSaldo());
-                                                                            listaClienteCabeceraEntity.setImvclientecabecera(0);
-                                                                            listaClienteCabeceraEntity.setMoneda(listaClienteEnvio.get(i).getMoneda());
-                                                                            listaClienteCabeceraEntity.setDomembarque_id(listaClienteEnvio.get(i).getDomembarque_id());
-                                                                            listaClienteCabeceraEntity.setImpuesto_id(listaClienteEnvio.get(i).getImpuesto_id());
-                                                                            listaClienteCabeceraEntity.setImpuesto(listaClienteEnvio.get(i).getImpuesto());
-                                                                            listaClienteCabeceraEntity.setRucdni(listaClienteEnvio.get(i).getRucdni());
-                                                                            listaClienteCabeceraEntity.setCategoria(listaClienteEnvio.get(i).getCategoria());
-                                                                            listaClienteCabeceraEntity.setLinea_credito(listaClienteEnvio.get(i).getLinea_credito());
-                                                                            listaClienteCabeceraEntity.setTerminopago_id(listaClienteEnvio.get(i).getLinea_credito());
-                                                                            listaClienteCabeceraEntity.setZona_id(listaClienteEnvio.get(i).getZona_id());
-                                                                            listaClienteCabeceraEntity.setCompania_id(SesionEntity.compania_id);
-                                                                            listaClienteCabeceraEntity.setOrdenvisita(listaClienteEnvio.get(i).getOrden());
-                                                                            listaClienteCabeceraEntity.setZona(listaClienteEnvio.get(i).getZona());
-                                                                            listaClienteCabeceraEntity.setTelefonofijo(listaClienteEnvio.get(i).getTelefonofijo());
-                                                                            listaClienteCabeceraEntity.setTelefonomovil(listaClienteEnvio.get(i).getTelefonomovil());
-                                                                            listaClienteCabeceraEntity.setCorreo(listaClienteEnvio.get(i).getCorreo());
-                                                                            listaClienteCabeceraEntity.setUbigeo_id(listaClienteEnvio.get(i).getUbigeo_id());
-                                                                            listaClienteCabeceraEntity.setTipocambio(listaClienteEnvio.get(i).getTipocambio());
-                                                                            listaClienteCabeceraEntity.setChk_visita("0");
-                                                                            listaClienteCabeceraEntity.setChk_pedido("0");
-                                                                            listaClienteCabeceraEntity.setChk_cobranza("0");
-                                                                            listaClienteCabeceraEntity.setChk_ruta("0");
-                                                                            listaClienteCabeceraEntity.setChk_cobranza("0");
+                                                                        Log.e("REOS","ListaHojaDespachoAdapter.lead.cliente_id():"+lead.getCliente_id());
+                                                                        Log.e("REOS","ListaHojaDespachoAdapter.lead.getDomembarque_id():"+lead.getDomembarque_id());
+                                                                        if(!listaClienteEnvio.isEmpty()) {
+                                                                            for (int i = 0; i < listaClienteEnvio.size(); i++) {
+                                                                                listaClienteCabeceraEntity = new ListaClienteCabeceraEntity();
+                                                                                holder.tv_cliente.setText(listaClienteEnvio.get(i).getNombrecliente());
+                                                                                listaClienteCabeceraEntity.setCliente_id(lead.getCliente_id());
+                                                                                listaClienteCabeceraEntity.setNombrecliente(listaClienteEnvio.get(i).getNombrecliente());
+                                                                                listaClienteCabeceraEntity.setDireccion(lead.getDireccion());
+                                                                                listaClienteCabeceraEntity.setSaldo(lead.getSaldo());
+                                                                                listaClienteCabeceraEntity.setImvclientecabecera(0);
+                                                                                listaClienteCabeceraEntity.setMoneda(listaClienteEnvio.get(i).getMoneda());
+                                                                                listaClienteCabeceraEntity.setDomembarque_id(lead.getDomembarque_id());
+                                                                                listaClienteCabeceraEntity.setImpuesto_id(listaClienteEnvio.get(i).getImpuesto_id());
+                                                                                listaClienteCabeceraEntity.setImpuesto(listaClienteEnvio.get(i).getImpuesto());
+                                                                                listaClienteCabeceraEntity.setRucdni(listaClienteEnvio.get(i).getRucdni());
+                                                                                listaClienteCabeceraEntity.setCategoria(listaClienteEnvio.get(i).getCategoria());
+                                                                                listaClienteCabeceraEntity.setLinea_credito(listaClienteEnvio.get(i).getLinea_credito());
+                                                                                listaClienteCabeceraEntity.setTerminopago_id(listaClienteEnvio.get(i).getLinea_credito());
+                                                                                listaClienteCabeceraEntity.setZona_id(listaClienteEnvio.get(i).getZona_id());
+                                                                                listaClienteCabeceraEntity.setCompania_id(SesionEntity.compania_id);
+                                                                                listaClienteCabeceraEntity.setOrdenvisita(listaClienteEnvio.get(i).getOrden());
+                                                                                listaClienteCabeceraEntity.setZona(listaClienteEnvio.get(i).getZona());
+                                                                                listaClienteCabeceraEntity.setTelefonofijo(listaClienteEnvio.get(i).getTelefonofijo());
+                                                                                listaClienteCabeceraEntity.setTelefonomovil(listaClienteEnvio.get(i).getTelefonomovil());
+                                                                                listaClienteCabeceraEntity.setCorreo(listaClienteEnvio.get(i).getCorreo());
+                                                                                listaClienteCabeceraEntity.setUbigeo_id(listaClienteEnvio.get(i).getUbigeo_id());
+                                                                                listaClienteCabeceraEntity.setTipocambio(listaClienteEnvio.get(i).getTipocambio());
+                                                                                listaClienteCabeceraEntity.setChk_visita("0");
+                                                                                listaClienteCabeceraEntity.setChk_pedido("0");
+                                                                                listaClienteCabeceraEntity.setChk_cobranza("0");
+                                                                                listaClienteCabeceraEntity.setChk_ruta("0");
+                                                                                listaClienteCabeceraEntity.setChk_cobranza("0");
+                                                                                listaClienteCabeceraEntity.setControl_id(lead.getControl_id());
+                                                                                listaClienteCabeceraEntity.setItem_id(lead.getItem_id());
+                                                                                ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
+                                                                            }
+                                                                        }
+                                                                        else {
+                                                                            listaClienteCabeceraEntity = new ListaClienteCabeceraEntity();
+                                                                            listaClienteCabeceraEntity.setCliente_id(lead.getCliente_id());
                                                                             listaClienteCabeceraEntity.setControl_id(lead.getControl_id());
                                                                             listaClienteCabeceraEntity.setItem_id(lead.getItem_id());
+                                                                            listaClienteCabeceraEntity.setDomembarque_id(lead.getDomembarque_id());
+                                                                            listaClienteCabeceraEntity.setDireccion(lead.getDireccion());
+                                                                            listaClienteCabeceraEntity.setSaldo(lead.getSaldo());
+                                                                            listaClienteCabeceraEntity.setNombrecliente("Cliente");
                                                                             ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
                                                                         }
                                                                         fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();

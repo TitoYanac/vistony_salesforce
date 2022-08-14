@@ -51,6 +51,7 @@ public class ListHistoricStatusDispatchDao {
                         , Lista.get(i).getFactura()
                         ,Lista.get(i).getFotoLocal()
                         ,Lista.get(i).getFotoGuia()
+                        ,Lista.get(i).getChk_Recibido()
                 ));
             }
         }catch (Exception e)

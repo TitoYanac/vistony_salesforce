@@ -143,10 +143,10 @@ public class StatusDispatchSQLite {
                 String Base64PhotoGuia2 = Base64PhotoGuia.replace("'\u003d'", "=");
                 statusDispatchEntity.setPhotoStore(Base64PhotoLocal2);
                 statusDispatchEntity.setPhotoDocument(Base64PhotoGuia2);
-                //statusDispatchEntity.setDocEntry(fila.getString(21));
-                statusDispatchEntity.setDocEntry("3");
-                //statusDispatchEntity.setLineId(fila.getString(22));
-                statusDispatchEntity.setLineId("1");
+                statusDispatchEntity.setDocEntry(fila.getString(21));
+                //statusDispatchEntity.setDocEntry("3");
+                statusDispatchEntity.setLineId(fila.getString(22));
+                //statusDispatchEntity.setLineId("1");
                 listStatusDispatchEntity.add(statusDispatchEntity);
             }
 
@@ -170,7 +170,9 @@ public class StatusDispatchSQLite {
         try {
             Cursor fila = bd.rawQuery(
                     "Select * from statusdispatch" +
-                            " where (chkrecibido='N' or chkrecibido='0') AND fecha_registro='"+Date+"' "
+                            " where " +
+                            //"(chkrecibido='N' or chkrecibido='0') AND" +
+                            " fecha_registro='"+Date+"' "
                     ,null);
 
             while (fila.moveToNext())
@@ -184,7 +186,7 @@ public class StatusDispatchSQLite {
                 historicStatusDispatchEntity.setCliente_ID(fila.getString(5));
                 //historicStatusDispatchEntity.setFactura_id(fila.getString(6));
                 historicStatusDispatchEntity.setEntrega_ID(fila.getString(7));
-                //historicStatusDispatchEntity.setChkrecibido (fila.getString(8));
+                historicStatusDispatchEntity.setChk_Recibido(fila.getString(8));
                 historicStatusDispatchEntity.setObservacion(fila.getString(9));
                 historicStatusDispatchEntity.setFotoLocal(fila.getString(10));
                 historicStatusDispatchEntity.setFotoGuia(fila.getString(13));
@@ -276,10 +278,10 @@ public class StatusDispatchSQLite {
             while (fila.moveToNext())
             {
                 statusDispatchEntity= new StatusDispatchEntity();
-                //statusDispatchEntity.setDocEntry(fila.getString(21));
-                statusDispatchEntity.setDocEntry("3");
-                //statusDispatchEntity.setLineId(fila.getString(22));
-                statusDispatchEntity.setLineId("1");
+                statusDispatchEntity.setDocEntry(fila.getString(21));
+                //statusDispatchEntity.setDocEntry("3");
+                statusDispatchEntity.setLineId(fila.getString(22));
+                //statusDispatchEntity.setLineId("1");
                 statusDispatchEntity.setCheckintime(fila.getString(24));
                 statusDispatchEntity.setCheckouttime(fila.getString(25));
                 listStatusDispatchEntity.add(statusDispatchEntity);

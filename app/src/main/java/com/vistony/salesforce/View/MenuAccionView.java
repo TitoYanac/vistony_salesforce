@@ -135,7 +135,7 @@ public class MenuAccionView extends Fragment {
         Bundle b = new Bundle();
         ArrayList<ListaClienteCabeceraEntity> Lista = (ArrayList<ListaClienteCabeceraEntity>) objeto;
 
-
+        Log.e("REOS","MenuAccionView.newInstance: Lista.size()"+Lista.size());
         for(int s=0;s<Lista.size();s++){
             Log.e("REOS","MenuAccionView-Lista.get(s).getDireccion()=>"+Lista.get(s).getDireccion());
             Log.e("REOS","MenuAccionView-Lista.get(s).getDomembarque_id()=>"+Lista.get(s).getDomembarque_id());
@@ -148,6 +148,7 @@ public class MenuAccionView extends Fragment {
             Log.e("REOS","MenuAccionView-Lista.get(s).getChkgeolocation()=>"+Lista.get(s).getChkgeolocation());
             Log.e("REOS","MenuAccionView-Lista.get(s).getTelefonofijo()=>"+Lista.get(s).getTelefonofijo());
             Log.e("REOS","MenuAccionView-Lista.get(s).getTelefonomovil()=>"+Lista.get(s).getTelefonomovil());
+            Log.e("REOS","MenuAccionView-Lista.get(s).Control_id()=>"+Lista.get(s).getControl_id());
             CardCode=Lista.get(s).getCliente_id();
             CardName=Lista.get(s).getNombrecliente();
             Address=Lista.get(s).getDireccion();
@@ -263,7 +264,7 @@ public class MenuAccionView extends Fragment {
         });
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
-            //cv_lead.setVisibility(View.GONE);
+            cv_lead.setVisibility(View.GONE);
             cv_visit_section.setVisibility(View.GONE);
             cv_dispatch.setVisibility(View.GONE);
         }
@@ -271,7 +272,7 @@ public class MenuAccionView extends Fragment {
             if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
             {
                 cv_lead.setVisibility(View.GONE);
-                //cv_visit_section.setVisibility(View.GONE);
+                cv_visit_section.setVisibility(View.GONE);
                 cv_dispatch.setVisibility(View.GONE);
             }
         }
@@ -615,10 +616,11 @@ public class MenuAccionView extends Fragment {
             cv_collection_check.setVisibility(View.GONE);
         }
         else {
-            if(Contado.equals("1"))
+            /*if(Contado.equals("1"))
             {
                 cv_collection_check.setVisibility(View.GONE);
-            }
+            }*/
+            cv_collection_check.setVisibility(View.GONE);
         }
 
         TextView textTitle = dialog.findViewById(R.id.text);
@@ -895,11 +897,13 @@ public class MenuAccionView extends Fragment {
                 visitSectionEntity.setDatefin("0");
                 visitSectionEntity.setTimefin("0");
                 visitSectionEntity.setChkrecibido("0");
+                visitSectionEntity.setIdref(Control_id);
                 listVisitSectionini.add(visitSectionEntity);
                 visitSectionSQLite.addVisitSection(listVisitSectionini);
                 chk_start_visitsection.setChecked(true);
                 btn_start_visitsection.setEnabled(false);
                 btn_start_visitsection.setClickable(false);
+
                 Utilitario.disabledButtton(btn_start_visitsection);
                 Toast.makeText(getActivity(), "Visita Iniciada!!!", Toast.LENGTH_LONG).show();
             }

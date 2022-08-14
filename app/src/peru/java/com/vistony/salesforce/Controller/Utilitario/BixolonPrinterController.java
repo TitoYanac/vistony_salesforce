@@ -468,7 +468,7 @@ public class BixolonPrinterController implements ErrorListener, OutputCompleteLi
 
             posPrinter.printPDF(POSPrinterConst.PTR_S_RECEIPT, path, width, alignment, startPage, endPage, brightness);
         } catch (JposException e) {
-            Log.d("TESTING",""+e);
+            Log.d("REOS","BixolonPrinterController.printerPDF.e"+e);
             e.printStackTrace();
 
             ret = false;

@@ -61,6 +61,8 @@ public class VisitSectionSQLite {
             registro.put("datefin",visitsection.get(i).getDatefin());
             registro.put("timefin",visitsection.get(i).getTimefin());
             registro.put("chkrecibido",visitsection.get(i).getChkrecibido());
+            registro.put("idref",visitsection.get(i).getIdref());
+
             bd.insert("visitsection",null,registro);
         }
 

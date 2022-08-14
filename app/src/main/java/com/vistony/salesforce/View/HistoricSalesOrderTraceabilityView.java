@@ -244,7 +244,8 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
                 }
                 tv_amount_historic_sales_order_traceability.setText(Convert.currencyForView(String.valueOf(amount)));
             }else {
-                Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "No se encontraron Documentos", Toast.LENGTH_SHORT).show();
+                listview_historic_salesorder_traceability.setAdapter(null);
             }
             pd.dismiss();
         });

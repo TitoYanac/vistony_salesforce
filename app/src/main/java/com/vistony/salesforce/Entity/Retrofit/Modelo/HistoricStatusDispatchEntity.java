@@ -58,11 +58,15 @@ public class HistoricStatusDispatchEntity implements Serializable  {
     private String FotoLocal;
 
     private String FotoGuia;
+
+    private String Chk_Recibido;
+
     public HistoricStatusDispatchEntity(
             String fuerzaTrabajo_ID, String usuario_ID, String tipoDespacho_ID, String tipoDespacho,
             String motivoDespacho_ID, String motivoDespacho, String observacion, String latitud,
             String longitud, String fecha, String hora, String entrega_ID, String cliente_ID,
-            String cliente, String entrega,String factura_ID,String factura,String FotoLocal,String FotoGuia
+            String cliente, String entrega,String factura_ID,String factura
+            ,String FotoLocal,String FotoGuia,String Chk_Recibido
     ) {
         FuerzaTrabajo_ID = fuerzaTrabajo_ID;
         Usuario_ID = usuario_ID;
@@ -83,10 +87,19 @@ public class HistoricStatusDispatchEntity implements Serializable  {
         Factura = factura;
         FotoLocal = FotoLocal;
         FotoGuia = FotoGuia;
+        this.Chk_Recibido=Chk_Recibido;
     }
 
     public HistoricStatusDispatchEntity() {
 
+    }
+
+    public String getChk_Recibido() {
+        return Chk_Recibido;
+    }
+
+    public void setChk_Recibido(String chk_Recibido) {
+        Chk_Recibido = chk_Recibido;
     }
 
     public String getFotoLocal() {

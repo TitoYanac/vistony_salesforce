@@ -38,7 +38,13 @@ public class VersionViewModel {
         switch (BuildConfig.FLAVOR) {
 
             case "chile":
-                puerto = ":8054";
+                //puerto = ":8054";
+                //Produccion----------
+                //puerto = ":8054";
+                //--------------------
+                //Pruebas QA------------- Nueva Produccion
+                puerto = "";
+                //-----------------------
                 break;
             case "bolivia":
                 puerto = ":8052";

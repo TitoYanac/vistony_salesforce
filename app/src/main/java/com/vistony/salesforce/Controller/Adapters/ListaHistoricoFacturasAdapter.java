@@ -18,9 +18,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoFacturasHistorialDespachosDao;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoFacturasLineasNoFacturadasDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoFacturasHistorialDespachosWS;
@@ -140,6 +143,11 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
         holder.tv_historico_facturas_monto.setText(Convert.currencyForView(lead.getMontoimporteordenventa()));
         holder.tv_cond_venta.setText(lead.getTerminopago());
 
+        if(BuildConfig.FLAVOR.equals("chile"))
+        {
+            holder.imv_historico_facturas_despacho.setEnabled(false);
+            holder.imv_historico_facturas_despacho.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
+        }
         holder.imv_historico_orden_venta_facturacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,9 +198,9 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
         textTitle.setText(titulo);
         tv_historico_facturas_facturacion_documento_id.setText(documento_id);
         tv_historico_facturas_facturacion_nrofactura.setText(nrofactura);
-        tv_historico_facturas_facturacion_fechaemision.setText(fechaemision);
-        tv_historico_facturas_facturacion_montoimporte.setText(importe);
-        tv_historico_facturas_facturacion_saldo.setText(saldo);
+        tv_historico_facturas_facturacion_fechaemision.setText(Induvis.getDate(BuildConfig.FLAVOR,fechaemision));
+        tv_historico_facturas_facturacion_montoimporte.setText(Convert.currencyForView(importe));
+        tv_historico_facturas_facturacion_saldo.setText(Convert.currencyForView(saldo));
         tv_historico_facturas_facturacion_lineas_no_facturadas.setText(tipo_factura);
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
@@ -250,7 +258,7 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
         textTitle.setText(titulo);
         tv_historico_facturas_despacho_nrofactura.setText(nrofactura);
         tv_historico_facturas_despacho_nombrechofer.setText(nombrechofer);
-        tv_historico_facturas_despacho_fechaprogramaciondespacho.setText(fechaprogramaciondespacho);
+        tv_historico_facturas_despacho_fechaprogramaciondespacho.setText( fechaprogramaciondespacho);
         tv_historico_facturas_despacho_estadodespacho.setText(estadodespacho);
         tv_historico_facturas_despacho_motivoestado.setText(motivoestado);
         tv_historico_facturas_despacho_telefono.setText(telefono);

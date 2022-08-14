@@ -224,14 +224,15 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
             ArrayList<ListaHistoricoFacturasEntity> Lista = (ArrayList<ListaHistoricoFacturasEntity>) result;
             if (Lista.isEmpty())
             {
-                Toast.makeText(getContext(), "Error en la Consulta", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "No se Encontraron Documentos", Toast.LENGTH_SHORT).show();
+                listviewhistoricofacturas.setAdapter(null);
             }else
             {
                 float monto_orden_venta=0f;
                 listaHistoricoFacturasAdapter = new ListaHistoricoFacturasAdapter(getActivity(),
                         ListaHistoricoFacturasDao.getInstance().getLeads(Lista));
                 listviewhistoricofacturas.setAdapter(listaHistoricoFacturasAdapter);
-                Toast.makeText(getContext(), "Ordenes de Venta Obtenidas Correctamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Facturas Obtenidas Correctamente", Toast.LENGTH_SHORT).show();
                 String montoordenventa;
                 for(int i=0;i<Lista.size();i++)
                 {
