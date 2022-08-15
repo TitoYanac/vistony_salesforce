@@ -28,22 +28,22 @@ public class VersionViewModel {
     public MutableLiveData<Object> getVs(String imei,String version,Context context){
         SharedPreferences statusImei = context.getSharedPreferences("imeiRegister", Context.MODE_PRIVATE);
         //Produccion-------------------------------
-        //String baseUrl = "http://salesforce.vistony.com";
+        String baseUrl = "http://salesforce.vistony.com";
         //------------------------------------------
         //Pruebas QA--------------- Nueva Produccion
-        String baseUrl = "https://salesforce.vistony.pe";
+        //String baseUrl = "https://salesforce.vistony.pe";
         //------------------
         //String baseUrl = "http://200.107.154.233";
         String puerto = "";
         switch (BuildConfig.FLAVOR) {
 
             case "chile":
-                //puerto = ":8054";
+                puerto = ":8054";
                 //Produccion----------
                 //puerto = ":8054";
                 //--------------------
                 //Pruebas QA------------- Nueva Produccion
-                puerto = "";
+                //puerto = "";
                 //-----------------------
                 break;
             case "bolivia":

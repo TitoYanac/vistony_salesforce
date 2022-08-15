@@ -60,9 +60,9 @@ android {
         chile{
             applicationIdSuffix ".chile"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.cl"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.cl"')
-            versionName "1.0.1"
+            buildConfigField('String' , 'BASE_ENDPOINT', '"cl.get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"cl.post"')
+            versionName "1.0.2"
             manifestPlaceholders = [country:"Chile"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"CL"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
