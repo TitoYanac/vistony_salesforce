@@ -125,8 +125,9 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
             holder.content=(ViewGroup) convertView.findViewById(R.id.content);
             holder.tablerowpricelist = (TableRow) convertView.findViewById(R.id.tablerowpricelist);
             holder.tablerow_promotion = (TableRow) convertView.findViewById(R.id.tablerow_promotion);
-
             holder.relativeListaConsultaStock=convertView.findViewById(R.id.relativeListaConsultaStock);
+            holder.lbl_enable_warehouses = (TextView) convertView.findViewById(R.id.lbl_enable_warehouses);
+
             convertView.setTag(holder);
         } else {
             holder = (ListaConsultaStockAdapter.ViewHolder) convertView.getTag();
@@ -143,7 +144,8 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
         holder.tv_price_credit.setText(Convert.currencyForView(lead.getPreciocreditoigv()) );
         holder.tv_stock.setText(lead.getStock());
         holder.tv_gal.setText(lead.getGal());
-
+        holder.lbl_enable_warehouses.setVisibility(View.INVISIBLE);
+        holder.imv_enable_warehouses.setVisibility(View.INVISIBLE);
         if(BuildConfig.FLAVOR.equals("chile"))
         {
             holder.tv_price_cash.setVisibility(View.GONE);
@@ -151,6 +153,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
             holder.lbl_price_credit.setVisibility(View.GONE);
             holder.lbl_precio_cash.setVisibility(View.GONE);
             holder.tablerow_promotion.setVisibility(View.GONE);
+
             if(holder.content.getChildCount()==0)
             {
                 ArrayList<ListaPrecioDetalleSQLiteEntity> ArraylistPrecioDetalle=new ArrayList();
@@ -246,6 +249,8 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
         RelativeLayout relativeListaConsultaStock;
         ImageView imv_enable_warehouses;
         TableRow tablerow_promotion;
+        TextView lbl_enable_warehouses;
+
     }
 
     private Dialog alertaProductoSinStock(android.content.Context context, String texto, ListaProductoEntity lead) {

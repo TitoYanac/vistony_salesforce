@@ -22,6 +22,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 */
 
 import android.os.Environment;
+import android.provider.Settings;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
@@ -1241,10 +1243,34 @@ public class CobranzaDetalleView extends Fragment {
                                     DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
                                     menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
                                 }
-                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual());
 
+                                // If you have access to the external storage, do whatever you need
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                    if (Environment.isExternalStorageManager()){
+
+                                        // If you don't have access, launch a new activity to show the user the system's dialog
+                                        // to allow access to the external storage
+                                        documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual());
+                                    }else{
+                                        Intent intent = new Intent();
+                                        intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                        Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                        intent.setData(uri);
+                                        startActivity(intent);
+                                    }
+                                }
+                                else
+                                {
+                                    documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual());
+                                }
                                 if (SesionEntity.Print.equals("Y")) {
-                                    MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
+                                    try
+                                    {
+                                       //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
+                                    }catch (Exception e)
+                                    {
+                                        Log.e("REOS","CobranzaDetalleView-alertaGenerarPDF-MenuView.getPrinterInstance().printPdf-e: "+e.toString());
+                                    }
                                 }
                                 Toast.makeText(getContext(), "Se creo tu archivo pdf", Toast.LENGTH_SHORT).show();
                             } else {

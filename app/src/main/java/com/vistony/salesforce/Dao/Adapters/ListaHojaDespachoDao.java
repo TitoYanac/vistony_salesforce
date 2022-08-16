@@ -49,6 +49,7 @@ public class ListaHojaDespachoDao {
                         ,Lista.get(i).getItem_id()
                         ,Lista.get(i).isChkvisitsectionstart()
                         ,Lista.get(i).isChkvisitsectionend()
+                        ,Lista.get(i).getEntrega()
                 ));
             }
         }catch (Exception e)

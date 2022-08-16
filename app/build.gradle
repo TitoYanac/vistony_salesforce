@@ -86,9 +86,12 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"pe.get"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"pe.post"')
             //Pruebas QA-------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
-            //--------------------
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            //Produccion--------------------
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            //---------------------------
             versionName "2.2.6"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')

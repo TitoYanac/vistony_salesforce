@@ -9,6 +9,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
@@ -319,9 +320,16 @@ public class VisitaSQLite {
         int resultado=0;
         abrir();
         try {
-            Cursor fila = bd.rawQuery(
-                    "SELECT count(TABLE_A.compania_id) FROM  (Select compania_id from visita where fecha_registro='"+date+"' and chkruta='"+chkruta+"' and tipo='"+type+"' and terminopago_id='0' group by cliente_id) AS TABLE_A ",null);
-
+            Cursor fila=null;
+            if(BuildConfig.FLAVOR.equals("peru"))
+            {
+                fila = bd.rawQuery(
+                        "SELECT count(TABLE_A.compania_id) FROM  (Select compania_id from visita where fecha_registro='" + date + "' and chkruta='" + chkruta + "' and tipo='" + type + "' and terminopago_id='0' group by cliente_id) AS TABLE_A ", null);
+            }
+            else {
+                fila = bd.rawQuery(
+                        "SELECT count(TABLE_A.compania_id) FROM  (Select compania_id from visita where fecha_registro='" + date + "' and chkruta='" + chkruta + "' and tipo='" + type + "' group by cliente_id) AS TABLE_A ", null);
+            }
             while (fila.moveToNext())
             {
                 resultado= Integer.parseInt(fila.getString(0));
@@ -363,8 +371,18 @@ public class VisitaSQLite {
         float resultado=0;
         abrir();
         try {
-            Cursor fila = bd.rawQuery(
-                    "Select IFNULL(SUM(amount),0)  from visita where fecha_registro='"+date+"' and chkruta='"+chkruta+"' and tipo='"+type+"' and terminopago_id='0'",null);
+            Cursor fila=null;
+            if(BuildConfig.FLAVOR.equals("peru"))
+            {
+                 fila = bd.rawQuery(
+                        "Select IFNULL(SUM(amount),0)  from visita where fecha_registro='"+date+"' and chkruta='"+chkruta+"' and tipo='"+type+"' and terminopago_id='0'",null);
+            }
+            else
+            {
+                fila = bd.rawQuery(
+                        "Select IFNULL(SUM(amount),0)  from visita where fecha_registro='"+date+"' and chkruta='"+chkruta+"' and tipo='"+type+"' ",null);
+            }
+
 
             while (fila.moveToNext())
             {

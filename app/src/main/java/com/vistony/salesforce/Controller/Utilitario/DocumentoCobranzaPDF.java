@@ -16,6 +16,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
@@ -50,6 +52,7 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.View.MenuView;
 
 public class DocumentoCobranzaPDF extends AppCompatActivity {
 
@@ -101,8 +104,9 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-recibo: "+recibo);
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-fecharecibo: "+fecharecibo);
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-horarecibo: "+horarecibo);
-        String cliente_id="",nombrecliente="",direccion="",fechaemision="",fechavencimiento="",nrodocumento="",documento_id="",importe="",saldo="",cobrado="",nuevo_saldo=""
-                ;
+        String cliente_id="",nombrecliente="",direccion="",fechaemision="",fechavencimiento="",nrodocumento="",documento_id="",importe="",saldo="",cobrado="",nuevo_saldo="";
+        //DeleteDocumentPDF(recibo,context);
+
         for(int i=0;i<Lista.size();i++)
         {
             cliente_id=Lista.get(i).getCliente_id();
@@ -168,6 +172,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
 
             // Asociamos el flujo que acabamos de crear al documento.
             PdfWriter writer = PdfWriter.getInstance(documento, ficheroPdf);
+            writer.close();
             //Calendar now = GregorianCalendar.getInstance();
             //DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL);
 
@@ -385,6 +390,18 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
                     {
                         OpenDocumentPDF(recibo,context);
                     }
+                    else {
+                        //DeleteDocumentPDF(recibo,context);
+                        File file = new File(Environment
+                                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                                NOMBRE_DIRECTORIO);
+                        String Cadenafile = "";
+                        Cadenafile = String.valueOf(file);
+                        String ruta = Cadenafile + "/" + recibo + ".pdf";
+                        MenuView menuView=new MenuView();
+                        menuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
+                    }
+                    //OpenDocumentPDF(recibo,context);
                     break;
             }
 
@@ -445,6 +462,29 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(context, "Es necesario que instales algun visor de PDF", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private boolean DeleteDocumentPDF(String recibo,Context context)
+    {
+        boolean status=false;
+        Log.e("REOS","DocumentCobranzaPDF-DeleteDocumentPDF-Inicio");
+        try {
+            status = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator
+                    +NOMBRE_DIRECTORIO+File.separator+recibo+".pdf").delete();
+            Log.e("REOS","DocumentCobranzaPDF-DeleteDocumentPDF-ruta"+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator
+                    +NOMBRE_DIRECTORIO+File.separator+recibo+".pdf");
+            //Uri  excelPath = FileProvider.getUriForFile(context, context.getPackageName(), file);
+            //Intent target = new Intent(Intent.ACTION_VIEW);
+            //target.setDataAndType(excelPath,"application/pdf");
+            //target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            //context.startActivity(target);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("REOS","DocumentCobranzaPDF-DeleteDocumentPDF-error" + e.toString());
+            Toast.makeText(context, "No se pudo eliminar el Archivi PDF", Toast.LENGTH_SHORT).show();
+        }
+        Log.e("REOS","DocumentCobranzaPDF-DeleteDocumentPDF-Finalizo");
+        return status;
     }
 
 }

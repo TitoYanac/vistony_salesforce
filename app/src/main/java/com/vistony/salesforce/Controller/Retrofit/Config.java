@@ -24,8 +24,15 @@ public class Config {
     private static OkHttpClient client2=null;
     public static Retrofit getClient() {
 
+        String baseUrl=null;
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            baseUrl = "https://salesforce.vistony.pe";
+        }else {
+            baseUrl = "http://salesforce.vistony.com";
+        }
         //Produccion-------------------------------
-        String baseUrl = "http://salesforce.vistony.com";
+        //String baseUrl = "http://salesforce.vistony.com";
         //------------------------------------------
         //Pruebas QA--------------- Nueva Produccion
         //String baseUrl = "https://salesforce.vistony.pe";
@@ -88,8 +95,15 @@ public class Config {
 
     public static Retrofit getClientLogin() {
 
+        String baseUrl=null;
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            baseUrl = "https://salesforce.vistony.pe";
+        }else {
+            baseUrl = "http://salesforce.vistony.com";
+        }
         //Produccion-------------------------------
-        String baseUrl = "http://salesforce.vistony.com";
+        //String baseUrl = "http://salesforce.vistony.com";
         //------------------------------------------
         //Pruebas QA--------------- Nueva Produccion
         //String baseUrl = "https://salesforce.vistony.pe";

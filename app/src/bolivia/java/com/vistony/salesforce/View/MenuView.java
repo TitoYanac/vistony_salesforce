@@ -55,6 +55,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.BixolonPrinterController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
@@ -119,7 +120,8 @@ public class MenuView extends AppCompatActivity
         PromocionDetalleView.OnFragmentInteractionListener,
         ConsStockView.OnFragmentInteractionListener,
         PromocionCabeceraEditarDescuentoView.OnFragmentInteractionListener,
-        PriceListView.OnFragmentInteractionListener
+        PriceListView.OnFragmentInteractionListener,
+        ConsultaStockView.OnFragmentInteractionListener
 
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
@@ -180,6 +182,7 @@ public class MenuView extends AppCompatActivity
 
     private  String recibovalidado = "";
     private ConnectivityManager manager;
+    private static BixolonPrinterController bxlPrinter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,6 +213,8 @@ public class MenuView extends AppCompatActivity
         context=this;
         usuarioSQLite = new UsuarioSQLite(this);
         cobranzaRepository = new ViewModelProvider(this).get(CobranzaRepository.class);
+        bxlPrinter = new BixolonPrinterController(this);
+
         cobranzaRepository.PendingCollectionQR(this).observe(MenuView.this, data -> {
             Log.e("Jepicame","=>"+data);
         });
@@ -340,7 +345,7 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(true);
-                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_formularios).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
@@ -706,7 +711,8 @@ public class MenuView extends AppCompatActivity
                 TAG_FRAGMENT="config_print";
                 break;
             case R.id.nav_comisiones:
-                contentFragment=new ComisionesView();
+                //contentFragment=new ComisionesView();
+                contentFragment=new ContenedorComisionesView();
                 fragmentSeleccionado=true;
                 TAG_FRAGMENT="config_print";
                 break;
@@ -1270,6 +1276,13 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
+            if(tag2.equals("menuconsultaspedidoview"))
+            {
+                contentFragment=new MenuConsultaPedidosView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
             if(tag2.equals("historicofacturas"))
             {
                 contentFragment=new HistoricoFacturasView();
@@ -1287,6 +1300,34 @@ public class MenuView extends AppCompatActivity
             if(tag2.equals("Consulta_Orden_Venta_Estado"))
             {
                 //contentFragment=new HistoricoOrdenVentaEstadoView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("menuconsultasfacturaview"))
+            {
+                contentFragment=new MenuConsultasFacturasView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("dispatch"))
+            {
+                contentFragment=new HistoricStatusDispatchView() ;
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("historic_analysis_by_route"))
+            {
+                contentFragment=new HistoricSalesAnalysisByRoute() ;
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("menuconsultacotizacion"))
+            {
+                contentFragment=new MenuConsultaCotizacionView() ;
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
@@ -1423,6 +1464,37 @@ public class MenuView extends AppCompatActivity
                 ft.add(R.id.content_menu_view, OrdenVentaCabeceraView.newInstanciaRecibirPriceList(Lista),tagOrdenVentaCabeceraView);
                 ft.addToBackStack("po1p");
                 ft.commit();
+            }
+        }
+        if(tag.equals("MenuConsultasPedidosView"))
+        {
+
+            if(tag2.equals("iniciar"))
+            {
+                tag2="historicoordenventa";
+                String tagOrdenVentaCabeceraView="consultaordenventa";
+                historicoOrdenVentaFragment = getSupportFragmentManager().findFragmentByTag(tag2);
+                OrdenVentaCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaCabeceraView);
+                ft.hide(historicoOrdenVentaFragment);
+                ft.add(R.id.content_menu_view, OrdenVentaCabeceraView.newInstanceHistoricoOrdenVenta(Lista,tag2),tagOrdenVentaCabeceraView);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            if(tag2.equals("consulta_stock"))
+            {
+                contentFragment=new ConsultaStockView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+
+            }
+            if(tag2.equals("seguimiento"))
+            {
+                contentFragment=new HistoricSalesOrderTraceabilityView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+
             }
         }
 
@@ -1790,5 +1862,11 @@ public class MenuView extends AppCompatActivity
     private void obtenerTituloFormulario()
     {
         setTitle(Induvis.getTituloVentaString());
+    }
+
+    public static BixolonPrinterController getPrinterInstance()
+    {
+        Log.e("REOS","MenuView-getPrinterInstance-Inicio");
+        return bxlPrinter;
     }
 }

@@ -67,7 +67,7 @@ public class ListaClienteDetalleDao {
         leads.put(lead.getNrodocumento(), lead);
     }
 */
-    public List<ListaClienteDetalleEntity> getLeads(ArrayList<DocumentoDeudaSQLiteEntity> Lista,String chkruta) {
+    public List<ListaClienteDetalleEntity> getLeads(ArrayList<DocumentoDeudaSQLiteEntity> Lista,String chkruta,String Dom_Embarque_id) {
         if(leads.size()>0)
         {
             leads.clear();
@@ -90,13 +90,16 @@ public class ListaClienteDetalleDao {
             for (int j=0;j<listaclientesqlSQLiteEntity.size();j++)
             {
                 nombrecliente=String.valueOf(listaclientesqlSQLiteEntity.get(j).getNombrecliente())  ;
-                domembarque_id=String.valueOf(listaclientesqlSQLiteEntity.get(j).getDomembarque_id()) ;
+                //domembarque_id=String.valueOf(listaclientesqlSQLiteEntity.get(j).getDomembarque_id()) ;
                 direccion=String.valueOf(listaclientesqlSQLiteEntity.get(j).getDireccion()) ;
             }
-            Log.e("REOS","ListaClienteDetalleDao1:  "+domembarque_id);
+            //Log.e("REOS","ListaClienteDetalleDao1:  "+domembarque_id);
             listaClienteDetalleEntity.cliente_id=Lista.get(i).getCliente_id();
             listaClienteDetalleEntity.nombrecliente=nombrecliente;
-            listaClienteDetalleEntity.domembarque=domembarque_id;
+            //listaClienteDetalleEntity.domembarque=domembarque_id;
+            //listaClienteDetalleEntity.domembarque=Lista.get(i).getDomembarque_id();
+            listaClienteDetalleEntity.domembarque=Dom_Embarque_id;
+            Log.e("REOS","ListaClienteDetalleDao-getLeads-listaClienteDetalleEntity.domembarque:  "+listaClienteDetalleEntity.domembarque);
             listaClienteDetalleEntity.direccion=direccion;
             listaClienteDetalleEntity.documento_id=Lista.get(i).getDocumento_id();
             listaClienteDetalleEntity.nrodocumento=Lista.get(i).getNrofactura();

@@ -15,11 +15,13 @@ public class ListaHojaDespachoEntity {
     public String item_id;
     public boolean chkvisitsectionstart;
     public boolean chkvisitsectionend;
+    public String entrega;
 
     public ListaHojaDespachoEntity(
             String nombrecliente, String direccion, String nrofactura, String saldo, String nombrefuerzatrabajo,
             String terminopago, String cliente_id, String domembarque_id,boolean chkupdatedispatch,
-            String control_id,String item_id,boolean chkvisitsectionstart,boolean chkvisitsectionend
+            String control_id,String item_id,boolean chkvisitsectionstart,boolean chkvisitsectionend,
+            String entrega
 
     ) {
         this.nombrecliente = nombrecliente;
@@ -35,11 +37,21 @@ public class ListaHojaDespachoEntity {
         this.item_id = item_id;
         this.chkvisitsectionstart = chkvisitsectionstart;
         this.chkvisitsectionend = chkvisitsectionend;
+        this.entrega = entrega;
+
     }
 
 
     public ListaHojaDespachoEntity() {
 
+    }
+
+    public String getEntrega() {
+        return entrega;
+    }
+
+    public void setEntrega(String entrega) {
+        this.entrega = entrega;
     }
 
     public boolean isChkvisitsectionstart() {

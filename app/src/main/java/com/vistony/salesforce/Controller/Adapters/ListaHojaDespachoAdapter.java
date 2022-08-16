@@ -118,6 +118,9 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
             holder.chk_updatedispatch=convertView.findViewById(R.id.chk_updatedispatch);
             holder.chk_visit_start=convertView.findViewById(R.id.chk_visit_start);
             holder.chk_visit_end=convertView.findViewById(R.id.chk_visit_end);
+            holder.tv_orden_detalle_item=convertView.findViewById(R.id.tv_orden_detalle_item);
+            holder.tv_delivery=convertView.findViewById(R.id.tv_delivery);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -136,6 +139,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         holder.chk_updatedispatch.setChecked(lead.isChkupdatedispatch());
         holder.chk_visit_start.setChecked(lead.isChkvisitsectionstart());
         holder.chk_visit_end.setChecked(lead.isChkvisitsectionend());
+        holder.tv_delivery.setText(lead.getEntrega());
         ArraylistaClienteCabeceraEntity=new ArrayList<>();
         /*ArrayList<ClienteSQLiteEntity> listaClienteEnvio=new ArrayList<>();
         ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
@@ -147,6 +151,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
             holder.tv_cliente.setText(listaClienteEnvio.get(i).getNombrecliente());
         }*/
         //.holder.chk_updatedispatch.setVisibility(View.GONE);
+        holder.tv_orden_detalle_item.setText(lead.getItem_id()+")");
         holder.tv_cliente.setText(lead.getNombrecliente());
         //holder.tv_cliente.setText(lead.getNombrecliente());
         holder.relativeListaHojaDespacho.setOnClickListener(new View.OnClickListener() {
@@ -229,6 +234,8 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         CheckBox chk_updatedispatch;
         CheckBox chk_visit_start;
         CheckBox chk_visit_end;
+        TextView tv_orden_detalle_item;
+        TextView tv_delivery;
 
     }
 

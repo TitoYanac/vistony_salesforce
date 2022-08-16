@@ -13,13 +13,22 @@
     >
 
     <TextView
+        android:id="@+id/tv_orden_detalle_item"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"
+        tools:text="1)" />
+
+    <TextView
         android:id="@+id/lbl_cliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold"
         android:text="@string/lbl_client_dispatch_sheet"
-        />
+        android:textAppearance="?attr/textAppearanceListItem" />
+
     <TextView
         android:id="@+id/tv_cliente"
         android:layout_width="wrap_content"
@@ -28,6 +37,7 @@
         android:layout_marginLeft="80dp"
         android:layout_marginTop="30dp"
         android:text="Cliente1"
+        android:textStyle="bold"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
@@ -53,9 +63,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="90dp"
-        android:textAppearance="?attr/textAppearanceListItem"
         android:text="Factura:"
-        />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_factura"
@@ -65,15 +75,17 @@
         android:layout_marginLeft="80dp"
         android:layout_marginTop="90dp"
         android:text="Factura1"
+        android:textStyle="bold"
         android:textAppearance="?attr/textAppearanceListItem" />
+
     <TextView
         android:id="@+id/lbl_saldo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="110dp"
-        android:textAppearance="?attr/textAppearanceListItem"
         android:text="Saldo:"
-        />
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_saldo"
@@ -83,6 +95,7 @@
         android:layout_marginLeft="80dp"
         android:layout_marginTop="110dp"
         android:text="Saldo1"
+        android:textStyle="bold"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
@@ -102,23 +115,24 @@
         android:layout_marginTop="50dp"
         android:text="Vendedor1"
         android:textAppearance="?attr/textAppearanceListItem" />
+
     <TextView
         android:id="@+id/lbl_direccion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
-        android:textAppearance="?attr/textAppearanceListItem"
+        android:layout_marginTop="150dp"
         android:text="@string/lbl_address"
+        android:textAppearance="?attr/textAppearanceListItem"
 
         />
 
     <TextView
         android:id="@+id/tv_direccion"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="150dp"
         android:text="Direccion1"
         android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -127,10 +141,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="240dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="185dp"
         android:clickable="false"
         android:text="Entrega"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:textStyle="bold" />
     <!--<CheckBox
         android:id="@+id/chk_statusdispatch"
         android:layout_width="wrap_content"
@@ -146,25 +161,51 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="190dp"
         android:text="Visita: "
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <CheckBox
         android:id="@+id/chk_visit_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
+        android:layout_marginTop="185dp"
         android:clickable="false"
         android:text="Inicio"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
     <CheckBox
         android:id="@+id/chk_visit_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="110dp"
+        android:layout_marginTop="185dp"
         android:clickable="false"
         android:text="Fin"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/lbl_delivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:text="@string/lbl_historic_status_dispatch_delivery"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_delivery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="130dp"
+        android:text="Entrega"
+        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceListItem" />
+
 </RelativeLayout>

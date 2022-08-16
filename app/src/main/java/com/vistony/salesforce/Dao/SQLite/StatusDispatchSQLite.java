@@ -194,7 +194,7 @@ public class StatusDispatchSQLite {
                 historicStatusDispatchEntity.setEntrega(fila.getString(18));
                 historicStatusDispatchEntity.setFactura(fila.getString(17));
                 historicStatusDispatchEntity.setTipoDespacho(fila.getString(19));
-                //historicStatusDispatchEntity.setMotivoDespacho(fila.getString(20));
+                historicStatusDispatchEntity.setMotivoDespacho(fila.getString(20));
                 listStatusDispatchEntity.add(historicStatusDispatchEntity);
             }
 

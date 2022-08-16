@@ -27,8 +27,16 @@ public class VersionViewModel {
 
     public MutableLiveData<Object> getVs(String imei,String version,Context context){
         SharedPreferences statusImei = context.getSharedPreferences("imeiRegister", Context.MODE_PRIVATE);
+        String baseUrl=null;
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            baseUrl = "https://salesforce.vistony.pe";
+        }else {
+            baseUrl = "http://salesforce.vistony.com";
+        }
+
         //Produccion-------------------------------
-        String baseUrl = "http://salesforce.vistony.com";
+        //String baseUrl = "http://salesforce.vistony.com";
         //------------------------------------------
         //Pruebas QA--------------- Nueva Produccion
         //String baseUrl = "https://salesforce.vistony.pe";

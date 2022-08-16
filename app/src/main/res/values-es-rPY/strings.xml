@@ -134,4 +134,5 @@
     <string name="lbl_find_quotation">Consulta Cotizacion</string>
     <string name="lbl_visit_start">Vist.Ini</string>
     <string name="lbl_visit_end">Vist.Fin</string>
+    <string name="lbl_item">Item</string>
 </resources>

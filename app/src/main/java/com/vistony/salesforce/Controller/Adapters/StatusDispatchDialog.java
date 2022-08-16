@@ -153,7 +153,7 @@ public class StatusDispatchDialog extends DialogFragment {
         ArrayList<String> spptypeDispatch=new ArrayList<>();
         ArrayList<String> sppOcurrencies=new ArrayList<>();
         Log.e("REOS","StatusDispatchDialog.onCreateDialog.cliente_id:"+cliente_id);
-        listDetailDispatchSheetSQLite=detailDispatchSheetSQLite.getDetailDispatchSheetforClient(cliente_id);
+        listDetailDispatchSheetSQLite=detailDispatchSheetSQLite.getDetailDispatchSheetforControlID(control_id,item_id);
         String direccion_id,zona_id;
         Log.e("REOS","StatusDispatchDialog.onCreateDialog.listDetailDispatchSheetSQLite.size():"+listDetailDispatchSheetSQLite.size());
         for(int i=0;i<listDetailDispatchSheetSQLite.size();i++)
@@ -238,6 +238,8 @@ public class StatusDispatchDialog extends DialogFragment {
                 someActivityResultLauncher.launch(intent);
             }
         });*/
+        //imv_historic_status_dispatch_delivery.setEnabled(true);
+        //imv_historic_status_dispatch_photo.setEnabled(true);
         spn_type_dispatch.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -273,29 +275,34 @@ public class StatusDispatchDialog extends DialogFragment {
 
         });
         imv_historic_status_dispatch_delivery.setOnClickListener(new View.OnClickListener() {
+        //imageViewPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.e("REOS","statusDispatchRepository-->FotoGuia-->Inicia");
                 //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Crea el File
-                File photoFile = null;
                 try {
-                    photoFile = createImageFile(Entrega_id,"G");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        // Crea el File
+                        File photoFile = null;
+                        //startActivityForResult(intent,0);
+                            photoFile = createImageFile(Entrega_id,"G");
+
+                        if (photoFile != null) {
+                            Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            //startActivityForResult(intent,20);
+                            someActivityResultLauncherGuia.launch(intent);
+                            /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                                someActivityResultLauncherGuia.launch(intent);
+                            }*/
+                        }
                 } catch (IOException ex) {
-                    Log.e("log,",""+ex);
-                }
-                if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    //startActivityForResult(intent,20);
-                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                        someActivityResultLauncherGuia.launch(intent);
-                    }
+                    Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto-error:"+ex);
                 }
 
         }});
         imv_historic_status_dispatch_photo.setOnClickListener(new View.OnClickListener() {
+        //imageViewPhoto2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -303,22 +310,29 @@ public class StatusDispatchDialog extends DialogFragment {
                 //if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                  //   someActivityResultLauncher.launch(intent);
                 //}
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Crea el File
-                File photoFile = null;
                 try {
-                    photoFile = createImageFile(Entrega_id,"L");
+                        Log.e("REOS","statusDispatchRepository-->FotoLocal-->Inicia");
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        // Crea el File
+                        File photoFile = null;
+
+                            photoFile = createImageFile(Entrega_id,"L");
+
+                        if (photoFile != null) {
+                            Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
+                            Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            //startActivityForResult(intent,20);
+                            someActivityResultLauncher.launch(intent);
+                            /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                                Log.e("REOS","statusDispatchRepository-->FotoLocal-->intent.resolveActivity(getActivity().getPackageManager()) != null");
+                                someActivityResultLauncher.launch(intent);
+                            }*/
+                        }
                 } catch (IOException ex) {
-                    Log.e("log,",""+ex);
+                    Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto2-error:"+ex);
                 }
-                if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    //startActivityForResult(intent,20);
-                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                        someActivityResultLauncher.launch(intent);
-                    }
-                }
+                Log.e("REOS","statusDispatchRepository-->FotoLocal-->Fin");
             }});
 
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {

@@ -71,7 +71,7 @@ public class MenuConsultasView extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         switch (BuildConfig.FLAVOR){
-            case "bolivia":
+
             case "india":
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view_induvis, container, false);
                 break;
@@ -79,6 +79,7 @@ public class MenuConsultasView extends Fragment {
             case "paraguay":
             case "chile":
             case "ecuador":
+            case "bolivia":
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view, container, false);
                 break;
             default:
@@ -138,19 +139,20 @@ public class MenuConsultasView extends Fragment {
                     case "paraguay":
                     case "chile":
                     case "ecuador":
+                    case "bolivia":
                          Fragment="MenuConsultasView";
                          accion="menuconsultaspedidoview";
                          compuesto=Fragment+"-"+accion;
                         mListener.onFragmentInteraction(compuesto,"");
                         break;
                     //case "ecuador":
-                    case "bolivia":
+                    /*case "bolivia":
 
                          Fragment="MenuConsultasView";
                          accion="historicoordenventa";
                          compuesto=Fragment+"-"+accion;
                         mListener.onFragmentInteraction(compuesto,"");
-                        break;
+                        break;*/
                 }
 
             }
@@ -175,6 +177,7 @@ public class MenuConsultasView extends Fragment {
                     case "paraguay":
                     case "chile":
                     case "ecuador":
+                    case "bolivia":
                         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
                         {
                             Fragment="HistoricoCobranzaView";
@@ -192,13 +195,13 @@ public class MenuConsultasView extends Fragment {
 
                         break;
                     //case "ecuador":
-                    case "bolivia":
+                    /*case "bolivia":
 
                          Fragment="HistoricoCobranzaView";
                          accion="COBRANZA";
                          compuesto=Fragment+"-"+accion;
-                        mListener.onFragmentInteraction(compuesto,"");
-                        break;
+                        mListener.onFragmentInteraction(compuesto,"");*/
+                        //break;
                 }
 
             }

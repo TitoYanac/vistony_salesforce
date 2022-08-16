@@ -390,7 +390,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
             listaClienteDetalleDao = new ListaClienteDetalleDao();
             pd.cancel();
 
-            listaClienteDetalleAdapter = new ListaClienteDetalleAdapter(getActivity(),ListaClienteDetalleDao.getInstance().getLeads(listaDDeudaEntity,chkruta));
+            listaClienteDetalleAdapter = new ListaClienteDetalleAdapter(getActivity(),ListaClienteDetalleDao.getInstance().getLeads(listaDDeudaEntity,chkruta,domebarque));
             //listaClienteDetalleAdapter = new ListaClienteDetalleAdapter(getActivity(),listaDDeudaEntity);
             listaDDeuda.setAdapter(listaClienteDetalleAdapter);
 
