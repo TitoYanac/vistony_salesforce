@@ -97,7 +97,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     View v;
     static Button btn_detalle_orden_venta;
     OnFragmentInteractionListener mListener;
-    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate;
+    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta;
     static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
     static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,lbl_terminopago;
@@ -278,6 +278,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         obtenerTituloFormulario();
         context=getContext();
+        SesionEntity.flagquerystock="N";
         induvis=new Induvis();
         hiloObtenerResumenOrdenVenta=new HiloObtenerResumenOrdenVenta();
 
@@ -391,6 +392,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     rucdni= Listado.get(i).getRucdni();
                     cliente_terminopago_id=Listado.get(i).getTerminopago_id();
                     cliente_domembarque_id=Listado.get(i).getDomembarque_id();
+                    chkruta=Listado.get(i).getChk_ruta();
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.Listado.get(i).getTerminopago_id(): "+Listado.get(i).getTerminopago_id());
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.cliente_terminopago_id: "+cliente_terminopago_id);
 
@@ -1032,6 +1034,10 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             visita.setObservation("Se genero el pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id()+" para la dirección "+Listado.get(i).getDireccion());
             visita.setLatitude(""+latitude);
             visita.setLongitude(""+longitude);
+            visita.setMobileID(ordenventa_id);
+            visita.setStatusRoute(chkruta);
+            visita.setAmount(""+totalSalesOrder.getTotal());
+            visita.setTerminoPago_ID(contado);
 
             formulasController.RegistraVisita(visita,getActivity(),totalSalesOrder.getTotal());
 

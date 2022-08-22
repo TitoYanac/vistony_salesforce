@@ -7,12 +7,17 @@ import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -419,10 +424,7 @@ ParametrosView extends Fragment {
         });
 
 
-        ///////////////////////////Ruta de Trabajo/////////////////////////////////////////////////
-        rutaFuerzaTrabajoRepository.getInsertDBWorkPath  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
+
 
         //Enviar Firma Electronica
         //cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
@@ -449,6 +451,11 @@ ParametrosView extends Fragment {
 
         fabdescargarparametros.setOnClickListener(view -> {
             Object objeto=null,object2=null;
+
+            ///////////////////////////Ruta de Trabajo/////////////////////////////////////////////////
+            rutaFuerzaTrabajoRepository.getInsertDBWorkPath  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame","=>"+data);
+            });
 
             objeto=listaParametrosAdapter.ObtenerListaParametros();
 
@@ -481,6 +488,17 @@ ParametrosView extends Fragment {
         //listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQLiteEntity,false));
         //listviewparametro.setAdapter(listaParametrosAdapter);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()){
+
+            }else{
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        }
         return v;
     }
 
@@ -499,6 +517,7 @@ ParametrosView extends Fragment {
                 int CantClientes=0,CantBancos=0,CantDocumentosDeuda=0,CantRutaVendedor=0,CantTerminoPago=0,
                         CantAgencia=0,CantListaPrecioDetalle=0,CantStock=0,CantListaPromocion=0,CantPromocionCabecera=0,
                 CantPromocionDetalle=0,CantRutaFuerzaTrabajo=0,CantCatalogo=0,CantDireccionCliente=0,CantHojaDespacho=0,CantMotivoVisita=0;
+
 
 
                 for(int i=0;i<arg0.length;i++) {
@@ -1271,6 +1290,8 @@ ParametrosView extends Fragment {
         switch (item.getItemId()) {
             case R.id.seleccionar_todo:
                 alertaSeleccionarTodo("Esta Seguro de Seleccionar Todos los parametros?").show();
+
+
                 return false;
             default:
                 break;

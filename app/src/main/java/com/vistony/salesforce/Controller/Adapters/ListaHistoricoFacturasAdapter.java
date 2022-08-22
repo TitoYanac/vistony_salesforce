@@ -143,7 +143,7 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
         holder.tv_historico_facturas_monto.setText(Convert.currencyForView(lead.getMontoimporteordenventa()));
         holder.tv_cond_venta.setText(lead.getTerminopago());
 
-        if(BuildConfig.FLAVOR.equals("chile"))
+        if(BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
         {
             holder.imv_historico_facturas_despacho.setEnabled(false);
             holder.imv_historico_facturas_despacho.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));

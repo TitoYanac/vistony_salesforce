@@ -123,6 +123,8 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         holder.tv_productoid.setText(lead.getProducto_id());
         holder.tv_producto.setText(lead.getProducto());
         holder.tv_umd.setText(lead.getUmd());
+        Log.e("REOS", "ListaProductoAdapter.relativeListaProducto.lead.getPreciobase():" + lead.getPreciobase());
+        Log.e("REOS", "ListaProductoAdapter.relativeListaProducto.SesionEntity.Impuesto:" + SesionEntity.Impuesto);
         holder.tv_precio.setText(formulasController.ObtenerCalculoPrecioImpuesto(lead.getPreciobase(), SesionEntity.Impuesto));
         //holder.tv_igv.setText(lead.getPrecioigv());
         holder.tv_igv.setText(lead.getStock());

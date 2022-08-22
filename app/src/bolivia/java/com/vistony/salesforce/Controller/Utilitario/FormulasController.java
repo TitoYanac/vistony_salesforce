@@ -1140,6 +1140,7 @@ public class FormulasController {
         visita.setChkrecibido("0");
 
         VisitaSQLite visitaSQLite = new VisitaSQLite(context);
+        visita.setHour_Before(visitaSQLite.getHourAfter(FormatFecha.format(date)));
         visitaSQLite.InsertaVisita(visita);
 
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(context);
@@ -1907,4 +1908,29 @@ public class FormulasController {
         BigDecimal subTotalLine=preUnit.multiply(cant.multiply(new BigDecimal(0.01)).add(new BigDecimal(1)));
         return subTotalLine.setScale(5,RoundingMode.DOWN).toString();
     }
+
+    public String CalcularMontoTotalPromocionconDescuentoyBono(String MontoTotalLineaSinDescuento,String MontoDescuento,String Bono ){
+        BigDecimal temp1=new BigDecimal(MontoTotalLineaSinDescuento);
+
+        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).subtract(new BigDecimal(Bono).setScale(3, RoundingMode.HALF_UP));
+
+        return repta.toString();
+    }
+
+    public  String getPriceReferencePack(String PrecioPackconDescuento,String QuantityPackPromotion){
+        String efectividad="";
+        Log.e("REOS","FormulasController.getAmountRouteeffectiveness.PrecioPackconDescuento:" + PrecioPackconDescuento);
+        Log.e("REOS","FormulasController.getAmountRouteeffectiveness.QuantityPackPromotion:" + QuantityPackPromotion);
+        //double resultado;
+        //resultado=(Double.parseDouble(PrecioPackconDescuento)/Double.parseDouble(QuantityPackPromotion));
+        QuantityPackPromotion=(QuantityPackPromotion==null || QuantityPackPromotion.equals(""))?"0":QuantityPackPromotion;
+        BigDecimal BPrecioPackconDescuento = new BigDecimal(PrecioPackconDescuento);
+        BigDecimal BQuantityPackPromotion = new BigDecimal(QuantityPackPromotion);
+
+        BigDecimal montoResultado=BPrecioPackconDescuento.divide(BQuantityPackPromotion,3,RoundingMode.HALF_UP);
+        //Log.e("REOS","FormulasController.getAmountRouteeffectiveness.resultado:" + resultado);
+        Log.e("REOS","FormulasController-getPriceReferencePack-montoResultado:"+montoResultado);
+        return montoResultado.toString();
+    }
+
 }

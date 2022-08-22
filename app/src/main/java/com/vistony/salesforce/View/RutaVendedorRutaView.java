@@ -181,13 +181,13 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
             ArrayList<RutaFuerzaTrabajoSQLiteEntity>Lista=(ArrayList<RutaFuerzaTrabajoSQLiteEntity>) result;
             ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntities=new ArrayList<>();
 
-            RutaFuerzaTrabajoSQLiteDao rutaFuerzaTrabajoSQLiteDaoO=new RutaFuerzaTrabajoSQLiteDao(getContext());
+            //RutaFuerzaTrabajoSQLiteDao rutaFuerzaTrabajoSQLiteDaoO=new RutaFuerzaTrabajoSQLiteDao(getContext());
 
             RutaFuerzaTrabajoSQLiteDao rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(getContext());
             Log.e("REOS", "RutaVendedorRutaView-ObtenerSQLiteRutaFuerzaTrabajo-Lista.size(): "+Lista.size());
-            Log.e("REOS", "RutaVendedorRutaView-ObtenerSQLiteRutaFuerzaTrabajo-rutaFuerzaTrabajoSQLiteDaoO.ObtenerCantidadRutaFuerzaTrabajo(): "+rutaFuerzaTrabajoSQLiteDaoO.ObtenerCantidadRutaFuerzaTrabajo());
+            //Log.e("REOS", "RutaVendedorRutaView-ObtenerSQLiteRutaFuerzaTrabajo-rutaFuerzaTrabajoSQLiteDaoO.ObtenerCantidadRutaFuerzaTrabajo(): "+rutaFuerzaTrabajoSQLiteDaoO.ObtenerCantidadRutaFuerzaTrabajo());
             //Evalua si la lista obtenida por fecha tiene data y si la tabla tiene registros
-            if(Lista.isEmpty()&&rutaFuerzaTrabajoSQLiteDaoO.ObtenerCantidadRutaFuerzaTrabajo()>0){
+            if(Lista.isEmpty()&&rutaFuerzaTrabajoSQLiteDao.ObtenerCantidadRutaFuerzaTrabajo()>0){
                 Log.e("REOS", "RutaVendedorRutaView-onPostExecute-Entraif:");
                 Lista=rutaFuerzaTrabajoSQLiteDao.ObtenerRutaFuerzaTrabajoFechaMenor();
 

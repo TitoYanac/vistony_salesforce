@@ -25,6 +25,7 @@ public class Config {
     public static Retrofit getClient() {
 
         String baseUrl=null;
+        //if(BuildConfig.FLAVOR.equals("peru"))
         if(BuildConfig.FLAVOR.equals("peru"))
         {
             baseUrl = "https://salesforce.vistony.pe";
@@ -52,6 +53,7 @@ public class Config {
                 break;
             case "bolivia":
                 puerto = ":8052";
+                //puerto = "";
                 break;
             case "ecuador":
                 puerto = ":8050";
@@ -96,6 +98,7 @@ public class Config {
     public static Retrofit getClientLogin() {
 
         String baseUrl=null;
+        //if(BuildConfig.FLAVOR.equals("peru"))
         if(BuildConfig.FLAVOR.equals("peru"))
         {
             baseUrl = "https://salesforce.vistony.pe";
@@ -123,6 +126,7 @@ public class Config {
                 break;
             case "bolivia":
                 puerto = ":8052";
+                //puerto = "";
                 break;
             case "ecuador":
                 puerto = ":8050";

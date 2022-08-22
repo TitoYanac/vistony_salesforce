@@ -28,6 +28,7 @@ public class VersionViewModel {
     public MutableLiveData<Object> getVs(String imei,String version,Context context){
         SharedPreferences statusImei = context.getSharedPreferences("imeiRegister", Context.MODE_PRIVATE);
         String baseUrl=null;
+        //if(BuildConfig.FLAVOR.equals("peru"))
         if(BuildConfig.FLAVOR.equals("peru"))
         {
             baseUrl = "https://salesforce.vistony.pe";
@@ -56,9 +57,11 @@ public class VersionViewModel {
                 break;
             case "bolivia":
                 puerto = ":8052";
+                //puerto = "";
                 break;
             case "ecuador":
                 puerto = ":8050";
+
                 break;
             case "peru":
                 //Produccion----------

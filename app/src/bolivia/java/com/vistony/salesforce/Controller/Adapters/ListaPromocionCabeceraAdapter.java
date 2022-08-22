@@ -46,9 +46,9 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
     private FragmentManager fragmentManager;
     PromocionCabeceraView promocionCabeceraView;
     ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntities=new ArrayList<>();
-    //PromocionDetalleSQLiteDao promocionDetalleSQLiteDao;
-    //ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao;
-    //FormulasController formulasController;
+    PromocionDetalleSQLiteDao promocionDetalleSQLiteDao;
+    ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao;
+    FormulasController formulasController;
     public ListaPromocionCabeceraAdapter(Context context, List<ListaPromocionCabeceraEntity> objects) {
 
         super(context, 0, objects);
@@ -59,9 +59,9 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //promocionDetalleSQLiteDao=new PromocionDetalleSQLiteDao(getContext());
-        //listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(getContext());
-        //formulasController=new FormulasController(getContext());
+        promocionDetalleSQLiteDao=new PromocionDetalleSQLiteDao(getContext());
+        listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(getContext());
+        formulasController=new FormulasController(getContext());
         final ListaPromocionCabeceraAdapter.ViewHolder holder;
         // ¿Ya se infló este view?
         if (null == convertView) {
@@ -103,7 +103,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         holder.tv_cantidadcompra.setText(lead.getCantidadcompra());
         holder.tv_cant_promocion.setText(lead.getCantidadpromocion());
         holder.tv_porcentajedescuentocabecera.setText(lead.getDescuento());
-        /*String contado="",credito="";
+        String contado="",credito="";
         ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
         listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
                 getContext(),
@@ -113,23 +113,23 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         {
             contado=listaPrecioDetalleSQLiteEntities.get(i).getContado();
             credito=listaPrecioDetalleSQLiteEntities.get(i).getCredito();
-        }*/
+        }
 
-        /*if(SesionEntity.flagquerystock.equals("Y"))
+        if(SesionEntity.flagquerystock.equals("Y"))
         {
             holder.tv_cant_promocion.setVisibility(View.GONE);
             holder.imv_incrementar.setVisibility(View.GONE);
             holder.imv_decrementar.setVisibility(View.GONE);
             holder.imv_editar_promocion_detalle.setVisibility(View.GONE);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.e: "+contado);
-            holder.tv_cash.setText(promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
+/*            holder.tv_cash.setText(promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
                     SesionEntity.compania_id,
                     lead.getLista_promocion_id(),
                     lead.getPromocion_id()));
             holder.tv_credit.setText(promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
                     SesionEntity.compania_id,
                     lead.getLista_promocion_id(),
-                    lead.getPromocion_id()));
+                    lead.getPromocion_id()));*/
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.contado: "+contado);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.credito: "+credito);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.formulasController.applyDiscountPercentageForLine): "+formulasController.applyDiscountPercentageForLine(
@@ -143,7 +143,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                     ),lead.getDescuento()
             ));
 
-            holder.tv_price_cash_pack.setText(
+            /*holder.tv_price_cash_pack.setText(
                     formulasController.CalcularMontoTotalconDescuento(
                             formulasController.getTotalPerLine(
                                     contado,lead.getCantidadcompra()
@@ -164,18 +164,18 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                                             credito,lead.getCantidadcompra()
                                     ),lead.getDescuento()
                             )
-                    ));
-        }*/
+                    ));*/
+        }
 
-        /*holder.imv_valorizar.setOnClickListener(new View.OnClickListener() {
+        holder.imv_valorizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogoObtenerPromocionValorizada(lead).show();
-            }});*/
+            }});
 
         //lead.setListaPromocionDetalleEntities(listaPromocionDetalleSQLiteEntity);
         switch (BuildConfig.FLAVOR){
-            case "bolivia":
+            //case "bolivia":
             case "ecuador":
             case "chile":
             case "india":
@@ -770,5 +770,205 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         });
         return  dialog;
     }*/
+    public Dialog DialogoObtenerPromocionValorizada(ListaPromocionCabeceraEntity lead) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_lista_promocion_valorizada);
+        TextView textTitle = dialog.findViewById(R.id.tv_titulo);
+        textTitle.setText("IMPORTANTE!!!");
+        final TextView tv_pack_contado,tv_pack_credito,tv_descuento_pack_contado,tv_descuento_pack_credito
+                ,tv_bono_pack_contado,tv_bono_pack_credito,tv_total_pack_contado,tv_total_pack_credito,
+                tv_precio_referencial_pack_contado,tv_precio_referencial_pack_credito,tv_precio_contado,tv_precio_credito
+                ,tv_precio_referencial_pack_contado_unit,tv_precio_referencial_pack_credito_unit
+                ;
 
+        tv_pack_contado= dialog.findViewById(R.id.tv_pack_contado);
+        tv_pack_credito= dialog.findViewById(R.id.tv_pack_credito);
+        tv_descuento_pack_contado= dialog.findViewById(R.id.tv_descuento_pack_contado);
+        tv_descuento_pack_credito= dialog.findViewById(R.id.tv_descuento_pack_credito);
+        tv_bono_pack_contado= dialog.findViewById(R.id.tv_bono_pack_contado);
+        tv_bono_pack_credito= dialog.findViewById(R.id.tv_bono_pack_credito);
+        tv_total_pack_contado= dialog.findViewById(R.id.tv_total_pack_contado);
+        tv_total_pack_credito= dialog.findViewById(R.id.tv_total_pack_credito);
+        tv_precio_referencial_pack_contado= dialog.findViewById(R.id.tv_precio_referencial_pack_contado);
+        tv_precio_referencial_pack_credito= dialog.findViewById(R.id.tv_precio_referencial_pack_credito);
+        tv_precio_contado= dialog.findViewById(R.id.tv_precio_contado);
+        tv_precio_credito= dialog.findViewById(R.id.tv_precio_credito);
+        tv_precio_referencial_pack_contado_unit= dialog.findViewById(R.id.tv_precio_referencial_pack_contado_unit);
+        tv_precio_referencial_pack_credito_unit= dialog.findViewById(R.id.tv_precio_referencial_pack_credito_unit);
+        String contado="",credito="",units="";
+        ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
+        listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
+                getContext(),
+                lead.producto_id
+        );
+        for(int i=0;i<listaPrecioDetalleSQLiteEntities.size();i++)
+        {
+            contado=listaPrecioDetalleSQLiteEntities.get(i).getContado();
+            credito=listaPrecioDetalleSQLiteEntities.get(i).getCredito();
+            units=listaPrecioDetalleSQLiteEntities.get(i).getUnit();
+        }
+
+        tv_precio_contado.setText(Convert.currencyForView(contado));
+        tv_precio_credito.setText(Convert.currencyForView(credito));
+
+        tv_pack_contado.setText(Convert.currencyForView(formulasController.getTotalPerLine(
+                contado,lead.getCantidadcompra()
+        )));
+        tv_pack_credito.setText(Convert.currencyForView(formulasController.getTotalPerLine(
+                credito,lead.getCantidadcompra()
+        )));
+
+        tv_bono_pack_contado.setText(Convert.currencyForView(
+                promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
+                        SesionEntity.compania_id,
+                        lead.getLista_promocion_id(),
+                        lead.getPromocion_id())));
+        tv_bono_pack_credito.setText(Convert.currencyForView(
+                promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
+                        SesionEntity.compania_id,
+                        lead.getLista_promocion_id(),
+                        lead.getPromocion_id())));
+        tv_descuento_pack_contado.setText(Convert.currencyForView(String.valueOf(
+                Double.parseDouble (formulasController.applyDiscountPercentageForLine(
+                        formulasController.getTotalPerLine(
+                                contado,lead.getCantidadcompra()
+                        ),lead.getDescuento()
+                ))*-1)
+        ));
+        tv_descuento_pack_credito.setText(Convert.currencyForView(String.valueOf(
+                Double.parseDouble (formulasController.applyDiscountPercentageForLine(
+                        formulasController.getTotalPerLine(
+                                credito,lead.getCantidadcompra()
+                        ),lead.getDescuento()
+                ))*-1)
+        ));
+        tv_total_pack_contado.setText(Convert.currencyForView(
+                formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                        formulasController.getTotalPerLine(
+                                contado,lead.getCantidadcompra()
+                        ),
+                        formulasController.applyDiscountPercentageForLine(
+                                formulasController.getTotalPerLine(
+                                        contado,lead.getCantidadcompra()
+                                ),lead.getDescuento()
+                        ),
+                        "0"
+                )
+        ));
+        tv_total_pack_credito.setText(Convert.currencyForView(
+                formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                        formulasController.getTotalPerLine(
+                                credito,lead.getCantidadcompra()
+                        ),
+                        formulasController.applyDiscountPercentageForLine(
+                                formulasController.getTotalPerLine(
+                                        credito,lead.getCantidadcompra()
+                                ),lead.getDescuento()
+                        ),
+                        "0"
+                )
+        ));
+        tv_precio_referencial_pack_contado.setText(Convert.currencyForView(
+                formulasController.getPriceReferencePack(
+                        formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                                formulasController.getTotalPerLine(
+                                        contado,lead.getCantidadcompra()
+                                ),
+                                formulasController.applyDiscountPercentageForLine(
+                                        formulasController.getTotalPerLine(
+                                                contado,lead.getCantidadcompra()
+                                        ),lead.getDescuento()
+                                ),
+                                promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
+                                        SesionEntity.compania_id,
+                                        lead.getLista_promocion_id(),
+                                        lead.getPromocion_id())
+                        ),
+                        lead.getCantidadcompra()
+                )
+        ));
+        tv_precio_referencial_pack_credito.setText(Convert.currencyForView(
+                formulasController.getPriceReferencePack(
+                        formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                                formulasController.getTotalPerLine(
+                                        credito,lead.getCantidadcompra()
+                                ),
+                                formulasController.applyDiscountPercentageForLine(
+                                        formulasController.getTotalPerLine(
+                                                credito,lead.getCantidadcompra()
+                                        ),lead.getDescuento()
+                                ),
+                                promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
+                                        SesionEntity.compania_id,
+                                        lead.getLista_promocion_id(),
+                                        lead.getPromocion_id())
+                        ),
+                        lead.getCantidadcompra()
+                )
+        ));
+
+
+
+
+        tv_precio_referencial_pack_contado_unit.setText(Convert.currencyForView(
+                formulasController.getPriceReferencePack(
+                        formulasController.getPriceReferencePack(
+                                formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                                        formulasController.getTotalPerLine(
+                                                contado,lead.getCantidadcompra()
+                                        ),
+                                        formulasController.applyDiscountPercentageForLine(
+                                                formulasController.getTotalPerLine(
+                                                        contado,lead.getCantidadcompra()
+                                                ),lead.getDescuento()
+                                        ),
+                                        promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
+                                                SesionEntity.compania_id,
+                                                lead.getLista_promocion_id(),
+                                                lead.getPromocion_id())
+                                ),
+                                lead.getCantidadcompra()
+                        ),
+                        units
+                )
+        ));
+        tv_precio_referencial_pack_credito_unit.setText(Convert.currencyForView(
+                formulasController.getPriceReferencePack(
+                        formulasController.getPriceReferencePack(
+                                formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                                        formulasController.getTotalPerLine(
+                                                credito,lead.getCantidadcompra()
+                                        ),
+                                        formulasController.applyDiscountPercentageForLine(
+                                                formulasController.getTotalPerLine(
+                                                        credito,lead.getCantidadcompra()
+                                                ),lead.getDescuento()
+                                        ),
+                                        promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
+                                                SesionEntity.compania_id,
+                                                lead.getLista_promocion_id(),
+                                                lead.getPromocion_id())
+                                ),
+                                lead.getCantidadcompra()
+                        ),
+                        units
+                )
+        ));
+
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        //Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel_orden_venta_detalle);
+        dialogButton.setText("ACEPTAR");
+        //dialogButtonCancel.setText("CANCELAR");
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        //image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialogButton.setOnClickListener(v -> {
+            dialog.dismiss();
+
+        });
+        return  dialog;
+    }
 }

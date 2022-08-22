@@ -14,9 +14,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +56,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.TypeDispatchEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.io.ByteArrayOutputStream;
@@ -240,6 +243,9 @@ public class StatusDispatchDialog extends DialogFragment {
         });*/
         //imv_historic_status_dispatch_delivery.setEnabled(true);
         //imv_historic_status_dispatch_photo.setEnabled(true);
+
+
+
         spn_type_dispatch.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -274,6 +280,9 @@ public class StatusDispatchDialog extends DialogFragment {
             }
 
         });
+
+
+
         imv_historic_status_dispatch_delivery.setOnClickListener(new View.OnClickListener() {
         //imageViewPhoto.setOnClickListener(new View.OnClickListener() {
             @Override

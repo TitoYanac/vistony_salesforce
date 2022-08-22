@@ -824,7 +824,7 @@ public class MenuAccionView extends Fragment {
 
         return  dialog;
     }
-
+    ArrayList<VisitSectionEntity> listVisitSection=new ArrayList<>();
     private Dialog alertDialogVisitSection() {
 
         final Dialog dialog = new Dialog(getContext());
@@ -847,7 +847,7 @@ public class MenuAccionView extends Fragment {
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
         VisitSectionEntity visitSectionEntity=new VisitSectionEntity();
-        ArrayList<VisitSectionEntity> listVisitSection=new ArrayList<>();
+
         VisitSectionSQLite visitSectionSQLite=new VisitSectionSQLite(getContext());
         listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date));
         statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
@@ -916,6 +916,13 @@ public class MenuAccionView extends Fragment {
                 UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
                 ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
+                listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date));
+                statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
+                for(int i=0;i<listVisitSection.size();i++)
+                {
+                    fechainicio=listVisitSection.get(i).getDateini();
+                    timeini=listVisitSection.get(i).getTimeini();
+                }
                 visitSectionSQLite.UpdateVisitSectionForClient(
                         CardCode,DomEmbarque_ID,FormatFecha.format(date),String.valueOf(latitude),String.valueOf(longitude),FormatFecha.format(date),dateFormathora.format(date)
                 );
