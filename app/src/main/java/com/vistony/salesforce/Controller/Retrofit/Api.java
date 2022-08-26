@@ -42,6 +42,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuotasPerCustomerDetailE
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuotasPerCustomerEntityHeadResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuotasPerCustomerInvoiceEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuotationEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuoteEffectivenessEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ReasonDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ResumenDiarioEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.RutaFuerzaTrabajoEntityResponse;
@@ -294,6 +295,8 @@ public interface Api {
     @POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Quotation/({docEntry})/CreateSalesOrder")
     Call<SalesOrderEntityResponse> sendQuotation (@Path("docEntry") int docEntry,@Body RequestBody params);
 
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Effectiveness/Quote")
+    Call<QuoteEffectivenessEntityResponse> getQuoteEffectiveness (@Query("imei") String imei);
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);
     //@GET

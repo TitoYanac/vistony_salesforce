@@ -40,7 +40,7 @@ public class ListaHojaDespachoDao {
                         , Lista.get(i).getDireccion()
                         , Lista.get(i).getFactura()
                         , Lista.get(i).getSaldo()
-                        , (Lista.get(i).getFuerzatrabajo_id()+" "+Lista.get(i).getFuerzatrabajo_factura())
+                        , (Lista.get(i).getFuerzatrabajo_factura_id()+" "+Lista.get(i).getFuerzatrabajo_factura())
                         , Lista.get(i).getTerminopago()
                         ,Lista.get(i).getCliente_id()
                         ,Lista.get(i).getDomembarque_id()

@@ -1489,7 +1489,6 @@ public class MenuView extends AppCompatActivity
         }
         if(tag.equals("RutaVendedorNorutaView"))
         {
-
             if(tag2.equals("agregarClienteNoRuta"))
             {
                 contentFragment=new BuscarClienteView();
@@ -1499,6 +1498,7 @@ public class MenuView extends AppCompatActivity
                 ft.add(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
+                BuscarClienteView.newInstanceFlujoNoRuta(Lista);
             }
         }
         if(tag.equals("DireccionClienteView"))

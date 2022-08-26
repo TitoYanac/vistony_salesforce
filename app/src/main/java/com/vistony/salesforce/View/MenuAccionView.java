@@ -912,6 +912,7 @@ public class MenuAccionView extends Fragment {
         btn_finish_visitsection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String Latitudini="0",Longitudini="0";
                 UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
                 UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
                 ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
@@ -922,6 +923,8 @@ public class MenuAccionView extends Fragment {
                 {
                     fechainicio=listVisitSection.get(i).getDateini();
                     timeini=listVisitSection.get(i).getTimeini();
+                    Latitudini=listVisitSection.get(i).getLatitudini();
+                    Longitudini=listVisitSection.get(i).getLongitudini();
                 }
                 visitSectionSQLite.UpdateVisitSectionForClient(
                         CardCode,DomEmbarque_ID,FormatFecha.format(date),String.valueOf(latitude),String.valueOf(longitude),FormatFecha.format(date),dateFormathora.format(date)
@@ -934,7 +937,10 @@ public class MenuAccionView extends Fragment {
                 if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("chofer"))
                 {
                     StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(getContext());
-                    statusDispatchSQLite.UpdateTimeStatusDispatch(CardCode, DomEmbarque_ID,timeini,dateFormathora.format(date));
+                    statusDispatchSQLite.UpdateTimeStatusDispatch(
+                            CardCode,
+                            DomEmbarque_ID,timeini,dateFormathora.format(date),Latitudini,Longitudini
+                    );
 
                     /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                     statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {

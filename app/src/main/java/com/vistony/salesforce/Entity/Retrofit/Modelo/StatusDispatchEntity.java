@@ -5,7 +5,10 @@ import com.google.gson.annotations.SerializedName;
 public class StatusDispatchEntity {
     public String compania_id;
 
+    @SerializedName("UserCode")
     public String fuerzatrabajo_id;
+
+
 
     public String usuario_id;
 
@@ -38,8 +41,10 @@ public class StatusDispatchEntity {
 
     public String PhotoDocument;
 
+    @SerializedName("Latitude")
     public String latitud;
 
+    @SerializedName("Longitude")
     public String longitud;
 
     public String cliente;
@@ -77,11 +82,14 @@ public class StatusDispatchEntity {
 
     public String chk_timestatus;
 
+    @SerializedName("UserName")
+    public String fuerzatrabajo;
+
     public StatusDispatchEntity(String compania_id, String fuerzatrabajo_id, String usuario_id, String Delivered, String ReturnReason, String cliente_id, String factura_id, String entrega_id, String chkrecibido, String Comments,
                                 String foto, String fecha_registro, String hora_registro, String PhotoDocument, String latitud, String longitud,
                                 String cliente, String entrega, String factura, String typedispatch, String reasondispatch, String LineId
             , String PhotoStore,String DocEntry,String Address,String checkintime,String checkouttime
-                                ,String chk_timestatus
+                                ,String chk_timestatus,String fuerzatrabajo
                                 ) {
         this.compania_id = compania_id;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
@@ -111,7 +119,16 @@ public class StatusDispatchEntity {
         this.checkintime=checkintime;
         this.checkouttime=checkouttime;
         this.chk_timestatus=chk_timestatus;
+        this.fuerzatrabajo=fuerzatrabajo;
 
+    }
+
+    public String getFuerzatrabajo() {
+        return fuerzatrabajo;
+    }
+
+    public void setFuerzatrabajo(String fuerzatrabajo) {
+        this.fuerzatrabajo = fuerzatrabajo;
     }
 
     public String getChk_timestatus() {

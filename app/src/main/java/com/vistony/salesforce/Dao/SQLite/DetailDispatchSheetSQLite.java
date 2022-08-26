@@ -112,13 +112,14 @@ public class DetailDispatchSheetSQLite {
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
                         "A.cliente_id=B.cliente_id " +
-                        " left outer join statusdispatch C ON  " +
-                        "A.cliente_id=C.cliente_id  AND " +
-                        "A.entrega_id=C.entrega_id  AND " +
-                        "A.fuerzatrabajo_id=C.fuerzatrabajo_id" +
                         " left outer join (SELECT control_id,fechahojadespacho,fuerzatrabajo_id FROM headerdispatchsheet group by control_id,fechahojadespacho,fuerzatrabajo_id ) D ON  " +
                         "A.fuerzatrabajo_id=D.fuerzatrabajo_id  AND " +
                         "A.control_id=D.control_id   " +
+                        " left outer join statusdispatch C ON  " +
+                        "A.cliente_id=C.cliente_id  AND " +
+                        "A.entrega_id=C.entrega_id  AND " +
+                        "A.fuerzatrabajo_id=C.fuerzatrabajo_id AND " +
+                        "C.fecha_registro=D.fechahojadespacho " +
                         " left outer join visitsection E ON  " +
                         "D.fuerzatrabajo_id=E.fuerzatrabajo_id  AND " +
                         "D.control_id=E.idref AND " +

@@ -30,12 +30,15 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Dao.SQLite.QuoteEffectivenessSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.QuoteEffectivenessEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.ResumenDiarioEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SummaryofeffectivenessEntity;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuoteEffectivenessEntityResponse;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
@@ -355,11 +358,11 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase("MONTO",font6));
+            cellCabecera = new PdfPCell(new Phrase("CUOTA DIA",font6));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblCabecera.addCell(cellCabecera);
-            cellCabecera = new PdfPCell(new Phrase("GALON",font6));
+            cellCabecera = new PdfPCell(new Phrase("GALON DIA",font6));
             cellCabecera.disableBorderSide(Rectangle.BOX);
             cellCabecera.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblCabecera.addCell(cellCabecera);
@@ -556,13 +559,44 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             tbefecruta.addCell(celltbefecruta);
             documento.add(tbefecruta);
 
-            PdfPTable tblefectividad = new PdfPTable(2);
+            PdfPTable tblEfec = new PdfPTable(3);
+            tblEfec.setWidthPercentage(100);
+            PdfPCell  cellTableEfec= null;
+            cellTableEfec=new PdfPCell(new Phrase("TIPO",font6));
+            cellTableEfec.disableBorderSide(Rectangle.BOX);
+            cellTableEfec.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tblEfec.addCell(cellTableEfec);
+            cellTableEfec=new PdfPCell(new Phrase("CUOTA",font6));
+            cellTableEfec.disableBorderSide(Rectangle.BOX);
+            cellTableEfec.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tblEfec.addCell(cellTableEfec);
+            cellTableEfec=new PdfPCell(new Phrase("AVANCE",font6));
+            cellTableEfec.disableBorderSide(Rectangle.BOX);
+            cellTableEfec.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tblEfec.addCell(cellTableEfec);
+            documento.add(tblEfec);
+
+
+            PdfPTable tblefectividad = new PdfPTable(3);
             tblefectividad.setWidthPercentage(100);
             PdfPCell celltblefectividad = null;
             celltblefectividad=new PdfPCell(new Phrase("EFECTIVIDAD PEDIDOS",font6));
             celltblefectividad.disableBorderSide(Rectangle.BOX);
             celltblefectividad.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblefectividad.addCell(celltblefectividad);
+            ArrayList<QuoteEffectivenessEntity> quoteEffectivenessEntityArrayList=new ArrayList<>();
+            QuoteEffectivenessSQLiteDao quoteEffectivenessSQLiteDao=new QuoteEffectivenessSQLiteDao(context);
+            quoteEffectivenessEntityArrayList=quoteEffectivenessSQLiteDao.getListQuoteEffectivenessEntity("1");
+            String efpedido="0",efcobranza="0",efvisita="0";
+            for (int i=0;i<quoteEffectivenessEntityArrayList.size();i++)
+            {
+                efpedido=quoteEffectivenessEntityArrayList.get(i).getQuote();
+            }
+            celltblefectividad=new PdfPCell(new Phrase(efpedido,font6));
+            celltblefectividad.disableBorderSide(Rectangle.BOX);
+            celltblefectividad.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tblefectividad.addCell(celltblefectividad);
+
             try{
                 celltblefectividad=new PdfPCell(new Phrase(
                         /*Induvis.getAmountRouteeffectiveness(
@@ -584,6 +618,17 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             celltblefectividad.disableBorderSide(Rectangle.BOX);
             celltblefectividad.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblefectividad.addCell(celltblefectividad);
+
+            quoteEffectivenessEntityArrayList=quoteEffectivenessSQLiteDao.getListQuoteEffectivenessEntity("2");
+            for (int i=0;i<quoteEffectivenessEntityArrayList.size();i++)
+            {
+                efcobranza=quoteEffectivenessEntityArrayList.get(i).getQuote();
+            }
+            celltblefectividad=new PdfPCell(new Phrase(efcobranza,font6));
+            celltblefectividad.disableBorderSide(Rectangle.BOX);
+            celltblefectividad.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tblefectividad.addCell(celltblefectividad);
+
             try{
                 celltblefectividad=new PdfPCell(new Phrase(
                         /*Induvis.getAmountRouteeffectiveness(
@@ -605,6 +650,17 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             celltblefectividad.disableBorderSide(Rectangle.BOX);
             celltblefectividad.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblefectividad.addCell(celltblefectividad);
+
+            quoteEffectivenessEntityArrayList=quoteEffectivenessSQLiteDao.getListQuoteEffectivenessEntity("3");
+            for (int i=0;i<quoteEffectivenessEntityArrayList.size();i++)
+            {
+                efvisita=quoteEffectivenessEntityArrayList.get(i).getQuote();
+            }
+            celltblefectividad=new PdfPCell(new Phrase(efvisita,font6));
+            celltblefectividad.disableBorderSide(Rectangle.BOX);
+            celltblefectividad.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tblefectividad.addCell(celltblefectividad);
+
             try{
                 celltblefectividad=new PdfPCell(new Phrase(
                         /*Induvis.getAmountRouteeffectiveness(

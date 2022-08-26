@@ -81,7 +81,7 @@ public class StatusDispatchDialog extends DialogFragment {
     double latitude, longitude;
     StatusDispatchRepository statusDispatchRepository;
     public static String mCurrentPhotoPathG="",mCurrentPhotoPathL="";
-    String Entrega_id="";
+    String Entrega_id="",Entrega="";
     File filelocal,fileguia;
     public StatusDispatchDialog(String Client_id,String cliente,String control_id,String item_id,String address){
     this.cliente_id=Client_id;
@@ -163,6 +163,7 @@ public class StatusDispatchDialog extends DialogFragment {
         {
             sppdelivery.add(listDetailDispatchSheetSQLite.get(i).getEntrega());
             Entrega_id=listDetailDispatchSheetSQLite.get(i).getEntrega_id();
+            Entrega=listDetailDispatchSheetSQLite.get(i).getEntrega();
         }
         ArrayAdapter<String> adapterdelivery = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,sppdelivery);
         spn_referral_guide.setAdapter(adapterdelivery);
@@ -194,7 +195,7 @@ public class StatusDispatchDialog extends DialogFragment {
                     File file = new File(mCurrentPhotoPathL);
                     bitmap2 = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file));
                     ImageCameraController imageCameraController = new ImageCameraController();
-                    filelocal= imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega_id,"L");
+                    filelocal= imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega+"_"+getDate(),"L");
 
                 } catch (IOException e){
                     e.printStackTrace();
@@ -220,7 +221,7 @@ public class StatusDispatchDialog extends DialogFragment {
 
                     bitmap2 = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file));
                     ImageCameraController imageCameraController = new ImageCameraController();
-                    fileguia=imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega_id,"G");
+                    fileguia=imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega+"_"+getDate(),"G");
 
                 } catch (IOException e){
                     e.printStackTrace();
@@ -294,7 +295,7 @@ public class StatusDispatchDialog extends DialogFragment {
                         // Crea el File
                         File photoFile = null;
                         //startActivityForResult(intent,0);
-                            photoFile = createImageFile(Entrega_id,"G");
+                            photoFile = createImageFile(Entrega+"_"+getDate(),"G");
 
                         if (photoFile != null) {
                             Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
@@ -325,7 +326,7 @@ public class StatusDispatchDialog extends DialogFragment {
                         // Crea el File
                         File photoFile = null;
 
-                            photoFile = createImageFile(Entrega_id,"L");
+                            photoFile = createImageFile(Entrega+"_"+getDate(),"L");
 
                         if (photoFile != null) {
                             Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
@@ -433,6 +434,7 @@ public class StatusDispatchDialog extends DialogFragment {
                     statusDispatchEntity.checkintime="0";
                     statusDispatchEntity.checkouttime="0";
                     statusDispatchEntity.chk_timestatus="0";
+                    statusDispatchEntity.fuerzatrabajo=SesionEntity.nombrefuerzadetrabajo;
                     listStatusDispatchEntity.add(statusDispatchEntity);
                     statusDispatchSQLite.addStatusDispatch(listStatusDispatchEntity);
 
@@ -495,8 +497,13 @@ public class StatusDispatchDialog extends DialogFragment {
         {
             mCurrentPhotoPathL = image.getAbsolutePath();
         }
-
-
         return image;
+    }
+
+    private String getDate() throws IOException {
+
+        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+
+        return date;
     }
 }

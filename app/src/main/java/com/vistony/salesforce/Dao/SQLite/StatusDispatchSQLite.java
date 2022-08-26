@@ -76,6 +76,7 @@ public class StatusDispatchSQLite {
             registro.put("checkintime", statusDispatchEntity.get(i).getCheckintime());
             registro.put("checkouttime", statusDispatchEntity.get(i).getCheckouttime());
             registro.put("chk_timestatus", statusDispatchEntity.get(i).getChk_timestatus());
+            registro.put("fuerzatrabajo", statusDispatchEntity.get(i).getFuerzatrabajo());
             bd.insert("statusdispatch", null, registro);
         }
 
@@ -106,6 +107,8 @@ public class StatusDispatchSQLite {
                 //statusDispatchEntity.setCompania_id(fila.getString(0));
                 //statusDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
                 //statusDispatchEntity.setUsuario_id (fila.getString(2));
+                statusDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
+                statusDispatchEntity.setFuerzatrabajo(fila.getString(27));
                 statusDispatchEntity.setDelivered(fila.getString(3));
                 statusDispatchEntity.setReturnReason(fila.getString(4));
                 //statusDispatchEntity.setCliente_id (fila.getString(5));
@@ -245,13 +248,23 @@ public class StatusDispatchSQLite {
         return status;
     }
 
-    public int UpdateTimeStatusDispatch (String cardcode,String address,String timeini,String timefin){
+    public int UpdateTimeStatusDispatch (
+            String cardcode,
+            String address,
+            String timeini,
+            String timefin,
+            String latitudini,
+            String longitudini
+
+    ){
         int status=0;
         try {
             abrir();
             ContentValues registro = new ContentValues();
             registro.put("checkintime",timeini);
             registro.put("checkouttime",timefin);
+            registro.put("latitud",latitudini);
+            registro.put("longitud",longitudini);
             bd.update("statusdispatch",registro,"domembarque_id=? and cliente_id=?",new String[]{address,cardcode});
             status=1;
         }catch (Exception e){
@@ -282,6 +295,8 @@ public class StatusDispatchSQLite {
                 //statusDispatchEntity.setDocEntry("3");
                 statusDispatchEntity.setLineId(fila.getString(22));
                 //statusDispatchEntity.setLineId("1");
+                statusDispatchEntity.setLatitud(fila.getString(14));
+                statusDispatchEntity.setLongitud(fila.getString(15));
                 statusDispatchEntity.setCheckintime(fila.getString(24));
                 statusDispatchEntity.setCheckouttime(fila.getString(25));
                 listStatusDispatchEntity.add(statusDispatchEntity);

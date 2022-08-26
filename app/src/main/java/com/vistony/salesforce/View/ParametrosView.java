@@ -56,6 +56,7 @@ import com.vistony.salesforce.Dao.Retrofit.ListaPromocionWS;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.Retrofit.PromocionCabeceraWS;
 import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleWS;
+import com.vistony.salesforce.Dao.Retrofit.QuoteEffectivenessRepository;
 import com.vistony.salesforce.Dao.Retrofit.ReasonDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoRepository;
 import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
@@ -189,6 +190,7 @@ ParametrosView extends Fragment {
     private ReasonDispatchRepository reasonDispatchRepository;
     private RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository;
     private StatusDispatchRepository statusDispatchRepository;
+    private QuoteEffectivenessRepository quoteEffectivenessRepository;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -278,6 +280,9 @@ ParametrosView extends Fragment {
         reasonDispatchRepository = new ViewModelProvider(getActivity()).get(ReasonDispatchRepository.class);
         rutaFuerzaTrabajoRepository = new ViewModelProvider(getActivity()).get(RutaFuerzaTrabajoRepository.class);
         statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
+        quoteEffectivenessRepository= new ViewModelProvider(getActivity()).get(QuoteEffectivenessRepository.class);
+
+
         //CARGA DE MAESTROS
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
         switch (BuildConfig.FLAVOR){
@@ -424,7 +429,10 @@ ParametrosView extends Fragment {
         });
 
 
-
+        ///////////////////////////Cuota de Efectividad/////////////////////////////////////////////////
+        quoteEffectivenessRepository.getQuoteEffectiveness  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame","=>"+data);
+        });
 
         //Enviar Firma Electronica
         //cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {

@@ -211,6 +211,7 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("collectioncheck","N");
             registro.put("e_signature","");
             registro.put("chkesignature","N");
+            registro.put("codeSMS",codeSMS);
             bd.insert("cobranzadetalle", null, registro);
         }
 
