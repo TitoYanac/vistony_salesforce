@@ -344,6 +344,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
             {
                 total_status_dispatch++;
             }
+            Log.e("REOS","DispatchSheetView-getListDetailDispatchSheet-listDetailDispatchSheetSQLite.get(i).getItem_id():"+listDetailDispatchSheetSQLite.get(i).getItem_id());
         }
         tv_cantidad_despachos.setText(String.valueOf(listDetailDispatchSheetSQLite.size()));
         tv_total_deuda.setText(Convert.currencyForView(String.valueOf((total_deuda))));

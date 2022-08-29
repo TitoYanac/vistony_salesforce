@@ -307,13 +307,13 @@ public class CobranzaDetalleView extends Fragment {
             }
         }
         //fecha =obtenerFechaYHoraActual();
-        try {
+        /*try {
             objCamara = Camera.open();
         }catch (Exception e)
         {
             Toast.makeText(getContext(), "Error en Comunicacio Camara:"+e.toString() , Toast.LENGTH_SHORT).show();
         }
-        parametrosCamara = objCamara.getParameters();
+        parametrosCamara = objCamara.getParameters();*/
         tieneFlash = getContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
         listaConfiguracionSQLEntity = new ArrayList<>();

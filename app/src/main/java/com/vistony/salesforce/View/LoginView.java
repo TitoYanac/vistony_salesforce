@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -33,10 +35,13 @@ import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Controller.Utilitario.UpdateApp;
@@ -77,6 +82,11 @@ public class LoginView extends AppCompatActivity{
     private SharedPreferences statusImei;
     private String version;
     private FirebaseAnalytics mFirebaseAnalytics;
+    LocationManager locationManager;
+    private GPSController gpsController;
+    private Location mLocation;
+    double latitude, longitude;
+    private static final int REQUEST_PERMISSION_LOCATION = 255;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -184,8 +194,42 @@ public class LoginView extends AppCompatActivity{
                     public void onNothingSelected(AdapterView<?> parent) {}
                 }
         );
+
+        getLocation();
         
 
+    }
+
+
+    private void getLocation(){
+        locationManager = (LocationManager) this. getSystemService(LOCATION_SERVICE);
+        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            // AlertNoGps();
+            androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
+            dialogFragment.show(((FragmentActivity) this). getSupportFragmentManager (),"un dialogo");
+        }
+
+
+        // When you need the permission, e.g. onCreate, OnClick etc.
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            Log.e("REOS","MenuAccionView: No tiene ACCESS_FINE_LOCATION ");
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
+
+        } else {
+            Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
+            // We have already permission to use the location
+            try {
+                gpsController =  new GPSController(this);
+                mLocation = gpsController.getLocation(mLocation);
+                latitude = mLocation.getLatitude();
+                longitude= mLocation.getLongitude();
+            }catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+            }
+
+        }
     }
 
     private void getCrash()

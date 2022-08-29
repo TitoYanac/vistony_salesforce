@@ -206,6 +206,7 @@ public class StatusDispatchSQLite {
         {
             // TODO: handle exception
             System.out.println(e.getMessage());
+            Log.e("REOS","StatusDispatchSQLite-getListStatusDispatchforDate-error:"+e.toString());
         }
 
         bd.close();

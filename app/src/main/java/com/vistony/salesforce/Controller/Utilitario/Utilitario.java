@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.vistony.salesforce.BuildConfig;
@@ -163,5 +164,35 @@ public class Utilitario {
         return status;
     }
 */
+
+    public static void disabledCardView(CardView cardView, Context context,ImageView imageview,boolean status){
+        Drawable borderdrawable,borderimageview;
+        borderdrawable= ResourcesCompat.getDrawable(context.getResources() , R.drawable.custom_border_view_grey_light, null);
+        cardView.setClickable(status);
+        cardView.setEnabled(status);
+        cardView.setFocusable(false);
+        cardView.setBackground (borderdrawable);
+        imageview.setClickable(status);
+        imageview.setEnabled(status);
+        imageview.setFocusable(false);
+        borderimageview= ResourcesCompat.getDrawable(context.getResources() , R.drawable.circlebackgroundgray, null);
+        imageview.setBackground (borderimageview);
+
+    }
+
+    public static void enableCardView(CardView cardView, Context context,ImageView imageview){
+        Drawable borderdrawable,borderimageview;
+        borderdrawable= ResourcesCompat.getDrawable(context.getResources() , R.drawable.custom_border_view_white, null);
+        cardView.setClickable(true);
+        cardView.setEnabled(true);
+        cardView.setFocusable(true);
+        cardView.setBackground (borderdrawable);
+        imageview.setClickable(true);
+        imageview.setEnabled(true);
+        imageview.setFocusable(true);
+        borderimageview= ResourcesCompat.getDrawable(context.getResources() , R.drawable.cerclebackgroundpurple, null);
+        imageview.setBackground (borderimageview);
+
+    }
 
 }

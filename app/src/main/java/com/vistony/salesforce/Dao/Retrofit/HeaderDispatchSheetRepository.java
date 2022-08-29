@@ -50,12 +50,9 @@ public class HeaderDispatchSheetRepository extends ViewModel {
                     headerDispatchSheetSQLite.ClearTableHeaderDispatchDate();
                     DetailDispatchSheetSQLite detailDispatchSheetSQLite= new DetailDispatchSheetSQLite(context);
                     detailDispatchSheetSQLite.ClearTableDetailDispatchSheet();
+                    headerDispatchSheetSQLite.InsertHeaderDispatchSheet(headerDispatchSheetEntityResponse.getHeaderDispatchSheetEntity(), FechaDespacho);
                     for(int i=0;i< headerDispatchSheetEntityResponse.getHeaderDispatchSheetEntity().size();i++ )
                     {
-
-                        headerDispatchSheetSQLite.InsertHeaderDispatchSheet(headerDispatchSheetEntityResponse.getHeaderDispatchSheetEntity(), FechaDespacho);
-
-
                         //Documentos
                         if (headerDispatchSheetEntityResponse.getHeaderDispatchSheetEntity().get(i).getListDedailDispatch() == null || headerDispatchSheetEntityResponse.getHeaderDispatchSheetEntity().get(i).getListDedailDispatch().size() == 0) {
                             //ObjCliente.setListInvoice(null);

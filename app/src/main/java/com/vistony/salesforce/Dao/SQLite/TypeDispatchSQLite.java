@@ -60,7 +60,7 @@ public class TypeDispatchSQLite {
         TypeDispatchEntity typeDispatchEntity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select * from typedispatch",null);
+                "Select * from typedispatch ",null);
 
         while (fila.moveToNext())
         {

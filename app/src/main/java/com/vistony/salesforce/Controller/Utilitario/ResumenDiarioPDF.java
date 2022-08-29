@@ -590,7 +590,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             String efpedido="0",efcobranza="0",efvisita="0";
             for (int i=0;i<quoteEffectivenessEntityArrayList.size();i++)
             {
-                efpedido=quoteEffectivenessEntityArrayList.get(i).getQuote();
+                efpedido=quoteEffectivenessEntityArrayList.get(i).getQuote()+" "+quoteEffectivenessEntityArrayList.get(i).getUmd();
             }
             celltblefectividad=new PdfPCell(new Phrase(efpedido,font6));
             celltblefectividad.disableBorderSide(Rectangle.BOX);
@@ -622,7 +622,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             quoteEffectivenessEntityArrayList=quoteEffectivenessSQLiteDao.getListQuoteEffectivenessEntity("2");
             for (int i=0;i<quoteEffectivenessEntityArrayList.size();i++)
             {
-                efcobranza=quoteEffectivenessEntityArrayList.get(i).getQuote();
+                efcobranza=quoteEffectivenessEntityArrayList.get(i).getQuote()+" "+quoteEffectivenessEntityArrayList.get(i).getUmd();
             }
             celltblefectividad=new PdfPCell(new Phrase(efcobranza,font6));
             celltblefectividad.disableBorderSide(Rectangle.BOX);
@@ -654,7 +654,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             quoteEffectivenessEntityArrayList=quoteEffectivenessSQLiteDao.getListQuoteEffectivenessEntity("3");
             for (int i=0;i<quoteEffectivenessEntityArrayList.size();i++)
             {
-                efvisita=quoteEffectivenessEntityArrayList.get(i).getQuote();
+                efvisita=quoteEffectivenessEntityArrayList.get(i).getQuote()+" "+quoteEffectivenessEntityArrayList.get(i).getUmd();
             }
             celltblefectividad=new PdfPCell(new Phrase(efvisita,font6));
             celltblefectividad.disableBorderSide(Rectangle.BOX);

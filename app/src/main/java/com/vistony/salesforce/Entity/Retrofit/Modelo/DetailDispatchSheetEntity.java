@@ -15,8 +15,8 @@ public class DetailDispatchSheetEntity {
     @SerializedName("ShipToCode")
     private String domembarque_id;
 
-    @SerializedName("Address2")
-    //@SerializedName("Address")
+    //@SerializedName("Address2")
+    @SerializedName("Address")
     private String direccion;
 
     @SerializedName("InvoiceNum")
@@ -55,6 +55,61 @@ public class DetailDispatchSheetEntity {
 
     @SerializedName("Comentario_Despacho")
     private String comentario_despacho;
+
+    @SerializedName("estado_id")
+    private String estado_id;
+
+    @SerializedName("motivo")
+    private String motivo;
+
+    @SerializedName("motivo_id")
+    private String motivo_id;
+
+    @SerializedName("fotoguia")
+    private String fotoguia;
+
+    @SerializedName("fotolocal")
+    private String fotolocal;
+
+    public String getEstado_id() {
+        return estado_id;
+    }
+
+    public void setEstado_id(String estado_id) {
+        this.estado_id = estado_id;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    public String getMotivo_id() {
+        return motivo_id;
+    }
+
+    public void setMotivo_id(String motivo_id) {
+        this.motivo_id = motivo_id;
+    }
+
+    public String getFotoguia() {
+        return fotoguia;
+    }
+
+    public void setFotoguia(String fotoguia) {
+        this.fotoguia = fotoguia;
+    }
+
+    public String getFotolocal() {
+        return fotolocal;
+    }
+
+    public void setFotolocal(String fotolocal) {
+        this.fotolocal = fotolocal;
+    }
 
     public String getControlid() {
         return controlid;

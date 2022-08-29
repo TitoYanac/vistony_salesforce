@@ -108,7 +108,7 @@ public class SqliteController extends SQLiteOpenHelper {
 
             //Version 5 --Cobranzas Distribucion
             db.execSQL("CREATE TABLE headerdispatchsheet (compania_id text,fuerzatrabajo_id text,usuario_id text,control_id TEXT,asistente_id TEXT,asistente TEXT,placa TEXT,marca TEXT,pesototal TEXT,fechahojadespacho TEXT)");
-            db.execSQL("CREATE TABLE detaildispatchsheet (compania_id text,fuerzatrabajo_id text,usuario_id text,control_id TEXT,item_id TEXT,cliente_id TEXT,domembarque_id TEXT,direccion TEXT,factura_id TEXT,entrega_id TEXT,entrega TEXT,factura TEXT,saldo TEXT,estado TEXT, fuerzatrabajo_factura_id TEXT,fuerzatrabajo_factura TEXT,terminopago_id TEXT,terminopago TEXT,peso TEXT,comentariodespacho TEXT)");
+            db.execSQL("CREATE TABLE detaildispatchsheet (compania_id text,fuerzatrabajo_id text,usuario_id text,control_id TEXT,item_id TEXT,cliente_id TEXT,domembarque_id TEXT,direccion TEXT,factura_id TEXT,entrega_id TEXT,entrega TEXT,factura TEXT,saldo TEXT,estado TEXT, fuerzatrabajo_factura_id TEXT,fuerzatrabajo_factura TEXT,terminopago_id TEXT,terminopago TEXT,peso TEXT,comentariodespacho TEXT,estado_id TEXT,motivo TEXT,motivo_id TEXT,fotoguia TEXT,fotolocal TEXT)");
 
 
             //Version 12  --Tramo de Visita
@@ -408,6 +408,13 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE statusdispatch ADD COLUMN checkintime TEXT");
             db.execSQL("ALTER TABLE statusdispatch ADD COLUMN checkouttime TEXT");
             db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_timestatus TEXT");
+            db.execSQL("CREATE TABLE quoteeffectiveness (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,type TEXT,quote TEXT,umd TEXT)");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN estado_id TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN motivo TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN motivo_id TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotoguia TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotolocal TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idref TEXT");
 
         }
 

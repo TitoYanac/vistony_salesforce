@@ -115,7 +115,7 @@ public class MenuAccionView extends Fragment {
     private Dialog dialog;
     String fechainicio="",timeini="";
     private StatusDispatchRepository statusDispatchRepository;
-
+    private ImageView imv_cobranza,imv_entrega;
     public MenuAccionView() {
         // Required empty public constructor
     }
@@ -175,39 +175,10 @@ public class MenuAccionView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        getLocation();
         ////COMENTADO EL 26/08/2021
 
-        locationManager = (LocationManager) getActivity(). getSystemService(LOCATION_SERVICE);
-        CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
-        //****Mejora****
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            // AlertNoGps();
-            androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
-            dialogFragment.show(((FragmentActivity) getContext()). getSupportFragmentManager (),"un dialogo");
-        }
 
-
-        // When you need the permission, e.g. onCreate, OnClick etc.
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            Log.e("REOS","MenuAccionView: No tiene ACCESS_FINE_LOCATION ");
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
-
-        } else {
-            Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
-            // We have already permission to use the location
-            try {
-                gpsController =  new GPSController(getContext());
-                mLocation = gpsController.getLocation(mLocation);
-                latitude = mLocation.getLatitude();
-                longitude= mLocation.getLongitude();
-            }catch (Exception e)
-            {
-                System.out.println(e.getMessage());
-            }
-
-        }
 
 
         /*if (ContextCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
@@ -229,6 +200,38 @@ public class MenuAccionView extends Fragment {
         getActivity().setTitle(CardName);
     }
 
+    private void getLocation()
+    {
+        locationManager = (LocationManager) getActivity(). getSystemService(LOCATION_SERVICE);
+        CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
+        //****Mejora****
+        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            // AlertNoGps();
+            androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
+            dialogFragment.show(((FragmentActivity) getContext()). getSupportFragmentManager (),"un dialogo");
+        }
+        // When you need the permission, e.g. onCreate, OnClick etc.
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            Log.e("REOS","MenuAccionView: No tiene ACCESS_FINE_LOCATION ");
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
+
+        } else {
+            Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
+            // We have already permission to use the location
+            try {
+                gpsController =  new GPSController(getContext());
+                mLocation = gpsController.getLocation(mLocation);
+                latitude = mLocation.getLatitude();
+                longitude= mLocation.getLongitude();
+            }catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+            }
+
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
@@ -240,22 +243,13 @@ public class MenuAccionView extends Fragment {
         cv_visit_section=v.findViewById(R.id.cv_visit_section);
         cv_dispatch=v.findViewById(R.id.cv_dispatch);
         cv_canvas=v.findViewById(R.id.cv_canvas);
+        imv_cobranza=v.findViewById(R.id.imv_cobranza);
+        imv_entrega=v.findViewById(R.id.imv_entrega);
+
 
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
         cv_canvas.setVisibility(View.GONE);
-        //cv_visit_section.setVisibility(View.GONE);
-        //cv_lead.setVisibility(View.GONE);
-       /* if(BuildConfig.FLAVOR.equals("peru"))
-        {
-            if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
-            {
-
-                if(SesionEntity.updateclient.equals("Y")) {
-                    alertaAdvertencia("Tiene Datos de Clientes pendientes de Actualizar, desea actualizarlo ahora?", getContext()).show();
-                }
-            }
-        }*/
         cv_canvas.setOnClickListener(v -> {
             String Fragment="MenuAccionView";
             String accion="canvas";
@@ -281,8 +275,8 @@ public class MenuAccionView extends Fragment {
             cv_pedido.setVisibility(View.GONE);
             cv_visita.setVisibility(View.GONE);
             cv_lead.setVisibility(View.GONE);
-            //cv_visit_section.setVisibility(View.GONE);
-            //0cv_dispatch.setVisibility(View.GONE);
+            cv_visit_section.setVisibility(View.GONE);
+            cv_dispatch.setVisibility(View.GONE);
         }
 
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
@@ -310,10 +304,11 @@ public class MenuAccionView extends Fragment {
         });
 
         cv_cobranza.setOnClickListener(v -> {
-
+            Log.e("REOS","MenuAccion-alertDialogVisitSection-cv_cobranza.setOnClickListener:Click");
             if(!SesionEntity.perfil_id.equals("CHOFER"))
             {
             //Prueba Patricia Avila
+
                validar=CobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
                 if(validar>0){
                     alertarecibospendientes().show();
@@ -321,7 +316,14 @@ public class MenuAccionView extends Fragment {
                     alertatiporecibos().show();
                 }
             }else {
-               alertatiporecibos().show();
+                /*if(cv_cobranza.isFocusable())
+                {
+                   alertatiporecibos().show();
+                }
+                else {
+                    Toast.makeText(getActivity(), "Registre el inicio de la visita, para continuar!!!", Toast.LENGTH_LONG).show();
+                }*/
+                alertatiporecibos().show();
             }
         });
 
@@ -359,11 +361,22 @@ public class MenuAccionView extends Fragment {
             alertDialogVisitSection().show();
         });
         cv_dispatch.setOnClickListener(v -> {
-            androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode,CardName,Control_id,Item_id,DomEmbarque_ID);
-            dialogFragment.show(((FragmentActivity) getContext ()). getSupportFragmentManager (),"un dialogo");
+            if(cv_dispatch.isFocusable())
+            {
+                Log.e("REOS", "MenuAccion-alertDialogVisitSection-cv_dispatch.setOnClickListener:Click");
+                androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode, CardName, Control_id, Item_id, DomEmbarque_ID);
+                dialogFragment.show(((FragmentActivity) getContext()).getSupportFragmentManager(), "un dialogo");
+            }else {
+                Toast.makeText(getActivity(), "Registre el inicio de la visita, para continuar!!!", Toast.LENGTH_LONG).show();
+            }
             ///Intent i= new Intent(getContext(),   MapaView.class);
             //startActivity(i);
         });
+
+        /*if(SesionEntity.perfil_id.equals("chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            getStatusRouteDriver();
+        }*/
 
         return v;
     }
@@ -509,6 +522,7 @@ public class MenuAccionView extends Fragment {
             if(latitude==0||longitude==0)
             {
                 Toast.makeText(getActivity(), "Calculando Ubicacion..., Guarde Ubicacion Nuevamente!!!", Toast.LENGTH_LONG).show();
+                getLocation();
             }else
                 {
                 LeadSQLite leadSQLite = new LeadSQLite(getContext());
@@ -583,9 +597,6 @@ public class MenuAccionView extends Fragment {
 
         final Dialog dialog = new Dialog(getContext());
         switch (BuildConfig.FLAVOR) {
-
-
-
             case "bolivia":
             case "paraguay":
             case "ecuador":
@@ -883,29 +894,40 @@ public class MenuAccionView extends Fragment {
                 UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
                 ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
-                visitSectionEntity.setCompania_id(ObjUsuario.compania_id);
-                visitSectionEntity.setFuerzatrabajo_id(ObjUsuario.fuerzatrabajo_id);
-                visitSectionEntity.setUsuario_id(ObjUsuario.usuario_id);
-                visitSectionEntity.setCliente_id(CardCode);
-                visitSectionEntity.setDomembarque_id(DomEmbarque_ID);
-                visitSectionEntity.setLatitudini(String.valueOf(latitude));
-                visitSectionEntity.setLongitudini(String.valueOf(longitude));
-                visitSectionEntity.setDateini(FormatFecha.format(date));
-                visitSectionEntity.setTimeini(dateFormathora.format(date));
-                visitSectionEntity.setLatitudfin( "0");
-                visitSectionEntity.setLongitudfin( "0");
-                visitSectionEntity.setDatefin("0");
-                visitSectionEntity.setTimefin("0");
-                visitSectionEntity.setChkrecibido("0");
-                visitSectionEntity.setIdref(Control_id);
-                listVisitSectionini.add(visitSectionEntity);
-                visitSectionSQLite.addVisitSection(listVisitSectionini);
-                chk_start_visitsection.setChecked(true);
-                btn_start_visitsection.setEnabled(false);
-                btn_start_visitsection.setClickable(false);
+                Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_start_visitsection-longitude: "+longitude);
+                Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_start_visitsection-latitude: "+latitude);
+                if(latitude!=0&&longitude!=0)
+                {
+                    visitSectionEntity.setCompania_id(ObjUsuario.compania_id);
+                    visitSectionEntity.setFuerzatrabajo_id(ObjUsuario.fuerzatrabajo_id);
+                    visitSectionEntity.setUsuario_id(ObjUsuario.usuario_id);
+                    visitSectionEntity.setCliente_id(CardCode);
+                    visitSectionEntity.setDomembarque_id(DomEmbarque_ID);
+                    visitSectionEntity.setLatitudini(String.valueOf(latitude));
+                    visitSectionEntity.setLongitudini(String.valueOf(longitude));
+                    visitSectionEntity.setDateini(FormatFecha.format(date));
+                    visitSectionEntity.setTimeini(dateFormathora.format(date));
+                    visitSectionEntity.setLatitudfin("0");
+                    visitSectionEntity.setLongitudfin("0");
+                    visitSectionEntity.setDatefin("0");
+                    visitSectionEntity.setTimefin("0");
+                    visitSectionEntity.setChkrecibido("0");
+                    visitSectionEntity.setIdref(Control_id);
+                    listVisitSectionini.add(visitSectionEntity);
+                    visitSectionSQLite.addVisitSection(listVisitSectionini);
+                    chk_start_visitsection.setChecked(true);
+                    btn_start_visitsection.setEnabled(false);
+                    btn_start_visitsection.setClickable(false);
 
-                Utilitario.disabledButtton(btn_start_visitsection);
-                Toast.makeText(getActivity(), "Visita Iniciada!!!", Toast.LENGTH_LONG).show();
+                    Utilitario.disabledButtton(btn_start_visitsection);
+                    Toast.makeText(getActivity(), "Visita Iniciada!!!", Toast.LENGTH_LONG).show();
+                    Utilitario.enableCardView(cv_dispatch,getContext(),imv_entrega);
+                    Utilitario.enableCardView(cv_cobranza,getContext(),imv_cobranza);
+                }
+                else {
+                    Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                    getLocation();
+                }
             }
 
         });
@@ -917,46 +939,53 @@ public class MenuAccionView extends Fragment {
                 UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
                 ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
-                listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date));
-                statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
-                for(int i=0;i<listVisitSection.size();i++)
+                Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_finish_visitsection-longitude: "+longitude);
+                Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_finish_visitsection-latitude: "+latitude);
+                if(latitude!=0&&longitude!=0)
                 {
-                    fechainicio=listVisitSection.get(i).getDateini();
-                    timeini=listVisitSection.get(i).getTimeini();
-                    Latitudini=listVisitSection.get(i).getLatitudini();
-                    Longitudini=listVisitSection.get(i).getLongitudini();
-                }
-                visitSectionSQLite.UpdateVisitSectionForClient(
-                        CardCode,DomEmbarque_ID,FormatFecha.format(date),String.valueOf(latitude),String.valueOf(longitude),FormatFecha.format(date),dateFormathora.format(date)
-                );
-                chk_finish_visitsection.setChecked(true);
-                btn_finish_visitsection.setEnabled(false);
-                btn_finish_visitsection.setClickable(false);
-                Utilitario.disabledButtton(btn_finish_visitsection);
+                    listVisitSection = visitSectionSQLite.getVisitSection(CardCode, DomEmbarque_ID, FormatFecha.format(date));
+                    statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
+                    for (int i = 0; i < listVisitSection.size(); i++) {
+                        fechainicio = listVisitSection.get(i).getDateini();
+                        timeini = listVisitSection.get(i).getTimeini();
+                        Latitudini = listVisitSection.get(i).getLatitudini();
+                        Longitudini = listVisitSection.get(i).getLongitudini();
+                    }
+                    visitSectionSQLite.UpdateVisitSectionForClient(
+                            CardCode, DomEmbarque_ID, FormatFecha.format(date), String.valueOf(latitude), String.valueOf(longitude), FormatFecha.format(date), dateFormathora.format(date)
+                    );
+                    chk_finish_visitsection.setChecked(true);
+                    btn_finish_visitsection.setEnabled(false);
+                    btn_finish_visitsection.setClickable(false);
+                    Utilitario.disabledButtton(btn_finish_visitsection);
 
-                if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("chofer"))
+                    if (SesionEntity.perfil_id.equals("CHOFER") || SesionEntity.perfil_id.equals("chofer")) {
+                        StatusDispatchSQLite statusDispatchSQLite = new StatusDispatchSQLite(getContext());
+                        statusDispatchSQLite.UpdateTimeStatusDispatch(
+                                CardCode,
+                                DomEmbarque_ID, timeini, dateFormathora.format(date), Latitudini, Longitudini
+                        );
+
+                        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                        statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+                            Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
+                        });
+
+                    } else {
+                        RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
+                        rutaVendedorSQLiteDao.UpdateChkVisitSection(
+                                CardCode,
+                                DomEmbarque_ID,
+                                ObjUsuario.compania_id,
+                                FormatFecha.format(date)
+                        );
+                    }
+                    Toast.makeText(getActivity(), "Visita Finalizada!!!", Toast.LENGTH_LONG).show();
+                }else
                 {
-                    StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(getContext());
-                    statusDispatchSQLite.UpdateTimeStatusDispatch(
-                            CardCode,
-                            DomEmbarque_ID,timeini,dateFormathora.format(date),Latitudini,Longitudini
-                    );
-
-                    /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                    statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
-                        Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
-                    });
-
-                }else {
-                    RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
-                    rutaVendedorSQLiteDao.UpdateChkVisitSection(
-                            CardCode,
-                            DomEmbarque_ID,
-                            ObjUsuario.compania_id,
-                            FormatFecha.format(date)
-                    );
+                    Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                    getLocation();
                 }
-                Toast.makeText(getActivity(), "Visita Finalizada!!!", Toast.LENGTH_LONG).show();
             }
         });
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
@@ -969,6 +998,34 @@ public class MenuAccionView extends Fragment {
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         return  dialog;
+    }
+
+    private void getStatusRouteDriver()
+    {
+        SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        Date date = new Date();
+        VisitSectionSQLite visitSectionSQLite=new VisitSectionSQLite(getContext());
+        ArrayList<VisitSectionEntity> listVisitSection=new ArrayList<>();
+        listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date));
+        Log.e("REOS","MenuAccionView-getStatusRouteDriver-CardCode"+CardCode);
+        Log.e("REOS","MenuAccionView-getStatusRouteDriver-DomEmbarque_ID"+DomEmbarque_ID);
+        Log.e("REOS","MenuAccionView-getStatusRouteDriver-FormatFecha.format(date)"+FormatFecha.format(date));
+        Log.e("REOS","MenuAccionView-getStatusRouteDriver-listVisitSection"+listVisitSection);
+        if(listVisitSection==null||listVisitSection.isEmpty())
+        {
+            Log.e("REOS","MenuAccionView-getStatusRouteDriver-listVisitSection==null");
+            Utilitario.disabledCardView(cv_dispatch,getContext(),imv_entrega,true);
+            Utilitario.disabledCardView(cv_cobranza,getContext(),imv_cobranza,true);
+        }
+        /*for(int i=0;i<listVisitSection.size();i++)
+        {
+            if(listVisitSection.get(i).getLatitudini()==null)
+            {
+                Log.e("REOS","MenuAccionView-getStatusRouteDriver-listVisitSection.get(i).getLatitudini()==null");
+                Utilitario.disabledCardView(cv_dispatch,getContext());
+                Utilitario.disabledCardView(cv_cobranza,getContext());
+            }
+        }*/
     }
 
 

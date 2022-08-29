@@ -18,7 +18,9 @@
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textStyle="bold"
-        tools:text="1)" />
+        tools:text="1)"
+        android:visibility="gone"
+        />
 
     <TextView
         android:id="@+id/lbl_cliente"
@@ -145,7 +147,9 @@
         android:clickable="false"
         android:text="Entrega"
         android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"
+        />
     <!--<CheckBox
         android:id="@+id/chk_statusdispatch"
         android:layout_width="wrap_content"
@@ -164,7 +168,9 @@
         android:layout_marginTop="190dp"
         android:text="Visita: "
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"
+        />
 
     <CheckBox
         android:id="@+id/chk_visit_start"
@@ -175,7 +181,9 @@
         android:clickable="false"
         android:text="Inicio"
         android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"
+        />
 
     <CheckBox
         android:id="@+id/chk_visit_end"
@@ -186,7 +194,9 @@
         android:clickable="false"
         android:text="Fin"
         android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="gone"
+        />
 
     <TextView
         android:id="@+id/lbl_delivery"
@@ -206,6 +216,8 @@
         android:layout_marginTop="130dp"
         android:text="Entrega"
         android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:textAppearance="?attr/textAppearanceListItem"
+
+        />
 
 </RelativeLayout>

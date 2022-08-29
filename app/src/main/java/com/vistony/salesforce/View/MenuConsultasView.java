@@ -93,6 +93,8 @@ public class MenuConsultasView extends Fragment {
         cv_dispatch=v.findViewById(R.id.cv_dispatch);
         cv_quotation=v.findViewById(R.id.cv_quotation);
 
+
+        cv_dispatch.setVisibility(View.GONE);
         if(SesionEntity.migratequotation.equals("N"))
         {
             cv_quotation.setVisibility(View.GONE);

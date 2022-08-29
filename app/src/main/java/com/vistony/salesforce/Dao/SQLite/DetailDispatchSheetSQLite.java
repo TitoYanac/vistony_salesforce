@@ -9,6 +9,7 @@ import android.util.Log;
 import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.DetailDispatchSheetEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
@@ -19,7 +20,7 @@ public class DetailDispatchSheetSQLite {
     SqliteController sqLiteController;
     SQLiteDatabase bd;
     ArrayList<HojaDespachoDetalleSQLiteEntity> listaHojaDespachoSQLiteEntity;
-
+    ArrayList<HistoricStatusDispatchEntity> listaHistoricStatusDispatchEntity;
     public DetailDispatchSheetSQLite(Context context)
     {
         sqLiteController = new SqliteController(context);
@@ -89,6 +90,11 @@ public class DetailDispatchSheetSQLite {
             //registro.put("terminopago","Contado");
             registro.put("peso",detailDispatchSheetEntity.get(i).getPeso());
             registro.put("comentariodespacho",detailDispatchSheetEntity.get(i).getComentario_despacho());
+            registro.put("estado_id",detailDispatchSheetEntity.get(i).getEstado_id());
+            registro.put("motivo",detailDispatchSheetEntity.get(i).getMotivo());
+            registro.put("motivo_id",detailDispatchSheetEntity.get(i).getMotivo_id());
+            registro.put("fotoguia",detailDispatchSheetEntity.get(i).getFotoguia());
+            registro.put("fotolocal",detailDispatchSheetEntity.get(i).getFotolocal());
             bd.insert("detaildispatchsheet",null,registro);
         }
 
@@ -115,11 +121,13 @@ public class DetailDispatchSheetSQLite {
                         " left outer join (SELECT control_id,fechahojadespacho,fuerzatrabajo_id FROM headerdispatchsheet group by control_id,fechahojadespacho,fuerzatrabajo_id ) D ON  " +
                         "A.fuerzatrabajo_id=D.fuerzatrabajo_id  AND " +
                         "A.control_id=D.control_id   " +
-                        " left outer join statusdispatch C ON  " +
+                        " left outer join (SELECT compania_id,cliente_id,entrega_id,fuerzatrabajo_id,control_id,item_id FROM statusdispatch group by compania_id,cliente_id,entrega_id,fuerzatrabajo_id,control_id,item_id ) C ON  " +
                         "A.cliente_id=C.cliente_id  AND " +
                         "A.entrega_id=C.entrega_id  AND " +
                         "A.fuerzatrabajo_id=C.fuerzatrabajo_id AND " +
-                        "C.fecha_registro=D.fechahojadespacho " +
+                        //"C.fecha_registro=D.fechahojadespacho " +
+                        "A.control_id=C.control_id AND " +
+                        "A.item_id=C.item_id " +
                         " left outer join visitsection E ON  " +
                         "D.fuerzatrabajo_id=E.fuerzatrabajo_id  AND " +
                         "D.control_id=E.idref AND " +
@@ -327,5 +335,63 @@ public class DetailDispatchSheetSQLite {
         bd.close();
         return listaHojaDespachoSQLiteEntity;
     }
+
+    public ArrayList<HistoricStatusDispatchEntity>
+    getDetailDispatchSheetforDateDispatch
+            (String dateDispatch)
+    {
+
+        listaHistoricStatusDispatchEntity = new ArrayList<>();
+        HistoricStatusDispatchEntity historicStatusDispatchEntity;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
+                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
+                        ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin " +
+                        ", a.estado_id,a.motivo,a.motivo_id,a.fotoguia,a.fotolocal " +
+                        "from detaildispatchsheet A" +
+                        " left outer join cliente B ON  " +
+                        "A.cliente_id=B.cliente_id " +
+                        " left outer join (SELECT control_id,fechahojadespacho,fuerzatrabajo_id FROM headerdispatchsheet group by control_id,fechahojadespacho,fuerzatrabajo_id ) D ON  " +
+                        "A.fuerzatrabajo_id=D.fuerzatrabajo_id  AND " +
+                        "A.control_id=D.control_id   " +
+                        " left outer join statusdispatch C ON  " +
+                        "A.cliente_id=C.cliente_id  AND " +
+                        "A.entrega_id=C.entrega_id  AND " +
+                        "A.fuerzatrabajo_id=C.fuerzatrabajo_id AND " +
+                        "C.fecha_registro=D.fechahojadespacho " +
+                        " left outer join visitsection E ON  " +
+                        "D.fuerzatrabajo_id=E.fuerzatrabajo_id  AND " +
+                        "D.control_id=E.idref AND " +
+                        "A.cliente_id=E.cliente_id AND " +
+                        "A.domembarque_id=E.domembarque_id   " +
+                        "  where D.fechahojadespacho='"+dateDispatch+"'",null);
+
+        while (fila.moveToNext())
+        {
+            historicStatusDispatchEntity= new HistoricStatusDispatchEntity();
+            historicStatusDispatchEntity.setFuerzaTrabajo_ID(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+            historicStatusDispatchEntity.setUsuario_ID(fila.getString(fila.getColumnIndex("usuario_id")));
+            historicStatusDispatchEntity.setTipoDespacho_ID(fila.getString(fila.getColumnIndex("estado_id")));
+            historicStatusDispatchEntity.setTipoDespacho(fila.getString(fila.getColumnIndex("estado")));
+            historicStatusDispatchEntity.setMotivoDespacho_ID(fila.getString(fila.getColumnIndex("motivo_id")));
+            historicStatusDispatchEntity.setMotivoDespacho(fila.getString(fila.getColumnIndex("motivo")));
+            historicStatusDispatchEntity.setObservacion(fila.getString(fila.getColumnIndex("comentariodespacho")));
+            historicStatusDispatchEntity.setLatitud(fila.getString(fila.getColumnIndex("direccion")));
+            historicStatusDispatchEntity.setLongitud(fila.getString(fila.getColumnIndex("factura_id")));
+            historicStatusDispatchEntity.setCliente_ID(fila.getString(fila.getColumnIndex("cliente_id")));
+            historicStatusDispatchEntity.setCliente(fila.getString(fila.getColumnIndex("nombrecliente")));
+            historicStatusDispatchEntity.setFotoGuia(fila.getString(fila.getColumnIndex("fotoguia")));
+            historicStatusDispatchEntity.setFotoLocal(fila.getString(fila.getColumnIndex("fotolocal")));
+            historicStatusDispatchEntity.setChk_Recibido ("Y");
+
+
+            listaHistoricStatusDispatchEntity.add(historicStatusDispatchEntity);
+        }
+
+        bd.close();
+        return listaHistoricStatusDispatchEntity;
+    }
+
 
 }

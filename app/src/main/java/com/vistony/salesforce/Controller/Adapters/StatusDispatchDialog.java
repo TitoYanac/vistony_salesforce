@@ -7,6 +7,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -172,7 +173,17 @@ public class StatusDispatchDialog extends DialogFragment {
         listTypeDispatch=typeDispatchSQLite.getTypeDispatch();
         for(int i=0;i<listTypeDispatch.size();i++)
         {
-            spptypeDispatch.add(listTypeDispatch.get(i).getTypedispatch_id()+"-"+listTypeDispatch.get(i).getTypedispatch());
+            if(listTypeDispatch.get(i).getTypedispatch_id().equals("E"))
+            {
+                spptypeDispatch.add(listTypeDispatch.get(i).getTypedispatch_id()+"-"+listTypeDispatch.get(i).getTypedispatch());
+            }
+        }
+        for(int j=0;j<listTypeDispatch.size();j++)
+        {
+            if(!listTypeDispatch.get(j).getTypedispatch_id().equals("E"))
+            {
+                spptypeDispatch.add(listTypeDispatch.get(j).getTypedispatch_id()+"-"+listTypeDispatch.get(j).getTypedispatch());
+            }
         }
         ArrayAdapter<String> adapterTypeDispatch = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item,spptypeDispatch);
         spn_type_dispatch.setAdapter(adapterTypeDispatch);
@@ -203,6 +214,10 @@ public class StatusDispatchDialog extends DialogFragment {
                 imgBitmap=bitmap2;
                 imageViewPhoto.setImageBitmap(bitmap2);
 
+                Resources res = getContext().getResources(); // need this to fetch the drawable
+                Drawable draw = res.getDrawable( R.drawable.ic_baseline_flip_camera_ios_24);
+                imv_historic_status_dispatch_photo.setImageDrawable(draw);
+                imv_historic_status_dispatch_photo.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
                 //Bundle extras = result.getData().getExtras();
                 //imgBitmap = (Bitmap) extras.get("data");
                 //imageViewPhoto.setImageBitmap(imgBitmap);
@@ -223,12 +238,19 @@ public class StatusDispatchDialog extends DialogFragment {
                     ImageCameraController imageCameraController = new ImageCameraController();
                     fileguia=imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega+"_"+getDate(),"G");
 
+
+
+
                 } catch (IOException e){
                     e.printStackTrace();
                 }
                 imgBitmap2=bitmap2;
                 imageViewPhoto2.setImageBitmap(bitmap2);
 
+                Resources res = getContext().getResources(); // need this to fetch the drawable
+                Drawable draw = res.getDrawable( R.drawable.ic_baseline_flip_camera_ios_24);
+                imv_historic_status_dispatch_delivery.setImageDrawable(draw);
+                imv_historic_status_dispatch_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
 
                 //Bundle extras = result.getData().getExtras();
                 //imgBitmap2 = (Bitmap) extras.get("data");
@@ -305,6 +327,7 @@ public class StatusDispatchDialog extends DialogFragment {
                             /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                                 someActivityResultLauncherGuia.launch(intent);
                             }*/
+
                         }
                 } catch (IOException ex) {
                     Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto-error:"+ex);
@@ -338,6 +361,7 @@ public class StatusDispatchDialog extends DialogFragment {
                                 Log.e("REOS","statusDispatchRepository-->FotoLocal-->intent.resolveActivity(getActivity().getPackageManager()) != null");
                                 someActivityResultLauncher.launch(intent);
                             }*/
+
                         }
                 } catch (IOException ex) {
                     Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto2-error:"+ex);
@@ -363,108 +387,130 @@ public class StatusDispatchDialog extends DialogFragment {
                     encoded2 = Base64.encodeToString(byteArray2, Base64.DEFAULT);
                     //encoded2 = new String(byteArray2);
                 }
-                if(imgBitmap != null||imgBitmap2 != null) {
-                    SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
-                    SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                    Date date = new Date();
-                    List<StatusDispatchEntity> listStatusDispatchEntity = new ArrayList<>();
-                    UsuarioSQLiteEntity ObjUsuario = new UsuarioSQLiteEntity();
-                    UsuarioSQLite usuarioSQLite = new UsuarioSQLite(getContext());
-                    ObjUsuario = usuarioSQLite.ObtenerUsuarioSesion();
-                    StatusDispatchSQLite statusDispatchSQLite = new StatusDispatchSQLite(getContext());
-                    ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetSQLite = new ArrayList<>();
-                    DetailDispatchSheetSQLite detailDispatchSheetSQLite = new DetailDispatchSheetSQLite(getContext());
-                    listDetailDispatchSheetSQLite = detailDispatchSheetSQLite.getDetailDispatchSheetforClient(cliente_id);
-                    String entrega_id = "", factura_id = "", entrega = "", factura = "", typedispatch_id = "", typedispatch = "", reasondispatch_id = "", reasondispatch = ""
-                            ,direccion_id="";
-                    for (int i = 0; i < listDetailDispatchSheetSQLite.size(); i++) {
-                        if (spn_referral_guide.getSelectedItem().toString().equals(listDetailDispatchSheetSQLite.get(i).getEntrega())) {
-                            entrega_id = listDetailDispatchSheetSQLite.get(i).getEntrega_id();
-                            factura_id = listDetailDispatchSheetSQLite.get(i).getFactura_id();
-                            factura = listDetailDispatchSheetSQLite.get(i).getFactura();
-                            entrega = listDetailDispatchSheetSQLite.get(i).getEntrega();
-                            direccion_id = listDetailDispatchSheetSQLite.get(i).getDomembarque_id();
-                        }
-                    }
 
-                    String[] tipodespacho = spn_type_dispatch.getSelectedItem().toString().split("-");
-                    typedispatch_id = tipodespacho[0];
-                    typedispatch = tipodespacho[1];
-                    if(spn_reason_dispatch.getAdapter()!=null)
+                if(imgBitmap != null&&imgBitmap2 != null) {
+
+                    if(latitude!=0&&longitude!=0)
                     {
-                        String[] motivodespacho = spn_reason_dispatch.getSelectedItem().toString().split("-");
-                        reasondispatch_id = motivodespacho[0];
-                        reasondispatch = motivodespacho[1];
+                            SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
+                            SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                            Date date = new Date();
+                            List<StatusDispatchEntity> listStatusDispatchEntity = new ArrayList<>();
+                            UsuarioSQLiteEntity ObjUsuario = new UsuarioSQLiteEntity();
+                            UsuarioSQLite usuarioSQLite = new UsuarioSQLite(getContext());
+                            ObjUsuario = usuarioSQLite.ObtenerUsuarioSesion();
+                            StatusDispatchSQLite statusDispatchSQLite = new StatusDispatchSQLite(getContext());
+                            ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetSQLite = new ArrayList<>();
+                            DetailDispatchSheetSQLite detailDispatchSheetSQLite = new DetailDispatchSheetSQLite(getContext());
+                            listDetailDispatchSheetSQLite = detailDispatchSheetSQLite.getDetailDispatchSheetforClient(cliente_id);
+                            String entrega_id = "", factura_id = "", entrega = "", factura = "", typedispatch_id = "", typedispatch = "", reasondispatch_id = "", reasondispatch = ""
+                                    ,direccion_id="";
+                            for (int i = 0; i < listDetailDispatchSheetSQLite.size(); i++) {
+                                if (spn_referral_guide.getSelectedItem().toString().equals(listDetailDispatchSheetSQLite.get(i).getEntrega())) {
+                                    entrega_id = listDetailDispatchSheetSQLite.get(i).getEntrega_id();
+                                    factura_id = listDetailDispatchSheetSQLite.get(i).getFactura_id();
+                                    factura = listDetailDispatchSheetSQLite.get(i).getFactura();
+                                    entrega = listDetailDispatchSheetSQLite.get(i).getEntrega();
+                                    direccion_id = listDetailDispatchSheetSQLite.get(i).getDomembarque_id();
+                                }
+                            }
+
+                            String[] tipodespacho = spn_type_dispatch.getSelectedItem().toString().split("-");
+                            typedispatch_id = tipodespacho[0];
+                            typedispatch = tipodespacho[1];
+                            if(spn_reason_dispatch.getAdapter()!=null)
+                            {
+                                String[] motivodespacho = spn_reason_dispatch.getSelectedItem().toString().split("-");
+                                reasondispatch_id = motivodespacho[0];
+                                reasondispatch = motivodespacho[1];
+                            }
+                            else {
+                                reasondispatch_id="";
+                                reasondispatch="";
+                            }
+                            StatusDispatchEntity statusDispatchEntity = new StatusDispatchEntity();
+                            statusDispatchEntity.compania_id = ObjUsuario.compania_id;
+                            statusDispatchEntity.fuerzatrabajo_id = ObjUsuario.fuerzatrabajo_id;
+                            statusDispatchEntity.usuario_id = ObjUsuario.usuario_id;
+                            statusDispatchEntity.Delivered = typedispatch_id;
+                            statusDispatchEntity.ReturnReason = reasondispatch_id;
+                            statusDispatchEntity.entrega_id = entrega_id;
+                            statusDispatchEntity.cliente_id = cliente_id;
+                            statusDispatchEntity.factura_id = factura_id;
+                            statusDispatchEntity.chkrecibido = "0";
+                            statusDispatchEntity.Comments = et_comentario.getText().toString();
+                            //statusDispatchEntity.foto = encoded;
+                            //statusDispatchEntity.foto = entrega_id+"_L.JPG";
+                            statusDispatchEntity.foto = filelocal.toString();
+                            statusDispatchEntity.fecha_registro = FormatFecha.format(date);
+                            statusDispatchEntity.hora_registro = dateFormathora.format(date);
+                            //statusDispatchEntity.fotoGuia = encoded2;
+                            //statusDispatchEntity.fotoGuia = entrega_id+"_G.JPG";
+                            statusDispatchEntity.PhotoDocument = fileguia.toString();
+                            statusDispatchEntity.latitud = String.valueOf(latitude);
+                            statusDispatchEntity.longitud = String.valueOf(longitude);
+                            //statusDispatchEntity.latitud = encoded;
+                            //statusDispatchEntity.longitud = encoded2;
+                            statusDispatchEntity.cliente = cliente;
+                            statusDispatchEntity.entrega = String.valueOf(entrega);
+                            statusDispatchEntity.factura = String.valueOf(factura);
+                            statusDispatchEntity.typedispatch = typedispatch;
+                            statusDispatchEntity.reasondispatch = reasondispatch;
+                            statusDispatchEntity.DocEntry=control_id;
+                            statusDispatchEntity.LineId=item_id;
+                            statusDispatchEntity.Address=address;
+                            statusDispatchEntity.checkintime="0";
+                            statusDispatchEntity.checkouttime="0";
+                            statusDispatchEntity.chk_timestatus="0";
+                            statusDispatchEntity.fuerzatrabajo=SesionEntity.nombrefuerzadetrabajo;
+                            listStatusDispatchEntity.add(statusDispatchEntity);
+                            statusDispatchSQLite.addStatusDispatch(listStatusDispatchEntity);
+
+                            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                            statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+                                Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
+                            });
+
+
+                            ////Visitas
+                            FormulasController formulasController=new FormulasController(getContext());
+                            VisitaSQLiteEntity visitaNativa=new VisitaSQLiteEntity();
+
+                            visitaNativa.setCardCode(cliente_id);
+                            visitaNativa.setAddress(direccion_id);
+                            visitaNativa.setTerritory("");
+                            visitaNativa.setType("04");
+                            visitaNativa.setObservation("Actualizacion Despacho realizada a la entrega: "+entrega_id);
+                            visitaNativa.setLatitude(""+latitude);
+                            visitaNativa.setLongitude(""+longitude);
+                            visitaNativa.setStatusRoute("N");
+                            visitaNativa.setMobileID(entrega_id);
+                            visitaNativa.setAmount("0");
+                            formulasController.RegistraVisita(visitaNativa,getActivity(),"0");
+
+                            Toast.makeText(getContext(), "Despacho Actualizado Correctamente", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                    }else
+                    {
+                        Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
                     }
-                    else {
-                        reasondispatch_id="";
-                        reasondispatch="";
-                    }
-                    StatusDispatchEntity statusDispatchEntity = new StatusDispatchEntity();
-                    statusDispatchEntity.compania_id = ObjUsuario.compania_id;
-                    statusDispatchEntity.fuerzatrabajo_id = ObjUsuario.fuerzatrabajo_id;
-                    statusDispatchEntity.usuario_id = ObjUsuario.usuario_id;
-                    statusDispatchEntity.Delivered = typedispatch_id;
-                    statusDispatchEntity.ReturnReason = reasondispatch_id;
-                    statusDispatchEntity.entrega_id = entrega_id;
-                    statusDispatchEntity.cliente_id = cliente_id;
-                    statusDispatchEntity.factura_id = factura_id;
-                    statusDispatchEntity.chkrecibido = "0";
-                    statusDispatchEntity.Comments = et_comentario.getText().toString();
-                    //statusDispatchEntity.foto = encoded;
-                    //statusDispatchEntity.foto = entrega_id+"_L.JPG";
-                    statusDispatchEntity.foto = filelocal.toString();
-                    statusDispatchEntity.fecha_registro = FormatFecha.format(date);
-                    statusDispatchEntity.hora_registro = dateFormathora.format(date);
-                    //statusDispatchEntity.fotoGuia = encoded2;
-                    //statusDispatchEntity.fotoGuia = entrega_id+"_G.JPG";
-                    statusDispatchEntity.PhotoDocument = fileguia.toString();
-                    statusDispatchEntity.latitud = String.valueOf(latitude);
-                    statusDispatchEntity.longitud = String.valueOf(longitude);
-                    //statusDispatchEntity.latitud = encoded;
-                    //statusDispatchEntity.longitud = encoded2;
-                    statusDispatchEntity.cliente = cliente;
-                    statusDispatchEntity.entrega = String.valueOf(entrega);
-                    statusDispatchEntity.factura = String.valueOf(factura);
-                    statusDispatchEntity.typedispatch = typedispatch;
-                    statusDispatchEntity.reasondispatch = reasondispatch;
-                    statusDispatchEntity.DocEntry=control_id;
-                    statusDispatchEntity.LineId=item_id;
-                    statusDispatchEntity.Address=address;
-                    statusDispatchEntity.checkintime="0";
-                    statusDispatchEntity.checkouttime="0";
-                    statusDispatchEntity.chk_timestatus="0";
-                    statusDispatchEntity.fuerzatrabajo=SesionEntity.nombrefuerzadetrabajo;
-                    listStatusDispatchEntity.add(statusDispatchEntity);
-                    statusDispatchSQLite.addStatusDispatch(listStatusDispatchEntity);
-
-                    /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                    statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
-                        Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
-                    });
 
 
-                    ////Visitas
-                    FormulasController formulasController=new FormulasController(getContext());
-                    VisitaSQLiteEntity visitaNativa=new VisitaSQLiteEntity();
-
-                    visitaNativa.setCardCode(cliente_id);
-                    visitaNativa.setAddress(direccion_id);
-                    visitaNativa.setTerritory("");
-                    visitaNativa.setType("04");
-                    visitaNativa.setObservation("Actualizacion Despacho realizada a la entrega: "+entrega_id);
-                    visitaNativa.setLatitude(""+latitude);
-                    visitaNativa.setLongitude(""+longitude);
-                    visitaNativa.setStatusRoute("N");
-                    visitaNativa.setMobileID(entrega_id);
-                    visitaNativa.setAmount("0");
-                    formulasController.RegistraVisita(visitaNativa,getActivity(),"0");
-
-                    Toast.makeText(getContext(), "Despacho Actualizado Correctamente", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
                 }else
                     {
-                        Toast.makeText(getContext(), "Debe Tomar las Imagenes Solicitadas", Toast.LENGTH_SHORT).show();
+                        if(imgBitmap == null&&imgBitmap2 == null)
+                        {
+                            Toast.makeText(getContext(), "Debe tomar Foto de la Guia y el Local!!!", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(imgBitmap == null&&imgBitmap2 != null)
+                        {
+                            Toast.makeText(getContext(), "Debe tomar Foto del Local!!!", Toast.LENGTH_SHORT).show();
+                        }
+                        else if(imgBitmap != null&&imgBitmap2 == null)
+                        {
+                            Toast.makeText(getContext(), "Debe tomar Foto de la Guia!!!", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
             }
         });

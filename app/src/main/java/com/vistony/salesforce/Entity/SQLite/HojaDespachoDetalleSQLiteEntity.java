@@ -25,6 +25,13 @@ public class HojaDespachoDetalleSQLiteEntity {
     public boolean chkupdatedispatch;
     public boolean chkvisitsectionstart;
     public boolean chkvisitsectionend;
+    public String estado_id;
+    public String motivo;
+    public String motivo_id;
+    public String fotoguia;
+    public String fotolocal;
+
+
 
     public HojaDespachoDetalleSQLiteEntity(
             String compania_id, String fuerzatrabajo_id, String usuario_id, String control_id, String item_id, String cliente_id,
@@ -34,6 +41,11 @@ public class HojaDespachoDetalleSQLiteEntity {
             ,boolean chkupdatedispatch
             ,boolean chkvisitsectionstart
             ,boolean chkvisitsectionend
+            ,String estado_id
+            ,String motivo
+            ,String motivo_id
+            ,String fotoguia
+            ,String fotolocal
     ) {
         this.compania_id = compania_id;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
@@ -59,10 +71,55 @@ public class HojaDespachoDetalleSQLiteEntity {
         this.chkupdatedispatch = chkupdatedispatch;
         this.chkvisitsectionstart = chkvisitsectionstart;
         this.chkvisitsectionend = chkvisitsectionend;
+        this.estado_id = estado_id;
+        this.motivo = motivo;
+        this.motivo_id = motivo_id;
+        this.fotoguia = fotoguia;
+        this.fotolocal = fotolocal;
     }
 
     public HojaDespachoDetalleSQLiteEntity() {
 
+    }
+
+    public String getEstado_id() {
+        return estado_id;
+    }
+
+    public void setEstado_id(String estado_id) {
+        this.estado_id = estado_id;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    public String getMotivo_id() {
+        return motivo_id;
+    }
+
+    public void setMotivo_id(String motivo_id) {
+        this.motivo_id = motivo_id;
+    }
+
+    public String getFotoguia() {
+        return fotoguia;
+    }
+
+    public void setFotoguia(String fotoguia) {
+        this.fotoguia = fotoguia;
+    }
+
+    public String getFotolocal() {
+        return fotolocal;
+    }
+
+    public void setFotolocal(String fotolocal) {
+        this.fotolocal = fotolocal;
     }
 
     public boolean isChkvisitsectionstart() {

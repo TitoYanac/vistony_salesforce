@@ -30,6 +30,7 @@ import com.vistony.salesforce.Controller.Adapters.ListKardexOfPaymentAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
+import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.StatusDispatchSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -65,7 +66,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
     private  int diadespacho,mesdespacho,anodespacho;
     private static DatePickerDialog oyenteSelectorFecha;
     SearchView mSearchView;
-    String fecha,parametrofecha;
+    static String fecha,parametrofecha;
     static ListHistoricStatusDispatchAdapter listHistoricStatusDispatchAdapter;
     static private ProgressDialog pd;
     static Activity activity;
@@ -266,9 +267,17 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
 
             Log.e("REOS","HistoricStatusDispatchView-getListHistoric-data==null:");
             List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch=new ArrayList<>();
-
+            DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(context);
             StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(context);
-            listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
+            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-SesionEntity.perfil_idl:"+SesionEntity.perfil_id);
+            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-Date:"+Date);
+            if(SesionEntity.perfil_id.equals("chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+            {
+                listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
+            }else {
+                //listHistoricStatusDiapatch=detailDispatchSheetSQLite.getDetailDispatchSheetforDateDispatch(Date);
+            }
+
             if(listHistoricStatusDiapatch.isEmpty())
             {
                 Log.e("REOS","HistoricStatusDispatchView-getListHistoric-listHistoricStatusDiapatch.isEmpty():");
