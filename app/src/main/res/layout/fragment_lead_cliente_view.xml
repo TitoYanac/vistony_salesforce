@@ -70,6 +70,9 @@
                         android:ems="10"
                         android:hint="@string/razon_social"
                         android:inputType="textPersonName"
+                        android:textColor="@color/gray"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,6 +95,7 @@
                         android:hint="@string/ruc"
                         android:inputType="textPersonName"
                         android:text="" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -112,6 +116,7 @@
                         android:ems="10"
                         android:hint="@string/nombre_comercial"
                         android:inputType="textPersonName"
+                        android:textColor="@color/gray"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
@@ -130,8 +135,87 @@
                         android:ems="10"
                         android:hint="@string/lbl_street"
                         android:inputType="textPersonName"
+                        android:textColor="@color/gray"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+
+                    android:layout_marginRight="5dp">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="15"
+                        app:errorEnabled="true"
+                        android:layout_weight="4"
+                        >
+                    <EditText
+                        android:id="@+id/et_telfhouseclient"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_weight="4"
+                        android:enabled="false"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:hint="@string/numero_telefono"
+                        android:textColor="@color/gray"
+                        app:counterEnabled="true"
+                        />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <ImageView
+                        android:id="@+id/imv_calltelfhouseclient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        android:src="@drawable/ic_baseline_ring_volume_24" />
+                </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        >
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="15"
+                            app:errorEnabled="true"
+                            android:layout_weight="4"
+                            >
+                        <EditText
+                            android:id="@+id/et_telfmovilcliente"
+                            style="@android:style/TextAppearance.Widget.TextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:layout_weight="4"
+                            android:enabled="false"
+                            app:counterEnabled="true"
+                            android:textSize="20dp"
+                            android:textStyle="bold"
+                            android:hint="@string/numero_celular"
+                            android:textColor="@color/gray"
+                            />
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <ImageView
+                            android:id="@+id/imv_callmobilephone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.2"
+                            android:src="@drawable/ic_baseline_local_phone_24" />
+                    </TableRow>
+                </TableLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -151,14 +235,16 @@
                         android:hint="@string/numero_telefono"
                         android:inputType="textPhonetic"
                         android:text="" />
-                </com.google.android.material.textfield.TextInputLayout>
 
+                </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:id="@+id/ti_textcellphone"
+                    >
 
                     <EditText
                         android:id="@+id/editTextCellPhone"

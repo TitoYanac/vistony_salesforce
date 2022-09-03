@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -34,8 +35,12 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.vistony.salesforce.Controller.Adapters.ListaHojaDespachoAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Dao.Adapters.ListaHojaDespachoDao;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.Retrofit.DetailDispatchSheetRepository;
@@ -82,11 +87,11 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
     private static DatePickerDialog oyenteSelectorFecha;
     private  int dia,mes,año;
     private SearchView mSearchView;
-    ImageButton imb_consultar_fecha_hoja_despacho,imb_consultar_codigo_control;
+    ImageButton imb_consultar_fecha_hoja_despacho,imb_consultar_codigo_control,imb_consultar_QR;
     SimpleDateFormat dateFormat,dateFormat2;
     Date date,date2;
     String fecha,parametrofecha;
-    TextView tv_fecha_hoja_despacho,tv_cantidad_despachos,tv_total_deuda,tv_status_despachos;
+    TextView tv_fecha_hoja_despacho,tv_cantidad_despachos,tv_total_deuda,tv_status_despachos,tv_total_collection;
     Button btn_consultar_fecha_despacho;
     private ProgressDialog pd;
     //DecimalFormat format = new DecimalFormat("#0.00");
@@ -158,6 +163,9 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         tv_status_despachos=v.findViewById(R.id.tv_status_despachos);
         table_row_status_dispatch=v.findViewById(R.id.table_row_status_dispatch);
         btn_consultar_fecha_despacho=v.findViewById(R.id.btn_consultar_fecha_despacho);
+        imb_consultar_QR=v.findViewById(R.id.imb_consultar_QR);
+        tv_total_collection=v.findViewById(R.id.tv_total_collection);
+
         imb_consultar_fecha_hoja_despacho.setOnClickListener(this);
         imb_consultar_codigo_control.setOnClickListener(this);
         btn_consultar_fecha_despacho.setOnClickListener(this);
@@ -170,9 +178,32 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         tv_fecha_hoja_despacho.setText(fecha);
         obtenerTituloFormulario();
         //table_row_status_dispatch.setVisibility(View.GONE);
+        getStatusQR();
 
+        imb_consultar_QR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                Bitmap bitmapqr = null;
+                try {
+                    bitmapqr = barcodeEncoder.encodeBitmap(spn_control_id.getSelectedItem().toString(), BarcodeFormat.QR_CODE, 300, 300);
+                } catch (WriterException e) {
+                    e.printStackTrace();
+                }
+                getalertPhoto("CODIGO QR",bitmapqr).show();
+            }
+        });
 
         return v;
+    }
+
+    public void getStatusQR()
+    {
+        if(spn_control_id.getSelectedItem()==null){
+            Utilitario.disabledImageButtton(imb_consultar_QR,getContext());
+        }else {
+            Utilitario.enableImageButtton(imb_consultar_QR,getContext());
+        }
     }
 
     public void obtenerTituloFormulario()
@@ -248,6 +279,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
                 if(spn_control_id.getSelectedItem()!=null)
                 {
                     getListDetailDispatchSheet(spn_control_id.getSelectedItem().toString(), getContext());
+                    getStatusQR();
                 }
                 break;
             default:
@@ -336,7 +368,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         lista_despachos.setAdapter(listaHojaDespachoAdapter);
 
         Double total_deuda=0.0;
-        Integer total_status_dispatch=0;
+        Integer total_status_dispatch=0,total_collections=0;
         for(int i=0;i<listDetailDispatchSheetSQLite.size();i++)
         {
             total_deuda=total_deuda+Double.parseDouble(listDetailDispatchSheetSQLite.get(i).getSaldo());
@@ -344,11 +376,17 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
             {
                 total_status_dispatch++;
             }
+            if(listDetailDispatchSheetSQLite.get(i).isChkcollection())
+            {
+                total_collections++;
+            }
             Log.e("REOS","DispatchSheetView-getListDetailDispatchSheet-listDetailDispatchSheetSQLite.get(i).getItem_id():"+listDetailDispatchSheetSQLite.get(i).getItem_id());
         }
         tv_cantidad_despachos.setText(String.valueOf(listDetailDispatchSheetSQLite.size()));
         tv_total_deuda.setText(Convert.currencyForView(String.valueOf((total_deuda))));
         tv_status_despachos.setText(String.valueOf(total_status_dispatch));
+        tv_total_collection.setText(String.valueOf(total_collections));
+
     }
 
     @Override
@@ -456,6 +494,32 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         return  dialog;
+    }
+
+    private Dialog getalertPhoto(String foto, Bitmap bitmap) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog_qr);
+
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText(foto);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        ImageView imageViewPhoto = (ImageView) dialog.findViewById(R.id.imageViewPhoto);
+        imageViewPhoto.setImageBitmap(bitmap);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        // if button is clicked, close the custom dialog
+
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        return dialog;
     }
 
 }

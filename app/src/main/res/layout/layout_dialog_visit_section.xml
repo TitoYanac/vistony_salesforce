@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -53,51 +54,68 @@
             android:layout_height="wrap_content"
             android:background="@drawable/custom_background_alert"
             android:orientation="horizontal">
-            <CheckBox
-                android:id="@+id/chk_start_visitsection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:text="@string/lbl_layout_visit_section_start" />
-            <CheckBox
-                android:id="@+id/chk_finish_visitsection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:text="@string/lbl_layout_visit_section_finish" />
+
         </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
+
+            <TableLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/custom_background_alert"
-                android:orientation="horizontal">
+                android:layout_marginBottom="5dp">
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    >
+                    <CheckBox
+                        android:id="@+id/chk_start_visitsection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/lbl_layout_visit_section_start"
+                        android:layout_weight="1"
+                        />
+                    <CheckBox
+                        android:id="@+id/chk_finish_visitsection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/lbl_layout_visit_section_finish" />
+                </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
                 <com.omega_r.libs.OmegaCenterIconButton
                     android:id="@+id/btn_start_visitsection"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/custom_border_button_red"
                     android:drawableLeft="@drawable/ic_baseline_play_circle_24_white"
                     android:enabled="true"
                     android:text="Iniciar"
                     android:textColor="@color/white"
                     android:textSize="20dp"
-                    android:background="@drawable/custom_border_button_red"
-                    />
+                    android:layout_marginStart="10dp"
+ />
                 <com.omega_r.libs.OmegaCenterIconButton
                     android:id="@+id/btn_finish_visitsection"
                     android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
                     android:layout_weight="4"
                     android:background="@drawable/custom_border_button_red"
                     android:drawableLeft="@drawable/ic_baseline_cancel_24_white"
                     android:enabled="true"
                     android:text="FINALIZAR"
                     android:textColor="@color/white"
-                    android:textSize="20dp" />
-            </LinearLayout>
-
+                    android:textSize="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    />
+            </TableRow>
+            </TableLayout>
             <Button
                 android:id="@+id/dialogButtonOK"
                 android:layout_width="wrap_content"
@@ -111,6 +129,9 @@
                 android:text="ACEPTAR"
                 android:layout_marginTop="30dp"
                 android:textColor="#0957C3" />
+
+
+
 
         </LinearLayout>
 

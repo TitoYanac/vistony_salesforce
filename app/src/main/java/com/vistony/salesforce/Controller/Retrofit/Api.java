@@ -3,6 +3,7 @@ package com.vistony.salesforce.Controller.Retrofit;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CatalogoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.HeaderStatusDispatchEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesOrderTraceabilityEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerInvoiceEntity;
@@ -18,6 +19,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.DetailDispatchSheetEntit
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursCEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursDEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HeaderDispatchSheetEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.HeaderStatusDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricContainerSalesEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricSalesAnalysisByRouteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricSalesOrderTraceabilityEntityResponse;
@@ -185,7 +187,7 @@ public interface Api {
 
     @PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
         //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Visit")
-    Call<StatusDispatchEntityResponse> sendStatusDispatch (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
+    Call<HeaderStatusDispatchEntityResponse> sendStatusDispatch (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricalSales/Variable")
     Call<HistoricContainerSalesEntityResponse> getDailySummary(
@@ -242,8 +244,8 @@ public interface Api {
     );
 
     //@GET("/AppVistonySalesTest/ServicioApp.svc/Obtener_DespachoC/{Imei},{Compania_ID},{FuerzaTrabajo_ID},{FechaDespacho}") //Maestro de Hoja de Despacho Cabecera
-    //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/List")
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/List")
+    //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
     Call<HeaderDispatchSheetEntityResponse> getHeaderDispatchSheet (
             @Query("imei") String Imei
             ,@Query("fecha") String FechaDespacho
@@ -297,6 +299,16 @@ public interface Api {
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Effectiveness/Quote")
     Call<QuoteEffectivenessEntityResponse> getQuoteEffectiveness (@Query("imei") String imei);
+
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/List")
+    Call<HeaderDispatchSheetEntityResponse> getHeaderDispatchSheetSalesPerson (
+            @Query("imei") String Imei
+            ,@Query("fecha") String FechaDespacho
+            ,@Query("flag") String Seller
+
+    );
+
+
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);
     //@GET

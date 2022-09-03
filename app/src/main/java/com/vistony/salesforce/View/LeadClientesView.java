@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -77,7 +78,7 @@ public class LeadClientesView extends Fragment {
     private Spinner spinner;
     private EditText editTextComentary, editTextCardCode, editTextCardName, editTextCardNameComercial,
             editTextPhone, editTextCellPhone, editTextContactPerson, editTextEmail, editTextWeb, editTextCoordenates
-            ,editTextStreet;
+            ,editTextStreet,et_telfmovilcliente,et_telfhouseclient;
     private Button buttonSendGPS;
     static private String direccion = "Sin dirección", referencia = "Sin referencias",type;
     final String message = "Este campo no puede ir vacio";
@@ -85,11 +86,11 @@ public class LeadClientesView extends Fragment {
     private GoogleMap myGoogleMap;
     private Dialog dialog;
     com.google.android.material.textfield.TextInputLayout ti_commercial_name,ti_card_name,
-            ti_textphone,ti_TextContactPerson,ti_TextEmail,ti_TextWeb,ti_TextCardCode,ti_editTextComments;
+            ti_textphone,ti_TextContactPerson,ti_TextEmail,ti_TextWeb,ti_TextCardCode,ti_editTextComments,ti_textcellphone;
     static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque,correo,chkgeolocation,telefonofijo,telefonomovil,rucdni;
     static Object object;
     LinearLayout linearLayoutGps;
-
+    ImageView imv_callmobilephone,imv_calltelfhouseclient;
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String tag, Object dato);
     }
@@ -134,7 +135,7 @@ public class LeadClientesView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         if(type.equals("leadUpdateClient"))
         {
-            getActivity().setTitle("Actualizar Direccion Cliente");
+            getActivity().setTitle("Consulta Cliente");
         }
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -178,11 +179,16 @@ public class LeadClientesView extends Fragment {
         editTextStreet = v.findViewById(R.id.editTextStreet);
         linearLayoutGps = v.findViewById(R.id.linearLayoutGps);
         ti_editTextComments = v.findViewById(R.id.ti_editTextComments);
-
+        et_telfmovilcliente=v.findViewById(R.id.et_telfmovilcliente);
+        imv_callmobilephone=v.findViewById(R.id.imv_callmobilephone);
+        imv_calltelfhouseclient=v.findViewById(R.id.imv_calltelfhouseclient);
+        ti_textcellphone=v.findViewById(R.id.ti_textcellphone);
+        btnUpload.setText("ACEPTAR");
+        et_telfhouseclient=v.findViewById(R.id.et_telfhouseclient);
         if(BuildConfig.FLAVOR.equals("peru"))
         {
             ti_commercial_name.setVisibility(View.GONE);
-            ti_textphone.setVisibility(View.GONE);
+            //ti_textphone.setVisibility(View.GONE);
             ti_TextContactPerson.setVisibility(View.GONE);
             spinner.setVisibility(View.GONE);
             ti_TextWeb.setVisibility(View.GONE);
@@ -193,6 +199,14 @@ public class LeadClientesView extends Fragment {
             editTextCellPhone.setEnabled(false);
             ti_textphone.setEnabled(false);
             editTextEmail.setEnabled(false);
+            linearLayoutGps.setVisibility(View.GONE);
+            ti_editTextComments.setVisibility(View.GONE);
+            ti_TextEmail.setVisibility(View.GONE);
+            ti_textphone.setVisibility(View.GONE);
+            editTextCellPhone.setVisibility(View.GONE);
+            editTextPhone.setVisibility(View.GONE);
+            floatingButtonTakePhoto.setVisibility(View.GONE);
+            ti_textcellphone.setVisibility(View.GONE);
         }
         else if(BuildConfig.FLAVOR.equals("ecuador"))
         {
@@ -217,9 +231,24 @@ public class LeadClientesView extends Fragment {
         editTextCardName.setText(nombrecliente);
         editTextStreet.setText(domebarque);
         editTextEmail.setText(correo);
-        editTextCellPhone.setText(telefonomovil);
-        editTextPhone.setText(telefonofijo);
+        //editTextCellPhone.setText(telefonomovil);
+        //editTextPhone.setText(telefonofijo);
+        et_telfmovilcliente.setText(telefonomovil);
+        et_telfhouseclient.setText(telefonofijo);
 
+
+        imv_callmobilephone.setOnClickListener(e -> {
+            String phone = et_telfmovilcliente.getText().toString();
+            Intent intent = new Intent(Intent.ACTION_DIAL,
+                    Uri.fromParts("tel", phone, null));
+            startActivity(intent);
+        });
+        imv_calltelfhouseclient.setOnClickListener(e -> {
+            String phone = et_telfhouseclient.getText().toString();
+            Intent intent = new Intent(Intent.ACTION_DIAL,
+                    Uri.fromParts("tel", phone, null));
+            startActivity(intent);
+        });
         floatingButtonTakePhoto.setOnClickListener(data -> {
             /*if (picturefile != null) {
                 Uri pictureUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() +
@@ -243,8 +272,14 @@ public class LeadClientesView extends Fragment {
         });
 
         btnUpload.setOnClickListener(e -> {
-
-            if(BuildConfig.FLAVOR.equals("peru"))
+            String Fragment="RutaVendedorView";
+            String accion="inicioRutaVendedorViewLead";
+            String compuesto=Fragment+"-"+accion;
+            if(mListener!=null) {
+                mListener.onFragmentInteraction(compuesto, object
+                );
+            }
+            /*if(BuildConfig.FLAVOR.equals("peru"))
             {
                 sendLeadApi();
             }
@@ -257,7 +292,7 @@ public class LeadClientesView extends Fragment {
                     mListener.onFragmentInteraction(compuesto, object
                     );
                 }
-            }
+            }*/
         });
 
         buttonSendGPS.setOnClickListener(e -> {
@@ -271,7 +306,7 @@ public class LeadClientesView extends Fragment {
         });
         if(type.equals("leadUpdateClient"))
         {
-            getActivity().setTitle("Actualizar Cliente");
+            getActivity().setTitle("Consultar Cliente");
         }else {
             getActivity().setTitle(getResources().getString(R.string.lead_cliente));
         }

@@ -434,6 +434,11 @@ ParametrosView extends Fragment {
             Log.e("Jepicame","=>"+data);
         });
 
+        ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
+        reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame", "=>" + data);
+        });
+
         //Enviar Firma Electronica
         //cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
         //    Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
@@ -451,10 +456,7 @@ ParametrosView extends Fragment {
                 Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
             });
 
-            ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
-            reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
-                Log.e("Jepicame", "=>" + data);
-            });
+
         }
 
         fabdescargarparametros.setOnClickListener(view -> {

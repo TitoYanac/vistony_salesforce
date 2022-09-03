@@ -8,8 +8,6 @@ public class StatusDispatchEntity {
     @SerializedName("UserCode")
     public String fuerzatrabajo_id;
 
-
-
     public String usuario_id;
 
     @SerializedName("Delivered")
@@ -71,7 +69,7 @@ public class StatusDispatchEntity {
 
     public String PhotoStore;
 
-    @SerializedName("DocEntry")
+    @SerializedName("CodeControl")
     public String DocEntry;
 
     public String Address;
@@ -85,42 +83,25 @@ public class StatusDispatchEntity {
     @SerializedName("UserName")
     public String fuerzatrabajo;
 
-    public StatusDispatchEntity(String compania_id, String fuerzatrabajo_id, String usuario_id, String Delivered, String ReturnReason, String cliente_id, String factura_id, String entrega_id, String chkrecibido, String Comments,
-                                String foto, String fecha_registro, String hora_registro, String PhotoDocument, String latitud, String longitud,
-                                String cliente, String entrega, String factura, String typedispatch, String reasondispatch, String LineId
-            , String PhotoStore,String DocEntry,String Address,String checkintime,String checkouttime
-                                ,String chk_timestatus,String fuerzatrabajo
-                                ) {
-        this.compania_id = compania_id;
-        this.fuerzatrabajo_id = fuerzatrabajo_id;
-        this.usuario_id = usuario_id;
-        this.Delivered = Delivered;
-        this.ReturnReason = ReturnReason;
-        this.cliente_id = cliente_id;
-        this.factura_id = factura_id;
-        this.entrega_id = entrega_id;
-        this.chkrecibido = chkrecibido;
-        this.Comments = Comments;
-        this.foto = foto;
-        this.fecha_registro = fecha_registro;
-        this.hora_registro = hora_registro;
-        this.PhotoDocument = PhotoDocument;
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.cliente = cliente;
-        this.entrega = entrega;
-        this.factura = factura;
-        this.typedispatch = typedispatch;
-        this.reasondispatch = reasondispatch;
-        this.LineId=LineId;
-        this.PhotoStore = PhotoStore;
-        this.DocEntry=DocEntry;
-        this.Address=Address;
-        this.checkintime=checkintime;
-        this.checkouttime=checkouttime;
-        this.chk_timestatus=chk_timestatus;
-        this.fuerzatrabajo=fuerzatrabajo;
+    public String messageServerDispatch;
 
+    public String messageServerTimeDispatch;
+
+
+    public String getMessageServerDispatch() {
+        return messageServerDispatch;
+    }
+
+    public void setMessageServerDispatch(String messageServerDispatch) {
+        this.messageServerDispatch = messageServerDispatch;
+    }
+
+    public String getMessageServerTimeDispatch() {
+        return messageServerTimeDispatch;
+    }
+
+    public void setMessageServerTimeDispatch(String messageServerTimeDispatch) {
+        this.messageServerTimeDispatch = messageServerTimeDispatch;
     }
 
     public String getFuerzatrabajo() {

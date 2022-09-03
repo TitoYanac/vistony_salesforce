@@ -28,8 +28,10 @@ import android.widget.Toast;
 import com.vistony.salesforce.Controller.Adapters.ListHistoricStatusDispatchAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListKardexOfPaymentAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
+import com.vistony.salesforce.Dao.Retrofit.TypeDispatchRepository;
 import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.StatusDispatchSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
@@ -76,7 +78,8 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
     static double docamount;
     SimpleDateFormat dateFormat,dateFormat2;
     Date date,date2;
-
+    static HeaderDispatchSheetRepository headerDispatchSheetRepository;
+    static List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch;
     public HistoricStatusDispatchView() {
         // Required empty public constructor
     }
@@ -126,6 +129,8 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
         imb_calendario_historic_status_dispatch=(ImageButton)v.findViewById(R.id.imb_calendario_historic_status_dispatch);
         imb_calendario_historic_status_dispatch.setOnClickListener(this);
         lv_historic_status_dispatch=(ListView) v.findViewById(R.id.lv_historic_status_dispatch);
+        headerDispatchSheetRepository= new ViewModelProvider(getActivity()).get(HeaderDispatchSheetRepository.class);
+
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         dateFormat2 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
@@ -229,22 +234,74 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
         pd = new ProgressDialog(activity);
         pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Estados de Despacho", true, false);
 
-        /*statusDispatchRepository.getHistoricStatusDispatch(SesionEntity.imei, Date).observe(lifecycleOwner, data -> {
-            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-date:"+data);
-            if(data!=null)
+
+        if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            listHistoricStatusDiapatch=new ArrayList<>();
+            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-data==null:");
+            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-SesionEntity.perfil_idl:"+SesionEntity.perfil_id);
+            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-Date:"+Date);
+            headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(SesionEntity.imei, Date,context).observe(lifecycleOwner, data -> {
+                //listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
+                DetailDispatchSheetSQLite detailDispatchSheetSQLite = new DetailDispatchSheetSQLite(context);
+                List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch = new ArrayList<>();
+                if (data.equals("1")) {
+                    listHistoricStatusDiapatch = detailDispatchSheetSQLite.getDetailDispatchSheetforDateDispatch(Date);
+                }
+                Log.e("REOS","DispatchSheetView-getMastersDelivery-data"+data.toString());
+                if(listHistoricStatusDiapatch.isEmpty())
+                {
+                    Log.e("REOS","HistoricStatusDispatchView-getListHistoric-listHistoricStatusDiapatch.isEmpty():");
+                    lv_historic_status_dispatch.setAdapter(null);
+                    tv_count_historic_status_dispatch.setText("0");
+                    Toast.makeText(context, "No se encontro operaciones en la fecha seleccionada", Toast.LENGTH_SHORT).show();
+                }else {
+                    Log.e("REOS","HistoricStatusDispatchView-getListHistoric-!listHistoricStatusDiapatch.isEmpty():");
+                    listHistoricStatusDispatchAdapter
+                            =new ListHistoricStatusDispatchAdapter(
+                            activity,
+                            listHistoricStatusDiapatch,
+                            activity);
+                    lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
+                    tv_count_historic_status_dispatch.setText(String.valueOf(listHistoricStatusDiapatch.size()));
+                    Toast.makeText(context, "Consulta Realizada con Exito", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+            /*if(SesionEntity.perfil_id.equals("chofer")||SesionEntity.perfil_id.equals("CHOFER"))
             {
-                listHistoricStatusDispatchAdapter
-                        =new ListHistoricStatusDispatchAdapter(
-                        activity,
-                        data);
-                lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
-                tv_count_historic_status_dispatch.setText(String.valueOf(data.size()));
-                Toast.makeText(context, "Consulta Realizada con Exito", Toast.LENGTH_SHORT).show();
-                Log.e("REOS","HistoricStatusDispatchView-getListHistoric-data!=null:");
+                listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
             }else {
+                listHistoricStatusDiapatch=detailDispatchSheetSQLite.getDetailDispatchSheetforDateDispatch(Date);
+            }*/
+
+
+        }
+        else {
+            headerDispatchSheetRepository.getAndInsertHeaderDispatchSheetSalesPerson(SesionEntity.imei, Date, context).observe(lifecycleOwner, data -> {
+                Log.e("REOS", "HistoricStatusDispatchView-getListHistoric-date:" + data);
+                if (data != null) {
+                    DetailDispatchSheetSQLite detailDispatchSheetSQLite = new DetailDispatchSheetSQLite(context);
+                    List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch = new ArrayList<>();
+                    if (data.equals("1")) {
+                        listHistoricStatusDiapatch = detailDispatchSheetSQLite.getDetailDispatchSheetforDateDispatch(Date);
+                    }
+                    listHistoricStatusDispatchAdapter
+                            = new ListHistoricStatusDispatchAdapter(
+                            activity,
+                            listHistoricStatusDiapatch,
+                            activity);
+                    lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
+                    tv_count_historic_status_dispatch.setText(String.valueOf(listHistoricStatusDiapatch.size()));
+                    Toast.makeText(context, "Consulta Realizada con Exito", Toast.LENGTH_SHORT).show();
+
+                    Log.e("REOS", "HistoricStatusDispatchView-getListHistoric-data!=null:");
+                }
+
+            /*else {
                 Log.e("REOS","HistoricStatusDispatchView-getListHistoric-data==null:");
                 List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch=new ArrayList<>();
-
                 StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(context);
                 listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
                 if(listHistoricStatusDiapatch.isEmpty())
@@ -257,42 +314,21 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
                     listHistoricStatusDispatchAdapter
                             =new ListHistoricStatusDispatchAdapter(
                             activity,
-                            listHistoricStatusDiapatch);
+                            listHistoricStatusDiapatch,
+                            activity);
                     lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
                     tv_count_historic_status_dispatch.setText(String.valueOf(listHistoricStatusDiapatch.size()));
                     Toast.makeText(context, "Consulta Realizada con Exito", Toast.LENGTH_SHORT).show();
                 }
 
             }*/
+            });
+        }
 
-            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-data==null:");
-            List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch=new ArrayList<>();
-            DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(context);
-            StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(context);
-            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-SesionEntity.perfil_idl:"+SesionEntity.perfil_id);
-            Log.e("REOS","HistoricStatusDispatchView-getListHistoric-Date:"+Date);
-            if(SesionEntity.perfil_id.equals("chofer")||SesionEntity.perfil_id.equals("CHOFER"))
-            {
-                listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
-            }else {
-                //listHistoricStatusDiapatch=detailDispatchSheetSQLite.getDetailDispatchSheetforDateDispatch(Date);
-            }
 
-            if(listHistoricStatusDiapatch.isEmpty())
-            {
-                Log.e("REOS","HistoricStatusDispatchView-getListHistoric-listHistoricStatusDiapatch.isEmpty():");
-                lv_historic_status_dispatch.setAdapter(null);
-                Toast.makeText(context, "No se encontro operaciones en la fecha seleccionada", Toast.LENGTH_SHORT).show();
-            }else {
-                Log.e("REOS","HistoricStatusDispatchView-getListHistoric-!listHistoricStatusDiapatch.isEmpty():");
-                listHistoricStatusDispatchAdapter
-                        =new ListHistoricStatusDispatchAdapter(
-                        activity,
-                        listHistoricStatusDiapatch);
-                lv_historic_status_dispatch.setAdapter(listHistoricStatusDispatchAdapter);
-                tv_count_historic_status_dispatch.setText(String.valueOf(listHistoricStatusDiapatch.size()));
-                Toast.makeText(context, "Consulta Realizada con Exito", Toast.LENGTH_SHORT).show();
-            }
+
+
+
             pd.dismiss();
         //});
     }

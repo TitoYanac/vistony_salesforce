@@ -120,7 +120,9 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
             holder.chk_visit_end=convertView.findViewById(R.id.chk_visit_end);
             holder.tv_orden_detalle_item=convertView.findViewById(R.id.tv_orden_detalle_item);
             holder.tv_delivery=convertView.findViewById(R.id.tv_delivery);
-
+            holder.chk_collection=convertView.findViewById(R.id.chk_collection);
+            holder.tv_status_dispatch=convertView.findViewById(R.id.tv_status_dispatch);
+            holder.tv_ocurrencies=convertView.findViewById(R.id.tv_ocurrencies);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -139,7 +141,10 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         holder.chk_updatedispatch.setChecked(lead.isChkupdatedispatch());
         holder.chk_visit_start.setChecked(lead.isChkvisitsectionstart());
         holder.chk_visit_end.setChecked(lead.isChkvisitsectionend());
+        holder.chk_collection.setChecked(lead.isChkcollection());
         holder.tv_delivery.setText(lead.getEntrega());
+        holder.tv_status_dispatch.setText(lead.getEstado());
+        holder.tv_ocurrencies.setText(lead.getOcurrencia());
         ArraylistaClienteCabeceraEntity=new ArrayList<>();
         /*ArrayList<ClienteSQLiteEntity> listaClienteEnvio=new ArrayList<>();
         ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
@@ -236,6 +241,9 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         CheckBox chk_visit_end;
         TextView tv_orden_detalle_item;
         TextView tv_delivery;
+        CheckBox chk_collection;
+        TextView tv_status_dispatch;
+        TextView tv_ocurrencies;
 
     }
 

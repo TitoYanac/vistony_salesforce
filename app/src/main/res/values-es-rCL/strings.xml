@@ -136,4 +136,12 @@
     <string name="lbl_visit_start">Vist.Ini</string>
     <string name="lbl_visit_end">Vist.Fin</string>
     <string name="lbl_item">Item</string>
+    <string name="lbl_information_client">Datos de Cliente</string>
+    <string name="lbl_create_visit">Generar Visita</string>
+    <string name="lbl_chk_collecion">Cobranza</string>
+    <string name="lbl_total_collection">Total Cobranza</string>
+    <string name="lbl_total_debt">Total Deuda</string>
+    <string name="lbl_delivery">Entrega</string>
+    <string name="lbl_dispatch">Despacho</string>
+    <string name="lbl_ocurrencies">Ocurrencia</string>
 </resources>

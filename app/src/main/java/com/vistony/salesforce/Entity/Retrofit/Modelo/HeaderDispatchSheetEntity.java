@@ -6,7 +6,7 @@ import java.util.List;
 
 public class HeaderDispatchSheetEntity {
 
-    @SerializedName("ControlCode")
+    @SerializedName("DocEntry")
     private String control_id;
 
     @SerializedName("")
@@ -24,8 +24,8 @@ public class HeaderDispatchSheetEntity {
     @SerializedName("OverallWeight")
     private String peso_total;
 
-    //@SerializedName("Details")
-    @SerializedName("Detail")
+    @SerializedName("Details")
+    //@SerializedName("Detail")
     private List<DetailDispatchSheetEntity> ListDedailDispatch;
 
     @SerializedName("TotalDocument")

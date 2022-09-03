@@ -50,6 +50,9 @@ public class ListaHojaDespachoDao {
                         ,Lista.get(i).isChkvisitsectionstart()
                         ,Lista.get(i).isChkvisitsectionend()
                         ,Lista.get(i).getEntrega()
+                        ,Lista.get(i).isChkcollection()
+                        ,Lista.get(i).getEstado()
+                        ,Lista.get(i).getOcurrencies()
                 ));
             }
         }catch (Exception e)

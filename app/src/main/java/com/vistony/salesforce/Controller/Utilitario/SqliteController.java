@@ -117,7 +117,7 @@ public class SqliteController extends SQLiteOpenHelper {
             //Version 13  -- Distribution Second Phase
             db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
             db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT)");
-            db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT,control_id TEXT,item_id TEXT,domembarque_id text,checkintime text,checkouttime text,chk_timestatus text,fuerzatrabajo text)");
+            db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT,control_id TEXT,item_id TEXT,domembarque_id text,checkintime text,checkouttime text,chk_timestatus text,fuerzatrabajo text, messageServerDispatch text, messageServerTimeDispatch text )");
 
             //Version 12  --Tramo de Visita
             db.execSQL("CREATE TABLE quoteeffectiveness (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,type TEXT,quote TEXT,umd TEXT)");

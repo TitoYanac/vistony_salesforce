@@ -1214,6 +1214,7 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.collectioncheck
                         ,""
                         ,"N"
+                        ,""
                 );
 
                 ActualizaDocumentoDeuda(ObjUsuario.compania_id,
@@ -1269,6 +1270,7 @@ public class CobranzaDetalleView extends Fragment {
                         SesionEntity.collectioncheck
                         ,""
                         ,"N"
+                        ,""
                 );
 
 

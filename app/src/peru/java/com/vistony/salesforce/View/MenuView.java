@@ -937,9 +937,12 @@ public class MenuView extends AppCompatActivity
             if(tag2.equals("inicioRutaVendedorViewLead"))
             {
                 String tagLeadClientesView="leadUpdateClient";
+                String tagMenuAccionView="inicioRutaVendedorView";
                 LeadFragment = getSupportFragmentManager().findFragmentByTag(tagLeadClientesView);
+                MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagMenuAccionView);
                 ft.remove(LeadFragment);
-                ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.show(MenuAccionViewFragment);
+                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("2pop");
 
                 ft.commit();
@@ -1152,7 +1155,7 @@ public class MenuView extends AppCompatActivity
 
                 String tagRutaVendedorView="inicioRutaVendedorView";
                 MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
-                ft.remove(MenuAccionViewFragment);
+                ft.hide(MenuAccionViewFragment);
                 //ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.add(R.id.content_menu_view,LeadClientesView.newInstancia(Lista,tag2),tag2);
                 ft.addToBackStack("popsssggggersa");

@@ -250,6 +250,7 @@ public class MenuAccionView extends Fragment {
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
         cv_canvas.setVisibility(View.GONE);
+
         cv_canvas.setOnClickListener(v -> {
             String Fragment="MenuAccionView";
             String accion="canvas";
@@ -274,9 +275,10 @@ public class MenuAccionView extends Fragment {
         {
             cv_pedido.setVisibility(View.GONE);
             cv_visita.setVisibility(View.GONE);
-            cv_lead.setVisibility(View.GONE);
-            cv_visit_section.setVisibility(View.GONE);
-            cv_dispatch.setVisibility(View.GONE);
+            //cv_lead.setVisibility(View.GONE);
+            //cv_visit_section.setVisibility(View.GONE);
+            //cv_dispatch.setVisibility(View.GONE);
+            cv_canvas.setVisibility(View.GONE);
         }
 
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
@@ -316,14 +318,14 @@ public class MenuAccionView extends Fragment {
                     alertatiporecibos().show();
                 }
             }else {
-                /*if(cv_cobranza.isFocusable())
+                if(cv_cobranza.isFocusable())
                 {
                    alertatiporecibos().show();
                 }
                 else {
                     Toast.makeText(getActivity(), "Registre el inicio de la visita, para continuar!!!", Toast.LENGTH_LONG).show();
-                }*/
-                alertatiporecibos().show();
+                }
+                //alertatiporecibos().show();
             }
         });
 
@@ -373,10 +375,10 @@ public class MenuAccionView extends Fragment {
             //startActivity(i);
         });
 
-        /*if(SesionEntity.perfil_id.equals("chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+        if(SesionEntity.perfil_id.equals("chofer")||SesionEntity.perfil_id.equals("CHOFER"))
         {
             getStatusRouteDriver();
-        }*/
+        }
 
         return v;
     }
@@ -935,57 +937,70 @@ public class MenuAccionView extends Fragment {
             @Override
             public void onClick(View v) {
                 String Latitudini="0",Longitudini="0";
+                CobranzaDetalleSQLiteDao  cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
+                StatusDispatchSQLite statusDispatchSQLite=new StatusDispatchSQLite(getContext());
+                cobranzaDetalleSQLiteDao.getCountCollectionDate(FormatFecha.format(date),SesionEntity.fuerzatrabajo_id,CardCode);
                 UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
                 UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
                 ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
-                Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_finish_visitsection-longitude: "+longitude);
-                Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_finish_visitsection-latitude: "+latitude);
-                if(latitude!=0&&longitude!=0)
+                if(
+                        cobranzaDetalleSQLiteDao.getCountCollectionDate(FormatFecha.format(date),SesionEntity.fuerzatrabajo_id,CardCode)>0
+                        || statusDispatchSQLite.getCountStatusDispatchforDate(FormatFecha.format(date),SesionEntity.fuerzatrabajo_id,CardCode)   >0
+                )
                 {
-                    listVisitSection = visitSectionSQLite.getVisitSection(CardCode, DomEmbarque_ID, FormatFecha.format(date));
-                    statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
-                    for (int i = 0; i < listVisitSection.size(); i++) {
-                        fechainicio = listVisitSection.get(i).getDateini();
-                        timeini = listVisitSection.get(i).getTimeini();
-                        Latitudini = listVisitSection.get(i).getLatitudini();
-                        Longitudini = listVisitSection.get(i).getLongitudini();
-                    }
-                    visitSectionSQLite.UpdateVisitSectionForClient(
-                            CardCode, DomEmbarque_ID, FormatFecha.format(date), String.valueOf(latitude), String.valueOf(longitude), FormatFecha.format(date), dateFormathora.format(date)
-                    );
-                    chk_finish_visitsection.setChecked(true);
-                    btn_finish_visitsection.setEnabled(false);
-                    btn_finish_visitsection.setClickable(false);
-                    Utilitario.disabledButtton(btn_finish_visitsection);
-
-                    if (SesionEntity.perfil_id.equals("CHOFER") || SesionEntity.perfil_id.equals("chofer")) {
-                        StatusDispatchSQLite statusDispatchSQLite = new StatusDispatchSQLite(getContext());
-                        statusDispatchSQLite.UpdateTimeStatusDispatch(
-                                CardCode,
-                                DomEmbarque_ID, timeini, dateFormathora.format(date), Latitudini, Longitudini
+                    Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_finish_visitsection-longitude: "+longitude);
+                    Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_finish_visitsection-latitude: "+latitude);
+                    if(latitude!=0&&longitude!=0)
+                    {
+                        listVisitSection = visitSectionSQLite.getVisitSection(CardCode, DomEmbarque_ID, FormatFecha.format(date));
+                        statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
+                        for (int i = 0; i < listVisitSection.size(); i++) {
+                            fechainicio = listVisitSection.get(i).getDateini();
+                            timeini = listVisitSection.get(i).getTimeini();
+                            Latitudini = listVisitSection.get(i).getLatitudini();
+                            Longitudini = listVisitSection.get(i).getLongitudini();
+                        }
+                        visitSectionSQLite.UpdateVisitSectionForClient(
+                                CardCode, DomEmbarque_ID, FormatFecha.format(date), String.valueOf(latitude), String.valueOf(longitude), FormatFecha.format(date), dateFormathora.format(date)
                         );
+                        chk_finish_visitsection.setChecked(true);
+                        btn_finish_visitsection.setEnabled(false);
+                        btn_finish_visitsection.setClickable(false);
+                        Utilitario.disabledButtton(btn_finish_visitsection);
 
-                        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                        statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
-                            Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
-                        });
+                        if (SesionEntity.perfil_id.equals("CHOFER") || SesionEntity.perfil_id.equals("chofer")) {
 
-                    } else {
-                        RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
-                        rutaVendedorSQLiteDao.UpdateChkVisitSection(
-                                CardCode,
-                                DomEmbarque_ID,
-                                ObjUsuario.compania_id,
-                                FormatFecha.format(date)
-                        );
+                            statusDispatchSQLite.UpdateTimeStatusDispatch(
+                                    CardCode,
+                                    DomEmbarque_ID, timeini, dateFormathora.format(date), Latitudini, Longitudini
+                            );
+
+                            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                            statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+                                Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
+                            });
+
+                        } else {
+                            RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
+                            rutaVendedorSQLiteDao.UpdateChkVisitSection(
+                                    CardCode,
+                                    DomEmbarque_ID,
+                                    ObjUsuario.compania_id,
+                                    FormatFecha.format(date)
+                            );
+                        }
+                        Toast.makeText(getActivity(), "Visita Finalizada!!!", Toast.LENGTH_LONG).show();
+                    }else
+                    {
+                        Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                        getLocation();
                     }
-                    Toast.makeText(getActivity(), "Visita Finalizada!!!", Toast.LENGTH_LONG).show();
-                }else
-                {
-                    Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
-                    getLocation();
+                }else {
+                    Toast.makeText(getActivity(), "No ah generado cobranza o despacho a este cliente, sirvase a actualizar su despacho o generar su cobranza!!!", Toast.LENGTH_LONG).show();
+                    //alertdialogInformative(getContext(),"","No ah generado cobranza o despacho a este cliente,Seguro que desea Finalizar la Visita?").show();
                 }
+
             }
         });
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
@@ -998,6 +1013,11 @@ public class MenuAccionView extends Fragment {
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         return  dialog;
+    }
+
+    public void savefinishvisit()
+    {
+
     }
 
     private void getStatusRouteDriver()
@@ -1026,6 +1046,32 @@ public class MenuAccionView extends Fragment {
                 Utilitario.disabledCardView(cv_cobranza,getContext());
             }
         }*/
+    }
+
+    static private Dialog alertdialogInformative(Context context, String titulo, String message) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText(titulo);
+        textViewMsj.setText(message);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 
 

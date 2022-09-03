@@ -113,7 +113,7 @@ public class DetailDispatchSheetSQLite {
         Cursor fila = bd.rawQuery(
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
                         "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
-                        ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin " +
+                        ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch " +
                         //", '0' timeini, '0' timefin " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
@@ -132,12 +132,19 @@ public class DetailDispatchSheetSQLite {
                         "D.fuerzatrabajo_id=E.fuerzatrabajo_id  AND " +
                         "D.control_id=E.idref AND " +
                         "A.cliente_id=E.cliente_id AND " +
-                        "A.domembarque_id=E.domembarque_id   " +
+                        "A.domembarque_id=E.domembarque_id  " +
+                        "LEFT OUTER JOIN cobranzadetalle F ON " +
+                        "A.cliente_id=F.cliente_id  AND " +
+                        "F.docentry=A.factura_id" +
+                        " LEFT OUTER JOIN typedispatch G ON " +
+                        "A.estado_id=G.typedispatch_id  " +
+                        " LEFT OUTER JOIN reasondispatch H ON " +
+                        "A.motivo_id=H.reasondispatch_id  " +
                         "  where A.control_id='"+codeControl+"'",null);
 
         while (fila.moveToNext())
         {
-            boolean chkupdatedispatch,chkvisitsectionstart,chkvisitsectionend;
+            boolean chkupdatedispatch,chkvisitsectionstart,chkvisitsectionend,chkcollection;
             hojaDespachoSQLiteEntity= new HojaDespachoDetalleSQLiteEntity();
             hojaDespachoSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
             hojaDespachoSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
@@ -182,6 +189,16 @@ public class DetailDispatchSheetSQLite {
                 chkvisitsectionend=true;
             }
             hojaDespachoSQLiteEntity.setChkvisitsectionend (chkvisitsectionend);
+
+            if(fila.getString(fila.getColumnIndex("chk_collection")).equals(""))
+            {
+                chkcollection=false;
+            }else {
+                chkcollection=true;
+            }
+            hojaDespachoSQLiteEntity.setChkcollection (chkcollection);
+            hojaDespachoSQLiteEntity.setEstado (fila.getString(fila.getColumnIndex("typedispatch")));
+            hojaDespachoSQLiteEntity.setOcurrencies(fila.getString(fila.getColumnIndex("reasondispatch")));
 
 
             listaHojaDespachoSQLiteEntity.add(hojaDespachoSQLiteEntity);
@@ -346,9 +363,9 @@ public class DetailDispatchSheetSQLite {
         abrir();
         Cursor fila = bd.rawQuery(
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
-                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
+                        "A.saldo,F.typedispatch,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.chkrecibido,'0') as chkupdatedispatch " +
                         ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin " +
-                        ", a.estado_id,a.motivo,a.motivo_id,a.fotoguia,a.fotolocal " +
+                        ", a.estado_id,g.reasondispatch,a.motivo_id,a.fotoguia,a.fotolocal,c.messageServerDispatch,c.messageServerTimeDispatch  " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
                         "A.cliente_id=B.cliente_id " +
@@ -358,13 +375,17 @@ public class DetailDispatchSheetSQLite {
                         " left outer join statusdispatch C ON  " +
                         "A.cliente_id=C.cliente_id  AND " +
                         "A.entrega_id=C.entrega_id  AND " +
-                        "A.fuerzatrabajo_id=C.fuerzatrabajo_id AND " +
-                        "C.fecha_registro=D.fechahojadespacho " +
+                        "A.fuerzatrabajo_id=C.fuerzatrabajo_id "+ // AND " +
+                        //"C.fecha_registro=D.fechahojadespacho " +
                         " left outer join visitsection E ON  " +
                         "D.fuerzatrabajo_id=E.fuerzatrabajo_id  AND " +
                         "D.control_id=E.idref AND " +
                         "A.cliente_id=E.cliente_id AND " +
-                        "A.domembarque_id=E.domembarque_id   " +
+                        "A.domembarque_id=E.domembarque_id" +
+                        " LEFT OUTER JOIN typedispatch F ON " +
+                        "F.typedispatch_id=A.estado_id " +
+                        " LEFT OUTER JOIN reasondispatch G ON " +
+                        "A.motivo_id=G.reasondispatch_id" +
                         "  where D.fechahojadespacho='"+dateDispatch+"'",null);
 
         while (fila.moveToNext())
@@ -373,9 +394,9 @@ public class DetailDispatchSheetSQLite {
             historicStatusDispatchEntity.setFuerzaTrabajo_ID(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
             historicStatusDispatchEntity.setUsuario_ID(fila.getString(fila.getColumnIndex("usuario_id")));
             historicStatusDispatchEntity.setTipoDespacho_ID(fila.getString(fila.getColumnIndex("estado_id")));
-            historicStatusDispatchEntity.setTipoDespacho(fila.getString(fila.getColumnIndex("estado")));
+            historicStatusDispatchEntity.setTipoDespacho(fila.getString(fila.getColumnIndex("typedispatch")));
             historicStatusDispatchEntity.setMotivoDespacho_ID(fila.getString(fila.getColumnIndex("motivo_id")));
-            historicStatusDispatchEntity.setMotivoDespacho(fila.getString(fila.getColumnIndex("motivo")));
+            historicStatusDispatchEntity.setMotivoDespacho(fila.getString(fila.getColumnIndex("reasondispatch")));
             historicStatusDispatchEntity.setObservacion(fila.getString(fila.getColumnIndex("comentariodespacho")));
             historicStatusDispatchEntity.setLatitud(fila.getString(fila.getColumnIndex("direccion")));
             historicStatusDispatchEntity.setLongitud(fila.getString(fila.getColumnIndex("factura_id")));
@@ -383,9 +404,16 @@ public class DetailDispatchSheetSQLite {
             historicStatusDispatchEntity.setCliente(fila.getString(fila.getColumnIndex("nombrecliente")));
             historicStatusDispatchEntity.setFotoGuia(fila.getString(fila.getColumnIndex("fotoguia")));
             historicStatusDispatchEntity.setFotoLocal(fila.getString(fila.getColumnIndex("fotolocal")));
-            historicStatusDispatchEntity.setChk_Recibido ("Y");
-
-
+            historicStatusDispatchEntity.setEntrega(fila.getString(fila.getColumnIndex("entrega")));
+            //historicStatusDispatchEntity.setChk_Recibido ("Y");
+            if(fila.getString(fila.getColumnIndex("chkupdatedispatch")).equals("0"))
+            {
+                historicStatusDispatchEntity.setChk_Recibido ("N");
+            }else {
+                historicStatusDispatchEntity.setChk_Recibido ("Y");
+            }
+            historicStatusDispatchEntity.setMessageServerDispatch(fila.getString(fila.getColumnIndex("messageServerDispatch")));
+            historicStatusDispatchEntity.setMessageServerTimeDispatch(fila.getString(fila.getColumnIndex("messageServerTimeDispatch")));
             listaHistoricStatusDispatchEntity.add(historicStatusDispatchEntity);
         }
 

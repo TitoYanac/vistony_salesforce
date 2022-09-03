@@ -1900,4 +1900,37 @@ public class CobranzaDetalleSQLiteDao {
         return rpta;
     }
 
+    public int getCountCollectionDate (
+            String date,
+            String fuerzatrabajo_id,
+            String cardcode
+    )
+    {
+        abrir();
+        int resultado=0;
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(count(recibo),0) as cantidad from cobranzadetalle" +
+                            " where fuerzatrabajo_id='"+fuerzatrabajo_id+"'" +
+                            " and cliente_id='"+cardcode+"'" +
+                            " and fechacobranza='"+date+"'"
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                resultado=Integer.parseInt(fila.getString(0));
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+
+        bd.close();
+        Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-resultado"+String.valueOf(resultado));
+        return resultado;
+    }
+
 }

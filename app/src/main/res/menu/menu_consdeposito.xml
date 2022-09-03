@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/seleccionar_todo"
-        android:icon="@drawable/ic_baseline_check_box_24"
+        android:icon="@drawable/ic_baseline_check_box_red_24"
         android:title="@string/save"
         android:enabled="true"
         app:showAsAction="ifRoom"

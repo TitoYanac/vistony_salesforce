@@ -30,8 +30,8 @@ public class HojaDespachoDetalleSQLiteEntity {
     public String motivo_id;
     public String fotoguia;
     public String fotolocal;
-
-
+    public boolean chkcollection;
+    public String ocurrencies;
 
     public HojaDespachoDetalleSQLiteEntity(
             String compania_id, String fuerzatrabajo_id, String usuario_id, String control_id, String item_id, String cliente_id,
@@ -46,6 +46,8 @@ public class HojaDespachoDetalleSQLiteEntity {
             ,String motivo_id
             ,String fotoguia
             ,String fotolocal
+            ,boolean chkcollection
+            ,String ocurrencies
     ) {
         this.compania_id = compania_id;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
@@ -76,10 +78,29 @@ public class HojaDespachoDetalleSQLiteEntity {
         this.motivo_id = motivo_id;
         this.fotoguia = fotoguia;
         this.fotolocal = fotolocal;
+        this.chkcollection = chkcollection;
+        this.ocurrencies = ocurrencies;
+
     }
 
     public HojaDespachoDetalleSQLiteEntity() {
 
+    }
+
+    public String getOcurrencies() {
+        return ocurrencies;
+    }
+
+    public void setOcurrencies(String ocurrencies) {
+        this.ocurrencies = ocurrencies;
+    }
+
+    public boolean isChkcollection() {
+        return chkcollection;
+    }
+
+    public void setChkcollection(boolean chkcollection) {
+        this.chkcollection = chkcollection;
     }
 
     public String getEstado_id() {

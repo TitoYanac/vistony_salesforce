@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.DetailStatusDispatchEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.HeaderStatusDispatchEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.StatusDispatchEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -77,12 +79,97 @@ public class StatusDispatchSQLite {
             registro.put("checkouttime", statusDispatchEntity.get(i).getCheckouttime());
             registro.put("chk_timestatus", statusDispatchEntity.get(i).getChk_timestatus());
             registro.put("fuerzatrabajo", statusDispatchEntity.get(i).getFuerzatrabajo());
+            registro.put("messageServerDispatch", statusDispatchEntity.get(i).getMessageServerDispatch());
+            registro.put("messageServerTimeDispatch", statusDispatchEntity.get(i).getMessageServerTimeDispatch());
             bd.insert("statusdispatch", null, registro);
         }
 
 
         bd.close();
         return 1;
+    }
+
+    public ArrayList<HeaderStatusDispatchEntity> getListHeaderStatusDispatch (Context context)
+    {
+
+        ArrayList<HeaderStatusDispatchEntity> listHeaderStatusDispatchEntity=new ArrayList<>();
+        HeaderStatusDispatchEntity headerStatusDispatchEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select  control_id from statusdispatch" +
+                            " where (chkrecibido='N' or chkrecibido='0') " +
+                            " group by control_id "
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                headerStatusDispatchEntity= new HeaderStatusDispatchEntity();
+                headerStatusDispatchEntity.setDocEntry(fila.getString(0));
+                headerStatusDispatchEntity.setDetails(getListDetailStatusDispatch(fila.getString(0)));
+                listHeaderStatusDispatchEntity.add(headerStatusDispatchEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS", "StatusDispatchSQlite-getListHeaderStatusDispatch-error"+e);
+        }
+
+        bd.close();
+        return listHeaderStatusDispatchEntity;
+    }
+
+    public ArrayList<DetailStatusDispatchEntity> getListDetailStatusDispatch (String control_id)
+    {
+
+        ArrayList<DetailStatusDispatchEntity> listDetailStatusDispatchEntity=new ArrayList<>();
+        DetailStatusDispatchEntity detailStatusDispatchEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select  * from statusdispatch" +
+                            " where (chkrecibido='N' or chkrecibido='0') and  control_id='"+control_id+"' "
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                byte[] byteArray=null,byteArray2=null;
+                String encoded = null,encoded2 = null;
+                Bitmap bitmap= null,bitmap2= null;
+                ImageCameraController imageCameraController=new ImageCameraController();
+                detailStatusDispatchEntity= new DetailStatusDispatchEntity();
+                detailStatusDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
+                detailStatusDispatchEntity.setFuerzatrabajo(fila.getString(27));
+                detailStatusDispatchEntity.setDelivered(fila.getString(3));
+                detailStatusDispatchEntity.setReturnReason(fila.getString(4));
+                detailStatusDispatchEntity.setEntrega_id(fila.getString(7));
+                detailStatusDispatchEntity.setComments(fila.getString(9));
+                encoded=imageCameraController.getBASE64(fila.getString(10));
+                encoded2=imageCameraController.getBASE64(fila.getString(13));
+                String Base64PhotoLocal = encoded.replace("\n", "");
+                String Base64PhotoLocal2 = Base64PhotoLocal.replace("'\u003d'", "=");
+                String Base64PhotoGuia = encoded2.replace("\n", "");
+                String Base64PhotoGuia2 = Base64PhotoGuia.replace("'\u003d'", "=");
+                detailStatusDispatchEntity.setPhotoStore(Base64PhotoLocal2);
+                detailStatusDispatchEntity.setPhotoDocument(Base64PhotoGuia2);
+                //detailStatusDispatchEntity.setDocEntry(fila.getString(21));
+                detailStatusDispatchEntity.setLineId(fila.getString(22));
+                listDetailStatusDispatchEntity.add(detailStatusDispatchEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS", "StatusDispatchSQlite-getListDetailStatusDispatch-error"+e);
+        }
+
+        bd.close();
+        return listDetailStatusDispatchEntity;
     }
 
     public ArrayList<StatusDispatchEntity> getListStatusDispatch (Context context)
@@ -213,12 +300,13 @@ public class StatusDispatchSQLite {
         return listStatusDispatchEntity;
     }
 
-    public int UpdateResultStatusDispatch (String control_id,String item_id){
+    public int UpdateResultStatusDispatch (String control_id,String item_id,String message){
         int status=0;
         try {
             abrir();
             ContentValues registro = new ContentValues();
             registro.put("chkrecibido","1");
+            registro.put("messageServerDispatch",message);
             bd.update("statusdispatch",registro,"control_id=? and item_id=?",new String[]{control_id,item_id});
             status=1;
 
@@ -314,12 +402,16 @@ public class StatusDispatchSQLite {
         return listStatusDispatchEntity;
     }
 
-    public int UpdateResultStatusDispatchTime (String control_id,String item_id){
+    public int UpdateResultStatusDispatchTime (String control_id,String item_id,String Message){
+        Log.e("REOS","StatusDispatchSQlite-UpdateResultStatusDispatchTime-control_id"+control_id);
+        Log.e("REOS","StatusDispatchSQlite-UpdateResultStatusDispatchTime-item_id"+item_id);
         int status=0;
         try {
             abrir();
             ContentValues registro = new ContentValues();
             registro.put("chk_timestatus","1");
+            registro.put("messageServerTimeDispatch", Message);
+
             bd.update("statusdispatch",registro,"control_id=? and item_id=?",new String[]{control_id,item_id});
             status=1;
 
@@ -331,5 +423,156 @@ public class StatusDispatchSQLite {
         return status;
     }
 
+
+    public ArrayList<HeaderStatusDispatchEntity> getHeaderListStatusDispatchTime (Context context)
+    {
+        ArrayList<HeaderStatusDispatchEntity> listHeaderStatusDispatchEntity=new ArrayList<>();
+        HeaderStatusDispatchEntity headerStatusDispatchEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select  control_id from statusdispatch" +
+                            " where (chk_timestatus='N' or chk_timestatus='0') and  checkintime<>'0' "+
+                            " group by control_id "
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                headerStatusDispatchEntity= new HeaderStatusDispatchEntity();
+                headerStatusDispatchEntity.setDocEntry(fila.getString(0));
+                headerStatusDispatchEntity.setDetails(getDetailListStatusDispatchTime(fila.getString(0)));
+                listHeaderStatusDispatchEntity.add(headerStatusDispatchEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS", "StatusDispatchSQlite-getHeaderListStatusDispatchTime-error"+e);
+        }
+
+        bd.close();
+        return listHeaderStatusDispatchEntity;
+    }
+
+    public ArrayList<DetailStatusDispatchEntity> getDetailListStatusDispatchTime (String control_id)
+    {
+
+        ArrayList<DetailStatusDispatchEntity> listDetailStatusDispatchEntity=new ArrayList<>();
+        DetailStatusDispatchEntity detailStatusDispatchEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select  * from statusdispatch" +
+                            " where (chk_timestatus='N' or chk_timestatus='0') and  checkintime<>'0' "+
+                            "and  control_id='"+control_id+"' "
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                detailStatusDispatchEntity= new DetailStatusDispatchEntity();
+                //detailStatusDispatchEntity.setDocEntry(fila.getString(21));
+                //statusDispatchEntity.setDocEntry("3");
+                detailStatusDispatchEntity.setLineId(fila.getString(22));
+                //statusDispatchEntity.setLineId("1");
+                detailStatusDispatchEntity.setLatitud(fila.getString(14));
+                detailStatusDispatchEntity.setLongitud(fila.getString(15));
+                detailStatusDispatchEntity.setCheckintime(fila.getString(24));
+                detailStatusDispatchEntity.setCheckouttime(fila.getString(25));
+                listDetailStatusDispatchEntity.add(detailStatusDispatchEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS", "StatusDispatchSQlite-getDetailListStatusDispatchTime-error"+e);
+        }
+
+        bd.close();
+        return listDetailStatusDispatchEntity;
+    }
+
+    /*public List<HistoricStatusDispatchEntity> getListStatusDispatchforDateSalesPerson (String Date)
+    {
+
+        List<HistoricStatusDispatchEntity> listStatusDispatchEntity=new ArrayList<>();
+        HistoricStatusDispatchEntity historicStatusDispatchEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select * from statusdispatch" +
+                            " where " +
+                            //"(chkrecibido='N' or chkrecibido='0') AND" +
+                            " fecha_registro='"+Date+"' "
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                historicStatusDispatchEntity= new HistoricStatusDispatchEntity();
+                //historicStatusDispatchEntity.setCompania_id(fila.getString(0));
+                //historicStatusDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
+                //historicStatusDispatchEntity.setUsuario_id (fila.getString(2));
+                historicStatusDispatchEntity.setTipoDespacho_ID (fila.getString(3));
+                historicStatusDispatchEntity.setMotivoDespacho_ID(fila.getString(4));
+                historicStatusDispatchEntity.setCliente_ID(fila.getString(5));
+                //historicStatusDispatchEntity.setFactura_id(fila.getString(6));
+                historicStatusDispatchEntity.setEntrega_ID(fila.getString(7));
+                historicStatusDispatchEntity.setChk_Recibido(fila.getString(8));
+                historicStatusDispatchEntity.setObservacion(fila.getString(9));
+                historicStatusDispatchEntity.setFotoLocal(fila.getString(10));
+                historicStatusDispatchEntity.setFotoGuia(fila.getString(13));
+                historicStatusDispatchEntity.setCliente(fila.getString(16));
+                historicStatusDispatchEntity.setEntrega(fila.getString(18));
+                historicStatusDispatchEntity.setFactura(fila.getString(17));
+                historicStatusDispatchEntity.setTipoDespacho(fila.getString(19));
+                historicStatusDispatchEntity.setMotivoDespacho(fila.getString(20));
+                listStatusDispatchEntity.add(historicStatusDispatchEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS","StatusDispatchSQLite-getListStatusDispatchforDate-error:"+e.toString());
+        }
+
+        bd.close();
+        return listStatusDispatchEntity;
+    }*/
+
+    public int getCountStatusDispatchforDate (String Date,String fuerzatrabajo_id,String cardcode)
+    {
+
+        abrir();
+        int resultado=0;
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(count(compania_id),0) as cantidad from statusdispatch" +
+                            " where " +
+                            " fecha_registro='"+Date+"' and " +
+                            " fuerzatrabajo_id='"+fuerzatrabajo_id+"' and " +
+                            " cliente_id='"+cardcode+"' "
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                resultado=Integer.parseInt(fila.getString(0));
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS","StatusDispatchSQLite-getListStatusDispatchforDate-error:"+e.toString());
+        }
+
+        bd.close();
+        return resultado;
+    }
 
 }

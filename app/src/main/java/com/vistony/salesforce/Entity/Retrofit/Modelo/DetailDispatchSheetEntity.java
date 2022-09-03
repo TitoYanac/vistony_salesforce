@@ -15,8 +15,8 @@ public class DetailDispatchSheetEntity {
     @SerializedName("ShipToCode")
     private String domembarque_id;
 
-    //@SerializedName("Address2")
-    @SerializedName("Address")
+    @SerializedName("Address2")
+    //@SerializedName("Address")
     private String direccion;
 
     @SerializedName("InvoiceNum")
@@ -56,19 +56,19 @@ public class DetailDispatchSheetEntity {
     @SerializedName("Comentario_Despacho")
     private String comentario_despacho;
 
-    @SerializedName("estado_id")
+    @SerializedName("StatusCode")
     private String estado_id;
 
     @SerializedName("motivo")
     private String motivo;
 
-    @SerializedName("motivo_id")
+    @SerializedName("OcurrencyCode")
     private String motivo_id;
 
-    @SerializedName("fotoguia")
+    @SerializedName("PhotoDocument")
     private String fotoguia;
 
-    @SerializedName("fotolocal")
+    @SerializedName("PhotoStore")
     private String fotolocal;
 
     public String getEstado_id() {

@@ -123,11 +123,19 @@
     <string name="lbl_currency_type">Tipo</string>
     <string name="lbl_currency_unit">Unidad</string>
     <string name="lbl_distpatch_route">Total Programados</string>
-    <string name="lbl_status_distpatch">Total Estado Actualizado</string>
+    <string name="lbl_status_distpatch">Total Despachados</string>
     <string name="lbl_status">Estado</string>
     <string name="lbl_send">Enviar</string>
     <string name="lbl_find_quotation">Consulta Cotizacion</string>
     <string name="lbl_item">Item</string>
+    <string name="lbl_information_client">Datos de Cliente</string>
+    <string name="lbl_create_visit">Generar Visita</string>
+    <string name="lbl_chk_collecion">Cobranza</string>
+    <string name="lbl_total_collection">Total Cobranza</string>
+    <string name="lbl_total_debt">Total Deuda</string>
+    <string name="lbl_delivery">Entrega</string>
+    <string name="lbl_dispatch">Despacho</string>
+    <string name="lbl_ocurrencies">Ocurrencia</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 
