@@ -584,7 +584,9 @@ public class MenuAccionView extends Fragment {
                         CardCode,
                         DomEmbarque_ID,
                         ObjUsuario.compania_id,
-                        fecha
+                        fecha,
+                        String.valueOf(latitude) ,
+                        String.valueOf(longitude)
                 );
                 direccionSQLite.updateCoordenatesAddress(CardCode,
                         DomEmbarque_ID,String.valueOf(latitude),

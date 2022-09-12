@@ -797,7 +797,16 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.guardar_orden_venta:
+                dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                date = new Date();
+                fechacomparativa =dateFormat.format(date);
+                if(!parametrofecha.equals(fechacomparativa))
+                {
                 alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                }else {
+
+                    alertdialogInformative(getContext(),"ADVERTENCIA","La Fecha de entrega de la Orden de Venta, debe ser distinta a la fecha actual, se sugiere 2 dias en adelante...").show();
+                }
                 return false;
             case R.id.enviar_erp:
                 alertaEnviarERP("Esta Seguro de Enviar a la Nube la Orden de Venta?").show();
@@ -822,20 +831,15 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
 
-        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-        date = new Date();
-        fechacomparativa =dateFormat.format(date);
+
 
         dialogButtonOK.setOnClickListener(v -> {
-            if(!parametrofecha.equals(fechacomparativa))
-            {
+
                 Utilitario.disabledImageButtton(btn_dispatch_date, context);
                 RegistrarOrdenVentaBD();
                 Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
-            }else {
 
-            }
         });
         dialogButtonCancel.setOnClickListener(v -> dialog.dismiss());
 
@@ -1360,5 +1364,31 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         }
         parametrofecha=year+mes+dia;
         tv_dispatch_date.setText(year + "-" + mes + "-" + dia);
+    }
+
+    static private Dialog alertdialogInformative(Context context, String titulo, String message) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText(titulo);
+        textViewMsj.setText(message);
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 }

@@ -569,7 +569,7 @@ public class RutaVendedorSQLiteDao {
         return 1;
     }
 
-    public int UpdateChkGeolocationRouteSales (String cliente_id, String domembarque_id, String compania_id,String fecharuta)
+    public int UpdateChkGeolocationRouteSales (String cliente_id, String domembarque_id, String compania_id,String fecharuta,String latitud,String longitud)
     {
         int resultado=0;
         abrir();
@@ -577,6 +577,8 @@ public class RutaVendedorSQLiteDao {
 
             ContentValues registro = new ContentValues();
             registro.put("chkgeolocation","1");
+            registro.put("latitud", latitud);
+            registro.put("longitud", longitud);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' " +
                     "and  domembarque_id='"+domembarque_id+"' " +

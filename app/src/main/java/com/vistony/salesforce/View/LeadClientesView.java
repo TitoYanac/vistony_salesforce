@@ -235,7 +235,7 @@ public class LeadClientesView extends Fragment {
             ti_textcellphone.setVisibility(View.GONE);
             if(type.equals("leadUpdateClient"))
             {
-                //getActivity().setTitle("Consultar Cliente");
+                getActivity().setTitle("Consultar Cliente");
             }else if(type.equals("leadUpdateClientCensus")){
                 btnUpload.setText("ACTUALIZAR");
             }
@@ -244,6 +244,8 @@ public class LeadClientesView extends Fragment {
             }
             if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
             {
+                btnUpload.setText("ACEPTAR");
+                getActivity().setTitle("Consultar Cliente");
                 floatingButtonTakePhoto.setVisibility(View.GONE);
                 linearLayoutGps.setVisibility(View.GONE);
             }
@@ -358,7 +360,19 @@ public class LeadClientesView extends Fragment {
             }*/
             if(BuildConfig.FLAVOR.equals("peru"))
             {
-                sendLeadApi();
+                if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+                {
+                    String Fragment="RutaVendedorView";
+                    String accion="inicioRutaVendedorViewLead";
+                    String compuesto=Fragment+"-"+accion;
+                    if(mListener!=null) {
+                        mListener.onFragmentInteraction(compuesto, object
+                        );
+                    }
+                }else {
+                    sendLeadApi();
+                }
+
             }
             else if(BuildConfig.FLAVOR.equals("ecuador"))
             {
@@ -384,6 +398,7 @@ public class LeadClientesView extends Fragment {
         if(type.equals("leadUpdateClient"))
         {
             getActivity().setTitle("Consultar Cliente");
+
         }else if(type.equals("leadUpdateClientCensus")){
             getActivity().setTitle("Geolocalización Cliente");
         }
@@ -481,7 +496,9 @@ public class LeadClientesView extends Fragment {
                         cliente_id,
                         domebarque_id,
                         ObjUsuario.compania_id,
-                        formattedDate
+                        formattedDate,
+                        String.valueOf(latitud),
+                        String.valueOf(longitud)
                 );
                 direccionSQLite.updateCoordenatesAddress(cliente_id,
                         domebarque_id,String.valueOf(latitud),
@@ -846,6 +863,8 @@ public class LeadClientesView extends Fragment {
         mCurrentPhotoPath=image.getAbsolutePath();
         return image;
     }
+
+
 
 }
 

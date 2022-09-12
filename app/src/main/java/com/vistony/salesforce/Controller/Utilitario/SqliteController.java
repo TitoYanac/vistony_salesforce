@@ -20,7 +20,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 16;
+    private static final int VERSION = 17;
 
 
     public SqliteController(Context context){
@@ -415,6 +415,23 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotoguia TEXT");
             db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotolocal TEXT");
             db.execSQL("ALTER TABLE visitsection ADD COLUMN idref TEXT");
+        }
+        if(oldVersion==16&&newVersion==17) {
+            //db.execSQL("ALTER TABLE statusdispatch ADD COLUMN fuerzatrabajo TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerTimeDispatch TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivercode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehiclecode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehicleplate TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivermobile TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivername TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN messageserver TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN census TEXT");
+            db.execSQL("ALTER TABLE typedispatch ADD COLUMN statusupdate TEXT");
+
 
         }
 
