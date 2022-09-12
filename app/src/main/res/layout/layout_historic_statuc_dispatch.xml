@@ -30,7 +30,9 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp">
+            android:layout_marginBottom="5dp"
+
+            >
 
             <TableRow
                 android:layout_width="match_parent"
@@ -42,22 +44,25 @@
                     android:layout_height="wrap_content"
                     android:text="@string/lbl_historic_status_dispatch_delivery"
                     android:textAppearance="?attr/textAppearanceListItem" />
-
+                <TextView
+                    android:id="@+id/lbl_referral_guide_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceListItem" />
                 <TextView
                     android:id="@+id/tv_referral_guide"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:text=""
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text=""
-                    android:layout_marginStart="10dp"
                     android:textStyle="bold"
-                    />
+                    tools:text="" />
             </TableRow>
-
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                >
 
                 <TextView
                     android:id="@+id/lbl_type_dispatch"
@@ -66,18 +71,24 @@
                     android:text="@string/lbl_historic_status_dispatch_type"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
+                <ImageView
+                    android:id="@+id/imv_indicator_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/Black"
+                    android:textStyle="bold"
+                    app:srcCompat="@drawable/ic_baseline_dangerous_24" />
+
                 <TextView
                     android:id="@+id/tv_type_dispatch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:text=""
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text=""
-                    android:layout_marginStart="10dp"
                     android:textStyle="bold"
-                    />
+                    tools:text="" />
             </TableRow>
-
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -90,17 +101,90 @@
                     android:textAppearance="?attr/textAppearanceListItem"
 
                     />
-
+                <TextView
+                    android:id="@+id/tv_reason_dispatch2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceListItem" />
                 <TextView
                     android:id="@+id/tv_reason_dispatch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:text=""
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text=""
-                    android:layout_marginStart="10dp"
                     android:textStyle="bold"
+                    tools:text="" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tbr_drivername"
+                >
+
+                <TextView
+                    android:id="@+id/lbl_driver_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lbl_drivername"
+                    android:textAppearance="?attr/textAppearanceListItem"
+
                     />
+                <TextView
+                    android:id="@+id/tv_driver_name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+                <TextView
+                    android:id="@+id/tv_driver_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    tools:text="" />
+            </TableRow>
+        </TableLayout>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/tbl_drivermobile"
+            >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3">
+
+                <TextView
+                    android:id="@+id/lbl_driver_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/lbl_drivemobile"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+
+                <ImageView
+                    android:id="@+id/imv_callmobilephone"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_baseline_local_phone_24" />
+
+                <TextView
+                    android:id="@+id/tv_driver_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    tools:text="" />
+
             </TableRow>
         </TableLayout>
 
@@ -148,8 +232,7 @@
                     android:layout_weight="1"
                     android:text="Recibido"
                     android:textAlignment="center"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                     />
+                    android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/lbl_historico_cobranza_respuesta_ws"

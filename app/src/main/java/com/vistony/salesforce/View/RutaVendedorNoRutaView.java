@@ -26,6 +26,7 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteCabeceraDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
@@ -162,8 +163,16 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
         {
             table_row_no_ruta_geolocation.setVisibility(View.GONE);
         }
+        else {
+            if(SesionEntity.census.equals("N")){
+                table_row_no_ruta_geolocation.setVisibility(View.GONE);
+            }
+            else {
+                table_row_no_ruta_geolocation.setVisibility(View.VISIBLE);
+            }
+        }
 
-        table_row_no_ruta_geolocation.setVisibility(View.GONE);
+        //table_row_no_ruta_geolocation.setVisibility(View.GONE);
         fabagregarclientenoruta.setOnClickListener(view -> {
             String Fragment="RutaVendedorNorutaView";
             String accion="agregarClienteNoRuta";

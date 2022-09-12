@@ -11,8 +11,16 @@ public class HojaDespachoCabeceraSQLiteEntity {
     public String marca;
     public String pesototal;
     public String fechahojadespacho;
+    public String DriverCode;
+    public String VehiculeCode;
+    public String VehiclePlate;
 
-    public HojaDespachoCabeceraSQLiteEntity(String compania_id, String fuerzatrabajo_id, String usuario_id, String control_id, String asistente_id, String asistente, String placa, String marca, String pesototal, String fechahojadespacho) {
+
+    public HojaDespachoCabeceraSQLiteEntity(
+            String compania_id, String fuerzatrabajo_id, String usuario_id, String control_id, String asistente_id, String asistente, String placa, String marca
+            , String pesototal, String fechahojadespacho,String DriverCode,String VehiculeCode, String VehiclePlate
+
+    ) {
         this.compania_id = compania_id;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
         this.usuario_id = usuario_id;
@@ -23,10 +31,39 @@ public class HojaDespachoCabeceraSQLiteEntity {
         this.marca = marca;
         this.pesototal = pesototal;
         this.fechahojadespacho = fechahojadespacho;
+        this.DriverCode = DriverCode;
+        this.VehiculeCode = VehiculeCode;
+        this.VehiclePlate = VehiclePlate;
+
+
     }
 
     public HojaDespachoCabeceraSQLiteEntity() {
 
+    }
+
+    public String getDriverCode() {
+        return DriverCode;
+    }
+
+    public void setDriverCode(String driverCode) {
+        DriverCode = driverCode;
+    }
+
+    public String getVehiculeCode() {
+        return VehiculeCode;
+    }
+
+    public void setVehiculeCode(String vehiculeCode) {
+        VehiculeCode = vehiculeCode;
+    }
+
+    public String getVehiclePlate() {
+        return VehiclePlate;
+    }
+
+    public void setVehiclePlate(String vehiclePlate) {
+        VehiclePlate = vehiclePlate;
     }
 
     public String getCompania_id() {

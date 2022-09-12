@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.LeadAddressEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.LeadEntity;
 import com.vistony.salesforce.Entity.SQLite.DireccionClienteSQLiteEntity;
 
@@ -52,7 +54,8 @@ public class LeadSQLite {
             String referencias,
             String cardcode,
             String domembarque_id,
-            String type
+            String type,
+            String addresscode
     )
     {
         abrir();
@@ -78,6 +81,7 @@ public class LeadSQLite {
         registro.put("cardcode",cardcode);
         registro.put("domembarque_id",domembarque_id);
         registro.put("type",type);
+        registro.put("addresscode",addresscode);
         bd.insert("lead",null,registro);
         bd.close();
         return 1;
@@ -156,4 +160,76 @@ public class LeadSQLite {
         return 1;
     }
 
+
+    public ArrayList<LeadAddressEntity> getGeolocationClient(){
+        try {
+            abrir();
+
+            Cursor fila = bd.rawQuery("SELECT  * FROM lead WHERE recibido_api =0 and type='leadUpdateClientCensus' LIMIT 5 ;", null);
+            ArrayList<LeadAddressEntity> leads = new  ArrayList<LeadAddressEntity>();
+
+            if (fila.moveToFirst()) {
+                do {
+                    String encoded = null;
+                    ImageCameraController imageCameraController=new ImageCameraController();
+                    LeadAddressEntity leadAddressEntity=new LeadAddressEntity();
+                    leadAddressEntity.setCardCode(fila.getString(fila.getColumnIndex("cardcode")));
+                    leadAddressEntity.setAddressCode(fila.getString(fila.getColumnIndex("addresscode")));
+                    leadAddressEntity.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
+                    leadAddressEntity.setLongitude(fila.getString(fila.getColumnIndex("longitud")));
+                    encoded=imageCameraController.getBASE64(fila.getString(fila.getColumnIndex("foto")));
+                    String Base64PhotoLocal = encoded.replace("\n", "");
+                    String Base64PhotoLocal2 = Base64PhotoLocal.replace("'\u003d'", "=");
+                    leadAddressEntity.setPhoto(Base64PhotoLocal2);
+                    leads.add(leadAddressEntity);
+                } while (fila.moveToNext());
+            }
+
+            bd.close();
+            return leads;
+
+        }catch (Exception ex){
+            Log.e("REOS","LeadSQLite-getGeolocationClient-ex"+ex.getMessage());
+            bd.close();
+            return null;
+        }
+    }
+
+    public int UpdateResultLeadAddress (String cardcode,String addresscode,String message){
+        int status=0;
+        try {
+            abrir();
+            ContentValues registro = new ContentValues();
+            registro.put("recibido_api","1");
+            registro.put("messageserver",message);
+            bd.update("lead",registro,"cardcode=? and addresscode=?",new String[]{cardcode,addresscode});
+            status=1;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            bd.close();
+        }
+        return status;
+    }
+
+
+    public int UpdateLeadJSON (String json,String cardcode){
+        int status=0;
+
+        try {
+            abrir();
+
+            ContentValues registro = new ContentValues();
+            registro.put("comentario",json);
+
+            bd.update("lead",registro,"cardcode=?",new String[]{cardcode});
+            status=1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            bd.close();
+        }
+        return status;
+    }
 }

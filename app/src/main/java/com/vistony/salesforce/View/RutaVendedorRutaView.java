@@ -29,6 +29,7 @@ import com.vistony.salesforce.Dao.SQLite.RutaFuerzaTrabajoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaFuerzaTrabajoSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.text.ParseException;
@@ -115,7 +116,15 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         {
             table_row_geolocation.setVisibility(View.GONE);
         }
-        table_row_geolocation.setVisibility(View.GONE);
+        else {
+            if(SesionEntity.census.equals("N")){
+                table_row_geolocation.setVisibility(View.GONE);
+            }
+            else {
+                table_row_geolocation.setVisibility(View.VISIBLE);
+            }
+        }
+        //table_row_geolocation.setVisibility(View.GONE);
         //Implementing setOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

@@ -15,6 +15,17 @@ public class TypeDispatchEntity {
 
     public String usuario_id;
 
+    @SerializedName("Flag")
+    public String statusupdate;
+
+    public String getStatusupdate() {
+        return statusupdate;
+    }
+
+    public void setStatusupdate(String statusupdate) {
+        this.statusupdate = statusupdate;
+    }
+
     public String getTypedispatch_id() {
         return typedispatch_id;
     }

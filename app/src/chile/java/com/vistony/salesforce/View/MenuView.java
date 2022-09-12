@@ -53,6 +53,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.BixolonPrinterController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerDetailRepository;
@@ -189,11 +190,9 @@ public class MenuView extends AppCompatActivity
     final int COD_FOTO=20;
     private TextView textViewStatus;
     String path;
-
-
     private  String recibovalidado = "";
-
     private ConnectivityManager manager;
+    private static BixolonPrinterController bxlPrinter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,6 +242,7 @@ public class MenuView extends AppCompatActivity
         clienteCabeceraView = new ClienteCabeceraView();
         consultarCobranzaView= new ClienteDetalleView();
         parametrosView = new ParametrosView();
+        bxlPrinter = new BixolonPrinterController(this);
 
         cobranzaCabeceraView = new CobranzaCabeceraView();
 
@@ -2070,5 +2070,11 @@ public class MenuView extends AppCompatActivity
             textViewStatus.setTextColor(Color.parseColor("#FFFFFF"));
             textViewStatus.setText("DESCONECTADO");
         }
+    }
+
+    public static BixolonPrinterController getPrinterInstance()
+    {
+        Log.e("REOS","MenuView-getPrinterInstance-Inicio");
+        return bxlPrinter;
     }
 }

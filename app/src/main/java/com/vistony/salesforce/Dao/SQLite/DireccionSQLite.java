@@ -44,7 +44,8 @@ public class DireccionSQLite {
             String fuerzatrabajo_id,
             String nombrefuerzatrabajo,
             String latitud,
-            String longitud
+            String longitud,
+            String addresscode
 
     )
     {
@@ -61,6 +62,7 @@ public class DireccionSQLite {
         registro.put("nombrefuerzatrabajo",nombrefuerzatrabajo);
         registro.put("latitud",latitud);
         registro.put("longitud",longitud);
+        registro.put("addresscode",addresscode);
         sqlite.insert("direccioncliente",null,registro);
         DataBaseManager.getInstance().closeDatabase();
 

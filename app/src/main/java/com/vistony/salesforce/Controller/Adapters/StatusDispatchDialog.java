@@ -334,6 +334,36 @@ public class StatusDispatchDialog extends DialogFragment {
                 }
 
         }});
+
+        imageViewPhoto2.setOnClickListener(new View.OnClickListener() {
+            //imageViewPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("REOS","statusDispatchRepository-->FotoGuia-->Inicia");
+                //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    // Crea el File
+                    File photoFile = null;
+                    //startActivityForResult(intent,0);
+                    photoFile = createImageFile(Entrega+"_"+getDate(),"G");
+
+                    if (photoFile != null) {
+                        Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        //startActivityForResult(intent,20);
+                        someActivityResultLauncherGuia.launch(intent);
+                            /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                                someActivityResultLauncherGuia.launch(intent);
+                            }*/
+
+                    }
+                } catch (IOException ex) {
+                    Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto-error:"+ex);
+                }
+
+            }});
+
         imv_historic_status_dispatch_photo.setOnClickListener(new View.OnClickListener() {
         //imageViewPhoto2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -363,6 +393,41 @@ public class StatusDispatchDialog extends DialogFragment {
                             }*/
 
                         }
+                } catch (IOException ex) {
+                    Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto2-error:"+ex);
+                }
+                Log.e("REOS","statusDispatchRepository-->FotoLocal-->Fin");
+            }});
+
+        imageViewPhoto.setOnClickListener(new View.OnClickListener() {
+            //imageViewPhoto2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                //Intent intent = new Intent(MediaStore.EXTRA);
+                //if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                //   someActivityResultLauncher.launch(intent);
+                //}
+                try {
+                    Log.e("REOS","statusDispatchRepository-->FotoLocal-->Inicia");
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    // Crea el File
+                    File photoFile = null;
+
+                    photoFile = createImageFile(Entrega+"_"+getDate(),"L");
+
+                    if (photoFile != null) {
+                        Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
+                        Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        //startActivityForResult(intent,20);
+                        someActivityResultLauncher.launch(intent);
+                            /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                                Log.e("REOS","statusDispatchRepository-->FotoLocal-->intent.resolveActivity(getActivity().getPackageManager()) != null");
+                                someActivityResultLauncher.launch(intent);
+                            }*/
+
+                    }
                 } catch (IOException ex) {
                     Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto2-error:"+ex);
                 }

@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +32,7 @@ import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -185,8 +187,45 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
             public void onClick(View view) {
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 Bitmap bitmapqr = null;
+                ArrayList<HojaDespachoCabeceraSQLiteEntity> listaHeaderDispatchSheetSQLite = new ArrayList<>();
+                HeaderDispatchSheetSQLite headerDispatchSheetSQLite= new HeaderDispatchSheetSQLite(getContext());
+                String asistente_id=null,drivercode=null,vehiclecode=null,variable,encoded="";
                 try {
-                    bitmapqr = barcodeEncoder.encodeBitmap(spn_control_id.getSelectedItem().toString(), BarcodeFormat.QR_CODE, 300, 300);
+
+                    listaHeaderDispatchSheetSQLite=headerDispatchSheetSQLite.getHeaderDispatchSheetforDateAll(parametrofecha);
+                    if(!listaHeaderDispatchSheetSQLite.isEmpty())
+                    {
+                        for (int i = 0; i < listaHeaderDispatchSheetSQLite.size(); i++) {
+                            asistente_id=listaHeaderDispatchSheetSQLite.get(i).getAsistente_id();
+                            drivercode=listaHeaderDispatchSheetSQLite.get(i).getDriverCode();
+                            vehiclecode=listaHeaderDispatchSheetSQLite.get(i).getVehiculeCode();
+                        }
+                    }else
+                    {
+                        alertdialogInformative(getContext(),"IMPORTANTE","No hay Datos Disponibles del Despacho en la Fecha Seleccionada").show();
+                        spn_control_id.setAdapter(null);
+                    }
+                    variable=drivercode+"|"+asistente_id+"|"+vehiclecode;
+                    if(drivercode!=null &&asistente_id!=null&&vehiclecode!=null)
+                    {
+                        Log.e("REOS", "DispatchSheetView-imb_consultar_QR.setOnClickListener-listaHeaderDispatchSheetSQLite.size()" + listaHeaderDispatchSheetSQLite.size());
+                        Log.e("REOS", "DispatchSheetView-imb_consultar_QR.setOnClickListener-parametrofecha" + parametrofecha);
+                        Log.e("REOS", "DispatchSheetView-imb_consultar_QR.setOnClickListener-variable" + variable);
+                        //bitmapqr = barcodeEncoder.encodeBitmap(spn_control_id.getSelectedItem().toString(), BarcodeFormat.QR_CODE, 300, 300);
+                        encoded = Base64.encodeToString(variable.getBytes(), Base64.DEFAULT);
+                        bitmapqr = barcodeEncoder.encodeBitmap(encoded, BarcodeFormat.QR_CODE, 300, 300);
+                    }
+                    else {
+                        if(drivercode==null){
+                            Toast.makeText(getContext(), "No se pudo generar Codigo QR, sin codigo de Chofer", Toast.LENGTH_SHORT).show();
+                        }else if(asistente_id==null)
+                        {
+                            Toast.makeText(getContext(), "No se pudo generar Codigo QR, sin codigo de Asistente", Toast.LENGTH_SHORT).show();
+                        }else if(vehiclecode==null)
+                        {
+                            Toast.makeText(getContext(), "No se pudo generar Codigo QR, sin codigo de Vehiculo", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 } catch (WriterException e) {
                     e.printStackTrace();
                 }
@@ -342,10 +381,12 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
                 Contador++;
             }
             CargaSpinnerControl(Lista_Control_ID);
+            lista_despachos.setAdapter(null);
         }else
         {
             alertdialogInformative(getContext(),"IMPORTANTE","No hay Datos Disponibles del Despacho en la Fecha Seleccionada").show();
             spn_control_id.setAdapter(null);
+            lista_despachos.setAdapter(null);
         }
     }
 
@@ -382,6 +423,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
             }
             Log.e("REOS","DispatchSheetView-getListDetailDispatchSheet-listDetailDispatchSheetSQLite.get(i).getItem_id():"+listDetailDispatchSheetSQLite.get(i).getItem_id());
         }
+
         tv_cantidad_despachos.setText(String.valueOf(listDetailDispatchSheetSQLite.size()));
         tv_total_deuda.setText(Convert.currencyForView(String.valueOf((total_deuda))));
         tv_status_despachos.setText(String.valueOf(total_status_dispatch));

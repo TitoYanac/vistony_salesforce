@@ -1,9 +1,12 @@
 package com.vistony.salesforce.View;
 
+import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -28,13 +31,16 @@ import android.widget.Toast;
 import com.vistony.salesforce.Controller.Adapters.ListHistoricStatusDispatchAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListKardexOfPaymentAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.TypeDispatchRepository;
 import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
+import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Dao.SQLite.StatusDispatchSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
+import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
@@ -80,6 +86,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
     Date date,date2;
     static HeaderDispatchSheetRepository headerDispatchSheetRepository;
     static List<HistoricStatusDispatchEntity> listHistoricStatusDiapatch;
+    static GetAsyncTaskCustomer getAsyncTaskCustomer;
     public HistoricStatusDispatchView() {
         // Required empty public constructor
     }
@@ -229,10 +236,45 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    public static class GetAsyncTaskCustomer extends AsyncTask<String, Void, Object> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pd = new ProgressDialog(activity);
+            pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Datos", true, false);
+        }
+        @Override
+        protected Object doInBackground(String... arg0) {
+            int CantClientes=0;
+            ClienteRepository clienteRepository = new ClienteRepository(context);
+            ParametrosSQLite parametrosSQLite=new ParametrosSQLite(activity);
+            List<ClienteSQLiteEntity> LclientesqlSQLiteEntity;
+            LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei ,tv_date_historic_status_dispatch.getText().toString());
+            Log.e("REOS","HojaDespachoView.getMastersDelivery-LclientesqlSQLiteEntity:"+LclientesqlSQLiteEntity.size());
+            if (!(LclientesqlSQLiteEntity.isEmpty())) {
+                CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
+                parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
+            }
+            return 1;
+        }
+        protected void onPostExecute(Object result) {
+            pd.dismiss();
+        }
+
+        public int registrarClienteSQLite(List<ClienteSQLiteEntity> Lista){
+
+            ClienteRepository clienteRepository =new ClienteRepository(context);
+            clienteRepository.addCustomer(Lista);
+
+            return clienteRepository.countCustomer();
+        }
+    }
+
+
     static private void getListHistoric(String Date)
     {
-        pd = new ProgressDialog(activity);
-        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Estados de Despacho", true, false);
+        //pd = new ProgressDialog(activity);
+        //pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Estados de Despacho", true, false);
 
 
         if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
@@ -241,6 +283,8 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
             Log.e("REOS","HistoricStatusDispatchView-getListHistoric-data==null:");
             Log.e("REOS","HistoricStatusDispatchView-getListHistoric-SesionEntity.perfil_idl:"+SesionEntity.perfil_id);
             Log.e("REOS","HistoricStatusDispatchView-getListHistoric-Date:"+Date);
+            getAsyncTaskCustomer=new GetAsyncTaskCustomer();
+            getAsyncTaskCustomer.execute();
             headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(SesionEntity.imei, Date,context).observe(lifecycleOwner, data -> {
                 //listHistoricStatusDiapatch=statusDispatchSQLite.getListStatusDispatchforDate(Date);
                 DetailDispatchSheetSQLite detailDispatchSheetSQLite = new DetailDispatchSheetSQLite(context);
@@ -279,6 +323,8 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
 
         }
         else {
+            pd = new ProgressDialog(activity);
+            pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Estados de Despacho", true, false);
             headerDispatchSheetRepository.getAndInsertHeaderDispatchSheetSalesPerson(SesionEntity.imei, Date, context).observe(lifecycleOwner, data -> {
                 Log.e("REOS", "HistoricStatusDispatchView-getListHistoric-date:" + data);
                 if (data != null) {
@@ -322,14 +368,16 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
                 }
 
             }*/
+                pd.dismiss();
             });
+
         }
 
 
 
 
 
-            pd.dismiss();
+            //pd.dismiss();
         //});
     }
 

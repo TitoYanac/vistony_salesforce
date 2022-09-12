@@ -73,6 +73,7 @@
                         android:layout_gravity="center"
                         android:text="@string/lbl_layout_visit_section_start"
                         android:layout_weight="1"
+                        android:clickable="false"
                         />
                     <CheckBox
                         android:id="@+id/chk_finish_visitsection"
@@ -80,6 +81,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
+                        android:clickable="false"
                         android:text="@string/lbl_layout_visit_section_finish" />
                 </TableRow>
             <TableRow

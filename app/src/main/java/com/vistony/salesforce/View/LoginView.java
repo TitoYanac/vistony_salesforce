@@ -373,6 +373,12 @@ public class LoginView extends AppCompatActivity{
             }else {
                 Sesion.migratequotation=userEntity.getMigratequotation();
             }
+            if(userEntity.getCensus()==null)
+            {
+                Sesion.census="N";
+            }else {
+                Sesion.census=userEntity.getCensus();
+            }
 
             Log.e("REOS","LoginView.Sesion.rate: "+Sesion.rate);
             Log.e("REOS","LoginView.Sesion.U_VIS_CashDscnt: "+Sesion.U_VIS_CashDscnt);

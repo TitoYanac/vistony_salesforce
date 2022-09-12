@@ -936,7 +936,8 @@ public class MenuView extends AppCompatActivity
             }
             if(tag2.equals("inicioRutaVendedorViewLead"))
             {
-                String tagLeadClientesView="leadUpdateClient";
+                //String tagLeadClientesView="leadUpdateClient";
+                String tagLeadClientesView="leadUpdateClientCensus";
                 String tagMenuAccionView="inicioRutaVendedorView";
                 LeadFragment = getSupportFragmentManager().findFragmentByTag(tagLeadClientesView);
                 MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagMenuAccionView);
@@ -1152,7 +1153,6 @@ public class MenuView extends AppCompatActivity
             }
             if(tag2.equals("leadUpdateClient"))
             {
-
                 String tagRutaVendedorView="inicioRutaVendedorView";
                 MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
                 ft.hide(MenuAccionViewFragment);
@@ -1160,7 +1160,16 @@ public class MenuView extends AppCompatActivity
                 ft.add(R.id.content_menu_view,LeadClientesView.newInstancia(Lista,tag2),tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
-
+            }
+            if(tag2.equals("leadUpdateClientCensus"))
+            {
+                String tagRutaVendedorView="inicioRutaVendedorView";
+                MenuAccionViewFragment = getSupportFragmentManager().findFragmentByTag(tagRutaVendedorView);
+                ft.hide(MenuAccionViewFragment);
+                //ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view,LeadClientesView.newInstancia(Lista,tag2),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
             }
             if(tag2.equals("lead"))
             {

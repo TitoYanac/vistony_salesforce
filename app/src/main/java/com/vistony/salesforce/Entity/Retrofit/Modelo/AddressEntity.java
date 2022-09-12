@@ -32,6 +32,17 @@ public class AddressEntity {
     @SerializedName("Longitude")
     private String longitude;
 
+    @SerializedName("AddressCode")
+    private String addresscode;
+
+    public String getAddresscode() {
+        return addresscode;
+    }
+
+    public void setAddresscode(String addresscode) {
+        this.addresscode = addresscode;
+    }
+
     public String getLatitude() {
         return latitude;
     }

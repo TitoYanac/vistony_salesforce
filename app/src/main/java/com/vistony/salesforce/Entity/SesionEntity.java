@@ -46,5 +46,6 @@ public class SesionEntity {
     public static String currency ="";
     public static String updateclient ="N";
     public static String migratequotation ="N";
+    public static String census ="N";
 }
 

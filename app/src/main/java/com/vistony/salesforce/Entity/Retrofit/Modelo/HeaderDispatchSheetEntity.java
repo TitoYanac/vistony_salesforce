@@ -9,7 +9,7 @@ public class HeaderDispatchSheetEntity {
     @SerializedName("DocEntry")
     private String control_id;
 
-    @SerializedName("")
+    @SerializedName("AssistantCode")
     private String asistente_id;
 
     @SerializedName("Assistant")
@@ -30,6 +30,61 @@ public class HeaderDispatchSheetEntity {
 
     @SerializedName("TotalDocument")
     private String TotalDocument;
+
+    @SerializedName("DriverCode")
+    private String DriverCode;
+
+    @SerializedName("VehicleCode")
+    private String VehiculeCode;
+
+    @SerializedName("VehiclePlate")
+    private String VehiclePlate;
+
+    @SerializedName("DriverMobile")
+    private String DriverMobile;
+
+    @SerializedName("DriverName")
+    private String DriverName;
+
+    public String getDriverName() {
+        return DriverName;
+    }
+
+    public void setDriverName(String driverName) {
+        DriverName = driverName;
+    }
+
+    public String getDriverMobile() {
+        return DriverMobile;
+    }
+
+    public void setDriverMobile(String driverMobile) {
+        DriverMobile = driverMobile;
+    }
+
+    public String getVehiclePlate() {
+        return VehiclePlate;
+    }
+
+    public void setVehiclePlate(String vehiclePlate) {
+        VehiclePlate = vehiclePlate;
+    }
+
+    public String getDriverCode() {
+        return DriverCode;
+    }
+
+    public void setDriverCode(String driverCode) {
+        DriverCode = driverCode;
+    }
+
+    public String getVehiculeCode() {
+        return VehiculeCode;
+    }
+
+    public void setVehiculeCode(String vehiculeCode) {
+        VehiculeCode = vehiculeCode;
+    }
 
     public String getTotalDocument() {
         return TotalDocument;

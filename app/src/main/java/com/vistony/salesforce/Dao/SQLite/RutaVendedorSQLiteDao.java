@@ -80,6 +80,7 @@ public class RutaVendedorSQLiteDao {
              ,String contado
              ,String latitud
              ,String longitud
+             ,String addresscode
     )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
@@ -125,6 +126,7 @@ public class RutaVendedorSQLiteDao {
             registro.put("contado", contado);
             registro.put("latitud", latitud);
             registro.put("longitud", longitud);
+            registro.put("addresscode", addresscode);
 
             bd.insert("rutavendedor", null, registro);
         }catch (Exception e)
@@ -284,6 +286,9 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setChkvisitsection(fila.getString(33));
             ObjListaClienteCabeceraEntity.setTerminopago(fila.getString(34));
             ObjListaClienteCabeceraEntity.setContado(fila.getString(35));
+            ObjListaClienteCabeceraEntity.setLatitud(fila.getString(36));
+            ObjListaClienteCabeceraEntity.setLongitud(fila.getString(37));
+            ObjListaClienteCabeceraEntity.setAddresscode(fila.getString(38));
             Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getLastpurchase"+ObjListaClienteCabeceraEntity.getLastpurchase());
             listaClienteCabeceraEntity.add(ObjListaClienteCabeceraEntity);
         }

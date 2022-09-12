@@ -38,6 +38,7 @@
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/borde_cuadrado_hoja_despacho_negro.xml" value="0.11302083333333333" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/borde_cuadrado_promocion_cabecera.xml" value="0.11614583333333334" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/borde_cuadrado_promocion_detalle.xml" value="0.1725" />
+        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/borde_editext_ov_gray.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/borde_editext_ov_gris.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/borde_editext_ov_negro.xml" value="0.15729166666666666" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/borde_editext_ov_rojo.xml" value="0.15729166666666666" />
@@ -53,10 +54,13 @@
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.11510416666666666" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1095" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_add_a_photo_48.xml" value="0.1095" />
+        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_add_a_photo_white_48.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_cancel_24_white.xml" value="0.1095" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_card_giftcard_blue_24.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_card_giftcard_rojo_vistony_24.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_check_box_24.xml" value="0.1" />
+        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_check_box_red_24.xml" value="0.1935" />
+        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_check_box_white_24.xml" value="0.1925" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_circle_24.xml" value="0.12083333333333333" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_done_24.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.1" />
@@ -184,7 +188,7 @@
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_qr.xml" value="0.22" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_quota_per_customer.xml" value="0.1" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_resumen_diario.xml" value="0.25" />
-        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_status_dispatch.xml" value="0.25" />
+        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_status_dispatch.xml" value="0.22" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_tipo_cobranza.xml" value="0.22" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_tipo_cobranza_induvis.xml" value="0.25" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_tipo_venta.xml" value="0.16" />
@@ -192,7 +196,7 @@
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_type_validate_document_collection.xml" value="0.18" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_validate_sms.xml" value="0.18" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_dialog_visit_section.xml" value="0.25" />
-        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_historic_statuc_dispatch.xml" value="0.22" />
+        <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_historic_statuc_dispatch.xml" value="0.2" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_historico_deposito_configuracion.xml" value="0.21" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_historico_facturas_factura_no_facturadas.xml" value="0.14322916666666666" />
         <entry key="..\:/Users/Vistony/Documents/GitHub/SalesForceInternacional/salesforce-intenacional-principal/VistonySalesForce_Pedidos/app/src/main/res/layout/layout_imei_dialog.xml" value="0.10520833333333333" />

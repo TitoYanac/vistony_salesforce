@@ -49,7 +49,8 @@ public class DireccionRepository extends ViewModel{
                 Lista.get(i).getFuerzatrabajoid(),
                 Lista.get(i).getNombrefuerzatrabajo(),
                     Lista.get(i).getLatitude(),
-                    Lista.get(i).getLongitude()
+                    Lista.get(i).getLongitude(),
+                    Lista.get(i).getAddresscode()
             );
         }
     }

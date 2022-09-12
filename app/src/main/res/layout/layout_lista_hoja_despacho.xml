@@ -44,6 +44,7 @@
             android:layout_height="20dp"
             android:text="Cliente1"
             android:textStyle="bold"
+            android:layout_marginLeft="10dp"
             android:textAppearance="?attr/textAppearanceListItem" />
     </TableRow>
         <TableRow
@@ -60,6 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:layout_marginLeft="10dp"
                 android:textAppearance="?attr/textAppearanceListItem" />
         </TableRow>
         <TableRow
@@ -79,6 +81,7 @@
                 android:layout_height="wrap_content"
                 android:text="Factura1"
                 android:textStyle="bold"
+                android:layout_marginLeft="10dp"
                 android:textAppearance="?attr/textAppearanceListItem" />
         </TableRow>
         <TableRow
@@ -98,6 +101,7 @@
                 android:layout_height="wrap_content"
                 android:text="Saldo1"
                 android:textStyle="bold"
+                android:layout_marginLeft="10dp"
                 android:textAppearance="?attr/textAppearanceListItem" />
         </TableRow>
         <TableRow
@@ -116,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:text="Entrega"
                 android:textStyle="bold"
+                android:layout_marginLeft="10dp"
                 android:textAppearance="?attr/textAppearanceListItem"
                 />
         </TableRow>
@@ -135,6 +140,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/lbl_status"
                 android:textStyle="bold"
+                android:layout_marginLeft="10dp"
                 android:textAppearance="?attr/textAppearanceListItem"
                 />
         </TableRow>
@@ -152,6 +158,7 @@
                 android:id="@+id/tv_ocurrencies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="@string/lbl_ocurrencies"
                 android:textStyle="bold"
                 android:textAppearance="?attr/textAppearanceListItem"
@@ -172,6 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:text="Vendedor1"
+                android:layout_marginLeft="10dp"
                 android:textAppearance="?attr/textAppearanceListItem" />
         </TableRow>
 
@@ -192,6 +200,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:text="Direccion1"
+                android:layout_marginLeft="10dp"
                 android:textAppearance="?attr/textAppearanceListItem" />
         </TableRow>
     </TableLayout>
@@ -246,6 +255,20 @@
                 android:text="Fin"
                 android:textSize="16dp"
                 android:textStyle="bold" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5">
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visita: "
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                />
 
             <CheckBox
                 android:id="@+id/chk_collection"

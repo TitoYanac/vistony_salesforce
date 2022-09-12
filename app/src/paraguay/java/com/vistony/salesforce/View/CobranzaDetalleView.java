@@ -1243,6 +1243,9 @@ public class CobranzaDetalleView extends Fragment {
                             String.valueOf(n),
                             Lista.get(i).getDocentry(),
                             SesionEntity.collectioncheck
+                            ,""
+                            ,""
+                            ,""
                     );
 
                     ActualizaDocumentoDeuda(ObjUsuario.compania_id,
@@ -1293,6 +1296,9 @@ public class CobranzaDetalleView extends Fragment {
                             String.valueOf(n),
                             Lista.get(i).getDocentry(),
                             SesionEntity.collectioncheck
+                            ,""
+                            ,""
+                            ,""
                     );
 
 

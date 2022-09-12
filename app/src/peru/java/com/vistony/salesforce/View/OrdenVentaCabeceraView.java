@@ -143,7 +143,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private static DireccionCliente direccionSelecionada;
     SimpleDateFormat dateFormat;
     Date date;
-    String fecha,parametrofecha;
+    String fecha,parametrofecha,fechacomparativa;
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
@@ -815,23 +815,27 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.layout_dialog_advertencia);
-
         TextView textMsj = dialog.findViewById(R.id.tv_texto);
         textMsj.setText(texto);
-
         ImageView image = dialog.findViewById(R.id.image);
-
         image.setImageResource(R.mipmap.logo_circulo);
-
-
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
 
+        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        date = new Date();
+        fechacomparativa =dateFormat.format(date);
+
         dialogButtonOK.setOnClickListener(v -> {
-            Utilitario.disabledImageButtton(btn_dispatch_date,context);
-            RegistrarOrdenVentaBD ();
-            Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
+            if(!parametrofecha.equals(fechacomparativa))
+            {
+                Utilitario.disabledImageButtton(btn_dispatch_date, context);
+                RegistrarOrdenVentaBD();
+                Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }else {
+
+            }
         });
         dialogButtonCancel.setOnClickListener(v -> dialog.dismiss());
 

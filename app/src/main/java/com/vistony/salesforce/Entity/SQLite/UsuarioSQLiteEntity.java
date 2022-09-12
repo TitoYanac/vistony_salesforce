@@ -35,6 +35,15 @@ public class UsuarioSQLiteEntity {
     public String print;
     public String activecurrency;
     public String migratequotation;
+    public String census;
+
+    public String getCensus() {
+        return census;
+    }
+
+    public void setCensus(String census) {
+        this.census = census;
+    }
 
     public String getMigratequotation() {
         return migratequotation;

@@ -65,6 +65,11 @@ public class HeaderDispatchSheetSQLite {
             registro.put("marca",headerDispatchSheetEntity.get(i).getMarca());
             registro.put("pesototal",headerDispatchSheetEntity.get(i).getPeso_total());
             registro.put("fechahojadespacho",FechaDespacho);
+            registro.put("drivercode",headerDispatchSheetEntity.get(i).getDriverCode());
+            registro.put("vehiclecode",headerDispatchSheetEntity.get(i).getVehiculeCode());
+            registro.put("vehicleplate",headerDispatchSheetEntity.get(i).getVehiclePlate());
+            registro.put("drivermobile",headerDispatchSheetEntity.get(i).getDriverMobile());
+            registro.put("drivername",headerDispatchSheetEntity.get(i).getDriverName());
             bd.insert("headerdispatchsheet",null,registro);
         }
 
@@ -122,6 +127,38 @@ public class HeaderDispatchSheetSQLite {
         bd.close();
 
         return resultado;
+    }
+
+    public ArrayList<HojaDespachoCabeceraSQLiteEntity> getHeaderDispatchSheetforDateAll (String DispatchDate)
+    {
+
+        listaHojaDespachoCabeceraSQLiteEntity = new ArrayList<>();
+        HojaDespachoCabeceraSQLiteEntity hojaDespachoCabeceraSQLiteEntity;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select asistente_id,drivercode,vehiclecode,vehicleplate from headerdispatchsheet where fechahojadespacho='"+DispatchDate+"' group by asistente_id,drivercode,vehiclecode,vehicleplate ",null);
+
+        while (fila.moveToNext())
+        {
+            hojaDespachoCabeceraSQLiteEntity= new HojaDespachoCabeceraSQLiteEntity();
+            /*hojaDespachoCabeceraSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
+            hojaDespachoCabeceraSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+            hojaDespachoCabeceraSQLiteEntity.setUsuario_id(fila.getString(fila.getColumnIndex("usuario_id")));
+            hojaDespachoCabeceraSQLiteEntity.setControl_id(fila.getString(fila.getColumnIndex("control_id")));*/
+            hojaDespachoCabeceraSQLiteEntity.setAsistente_id(fila.getString(fila.getColumnIndex("asistente_id")));
+            /*hojaDespachoCabeceraSQLiteEntity.setAsistente(fila.getString(fila.getColumnIndex("asistente")));
+            hojaDespachoCabeceraSQLiteEntity.setPlaca(fila.getString(fila.getColumnIndex("placa")));
+            hojaDespachoCabeceraSQLiteEntity.setMarca(fila.getString(fila.getColumnIndex("marca")));
+            hojaDespachoCabeceraSQLiteEntity.setPesototal(fila.getString(fila.getColumnIndex("pesototal")));
+            hojaDespachoCabeceraSQLiteEntity.setFechahojadespacho(fila.getString(fila.getColumnIndex("fechahojadespacho")));*/
+            hojaDespachoCabeceraSQLiteEntity.setDriverCode(fila.getString(fila.getColumnIndex("drivercode")));
+            hojaDespachoCabeceraSQLiteEntity.setVehiculeCode(fila.getString(fila.getColumnIndex("vehiclecode")));
+            hojaDespachoCabeceraSQLiteEntity.setVehiclePlate(fila.getString(fila.getColumnIndex("vehicleplate")));
+            listaHojaDespachoCabeceraSQLiteEntity.add(hojaDespachoCabeceraSQLiteEntity);
+        }
+
+        bd.close();
+        return listaHojaDespachoCabeceraSQLiteEntity;
     }
 }
 

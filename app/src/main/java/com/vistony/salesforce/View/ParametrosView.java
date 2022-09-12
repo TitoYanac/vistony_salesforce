@@ -44,6 +44,7 @@ import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.EscColoursCRepository;
 import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
+import com.vistony.salesforce.Dao.Retrofit.LeadClienteViewModel;
 import com.vistony.salesforce.Dao.Retrofit.MotivoVisitaWS;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.Retrofit.AgenciaWS;
@@ -191,6 +192,7 @@ ParametrosView extends Fragment {
     private RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository;
     private StatusDispatchRepository statusDispatchRepository;
     private QuoteEffectivenessRepository quoteEffectivenessRepository;
+    private LeadClienteViewModel leadClienteViewModel;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -281,7 +283,7 @@ ParametrosView extends Fragment {
         rutaFuerzaTrabajoRepository = new ViewModelProvider(getActivity()).get(RutaFuerzaTrabajoRepository.class);
         statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
         quoteEffectivenessRepository= new ViewModelProvider(getActivity()).get(QuoteEffectivenessRepository.class);
-
+        leadClienteViewModel = new ViewModelProvider(getActivity()).get(LeadClienteViewModel.class);
 
         //CARGA DE MAESTROS
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
@@ -439,6 +441,9 @@ ParametrosView extends Fragment {
             Log.e("Jepicame", "=>" + data);
         });
 
+        leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei).observe(getActivity(), data -> {
+            Log.e("Jepicame", "=>" + data);
+        });
         //Enviar Firma Electronica
         //cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
         //    Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
@@ -451,7 +456,7 @@ ParametrosView extends Fragment {
                 Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
             });
 
-            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
                 Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
             });

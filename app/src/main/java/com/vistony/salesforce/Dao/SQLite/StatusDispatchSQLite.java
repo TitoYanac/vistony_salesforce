@@ -157,6 +157,8 @@ public class StatusDispatchSQLite {
                 detailStatusDispatchEntity.setPhotoDocument(Base64PhotoGuia2);
                 //detailStatusDispatchEntity.setDocEntry(fila.getString(21));
                 detailStatusDispatchEntity.setLineId(fila.getString(22));
+                detailStatusDispatchEntity.setDeliveryNotes(fila.getString(7));
+                detailStatusDispatchEntity.setReturnReasonText(fila.getString(20));
                 listDetailStatusDispatchEntity.add(detailStatusDispatchEntity);
             }
 
@@ -325,7 +327,7 @@ public class StatusDispatchSQLite {
             abrir();
 
             ContentValues registro = new ContentValues();
-            registro.put("reasondispatch",json);
+            registro.put("typedispatch",json);
 
             bd.update("statusdispatch",registro,"entrega_id=?",new String[]{Entrega_id});
             status=1;
@@ -544,7 +546,7 @@ public class StatusDispatchSQLite {
         return listStatusDispatchEntity;
     }*/
 
-    public int getCountStatusDispatchforDate (String Date,String fuerzatrabajo_id,String cardcode)
+    public int getCountStatusDispatchforDate (String fuerzatrabajo_id,String cardcode,String control_id,String item_id)
     {
 
         abrir();
@@ -553,9 +555,10 @@ public class StatusDispatchSQLite {
             Cursor fila = bd.rawQuery(
                     "Select IFNULL(count(compania_id),0) as cantidad from statusdispatch" +
                             " where " +
-                            " fecha_registro='"+Date+"' and " +
                             " fuerzatrabajo_id='"+fuerzatrabajo_id+"' and " +
-                            " cliente_id='"+cardcode+"' "
+                            " cliente_id='"+cardcode+"' and  " +
+                            " control_id='"+control_id+"' and  " +
+                            " item_id='"+item_id+"'  "
                     ,null);
 
             while (fila.moveToNext())
@@ -574,5 +577,6 @@ public class StatusDispatchSQLite {
         bd.close();
         return resultado;
     }
+
 
 }

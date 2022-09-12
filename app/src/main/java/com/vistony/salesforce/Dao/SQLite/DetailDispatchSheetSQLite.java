@@ -95,6 +95,7 @@ public class DetailDispatchSheetSQLite {
             registro.put("motivo_id",detailDispatchSheetEntity.get(i).getMotivo_id());
             registro.put("fotoguia",detailDispatchSheetEntity.get(i).getFotoguia());
             registro.put("fotolocal",detailDispatchSheetEntity.get(i).getFotolocal());
+
             bd.insert("detaildispatchsheet",null,registro);
         }
 
@@ -140,7 +141,8 @@ public class DetailDispatchSheetSQLite {
                         "A.estado_id=G.typedispatch_id  " +
                         " LEFT OUTER JOIN reasondispatch H ON " +
                         "A.motivo_id=H.reasondispatch_id  " +
-                        "  where A.control_id='"+codeControl+"'",null);
+                        "  where A.control_id='"+codeControl+"'" +
+                        " ORDER BY A.item_id",null);
 
         while (fila.moveToNext())
         {
@@ -365,18 +367,19 @@ public class DetailDispatchSheetSQLite {
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
                         "A.saldo,F.typedispatch,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.chkrecibido,'0') as chkupdatedispatch " +
                         ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin " +
-                        ", a.estado_id,g.reasondispatch,a.motivo_id,a.fotoguia,a.fotolocal,c.messageServerDispatch,c.messageServerTimeDispatch  " +
+                        ", a.estado_id,g.reasondispatch,a.motivo_id,a.fotoguia,a.fotolocal,c.messageServerDispatch,c.messageServerTimeDispatch,D.drivermobile,D.drivername  " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
                         "A.cliente_id=B.cliente_id " +
-                        " left outer join (SELECT control_id,fechahojadespacho,fuerzatrabajo_id FROM headerdispatchsheet group by control_id,fechahojadespacho,fuerzatrabajo_id ) D ON  " +
+                        " left outer join (SELECT control_id,fechahojadespacho,fuerzatrabajo_id,drivermobile,drivername FROM headerdispatchsheet group by control_id,fechahojadespacho,fuerzatrabajo_id,drivermobile,drivername ) D ON  " +
                         "A.fuerzatrabajo_id=D.fuerzatrabajo_id  AND " +
                         "A.control_id=D.control_id   " +
-                        " left outer join statusdispatch C ON  " +
+                        " left outer join (SELECT cliente_id,entrega_id,fuerzatrabajo_id,control_id,item_id,chkrecibido,messageServerDispatch,messageServerTimeDispatch  FROM statusdispatch GROUP BY cliente_id,entrega_id,fuerzatrabajo_id,control_id,item_id,chkrecibido,messageServerDispatch,messageServerTimeDispatch ) C ON  " +
                         "A.cliente_id=C.cliente_id  AND " +
                         "A.entrega_id=C.entrega_id  AND " +
-                        "A.fuerzatrabajo_id=C.fuerzatrabajo_id "+ // AND " +
-                        //"C.fecha_registro=D.fechahojadespacho " +
+                        "A.fuerzatrabajo_id=C.fuerzatrabajo_id AND " +
+                        "A.control_id=C.control_id AND " +
+                        "A.item_id=C.item_id " +
                         " left outer join visitsection E ON  " +
                         "D.fuerzatrabajo_id=E.fuerzatrabajo_id  AND " +
                         "D.control_id=E.idref AND " +
@@ -414,6 +417,8 @@ public class DetailDispatchSheetSQLite {
             }
             historicStatusDispatchEntity.setMessageServerDispatch(fila.getString(fila.getColumnIndex("messageServerDispatch")));
             historicStatusDispatchEntity.setMessageServerTimeDispatch(fila.getString(fila.getColumnIndex("messageServerTimeDispatch")));
+            historicStatusDispatchEntity.setDrivermobile(fila.getString(fila.getColumnIndex("drivermobile")));
+            historicStatusDispatchEntity.setDrivername(fila.getString(fila.getColumnIndex("drivername")));
             listaHistoricStatusDispatchEntity.add(historicStatusDispatchEntity);
         }
 

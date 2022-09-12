@@ -53,7 +53,7 @@ public class DetailDispatchSheetEntity {
     @SerializedName("Weight")
     private String peso;
 
-    @SerializedName("Comentario_Despacho")
+    @SerializedName("Comments")
     private String comentario_despacho;
 
     @SerializedName("StatusCode")

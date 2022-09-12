@@ -69,6 +69,19 @@ public class UserEntity {
     private String quotation;
 
     @NonNull
+    @SerializedName("Census")
+    private String census;
+
+    @NonNull
+    public String getCensus() {
+        return census;
+    }
+
+    public void setCensus(@NonNull String census) {
+        this.census = census;
+    }
+
+    @NonNull
     public String getQuotation() {
         return quotation;
     }

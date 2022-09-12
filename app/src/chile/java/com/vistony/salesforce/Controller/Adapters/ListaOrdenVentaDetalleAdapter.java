@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
+import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEntity;
@@ -106,6 +107,9 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         listaOrdenVentaDetalleEntities.add(lead);
         // Setup.
 
+        //Utilitario utilitario=new Utilitario();
+        //Utilitario.disabledEditText(holder.editDspPorcentaje);
+        //holder.editDspPorcentaje.setBackgroundResource(R.drawable.borde_editext_ov_gray);
         holder.tv_orden_detalle_item.setText(lead.getOrden_detalle_item()+")");
         holder.tv_orden_detalle_producto.setText(lead.getOrden_detalle_producto_id()+" "+lead.getOrden_detalle_producto());
 

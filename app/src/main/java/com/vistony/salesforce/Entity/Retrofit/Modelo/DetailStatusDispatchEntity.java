@@ -24,7 +24,7 @@ public class DetailStatusDispatchEntity {
     @SerializedName("Delivered")
     public String Delivered;
 
-    @SerializedName("ReturnReason")
+    @SerializedName("ReturnReasonValue")
     public String ReturnReason;
 
     @SerializedName("Comments")
@@ -47,6 +47,28 @@ public class DetailStatusDispatchEntity {
 
     @SerializedName("Message")
     public String Message;
+
+    @SerializedName("DeliveryNotes")
+    public String DeliveryNotes;
+
+    @SerializedName("ReturnReasonText")
+    public String ReturnReasonText;
+
+    public String getReturnReasonText() {
+        return ReturnReasonText;
+    }
+
+    public void setReturnReasonText(String returnReasonText) {
+        ReturnReasonText = returnReasonText;
+    }
+
+    public String getDeliveryNotes() {
+        return DeliveryNotes;
+    }
+
+    public void setDeliveryNotes(String deliveryNotes) {
+        DeliveryNotes = deliveryNotes;
+    }
 
     public String getHaveError() {
         return haveError;

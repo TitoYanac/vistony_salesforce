@@ -26,7 +26,7 @@ public class Config {
 
         String baseUrl=null;
         //if(BuildConfig.FLAVOR.equals("peru"))
-        if(BuildConfig.FLAVOR.equals("peru"))
+        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
         {
             baseUrl = "https://salesforce.vistony.pe";
         }else {
@@ -43,12 +43,12 @@ public class Config {
         String puerto = "";
         switch (BuildConfig.FLAVOR) {
             case "chile":
-                puerto = ":8054";
+                //puerto = ":8054";
                 //Produccion----------
                 //puerto = ":8054";
                 //--------------------
                 //Pruebas QA------------- Nueva Produccion
-                //puerto = "";
+                puerto = "";
                 //-----------------------
                 break;
             case "bolivia":
@@ -99,7 +99,8 @@ public class Config {
 
         String baseUrl=null;
         //if(BuildConfig.FLAVOR.equals("peru"))
-        if(BuildConfig.FLAVOR.equals("peru"))
+        //if(BuildConfig.FLAVOR.equals("peru"))
+        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
         {
             baseUrl = "https://salesforce.vistony.pe";
         }else {
@@ -116,12 +117,12 @@ public class Config {
         String puerto = "";
         switch (BuildConfig.FLAVOR) {
             case "chile":
-                puerto = ":8054";
+                //puerto = ":8054";
                 //Produccion----------
                 //puerto = ":8054";
                 //--------------------
                 //Pruebas QA------------- Nueva Produccion
-                //puerto = "";
+                puerto = "";
                 //-----------------------
                 break;
             case "bolivia":

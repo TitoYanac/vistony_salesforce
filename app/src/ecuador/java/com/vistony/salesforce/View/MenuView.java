@@ -53,6 +53,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.navigation.NavigationView;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.BixolonPrinterController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerDetailRepository;
@@ -196,6 +197,7 @@ public class MenuView extends AppCompatActivity
     private  String recibovalidado = "";
 
     private ConnectivityManager manager;
+    private static BixolonPrinterController bxlPrinter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,6 +255,7 @@ public class MenuView extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
+        bxlPrinter = new BixolonPrinterController(this);
 
         tv_fuerzatrabajo_id_navheader=(TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_fuerzatrabajo_id_navheader);
@@ -2069,5 +2072,11 @@ public class MenuView extends AppCompatActivity
         super.onRestart();
         Induvis.refreshGlobalVariables(this);
         //registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    public static BixolonPrinterController getPrinterInstance()
+    {
+        Log.e("REOS","MenuView-getPrinterInstance-Inicio");
+        return bxlPrinter;
     }
 }

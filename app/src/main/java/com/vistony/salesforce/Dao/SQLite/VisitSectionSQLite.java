@@ -70,7 +70,7 @@ public class VisitSectionSQLite {
         return 1;
     }
 
-    public ArrayList<VisitSectionEntity> getVisitSection (String cliente_id,String domembarque_id,String dateini)
+    public ArrayList<VisitSectionEntity> getVisitSection (String cliente_id,String domembarque_id,String dateini,String idref)
     {
         //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
         //SQLiteDatabase bd = admin.getWritableDatabase();
@@ -78,7 +78,7 @@ public class VisitSectionSQLite {
         VisitSectionEntity visitSectionEntity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select * from visitsection where cliente_id='"+cliente_id+"' and domembarque_id='"+domembarque_id+"' and dateini='"+dateini+"' ",null);
+                "Select * from visitsection where cliente_id='"+cliente_id+"' and domembarque_id='"+domembarque_id+"' and dateini='"+dateini+"' and idref=='"+idref+"'",null);
 
         while (fila.moveToNext())
         {

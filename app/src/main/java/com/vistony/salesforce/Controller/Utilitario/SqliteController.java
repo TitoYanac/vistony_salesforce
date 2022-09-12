@@ -51,7 +51,7 @@ public class SqliteController extends SQLiteOpenHelper {
         //Sistema
         db.execSQL("create table parametros (parametro_id text,nombreparametro text, cantidadregistros text, fechacarga text)");
         db.execSQL("create table configuracion (papel text,tamanio text, totalrecibos text, secuenciarecibos text,modeloimpresora text, direccionimpresora text,tipoimpresora text,vinculaimpresora text )");
-        db.execSQL("create table usuario (compania_id text,fuerzatrabajo_id text ,nombrecompania text, nombrefuerzatrabajo text,nombreusuario text,usuario_id text,recibo text, chksesion text, online text,perfil text,chkbloqueopago text,listaPrecios_id_1 text,listaPrecios_id_2 text,planta text,almacen_id text,CogsAcct text,U_VIST_CTAINGDCTO text,DocumentsOwner text,U_VIST_SUCUSU text,CentroCosto text,UnidadNegocio text,LineaProduccion text,Impuesto_ID text,Impuesto text,U_VIS_CashDscnt text,Language text,Country text,flag_stock TEXT,flag_backup TEXT,imei TEXT,rate TEXT,print TEXT,activecurrency TEXT,quotation TEXT)");
+        db.execSQL("create table usuario (compania_id text,fuerzatrabajo_id text ,nombrecompania text, nombrefuerzatrabajo text,nombreusuario text,usuario_id text,recibo text, chksesion text, online text,perfil text,chkbloqueopago text,listaPrecios_id_1 text,listaPrecios_id_2 text,planta text,almacen_id text,CogsAcct text,U_VIST_CTAINGDCTO text,DocumentsOwner text,U_VIST_SUCUSU text,CentroCosto text,UnidadNegocio text,LineaProduccion text,Impuesto_ID text,Impuesto text,U_VIS_CashDscnt text,Language text,Country text,flag_stock TEXT,flag_backup TEXT,imei TEXT,rate TEXT,print TEXT,activecurrency TEXT,quotation TEXT,census TEXT)");
 
         //Cobranzas
         //Maestros
@@ -61,7 +61,7 @@ public class SqliteController extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE documentodeuda (documento_id text ,domembarque_id text, compania_id text,cliente_id text,fuerzatrabajo_id text,fechaemision text,fechavencimiento text,nrofactura text,moneda text,importefactura text,saldo text,saldo_sin_procesar text,doc_entry TEXT,pymntgroup TEXT)");
         db.execSQL("CREATE TABLE fuerzatrabajo (fuerzatrabajo_id text , compania_id text,nombrefuerzatrabajo text)");
         db.execSQL("CREATE TABLE rutavendedor (cliente_id text,domembarque_id text ,compania_id text, nombrecliente text,direccion text,zona_id text,ordenvisita text,zona text,rucdni text,moneda text,telefonofijo text,telefonomovil text,correo text,ubigeo_id text,impuesto_id text,impuesto text,tipocambio text,categoria TEXT,linea_credito TEXT,terminopago_id TEXT, chk_visita TEXT,chk_pedido TEXT,chk_cobranza TEXT,chk_ruta TEXT,fecharuta TEXT,saldomn text,slpCode TEXT,userCode TEXT,salesorderamount TEXT,collectionamount TEXT,lastpurchase TEXT,saldosincontado TEXT,chkgeolocation TEXT,chkvisitsection TEXT" +
-                ",terminopago TEXT,contado TEXT,latitud TEXT,longitud TEXT)");
+                ",terminopago TEXT,contado TEXT,latitud TEXT,longitud TEXT,addresscode TEXT)");
 
         //Transaccional
         db.execSQL("CREATE TABLE cobranzacabecera (cobranza_id text , usuario_id text,banco_id text,compania_id text,totalmontocobrado text,chkdepositado text,chkanulado text,fuerzatrabajo_id text ,tipoingreso text,chkbancarizado text,fechadiferido text, chkwsrecibido text, fechadeposito text,comentarioanulado  text,chkwsanulado text,chkupdate text,chkwsupdate text,pagodirecto text,pagopos text,sap_code TEXT,mensajeWS TEXT,countsend TEXT)");
@@ -83,7 +83,7 @@ public class SqliteController extends SQLiteOpenHelper {
 
             //db.execSQL("CREATE TABLE stock (compania_id text,producto_id TEXT,producto TEXT,umd TEXT,stock TEXT,almacen_id TEXT,comprometido TEXT,enstock TEXT,pedido TEXT)");
             db.execSQL("CREATE TABLE rutafuerzatrabajo (compania_id text,zona_id TEXT,zona TEXT,dia TEXT,frecuencia TEXT,fechainicioruta TEXT,estado TEXT)");
-            db.execSQL("CREATE TABLE direccioncliente (compania_id text,cliente_id text,domembarque_id text,direccion text,zona_id TEXT,zona TEXT,fuerzatrabajo_id TEXT,nombrefuerzatrabajo TEXT,latitud TEXT,longitud TEXT)");
+            db.execSQL("CREATE TABLE direccioncliente (compania_id text,cliente_id text,domembarque_id text,direccion text,zona_id TEXT,zona TEXT,fuerzatrabajo_id TEXT,nombrefuerzatrabajo TEXT,latitud TEXT,longitud TEXT,addresscode TEXT)");
 
             //Transaccional
             db.execSQL("CREATE TABLE ordenventacabecera (compania_id text ,ordenventa_id TEXT,cliente_id TEXT ,domembarque_id TEXT,terminopago_id TEXT,agencia_id TEXT,moneda_id TEXT,comentario " +
@@ -97,7 +97,7 @@ public class SqliteController extends SQLiteOpenHelper {
             //db.execSQL("CREATE TABLE descuento (compania_id text ,descuento_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT)");
 
         //Lead
-            db.execSQL("CREATE TABLE lead (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,document_owner TEXT,sales_person TEXT,razon_social TEXT,ruc TEXT,nombre_comercial TEXT,numero_telefono TEXT,numero_celular TEXT,persona_contacto TEXT,correo TEXT,latitud TEXT,longitud TEXT,direccion TEXT,referencias TEXT,comentario TEXT,categoria TEXT,foto TEXT,fecha TEXT,recibido_api INTEGER,cardcode TEXT,domembarque_id TEXT,type TEXT)");
+            db.execSQL("CREATE TABLE lead (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,document_owner TEXT,sales_person TEXT,razon_social TEXT,ruc TEXT,nombre_comercial TEXT,numero_telefono TEXT,numero_celular TEXT,persona_contacto TEXT,correo TEXT,latitud TEXT,longitud TEXT,direccion TEXT,referencias TEXT,comentario TEXT,categoria TEXT,foto TEXT,fecha TEXT,recibido_api INTEGER,cardcode TEXT,domembarque_id TEXT,type TEXT,addresscode TEXT,messageserver TEXT)");
             db.execSQL("CREATE TABLE motivovisita (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,code TEXT,name TEXT,type TEXT,fecha TEXT)");
             db.execSQL("CREATE TABLE pricelist (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,pricelist_id TEXT,pricelist TEXT)");
 
@@ -107,7 +107,7 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE esc_colours_d (id_esc_colours_c TEXT,id TEXT,rangemin TEXT,rangemax TEXT,colourmin TEXT,colourmax TEXT,degrade TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT )");
 
             //Version 5 --Cobranzas Distribucion
-            db.execSQL("CREATE TABLE headerdispatchsheet (compania_id text,fuerzatrabajo_id text,usuario_id text,control_id TEXT,asistente_id TEXT,asistente TEXT,placa TEXT,marca TEXT,pesototal TEXT,fechahojadespacho TEXT)");
+            db.execSQL("CREATE TABLE headerdispatchsheet (compania_id text,fuerzatrabajo_id text,usuario_id text,control_id TEXT,asistente_id TEXT,asistente TEXT,placa TEXT,marca TEXT,pesototal TEXT,fechahojadespacho TEXT,drivercode TEXT,vehiclecode TEXT,vehicleplate TEXT, drivermobile TEXT,drivername TEXT)");
             db.execSQL("CREATE TABLE detaildispatchsheet (compania_id text,fuerzatrabajo_id text,usuario_id text,control_id TEXT,item_id TEXT,cliente_id TEXT,domembarque_id TEXT,direccion TEXT,factura_id TEXT,entrega_id TEXT,entrega TEXT,factura TEXT,saldo TEXT,estado TEXT, fuerzatrabajo_factura_id TEXT,fuerzatrabajo_factura TEXT,terminopago_id TEXT,terminopago TEXT,peso TEXT,comentariodespacho TEXT,estado_id TEXT,motivo TEXT,motivo_id TEXT,fotoguia TEXT,fotolocal TEXT)");
 
 
@@ -116,7 +116,7 @@ public class SqliteController extends SQLiteOpenHelper {
 
             //Version 13  -- Distribution Second Phase
             db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
-            db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT)");
+            db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT,statusupdate TEXT)");
             db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT,control_id TEXT,item_id TEXT,domembarque_id text,checkintime text,checkouttime text,chk_timestatus text,fuerzatrabajo text, messageServerDispatch text, messageServerTimeDispatch text )");
 
             //Version 12  --Tramo de Visita

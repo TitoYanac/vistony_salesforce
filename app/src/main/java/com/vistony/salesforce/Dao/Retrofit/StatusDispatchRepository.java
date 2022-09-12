@@ -93,10 +93,10 @@ public class StatusDispatchRepository  extends ViewModel {
             json = "{ \"Dispatch\":" + json + "}";
         }
 
-        Log.e("REOS", "StatusDispatchRepository-sendStatusDispatch-json"+json);
-        /*if(listStatusDispatch!=null && listStatusDispatch.size()>0)
+        /*Log.e("REOS", "StatusDispatchRepository-sendStatusDispatch-json"+json);
+        if(listStatusDispatch!=null && listStatusDispatch.size()>0)
         {
-            statusDispatchSQLite.UpdatePruebaJSON(json, listStatusDispatch.get(0).getEntrega_id());
+            statusDispatchSQLite.UpdatePruebaJSON(json, listStatusDispatch.get(0).getDetails().get(0).getEntrega_id());
         }*/
         if(json!=null){
             RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
@@ -192,21 +192,27 @@ public class StatusDispatchRepository  extends ViewModel {
                 public void onResponse(Call<HeaderStatusDispatchEntityResponse> call, Response<HeaderStatusDispatchEntityResponse> response) {
 
                     HeaderStatusDispatchEntityResponse headerStatusDispatchEntityResponse = response.body();
-                    for (HeaderStatusDispatchEntity respuesta : headerStatusDispatchEntityResponse.getHeaderStatusDispatchEntityResponse()) {
-                        for (DetailStatusDispatchEntity respuestaDetalle : respuesta.getDetails()) {
-                            if (respuestaDetalle.getHaveError().equals("N")) {//se envio
+                    if(response.isSuccessful() && headerStatusDispatchEntityResponse!=null)
+                    {
+                        for (HeaderStatusDispatchEntity respuesta : headerStatusDispatchEntityResponse.getHeaderStatusDispatchEntityResponse()) {
+                            for (DetailStatusDispatchEntity respuestaDetalle : respuesta.getDetails()) {
+                                if (respuestaDetalle.getHaveError().equals("N")) {//se envio
 
-                                responseData.add("La Hora de Estado de Despacho fue aceptado en SAP");
-                                statusDispatchSQLite.UpdateResultStatusDispatchTime(respuesta.getDocEntry(), respuestaDetalle.getLineId(),respuestaDetalle.getMessage());
+                                    responseData.add("La Hora de Estado de Despacho fue aceptado en SAP");
+                                    statusDispatchSQLite.UpdateResultStatusDispatchTime(respuesta.getDocEntry(), respuestaDetalle.getLineId(), respuestaDetalle.getMessage());
 
-                            } else {//tiene error
-                                responseData.add("El Estado de Despacho no fue aceptado en SAP");
+                                } else {//tiene error
+                                    responseData.add("El Estado de Despacho no fue aceptado en SAP");
+                                }
                             }
                         }
+                        callback.onResponseSap(responseData);
+                        callback.onResponseErrorSap(response.message());
+                    }else{
+
+                        callback.onResponseErrorSap(response.message());
                     }
 
-                    callback.onResponseSap(responseData);
-                    callback.onResponseErrorSap(response.message());
                 }
                     /*if(response.isSuccessful() && statusDispatchEntityResponse!=null){
                         ArrayList<String> responseData=new ArrayList<>();

@@ -144,4 +144,6 @@
     <string name="lbl_delivery">Entrega</string>
     <string name="lbl_dispatch">Despacho</string>
     <string name="lbl_ocurrencies">Ocurrencies</string>
+    <string name="lbl_drivername">Nombre Chofer</string>
+    <string name="lbl_drivemobile">Telefono Chofer</string>
 </resources>

@@ -45,6 +45,7 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String longitud;
     private String control_id;
     private String item_id;
+    private String addresscode;
 
     public ListaClienteCabeceraEntity(
             String cliente_id,
@@ -57,6 +58,7 @@ public class ListaClienteCabeceraEntity implements Serializable {
             ,String longitud
             ,String control_id
             ,String item_id
+            ,String addresscode
 
     ) {
         this.cliente_id = cliente_id;
@@ -101,6 +103,15 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.longitud = longitud;
         this.control_id = control_id;
         this.item_id = item_id;
+        this.addresscode = addresscode;
+    }
+
+    public String getAddresscode() {
+        return addresscode;
+    }
+
+    public void setAddresscode(String addresscode) {
+        this.addresscode = addresscode;
     }
 
     public String getControl_id() {

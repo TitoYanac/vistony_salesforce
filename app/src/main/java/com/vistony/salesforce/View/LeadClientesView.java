@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,9 +19,12 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -45,18 +50,30 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
+import com.vistony.salesforce.Controller.Utilitario.GPSController;
+import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Dao.Retrofit.LeadClienteViewModel;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
+import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.LOCATION_SERVICE;
 
 public class LeadClientesView extends Fragment {
 
@@ -87,10 +104,18 @@ public class LeadClientesView extends Fragment {
     private Dialog dialog;
     com.google.android.material.textfield.TextInputLayout ti_commercial_name,ti_card_name,
             ti_textphone,ti_TextContactPerson,ti_TextEmail,ti_TextWeb,ti_TextCardCode,ti_editTextComments,ti_textcellphone;
-    static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque,correo,chkgeolocation,telefonofijo,telefonomovil,rucdni;
+    static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque,correo,chkgeolocation,telefonofijo,telefonomovil,rucdni,addresscode;
     static Object object;
     LinearLayout linearLayoutGps;
     ImageView imv_callmobilephone,imv_calltelfhouseclient;
+    private GPSController gpsController;
+    private Location mLocation;
+    double latitude, longitude;
+    private static final int REQUEST_PERMISSION_LOCATION = 255;
+    LocationManager locationManager;
+    File file;
+    public static String mCurrentPhotoPath="";
+    File fileCliente;
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String tag, Object dato);
     }
@@ -111,6 +136,7 @@ public class LeadClientesView extends Fragment {
             telefonofijo=Lista.get(i).getTelefonofijo();
             telefonomovil=Lista.get(i).getTelefonomovil();
             rucdni=Lista.get(i).getRucdni();
+            addresscode=Lista.get(i).getAddresscode();
             Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+Lista.get(i).getCliente_id());
             Log.e("REOS","LeadClientesView-newInstancia-nombrecliente:"+Lista.get(i).getNombrecliente());
             Log.e("REOS","LeadClientesView-newInstancia-domebarque_id:"+Lista.get(i).getDomembarque_id());
@@ -150,7 +176,7 @@ public class LeadClientesView extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         dialog = new Dialog(getActivity());
-
+        getLocation();
         v = inflater.inflate(R.layout.fragment_lead_cliente_view, container, false);
 
         floatingButtonTakePhoto = v.findViewById(R.id.floatingButtonTakePhoto);
@@ -183,7 +209,7 @@ public class LeadClientesView extends Fragment {
         imv_callmobilephone=v.findViewById(R.id.imv_callmobilephone);
         imv_calltelfhouseclient=v.findViewById(R.id.imv_calltelfhouseclient);
         ti_textcellphone=v.findViewById(R.id.ti_textcellphone);
-        btnUpload.setText("ACEPTAR");
+
         et_telfhouseclient=v.findViewById(R.id.et_telfhouseclient);
         if(BuildConfig.FLAVOR.equals("peru"))
         {
@@ -199,14 +225,30 @@ public class LeadClientesView extends Fragment {
             editTextCellPhone.setEnabled(false);
             ti_textphone.setEnabled(false);
             editTextEmail.setEnabled(false);
-            linearLayoutGps.setVisibility(View.GONE);
+            //linearLayoutGps.setVisibility(View.GONE);
             ti_editTextComments.setVisibility(View.GONE);
             ti_TextEmail.setVisibility(View.GONE);
             ti_textphone.setVisibility(View.GONE);
             editTextCellPhone.setVisibility(View.GONE);
             editTextPhone.setVisibility(View.GONE);
-            floatingButtonTakePhoto.setVisibility(View.GONE);
+            //floatingButtonTakePhoto.setVisibility(View.GONE);
             ti_textcellphone.setVisibility(View.GONE);
+            if(type.equals("leadUpdateClient"))
+            {
+                //getActivity().setTitle("Consultar Cliente");
+            }else if(type.equals("leadUpdateClientCensus")){
+                btnUpload.setText("ACTUALIZAR");
+            }
+            else {
+                //getActivity().setTitle(getResources().getString(R.string.lead_cliente));
+            }
+            if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+            {
+                floatingButtonTakePhoto.setVisibility(View.GONE);
+                linearLayoutGps.setVisibility(View.GONE);
+            }
+
+
         }
         else if(BuildConfig.FLAVOR.equals("ecuador"))
         {
@@ -257,29 +299,64 @@ public class LeadClientesView extends Fragment {
             }*/
 
             //startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                 someActivityResultLauncher.launch(intent);
+            }*/
+
+            try {
+                Log.e("REOS","statusDispatchRepository-->FotoLocal-->Inicia");
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Crea el File
+                File photoFile = null;
+                photoFile = createImageFile(cliente_id+domebarque_id+"_"+getDate(),"C");
+                if (photoFile != null) {
+                    Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
+                    Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    someActivityResultLauncher.launch(intent);
+                }
+            } catch (IOException ex) {
+                Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto2-error:"+ex);
             }
+            Log.e("REOS","statusDispatchRepository-->FotoLocal-->Fin");
         });
 
         LeadClientesView.this.someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK) {
+           /* if (result.getResultCode() == RESULT_OK) {
                 Bundle extras = result.getData().getExtras();
                 imgBitmap = (Bitmap) extras.get("data");
                 imageViewPhoto.setImageBitmap(imgBitmap);
+            }*/
+
+            if (result.getResultCode() == RESULT_OK) {
+                Bitmap bitmap2=null;
+                try {
+                    File file = new File(mCurrentPhotoPath);
+                    bitmap2 = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file));
+                    ImageCameraController imageCameraController = new ImageCameraController();
+                    fileCliente=imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,cliente_id+domebarque_id+"_"+getDate(),"C");
+
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+                imgBitmap=bitmap2;
+                imageViewPhoto.setImageBitmap(bitmap2);
+                //Bundle extras = result.getData().getExtras();
+                //imgBitmap2 = (Bitmap) extras.get("data");
+                //imageViewPhoto2.setImageBitmap(imgBitmap2);
             }
         });
 
         btnUpload.setOnClickListener(e -> {
-            String Fragment="RutaVendedorView";
+            /*String Fragment="RutaVendedorView";
             String accion="inicioRutaVendedorViewLead";
             String compuesto=Fragment+"-"+accion;
             if(mListener!=null) {
                 mListener.onFragmentInteraction(compuesto, object
                 );
-            }
-            /*if(BuildConfig.FLAVOR.equals("peru"))
+            }*/
+            if(BuildConfig.FLAVOR.equals("peru"))
             {
                 sendLeadApi();
             }
@@ -292,7 +369,7 @@ public class LeadClientesView extends Fragment {
                     mListener.onFragmentInteraction(compuesto, object
                     );
                 }
-            }*/
+            }
         });
 
         buttonSendGPS.setOnClickListener(e -> {
@@ -307,7 +384,10 @@ public class LeadClientesView extends Fragment {
         if(type.equals("leadUpdateClient"))
         {
             getActivity().setTitle("Consultar Cliente");
-        }else {
+        }else if(type.equals("leadUpdateClientCensus")){
+            getActivity().setTitle("Geolocalización Cliente");
+        }
+        else {
             getActivity().setTitle(getResources().getString(R.string.lead_cliente));
         }
 
@@ -338,12 +418,15 @@ public class LeadClientesView extends Fragment {
         }else if (editTextCoordenates.getText().length() == 0) {
             editTextCoordenates.setError(message);
             acount = acount + 1;
+        }else if(fileCliente!=null)
+        {
+            acount = acount + 1;
         }
 
 
         String encoded = null;
 
-        if (imgBitmap != null) {
+       /* if (imgBitmap != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             imgBitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
             byteArray = stream.toByteArray();
@@ -353,74 +436,108 @@ public class LeadClientesView extends Fragment {
             acount = acount + 1;
 
 
-        }
+        }*/
 
-        if (acount == 0) {
+        if(fileCliente!=null&&latitud!=null&&longitud!=null)
+        {
+            Log.e("REOS","LeadClientesView.displayDialogMap.SendLeadApiif-encoded!=null&&latitud!=null&&longitud!=null");
+            if (acount> 0) {
+                Log.e("REOS","LeadClientesView.displayDialogMap.SendLeadApi-ifacount == 0");
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+                String formattedDate = df.format(c.getTime());
 
-            Calendar c = Calendar.getInstance();
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String formattedDate = df.format(c.getTime());
+                HashMap<String, String> parametros = new HashMap<>();
+                parametros.put("DocumentsOwner", SesionEntity.usuario_id);
+                parametros.put("SalesPersonCode", SesionEntity.fuerzatrabajo_id);
+                parametros.put("Comentary", editTextComentary.getText().toString());
+                parametros.put("CardName", editTextCardName.getText().toString());
+                parametros.put("TaxNumber", editTextCardCode.getText().toString());
+                parametros.put("TradeName", editTextCardNameComercial.getText().toString());
+                parametros.put("NumberPhono", editTextPhone.getText().toString());
+                parametros.put("NumberCellPhone", editTextCellPhone.getText().toString());
+                parametros.put("ContactPerson", editTextContactPerson.getText().toString());
+                parametros.put("Email", editTextEmail.getText().toString());
+                parametros.put("Web", editTextWeb.getText().toString());
+                parametros.put("Address", direccion);
+                parametros.put("Reference", referencia);
+                parametros.put("Category", spinner.getSelectedItem().toString());
+                parametros.put("Latitude", "" + latitud);
+                parametros.put("Longitude", "" + longitud);
+                parametros.put("DateTime", "" + formattedDate);
+                //parametros.put("photo", encoded);
+                parametros.put("photo", fileCliente.toString());
+                parametros.put("type", type);
+                parametros.put("CardCode", cliente_id);
+                parametros.put("domembarque_id", domebarque_id);
+                parametros.put("addresscode", addresscode);
 
-            HashMap<String, String> parametros = new HashMap<>();
-            parametros.put("DocumentsOwner", SesionEntity.usuario_id);
-            parametros.put("SalesPersonCode", SesionEntity.fuerzatrabajo_id);
-            parametros.put("Comentary", editTextComentary.getText().toString());
-            parametros.put("CardName", editTextCardName.getText().toString());
-            parametros.put("TaxNumber", editTextCardCode.getText().toString());
-            parametros.put("TradeName", editTextCardNameComercial.getText().toString());
-            parametros.put("NumberPhono", editTextPhone.getText().toString());
-            parametros.put("NumberCellPhone", editTextCellPhone.getText().toString());
-            parametros.put("ContactPerson", editTextContactPerson.getText().toString());
-            parametros.put("Email", editTextEmail.getText().toString());
-            parametros.put("Web", editTextWeb.getText().toString());
-            parametros.put("Address", direccion);
-            parametros.put("Reference", referencia);
-            parametros.put("Category", spinner.getSelectedItem().toString());
-            parametros.put("Latitude", "" + latitud);
-            parametros.put("Longitude", "" + longitud);
-            parametros.put("DateTime", "" + formattedDate);
-            parametros.put("photo", encoded);
-            parametros.put("type", type);
-            parametros.put("CardCode", cliente_id);
-            parametros.put("domembarque_id", domebarque_id);
-            leadClienteViewModel.sendLead(parametros, getContext()).observe(this.getActivity(), data -> {
-                if (data.equals("init")) {
-                    btnUpload.setEnabled(false);
-                    btnUpload.setClickable(false);
-                    btnUpload.setText("Enviado Lead...");
-                    btnUpload.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.custom_border_button_onclick));
-                    String Fragment="RutaVendedorView";
-                    String accion="inicioRutaVendedorViewLead";
-                    String compuesto=Fragment+"-"+accion;
-                    if(mListener!=null) {
-                        mListener.onFragmentInteraction(compuesto, object
-                        );
+                UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+                ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+                DireccionSQLite direccionSQLite= new DireccionSQLite(getContext());
+                RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
+                rutaVendedorSQLiteDao.UpdateChkGeolocationRouteSales(
+                        cliente_id,
+                        domebarque_id,
+                        ObjUsuario.compania_id,
+                        formattedDate
+                );
+                direccionSQLite.updateCoordenatesAddress(cliente_id,
+                        domebarque_id,String.valueOf(latitud),
+                        String.valueOf(longitud));
+                dialog.dismiss();
+                leadClienteViewModel.sendLead(parametros, getContext()).observe(this.getActivity(), data -> {
+                    if (data.equals("init")) {
+                        btnUpload.setEnabled(false);
+                        btnUpload.setClickable(false);
+                        btnUpload.setText("Enviado Lead...");
+                        btnUpload.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.custom_border_button_onclick));
+                        String Fragment = "RutaVendedorView";
+                        String accion = "inicioRutaVendedorViewLead";
+                        String compuesto = Fragment + "-" + accion;
+                        if (mListener != null) {
+                            mListener.onFragmentInteraction(compuesto, object
+                            );
+                        }
+                        SesionEntity.updateclient = "N";
+                        Toast.makeText(getActivity(), "Gelocalizacion Enviada Correctamente...", Toast.LENGTH_SHORT).show();
+
+                    } else if (data.equals("successful")) {
+                        btnUpload.setEnabled(true);
+                        btnUpload.setClickable(true);
+                        btnUpload.setText("Enviar Lead");
+                        btnUpload.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.custom_border_button_red));
+                        Toast.makeText(getActivity(), "Lead enviado", Toast.LENGTH_SHORT).show();
+
+                        clearEditText();
+
+                    } else {
+                        btnUpload.setEnabled(true);
+                        btnUpload.setClickable(true);
+                        btnUpload.setText("Enviar Lead");
+                        btnUpload.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.custom_border_button_red));
+                        Toast.makeText(getActivity(), "Ocurrio un error al enviar el lead...", Toast.LENGTH_SHORT).show();
                     }
-                    SesionEntity.updateclient="N";
+                });
+            }
 
+            /*leadClienteViewModel.sendLeadNotSend(getContext()).observe(this.getActivity(), data -> {
+                Log.e("JEPICAMEE", "=>" + data);
+            });*/
 
-                } else if (data.equals("successful")) {
-                    btnUpload.setEnabled(true);
-                    btnUpload.setClickable(true);
-                    btnUpload.setText("Enviar Lead");
-                    btnUpload.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.custom_border_button_red));
-                    Toast.makeText(getActivity(), "Lead enviado", Toast.LENGTH_SHORT).show();
-
-                    clearEditText();
-
-                } else {
-                    btnUpload.setEnabled(true);
-                    btnUpload.setClickable(true);
-                    btnUpload.setText("Enviar Lead");
-                    btnUpload.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.custom_border_button_red));
-                    Toast.makeText(getActivity(), "Ocurrio un error al enviar el lead...", Toast.LENGTH_SHORT).show();
-                }
+            leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
             });
         }
-
-        leadClienteViewModel.sendLeadNotSend(getContext()).observe(this.getActivity(), data -> {
-            Log.e("JEPICAMEE", "=>" + data);
-        });
+        else {
+            if(encoded==null){
+                Toast.makeText(getActivity(), "Se tiene que Tomar la Foto para actualizar los datos del Cliente...", Toast.LENGTH_SHORT).show();
+            }else if(latitud!=null&&longitud!=null)
+            {
+                Toast.makeText(getActivity(), "Se tiene que Actualizar la Geolocalizacion del Cliente para actualizar...", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void clearEditText() {
@@ -458,7 +575,7 @@ public class LeadClientesView extends Fragment {
         final Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
         final Button dialogButtonExit = dialog.findViewById(R.id.dialogButtonCancel);
         mapView = dialog.findViewById(R.id.mapView);
-
+        getLocation();
         dialogButton.setText("Add");
         dialogButtonExit.setText("Cancel");
 
@@ -482,8 +599,26 @@ public class LeadClientesView extends Fragment {
 
                             myGoogleMap.setMyLocationEnabled(true);
                             myGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                            //latitud = location.getLatitude();
+                            //longitud = location.getLongitude();
+                            latitud = latitude;
+                            longitud = longitude;
+                            Log.e("REOS","LeadClientesView.displayDialogMap.latitud:"+latitud);
+                            Log.e("REOS","LeadClientesView.displayDialogMap.longitud:"+longitud);
+                            LatLng latLng = new LatLng(latitud, longitud);
+                            myGoogleMap.clear();
+                            myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Potential client").draggable(true));
 
-                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+
+                            if (status) {
+                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                                status = false;
+                            } else {
+                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                //myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                            }
+
+                            /*locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
                                     new LocationListener() {
                                         @Override
                                         public void onLocationChanged(Location location) {
@@ -528,7 +663,7 @@ public class LeadClientesView extends Fragment {
                                         }
 
                                     }
-                            );
+                            );*/
 
 
 
@@ -609,7 +744,7 @@ public class LeadClientesView extends Fragment {
         });
 
         dialogButton.setOnClickListener(v -> {
-
+            editTextCoordenates.setText(latitud + "," + longitud);
             direccion=editTextAddress.getText().toString();
             referencia=editTextAddressReference.getText().toString();
             dialog.dismiss();
@@ -661,6 +796,55 @@ public class LeadClientesView extends Fragment {
         // mapView.onResume();
         //ListenerBackPress.setTemporaIdentityFragment("onDetach");
         mListener = null;
+    }
+
+    private void getLocation()
+    {
+        locationManager = (LocationManager) getActivity(). getSystemService(LOCATION_SERVICE);
+        //****Mejora****
+        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            // AlertNoGps();
+            androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
+            dialogFragment.show(((FragmentActivity) getContext()). getSupportFragmentManager (),"un dialogo");
+        }
+        // When you need the permission, e.g. onCreate, OnClick etc.
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            Log.e("REOS","MenuAccionView: No tiene ACCESS_FINE_LOCATION ");
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
+
+        } else {
+            Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
+            // We have already permission to use the location
+            try {
+                gpsController =  new GPSController(getContext());
+                mLocation = gpsController.getLocation(mLocation);
+                latitude = mLocation.getLatitude();
+                longitude= mLocation.getLongitude();
+            }catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+            }
+
+        }
+    }
+
+    private String getDate() throws IOException {
+
+        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+
+        return date;
+    }
+
+    private File createImageFile(String entrega_id,String type) throws IOException {
+
+        //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = entrega_id+"_"+type;
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(imageFileName,".jpg",storageDir);
+        mCurrentPhotoPath=image.getAbsolutePath();
+        return image;
     }
 
 }

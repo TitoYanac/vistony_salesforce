@@ -22,8 +22,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="15dp"
         android:clickable="true"
-        android:src="@drawable/ic_add_a_photo_black_24dp"
-        app:backgroundTint="#C3FFFFFF" />
+        android:src="@drawable/ic_baseline_add_a_photo_white_48"
+        app:backgroundTint="#D6001C" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -343,6 +343,8 @@
                     <Button
                         android:id="@+id/buttonSendGPS"
                         android:layout_width="wrap_content"
+                        android:background="@drawable/custom_border_button_red"
+                        android:textColor="@color/White"
                         android:layout_height="wrap_content"
                         android:text="GPS" />
 

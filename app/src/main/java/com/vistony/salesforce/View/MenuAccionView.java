@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -92,15 +93,15 @@ public class MenuAccionView extends Fragment {
     private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead,cv_visit_section,cv_dispatch,cv_canvas;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
 
-    OnFragmentInteractionListener mListener;
+    static OnFragmentInteractionListener mListener;
     public static Object objetoMenuAccionView=new Object();
 
     private GPSController gpsController;
     private Location mLocation;
-    double latitude, longitude;
+    static double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     LocationManager locationManager;
-    static String CardCode,CardName,Address,DomEmbarque_ID,Contado,Control_id,Item_id;
+    static String CardCode,CardName,Address,DomEmbarque_ID,Contado,Control_id,Item_id,AddressCode;
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
@@ -110,6 +111,7 @@ public class MenuAccionView extends Fragment {
     private MapView mapView;
     private GoogleMap myGoogleMap;
     private Double latitud = null, longitud = null;
+    static private String latitudesap,longitudesap;
     private boolean status = true;
     private String direccion = "Sin dirección", referencia = "Sin referencias";
     private Dialog dialog;
@@ -149,6 +151,9 @@ public class MenuAccionView extends Fragment {
             Log.e("REOS","MenuAccionView-Lista.get(s).getTelefonofijo()=>"+Lista.get(s).getTelefonofijo());
             Log.e("REOS","MenuAccionView-Lista.get(s).getTelefonomovil()=>"+Lista.get(s).getTelefonomovil());
             Log.e("REOS","MenuAccionView-Lista.get(s).Control_id()=>"+Lista.get(s).getControl_id());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getAddresscode()=>"+Lista.get(s).getAddresscode());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getLatitud()=>"+Lista.get(s).getLatitud());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getLongitud()=>"+Lista.get(s).getLongitud());
             CardCode=Lista.get(s).getCliente_id();
             CardName=Lista.get(s).getNombrecliente();
             Address=Lista.get(s).getDireccion();
@@ -156,6 +161,9 @@ public class MenuAccionView extends Fragment {
             Contado=Lista.get(s).getContado();
             Control_id=Lista.get(s).getControl_id();
             Item_id=Lista.get(s).getItem_id();
+            AddressCode=Lista.get(s).getAddresscode();
+            latitudesap=(Lista.get(s).getLatitud());
+            longitudesap=(Lista.get(s).getLongitud());
             if(Lista.get(s).getTelefonofijo()==null||Lista.get(s).getCorreo()==null||Lista.get(s).getChkgeolocation()==null)
             {
                 SesionEntity.updateclient="Y";
@@ -251,11 +259,18 @@ public class MenuAccionView extends Fragment {
         setHasOptionsMenu(true);
         cv_canvas.setVisibility(View.GONE);
 
+
         cv_canvas.setOnClickListener(v -> {
-            String Fragment="MenuAccionView";
+            /*String Fragment="MenuAccionView";
             String accion="canvas";
             String compuesto=Fragment+"-"+accion;
-            mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+            mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);*/
+            Log.e("REOS","MenuAccion-alertDialogVisitSection-cv_canvas.latitude"+latitude);
+            Log.e("REOS","MenuAccion-alertDialogVisitSection-cv_canvas.longitude"+longitude);
+            Log.e("REOS","MenuAccion-alertDialogVisitSection-cv_canvas.url"+"http://maps.google.com/maps/place/"+latitude+","+longitude);
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps/place/"+latitude+","+longitude)); //o la direccion/consulta que quiera "http://maps.google.com/maps?q="+ myLatitude  +"," + myLongitude +"("+ labLocation + ")&iwloc=A&hl=es"
+            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+            startActivity(intent);
         });
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
@@ -266,9 +281,20 @@ public class MenuAccionView extends Fragment {
         else {
             if(SesionEntity.perfil_id.equals("VENDEDOR")||SesionEntity.perfil_id.equals("Vendedor"))
             {
-                cv_lead.setVisibility(View.GONE);
+                //cv_lead.setVisibility(View.GONE);
                 cv_visit_section.setVisibility(View.GONE);
                 cv_dispatch.setVisibility(View.GONE);
+                if(SesionEntity.census.equals("N")){
+                    cv_lead.setVisibility(View.GONE);
+                }
+                else {
+                    cv_lead.setVisibility(View.VISIBLE);
+                    if(latitudesap==null&&longitudesap==null)
+                    {
+                        alertdialogInformative(getContext(),"IMPORTANTE","El Cliente tiene no tiene la Geolocalizacion Actualizada, debe actualizar la ubicacion y tomar la Foto del Local...").show();
+
+                    }
+                }
             }
         }
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
@@ -278,7 +304,7 @@ public class MenuAccionView extends Fragment {
             //cv_lead.setVisibility(View.GONE);
             //cv_visit_section.setVisibility(View.GONE);
             //cv_dispatch.setVisibility(View.GONE);
-            cv_canvas.setVisibility(View.GONE);
+            //cv_canvas.setVisibility(View.GONE);
         }
 
         CobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
@@ -349,7 +375,9 @@ public class MenuAccionView extends Fragment {
         });
         cv_lead.setOnClickListener(v -> {
                 String Fragment="MenuAccionView";
-                String accion="leadUpdateClient";
+
+                //String accion="leadUpdateClient";
+                String accion="leadUpdateClientCensus";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
                 SesionEntity.quotation="N";
@@ -548,7 +576,8 @@ public class MenuAccionView extends Fragment {
                         "",
                         CardCode,
                         DomEmbarque_ID,
-                        "01"
+                        "01",
+                        AddressCode
                 );
                 RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
                 rutaVendedorSQLiteDao.UpdateChkGeolocationRouteSales(
@@ -862,7 +891,7 @@ public class MenuAccionView extends Fragment {
         VisitSectionEntity visitSectionEntity=new VisitSectionEntity();
 
         VisitSectionSQLite visitSectionSQLite=new VisitSectionSQLite(getContext());
-        listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date));
+        listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date),Control_id);
         statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
         for(int i=0;i<listVisitSection.size();i++)
         {
@@ -946,14 +975,14 @@ public class MenuAccionView extends Fragment {
 
                 if(
                         cobranzaDetalleSQLiteDao.getCountCollectionDate(FormatFecha.format(date),SesionEntity.fuerzatrabajo_id,CardCode)>0
-                        || statusDispatchSQLite.getCountStatusDispatchforDate(FormatFecha.format(date),SesionEntity.fuerzatrabajo_id,CardCode)   >0
+                        || statusDispatchSQLite.getCountStatusDispatchforDate(SesionEntity.fuerzatrabajo_id,CardCode,Control_id,Item_id)   >0
                 )
                 {
                     Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_finish_visitsection-longitude: "+longitude);
                     Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_finish_visitsection-latitude: "+latitude);
                     if(latitude!=0&&longitude!=0)
                     {
-                        listVisitSection = visitSectionSQLite.getVisitSection(CardCode, DomEmbarque_ID, FormatFecha.format(date));
+                        listVisitSection = visitSectionSQLite.getVisitSection(CardCode, DomEmbarque_ID, FormatFecha.format(date),Control_id);
                         statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
                         for (int i = 0; i < listVisitSection.size(); i++) {
                             fechainicio = listVisitSection.get(i).getDateini();
@@ -1026,7 +1055,7 @@ public class MenuAccionView extends Fragment {
         Date date = new Date();
         VisitSectionSQLite visitSectionSQLite=new VisitSectionSQLite(getContext());
         ArrayList<VisitSectionEntity> listVisitSection=new ArrayList<>();
-        listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date));
+        listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date),Control_id);
         Log.e("REOS","MenuAccionView-getStatusRouteDriver-CardCode"+CardCode);
         Log.e("REOS","MenuAccionView-getStatusRouteDriver-DomEmbarque_ID"+DomEmbarque_ID);
         Log.e("REOS","MenuAccionView-getStatusRouteDriver-FormatFecha.format(date)"+FormatFecha.format(date));
@@ -1065,6 +1094,11 @@ public class MenuAccionView extends Fragment {
             @Override
             public void onClick(View v)
             {
+                        String Fragment="MenuAccionView";
+                        String accion="leadUpdateClientCensus";
+                        String compuesto=Fragment+"-"+accion;
+                        mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                        SesionEntity.quotation="N";
                 dialog.dismiss();
             }
         });

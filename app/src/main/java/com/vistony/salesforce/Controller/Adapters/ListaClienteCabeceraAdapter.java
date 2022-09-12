@@ -187,7 +187,8 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         holder.tv_address.setText(lead.getDomembarque_id()+"-"+lead.getDireccion());
         holder.tv_paymentterms.setText(lead.getTerminopago());
         //holder.chk_geolocation.setVisibility(View.GONE);
-        holder.ll_geolocation.setVisibility(View.GONE);
+        //holder.ll_geolocation.setVisibility(View.GONE);
+        holder.chk_visitsection.setVisibility(View.GONE);
         switch(lead.getMoneda()){
             case "S/":
                 holder.tv_moneda.setText("Soles");
@@ -283,6 +284,13 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
        {
             holder.chk_geolocation.setVisibility(View.GONE);
             holder.chk_visitsection.setVisibility(View.GONE);
+        }else {
+            if(SesionEntity.census.equals("N")){
+                holder.chk_geolocation.setVisibility(View.GONE);
+            }
+            else {
+                holder.chk_geolocation.setVisibility(View.VISIBLE);
+            }
         }
 
         holder.relativeListaCabezeraCns.setOnClickListener(v -> {
@@ -332,6 +340,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                listaClienteCabeceraEntity.setLastpurchase(lead.getLastpurchase());
                     listaClienteCabeceraEntity.setTerminopago(lead.getTerminopago());
                     listaClienteCabeceraEntity.setContado( lead.getContado());
+                    listaClienteCabeceraEntity.setAddresscode( lead.getAddresscode());
                //ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
                     ArraylistaClienteCabeceraEntity.add(lead);
                String Cliente = "";

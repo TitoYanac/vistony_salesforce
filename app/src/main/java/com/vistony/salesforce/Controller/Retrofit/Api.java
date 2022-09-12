@@ -33,6 +33,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoFacturasHistori
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoFacturasLineasNoFacturadasEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoOrdenVentaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.KardexPagoEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.LeadAddressEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPrecioDetalleEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPromocionEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.LoginEntityResponse;
@@ -269,7 +270,7 @@ public interface Api {
             @Query("endDate") String fecfin
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/DispatchTypes")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/Type")
     Call<TypeDispatchEntityResponse> getTypeDispatch(@Query("imei") String imei);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies")
@@ -305,8 +306,11 @@ public interface Api {
             @Query("imei") String Imei
             ,@Query("fecha") String FechaDespacho
             ,@Query("flag") String Seller
-
     );
+
+    @PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Customers/Address")
+    Call<LeadAddressEntityResponse> sendLeadAddress (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
+
 
 
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos

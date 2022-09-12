@@ -48,6 +48,7 @@ public class TypeDispatchSQLite {
             registro.put("usuario_id", SesionEntity.usuario_id);
             registro.put("typedispatch_id",listTypeDispatchEntity.get(i).getTypedispatch_id());
             registro.put("typedispatch",listTypeDispatchEntity.get(i).getTypedispatch());
+            registro.put("statusupdate",listTypeDispatchEntity.get(i).getStatusupdate());
             bd.insert("typedispatch",null,registro);
         }
         bd.close();
@@ -60,7 +61,7 @@ public class TypeDispatchSQLite {
         TypeDispatchEntity typeDispatchEntity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select * from typedispatch ",null);
+                "Select * from typedispatch where statusupdate='Y'",null);
 
         while (fila.moveToNext())
         {

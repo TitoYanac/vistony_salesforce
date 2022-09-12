@@ -66,6 +66,7 @@ public class Utilitario {
     public static void disabledEditText(EditText editText){
         editText.setEnabled(false);
         editText.setClickable(false);
+        editText.setTextColor(Color.parseColor("#FF686A6F"));
     }
     public static void disabledTextView(TextView tv){
         tv.setClickable(false);

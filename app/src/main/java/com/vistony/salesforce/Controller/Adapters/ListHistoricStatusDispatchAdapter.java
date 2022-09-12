@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,12 +22,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,19 +64,26 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
 
 
     public void filter(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        Listanombres.clear();
-        if (charText.length() == 0) {
-            Listanombres.addAll(arrayList);
-        } else {
-            for (HistoricStatusDispatchEntity wp : arrayList) {
-                if (wp.getCliente().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    Listanombres.add(wp);
-                } else if (wp.getCliente_ID().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    Listanombres.add(wp);
+        try{
+            charText = charText.toLowerCase(Locale.getDefault());
+            Listanombres.clear();
+            if (charText.length() == 0) {
+                Listanombres.addAll(arrayList);
+            } else {
+
+
+                for (HistoricStatusDispatchEntity wp : arrayList) {
+                    if (wp.getCliente().toLowerCase(Locale.getDefault()).contains(charText)) {
+                        Listanombres.add(wp);
+                    } else if (wp.getEntrega().toLowerCase().contains(charText)) {
+                        Listanombres.add(wp);
+                    }
                 }
 
             }
+        }catch (Exception e)
+        {
+
         }
         notifyDataSetChanged();
 
@@ -119,6 +134,12 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
             holder.lbl_wsrecibido = (TextView) convertView.findViewById(R.id.lbl_wsrecibido);
             holder.lbl_historico_cobranza_respuesta_ws = (TextView) convertView.findViewById(R.id.lbl_historico_cobranza_respuesta_ws);
             holder.imv_wsrecibido = (ImageView) convertView.findViewById(R.id.imv_wsrecibido);
+            holder.tv_drivermobile = (TextView) convertView.findViewById(R.id.tv_driver_mobile);
+            holder.tv_drivername = (TextView) convertView.findViewById(R.id.tv_driver_name);
+            holder.imv_callmobilephone = (ImageView) convertView.findViewById(R.id.imv_callmobilephone);
+            holder.imv_indicator_status = (ImageView) convertView.findViewById(R.id.imv_indicator_status);
+            holder.tbr_drivername = (TableRow) convertView.findViewById(R.id.tbr_drivername);
+            holder.tbl_drivermobile = (TableLayout) convertView.findViewById(R.id.tbl_drivermobile);
 
             //holder.imv_historic_status_dispatch_photo.setBackgroundResource(R.drawable.portail);
             convertView.setTag(holder);
@@ -133,7 +154,36 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         holder.tv_referral_guide.setText(lead.getEntrega());
         holder.tv_type_dispatch.setText(lead.getTipoDespacho());
         holder.tv_reason_dispatch.setText(lead.getMotivoDespacho());
+        holder.tv_drivermobile.setText(lead.getDrivermobile());
+        holder.tv_drivername.setText(lead.getDrivername());
 
+        if(lead.getTipoDespacho_ID().equals("A"))
+        {
+            Resources res = getContext().getResources(); // need this to fetch the drawable
+            Drawable draw = res.getDrawable( R.drawable.ic_baseline_dangerous_24);
+            holder.imv_indicator_status.setImageDrawable(draw);
+            holder.imv_indicator_status.setEnabled(false);
+        }
+        else if(lead.getTipoDespacho_ID().equals("V"))
+        {
+            Resources res = getContext().getResources(); // need this to fetch the drawable
+            Drawable draw = res.getDrawable( R.drawable.ic_baseline_warning_24);
+            holder.imv_indicator_status.setImageDrawable(draw);
+            holder.imv_indicator_status.setEnabled(false);
+        }
+        else if(lead.getTipoDespacho_ID().equals("E"))
+        {
+            Resources res = getContext().getResources(); // need this to fetch the drawable
+            Drawable draw = res.getDrawable( R.drawable.ic_baseline_check_circle_24);
+            holder.imv_indicator_status.setImageDrawable(draw);
+            holder.imv_indicator_status.setEnabled(false);
+        }
+        else {
+            Resources res = getContext().getResources(); // need this to fetch the drawable
+            Drawable draw = res.getDrawable( R.drawable.ic_baseline_warning_24);
+            holder.imv_indicator_status.setImageDrawable(draw);
+            holder.imv_indicator_status.setEnabled(false);
+        }
         if (lead.getChk_Recibido().equals("1") || lead.getChk_Recibido().equals("Y")) {
             //holder.chk_wsrecibido.setChecked(true);
             Resources res = getContext().getResources(); // need this to fetch the drawable
@@ -141,9 +191,17 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
             holder.imv_wsrecibido.setImageDrawable(draw);
             holder.imv_wsrecibido.setEnabled(false);
         }
+        else {
+            Resources res = getContext().getResources(); // need this to fetch the drawable
+            Drawable draw = res.getDrawable( R.drawable.ic_baseline_check_box_outline_blank_24);
+            holder.imv_wsrecibido.setImageDrawable(draw);
+            holder.imv_wsrecibido.setEnabled(false);
+        }
 
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
+            holder.tbr_drivername.setVisibility(View.GONE);
+            holder.tbl_drivermobile.setVisibility(View.GONE);
 
         }else
         {
@@ -184,7 +242,9 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         holder.imv_historic_status_dispatch_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
+                if(lead.getFotoLocal()!=null)
+                {
+                    if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
                     /*ImageCameraController imageCameraController = new ImageCameraController();
                     imageCameraController.OpenImageDispacth(getContext(), lead.getFotoLocal());*/
                     /*ImageCameraController imageCameraController=new ImageCameraController();
@@ -192,11 +252,11 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
                     byteArray=imageCameraController.getImageSDtoByte(getContext(),lead.getFotoLocal());
                     Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                     getalertPhoto("FOTO LOCAL",bitmap).show();*/
-                    String[] parametros={lead.getFotoLocal(),"FOTO LOCAL"};
-                    AsynktaskgetPhoto asynktaskgetPhoto = new AsynktaskgetPhoto();
-                    asynktaskgetPhoto.execute(parametros);
-                } else {
-                    Log.e("REOS", "ListHistoricStatusDispatchAdapter-getView-holder.imv_historic_status_dispatch_photo-lead.getFotoLocal()" + lead.getFotoLocal());
+                        String[] parametros = {lead.getFotoLocal(), "FOTO LOCAL"};
+                        AsynktaskgetPhoto asynktaskgetPhoto = new AsynktaskgetPhoto();
+                        asynktaskgetPhoto.execute(parametros);
+                    } else {
+                        Log.e("REOS", "ListHistoricStatusDispatchAdapter-getView-holder.imv_historic_status_dispatch_photo-lead.getFotoLocal()" + lead.getFotoLocal());
                     /*lead.getFotoLocal();
                     bitmaplocal=getBitmapFromURL(lead.getFotoLocal());
                     getalertPhoto("FOTO LOCAL",bitmaplocal).show();*/
@@ -220,23 +280,25 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
                             getalertPhoto("FOTO LOCAL", bitmaplocal).show();
                         }
                     });*/
-                    String[] parametros={lead.getFotoLocal(),"FOTO LOCAL"};
-                    AsynktaskgetPhoto asynktaskgetPhoto = new AsynktaskgetPhoto();
-                    asynktaskgetPhoto.execute(parametros);
-                }
+                        String[] parametros = {lead.getFotoLocal(), "FOTO LOCAL"};
+                        AsynktaskgetPhoto asynktaskgetPhoto = new AsynktaskgetPhoto();
+                        asynktaskgetPhoto.execute(parametros);
+                    }
                 /*ImageCameraController imageCameraController=new ImageCameraController();
                 byte[] byteArray,byteArray2;
                 byteArray=imageCameraController.getImageSDtoByte(getContext(),lead.getFotoLocal());
                 Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                 getalertPhoto("FOTO DESPACHO",bitmap).show();*/
-
+                }else {
+                    Toast.makeText(getContext(), "No hay Foto de Local Disponible...", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         holder.imv_historic_status_dispatch_photo_delivery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
+                if(lead.getFotoGuia()!=null) {
+                    if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
                     /*ImageCameraController imageCameraController = new ImageCameraController();
                     imageCameraController.OpenImageDispacth(getContext(), lead.getFotoGuia());*/
                     /*ImageCameraController imageCameraController=new ImageCameraController();
@@ -244,12 +306,12 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
                     byteArray=imageCameraController.getImageSDtoByte(getContext(),lead.getFotoGuia());
                     Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                     getalertPhoto("FOTO GUIA",bitmap).show();*/
-                    String[] parametros={lead.getFotoGuia(),"FOTO GUIA"};
-                    AsynktaskgetPhoto asynktaskgetPhoto = new AsynktaskgetPhoto();
-                    asynktaskgetPhoto.execute(parametros);
-                } else {
-                    Log.e("REOS", "ListHistoricStatusDispatchAdapter-getView-holder.imv_historic_status_dispatch_photo_delivery-lead.getFotoGuia()" + lead.getFotoGuia());
-                    //lead.getFotoGuia();
+                        String[] parametros = {lead.getFotoGuia(), "FOTO GUIA"};
+                        AsynktaskgetPhoto asynktaskgetPhoto = new AsynktaskgetPhoto();
+                        asynktaskgetPhoto.execute(parametros);
+                    } else {
+                        Log.e("REOS", "ListHistoricStatusDispatchAdapter-getView-holder.imv_historic_status_dispatch_photo_delivery-lead.getFotoGuia()" + lead.getFotoGuia());
+                        //lead.getFotoGuia();
                     /*Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -270,11 +332,14 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
                             getalertPhoto("FOTO GUIA", bitmapguia).show();
                         }
                     });*/
-                    String[] parametros={lead.getFotoGuia(),"FOTO GUIA"};
-                    AsynktaskgetPhoto asynktaskgetPhoto = new AsynktaskgetPhoto();
-                    asynktaskgetPhoto.execute(parametros);
+                        String[] parametros = {lead.getFotoGuia(), "FOTO GUIA"};
+                        AsynktaskgetPhoto asynktaskgetPhoto = new AsynktaskgetPhoto();
+                        asynktaskgetPhoto.execute(parametros);
 
 
+                    }
+                }else {
+                    Toast.makeText(getContext(), "No hay Foto de Guia Disponible...", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -288,6 +353,22 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
             @Override
             public void onClick(View view) {
                 alertamostrarcomentario("Observacion", lead.getObservacion()).show();
+            }
+        });
+
+        holder.imv_callmobilephone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(lead.getDrivermobile()!=null)
+                {
+                    String phone = lead.getDrivermobile();
+                    Intent intent = new Intent(Intent.ACTION_DIAL,
+                            Uri.fromParts("tel", phone, null));
+                    activity.startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getContext(), "Numero de Telefono no Disponible...", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -310,6 +391,12 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         TextView lbl_wsrecibido;
         TextView lbl_historico_cobranza_respuesta_ws;
         ImageView imv_wsrecibido;
+        TextView tv_drivermobile;
+        TextView tv_drivername;
+        ImageView imv_callmobilephone;
+        ImageView imv_indicator_status;
+        TableRow tbr_drivername;
+        TableLayout tbl_drivermobile;
 
     }
 

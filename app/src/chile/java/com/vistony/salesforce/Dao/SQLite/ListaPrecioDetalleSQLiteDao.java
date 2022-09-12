@@ -68,6 +68,8 @@ public class ListaPrecioDetalleSQLiteDao {
         arraylistaProductoEntity = new ArrayList<ListaProductoEntity>();
         ListaProductoEntity listaProductoEntity;
         Cursor fila=null;
+        Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.cardCode: "+cardCode);
+        Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.terminoPago:"+terminoPago);
 
         try {
             SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
@@ -86,6 +88,8 @@ public class ListaPrecioDetalleSQLiteDao {
                 if(isCash.equals("0")){
                     tipoDeCompra=TipoDeCompra.credito;
                 }
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.tipoDeCompra: "+tipoDeCompra);
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.listaArtificio:"+listaArtificio);
 
                 String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
                         "IFNULL(stock_general,0) stock_general,"+tipoDeCompra+","+tipoDeCompra+",gal," +

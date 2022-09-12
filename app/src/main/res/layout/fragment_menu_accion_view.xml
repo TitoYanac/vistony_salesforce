@@ -293,7 +293,6 @@
                 android:clipToPadding="false"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:visibility="gone"
                 >
 
                 <androidx.cardview.widget.CardView

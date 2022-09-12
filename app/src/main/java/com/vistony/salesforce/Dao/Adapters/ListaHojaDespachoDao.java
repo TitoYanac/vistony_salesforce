@@ -14,7 +14,7 @@ public class ListaHojaDespachoDao {
     Context context;
 
     public static ListaHojaDespachoDao repository = new ListaHojaDespachoDao();
-    public HashMap<String, ListaHojaDespachoEntity> leads = new HashMap<>();
+    public HashMap<Integer, ListaHojaDespachoEntity> leads = new HashMap<>();
 
     public static ListaHojaDespachoDao getInstance() {
         return repository;
@@ -26,7 +26,13 @@ public class ListaHojaDespachoDao {
     }
 
     private void saveLead(ListaHojaDespachoEntity lead) {
-        leads.put(lead.getItem_id(), lead);
+        try
+        {
+            leads.put(Integer.parseInt(lead.getItem_id()), lead);
+        }catch (Exception e)
+        {
+
+        }
     }
 
     public List<ListaHojaDespachoEntity> getLeads(ArrayList<HojaDespachoDetalleSQLiteEntity> Lista) {
