@@ -49,8 +49,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omega_r.libs.OmegaCenterIconButton;
+import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
+import com.vistony.salesforce.Controller.Retrofit.Api;
+import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Dao.Retrofit.LeadClienteViewModel;
@@ -60,6 +65,7 @@ import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
@@ -91,7 +97,7 @@ public class LeadClientesView extends Fragment {
     private byte[] byteArray;
     private MapView mapView;
     private OmegaCenterIconButton btnUpload;
-    private Double latitud = null, longitud = null;
+    //private Double latitud = null, longitud = null;
     private Spinner spinner;
     private EditText editTextComentary, editTextCardCode, editTextCardName, editTextCardNameComercial,
             editTextPhone, editTextCellPhone, editTextContactPerson, editTextEmail, editTextWeb, editTextCoordenates
@@ -104,7 +110,7 @@ public class LeadClientesView extends Fragment {
     private Dialog dialog;
     com.google.android.material.textfield.TextInputLayout ti_commercial_name,ti_card_name,
             ti_textphone,ti_TextContactPerson,ti_TextEmail,ti_TextWeb,ti_TextCardCode,ti_editTextComments,ti_textcellphone;
-    static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque,correo,chkgeolocation,telefonofijo,telefonomovil,rucdni,addresscode;
+    static String cliente_id,nombrecliente,domebarque_id,zona_id,domebarque,correo,chkgeolocation,telefonofijo,telefonomovil,rucdni,addresscode,chk_ruta;
     static Object object;
     LinearLayout linearLayoutGps;
     ImageView imv_callmobilephone,imv_calltelfhouseclient;
@@ -116,6 +122,8 @@ public class LeadClientesView extends Fragment {
     File file;
     public static String mCurrentPhotoPath="";
     File fileCliente;
+    private static final int MAX_BITMAP_SIZE = 100 * 1024 * 1024; // 100 MB
+
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String tag, Object dato);
     }
@@ -137,6 +145,7 @@ public class LeadClientesView extends Fragment {
             telefonomovil=Lista.get(i).getTelefonomovil();
             rucdni=Lista.get(i).getRucdni();
             addresscode=Lista.get(i).getAddresscode();
+            chk_ruta=Lista.get(i).getChk_ruta();
             Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+Lista.get(i).getCliente_id());
             Log.e("REOS","LeadClientesView-newInstancia-nombrecliente:"+Lista.get(i).getNombrecliente());
             Log.e("REOS","LeadClientesView-newInstancia-domebarque_id:"+Lista.get(i).getDomembarque_id());
@@ -149,7 +158,7 @@ public class LeadClientesView extends Fragment {
             Log.e("REOS","LeadClientesView-newInstancia-telefonomovil"+Lista.get(i).getTelefonomovil());
             Log.e("REOS","LeadClientesView-newInstancia-latitud"+Lista.get(i).getLatitud());
             Log.e("REOS","LeadClientesView-newInstancia-longitud"+Lista.get(i).getLongitud());
-
+            Log.e("REOS","LeadClientesView-newInstancia-getChk_ruta"+Lista.get(i).getChk_ruta());
         }
         Log.e("REOS","LeadClientesView-newInstancia-type "+type);
         type=id;
@@ -159,9 +168,11 @@ public class LeadClientesView extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if(type.equals("leadUpdateClient"))
+        if(type!=null)
         {
-            getActivity().setTitle("Consulta Cliente");
+            if (type.equals("leadUpdateClient")) {
+                getActivity().setTitle("Consulta Cliente");
+            }
         }
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -233,14 +244,15 @@ public class LeadClientesView extends Fragment {
             editTextPhone.setVisibility(View.GONE);
             //floatingButtonTakePhoto.setVisibility(View.GONE);
             ti_textcellphone.setVisibility(View.GONE);
-            if(type.equals("leadUpdateClient"))
+            if(type!=null)
             {
-                getActivity().setTitle("Consultar Cliente");
-            }else if(type.equals("leadUpdateClientCensus")){
-                btnUpload.setText("ACTUALIZAR");
-            }
-            else {
-                //getActivity().setTitle(getResources().getString(R.string.lead_cliente));
+                if (type.equals("leadUpdateClient")) {
+                    getActivity().setTitle("Consultar Cliente");
+                } else if (type.equals("leadUpdateClientCensus")) {
+                    btnUpload.setText("ACTUALIZAR");
+                } else {
+                    //getActivity().setTitle(getResources().getString(R.string.lead_cliente));
+                }
             }
             if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
             {
@@ -318,8 +330,12 @@ public class LeadClientesView extends Fragment {
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     someActivityResultLauncher.launch(intent);
                 }
-            } catch (IOException ex) {
-                Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto2-error:"+ex);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "No se pudo grabar la Geolocalizacion error: "+e.toString(), Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "No se pudo grabar la Geolocalizacion error: "+e.toString(), Toast.LENGTH_SHORT).show();
             }
             Log.e("REOS","statusDispatchRepository-->FotoLocal-->Fin");
         });
@@ -338,12 +354,25 @@ public class LeadClientesView extends Fragment {
                     bitmap2 = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file));
                     ImageCameraController imageCameraController = new ImageCameraController();
                     fileCliente=imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,cliente_id+domebarque_id+"_"+getDate(),"C");
+                    imgBitmap=bitmap2;
+                    int bitmapSize = imgBitmap.getByteCount();
+                    if (bitmapSize > MAX_BITMAP_SIZE) {
+                        throw new RuntimeException(
+                                "Canvas: trying to draw too large(" + bitmapSize + "bytes) bitmap.");
+                    }else {
+                        //imageViewPhoto.setImageBitmap(bitmap2);
+                        Convert.resizeImage(imageViewPhoto,bitmap2,getActivity());
+                    }
 
-                } catch (IOException e){
+
+                } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
                 }
-                imgBitmap=bitmap2;
-                imageViewPhoto.setImageBitmap(bitmap2);
+
                 //Bundle extras = result.getData().getExtras();
                 //imgBitmap2 = (Bitmap) extras.get("data");
                 //imageViewPhoto2.setImageBitmap(imgBitmap2);
@@ -385,31 +414,60 @@ public class LeadClientesView extends Fragment {
                 }
             }
         });
-
+        try {
         buttonSendGPS.setOnClickListener(e -> {
-            displayDialogMap();
-
+            /*if(latitude!=0&&longitude!=0) {
+                editTextCoordenates.setText(latitude + "," + longitude);
+            }
+            else {
+                    Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                    getLocation();
+                }*/
+           displayDialogMap();
             MapsInitializer.initialize(getActivity());
-
             mapView.onCreate(dialog.onSaveInstanceState());
             mapView.onResume();
 
+            /*dialog = new Dialog(getActivity());
+            mapView.onCreate(dialog.onSaveInstanceState());
+
+            if(mapView!=null){
+                MapsInitializer.initialize(getActivity());
+
+                mapView.onResume();
+                displayDialogMap();
+            }*/
+
+
         });
-        if(type.equals("leadUpdateClient"))
-        {
-            getActivity().setTitle("Consultar Cliente");
-
-        }else if(type.equals("leadUpdateClientCensus")){
-            getActivity().setTitle("Geolocalización Cliente");
+        }catch (Exception e){
+            Toast.makeText(getContext(), "No se puedo mostrar el Mapa - error: "+e.toString(), Toast.LENGTH_SHORT).show();
         }
-        else {
-            getActivity().setTitle(getResources().getString(R.string.lead_cliente));
-        }
+        try {
+            if(type!=null)
+            {
+                if (type.equals("leadUpdateClient")) {
+                    getActivity().setTitle("Consultar Cliente");
 
+                } else if (type.equals("leadUpdateClientCensus")) {
+                    getActivity().setTitle("Geolocalización Cliente");
+                } else {
+                    getActivity().setTitle(getResources().getString(R.string.lead_cliente));
+                }
+            }
+        }catch (Exception e){
+            Toast.makeText(getContext(), "No se puedo mostrar el titulo - error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
         return v;
     }
 
+
     private void sendLeadApi() {
+        try {
+            AppExecutors executor=new AppExecutors();
+            UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+            UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+            ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
         Integer acount = 0;
 
         if (editTextCardName.getText().length() == 0) {
@@ -453,7 +511,10 @@ public class LeadClientesView extends Fragment {
 
         }*/
 
-        if(fileCliente!=null&&latitud!=null&&longitud!=null)
+
+
+        //if(fileCliente!=null&&latitud!=null&&longitud!=null)
+            if(fileCliente!=null&&latitude!=0&&longitude!=0)
         {
             Log.e("REOS","LeadClientesView.displayDialogMap.SendLeadApiif-encoded!=null&&latitud!=null&&longitud!=null");
             if (acount> 0) {
@@ -477,19 +538,27 @@ public class LeadClientesView extends Fragment {
                 parametros.put("Address", direccion);
                 parametros.put("Reference", referencia);
                 parametros.put("Category", spinner.getSelectedItem().toString());
-                parametros.put("Latitude", "" + latitud);
-                parametros.put("Longitude", "" + longitud);
+                parametros.put("Latitude", "" + latitude);
+                parametros.put("Longitude", "" + longitude);
                 parametros.put("DateTime", "" + formattedDate);
                 //parametros.put("photo", encoded);
                 parametros.put("photo", fileCliente.toString());
+                if(BuildConfig.FLAVOR.equals("peru"))
+                {
+                    if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+                    {
+
+                    }else {
+                        type="leadUpdateClientCensus";
+                    }
+
+                }
                 parametros.put("type", type);
                 parametros.put("CardCode", cliente_id);
                 parametros.put("domembarque_id", domebarque_id);
                 parametros.put("addresscode", addresscode);
 
-                UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
-                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
-                ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
                 DireccionSQLite direccionSQLite= new DireccionSQLite(getContext());
                 RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(getContext());
                 rutaVendedorSQLiteDao.UpdateChkGeolocationRouteSales(
@@ -497,12 +566,29 @@ public class LeadClientesView extends Fragment {
                         domebarque_id,
                         ObjUsuario.compania_id,
                         formattedDate,
-                        String.valueOf(latitud),
-                        String.valueOf(longitud)
+                        String.valueOf(latitude),
+                        String.valueOf(longitude)
                 );
                 direccionSQLite.updateCoordenatesAddress(cliente_id,
-                        domebarque_id,String.valueOf(latitud),
-                        String.valueOf(longitud));
+                        domebarque_id,String.valueOf(latitude),
+                        String.valueOf(longitude));
+
+                FormulasController formulasController=new FormulasController(getContext());
+
+                VisitaSQLiteEntity visitaNativa=new VisitaSQLiteEntity();
+                visitaNativa.setCardCode(cliente_id);
+                visitaNativa.setAddress(domebarque_id);
+                visitaNativa.setTerritory(zona_id);
+                visitaNativa.setType("14");
+                visitaNativa.setObservation("Geolocalizacion de Cliente Actualizada...");
+                visitaNativa.setLatitude(""+latitude);
+                visitaNativa.setLongitude(""+longitude);
+                visitaNativa.setStatusRoute(chk_ruta);
+                visitaNativa.setMobileID("0");
+                visitaNativa.setAmount("0");
+                formulasController.RegistraVisita(visitaNativa,getActivity(),"0");
+                Toast.makeText(getContext(), "Visita registrada...", Toast.LENGTH_SHORT).show();
+
                 dialog.dismiss();
                 leadClienteViewModel.sendLead(parametros, getContext()).observe(this.getActivity(), data -> {
                     if (data.equals("init")) {
@@ -536,26 +622,36 @@ public class LeadClientesView extends Fragment {
                         btnUpload.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.custom_border_button_red));
                         Toast.makeText(getActivity(), "Ocurrio un error al enviar el lead...", Toast.LENGTH_SHORT).show();
                     }
+
                 });
+
             }
 
             /*leadClienteViewModel.sendLeadNotSend(getContext()).observe(this.getActivity(), data -> {
                 Log.e("JEPICAMEE", "=>" + data);
             });*/
 
-            leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei).observe(getActivity(), data -> {
+            leadClienteViewModel.sendGeolocationClient(getContext(),ObjUsuario.Imei,executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("Jepicame", "=>" + data);
             });
         }
         else {
             if(encoded==null){
                 Toast.makeText(getActivity(), "Se tiene que Tomar la Foto para actualizar los datos del Cliente...", Toast.LENGTH_SHORT).show();
-            }else if(latitud!=null&&longitud!=null)
+            }else if(latitude!=0&&longitude!=0)
             {
                 Toast.makeText(getActivity(), "Se tiene que Actualizar la Geolocalizacion del Cliente para actualizar...", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+        } catch (Exception e){
+
+        e.printStackTrace();
+
+        Toast.makeText(getActivity(), "No se pudo grabar la Geolocalizacion error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+
+}
 
     private void clearEditText() {
         editTextCardCode.setText("");
@@ -571,69 +667,73 @@ public class LeadClientesView extends Fragment {
     }
 
     private void displayDialogMap() {
-        dialog.setContentView(R.layout.layout_mapa_dialog);
-
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        final TextView editTextAddress = dialog.findViewById(R.id.editTextAddressDialog);
-        final TextView editTextAddressReference = dialog.findViewById(R.id.editTextAddressReferenceDialog);
-
-        //editTextAddress.setText((direccion.equals("Sin dirección") ? "" : direccion));
-        //editTextAddressReference.setText((referencia.equals("Sin referencias") ? "" : referencia));
-        editTextAddress.setText(nombrecliente);
-        editTextAddressReference.setText(domebarque);
-
-        ImageView image = dialog.findViewById(R.id.image);
-        image.setImageResource(R.mipmap.logo_circulo);
-        image.setBackground(new ColorDrawable(Color.TRANSPARENT));
-
-        final Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
-        final Button dialogButtonExit = dialog.findViewById(R.id.dialogButtonCancel);
-        mapView = dialog.findViewById(R.id.mapView);
-        getLocation();
-        dialogButton.setText("Add");
-        dialogButtonExit.setText("Cancel");
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        if (mapView != null) {
-
-            LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
-            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                mapView.getMapAsync(new OnMapReadyCallback() {
-                    @Override
-                    public void onMapReady(final GoogleMap googleMap) {
-
-                        myGoogleMap=googleMap;
-
-                        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                                ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        try {
 
 
-                            myGoogleMap.setMyLocationEnabled(true);
-                            myGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
-                            //latitud = location.getLatitude();
-                            //longitud = location.getLongitude();
-                            latitud = latitude;
-                            longitud = longitude;
-                            Log.e("REOS","LeadClientesView.displayDialogMap.latitud:"+latitud);
-                            Log.e("REOS","LeadClientesView.displayDialogMap.longitud:"+longitud);
-                            LatLng latLng = new LatLng(latitud, longitud);
-                            myGoogleMap.clear();
-                            myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Potential client").draggable(true));
+
+            dialog.setContentView(R.layout.layout_mapa_dialog);
+
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            final TextView editTextAddress = dialog.findViewById(R.id.editTextAddressDialog);
+            final TextView editTextAddressReference = dialog.findViewById(R.id.editTextAddressReferenceDialog);
+
+            //editTextAddress.setText((direccion.equals("Sin dirección") ? "" : direccion));
+            //editTextAddressReference.setText((referencia.equals("Sin referencias") ? "" : referencia));
+            editTextAddress.setText(nombrecliente);
+            editTextAddressReference.setText(domebarque);
+
+            ImageView image = dialog.findViewById(R.id.image);
+            image.setImageResource(R.mipmap.logo_circulo);
+            image.setBackground(new ColorDrawable(Color.TRANSPARENT));
+
+            final Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
+            final Button dialogButtonExit = dialog.findViewById(R.id.dialogButtonCancel);
+            mapView = dialog.findViewById(R.id.mapView);
+            getLocation();
+            dialogButton.setText("Add");
+            dialogButtonExit.setText("Cancel");
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            if (mapView != null) {
+
+                LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+                if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+                    mapView.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(final GoogleMap googleMap) {
+
+                            myGoogleMap = googleMap;
+
+                            if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                    ContextCompat.checkSelfPermission(getActivity().getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
 
-                            if (status) {
-                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
-                                status = false;
-                            } else {
-                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                //myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-                            }
+                                myGoogleMap.setMyLocationEnabled(true);
+                                myGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+                                //latitud = location.getLatitude();
+                                //longitud = location.getLongitude();
+                                //latitud = latitude;
+                                //longitud = longitude;
+                                Log.e("REOS", "LeadClientesView.displayDialogMap.latitud:" + latitude);
+                                Log.e("REOS", "LeadClientesView.displayDialogMap.longitud:" + longitude);
+                                LatLng latLng = new LatLng(latitude, longitude);
+                                myGoogleMap.clear();
+                                myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Potential client").draggable(true));
+
+
+                                if (status) {
+                                    myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+                                    status = false;
+                                } else {
+                                    myGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                    //myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                                }
 
                             /*locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
                                     new LocationListener() {
@@ -683,15 +783,14 @@ public class LeadClientesView extends Fragment {
                             );*/
 
 
+                                dialog.show();
 
-                            dialog.show();
+                            } else {
+                                Toast.makeText(getActivity().getApplicationContext(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
+                                getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+                            }
 
-                        }else{
-                            Toast.makeText( getActivity().getApplicationContext(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
-                            getActivity().requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION },100);
-                        }
-
-                        ////////////////////////////////////////////////////////////////////////////////////
+                            ////////////////////////////////////////////////////////////////////////////////////
 
 
                 /*
@@ -743,30 +842,37 @@ public class LeadClientesView extends Fragment {
                     googleMap.getUiSettings().setZoomControlsEnabled(true);
                 }
                 */
-                    }
-                });
+                        }
+                    });
 
 
-            } else {
-                Toast.makeText( getActivity(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
-                getActivity().requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION },100);
+                } else {
+                    Toast.makeText(getActivity(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
+                    getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+                }
+
             }
+            ////////////////////////////////////////////////////////////////////////////////////////////
 
+            dialogButtonExit.setOnClickListener(v -> {
+                // mapView=null;
+                dialog.dismiss();
+            });
+
+            dialogButton.setOnClickListener(v -> {
+                editTextCoordenates.setText(latitude + "," + longitude);
+                direccion = editTextAddress.getText().toString();
+                referencia = editTextAddressReference.getText().toString();
+                dialog.dismiss();
+
+            });
+            /*MapsInitializer.initialize(getActivity());
+            mapView.onCreate(dialog.onSaveInstanceState());
+            mapView.onResume();*/
+        }catch (Exception e)
+        {
+            Toast.makeText(getContext(), "No se pudo abrir el Mapa error: "+e.toString(), Toast.LENGTH_SHORT).show();
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////
-
-        dialogButtonExit.setOnClickListener(v -> {
-            // mapView=null;
-            dialog.dismiss();
-        });
-
-        dialogButton.setOnClickListener(v -> {
-            editTextCoordenates.setText(latitud + "," + longitud);
-            direccion=editTextAddress.getText().toString();
-            referencia=editTextAddressReference.getText().toString();
-            dialog.dismiss();
-
-        });
     }
 
     @Override

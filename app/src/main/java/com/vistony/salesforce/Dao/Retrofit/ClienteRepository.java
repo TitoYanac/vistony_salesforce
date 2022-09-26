@@ -54,7 +54,7 @@ public class ClienteRepository extends ViewModel {
         if(ObjUsuario.perfil.equals("CHOFER"))
         {
             Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.perfil_id:"+ObjUsuario.perfil);
-            call = Config.getClient().create(Api.class).getClientDelivery(Imei,Fecha);
+            call = Config.getClentSesionStart().create(Api.class).getClientDelivery(Imei,Fecha);
             Log.e("REOS","ClienteRepository.getCustomers-SesionEntity.call:"+call.toString());
         }
         else

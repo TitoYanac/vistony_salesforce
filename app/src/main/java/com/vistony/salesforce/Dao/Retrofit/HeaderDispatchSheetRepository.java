@@ -36,7 +36,7 @@ public class HeaderDispatchSheetRepository extends ViewModel {
         status= new MutableLiveData<>();
         //if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
         //{
-            Config.getClient().create(Api.class)
+            Config.getClentSesionStart().create(Api.class)
                     .getHeaderDispatchSheet(
                             Imei
                             , FechaDespacho
@@ -95,7 +95,7 @@ public class HeaderDispatchSheetRepository extends ViewModel {
             ,Context context
     ){
         status= new MutableLiveData<>();
-        Config.getClient().create(Api.class)
+        Config.getClientLogin().create(Api.class)
                 .getHeaderDispatchSheetSalesPerson(
                         Imei
                         , FechaDespacho

@@ -99,7 +99,7 @@ public class StatusDispatchSQLite {
             Cursor fila = bd.rawQuery(
                     "Select  control_id from statusdispatch" +
                             " where (chkrecibido='N' or chkrecibido='0') " +
-                            " group by control_id "
+                            " group by control_id LIMIT 3 "
                     ,null);
 
             while (fila.moveToNext())
@@ -131,7 +131,7 @@ public class StatusDispatchSQLite {
         try {
             Cursor fila = bd.rawQuery(
                     "Select  * from statusdispatch" +
-                            " where (chkrecibido='N' or chkrecibido='0') and  control_id='"+control_id+"' "
+                            " where (chkrecibido='N' or chkrecibido='0') and  control_id='"+control_id+"' LIMIT 3 "
                     ,null);
 
             while (fila.moveToNext())
@@ -149,12 +149,23 @@ public class StatusDispatchSQLite {
                 detailStatusDispatchEntity.setComments(fila.getString(9));
                 encoded=imageCameraController.getBASE64(fila.getString(10));
                 encoded2=imageCameraController.getBASE64(fila.getString(13));
-                String Base64PhotoLocal = encoded.replace("\n", "");
-                String Base64PhotoLocal2 = Base64PhotoLocal.replace("'\u003d'", "=");
-                String Base64PhotoGuia = encoded2.replace("\n", "");
-                String Base64PhotoGuia2 = Base64PhotoGuia.replace("'\u003d'", "=");
-                detailStatusDispatchEntity.setPhotoStore(Base64PhotoLocal2);
-                detailStatusDispatchEntity.setPhotoDocument(Base64PhotoGuia2);
+
+                if(encoded.equals(""))
+                {
+                    detailStatusDispatchEntity.setPhotoStore(encoded);
+                }else {
+                    String Base64PhotoLocal = encoded.replace("\n", "");
+                    String Base64PhotoLocal2 = Base64PhotoLocal.replace("'\u003d'", "=");
+                    detailStatusDispatchEntity.setPhotoStore(Base64PhotoLocal2);
+                }
+                if(encoded2.equals(""))
+                {
+                    detailStatusDispatchEntity.setPhotoDocument(encoded2);
+                }else {
+                    String Base64PhotoGuia = encoded2.replace("\n", "");
+                    String Base64PhotoGuia2 = Base64PhotoGuia.replace("'\u003d'", "=");
+                    detailStatusDispatchEntity.setPhotoDocument(Base64PhotoGuia2);
+                }
                 //detailStatusDispatchEntity.setDocEntry(fila.getString(21));
                 detailStatusDispatchEntity.setLineId(fila.getString(22));
                 detailStatusDispatchEntity.setDeliveryNotes(fila.getString(7));
@@ -435,7 +446,7 @@ public class StatusDispatchSQLite {
             Cursor fila = bd.rawQuery(
                     "Select  control_id from statusdispatch" +
                             " where (chk_timestatus='N' or chk_timestatus='0') and  checkintime<>'0' "+
-                            " group by control_id "
+                            " group by control_id LIMIT 3"
                     ,null);
 
             while (fila.moveToNext())
@@ -468,7 +479,7 @@ public class StatusDispatchSQLite {
             Cursor fila = bd.rawQuery(
                     "Select  * from statusdispatch" +
                             " where (chk_timestatus='N' or chk_timestatus='0') and  checkintime<>'0' "+
-                            "and  control_id='"+control_id+"' "
+                            "and  control_id='"+control_id+"' LIMIT 3"
                     ,null);
 
             while (fila.moveToNext())

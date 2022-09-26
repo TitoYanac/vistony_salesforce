@@ -10,8 +10,10 @@
         android:id="@+id/imageViewPhoto"
         android:layout_width="wrap_content"
         android:layout_height="235dp"
-        android:scaleType="centerCrop"
+        android:scaleType="centerInside"
+
         android:src="@drawable/portail"
+
         android:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

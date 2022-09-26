@@ -35,13 +35,20 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
     public String lineofbussiness;
     public String terminopago;
     public String contado;
+    private String latitud;
+    private String longitud;
+    private String control_id;
+    private String item_id;
+    private String addresscode;
+    private String chkgeolocation;
 
     public ListaConsClienteCabeceraEntity(
             String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id,
             String impuesto_id, String impuesto, String rucdni, String categoria, String linea_credito,String linea_credito_usado, String terminopago_id,
             String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id,
             String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta,String lastpurchase,String lineofbussiness
-            ,String terminopago,String contado
+            ,String terminopago,String contado,String latitud, String longitud,
+            String control_id,String item_id,String addresscode,String chkgeolocation
     ) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
@@ -75,10 +82,65 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
         this.lineofbussiness = lineofbussiness;
         this.terminopago = terminopago;
         this.contado = contado;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.control_id = control_id ;
+        this.item_id = item_id;
+        this.addresscode = addresscode;
+        this.chkgeolocation = chkgeolocation;
+
     }
 
     public ListaConsClienteCabeceraEntity() {
 
+    }
+
+    public String getChkgeolocation() {
+        return chkgeolocation;
+    }
+
+    public void setChkgeolocation(String chkgeolocation) {
+        this.chkgeolocation = chkgeolocation;
+    }
+
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
+    }
+
+    public String getControl_id() {
+        return control_id;
+    }
+
+    public void setControl_id(String control_id) {
+        this.control_id = control_id;
+    }
+
+    public String getItem_id() {
+        return item_id;
+    }
+
+    public void setItem_id(String item_id) {
+        this.item_id = item_id;
+    }
+
+    public String getAddresscode() {
+        return addresscode;
+    }
+
+    public void setAddresscode(String addresscode) {
+        this.addresscode = addresscode;
     }
 
     public String getTerminopago() {

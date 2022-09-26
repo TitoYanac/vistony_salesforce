@@ -26,7 +26,8 @@ public class Config {
 
         String baseUrl=null;
         //if(BuildConfig.FLAVOR.equals("peru"))
-        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
+        //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
+        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
         {
             baseUrl = "https://salesforce.vistony.pe";
         }else {
@@ -52,8 +53,8 @@ public class Config {
                 //-----------------------
                 break;
             case "bolivia":
-                puerto = ":8052";
-                //puerto = "";
+                //puerto = ":8052";
+                puerto = "";
                 break;
             case "ecuador":
                 puerto = ":8050";
@@ -100,7 +101,8 @@ public class Config {
         String baseUrl=null;
         //if(BuildConfig.FLAVOR.equals("peru"))
         //if(BuildConfig.FLAVOR.equals("peru"))
-        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
+        //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
+        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
         {
             baseUrl = "https://salesforce.vistony.pe";
         }else {
@@ -126,8 +128,8 @@ public class Config {
                 //-----------------------
                 break;
             case "bolivia":
-                puerto = ":8052";
-                //puerto = "";
+                //puerto = ":8052";
+                puerto = "";
                 break;
             case "ecuador":
                 puerto = ":8050";
@@ -150,6 +152,80 @@ public class Config {
                         .connectTimeout(30, TimeUnit.SECONDS)
                         .writeTimeout(30, TimeUnit.SECONDS)
                         .readTimeout(30, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .proxy(Proxy.NO_PROXY)
+                        .build();
+            }
+
+            if(retrofit==null){
+                retrofit = new Retrofit.Builder()
+                        .baseUrl( baseUrl+puerto)
+                        .addConverterFactory(GsonConverterFactory.create()).client(client)
+                        .build();
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("REOS","Config-getClient-e:"+e.toString());
+        }
+        return retrofit;
+    }
+
+    public static Retrofit getClentSesionStart() {
+
+        String baseUrl=null;
+        //if(BuildConfig.FLAVOR.equals("peru"))
+        //if(BuildConfig.FLAVOR.equals("peru"))
+        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
+        {
+            baseUrl = "https://salesforce.vistony.pe";
+        }else {
+            baseUrl = "http://salesforce.vistony.com";
+        }
+        //Produccion-------------------------------
+        //String baseUrl = "http://salesforce.vistony.com";
+        //------------------------------------------
+        //Pruebas QA--------------- Nueva Produccion
+        //String baseUrl = "https://salesforce.vistony.pe";
+        //------------------
+        //String baseUrl = "http://200.107.154.233";
+
+        String puerto = "";
+        switch (BuildConfig.FLAVOR) {
+            case "chile":
+                //puerto = ":8054";
+                //Produccion----------
+                //puerto = ":8054";
+                //--------------------
+                //Pruebas QA------------- Nueva Produccion
+                puerto = "";
+                //-----------------------
+                break;
+            case "bolivia":
+                //puerto = ":8052";
+                puerto = "";
+                break;
+            case "ecuador":
+                puerto = ":8050";
+                break;
+            case "peru":
+                //Produccion----------
+                //puerto = ":8001";
+                //--------------------
+                //Pruebas QA------------- Nueva Produccion
+                puerto = "";
+                //-----------------------
+                break;
+            case "paraguay":
+                puerto = ":8051";
+                break;
+        }
+        try{
+            if(client==null) {
+                client = new OkHttpClient. Builder()
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .writeTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(15, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
                         .proxy(Proxy.NO_PROXY)
                         .build();

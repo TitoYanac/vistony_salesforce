@@ -16,6 +16,33 @@ public class VisitSectionEntity {
     private String timefin;
     private String chkrecibido;
     private String idref;
+    private String cardname;
+    private String idrefitemid;
+    private String legalnumberref;
+
+    public String getLegalnumberref() {
+        return legalnumberref;
+    }
+
+    public void setLegalnumberref(String legalnumberref) {
+        this.legalnumberref = legalnumberref;
+    }
+
+    public String getIdrefitemid() {
+        return idrefitemid;
+    }
+
+    public void setIdrefitemid(String idrefitemid) {
+        this.idrefitemid = idrefitemid;
+    }
+
+    public String getCardname() {
+        return cardname;
+    }
+
+    public void setCardname(String cardname) {
+        this.cardname = cardname;
+    }
 
     public String getIdref() {
         return idref;

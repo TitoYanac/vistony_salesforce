@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Entity.Adapters.DireccionCliente;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.LeadAddressEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.LeadEntity;
 import com.vistony.salesforce.Entity.SQLite.DireccionClienteSQLiteEntity;
@@ -18,10 +19,11 @@ public class LeadSQLite {
     SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<DireccionClienteSQLiteEntity> listaDireccionClienteSQLiteEntity;
-
+    Context context;
     public LeadSQLite(Context context)
     {
         sqliteController = new SqliteController(context);
+        this.context=context;
     }
     private void abrir(){
         Log.i("SQLite", "Se abre conexion a la base de datos desde " + this.getClass().getName());
@@ -165,7 +167,7 @@ public class LeadSQLite {
         try {
             abrir();
 
-            Cursor fila = bd.rawQuery("SELECT  * FROM lead WHERE recibido_api =0 and type='leadUpdateClientCensus' LIMIT 5 ;", null);
+            Cursor fila = bd.rawQuery("SELECT  cardcode,domembarque_id,IFNULL(latitud,'0') AS latitud ,IFNULL(longitud,'0') AS longitud,foto FROM lead WHERE recibido_api =0 and type='leadUpdateClientCensus' LIMIT 3 ;", null);
             ArrayList<LeadAddressEntity> leads = new  ArrayList<LeadAddressEntity>();
 
             if (fila.moveToFirst()) {
@@ -174,7 +176,14 @@ public class LeadSQLite {
                     ImageCameraController imageCameraController=new ImageCameraController();
                     LeadAddressEntity leadAddressEntity=new LeadAddressEntity();
                     leadAddressEntity.setCardCode(fila.getString(fila.getColumnIndex("cardcode")));
-                    leadAddressEntity.setAddressCode(fila.getString(fila.getColumnIndex("addresscode")));
+                    DireccionSQLite direccionSQLite=new DireccionSQLite(context);
+                    ArrayList<DireccionCliente> listDireccionCliente=new ArrayList<>();
+                    listDireccionCliente=direccionSQLite.getListAddressOV(fila.getString(fila.getColumnIndex("cardcode")),fila.getString(fila.getColumnIndex("domembarque_id")));
+                    for(int i= 0;i<listDireccionCliente.size();i++)
+                    {
+                        leadAddressEntity.setAddressCode(listDireccionCliente.get(i).getAddresscode());
+                    }
+                    //leadAddressEntity.setAddressCode(fila.getString(fila.getColumnIndex("addresscode")));
                     leadAddressEntity.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
                     leadAddressEntity.setLongitude(fila.getString(fila.getColumnIndex("longitud")));
                     encoded=imageCameraController.getBASE64(fila.getString(fila.getColumnIndex("foto")));
@@ -197,12 +206,20 @@ public class LeadSQLite {
 
     public int UpdateResultLeadAddress (String cardcode,String addresscode,String message){
         int status=0;
+        String domembarque_id="";
+        DireccionSQLite direccionSQLite=new DireccionSQLite(context);
+        ArrayList<DireccionCliente> listDireccionCliente=new ArrayList<>();
+        listDireccionCliente=direccionSQLite.getListAddress(cardcode,addresscode);
+        for(int i=0;i<listDireccionCliente.size();i++)
+        {
+            domembarque_id=listDireccionCliente.get(i).getDomembarque_id();
+        }
         try {
             abrir();
             ContentValues registro = new ContentValues();
             registro.put("recibido_api","1");
             registro.put("messageserver",message);
-            bd.update("lead",registro,"cardcode=? and addresscode=?",new String[]{cardcode,addresscode});
+            bd.update("lead",registro,"cardcode=? and domembarque_id=?",new String[]{cardcode,domembarque_id});
             status=1;
 
         }catch (Exception e){

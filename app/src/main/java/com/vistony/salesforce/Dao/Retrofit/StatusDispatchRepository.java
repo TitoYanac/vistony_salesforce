@@ -2,6 +2,7 @@ package com.vistony.salesforce.Dao.Retrofit;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,7 +11,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.StatusDispatchSQLite;
+import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.DetailStatusDispatchEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HeaderStatusDispatchEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
@@ -18,9 +21,11 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.StatusDispatchEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HeaderStatusDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricStatusDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.StatusDispatchEntityResponse;
+import com.vistony.salesforce.View.BuscarClienteView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -58,24 +63,29 @@ public class StatusDispatchRepository  extends ViewModel {
         return ListHistoricStatusDispatchEntity;
     }
 
-    public MutableLiveData<String> statusDispatchSend(Context context){
+    //public MutableLiveData<String> statusDispatchSend(Context context){
+    public MutableLiveData<String> statusDispatchSend(Context context,Executor executor){
         MutableLiveData<String> temp=new MutableLiveData<String>();
-
-        sendStatusDispatch(context, new VisitCallback(){
-            @Override
-            public void onResponseSap(ArrayList<String> data) {
-                if(data==null){
-                    temp.setValue("No hay Estados de Despacho pendientes de Enviar");
-                }else{
-                    temp.setValue(data.get(0));
+        try {
+            sendStatusDispatch(context, new VisitCallback() {
+                @Override
+                public void onResponseSap(ArrayList<String> data) {
+                    if (data == null) {
+                        temp.postValue("No hay Estados de Despacho pendientes de Enviar");
+                    } else {
+                        temp.postValue(data.get(0));
+                    }
                 }
-            }
-            @Override
-            public void onResponseErrorSap(String response) {
-                temp.setValue(response);
-            }
-        });
 
+                @Override
+                public void onResponseErrorSap(String response) {
+                    temp.postValue(response);
+                }
+            });
+        }catch (Exception e)
+        {
+            Toast.makeText(context, "Error en Proceso de Envio de Despacho - Error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
         return temp;
     }
 
@@ -93,8 +103,8 @@ public class StatusDispatchRepository  extends ViewModel {
             json = "{ \"Dispatch\":" + json + "}";
         }
 
-        /*Log.e("REOS", "StatusDispatchRepository-sendStatusDispatch-json"+json);
-        if(listStatusDispatch!=null && listStatusDispatch.size()>0)
+        Log.e("REOS", "StatusDispatchRepository-sendStatusDispatch-json"+json);
+        /*if(listStatusDispatch!=null && listStatusDispatch.size()>0)
         {
             statusDispatchSQLite.UpdatePruebaJSON(json, listStatusDispatch.get(0).getDetails().get(0).getEntrega_id());
         }*/
@@ -143,23 +153,30 @@ public class StatusDispatchRepository  extends ViewModel {
         }
     }
 
-    public MutableLiveData<String> statusDispatchSendTime(Context context){
+    public MutableLiveData<String> statusDispatchSendTime(Context context,Executor executor){
         MutableLiveData<String> temp=new MutableLiveData<String>();
-
-        sendStatusDispatchTime(context, new VisitCallback(){
-            @Override
-            public void onResponseSap(ArrayList<String> data) {
-                if(data==null){
-                    temp.setValue("No hay Estados de Despacho con Tiempo pendientes de Enviar");
-                }else{
-                    temp.setValue(data.get(0));
+        try {
+        executor.execute(() -> {
+            sendStatusDispatchTime(context, new VisitCallback() {
+                @Override
+                public void onResponseSap(ArrayList<String> data) {
+                    if (data == null) {
+                        temp.postValue("No hay Estados de Despacho con Tiempo pendientes de Enviar");
+                    } else {
+                        temp.postValue(data.get(0));
+                    }
                 }
-            }
-            @Override
-            public void onResponseErrorSap(String response) {
-                temp.setValue(response);
-            }
+
+                @Override
+                public void onResponseErrorSap(String response) {
+                    temp.postValue(response);
+                }
+            });
         });
+        }catch (Exception e)
+        {
+            Toast.makeText(context, "Error en Proceso de Envio de Despacho Hora- Error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
 
         return temp;
     }

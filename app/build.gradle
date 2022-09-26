@@ -85,10 +85,6 @@ android {
         peru{
             applicationIdSuffix ".peru"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"/pe"')
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"pe.get.qa"')
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"pe.get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"pe.post"')
             //QA -------
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
@@ -96,7 +92,7 @@ android {
             buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //---------------------------
-            versionName "2.2.8"
+            versionName "2.2.9"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -107,8 +103,12 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"/bo"')
             //buildConfigField('String' , 'BASE_ENDPOINT', '"bo.get"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"bo.post"')
-            buildConfigField('String' , 'BASE_ENDPOINT', '"bo.get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"bo.post"')
+            //----------Ambiente 113
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"bo.get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"bo.post"')
+            //----------Ambiente Server20
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo"')
             versionName "1.0.8"
             manifestPlaceholders = [country:"Bolivia"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"BO"')
@@ -123,6 +123,21 @@ android {
             versionName "1.0.0"
             manifestPlaceholders = [country:"Paraguay"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PY"')
+            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
+        }
+        perurofalab{
+            applicationIdSuffix ".perurofalab"
+            buildConfigField('String' , 'IMEI_DEFAULT', '""')
+            //QA -------
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            //Produccion------
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            //---------------------------
+            versionName "2.2.9"
+            manifestPlaceholders = [country:"Perú"]
+            buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
     }

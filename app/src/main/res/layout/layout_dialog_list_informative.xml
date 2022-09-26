@@ -60,7 +60,7 @@
             <ListView
                 android:id="@+id/lv_pending_collection"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
 
                 android:background="@drawable/custom_background_alert"
                 android:divider="@android:color/darker_gray"

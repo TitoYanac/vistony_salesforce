@@ -20,7 +20,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 17;
+    private static final int VERSION = 18;
 
 
     public SqliteController(Context context){
@@ -112,7 +112,7 @@ public class SqliteController extends SQLiteOpenHelper {
 
 
             //Version 12  --Tramo de Visita
-            db.execSQL("CREATE TABLE visitsection (compania_id text,fuerzatrabajo_id text,usuario_id text,cliente_id TEXT,domembarque_id TEXT,latitudini TEXT,longitudini TEXT,dateini TEXT,timeini TEXT,latitudfin TEXT,longitudfin TEXT,datefin TEXT,timefin TEXT,chkrecibido TEXT,idref TEXT)");
+            db.execSQL("CREATE TABLE visitsection (compania_id text,fuerzatrabajo_id text,usuario_id text,cliente_id TEXT,domembarque_id TEXT,latitudini TEXT,longitudini TEXT,dateini TEXT,timeini TEXT,latitudfin TEXT,longitudfin TEXT,datefin TEXT,timefin TEXT,chkrecibido TEXT,idref TEXT,idrefitemid TEXT,legalnumberref TEXT)");
 
             //Version 13  -- Distribution Second Phase
             db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
@@ -432,6 +432,11 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE usuario ADD COLUMN census TEXT");
             db.execSQL("ALTER TABLE typedispatch ADD COLUMN statusupdate TEXT");
 
+
+        }
+        if(oldVersion==17&&newVersion==18) {
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idrefitemid TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN legalnumberref TEXT");
 
         }
 

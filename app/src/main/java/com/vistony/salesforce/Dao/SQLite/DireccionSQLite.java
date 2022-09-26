@@ -148,7 +148,7 @@ public class DireccionSQLite {
 
         try {
 
-            Cursor fila = sqlite.rawQuery("SELECT DISTINCT cliente_id,domembarque_id,direccion,zona_id,zona,nombrefuerzatrabajo FROM direccioncliente WHERE cliente_id=? and domembarque_id=?", new String[]{cliente_id,domembarque_id});
+            Cursor fila = sqlite.rawQuery("SELECT DISTINCT cliente_id,domembarque_id,direccion,zona_id,zona,nombrefuerzatrabajo,addresscode FROM direccioncliente WHERE cliente_id=? and domembarque_id=?", new String[]{cliente_id,domembarque_id});
 
             if (fila.moveToFirst()) {
                 if (fila.moveToFirst()) {
@@ -160,6 +160,7 @@ public class DireccionSQLite {
                         ObjDCliente.setZona_id(fila.getString(fila.getColumnIndex("zona_id")));
                         ObjDCliente.setZona(fila.getString(fila.getColumnIndex("zona")));
                         ObjDCliente.setNombrefuerzatrabajo(fila.getString(fila.getColumnIndex("nombrefuerzatrabajo")));
+                        ObjDCliente.setAddresscode(fila.getString(fila.getColumnIndex("addresscode")));
 
                         LDCliente.add(ObjDCliente);
                     } while (fila.moveToNext());
@@ -194,6 +195,40 @@ public class DireccionSQLite {
         }
 
         return resultado;
+    }
+
+    public ArrayList<DireccionCliente> getListAddress(String cliente_id,String addresscode){
+        ArrayList<DireccionCliente> LDCliente = new ArrayList<>();
+
+        SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+
+        try {
+
+            Cursor fila = sqlite.rawQuery("SELECT DISTINCT cliente_id,domembarque_id,direccion,zona_id,zona,nombrefuerzatrabajo,addresscode FROM direccioncliente WHERE cliente_id=? and addresscode=?", new String[]{cliente_id,addresscode});
+
+            if (fila.moveToFirst()) {
+                if (fila.moveToFirst()) {
+                    do {
+                        DireccionCliente ObjDCliente = new DireccionCliente();
+                        ObjDCliente.setCliente_id(fila.getString(fila.getColumnIndex("cliente_id")));
+                        ObjDCliente.setDomembarque_id(fila.getString(fila.getColumnIndex("domembarque_id")));
+                        ObjDCliente.setDireccion(fila.getString(fila.getColumnIndex("direccion")));
+                        ObjDCliente.setZona_id(fila.getString(fila.getColumnIndex("zona_id")));
+                        ObjDCliente.setZona(fila.getString(fila.getColumnIndex("zona")));
+                        ObjDCliente.setNombrefuerzatrabajo(fila.getString(fila.getColumnIndex("nombrefuerzatrabajo")));
+                        ObjDCliente.setAddresscode(fila.getString(fila.getColumnIndex("addresscode")));
+
+                        LDCliente.add(ObjDCliente);
+                    } while (fila.moveToNext());
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
+
+        return LDCliente;
     }
 
 

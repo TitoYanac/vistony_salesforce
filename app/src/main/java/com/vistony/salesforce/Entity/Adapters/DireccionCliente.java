@@ -8,8 +8,18 @@ public class DireccionCliente {
     public String zona;
     public String nombrefuerzatrabajo;
     public String fuerzatrabajo_id;
+    public String addresscode;
 
-    public DireccionCliente(String cliente_id, String domembarque_id, String direccion, String zona_id, String zona, String nombrefuerzatrabajo, String fuerzatrabajo_id) {
+    public DireccionCliente(
+            String cliente_id,
+            String domembarque_id,
+            String direccion,
+            String zona_id,
+            String zona,
+            String nombrefuerzatrabajo,
+            String fuerzatrabajo_id,
+            String addresscode
+    ) {
         this.cliente_id = cliente_id;
         this.domembarque_id = domembarque_id;
         this.direccion = direccion;
@@ -17,9 +27,18 @@ public class DireccionCliente {
         this.zona = zona;
         this.nombrefuerzatrabajo = nombrefuerzatrabajo;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
+        this.addresscode = addresscode;
     }
 
     public DireccionCliente() {
+    }
+
+    public String getAddresscode() {
+        return addresscode;
+    }
+
+    public void setAddresscode(String addresscode) {
+        this.addresscode = addresscode;
     }
 
     public String getFuerzatrabajo_id() {

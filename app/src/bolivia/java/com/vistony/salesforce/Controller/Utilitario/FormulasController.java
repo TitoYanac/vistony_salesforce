@@ -1108,6 +1108,8 @@ public class FormulasController {
                         listaClienteCabeceraEntities.get(i).getContado()
                         ,listaClienteCabeceraEntities.get(i).getLatitud()
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
+                        ,listaClienteCabeceraEntities.get(i).getAddresscode()
+
                 );
             }
 

@@ -2,6 +2,7 @@ package com.vistony.salesforce.Dao.Retrofit;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -24,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -112,23 +114,30 @@ public class LeadClienteViewModel extends ViewModel {
         );
     }
 
-    public MutableLiveData<String> sendGeolocationClient (Context context,String imei){
+    public MutableLiveData<String> sendGeolocationClient (Context context, String imei, Executor executor){
         MutableLiveData<String> temp=new MutableLiveData<String>();
 
+        try
+        {
         sendGeolocationClient(imei,context, new VisitCallback(){
             @Override
             public void onResponseSap(ArrayList<String> data) {
                 if(data==null){
-                    temp.setValue(("No hay Geolocalizacion de Clientes pendientes de enviar"));
+                    temp.postValue(("No hay Geolocalizacion de Clientes pendientes de enviar"));
                 }else{
-                    temp.setValue(data.get(0));
+                    temp.postValue(data.get(0));
                 }
             }
             @Override
             public void onResponseErrorSap(String response) {
-                temp.setValue(response);
+                temp.postValue(response);
             }
         });
+
+        }catch (Exception e)
+        {
+            Toast.makeText(context, "Error en Proceso de Envio de Geolocalizacion- Error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
 
         return temp;
     }
@@ -145,8 +154,8 @@ public class LeadClienteViewModel extends ViewModel {
             json = "{ \"Token\":\"" + imei + "\",\"Addresses\":" + json + "}";
         }
 
-        /*Log.e("REOS", "LeadClienteViewModel-sendGeolocationClient-json"+json);
-        if(listLeadAddressEntity!=null && listLeadAddressEntity.size()>0)
+        Log.e("REOS", "LeadClienteViewModel-sendGeolocationClient-json"+json);
+        /*if(listLeadAddressEntity!=null && listLeadAddressEntity.size()>0)
         {
             leadSQLite.UpdateLeadJSON(json, listLeadAddressEntity.get(0).getCardCode());
         }*/

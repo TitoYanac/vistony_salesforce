@@ -2017,9 +2017,7 @@ public class MenuView extends AppCompatActivity
                     Bitmap bitmap2=null;
                     try {
                         bitmap2 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.fromFile(file));
-                    } catch (IOException e){
-                        e.printStackTrace();
-                    }
+
 
                     //try {
 
@@ -2042,6 +2040,11 @@ public class MenuView extends AppCompatActivity
                     {
                         Log.e("REOS","MenuView-onActivityResult-error-e: "+e.toString());
                     }*/
+                    } catch (IOException e){
+                        e.printStackTrace();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                     break;
                 case 21:  //deposito tomar foto
 
@@ -2050,9 +2053,7 @@ public class MenuView extends AppCompatActivity
                     Bitmap bitmap21=null;
                     try {
                         bitmap21 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.fromFile(file1));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
 
                     ImageCameraController imageCameraController2 = new ImageCameraController();
                     imageCameraController2.SaveImage (this,bitmap21);
@@ -2082,6 +2083,11 @@ public class MenuView extends AppCompatActivity
                     SesionEntity.imagen = "DEP";
 
                     Toast.makeText(this, "Imagen guardada correctamente...", Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 155:
                     Log.e("jpcm", "ingreso 155 add foto");
@@ -2094,9 +2100,7 @@ public class MenuView extends AppCompatActivity
                     Bitmap bitmap211=null;
                     try {
                         bitmap211 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.fromFile(sourceFile));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+
 
 
                     SesionEntity.imagen = "DEP";
@@ -2115,15 +2119,19 @@ public class MenuView extends AppCompatActivity
                     CobranzaCabeceraView.agregar_foto_deposito.setEnabled(false);
 
                     Drawable drawable3 = CobranzaCabeceraView.menu_variable.findItem(R.id.guardar_deposito).getIcon();
-                    drawable = DrawableCompat.wrap(drawable3);
-                    DrawableCompat.setTint(drawable, getResources().getColor(R.color.white));
+                        drawable3 = DrawableCompat.wrap(drawable3);
+                    DrawableCompat.setTint(drawable3, getResources().getColor(R.color.white));
 
                     Drawable drawable4 = CobranzaCabeceraView.menu_variable.findItem(R.id.agregar_foto_deposito).getIcon();
-                    drawable2 = DrawableCompat.wrap(drawable4);
-                    DrawableCompat.setTint(drawable2, getResources().getColor(R.color.Black));
+                        drawable4 = DrawableCompat.wrap(drawable4);
+                    DrawableCompat.setTint(drawable4, getResources().getColor(R.color.Black));
 
                     Toast.makeText(this, "Imagen adjuntada...", Toast.LENGTH_SHORT).show();
-
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                     break;
                case 10000:
@@ -2280,12 +2288,14 @@ public class MenuView extends AppCompatActivity
 
     @Override
     public void onResume() {
+        Log.e("REOS","MenuView-onResume");
         super.onResume();
         registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
     public void onPause() {
+        Log.e("REOS","MenuView-onPause");
         unregisterReceiver(networkStateReceiver);
         super.onPause();
     }

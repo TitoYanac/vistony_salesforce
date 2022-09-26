@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -42,6 +43,9 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.lowagie.text.DocumentException;
+import com.vistony.salesforce.AppExecutors;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
@@ -84,6 +88,8 @@ public class StatusDispatchDialog extends DialogFragment {
     public static String mCurrentPhotoPathG="",mCurrentPhotoPathL="";
     String Entrega_id="",Entrega="";
     File filelocal,fileguia;
+    private static final int MAX_BITMAP_SIZE = 100 * 1024 * 1024; // 100 MB
+
     public StatusDispatchDialog(String Client_id,String cliente,String control_id,String item_id,String address){
     this.cliente_id=Client_id;
     this.cliente=cliente;
@@ -207,12 +213,32 @@ public class StatusDispatchDialog extends DialogFragment {
                     bitmap2 = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file));
                     ImageCameraController imageCameraController = new ImageCameraController();
                     filelocal= imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega+"_"+getDate(),"L");
+                    imgBitmap=bitmap2;
+                    //Bitmap imgBitmapImageView;
+                    int bitmapSize = imgBitmap.getByteCount();
+                    if (bitmapSize > MAX_BITMAP_SIZE) {
+                        throw new RuntimeException(
+                                "Canvas: trying to draw too large(" + bitmapSize + "bytes) bitmap.");
+                    }else {
+                        //imageViewPhoto.setImageBitmap(imgBitmap);
+                        Convert.resizeImage(imageViewPhoto,imgBitmap,getActivity());
+                    }
 
-                } catch (IOException e){
+                    /*byte[] byteArray,byteArray2;
+                    byteArray=imageCameraController.getImageSDtoByte(getContext(),filelocal.toString());
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                    imageViewPhoto.setImageBitmap(bitmap);*/
+                    /*Bundle extras = result.getData().getExtras();
+                    imgBitmapImageView = (Bitmap) extras.get("data");
+                    imageViewPhoto.setImageBitmap(imgBitmapImageView);*/
+                } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
                 }
-                imgBitmap=bitmap2;
-                imageViewPhoto.setImageBitmap(bitmap2);
+
 
                 Resources res = getContext().getResources(); // need this to fetch the drawable
                 Drawable draw = res.getDrawable( R.drawable.ic_baseline_flip_camera_ios_24);
@@ -239,13 +265,33 @@ public class StatusDispatchDialog extends DialogFragment {
                     fileguia=imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega+"_"+getDate(),"G");
 
 
+                    imgBitmap2=bitmap2;
+                    int bitmapSize = imgBitmap.getByteCount();
+                    if (bitmapSize > MAX_BITMAP_SIZE) {
+                        throw new RuntimeException(
+                                "Canvas: trying to draw too large(" + bitmapSize + "bytes) bitmap.");
+                    }else {
+                        //imageViewPhoto2.setImageBitmap(imgBitmap2);
+                        Convert.resizeImage(imageViewPhoto2,imgBitmap2,getActivity());
+                    }
+                    /*byte[] byteArray,byteArray2;
+                    byteArray=imageCameraController.getImageSDtoByte(getContext(),fileguia.toString());
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                    imageViewPhoto2.setImageBitmap(bitmap);*/
+                    /*BitmapFactory.decodeByteArray()
+                    getImageSDtoByte.
+                    imageViewPhoto2.setImageBitmap(
+                            //decodeSampledBitmapFromResource(getResources(), R.id.myimage, 100, 100));
+                            decodeSampledBitmapFromResource(getResources(), imgBitmap2, 100, 100));*/
 
-
-                } catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
+                    Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
                 }
-                imgBitmap2=bitmap2;
-                imageViewPhoto2.setImageBitmap(bitmap2);
+
 
                 Resources res = getContext().getResources(); // need this to fetch the drawable
                 Drawable draw = res.getDrawable( R.drawable.ic_baseline_flip_camera_ios_24);
@@ -437,26 +483,27 @@ public class StatusDispatchDialog extends DialogFragment {
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String encoded = null,encoded2 = null;
-                if (imgBitmap != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    imgBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
-                    byteArray = stream.toByteArray();
-                    encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    //encoded = new String(byteArray);
-                }
-                if (imgBitmap2 != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    imgBitmap2.compress(Bitmap.CompressFormat.JPEG, 10, stream);
-                    byteArray2 = stream.toByteArray();
-                    encoded2 = Base64.encodeToString(byteArray2, Base64.DEFAULT);
-                    //encoded2 = new String(byteArray2);
-                }
+                try {
 
-                if(imgBitmap != null&&imgBitmap2 != null) {
+                    String encoded = null, encoded2 = null;
+                    if (imgBitmap != null) {
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        imgBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
+                        byteArray = stream.toByteArray();
+                        encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        //encoded = new String(byteArray);
+                    }
+                    if (imgBitmap2 != null) {
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        imgBitmap2.compress(Bitmap.CompressFormat.JPEG, 10, stream);
+                        byteArray2 = stream.toByteArray();
+                        encoded2 = Base64.encodeToString(byteArray2, Base64.DEFAULT);
+                        //encoded2 = new String(byteArray2);
+                    }
 
-                    if(latitude!=0&&longitude!=0)
-                    {
+                    if (imgBitmap != null && imgBitmap2 != null) {
+
+                        if (latitude != 0 && longitude != 0) {
                             SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
                             SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
                             Date date = new Date();
@@ -468,8 +515,7 @@ public class StatusDispatchDialog extends DialogFragment {
                             ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetSQLite = new ArrayList<>();
                             DetailDispatchSheetSQLite detailDispatchSheetSQLite = new DetailDispatchSheetSQLite(getContext());
                             listDetailDispatchSheetSQLite = detailDispatchSheetSQLite.getDetailDispatchSheetforClient(cliente_id);
-                            String entrega_id = "", factura_id = "", entrega = "", factura = "", typedispatch_id = "", typedispatch = "", reasondispatch_id = "", reasondispatch = ""
-                                    ,direccion_id="";
+                            String entrega_id = "", factura_id = "", entrega = "", factura = "", typedispatch_id = "", typedispatch = "", reasondispatch_id = "", reasondispatch = "", direccion_id = "";
                             for (int i = 0; i < listDetailDispatchSheetSQLite.size(); i++) {
                                 if (spn_referral_guide.getSelectedItem().toString().equals(listDetailDispatchSheetSQLite.get(i).getEntrega())) {
                                     entrega_id = listDetailDispatchSheetSQLite.get(i).getEntrega_id();
@@ -483,15 +529,13 @@ public class StatusDispatchDialog extends DialogFragment {
                             String[] tipodespacho = spn_type_dispatch.getSelectedItem().toString().split("-");
                             typedispatch_id = tipodespacho[0];
                             typedispatch = tipodespacho[1];
-                            if(spn_reason_dispatch.getAdapter()!=null)
-                            {
+                            if (spn_reason_dispatch.getAdapter() != null) {
                                 String[] motivodespacho = spn_reason_dispatch.getSelectedItem().toString().split("-");
                                 reasondispatch_id = motivodespacho[0];
                                 reasondispatch = motivodespacho[1];
-                            }
-                            else {
-                                reasondispatch_id="";
-                                reasondispatch="";
+                            } else {
+                                reasondispatch_id = "";
+                                reasondispatch = "";
                             }
                             StatusDispatchEntity statusDispatchEntity = new StatusDispatchEntity();
                             statusDispatchEntity.compania_id = ObjUsuario.compania_id;
@@ -521,62 +565,60 @@ public class StatusDispatchDialog extends DialogFragment {
                             statusDispatchEntity.factura = String.valueOf(factura);
                             statusDispatchEntity.typedispatch = typedispatch;
                             statusDispatchEntity.reasondispatch = reasondispatch;
-                            statusDispatchEntity.DocEntry=control_id;
-                            statusDispatchEntity.LineId=item_id;
-                            statusDispatchEntity.Address=address;
-                            statusDispatchEntity.checkintime="0";
-                            statusDispatchEntity.checkouttime="0";
-                            statusDispatchEntity.chk_timestatus="0";
-                            statusDispatchEntity.fuerzatrabajo=SesionEntity.nombrefuerzadetrabajo;
+                            statusDispatchEntity.DocEntry = control_id;
+                            statusDispatchEntity.LineId = item_id;
+                            statusDispatchEntity.Address = address;
+                            statusDispatchEntity.checkintime = "0";
+                            statusDispatchEntity.checkouttime = "0";
+                            statusDispatchEntity.chk_timestatus = "0";
+                            statusDispatchEntity.fuerzatrabajo = SesionEntity.nombrefuerzadetrabajo;
                             listStatusDispatchEntity.add(statusDispatchEntity);
                             statusDispatchSQLite.addStatusDispatch(listStatusDispatchEntity);
-
+                            AppExecutors executor=new AppExecutors();
                             /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                            statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
-                                Log.e("REOS","statusDispatchRepository-->statusDispatchSend-->resultdata"+data);
+                            //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+                            statusDispatchRepository.statusDispatchSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                                Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
                             });
 
 
                             ////Visitas
-                            FormulasController formulasController=new FormulasController(getContext());
-                            VisitaSQLiteEntity visitaNativa=new VisitaSQLiteEntity();
+                            FormulasController formulasController = new FormulasController(getContext());
+                            VisitaSQLiteEntity visitaNativa = new VisitaSQLiteEntity();
 
                             visitaNativa.setCardCode(cliente_id);
                             visitaNativa.setAddress(direccion_id);
                             visitaNativa.setTerritory("");
-                            visitaNativa.setType("04");
-                            visitaNativa.setObservation("Actualizacion Despacho realizada a la entrega: "+entrega_id);
-                            visitaNativa.setLatitude(""+latitude);
-                            visitaNativa.setLongitude(""+longitude);
+                            visitaNativa.setType("13");
+                            visitaNativa.setObservation("Actualizacion Despacho realizada a la entrega: " + entrega_id);
+                            visitaNativa.setLatitude("" + latitude);
+                            visitaNativa.setLongitude("" + longitude);
                             visitaNativa.setStatusRoute("N");
                             visitaNativa.setMobileID(entrega_id);
                             visitaNativa.setAmount("0");
-                            formulasController.RegistraVisita(visitaNativa,getActivity(),"0");
+                            formulasController.RegistraVisita(visitaNativa, getActivity(), "0");
 
                             Toast.makeText(getContext(), "Despacho Actualizado Correctamente", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
-                    }else
-                    {
-                        Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
-                    }
+                        } else {
+                            Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                        }
 
 
-                }else
-                    {
-                        if(imgBitmap == null&&imgBitmap2 == null)
-                        {
+                    } else {
+                        if (imgBitmap == null && imgBitmap2 == null) {
                             Toast.makeText(getContext(), "Debe tomar Foto de la Guia y el Local!!!", Toast.LENGTH_SHORT).show();
-                        }
-                        else if(imgBitmap == null&&imgBitmap2 != null)
-                        {
+                        } else if (imgBitmap == null && imgBitmap2 != null) {
                             Toast.makeText(getContext(), "Debe tomar Foto del Local!!!", Toast.LENGTH_SHORT).show();
-                        }
-                        else if(imgBitmap != null&&imgBitmap2 == null)
-                        {
+                        } else if (imgBitmap != null && imgBitmap2 == null) {
                             Toast.makeText(getContext(), "Debe tomar Foto de la Guia!!!", Toast.LENGTH_SHORT).show();
                         }
 
                     }
+                }catch (Exception e)
+                {
+                    Toast.makeText(getContext(), "No se pudo grabar el despacho error:"+e.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -616,5 +658,44 @@ public class StatusDispatchDialog extends DialogFragment {
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
 
         return date;
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                         int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res, resId, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(res, resId, options);
+    }
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }

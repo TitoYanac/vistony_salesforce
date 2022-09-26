@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
@@ -22,10 +23,11 @@ public class VisitSectionSQLite {
     SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<VisitSectionEntity> listVisitSection;
-
+    Context context;
     public VisitSectionSQLite(Context context)
     {
         sqliteController = new SqliteController(context);
+        this.context=context;
     }
     public void abrir(){
         Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
@@ -62,7 +64,8 @@ public class VisitSectionSQLite {
             registro.put("timefin",visitsection.get(i).getTimefin());
             registro.put("chkrecibido",visitsection.get(i).getChkrecibido());
             registro.put("idref",visitsection.get(i).getIdref());
-
+            registro.put("idrefitemid",visitsection.get(i).getIdrefitemid());
+            registro.put("legalnumberref",visitsection.get(i).getLegalnumberref());
             bd.insert("visitsection",null,registro);
         }
 
@@ -160,5 +163,37 @@ public class VisitSectionSQLite {
 
         return resultado;
     }
+
+    public ArrayList<VisitSectionEntity> getVisitSectionforDate (String dateini)
+    {
+        listVisitSection = new ArrayList<VisitSectionEntity>();
+        VisitSectionEntity visitSectionEntity;
+
+        try {
+            abrir();
+            Cursor fila = bd.rawQuery(
+                            "Select A.cliente_id,A.domembarque_id,B.nombrecliente,A.idref,A.idrefitemid,A.legalnumberref from visitsection A" +
+                                " left join cliente B ON " +
+                                "A.cliente_id=B.cliente_id" +
+                                " where dateini='" + dateini + "' and datefin = '0' ", null);
+
+            while (fila.moveToNext()) {
+                visitSectionEntity = new VisitSectionEntity();
+                visitSectionEntity.setCliente_id(fila.getString(fila.getColumnIndex("cliente_id")));
+                visitSectionEntity.setDomembarque_id(fila.getString(fila.getColumnIndex("domembarque_id")));
+                visitSectionEntity.setCardname(fila.getString(fila.getColumnIndex("nombrecliente")));
+                visitSectionEntity.setIdref(fila.getString(fila.getColumnIndex("idref")));
+                visitSectionEntity.setIdrefitemid(fila.getString(fila.getColumnIndex("idrefitemid")));
+                visitSectionEntity.setLegalnumberref(fila.getString(fila.getColumnIndex("legalnumberref")));
+                listVisitSection.add(visitSectionEntity);
+            }
+            bd.close();
+        }catch (Exception e)
+        {
+            Toast.makeText(context, "No se puede validar la apertura de visita - error:"+e.toString(), Toast.LENGTH_LONG).show();
+        }
+        return listVisitSection;
+    }
+
 
 }

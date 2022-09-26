@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,10 +37,12 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaParametrosAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
+import com.vistony.salesforce.Controller.Utilitario.StrictModeController;
 import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.EscColoursCRepository;
@@ -205,6 +208,11 @@ ParametrosView extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        /*StrictModeController.enableStrictMode();
+        StrictModeController.allowDiskReads(
+                clienteSQlite = new ClienteSQlite(getContext())
+        );*/
         super.onCreate(savedInstanceState);
         sesionEntity =  new SesionEntity();
         clienteSQlite = new ClienteSQlite(getContext());
@@ -352,7 +360,7 @@ ParametrosView extends Fragment {
                 }
                 break;
         }
-
+        AppExecutors executor=new AppExecutors();
         /////////////////////Sincronizar Recibos Pendientes de Depositar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         cobranzaRepository.SynchronizedepositedPendingCollection(getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
@@ -436,12 +444,14 @@ ParametrosView extends Fragment {
             Log.e("Jepicame","=>"+data);
         });
 
+        if(!BuildConfig.FLAVOR.equals("bolivia") ){
         ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
         reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame", "=>" + data);
         });
+        }
 
-        leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei).observe(getActivity(), data -> {
+        leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
             Log.e("Jepicame", "=>" + data);
         });
         //Enviar Firma Electronica
@@ -451,13 +461,16 @@ ParametrosView extends Fragment {
 
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
+
             /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+            //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+            statusDispatchRepository.statusDispatchSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
             });
 
             //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+            //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+            statusDispatchRepository.statusDispatchSendTime(getContext(),executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
             });
 

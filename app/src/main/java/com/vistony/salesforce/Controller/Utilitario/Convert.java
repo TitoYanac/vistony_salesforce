@@ -7,11 +7,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+
+import android.app.Activity;
+import android.graphics.Bitmap;
 import android.icu.text.DecimalFormat;
 import android.icu.text.NumberFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Adapters.ListKardexOfPaymentEntity;
@@ -368,5 +373,23 @@ public class Convert {
             ListConvertHistoricSalesAnalysisByRouteEntity.add(historicSalesAnalysisByRouteEntity);
         }
         return ListConvertHistoricSalesAnalysisByRouteEntity;
+    }
+
+    static public void resizeImage(ImageView imageView, Bitmap bitMap, Activity activity)
+    {
+        try {
+            int currentBitmapWidth = bitMap.getWidth();
+            int currentBitmapHeight = bitMap.getHeight();
+            int ivWidth = imageView.getWidth();
+            int ivHeight = imageView.getHeight();
+            int newWidth = ivWidth;
+            int newHeight = (int) Math.floor((double) currentBitmapHeight * ((double) newWidth / (double) currentBitmapWidth));
+            Bitmap newbitMap = Bitmap.createScaledBitmap(bitMap, newWidth, newHeight, true);
+            imageView.setImageBitmap(newbitMap);
+        }catch (Exception e)
+        {
+            Toast.makeText(activity, "No se pudo redimensionar la imagen- error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

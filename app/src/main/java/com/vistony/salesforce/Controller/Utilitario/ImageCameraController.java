@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,6 +78,7 @@ public class ImageCameraController {
             File file = crearFichero(SesionEntity.imagen+SesionEntity.compania_id+SesionEntity.fuerzatrabajo_id+CurrentDateAndTime + ".JPG");
             //File f = crearFichero(recibo+".pdf");
             FileOutputStream fOut = new FileOutputStream(file);
+            //El elegir el PNG no obliga a trabajar con filtro, en cambio el JPEG si obliga
             ImageToSave.compress(Bitmap.CompressFormat.JPEG, 35, fOut);
             fOut.flush();
             fOut.close();
@@ -84,10 +86,13 @@ public class ImageCameraController {
             AbleToSave();
         }
         catch(FileNotFoundException e) {
-            UnableToSave();
+            UnableToSave(e.toString());
         }
-        catch(IOException e) {
-            UnableToSave();
+        catch(IOException ioexception) {
+            UnableToSave(ioexception.toString());
+        }
+        catch(Exception exception) {
+            UnableToSave(exception.toString());
         }
     }
 
@@ -122,10 +127,13 @@ public class ImageCameraController {
         }
 
         catch(FileNotFoundException e) {
-            UnableToSave();
+            UnableToSave(e.toString());
         }
-        catch(IOException e) {
-            UnableToSave();
+        catch(IOException ioexception) {
+            UnableToSave(ioexception.toString());
+        }
+        catch(Exception exception) {
+            UnableToSave(exception.toString());
         }
 
         return file;
@@ -147,8 +155,8 @@ public class ImageCameraController {
         return formattedDate;
     }
 
-    private void UnableToSave() {
-        Toast.makeText(TheThis, "¡No se ha podido guardar la imagen!", Toast.LENGTH_SHORT).show();
+    private void UnableToSave(String error) {
+        Toast.makeText(TheThis, "¡No se ha podido guardar la imagen!-Error: "+error, Toast.LENGTH_SHORT).show();
     }
 
     private void AbleToSave() {
@@ -173,21 +181,30 @@ public class ImageCameraController {
     }
 
     public String getBASE64(String file_path) {
-        String encoded=null;
+        String encoded="";
         Log.e("REOS","ImageCameraController-getImageSDtoByte-file_path-Ingreso"+file_path);
         byte[] bitmapdata=null;
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(file_path);
             ByteArrayOutputStream blob = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 10 /* Ignored for PNGs */, blob);
+            //bitmap.compress(Bitmap.CompressFormat.JPEG, 10/* Ignored for PNGs */, blob);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 10/* Ignored for PNGs */, blob);
             bitmapdata = blob.toByteArray();
             encoded = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
+            //encoded = Base64.encodeToString(convertBitmapToByteArray(bitmap), Base64.DEFAULT);
         }catch (Exception e){
             System.out.println(e.getMessage());
+            encoded="";
         }
         Log.e("REOS","ImageCameraController-getImageSDtoByte-file_path-Salio"+file_path);
 
         return encoded;
+    }
+    public static byte[] convertBitmapToByteArray(Bitmap bitmap){
+        ByteBuffer byteBuffer = ByteBuffer.allocate(bitmap.getByteCount());
+        bitmap.copyPixelsToBuffer(byteBuffer);
+        byteBuffer.rewind();
+        return byteBuffer.array();
     }
 
     public void OpenImageDispacth(Context context,String Entrega_id)
