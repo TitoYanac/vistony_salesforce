@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -50,6 +51,7 @@ import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
 import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.HeaderDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
+import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
@@ -102,6 +104,8 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
     ParametrosSQLite parametrosSQLite;
     GetAsyncTaskCustomer getAsyncTaskCustomer;
     TableRow table_row_status_dispatch;
+    SwipeRefreshLayout swipeRefreshLayout;
+
     public DispatchSheetView() {
         // Required empty public constructor
     }
@@ -167,7 +171,7 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         btn_consultar_fecha_despacho=v.findViewById(R.id.btn_consultar_fecha_despacho);
         imb_consultar_QR=v.findViewById(R.id.imb_consultar_QR);
         tv_total_collection=v.findViewById(R.id.tv_total_collection);
-
+        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swiperefresh);
         imb_consultar_fecha_hoja_despacho.setOnClickListener(this);
         imb_consultar_codigo_control.setOnClickListener(this);
         btn_consultar_fecha_despacho.setOnClickListener(this);
@@ -233,8 +237,18 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+                UpdateListView(SesionEntity.imei,parametrofecha,getContext());
+            }
+        });
+
         return v;
     }
+
+
 
     public void getStatusQR()
     {
@@ -334,22 +348,29 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         ConnectivityManager manager= (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);;
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-        if (networkInfo != null) {
-            if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                Log.e("REOS","DispatchSheetView-getMastersDelivery-entraif");
-                getAsyncTaskCustomer=new GetAsyncTaskCustomer();
-                getAsyncTaskCustomer.execute();
-                headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
-                    Log.e("REOS","DispatchSheetView-getMastersDelivery-data"+data.toString());
-                    getListDispatchSheet(DispatchDate,context);
-                });
 
-            } else {
-                Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
-            }
-        }else{
-            Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
+        HeaderDispatchSheetSQLite headerDispatchSheetSQLite=new HeaderDispatchSheetSQLite(getContext());
+        if(headerDispatchSheetSQLite.getCountHeaderDispatchSheetDate(DispatchDate)>0)
+        {
             getListDispatchSheet(DispatchDate,context);
+        }else {
+            if (networkInfo != null) {
+                if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                    Log.e("REOS","DispatchSheetView-getMastersDelivery-entraif");
+                    getAsyncTaskCustomer=new GetAsyncTaskCustomer();
+                    getAsyncTaskCustomer.execute();
+                    headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
+                        Log.e("REOS","DispatchSheetView-getMastersDelivery-data"+data.toString());
+                        getListDispatchSheet(DispatchDate,context);
+                    });
+
+                } else {
+                    Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
+                }
+            }else{
+                Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
+                getListDispatchSheet(DispatchDate,context);
+            }
         }
 
 
@@ -562,6 +583,32 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         return dialog;
+    }
+
+
+    public void UpdateListView(String Imei,String DispatchDate,Context context) {
+        Log.e("REOS","HojaDespachoView.getMastersDelivery-DispatchDate:"+DispatchDate);
+        HeaderDispatchSheetRepository headerDispatchSheetRepository= new ViewModelProvider(getActivity()).get(HeaderDispatchSheetRepository.class);
+        ConnectivityManager manager= (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);;
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+
+        if (networkInfo != null) {
+            if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                Log.e("REOS","DispatchSheetView-getMastersDelivery-entraif");
+                getAsyncTaskCustomer=new GetAsyncTaskCustomer();
+                getAsyncTaskCustomer.execute();
+                headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
+                    Log.e("REOS","DispatchSheetView-getMastersDelivery-data"+data.toString());
+                    getListDispatchSheet(DispatchDate,context);
+                });
+
+            } else {
+                Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
+            }
+        }else{
+            Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
+            getListDispatchSheet(DispatchDate,context);
+        }
     }
 
 }

@@ -1,0 +1,5 @@
+<resources>
+    <style name="SplashThemeRofalab" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/splashrofalab</item>
+    </style>
+</resources>

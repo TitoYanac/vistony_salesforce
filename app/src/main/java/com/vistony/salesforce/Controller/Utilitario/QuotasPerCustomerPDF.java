@@ -28,11 +28,13 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerDetailEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerHeadEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerInvoiceEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
@@ -125,8 +127,27 @@ public class QuotasPerCustomerPDF extends AppCompatActivity {
             // Insertamos una imagen que se encuentra en los recursos de la
             // aplicacion.
             Bitmap bitmap=null;
+            UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+            UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+            ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+            //set image company
+            switch (ObjUsuario.compania_id) {
+                case "01":
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+                    break;
+                case "C011":
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_bluker_negro);
+                    break;
+                case "13":
+                    bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo_rofalab_negro2);
+                    break;
+                default:
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+                    break;
+            }
+
+            //bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100 ,stream);

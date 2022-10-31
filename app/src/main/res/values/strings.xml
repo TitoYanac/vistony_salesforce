@@ -138,6 +138,11 @@
     <string name="lbl_ocurrencies">Ocurrencia</string>
     <string name="lbl_drivername">Nombre Chofer</string>
     <string name="lbl_drivemobile">Telefono Chofer</string>
+    <string name="lbl_find_geolocation">Geolocalizacion enviada</string>
+    <string name="lbl_date_register">Fecha Registro</string>
+    <string name="lbl_dispatch_pending">Pendientes</string>
+    <string name="lbl_dispatch_failed">Fallidos</string>
+    <string name="lbl_dispatch_sucessfull">Exitosos</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 

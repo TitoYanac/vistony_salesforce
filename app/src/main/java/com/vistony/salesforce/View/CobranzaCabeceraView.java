@@ -69,11 +69,13 @@ import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaCabeceraDao;
 import com.vistony.salesforce.Dao.SQLite.HeaderDispatchSheetSQLite;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.BancoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaConsDepositoEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoCabeceraSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -814,7 +816,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     tipo="1";
                     Alerta(tipo).show();
                 }
-                else if(banco.equals("---SELECCIONAR BANCO---"))
+                else if(banco.equals("---SELECCIONAR BANCO---")||banco==null)
                 {
                     tipo="2";
                     Alerta(tipo).show();
@@ -829,13 +831,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                         Alerta(tipo).show();
                         // Toast.makeText(getContext(), "No se puede Enviar un Deposito sin recibos", Toast.LENGTH_SHORT).show();
                     } else {
-
                         alertaGuardarDeposito().show();
-
                     }
-
-
-
                 }
                 return true;
 
@@ -882,14 +879,6 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                                     fechadiferida="19000101";
                                 }
                                 GuardarDepositoVincularRecibos();
-
-                                //EnviarWSCobranzaCabecera enviarWSCobranzaCabecera = new EnviarWSCobranzaCabecera();
-                                //enviarWSCobranzaCabecera.execute();
-
-
-
-
-
                             }
                         })
                 .setNegativeButton("CANCELAR",
@@ -906,16 +895,17 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     private void GuardarDepositoVincularRecibos()
     {
 
-        depositoRepository = new ViewModelProvider(getActivity()).get(DepositoRepository.class);
-        cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
-            int ValidaSQLite=0;
-            ValidaSQLite=cobranzaCabeceraSQLiteDao.InsertaCobranzaCabecera(
+        if(Banco!=null) {
+            depositoRepository = new ViewModelProvider(getActivity()).get(DepositoRepository.class);
+            cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
+            int ValidaSQLite = 0;
+            ValidaSQLite = cobranzaCabeceraSQLiteDao.InsertaCobranzaCabecera(
                     Grupo,
                     SesionEntity.usuario_id,
                     SesionEntity.fuerzatrabajo_id,
                     Banco,
                     SesionEntity.compania_id,
-                    sumacobrado.setScale(3,RoundingMode.HALF_UP).toString(),
+                    sumacobrado.setScale(3, RoundingMode.HALF_UP).toString(),
                     tipo,
                     bancarizado,
                     fechadiferida,
@@ -924,10 +914,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     "N"
             );
 
-            if(ValidaSQLite==1)
-            {
-                for (int i = 0; i < listaConsDepositoAdapterFragment.size(); i++)
-                {
+            if (ValidaSQLite == 1) {
+                for (int i = 0; i < listaConsDepositoAdapterFragment.size(); i++) {
                     cobranzaDetalleSQLiteDao.ActualizaCobranzaDetalle(
                             Grupo,
                             listaConsDepositoAdapterFragment.get(i).getRecibo(),
@@ -937,27 +925,31 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 }
             }
 
-        etgrupo.setEnabled(false);
-        txtfecha.setEnabled(false);
-        spnbanco.setEnabled(false);
-        spnbanco.setClickable(false);
+            etgrupo.setEnabled(false);
+            txtfecha.setEnabled(false);
+            spnbanco.setEnabled(false);
+            spnbanco.setClickable(false);
 
-        Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
-        String fragment = "", accion = "", compuesto = "";
-        fragment = "CobranzaCabeceraView";
-        accion = "nuevoinicio";
-        compuesto = fragment + "-" + accion;
-        Object object = null;
-        mListener.onFragmentInteraction(compuesto, object);
+            Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
+            String fragment = "", accion = "", compuesto = "";
+            fragment = "CobranzaCabeceraView";
+            accion = "nuevoinicio";
+            compuesto = fragment + "-" + accion;
+            Object object = null;
+            mListener.onFragmentInteraction(compuesto, object);
 
-        ///////////////////////////// ENVIAR DEPOSITOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
-        });
-        ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
+            ///////////////////////////// ENVIAR DEPOSITOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+            ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
+            cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+        }
+        else {
+            Toast.makeText(getContext(), "No se eligio Banco, debe elegir banco para poder continuar...", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

@@ -88,7 +88,7 @@ public class VisitaSQLite {
 
         try {
             abrir();
-            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend,IFNULL(chkruta,0) AS chkruta ,IFNULL(id_trans_mobile,0) AS id_trans_mobile ,IFNULL(amount,0) AS amount,IFNULL(hora_anterior,0)  AS hora_anterior FROM VISITA WHERE chkrecibido='0' AND fecha_registro>='20220601' LIMIT 30", null);
+            Cursor fila = bd.rawQuery("SELECT id,cliente_id,direccion_id,fecha_registro,hora_registro,zona_id,fuerzatrabajo_id,usuario_id,tipo,motivo,observacion,latitud,longitud,countsend,IFNULL(chkruta,0) AS chkruta ,IFNULL(id_trans_mobile,0) AS id_trans_mobile ,IFNULL(amount,0) AS amount,IFNULL(hora_anterior,0)  AS hora_anterior FROM VISITA WHERE chkrecibido='0' AND fecha_registro>='20220601' LIMIT 100", null);
 
             if (fila.moveToFirst()) {
                 do {

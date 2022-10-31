@@ -29,6 +29,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -37,6 +38,7 @@
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
+
         android:label="${country} ${appName}"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
@@ -45,11 +47,11 @@
         android:requestLegacyExternalStorage="true"
         tools:replace="android:label"
         android:largeHeap="true"
-        >
+    >
 
-        <!--<meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />-->
+    <!--<meta-data android:icon="@mipmap/logo_factura"
+        android:name="com.google.android.geo.API_KEY"
+        android:value="@string/google_maps_key" />-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAXXBoIS1O-9Vhvg5ccRyT_vWCnry4_9ds" />
@@ -67,7 +69,8 @@
         <activity
             android:name=".View.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

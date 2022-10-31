@@ -224,7 +224,9 @@ public class RutaVendedorSQLiteDao {
             String ShipToCode="";
 
             listaClienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(fila.getString(0),fila.getString(2));
-
+            Log.e("REOS","RutaVendedorSQLiteDao.listaClienteSQLiteEntity.get(i).fila.getString(0): "+fila.getString(0));
+            Log.e("REOS","RutaVendedorSQLiteDao.listaClienteSQLiteEntity.get(i).fila.getString(2): "+fila.getString(2));
+            Log.e("REOS","RutaVendedorSQLiteDao.listaClienteSQLiteEntity.get(i).listaClienteSQLiteEntity.size(): "+listaClienteSQLiteEntity.size());
             for(int i=0;i<listaClienteSQLiteEntity.size();i++){
                 terminopago_id=listaClienteSQLiteEntity.get(i).getTerminopago_id();
                 Log.e("REOS","RutaVendedorSQLiteDao.listaClienteSQLiteEntity.get(i).getTerminopago_id(): "+listaClienteSQLiteEntity.get(i).getTerminopago_id());

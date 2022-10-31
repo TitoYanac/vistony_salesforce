@@ -1297,7 +1297,6 @@ public class CobranzaDetalleView extends Fragment {
                             //encenderFlash();
                             IntentIntegrator integrator = new IntentIntegrator(activity);
                             integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-
                             integrator.setPrompt("Scan");
                             integrator.setCameraId(0);
                             integrator.setBeepEnabled(true);
@@ -2134,5 +2133,7 @@ public class CobranzaDetalleView extends Fragment {
 
         return  dialog;
     }
+
+
 
 }

@@ -75,6 +75,10 @@ public class Convert {
                 amountRedonded =new BigDecimal(amount).setScale(0, RoundingMode.HALF_UP);
                 locale=new Locale("ES","PY");
                 break;
+            case "perurofalab":
+                amountRedonded =new BigDecimal(amount).setScale(3, RoundingMode.HALF_UP);
+                locale=new Locale("ES","PE");
+                break;
         }
 
         Log.e("REOS","Convert-currencyForView-amountRedonded-Antes"+amountRedonded.toString());
@@ -94,6 +98,7 @@ public class Convert {
             case "peru":
             case "bolivia":
             case "paraguay":
+            case "perurofalab":
                 resultado= NumberFormat.getCurrencyInstance(locale).format(amountRedonded);
                 break;
         }

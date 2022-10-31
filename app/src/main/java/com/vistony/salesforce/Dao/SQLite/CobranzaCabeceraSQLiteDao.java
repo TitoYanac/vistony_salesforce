@@ -599,4 +599,75 @@ public class CobranzaCabeceraSQLiteDao {
         return resultado;
     }
 
+    public ArrayList<DepositEntity> ObtenerCobranzaCabeceraPendientesWSDrivers (String compania_id, String usuario_id)
+    {
+
+        ArrayList<DepositEntity> depositos = new ArrayList<DepositEntity>();
+        String brand = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        String osVersion = android.os.Build.VERSION.RELEASE;
+
+        try {
+            abrir();
+            Cursor fila = bd.rawQuery(
+                    "Select * from cobranzacabecera where (chkwsrecibido= 'N' or chkwsrecibido= '0')  and compania_id=? and usuario_id=? AND (fechadeposito>='20220407' OR fechadeposito>='2022-04-07')   " +
+                            "",new String[]{compania_id,usuario_id});
+
+            while (fila.moveToNext())
+            {
+                String deposito_id="";
+                DepositEntity deposito= new DepositEntity();
+                deposito.setDeposit(fila.getString(0));
+                deposito.setUserID(fila.getString(1));
+                if(fila.getString(2)==null){
+                    deposito.setBankID("103117");
+                }else {
+                    deposito.setBankID(fila.getString(2));
+                }
+
+                deposito.setCompanyCode(fila.getString(3));
+                deposito.setAmountDeposit(fila.getString( 4));
+                //deposito.setChkdepositado(fila.getString(5));
+                //deposito.setChkanulado(fila.getString(6));
+                deposito.setSlpCode(fila.getString(7));
+                if(fila.getString(8).equals("Deposito"))
+                {
+                    deposito_id="DE";
+                }
+                else if(fila.getString(8).equals("Cheque"))
+                {
+                    deposito_id="CH";
+                }
+                else if(fila.getString(8).equals("ChequeDia"))
+                {
+                    deposito_id="CHD";
+                }
+                deposito.setIncomeType(deposito_id);
+                deposito.setBanking((fila.getString(9)));
+                deposito.setDeferredDate(fila.getString(10));
+                //deposito.setChkwsrecibido(fila.getString(11));
+                deposito.setStatus("P"); //always pendiente
+                deposito.setDate(fila.getString(12));
+                deposito.setCancelReason(fila.getString(13));
+                deposito.setDirectDeposit((fila.getString(17)));
+                deposito.setPOSPay((fila.getString(18)));
+                deposito.setComments("");
+                deposito.setAppVersion(Utilitario.getVersion(Context));
+                deposito.setModel(model);
+                deposito.setBrand(brand);
+                deposito.setOSVersion(osVersion);
+                deposito.setIntent (fila.getString(fila.getColumnIndex("countsend")));
+                depositos.add(deposito);
+
+                UpdateCountSend(fila.getString(fila.getColumnIndex("cobranza_id")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
+            }
+
+            bd.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("REOS","CobranzaCabeceraSQLiteDao-ObtenerCobranzaCabeceraPendientesWS-error: "+e.toString());
+        }
+        return depositos;
+    }
+
 }

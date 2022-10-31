@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.zxing.BarcodeFormat;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -354,11 +356,32 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellResu = new PdfPCell(new Phrase(Convert.currencyForView(total),font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+
+
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            String encData="",Data="";
+            Data=ordenventa_id+"&&&"+fechaemision+"&&&"+nombrecliente+"&&&"+total+"&&&"+SesionEntity.fuerzatrabajo_id+" "+SesionEntity.nombrefuerzadetrabajo;
+            try {
+                Log.e("REOS","DocumentoCobranzaPDF-generarPdf-EntroalTryCifrado");
+                encData= CifradoController.encrypt("Vistony2019*".getBytes("UTF-16LE"), Data.getBytes("UTF-16LE"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Bitmap bitmapqr = barcodeEncoder.encodeBitmap(encData, BarcodeFormat.QR_CODE, 400, 400);
+
+            ByteArrayOutputStream streamqr = new ByteArrayOutputStream();
+
+            bitmapqr.compress(Bitmap.CompressFormat.PNG, 50, streamqr);
+            Image imagenqr = Image.getInstance(streamqr.toByteArray());
+            imagenqr.setAlignment(Element.ALIGN_CENTER);
+
+
+
             tblResu.addCell(cellResu);
+            tblResu.addCell(imagenqr);
+
             documento.add(tblResu);
-
-
-
+            documento.add(imagenqr);
 
         } catch (DocumentException e) {
 

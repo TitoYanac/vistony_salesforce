@@ -149,7 +149,7 @@ public class StatusDispatchDialog extends DialogFragment {
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
-        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+        ImageView dialogButtonCancel = (ImageView) dialog.findViewById(R.id.dialogButtonCancel);
         floatingButtonTakePhoto = (FloatingActionButton) dialog.findViewById(R.id.floatingButtonTakePhoto);
         ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetSQLite=new ArrayList<>();
         ArrayList<TypeDispatchEntity> listTypeDispatch=new ArrayList<>();
@@ -214,7 +214,6 @@ public class StatusDispatchDialog extends DialogFragment {
                     ImageCameraController imageCameraController = new ImageCameraController();
                     filelocal= imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,Entrega+"_"+getDate(),"L");
                     imgBitmap=bitmap2;
-                    //Bitmap imgBitmapImageView;
                     int bitmapSize = imgBitmap.getByteCount();
                     if (bitmapSize > MAX_BITMAP_SIZE) {
                         throw new RuntimeException(
@@ -224,13 +223,6 @@ public class StatusDispatchDialog extends DialogFragment {
                         Convert.resizeImage(imageViewPhoto,imgBitmap,getActivity());
                     }
 
-                    /*byte[] byteArray,byteArray2;
-                    byteArray=imageCameraController.getImageSDtoByte(getContext(),filelocal.toString());
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                    imageViewPhoto.setImageBitmap(bitmap);*/
-                    /*Bundle extras = result.getData().getExtras();
-                    imgBitmapImageView = (Bitmap) extras.get("data");
-                    imageViewPhoto.setImageBitmap(imgBitmapImageView);*/
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
@@ -304,17 +296,6 @@ public class StatusDispatchDialog extends DialogFragment {
             }
 
         });
-       /* floatingButtonTakePhoto.setOnClickListener(data -> {
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                someActivityResultLauncher.launch(intent);
-            }
-        });*/
-        //imv_historic_status_dispatch_delivery.setEnabled(true);
-        //imv_historic_status_dispatch_photo.setEnabled(true);
-
-
-
         spn_type_dispatch.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -351,7 +332,7 @@ public class StatusDispatchDialog extends DialogFragment {
         });
 
 
-
+/*
         imv_historic_status_dispatch_delivery.setOnClickListener(new View.OnClickListener() {
         //imageViewPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -362,25 +343,18 @@ public class StatusDispatchDialog extends DialogFragment {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         // Crea el File
                         File photoFile = null;
-                        //startActivityForResult(intent,0);
                             photoFile = createImageFile(Entrega+"_"+getDate(),"G");
-
                         if (photoFile != null) {
                             Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                            //startActivityForResult(intent,20);
                             someActivityResultLauncherGuia.launch(intent);
-                            /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                                someActivityResultLauncherGuia.launch(intent);
-                            }*/
-
                         }
                 } catch (IOException ex) {
                     Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto-error:"+ex);
                 }
 
         }});
-
+*/
         imageViewPhoto2.setOnClickListener(new View.OnClickListener() {
             //imageViewPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -410,40 +384,27 @@ public class StatusDispatchDialog extends DialogFragment {
 
             }});
 
+        /*
         imv_historic_status_dispatch_photo.setOnClickListener(new View.OnClickListener() {
-        //imageViewPhoto2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                //Intent intent = new Intent(MediaStore.EXTRA);
-                //if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                 //   someActivityResultLauncher.launch(intent);
-                //}
                 try {
                         Log.e("REOS","statusDispatchRepository-->FotoLocal-->Inicia");
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         // Crea el File
                         File photoFile = null;
-
                             photoFile = createImageFile(Entrega+"_"+getDate(),"L");
-
                         if (photoFile != null) {
                             Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
                             Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                            //startActivityForResult(intent,20);
                             someActivityResultLauncher.launch(intent);
-                            /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                                Log.e("REOS","statusDispatchRepository-->FotoLocal-->intent.resolveActivity(getActivity().getPackageManager()) != null");
-                                someActivityResultLauncher.launch(intent);
-                            }*/
-
                         }
                 } catch (IOException ex) {
                     Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto2-error:"+ex);
                 }
                 Log.e("REOS","statusDispatchRepository-->FotoLocal-->Fin");
-            }});
+            }});*/
 
         imageViewPhoto.setOnClickListener(new View.OnClickListener() {
             //imageViewPhoto2.setOnClickListener(new View.OnClickListener() {
@@ -485,7 +446,7 @@ public class StatusDispatchDialog extends DialogFragment {
             public void onClick(View v) {
                 try {
 
-                    String encoded = null, encoded2 = null;
+                    /*String encoded = null, encoded2 = null;
                     if (imgBitmap != null) {
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         imgBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
@@ -499,7 +460,7 @@ public class StatusDispatchDialog extends DialogFragment {
                         byteArray2 = stream.toByteArray();
                         encoded2 = Base64.encodeToString(byteArray2, Base64.DEFAULT);
                         //encoded2 = new String(byteArray2);
-                    }
+                    }*/
 
                     if (imgBitmap != null && imgBitmap2 != null) {
 
@@ -577,7 +538,12 @@ public class StatusDispatchDialog extends DialogFragment {
                             AppExecutors executor=new AppExecutors();
                             /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                             //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
-                            statusDispatchRepository.statusDispatchSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                            statusDispatchRepository.statusDispatchListSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                                Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
+                            });
+                            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                            //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+                            statusDispatchRepository.statusDispatchSendPhoto(getContext(),executor.diskIO()).observe(getActivity(), data -> {
                                 Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
                             });
 

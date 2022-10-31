@@ -188,7 +188,22 @@
         android:layout_marginTop="60dp"
         app:srcCompat="@mipmap/icons8_chebron_hacia_la_derecha_96" />
 
+    <TextView
+        android:id="@+id/lbl_salesorder_qr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="120dp"
+        android:text="Validar QR"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
+    <ImageView
+        android:id="@+id/imv_salesorder_qr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="145dp"
+        app:srcCompat="@drawable/ic_baseline_qr_code_24" />
 
 
 </RelativeLayout>

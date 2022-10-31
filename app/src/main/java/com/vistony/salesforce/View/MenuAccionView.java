@@ -163,6 +163,7 @@ public class MenuAccionView extends Fragment {
             Log.e("REOS","MenuAccionView-Lista.get(s).getLatitud()=>"+Lista.get(s).getLatitud());
             Log.e("REOS","MenuAccionView-Lista.get(s).getLongitud()=>"+Lista.get(s).getLongitud());
             Log.e("REOS","MenuAccionView-Lista.get(s).getChkRuta=>"+Lista.get(s).getChk_ruta());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getTerminopago_id=>"+Lista.get(s).getTerminopago_id());
             CardCode=Lista.get(s).getCliente_id();
             CardName=Lista.get(s).getNombrecliente();
             Address=Lista.get(s).getDireccion();
@@ -282,7 +283,7 @@ public class MenuAccionView extends Fragment {
             intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
             startActivity(intent);
         });
-        if(!BuildConfig.FLAVOR.equals("peru"))
+        if(!BuildConfig.FLAVOR.equals("peru")&&BuildConfig.FLAVOR.equals("rofalab"))
         {
             cv_lead.setVisibility(View.GONE);
             cv_visit_section.setVisibility(View.GONE);
@@ -330,6 +331,7 @@ public class MenuAccionView extends Fragment {
 
                 case "peru":
                 case "paraguay":
+                case "perurofalab":
                     String Fragment="MenuAccionView";
                     String accion="pedido";
                     String compuesto=Fragment+"-"+accion;
@@ -357,10 +359,17 @@ public class MenuAccionView extends Fragment {
                 }else{
                     alertatiporecibos().show();
                 }
-            }else {
+            }else
+            {
                 if(cv_cobranza.isFocusable())
                 {
-                   alertatiporecibos().show();
+                    validar=CobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
+                    if(validar>0){
+                        alertarecibospendientes().show();
+                    }else{
+                        alertatiporecibos().show();
+                    }
+                   //alertatiporecibos().show();
                 }
                 else {
                     Toast.makeText(getActivity(), "Registre el inicio de la visita, para continuar!!!", Toast.LENGTH_LONG).show();
@@ -651,6 +660,7 @@ public class MenuAccionView extends Fragment {
                 break;
             case "peru":
             case "chile":
+            case "perurofalab":
             //case "ecuador":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
                 break;

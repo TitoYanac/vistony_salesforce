@@ -179,11 +179,11 @@ public class LeadClienteViewModel extends ViewModel {
                                     Log.e("REOS","LeadClienteViewModel.sendGeolocationClient.respuesta.getCardCode():" + respuesta.getCardCode());
                                     Log.e("REOS","LeadClienteViewModel.sendGeolocationClient.respuesta.getAddressCode():" + respuesta.getAddressCode() );
                                     Log.e("REOS","LeadClienteViewModel.sendGeolocationClient.respuesta.getMessage():" + respuesta.getMessage());
-                                    leadSQLite.UpdateResultLeadAddress(respuesta.getCardCode(),respuesta.getAddressCode() , respuesta.getMessage());
+                                    leadSQLite.UpdateResultLeadAddress(respuesta.getCardCode(),respuesta.getAddressCode() , respuesta.getMessage(),"1");
 
                                 }else{//tiene error
                                     responseData.add("La Geolocalizacion no fue aceptado en SAP");
-                                    leadSQLite.UpdateResultLeadAddress(respuesta.getCardCode(),respuesta.getAddressCode() , respuesta.getMessage());
+                                    leadSQLite.UpdateResultLeadAddress(respuesta.getCardCode(),respuesta.getAddressCode() , respuesta.getMessage(),"0");
                                 }
 
                         }
@@ -204,6 +204,191 @@ public class LeadClienteViewModel extends ViewModel {
             });
         }else{
             callback.onResponseErrorSap("No hay Geolocalizacion de Clientes pendientes de enviar");
+        }
+    }
+
+    public MutableLiveData<String> sendGeolocationforClient (Context context, String imei, Executor executor,String cardcode){
+        MutableLiveData<String> temp=new MutableLiveData<String>();
+
+        try
+        {
+            sendGeolocationClient(imei,context, new VisitCallback(){
+                @Override
+                public void onResponseSap(ArrayList<String> data) {
+                    if(data==null){
+                        temp.postValue(("No hay Geolocalizacion de Clientes pendientes de enviar"));
+                    }else{
+                        temp.postValue(data.get(0));
+                    }
+                }
+                @Override
+                public void onResponseErrorSap(String response) {
+                    temp.postValue(response);
+                }
+            });
+
+        }catch (Exception e)
+        {
+            Toast.makeText(context, "Error en Proceso de Envio de Geolocalizacion- Error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        return temp;
+    }
+
+    private void sendGeolocationforClient(String imei,final Context context,String cardcode,final VisitCallback callback){
+        String  json=null;
+        Gson gson=new GsonBuilder().disableHtmlEscaping().create();
+        LeadSQLite leadSQLite =new LeadSQLite(context);
+
+        ArrayList<LeadAddressEntity> listLeadAddressEntity= leadSQLite.getGeolocationClient();
+        if(listLeadAddressEntity!=null && listLeadAddressEntity.size()>0){
+            json = gson.toJson(listLeadAddressEntity);
+            //json = "{ \"Addresses\":" + json + "}";
+            json = "{ \"Token\":\"" + imei + "\",\"Addresses\":" + json + "}";
+        }
+
+        Log.e("REOS", "LeadClienteViewModel-sendGeolocationClient-json"+json);
+        /*if(listLeadAddressEntity!=null && listLeadAddressEntity.size()>0)
+        {
+            leadSQLite.UpdateLeadJSON(json, listLeadAddressEntity.get(0).getCardCode());
+        }*/
+        if(json!=null){
+            RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
+            //Log.e("REOS", "VisitaRepository-sendVisit-sendVisit"+Config.getClient().create(Api.class).sendVisit(jsonRequest).toString());
+            Config.getClient().create(Api.class).sendLeadAddress(jsonRequest).enqueue(new Callback<LeadAddressEntityResponse>() {
+                @Override
+                public void onResponse(Call<LeadAddressEntityResponse> call, Response<LeadAddressEntityResponse> response) {
+
+                    LeadAddressEntityResponse leadAddressEntityResponse=response.body();
+
+                    if(response.isSuccessful() && leadAddressEntityResponse!=null){
+                        ArrayList<String> responseData=new ArrayList<>();
+
+                        for (LeadAddressEntity respuesta:leadAddressEntityResponse.getLeadAddressEntity()  )
+                        {
+                            if(respuesta.getHaveError().equals("N")){//se envio
+
+                                responseData.add("La Geolocalizacion fue aceptado en SAP");
+                                Log.e("REOS","LeadClienteViewModel.sendGeolocationClient.respuesta.getCardCode():" + respuesta.getCardCode());
+                                Log.e("REOS","LeadClienteViewModel.sendGeolocationClient.respuesta.getAddressCode():" + respuesta.getAddressCode() );
+                                Log.e("REOS","LeadClienteViewModel.sendGeolocationClient.respuesta.getMessage():" + respuesta.getMessage());
+                                leadSQLite.UpdateResultLeadAddress(respuesta.getCardCode(),respuesta.getAddressCode() , respuesta.getMessage(),"1");
+
+                            }else{//tiene error
+                                responseData.add("La Geolocalizacion no fue aceptado en SAP");
+                                leadSQLite.UpdateResultLeadAddress(respuesta.getCardCode(),respuesta.getAddressCode() , respuesta.getMessage(),"0");
+                            }
+
+                        }
+
+                        callback.onResponseSap(responseData);
+                        callback.onResponseErrorSap(response.message());
+                    }else{
+                        callback.onResponseErrorSap(response.message());
+                    }
+                }
+                @Override
+                public void onFailure(Call<LeadAddressEntityResponse> call, Throwable t) {
+                    callback.onResponseErrorSap("Cayo en Error:"+t.getMessage());
+
+                    call.cancel();
+                }
+            });
+        }else{
+            callback.onResponseErrorSap("No hay Geolocalizacion de Clientes pendientes de enviar");
+        }
+    }
+
+    public MutableLiveData<String> sendGeolocationBlock (Context context, String imei, Executor executor){
+        MutableLiveData<String> temp=new MutableLiveData<String>();
+
+        try
+        {
+            sendGeolocationBlock(imei,context, new VisitCallback(){
+                @Override
+                public void onResponseSap(ArrayList<String> data) {
+                    if(data==null){
+                        temp.postValue(("No hay Geolocalizacion de Clientes en Bloque pendientes de enviar"));
+                    }else{
+                        temp.postValue(data.get(0));
+                    }
+                }
+                @Override
+                public void onResponseErrorSap(String response) {
+                    temp.postValue(response);
+                }
+            });
+
+        }catch (Exception e)
+        {
+            Toast.makeText(context, "Error en Proceso de Envio de Geolocalizacion en Bloque - Error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        return temp;
+    }
+
+    private void sendGeolocationBlock (String imei,final Context context,final VisitCallback callback){
+        String  json=null;
+        Gson gson=new GsonBuilder().disableHtmlEscaping().create();
+        LeadSQLite leadSQLite =new LeadSQLite(context);
+
+        ArrayList<LeadAddressEntity> listLeadAddressEntity= leadSQLite.getGeolocationBlock();
+        if(listLeadAddressEntity!=null && listLeadAddressEntity.size()>0){
+            json = gson.toJson(listLeadAddressEntity);
+            //json = "{ \"Addresses\":" + json + "}";
+            json = "{ \"Token\":\"" + imei + "\",\"Addresses\":" + json + "}";
+        }
+
+        Log.e("REOS", "LeadClienteViewModel-sendGeolocationClient-json"+json);
+        /*if(listLeadAddressEntity!=null && listLeadAddressEntity.size()>0)
+        {
+            leadSQLite.UpdateLeadJSON(json, listLeadAddressEntity.get(0).getCardCode());
+        }*/
+        if(json!=null){
+            RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
+            //Log.e("REOS", "VisitaRepository-sendVisit-sendVisit"+Config.getClient().create(Api.class).sendVisit(jsonRequest).toString());
+            Config.getClient().create(Api.class).sendLeadAddress(jsonRequest).enqueue(new Callback<LeadAddressEntityResponse>() {
+                @Override
+                public void onResponse(Call<LeadAddressEntityResponse> call, Response<LeadAddressEntityResponse> response) {
+
+                    LeadAddressEntityResponse leadAddressEntityResponse=response.body();
+
+                    if(response.isSuccessful() && leadAddressEntityResponse!=null){
+                        ArrayList<String> responseData=new ArrayList<>();
+
+                        for (LeadAddressEntity respuesta:leadAddressEntityResponse.getLeadAddressEntity()  )
+                        {
+                            if(respuesta.getHaveError().equals("N")){//se envio
+
+                                responseData.add("La Geolocalizacion en Bloque fue aceptado en SAP");
+                                Log.e("REOS","LeadClienteViewModel.sendGeolocationClient.respuesta.getCardCode():" + respuesta.getCardCode());
+                                Log.e("REOS","LeadClienteViewModel.sendGeolocationClient.respuesta.getAddressCode():" + respuesta.getAddressCode() );
+                                Log.e("REOS","LeadClienteViewModel.sendGeolocationClient.respuesta.getMessage():" + respuesta.getMessage());
+                                leadSQLite.UpdateResultLeadAddressBlock(respuesta.getCardCode(),respuesta.getAddressCode() , respuesta.getMessage(),"1");
+
+                            }else{//tiene error
+                                responseData.add("La Geolocalizacion en Bloque no fue aceptado en SAP");
+                                leadSQLite.UpdateResultLeadAddressBlock(respuesta.getCardCode(),respuesta.getAddressCode() , respuesta.getMessage(),"0");
+                            }
+
+                        }
+
+                        callback.onResponseSap(responseData);
+                        callback.onResponseErrorSap(response.message());
+                    }else{
+
+                        callback.onResponseErrorSap(response.message());
+                    }
+                }
+                @Override
+                public void onFailure(Call<LeadAddressEntityResponse> call, Throwable t) {
+                    callback.onResponseErrorSap("Cayo en Error:"+t.getMessage());
+
+                    call.cancel();
+                }
+            });
+        }else{
+            callback.onResponseErrorSap("No hay Geolocalizacion de Clientes en Bloque pendientes de enviar");
         }
     }
 }

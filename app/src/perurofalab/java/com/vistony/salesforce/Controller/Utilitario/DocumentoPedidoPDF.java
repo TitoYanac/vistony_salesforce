@@ -126,7 +126,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             else if(SesionEntity.compania_id.equals("C011")) {
                 bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_bluker_negro);
             }
-            else if(SesionEntity.compania_id.equals("C013"))
+            else if(SesionEntity.compania_id.equals("13"))
             {
                 //bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.rofalab_negro_300_90);
                 bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo_rofalab_negro2);

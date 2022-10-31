@@ -237,32 +237,19 @@
                 android:background="@android:color/white"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:weightSum="2">
+                android:weightSum="1">
 
                 <Button
                     android:id="@+id/dialogButtonOK"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
                     android:text="ACEPTAR"
                     android:textColor="#0957C3" />
-
-                <Button
-                    android:id="@+id/dialogButtonCancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/custom_border_button"
-                    android:text="CANCELAR"
-                    android:textColor="#0957C3" />
-
-
 
             </LinearLayout>
 
@@ -275,6 +262,13 @@
             android:layout_gravity="center|top"
             android:layout_marginTop="5dp"
             android:src="@mipmap/logo" />
+        <ImageView
+            android:id="@+id/dialogButtonCancel"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="280dp"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/ic_baseline_cancel_blue_24" />
 
 
     </FrameLayout>

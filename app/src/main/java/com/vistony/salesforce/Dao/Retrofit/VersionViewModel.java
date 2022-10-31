@@ -31,7 +31,9 @@ public class VersionViewModel {
         //if(BuildConfig.FLAVOR.equals("peru"))
         //if(BuildConfig.FLAVOR.equals("peru"))
         //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
-        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
+        //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
+        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||
+                BuildConfig.FLAVOR.equals("bolivia")||BuildConfig.FLAVOR.equals("perurofalab"))
         {
             baseUrl = "https://salesforce.vistony.pe";
         }else {
@@ -73,6 +75,14 @@ public class VersionViewModel {
                 puerto = "";
                 //-----------------------
                 break;
+            case "perurofalab":
+                //Produccion----------
+                //puerto = ":8001";
+                //--------------------
+                //Pruebas QA------------- Nueva Produccion
+                puerto = "";
+                //-----------------------
+                break;
             case "paraguay":
                 puerto = ":8051";
                 break;
@@ -99,7 +109,7 @@ public class VersionViewModel {
                 break;
         }
 
-        Config.getClentSesionStart().create(Api.class).getVs(endPoint).enqueue(new Callback<VersionEntity>() {
+        Config.getClientLogin().create(Api.class).getVs(endPoint).enqueue(new Callback<VersionEntity>() {
          @Override
             public void onResponse(Call<VersionEntity> call, Response<VersionEntity> response) {
                 if(response.isSuccessful()) {

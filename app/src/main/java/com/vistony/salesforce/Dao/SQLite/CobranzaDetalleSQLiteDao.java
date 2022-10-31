@@ -1474,7 +1474,7 @@ public class CobranzaDetalleSQLiteDao {
                             " and (chkwsdepositorecibido='N'or  chkwsdepositorecibido='0')" +
                             " and cobranza_id<>''" +
                             " and compania_id='"+compania_id+"'  " +
-                            " and usuario_id='"+usuario_id+"'   LIMIT 30  "
+                            " and usuario_id='"+usuario_id+"'   LIMIT 100  "
                     ,null);
 
             while (fila.moveToNext())
@@ -1931,6 +1931,53 @@ public class CobranzaDetalleSQLiteDao {
         bd.close();
         Log.e("REOS","CobranzaDetalleSQLiteDao-ObtenerCobranzaDetalleporRecibo-resultado"+String.valueOf(resultado));
         return resultado;
+    }
+
+    public ArrayList<CollectionEntity> ObtenerCobranzaDetallePendienteEnvioEstadoDepositadosJSONDrivers (String compania_id,String usuario_id)
+    {
+
+        ArrayList<CollectionEntity> listCollectionEntity=new ArrayList<>();
+        CollectionEntity collectionEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select sap_code,cobranza_id,IFNULL(banco_id,'103117'),recibo,chkqrvalidado,usuario_id from cobranzadetalle" +
+                            " where (chkdepositado='Y' or  chkdepositado='1')  " +
+                            " and (chkwsdepositorecibido='N'or  chkwsdepositorecibido='0')" +
+                            " and cobranza_id<>''" +
+                            " and compania_id='"+compania_id+"' " +
+                            " and usuario_id='"+usuario_id+"'   LIMIT 100  "
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                String QRStatus="";
+                collectionEntity= new CollectionEntity();
+                collectionEntity.setCode(fila.getString(0));
+                collectionEntity.setDeposit(fila.getString(1));
+                collectionEntity.setBankID(fila.getString(2));
+                collectionEntity.setReceip(fila.getString(3));
+                if((fila.getString(4).equals("1")))
+                {
+                    QRStatus="Y";
+                }
+                else {
+                    QRStatus=fila.getString(4);
+                }
+                collectionEntity.setQRStatus(QRStatus);
+                collectionEntity.setU_VIS_UserID(fila.getString(5));
+                listCollectionEntity.add(collectionEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+
+        bd.close();
+        return listCollectionEntity;
     }
 
 }

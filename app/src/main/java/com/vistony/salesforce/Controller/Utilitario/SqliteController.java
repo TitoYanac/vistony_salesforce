@@ -20,7 +20,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 18;
+    private static final int VERSION = 20;
 
 
     public SqliteController(Context context){
@@ -97,7 +97,7 @@ public class SqliteController extends SQLiteOpenHelper {
             //db.execSQL("CREATE TABLE descuento (compania_id text ,descuento_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT)");
 
         //Lead
-            db.execSQL("CREATE TABLE lead (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,document_owner TEXT,sales_person TEXT,razon_social TEXT,ruc TEXT,nombre_comercial TEXT,numero_telefono TEXT,numero_celular TEXT,persona_contacto TEXT,correo TEXT,latitud TEXT,longitud TEXT,direccion TEXT,referencias TEXT,comentario TEXT,categoria TEXT,foto TEXT,fecha TEXT,recibido_api INTEGER,cardcode TEXT,domembarque_id TEXT,type TEXT,addresscode TEXT,messageserver TEXT)");
+            db.execSQL("CREATE TABLE lead (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,document_owner TEXT,sales_person TEXT,razon_social TEXT,ruc TEXT,nombre_comercial TEXT,numero_telefono TEXT,numero_celular TEXT,persona_contacto TEXT,correo TEXT,latitud TEXT,longitud TEXT,direccion TEXT,referencias TEXT,comentario TEXT,categoria TEXT,foto TEXT,fecha TEXT,recibido_api INTEGER,cardcode TEXT,domembarque_id TEXT,type TEXT,addresscode TEXT,messageserver TEXT,chk_ServerGeolocation TEXT,MessageServerGeolocation TEXT )");
             db.execSQL("CREATE TABLE motivovisita (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,code TEXT,name TEXT,type TEXT,fecha TEXT)");
             db.execSQL("CREATE TABLE pricelist (compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,pricelist_id TEXT,pricelist TEXT)");
 
@@ -117,7 +117,7 @@ public class SqliteController extends SQLiteOpenHelper {
             //Version 13  -- Distribution Second Phase
             db.execSQL("CREATE TABLE reasondispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,reasondispatch_id TEXT,reasondispatch TEXT,typedispatch_id TEXT)");
             db.execSQL("CREATE TABLE typedispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,typedispatch TEXT,statusupdate TEXT)");
-            db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT,control_id TEXT,item_id TEXT,domembarque_id text,checkintime text,checkouttime text,chk_timestatus text,fuerzatrabajo text, messageServerDispatch text, messageServerTimeDispatch text )");
+            db.execSQL("CREATE TABLE statusdispatch (compania_id text,fuerzatrabajo_id text,usuario_id text,typedispatch_id TEXT,reasondispatch_id TEXT,cliente_id TEXT,factura_id TEXT,entrega_id TEXT,chkrecibido TEXT,observation TEXT,foto TEXT,fecha_registro TEXT,hora_registro TEXT,fotoGuia TEXT,latitud TEXT,longitud TEXT,cliente TEXT,factura TEXT,entrega TEXT,typedispatch TEXT,reasondispatch TEXT,control_id TEXT,item_id TEXT,domembarque_id text,checkintime text,checkouttime text,chk_timestatus text,fuerzatrabajo text, messageServerDispatch text, messageServerTimeDispatch text,chk_statusServerDispatch text, messageServerStatusDispatch)");
 
             //Version 12  --Tramo de Visita
             db.execSQL("CREATE TABLE quoteeffectiveness (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,type TEXT,quote TEXT,umd TEXT)");
@@ -417,7 +417,7 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE visitsection ADD COLUMN idref TEXT");
         }
         if(oldVersion==16&&newVersion==17) {
-            //db.execSQL("ALTER TABLE statusdispatch ADD COLUMN fuerzatrabajo TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN fuerzatrabajo TEXT");
             db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerDispatch TEXT");
             db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerTimeDispatch TEXT");
             db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivercode TEXT");
@@ -431,14 +431,48 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE rutavendedor ADD COLUMN addresscode TEXT");
             db.execSQL("ALTER TABLE usuario ADD COLUMN census TEXT");
             db.execSQL("ALTER TABLE typedispatch ADD COLUMN statusupdate TEXT");
-
-
         }
         if(oldVersion==17&&newVersion==18) {
             db.execSQL("ALTER TABLE visitsection ADD COLUMN idrefitemid TEXT");
             db.execSQL("ALTER TABLE visitsection ADD COLUMN legalnumberref TEXT");
-
         }
+        if(oldVersion==18&&newVersion==19) {
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_statusServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerStatusDispatch TEXT");
+        }
+        if(oldVersion==17&&newVersion==19) {
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idrefitemid TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN legalnumberref TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_statusServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerStatusDispatch TEXT");
+        }
+        if(oldVersion==16&&newVersion==19) {
+
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivercode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehiclecode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehicleplate TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivermobile TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivername TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN messageserver TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN census TEXT");
+            db.execSQL("ALTER TABLE typedispatch ADD COLUMN statusupdate TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idrefitemid TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN legalnumberref TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN fuerzatrabajo TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerTimeDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_statusServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerStatusDispatch TEXT");
+        }
+        if(oldVersion==19&&newVersion==20) {
+            db.execSQL("ALTER TABLE lead ADD COLUMN chk_ServerGeolocation TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN MessageServerGeolocation TEXT");
+        }
+
+
 
     }
 

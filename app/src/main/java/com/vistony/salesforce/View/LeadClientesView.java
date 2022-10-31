@@ -117,6 +117,7 @@ public class LeadClientesView extends Fragment {
     private GPSController gpsController;
     private Location mLocation;
     double latitude, longitude;
+    static String latitudeClient,longitudeClient;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     LocationManager locationManager;
     File file;
@@ -132,6 +133,9 @@ public class LeadClientesView extends Fragment {
         LeadClientesView fragment = new LeadClientesView();
         object=param1;
         ArrayList<ListaClienteCabeceraEntity> Lista = (ArrayList<ListaClienteCabeceraEntity>) param1;
+        latitudeClient=null;
+        longitudeClient=null;
+
         for(int i=0;i<Lista.size();i++)
         {
             cliente_id=Lista.get(i).getCliente_id();
@@ -146,6 +150,8 @@ public class LeadClientesView extends Fragment {
             rucdni=Lista.get(i).getRucdni();
             addresscode=Lista.get(i).getAddresscode();
             chk_ruta=Lista.get(i).getChk_ruta();
+            latitudeClient=Lista.get(i).getLatitud();
+            longitudeClient=Lista.get(i).getLongitud();
             Log.e("REOS","LeadClientesView-newInstancia-cliente_id:"+Lista.get(i).getCliente_id());
             Log.e("REOS","LeadClientesView-newInstancia-nombrecliente:"+Lista.get(i).getNombrecliente());
             Log.e("REOS","LeadClientesView-newInstancia-domebarque_id:"+Lista.get(i).getDomembarque_id());
@@ -168,6 +174,8 @@ public class LeadClientesView extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        latitude=0;
+        longitude=0;
         if(type!=null)
         {
             if (type.equals("leadUpdateClient")) {
@@ -692,7 +700,7 @@ public class LeadClientesView extends Fragment {
             final Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
             final Button dialogButtonExit = dialog.findViewById(R.id.dialogButtonCancel);
             mapView = dialog.findViewById(R.id.mapView);
-            getLocation();
+            //getLocation();
             dialogButton.setText("Add");
             dialogButtonExit.setText("Cancel");
 
@@ -720,6 +728,13 @@ public class LeadClientesView extends Fragment {
                                 //longitud = location.getLongitude();
                                 //latitud = latitude;
                                 //longitud = longitude;
+                                if(latitudeClient!=null)
+                                {
+                                    latitude=Float.parseFloat(latitudeClient);
+                                    longitude=Float.parseFloat(longitudeClient);
+                                }
+                                Log.e("REOS", "LeadClientesView.displayDialogMap.latitudeClient:" + latitudeClient);
+                                Log.e("REOS", "LeadClientesView.displayDialogMap.longitudeClient:" + longitudeClient);
                                 Log.e("REOS", "LeadClientesView.displayDialogMap.latitud:" + latitude);
                                 Log.e("REOS", "LeadClientesView.displayDialogMap.longitud:" + longitude);
                                 LatLng latLng = new LatLng(latitude, longitude);
@@ -860,6 +875,7 @@ public class LeadClientesView extends Fragment {
             });
 
             dialogButton.setOnClickListener(v -> {
+                getLocation();
                 editTextCoordenates.setText(latitude + "," + longitude);
                 direccion = editTextAddress.getText().toString();
                 referencia = editTextAddressReference.getText().toString();

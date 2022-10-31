@@ -11,6 +11,8 @@ import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitaEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
+
 import java.util.ArrayList;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -58,8 +60,8 @@ public class VisitaRepository extends ViewModel {
         Log.e("REOS", "VisitaRepository-sendVisit-json"+json);
         if(json!=null){
             RequestBody jsonRequest = RequestBody.create(json,MediaType.parse("application/json; charset=utf-8"));
-            Log.e("REOS", "VisitaRepository-sendVisit-sendVisit"+Config.getClient().create(Api.class).sendVisit(jsonRequest).toString());
-            Config.getClient().create(Api.class).sendVisit(jsonRequest).enqueue(new Callback<VisitaEntity>() {
+            Log.e("REOS", "VisitaRepository-sendVisit-sendVisit"+Config.getClient().create(Api.class).sendVisit(SesionEntity.imei, jsonRequest).toString());
+            Config.getClient().create(Api.class).sendVisit(SesionEntity.imei,jsonRequest).enqueue(new Callback<VisitaEntity>() {
                 @Override
                 public void onResponse(Call<VisitaEntity> call, Response<VisitaEntity> response) {
 

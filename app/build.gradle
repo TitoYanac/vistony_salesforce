@@ -42,6 +42,7 @@ android {
             debuggable true
             buildConfigField('String' , 'BASE_ENVIRONMENT', '"/api"')
             manifestPlaceholders = [appName:"Producción Sales Force"]
+            //manifestPlaceholders = [appName:"Rofalab Sales Force"]
         }
     }
 
@@ -86,13 +87,13 @@ android {
             applicationIdSuffix ".peru"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //---------------------------
-            versionName "2.2.9"
+            versionName "2.2.10"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -129,13 +130,13 @@ android {
             applicationIdSuffix ".perurofalab"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.rf"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.rf"')
             //Produccion------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //---------------------------
-            versionName "2.2.9"
+            versionName "1.0.0"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -172,7 +173,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'com.google.firebase:firebase-analytics:20.0.2'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
@@ -223,10 +224,10 @@ dependencies {
     //SDK FireBase
     //implementation 'com.google.firebase:firebase-analytics:17.4.1'
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:29.0.3')
-
     // Declare the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation platform('com.google.firebase:firebase-bom:29.0.3')
+    implementation 'com.google.firebase:firebase-analytics:20.0.2'
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-perf'
@@ -235,4 +236,7 @@ dependencies {
 
     //Circles Menu
     implementation 'com.github.Hitomis:CircleMenu:v1.1.0'
+
+    //QR Scanner
+    implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
 }

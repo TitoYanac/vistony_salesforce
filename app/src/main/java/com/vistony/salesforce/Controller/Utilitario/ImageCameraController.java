@@ -25,6 +25,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -185,10 +186,12 @@ public class ImageCameraController {
         Log.e("REOS","ImageCameraController-getImageSDtoByte-file_path-Ingreso"+file_path);
         byte[] bitmapdata=null;
         try {
-            Bitmap bitmap = BitmapFactory.decodeFile(file_path);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 4;
+            Bitmap bitmap = BitmapFactory.decodeFile(file_path,options);
             ByteArrayOutputStream blob = new ByteArrayOutputStream();
             //bitmap.compress(Bitmap.CompressFormat.JPEG, 10/* Ignored for PNGs */, blob);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 10/* Ignored for PNGs */, blob);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 30/* Ignored for PNGs */, blob);
             bitmapdata = blob.toByteArray();
             encoded = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
             //encoded = Base64.encodeToString(convertBitmapToByteArray(bitmap), Base64.DEFAULT);
@@ -267,5 +270,7 @@ public class ImageCameraController {
         }
         return ruta;
     }
+
+
 }
 

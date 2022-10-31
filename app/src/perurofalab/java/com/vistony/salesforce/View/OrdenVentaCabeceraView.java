@@ -682,6 +682,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 inflater.inflate(R.menu.menu_orden_venta_cabecera, menu);
                 break;
             case "peru":
+            case "perurofalab":
                 inflater.inflate(R.menu.menu_orden_venta_cabecera_peru, menu);
                 break;
             default:
@@ -937,6 +938,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 generarpdf.setEnabled(true);
                 break;
             case "peru":
+            case "perurofalab":
 
                 break;
             default:

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp"
+    android:id="@+id/layout_lista_find_geolocation_id"
+    >
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="30dp"
+        >
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/lbl_date_register"
+                android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/tv_cliente"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="Cliente1"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_terminopago"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_payment_term"
+                android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/tv_terminopago"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_factura"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Factura:"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_factura"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Factura1"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_saldo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saldo:"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceListItem" />
+
+            <TextView
+                android:id="@+id/tv_saldo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saldo1"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_delivery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_historic_status_dispatch_delivery"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_delivery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entrega"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_status_dispatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_status"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_status_dispatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_status"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_ocurrencies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_ocurrencies"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_ocurrencies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/lbl_ocurrencies"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceListItem"
+                />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_nombrefuerzatrabajo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_seller_dispatch_sheet"
+                android:textAppearance="?attr/textAppearanceListItem" />
+
+            <TextView
+                android:id="@+id/tv_nombrefuerzatrabajo"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="Vendedor1"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_direccion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_address"
+                android:textAppearance="?attr/textAppearanceListItem"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_direccion"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Direccion1"
+                android:layout_marginLeft="10dp"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </TableRow>
+    </TableLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="240dp"
+        >
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5">
+            <TextView
+                android:id="@+id/tv_visita"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visita: "
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold"
+                />
+            <CheckBox
+                android:id="@+id/chk_visit_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="Inicio"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_visit_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="Fin"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5">
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visita: "
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                />
+
+            <CheckBox
+                android:id="@+id/chk_collection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="@string/lbl_chk_collecion"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <CheckBox
+                android:id="@+id/chk_updatedispatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:text="@string/lbl_dispatch"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="5">
+        </TableRow>
+    </TableLayout>
+
+
+
+</RelativeLayout>

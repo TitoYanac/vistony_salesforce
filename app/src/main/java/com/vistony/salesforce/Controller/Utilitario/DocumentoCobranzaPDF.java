@@ -49,7 +49,9 @@ import harmony.java.awt.Color;
 import com.journeyapps.barcodescanner.*;
 import com.google.zxing.BarcodeFormat;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.MenuView;
@@ -145,12 +147,12 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
         Document documento = new Document(pagina);
 
         try {
-            Log.e("REOS","DocumentoCobranzaPDF-generarPdf-EntroalTry1");
-            CifradoController cifradoController=new CifradoController();
-            String encData="";
+            Log.e("REOS", "DocumentoCobranzaPDF-generarPdf-EntroalTry1");
+            CifradoController cifradoController = new CifradoController();
+            String encData = "";
             try {
-                Log.e("REOS","DocumentoCobranzaPDF-generarPdf-EntroalTryCifrado");
-                encData= CifradoController.encrypt("Vistony2019*".getBytes("UTF-16LE"), recibo.getBytes("UTF-16LE"));
+                Log.e("REOS", "DocumentoCobranzaPDF-generarPdf-EntroalTryCifrado");
+                encData = CifradoController.encrypt("Vistony2019*".getBytes("UTF-16LE"), recibo.getBytes("UTF-16LE"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -164,7 +166,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             Image imagenqr = Image.getInstance(streamqr.toByteArray());
             imagenqr.setAlignment(Element.ALIGN_CENTER);
 
-            File f = crearFichero(recibo+".pdf");
+            File f = crearFichero(recibo + ".pdf");
 
             // Creamos el flujo de datos de salida para el fichero donde
             // guardaremos el pdf.
@@ -178,46 +180,6 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
 
             documento.open();
 
-            /*if(!BuildConfig.FLAVOR.equals("peru"))
-            {
-                PdfContentByte waterMar = writer.getDirectContentUnder();
-                // Comience a configurar la marca de agua
-                waterMar.beginText();
-                // Establecer transparencia de marca de agua
-                PdfGState gs = new PdfGState();
-                // Establece la opacidad de la fuente de relleno en0.4f
-                gs.setFillOpacity(0.1f);
-                //
-                Bitmap bitmap2 = null;
-                bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo);
-
-                ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
-                bitmap2.compress(Bitmap.CompressFormat.PNG, 100, stream2);
-                Image imagen2 = Image.getInstance(stream2.toByteArray());
-                imagen2.setAlignment(Element.ALIGN_CENTER);
-                //
-
-                //Image image = Image.getInstance("d:/tomatocc.jpg");
-                // establecer coordenadas posición absoluta X Y
-                imagen2.setAbsolutePosition(100, 500);
-                // Establecer el radio de rotación
-                imagen2.setRotation(0); // Rotar radianes
-                // Establecer el ángulo de rotación
-                imagen2.setRotationDegrees(0);// Ángulo de rotación
-                // Establecer zoom proporcional
-                imagen2.scalePercent(90); // Escala proporcionalmente
-                imagen2.scaleAbsolute(500, 500); // Tamaño personalizado
-                // Establecer transparencia
-                waterMar.setGState(gs);
-                // Añadir imagen de marca de agua
-                waterMar.addImage(imagen2);
-                // Establecer transparencia
-                waterMar.setGState(gs);
-                // Finalizar configuración
-                waterMar.endText();
-                waterMar.stroke();
-            }*/
-
             Font font = FontFactory.getFont(FontFactory.HELVETICA, 28,
                     Font.BOLD, Color.black);
             Font font2 = FontFactory.getFont(FontFactory.HELVETICA, 20,
@@ -229,15 +191,47 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
                     Font.BOLD, Color.black);
             // Insertamos una imagen que se encuentra en los recursos de la
             // aplicacion.
-            Bitmap bitmap=null;
+            Bitmap bitmap = null;
 
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+            //Get Date User
+            UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+            UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+            ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
+            //set image company
+            switch (ObjUsuario.compania_id) {
+                case "01":
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+                    break;
+                case "C011":
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_bluker_negro);
+                    break;
+                case "13":
+                    bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo_rofalab_negro2);
+                    break;
+                default:
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+                    break;
+            }
+
+            /*if(SesionEntity.compania_id.equals("01"))
+            {
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+            }
+            else if(SesionEntity.compania_id.equals("C011")) {
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_bluker_negro);
+            }
+            else if(SesionEntity.compania_id.equals("13"))
+            {
+                bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo_rofalab_negro2);
+            }else{
+                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+            }*/
+            //bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100 ,stream);
             Image imagen = Image.getInstance(stream.toByteArray());
             imagen.setAlignment(Element.ALIGN_CENTER);
-            //documento.add(waterMar);
             documento.add(imagen);
 
 
@@ -386,6 +380,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
                     OpenDocumentPDF(recibo,context);
                     break;
                 case "peru":
+                case "perurofalab":
                     if(SesionEntity.Print.equals("N"))
                     {
                         OpenDocumentPDF(recibo,context);

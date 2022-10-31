@@ -219,7 +219,7 @@ public class MenuView extends AppCompatActivity
     QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
     HistoricContainerSalesRepository historicContainerSalesRepository;
     TableRow tablerowzona;
-
+    public Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,7 +232,7 @@ public class MenuView extends AppCompatActivity
         dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
-
+        activity=this;
         view= (MenuItem) findViewById(R.id.nav_cobranzas);
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(this);
         CobranzaCabeceraFragment= new Fragment();
@@ -265,9 +265,9 @@ public class MenuView extends AppCompatActivity
         quotasPerCustomerRepository = new ViewModelProvider(this).get(QuotasPerCustomerHeadRepository.class);
         quotasPerCustomerDetailRepository = new ViewModelProvider(this).get(QuotasPerCustomerDetailRepository.class);
         cobranzaRepository = new ViewModelProvider(this).get(CobranzaRepository.class);
-        cobranzaRepository.PendingCollectionQR(this).observe(MenuView.this, data -> {
+        /*cobranzaRepository.PendingCollectionQR(this).observe(MenuView.this, data -> {
             Log.e("Jepicame","=>"+data);
-        });
+        });*/
         historicContainerSalesRepository = new ViewModelProvider(this).get(HistoricContainerSalesRepository.class);
         Conexion=usuarioSQLite.ObtenerUsuarioSesion().getOnline();
         rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(this);
@@ -385,6 +385,12 @@ public class MenuView extends AppCompatActivity
                 onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(7).setVisible(false));
                 break;
+            default:
+                Log.e("REOS","Se creo sin navigation.getMenu().perfil");
+                //El error de que aparecen todas las opciones
+                Intent intent = new Intent(this, LoginView.class);
+                startActivity(intent);
+                break;
         }
         ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -430,6 +436,9 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
                 break;
             default:
+                Log.e("REOS","Se creo sin navigation.getMenu()");
+                Intent intent = new Intent(this, LoginView.class);
+                startActivity(intent);
                 break;
         }
 
@@ -2147,6 +2156,33 @@ public class MenuView extends AppCompatActivity
                        uploadMessage = null;
                    }
                    break;
+               case 101:
+                   if (data != null) {
+                       //Toast.makeText(this, "QR ORDEN VENTA", Toast.LENGTH_LONG).show();
+                       if (data == null) {
+                           Toast.makeText(this, "Tu has canceladp el Scaneo", Toast.LENGTH_LONG).show();
+                       } else {
+                       String decData = "";
+                       try {
+                           decData = decrypt("Vistony2019*", Base64.decode(result.getContents().getBytes("UTF-16LE"), Base64.DEFAULT));
+                       } catch (Exception e) {
+                           e.printStackTrace();
+                       }
+                           Toast.makeText(this, "Leído: " + data.toString(), Toast.LENGTH_SHORT).show();
+                           //alertdialogSalesOrderQR(this,decData).show();
+                       }
+                   }
+ //                  String lectura = data.getStringExtra("extras");
+//                   Toast.makeText(this, "Leído: " + result.getContents().toString(), Toast.LENGTH_SHORT).show();
+                   /*String decData = "";
+                   try {
+                       decData = decrypt("Vistony2019*", Base64.decode(result.getContents().getBytes("UTF-16LE"), Base64.DEFAULT));
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
+                   Toast.makeText(this, "Leído: " + result.getContents().toString(), Toast.LENGTH_SHORT).show();*/
+                   //alertdialogSalesOrderQR(this,decData).show();
+                   break;
                 default:
                     Log.d("jpcm", " entro al default con este requestCode " + requestCode);
                     break;
@@ -2158,6 +2194,7 @@ public class MenuView extends AppCompatActivity
                 Toast.makeText(this, "Tu has canceladp el Scaneo", Toast.LENGTH_LONG).show();
             } else {
                 String decData = "";
+                Toast.makeText(this, "Leído2: " + result.getContents().toString(), Toast.LENGTH_SHORT).show();
                 try {
                     decData = decrypt("Vistony2019*", Base64.decode(result.getContents().getBytes("UTF-16LE"), Base64.DEFAULT));
                 } catch (Exception e) {
@@ -2195,6 +2232,55 @@ public class MenuView extends AppCompatActivity
     }
 
 
+    private Dialog alertdialogSalesOrderQR(Context context, String data) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog_salesorder_qr);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView tv_salesorder_id=(TextView) dialog.findViewById(R.id.tv_salesorder_id);
+        TextView tv_cliente=(TextView) dialog.findViewById(R.id.tv_cliente);
+        TextView tv_seller=(TextView) dialog.findViewById(R.id.tv_seller);
+        TextView tv_date=(TextView) dialog.findViewById(R.id.tv_date);
+        TextView tv_amount_salesorder=(TextView) dialog.findViewById(R.id.tv_amount_salesorder);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText("ORDEN DE VENTA");
+        String salesorderid="",orderdate="",client="",amount="",seller="";
+
+        try{
+            String[] salesorder_data= data.split("&&&");
+            salesorderid=salesorder_data[0];
+            orderdate=salesorder_data[1];
+            client=salesorder_data[2];
+            amount=salesorder_data[3];
+            seller=salesorder_data[4];
+        }catch (Exception e)
+        {
+            Toast.makeText(this, "alertdialogSalesOrderQR-Error:" + e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        tv_salesorder_id.setText(salesorderid);
+        tv_cliente.setText(client);
+        tv_seller.setText(seller);
+        tv_date.setText(orderdate);
+        tv_amount_salesorder.setText(amount);
+
+
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
 
     private File createImageFile() throws IOException {
 
@@ -2291,6 +2377,12 @@ public class MenuView extends AppCompatActivity
         Log.e("REOS","MenuView-onResume");
         super.onResume();
         registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
+        {
+            Intent intent = new Intent(this, LoginView.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -2320,6 +2412,9 @@ public class MenuView extends AppCompatActivity
         Log.e("REOS","MenuView-onRestart");
         super.onRestart();
         Induvis.refreshGlobalVariables(this);
+        //Intent intent = new Intent(this, LoginView.class);
+        //startActivity(intent);
+        //finish();
         //registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
     }
 }

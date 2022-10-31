@@ -89,7 +89,7 @@ public class StatusDispatchSQLite {
         return 1;
     }
 
-    public ArrayList<HeaderStatusDispatchEntity> getListHeaderStatusDispatch (Context context)
+    public ArrayList<HeaderStatusDispatchEntity> getListHeaderDispatchPhoto (Context context)
     {
 
         ArrayList<HeaderStatusDispatchEntity> listHeaderStatusDispatchEntity=new ArrayList<>();
@@ -99,14 +99,14 @@ public class StatusDispatchSQLite {
             Cursor fila = bd.rawQuery(
                     "Select  control_id from statusdispatch" +
                             " where (chkrecibido='N' or chkrecibido='0') " +
-                            " group by control_id LIMIT 3 "
+                            " group by control_id LIMIT 1 "
                     ,null);
 
             while (fila.moveToNext())
             {
                 headerStatusDispatchEntity= new HeaderStatusDispatchEntity();
                 headerStatusDispatchEntity.setDocEntry(fila.getString(0));
-                headerStatusDispatchEntity.setDetails(getListDetailStatusDispatch(fila.getString(0)));
+                headerStatusDispatchEntity.setDetails(getListDetailDispatchPhoto(fila.getString(0)));
                 listHeaderStatusDispatchEntity.add(headerStatusDispatchEntity);
             }
 
@@ -122,7 +122,7 @@ public class StatusDispatchSQLite {
         return listHeaderStatusDispatchEntity;
     }
 
-    public ArrayList<DetailStatusDispatchEntity> getListDetailStatusDispatch (String control_id)
+    public ArrayList<DetailStatusDispatchEntity> getListDetailDispatchPhoto (String control_id)
     {
 
         ArrayList<DetailStatusDispatchEntity> listDetailStatusDispatchEntity=new ArrayList<>();
@@ -136,10 +136,6 @@ public class StatusDispatchSQLite {
 
             while (fila.moveToNext())
             {
-                byte[] byteArray=null,byteArray2=null;
-                String encoded = null,encoded2 = null;
-                Bitmap bitmap= null,bitmap2= null;
-                ImageCameraController imageCameraController=new ImageCameraController();
                 detailStatusDispatchEntity= new DetailStatusDispatchEntity();
                 detailStatusDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
                 detailStatusDispatchEntity.setFuerzatrabajo(fila.getString(27));
@@ -147,26 +143,8 @@ public class StatusDispatchSQLite {
                 detailStatusDispatchEntity.setReturnReason(fila.getString(4));
                 detailStatusDispatchEntity.setEntrega_id(fila.getString(7));
                 detailStatusDispatchEntity.setComments(fila.getString(9));
-                encoded=imageCameraController.getBASE64(fila.getString(10));
-                encoded2=imageCameraController.getBASE64(fila.getString(13));
-
-                if(encoded.equals(""))
-                {
-                    detailStatusDispatchEntity.setPhotoStore(encoded);
-                }else {
-                    String Base64PhotoLocal = encoded.replace("\n", "");
-                    String Base64PhotoLocal2 = Base64PhotoLocal.replace("'\u003d'", "=");
-                    detailStatusDispatchEntity.setPhotoStore(Base64PhotoLocal2);
-                }
-                if(encoded2.equals(""))
-                {
-                    detailStatusDispatchEntity.setPhotoDocument(encoded2);
-                }else {
-                    String Base64PhotoGuia = encoded2.replace("\n", "");
-                    String Base64PhotoGuia2 = Base64PhotoGuia.replace("'\u003d'", "=");
-                    detailStatusDispatchEntity.setPhotoDocument(Base64PhotoGuia2);
-                }
-                //detailStatusDispatchEntity.setDocEntry(fila.getString(21));
+                detailStatusDispatchEntity.setPhotoStore(fila.getString(10));
+                detailStatusDispatchEntity.setPhotoDocument(fila.getString(13));
                 detailStatusDispatchEntity.setLineId(fila.getString(22));
                 detailStatusDispatchEntity.setDeliveryNotes(fila.getString(7));
                 detailStatusDispatchEntity.setReturnReasonText(fila.getString(20));
@@ -446,7 +424,7 @@ public class StatusDispatchSQLite {
             Cursor fila = bd.rawQuery(
                     "Select  control_id from statusdispatch" +
                             " where (chk_timestatus='N' or chk_timestatus='0') and  checkintime<>'0' "+
-                            " group by control_id LIMIT 3"
+                            " group by control_id LIMIT 1"
                     ,null);
 
             while (fila.moveToNext())
@@ -479,7 +457,7 @@ public class StatusDispatchSQLite {
             Cursor fila = bd.rawQuery(
                     "Select  * from statusdispatch" +
                             " where (chk_timestatus='N' or chk_timestatus='0') and  checkintime<>'0' "+
-                            "and  control_id='"+control_id+"' LIMIT 3"
+                            "and  control_id='"+control_id+"' LIMIT 10"
                     ,null);
 
             while (fila.moveToNext())
@@ -507,55 +485,6 @@ public class StatusDispatchSQLite {
         bd.close();
         return listDetailStatusDispatchEntity;
     }
-
-    /*public List<HistoricStatusDispatchEntity> getListStatusDispatchforDateSalesPerson (String Date)
-    {
-
-        List<HistoricStatusDispatchEntity> listStatusDispatchEntity=new ArrayList<>();
-        HistoricStatusDispatchEntity historicStatusDispatchEntity;
-        abrir();
-        try {
-            Cursor fila = bd.rawQuery(
-                    "Select * from statusdispatch" +
-                            " where " +
-                            //"(chkrecibido='N' or chkrecibido='0') AND" +
-                            " fecha_registro='"+Date+"' "
-                    ,null);
-
-            while (fila.moveToNext())
-            {
-                historicStatusDispatchEntity= new HistoricStatusDispatchEntity();
-                //historicStatusDispatchEntity.setCompania_id(fila.getString(0));
-                //historicStatusDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
-                //historicStatusDispatchEntity.setUsuario_id (fila.getString(2));
-                historicStatusDispatchEntity.setTipoDespacho_ID (fila.getString(3));
-                historicStatusDispatchEntity.setMotivoDespacho_ID(fila.getString(4));
-                historicStatusDispatchEntity.setCliente_ID(fila.getString(5));
-                //historicStatusDispatchEntity.setFactura_id(fila.getString(6));
-                historicStatusDispatchEntity.setEntrega_ID(fila.getString(7));
-                historicStatusDispatchEntity.setChk_Recibido(fila.getString(8));
-                historicStatusDispatchEntity.setObservacion(fila.getString(9));
-                historicStatusDispatchEntity.setFotoLocal(fila.getString(10));
-                historicStatusDispatchEntity.setFotoGuia(fila.getString(13));
-                historicStatusDispatchEntity.setCliente(fila.getString(16));
-                historicStatusDispatchEntity.setEntrega(fila.getString(18));
-                historicStatusDispatchEntity.setFactura(fila.getString(17));
-                historicStatusDispatchEntity.setTipoDespacho(fila.getString(19));
-                historicStatusDispatchEntity.setMotivoDespacho(fila.getString(20));
-                listStatusDispatchEntity.add(historicStatusDispatchEntity);
-            }
-
-            bd.close();
-        }catch (Exception e)
-        {
-            // TODO: handle exception
-            System.out.println(e.getMessage());
-            Log.e("REOS","StatusDispatchSQLite-getListStatusDispatchforDate-error:"+e.toString());
-        }
-
-        bd.close();
-        return listStatusDispatchEntity;
-    }*/
 
     public int getCountStatusDispatchforDate (String fuerzatrabajo_id,String cardcode,String control_id,String item_id)
     {
@@ -587,6 +516,101 @@ public class StatusDispatchSQLite {
 
         bd.close();
         return resultado;
+    }
+
+    public ArrayList<HeaderStatusDispatchEntity> getHeaderListStatusDispatch (Context context)
+    {
+        ArrayList<HeaderStatusDispatchEntity> listHeaderStatusDispatchEntity=new ArrayList<>();
+        HeaderStatusDispatchEntity headerStatusDispatchEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select  control_id from statusdispatch" +
+                            " where chk_statusServerDispatch is null " +
+                            " and (chkrecibido='N' or chkrecibido='0') " +
+                            " group by control_id LIMIT 1"
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                headerStatusDispatchEntity= new HeaderStatusDispatchEntity();
+                headerStatusDispatchEntity.setDocEntry(fila.getString(0));
+                headerStatusDispatchEntity.setDetails(getDetailListStatusDispatch(fila.getString(0)));
+                listHeaderStatusDispatchEntity.add(headerStatusDispatchEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS", "StatusDispatchSQlite-getHeaderListStatusDispatchTime-error"+e);
+        }
+
+        bd.close();
+        return listHeaderStatusDispatchEntity;
+    }
+
+    public ArrayList<DetailStatusDispatchEntity> getDetailListStatusDispatch (String control_id)
+    {
+
+        ArrayList<DetailStatusDispatchEntity> listDetailStatusDispatchEntity=new ArrayList<>();
+        DetailStatusDispatchEntity detailStatusDispatchEntity;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select  * from statusdispatch" +
+                            " where chk_statusServerDispatch is null  " +
+                            " and (chkrecibido='N' or chkrecibido='0') " +
+                            "and  control_id='"+control_id+"' LIMIT 10"
+                    ,null);
+
+            while (fila.moveToNext())
+            {
+                detailStatusDispatchEntity= new DetailStatusDispatchEntity();
+                detailStatusDispatchEntity.setFuerzatrabajo_id(fila.getString(1));
+                detailStatusDispatchEntity.setFuerzatrabajo(fila.getString(27));
+                detailStatusDispatchEntity.setDelivered(fila.getString(3));
+                detailStatusDispatchEntity.setReturnReason(fila.getString(4));
+                detailStatusDispatchEntity.setEntrega_id(fila.getString(7));
+                detailStatusDispatchEntity.setComments(fila.getString(9));
+                detailStatusDispatchEntity.setLineId(fila.getString(22));
+                detailStatusDispatchEntity.setDeliveryNotes(fila.getString(7));
+                detailStatusDispatchEntity.setReturnReasonText(fila.getString(20));
+                listDetailStatusDispatchEntity.add(detailStatusDispatchEntity);
+            }
+
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            Log.e("REOS", "StatusDispatchSQlite-getDetailListStatusDispatchTime-error"+e);
+        }
+
+        bd.close();
+        return listDetailStatusDispatchEntity;
+    }
+
+    public int UpdateResultStatusDispatchList (String control_id,String item_id,String Message){
+        Log.e("REOS","StatusDispatchSQlite-UpdateResultStatusDispatchList-control_id"+control_id);
+        Log.e("REOS","StatusDispatchSQlite-UpdateResultStatusDispatchList-item_id"+item_id);
+        int status=0;
+        try {
+            abrir();
+            ContentValues registro = new ContentValues();
+            registro.put("chk_statusServerDispatch","1");
+            registro.put("messageServerStatusDispatch", Message);
+
+            bd.update("statusdispatch",registro,"control_id=? and item_id=?",new String[]{control_id,item_id});
+            status=1;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            bd.close();
+        }
+        return status;
     }
 
 

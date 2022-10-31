@@ -32,6 +32,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Dao.SQLite.QuoteEffectivenessSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
@@ -39,6 +40,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.QuoteEffectivenessEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.ResumenDiarioEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SummaryofeffectivenessEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuoteEffectivenessEntityResponse;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
@@ -257,8 +259,26 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             // aplicacion.
             Bitmap bitmap=null;
 
-            bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+            //bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+            UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+            UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+            ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
+            //set image company
+            switch (ObjUsuario.compania_id) {
+                case "01":
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+                    break;
+                case "C011":
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_bluker_negro);
+                    break;
+                case "13":
+                    bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo_rofalab_negro2);
+                    break;
+                default:
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+                    break;
+            }
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100 ,stream);
             Image imagen = Image.getInstance(stream.toByteArray());

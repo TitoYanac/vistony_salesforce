@@ -152,6 +152,7 @@ public class CobranzaRepository extends ViewModel {
 
         RequestBody json = RequestBody.create((new JSONObject(params)).toString(),okhttp3.MediaType.parse("application/json; charset=utf-8"));
         Call<CobranzaDetalleEntity> call = api.updateCollection(codeSap,json);
+//        Call<CobranzaDetalleEntity> call = api.updateCollection(json);
         Log.e("REOS", "CobranzaRepository-sendPatch-call: "+call.toString());
         try{
             Response response= call.execute();
@@ -545,7 +546,15 @@ public class CobranzaRepository extends ViewModel {
             cobranzaDetalleSQLiteDao =new CobranzaDetalleSQLiteDao(context);
         }
         ArrayList<CollectionEntity> listCollection=null;
-        listCollection = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendienteEnvioEstadoDepositadosJSON(SesionEntity.compania_id, SesionEntity.usuario_id);
+
+        if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            listCollection = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendienteEnvioEstadoDepositadosJSONDrivers(SesionEntity.compania_id, SesionEntity.usuario_id);
+        }else {
+            listCollection = cobranzaDetalleSQLiteDao.ObtenerCobranzaDetallePendienteEnvioEstadoDepositadosJSON(SesionEntity.compania_id, SesionEntity.usuario_id);
+        }
+
+
         Log.e("REOS","CobranzaRepository-depositedPendingCollection-UpdateCollection-listCollection.size(): "+listCollection.size());
         if(listCollection!=null && listCollection.size()>0){
             json = gson.toJson(listCollection);
@@ -570,7 +579,9 @@ public class CobranzaRepository extends ViewModel {
                 RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
                 Log.e("REOS", "CobranzaRepository-depositedPendingCollection-UpdateCollection-jsonRequest: " + jsonRequest.toString());
                 //RequestBody jsonRequest = RequestBody.create((new JSONObject(params)).toString(),okhttp3.MediaType.parse("application/json; charset=utf-8"));
-                Config.getClient().create(Api.class).updateCollection(listCollection.get(0).getCode(), jsonRequest).enqueue(new Callback<CobranzaDetalleEntity>() {
+
+                //Config.getClient().create(Api.class).updateCollection(jsonRequest).enqueue(new Callback<CobranzaDetalleEntity>() {
+                        Config.getClient().create(Api.class).updateCollection(listCollection.get(0).getCode(),jsonRequest).enqueue(new Callback<CobranzaDetalleEntity>() {
                     @Override
                     public void onResponse(Call<CobranzaDetalleEntity> call, Response<CobranzaDetalleEntity> response) {
                         ArrayList<String> responseData = new ArrayList<>();
@@ -702,6 +713,7 @@ public class CobranzaRepository extends ViewModel {
             RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
             Log.e("REOS", "CobranzaRepository-depositedPendingCollection-UpdateCollection-jsonRequest: " + jsonRequest.toString());
             Config.getClient().create(Api.class).updateCollection(listCollection.get(0).getCode(), jsonRequest).enqueue(new Callback<CobranzaDetalleEntity>() {
+            //Config.getClient().create(Api.class).updateCollection(jsonRequest).enqueue(new Callback<CobranzaDetalleEntity>() {
                 @Override
                 public void onResponse(Call<CobranzaDetalleEntity> call, Response<CobranzaDetalleEntity> response) {
 
@@ -929,6 +941,7 @@ public class CobranzaRepository extends ViewModel {
                 Log.e("REOS", "CobranzaRepository-depositedPendingCollection-UpdateCollection-jsonRequest: " + jsonRequest.toString());
                 //RequestBody jsonRequest = RequestBody.create((new JSONObject(params)).toString(),okhttp3.MediaType.parse("application/json; charset=utf-8"));
                 Config.getClient().create(Api.class).updateCollection(listCollection.get(0).getCode(), jsonRequest).enqueue(new Callback<CobranzaDetalleEntity>() {
+                //Config.getClient().create(Api.class).updateCollection(jsonRequest).enqueue(new Callback<CobranzaDetalleEntity>() {
                     @Override
                     public void onResponse(Call<CobranzaDetalleEntity> call, Response<CobranzaDetalleEntity> response) {
                         ArrayList<String> responseData = new ArrayList<>();

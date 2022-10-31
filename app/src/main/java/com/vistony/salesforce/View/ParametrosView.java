@@ -325,6 +325,7 @@ ParametrosView extends Fragment {
             case "peru":
             case "bolivia":
             case "paraguay":
+            case "perurofalab":
                 if (listaparametrosSQLiteEntity.isEmpty()) {
                     if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
                         //if (listaparametrosSQLiteEntity.isEmpty()) {
@@ -451,8 +452,14 @@ ParametrosView extends Fragment {
         });
         }
 
+        //Envio de Geolocalizacion con Foto
         leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
+            Log.e("REOS", "sendGeolocationClient" + data);
+        });
+
+        //Envio de Geolocalizacion sin Foto en Bloque
+        leadClienteViewModel.sendGeolocationBlock(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
+            Log.e("REOS", "sendGeolocationBlock" + data);
         });
         //Enviar Firma Electronica
         //cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
@@ -464,16 +471,21 @@ ParametrosView extends Fragment {
 
             /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
-            statusDispatchRepository.statusDispatchSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
-                Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
+            statusDispatchRepository.statusDispatchListSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                Log.e("REOS", "statusDispatchRepository-->statusDispatchListSend-->resultdata" + data);
             });
 
             //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
             statusDispatchRepository.statusDispatchSendTime(getContext(),executor.diskIO()).observe(getActivity(), data -> {
-                Log.e("REOS", "statusDispatchRepository-->statusDispatchSend-->resultdata" + data);
+                Log.e("REOS", "statusDispatchRepository-->statusDispatchSendTime-->resultdata" + data);
             });
 
+            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+            statusDispatchRepository.statusDispatchSendPhoto(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                Log.e("REOS", "statusDispatchRepository-->statusDispatchSendPhoto-->resultdata" + data);
+            });
 
         }
 
@@ -615,6 +627,7 @@ ParametrosView extends Fragment {
 
                                 break;
                             case "peru":
+                            case "perurofalab":
                                 if(!SesionEntity.perfil_id.equals("CHOFER"))
                                 {
                                  clienteRepository = new ClienteRepository(getContext());

@@ -78,6 +78,7 @@ public class MenuConfiguracionView extends Fragment {
                 break;
             case "peru":
             case "paraguay":
+            case "perurofalab":
                 v= inflater.inflate(R.layout.fragment_menu_configuracion, container, false);
                 break;
         }
@@ -117,7 +118,9 @@ public class MenuConfiguracionView extends Fragment {
             }
         });
 
-        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("paraguay"))
+        if(     BuildConfig.FLAVOR.equals("peru")||
+                BuildConfig.FLAVOR.equals("paraguay")||
+                BuildConfig.FLAVOR.equals("perurofalab"))
         {
             if(SesionEntity.Print.equals("N"))
             {

@@ -3,6 +3,7 @@ package com.vistony.salesforce.Dao.Retrofit;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.JsonSyntaxException;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Controller.Utilitario.FileController;
 import com.vistony.salesforce.Entity.SesionEntity;
 
 import org.json.JSONException;
@@ -34,7 +36,12 @@ public class BackupRepository  extends ViewModel {
 
     public LiveData<Object> sendSqlite(Context context){
         String imei= SesionEntity.imei;
+
+
         File file = new File(Environment.getDataDirectory(),"/data/"+context.getPackageName()+"/databases/dbcobranzas");
+
+
+
         Api api = Config.getClient().create(Api.class);
         RequestBody requestBody=RequestBody.create(file,MediaType.parse("multipart/form-data"));
 
@@ -71,6 +78,7 @@ public class BackupRepository  extends ViewModel {
                 status.setValue(message);
             }
         } );
+
 
         return status;
     }

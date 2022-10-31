@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -335,13 +336,33 @@ public class MenuView extends AppCompatActivity
         tv_nombrefuerzatrabajo_navheader.setText(String.valueOf(SesionEntity.nombrefuerzadetrabajo));
 //      tv_correlativo_navheader.setText(String.valueOf(correlativo));
 
-        if(SesionEntity.compania_id.equals("C011"))
+        /*if(SesionEntity.compania_id.equals("C011"))
         {
             imv_compania_menu.setImageResource(R.mipmap.logo_bluker_2);
         }
         else if(SesionEntity.compania_id.equals("C013"))
         {
             imv_compania_menu.setImageResource(R.mipmap.rofalab304x90_2);
+        }*/
+
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
+        //set image company
+        switch (ObjUsuario.compania_id) {
+            case "01":
+                imv_compania_menu.setImageResource(R.mipmap.logo_factura);
+                break;
+            case "C011":
+                imv_compania_menu.setImageResource(R.mipmap.logo_bluker_2);
+                break;
+            case "13":
+                imv_compania_menu.setImageResource(R.mipmap.logo_rofalab_788_229);
+                break;
+            default:
+                imv_compania_menu.setImageResource(R.mipmap.logo_factura);
+                break;
         }
 
 
@@ -418,6 +439,7 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
                 break;
             case "peru":
+            case "perurofalab":
                 navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
@@ -2174,7 +2196,23 @@ public class MenuView extends AppCompatActivity
                         Log.e("log,",""+ex);
                     }
                     if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.vistony.salesforce.peru" , photoFile);
+                        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+                        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+                        Uri photoURI=null;
+                        switch (ObjUsuario.compania_id) {
+                            case "01":
+                                photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.vistony.salesforce.peru" , photoFile);
+                                break;
+                            case "13":
+                                photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.vistony.salesforce.perurofalab" , photoFile);
+                                break;
+                            default:
+                                photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.vistony.salesforce.peru" , photoFile);
+                                break;
+                        }
+                        //Uri photoURI = FileProvider.getUriForFile(getApplicationContext(),"com.vistony.salesforce.peru" , photoFile);
+
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         startActivityForResult(intent,20);
                     }

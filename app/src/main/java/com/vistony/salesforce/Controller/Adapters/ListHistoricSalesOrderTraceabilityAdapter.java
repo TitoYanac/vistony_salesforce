@@ -319,7 +319,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Facturado y Proceso Despacho y Entregado");
             }
         }
-        else if(BuildConfig.FLAVOR.equals("peru")) {
+        else if((BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("perurofalab"))){
             String[] descriptionData = {"Orden\nVenta","Pend.\nRevision", "Aprobacion\nOrden", "Factura", "Entrega\nMercaderia"};
             holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
             Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:"+statusDispatch);

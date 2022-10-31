@@ -33,6 +33,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.vistony.salesforce.Controller.Utilitario.FileController;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
@@ -161,9 +162,23 @@ public class ConfigSistemaView extends Fragment{
         cveliminar = v.findViewById(R.id.cveliminar);
         cvsincronizar =v.findViewById(R.id.cvsincronizar);
         createFile=v.findViewById(R.id.asdFirstFile);
+        FileController fileController=new FileController();
 
         cveliminar.setOnClickListener(v -> AlertaEliminarDialog().show());
-        cvsincronizar.setOnClickListener(v -> AlertaSincronizarDialog().show());
+        cvsincronizar.setOnClickListener(v -> {
+            ProgressDialog progress = new ProgressDialog(getActivity());
+            progress.setTitle("Cargando");
+            progress.setMessage("Por favor espere...");
+            //AlertaSincronizarDialog().show()
+                    try {
+                        fileController.CopyDbcobranzas(getContext());
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "¡No se ha podido guardar el fichero!-Error: " + e, Toast.LENGTH_SHORT).show();
+                    }
+            progress.dismiss();
+                }
+
+        );
         clearTemp.setOnClickListener(v->{
             File fdelete = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"OrdenVenta");
             File fdelete2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),"Cobranza");

@@ -141,7 +141,15 @@ public class DepositoRepository extends ViewModel {
             cobranzaCabeceraSQLiteDao =new CobranzaCabeceraSQLiteDao(context);
         }
 
-        ArrayList<DepositEntity> depositos = cobranzaCabeceraSQLiteDao.ObtenerCobranzaCabeceraPendientesWS(SesionEntity.compania_id, SesionEntity.usuario_id);
+        ArrayList<DepositEntity> depositos;
+        if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            depositos = cobranzaCabeceraSQLiteDao.ObtenerCobranzaCabeceraPendientesWSDrivers(SesionEntity.compania_id, SesionEntity.usuario_id);
+        }else {
+            depositos = cobranzaCabeceraSQLiteDao.ObtenerCobranzaCabeceraPendientesWS(SesionEntity.compania_id, SesionEntity.usuario_id);
+        }
+
+
         Log.e("REOS","DepositoRepository-enviarDepositos-depositos.size(): "+depositos.size());
 
         if(depositos!=null && depositos.size()>0){
@@ -290,7 +298,8 @@ public class DepositoRepository extends ViewModel {
             RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
             Log.e("REOS", "DepositoRepository-UpdatedepositStatusJSON-UpdateCollection-jsonRequest: " + jsonRequest.toString());
             //RequestBody jsonRequest = RequestBody.create((new JSONObject(params)).toString(),okhttp3.MediaType.parse("application/json; charset=utf-8"));
-            Config.getClient().create(Api.class).updateDeposit(depositos.get(0).getCode(), jsonRequest).enqueue(new Callback<DepositList>() {
+            //Config.getClient().create(Api.class).updateDeposit(depositos.get(0).getCode(), jsonRequest).enqueue(new Callback<DepositList>() {
+            Config.getClient().create(Api.class).updateDeposit(jsonRequest).enqueue(new Callback<DepositList>() {
                 @Override
                 public void onResponse(Call<DepositList> call, Response<DepositList> response) {
                     Log.e("REOS","DepositoRepository-UpdatedepositStatusJSON-response: "+response.toString());

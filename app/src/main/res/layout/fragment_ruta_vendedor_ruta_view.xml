@@ -8,155 +8,28 @@
    android:id="@+id/fragmentRutaVendedorNoRuta"
    tools:context=".View.RutaVendedorNoRutaView">
    <!-- TODO: Update blank fragment layout -->
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swiperefresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <ListView
-        android:id="@+id/listrutavendedorruta"
-        android:layout_width="match_parent"
-        android:layout_height="603dp" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    <!--
-        <LinearLayout
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="170dp"
+            >
 
             <ListView
                 android:id="@+id/listrutavendedorruta"
-                android:layout_width="match_parent"
-                android:layout_height="603dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/colorPrimary"
-                android:focusable="false">
-
-                <TextView
-                    android:id="@+id/tv_cantidad_cliente_cabecera_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:text="0"
-                    android:textColor="@color/White"
-                    android:textSize="24dp" />
-
-                <TextView
-                    android:id="@+id/txt_fake_info3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toLeftOf="@id/tv_cantidad_cliente_cabecera_total"
-                    android:text="Total Clientes"
-                    android:textColor="@color/White"
-                    android:textSize="24dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/colorPrimary"
-                android:focusable="false">
-
-                <TextView
-                    android:id="@+id/tv_cantidad_cliente_cabecera_visita"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:text="0"
-                    android:textColor="@color/White"
-                    android:textSize="24dp" />
-
-                <TextView
-                    android:id="@+id/txt_fake_info33"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toLeftOf="@id/tv_cantidad_cliente_cabecera_visita"
-                    android:text="Clientes Visitados"
-                    android:textColor="@color/White"
-                    android:textSize="24dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/colorPrimary"
-                android:focusable="false">
-
-                <TextView
-                    android:id="@+id/tv_cantidad_cliente_cabecera_pedido"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:text="0"
-                    android:textColor="@color/White"
-                    android:textSize="24dp" />
-
-                <TextView
-                    android:id="@+id/TEXTiNFO22"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toLeftOf="@id/tv_cantidad_cliente_cabecera_pedido"
-                    android:text="Clientes con Pedido"
-                    android:textColor="@color/White"
-                    android:textSize="24dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@color/colorPrimary"
-                android:focusable="false">
-
-                <TextView
-                    android:id="@+id/tv_cantidad_cliente_cabecera_cobranza"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:text="0"
-                    android:textColor="@color/White"
-                    android:textSize="24dp" />
-
-                <TextView
-                    android:id="@+id/TEXTiNFO2COBRAOS"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toLeftOf="@id/tv_cantidad_cliente_cabecera_cobranza"
-                    android:text="Clientes Cobrados"
-                    android:textColor="@color/White"
-                    android:textSize="24dp" />
-            </RelativeLayout>
-        </LinearLayout>
-        -->
-
-
-
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:background="@color/colorPrimary"
-        android:focusable="false">
+        android:layout_gravity="bottom"
+        >
         <TableRow
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView

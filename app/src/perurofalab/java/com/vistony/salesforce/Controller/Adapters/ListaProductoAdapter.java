@@ -144,6 +144,7 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
                             sendArrayProduct(lead);
                             break;
                         case "peru":
+                        case "perurofalab":
                             if(Double.parseDouble (lead.getStock()) <=0)
                             {
                                 alertaProductoSinStock(getContext(), "El Producto Elegido tiene Stock 0,desea continuar?", lead).show();

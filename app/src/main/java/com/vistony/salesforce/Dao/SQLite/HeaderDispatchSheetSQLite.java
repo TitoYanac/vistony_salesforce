@@ -113,19 +113,15 @@ public class HeaderDispatchSheetSQLite {
         try {
             Cursor fila = bd.rawQuery(
                     "Select count(compania_id) from headerdispatchsheet",null);
-
             while (fila.moveToNext())
             {
                 resultado= Integer.parseInt(fila.getString(0));
-
             }
         }catch (Exception e)
         {
             System.out.println(e.getMessage());
         }
-
         bd.close();
-
         return resultado;
     }
 
@@ -159,6 +155,26 @@ public class HeaderDispatchSheetSQLite {
 
         bd.close();
         return listaHojaDespachoCabeceraSQLiteEntity;
+    }
+
+    public int getCountHeaderDispatchSheetDate (String DispatchDate)
+    {
+        int resultado=0;
+
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select count(compania_id) from headerdispatchsheet where fechahojadespacho='"+DispatchDate+"'",null);
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
+        return resultado;
     }
 }
 

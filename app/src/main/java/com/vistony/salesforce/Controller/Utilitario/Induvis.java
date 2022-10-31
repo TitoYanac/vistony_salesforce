@@ -65,6 +65,12 @@ public class Induvis {
                         "Central:0986-454-534/0986-125-810 E-mail: ventas@vistony.com   " +
                         " Web: www.vistony.com.py";
                 break;
+            case "perurofalab":
+                information="R.U.C N° 20601500605 " +
+                        "MZA. B1 LOTE. 01 INT. D1 PQUE.IND.DE ANCON - ACOMPIA(ALT.KM.46.5 " +
+                        "PAN.NORTE) LIMA - LIMA - ANCON " +
+                        "Telf: 945168184 E-mail: rofalab@tolbrin.com" ;
+                break;
         }
 
         return information;
@@ -82,6 +88,7 @@ public class Induvis {
             case "ecuador":
             case "peru":
             case "paraguay":
+            case "perurofalab":
                 year=dateBD.substring(0,4);
                 month=dateBD.substring(4,6);
                 day=dateBD.substring(6,8);
@@ -105,6 +112,7 @@ public class Induvis {
             case "bolivia":
             case "ecuador":
             case "paraguay":
+            case "perurofalab":
                 hour=timeBD.substring(0,2);
                 minute=timeBD.substring(2,4);
                 second=timeBD.substring(4,6);
@@ -127,6 +135,7 @@ public class Induvis {
                 case "ecuador":
                 case "chile":
                 case "paraguay":
+                case "perurofalab":
                     hour = timeBD.substring(0, 2);
                     minute = timeBD.substring(2, 4);
                     second = timeBD.substring(4, 6);
@@ -155,6 +164,8 @@ public class Induvis {
                 break;
             case "paraguay":
                 impuesto=0.10;
+            case "perurofalab":
+                impuesto=0.18;
                 break;
         }
 
@@ -179,6 +190,9 @@ public class Induvis {
             case "paraguay":
                 impuesto="10";
                 break;
+            case "perurofalab":
+                impuesto="18";
+                break;
         }
 
         return impuesto;
@@ -201,6 +215,8 @@ public class Induvis {
                 break;
             case "paraguay":
                 agencia="P80035312-9";
+            case "perurofalab":
+                agencia="P20102306598";
                 break;
         }
 
@@ -218,6 +234,7 @@ public class Induvis {
                 impuesto="IVA_12";
                 break;
             case "peru":
+            case "perurofalab":
                 impuesto="IGV";
                 break;
             case "paraguay":
@@ -232,6 +249,7 @@ public class Induvis {
         switch (BuildConfig.FLAVOR){
 
             case "peru":
+            case "perurofalab":
                 tituloventa="ORDEN VENTA";
                 break;
             case ("ecuador"):
@@ -333,6 +351,7 @@ public class Induvis {
             case "bolivia":
             case "peru":
             case "paraguay":
+            case "perurofalab":
                 dias=0;
                 break;
             case "ecuador":
@@ -347,6 +366,7 @@ public class Induvis {
         String draft="N";
         switch (BuildConfig.FLAVOR){
             case "peru":
+            case "perurofalab":
                 draft="N";
                 break;
             case "ecuador":
@@ -455,6 +475,7 @@ public class Induvis {
                 case "ecuador":
                 case "peru":
                 case "paraguay":
+                case "perurofalab":
                     year=dateBD.substring(0,4);
                     month=dateBD.substring(4,6);
                     day=dateBD.substring(6,8);

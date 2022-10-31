@@ -167,7 +167,7 @@ public class LeadSQLite {
         try {
             abrir();
 
-            Cursor fila = bd.rawQuery("SELECT  cardcode,domembarque_id,IFNULL(latitud,'0') AS latitud ,IFNULL(longitud,'0') AS longitud,foto FROM lead WHERE recibido_api =0 and type='leadUpdateClientCensus' LIMIT 3 ;", null);
+            Cursor fila = bd.rawQuery("SELECT  cardcode,domembarque_id,IFNULL(latitud,'0') AS latitud ,IFNULL(longitud,'0') AS longitud,foto,addresscode FROM lead WHERE recibido_api =0 and type='leadUpdateClientCensus'   LIMIT 3 ;", null);
             ArrayList<LeadAddressEntity> leads = new  ArrayList<LeadAddressEntity>();
 
             if (fila.moveToFirst()) {
@@ -179,9 +179,16 @@ public class LeadSQLite {
                     DireccionSQLite direccionSQLite=new DireccionSQLite(context);
                     ArrayList<DireccionCliente> listDireccionCliente=new ArrayList<>();
                     listDireccionCliente=direccionSQLite.getListAddressOV(fila.getString(fila.getColumnIndex("cardcode")),fila.getString(fila.getColumnIndex("domembarque_id")));
-                    for(int i= 0;i<listDireccionCliente.size();i++)
+
+                    if(!listDireccionCliente.isEmpty())
                     {
-                        leadAddressEntity.setAddressCode(listDireccionCliente.get(i).getAddresscode());
+                        for(int i= 0;i<listDireccionCliente.size();i++)
+                        {
+                            leadAddressEntity.setAddressCode(listDireccionCliente.get(i).getAddresscode());
+                        }
+                    }
+                    else {
+                        leadAddressEntity.setAddressCode(fila.getString(fila.getColumnIndex("addresscode")));
                     }
                     //leadAddressEntity.setAddressCode(fila.getString(fila.getColumnIndex("addresscode")));
                     leadAddressEntity.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
@@ -204,7 +211,7 @@ public class LeadSQLite {
         }
     }
 
-    public int UpdateResultLeadAddress (String cardcode,String addresscode,String message){
+    public int UpdateResultLeadAddress (String cardcode,String addresscode,String message,String Stattus){
         int status=0;
         String domembarque_id="";
         DireccionSQLite direccionSQLite=new DireccionSQLite(context);
@@ -217,7 +224,7 @@ public class LeadSQLite {
         try {
             abrir();
             ContentValues registro = new ContentValues();
-            registro.put("recibido_api","1");
+            registro.put("recibido_api",Stattus);
             registro.put("messageserver",message);
             bd.update("lead",registro,"cardcode=? and domembarque_id=?",new String[]{cardcode,domembarque_id});
             status=1;
@@ -242,6 +249,124 @@ public class LeadSQLite {
 
             bd.update("lead",registro,"cardcode=?",new String[]{cardcode});
             status=1;
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            bd.close();
+        }
+        return status;
+    }
+
+    public ArrayList<LeadAddressEntity> getGeolocationforClient(String cardcode){
+        try {
+            abrir();
+
+            Cursor fila = bd.rawQuery("SELECT  cardcode,domembarque_id,IFNULL(latitud,'0') AS latitud ,IFNULL(longitud,'0') AS longitud,foto,addresscode,messageserver,recibido_api,fecha FROM lead WHERE recibido_api =0 and type='leadUpdateClientCensus' and cardcode='"+cardcode+"'", null);
+            ArrayList<LeadAddressEntity> leads = new  ArrayList<LeadAddressEntity>();
+
+            if (fila.moveToFirst()) {
+                do {
+                    String encoded = null;
+                    ImageCameraController imageCameraController=new ImageCameraController();
+                    LeadAddressEntity leadAddressEntity=new LeadAddressEntity();
+                    leadAddressEntity.setCardCode(fila.getString(fila.getColumnIndex("cardcode")));
+                    DireccionSQLite direccionSQLite=new DireccionSQLite(context);
+                    ArrayList<DireccionCliente> listDireccionCliente=new ArrayList<>();
+                    listDireccionCliente=direccionSQLite.getListAddressOV(fila.getString(fila.getColumnIndex("cardcode")),fila.getString(fila.getColumnIndex("domembarque_id")));
+
+                    if(!listDireccionCliente.isEmpty())
+                    {
+                        for(int i= 0;i<listDireccionCliente.size();i++)
+                        {
+                            leadAddressEntity.setAddressCode(listDireccionCliente.get(i).getAddresscode());
+                        }
+                    }
+                    else {
+                        leadAddressEntity.setAddressCode(fila.getString(fila.getColumnIndex("addresscode")));
+                    }
+                    //leadAddressEntity.setAddressCode(fila.getString(fila.getColumnIndex("addresscode")));
+                    leadAddressEntity.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
+                    leadAddressEntity.setLongitude(fila.getString(fila.getColumnIndex("longitud")));
+                    encoded=imageCameraController.getBASE64(fila.getString(fila.getColumnIndex("foto")));
+                    String Base64PhotoLocal = encoded.replace("\n", "");
+                    String Base64PhotoLocal2 = Base64PhotoLocal.replace("'\u003d'", "=");
+                    leadAddressEntity.setPhoto(Base64PhotoLocal2);
+                    leadAddressEntity.setMessage(fila.getString(fila.getColumnIndex("messageserver")));
+                    leadAddressEntity.setChk_recibido(fila.getString(fila.getColumnIndex("recibido_api")));
+                    leadAddressEntity.setFecha(fila.getString(fila.getColumnIndex("fecha")));
+                    leads.add(leadAddressEntity);
+                } while (fila.moveToNext());
+            }
+
+            bd.close();
+            return leads;
+
+        }catch (Exception ex){
+            Log.e("REOS","LeadSQLite-getGeolocationClient-ex"+ex.getMessage());
+            bd.close();
+            return null;
+        }
+    }
+
+    public ArrayList<LeadAddressEntity> getGeolocationBlock(){
+        try {
+            abrir();
+
+            Cursor fila = bd.rawQuery("SELECT  cardcode,domembarque_id,IFNULL(latitud,'0') AS latitud ,IFNULL(longitud,'0') AS longitud,foto,addresscode FROM lead WHERE recibido_api =0 and type='leadUpdateClientCensus' and chk_ServerGeolocation is null  and latitud not in ('null') LIMIT 30 ;", null);
+            ArrayList<LeadAddressEntity> leads = new  ArrayList<LeadAddressEntity>();
+
+            if (fila.moveToFirst()) {
+                do {
+                    LeadAddressEntity leadAddressEntity=new LeadAddressEntity();
+                    leadAddressEntity.setCardCode(fila.getString(fila.getColumnIndex("cardcode")));
+                    DireccionSQLite direccionSQLite=new DireccionSQLite(context);
+                    ArrayList<DireccionCliente> listDireccionCliente=new ArrayList<>();
+                    listDireccionCliente=direccionSQLite.getListAddressOV(fila.getString(fila.getColumnIndex("cardcode")),fila.getString(fila.getColumnIndex("domembarque_id")));
+
+                    if(!listDireccionCliente.isEmpty())
+                    {
+                        for(int i= 0;i<listDireccionCliente.size();i++)
+                        {
+                            leadAddressEntity.setAddressCode(listDireccionCliente.get(i).getAddresscode());
+                        }
+                    }
+                    else {
+                        leadAddressEntity.setAddressCode(fila.getString(fila.getColumnIndex("addresscode")));
+                    }
+                    leadAddressEntity.setLatitude(fila.getString(fila.getColumnIndex("latitud")));
+                    leadAddressEntity.setLongitude(fila.getString(fila.getColumnIndex("longitud")));
+                    leads.add(leadAddressEntity);
+                } while (fila.moveToNext());
+            }
+
+            bd.close();
+            return leads;
+
+        }catch (Exception ex){
+            Log.e("REOS","LeadSQLite-getGeolocationBlock-ex"+ex.getMessage());
+            bd.close();
+            return null;
+        }
+    }
+
+    public int UpdateResultLeadAddressBlock (String cardcode,String addresscode,String message,String Stattus){
+        int status=0;
+        String domembarque_id="";
+        DireccionSQLite direccionSQLite=new DireccionSQLite(context);
+        ArrayList<DireccionCliente> listDireccionCliente=new ArrayList<>();
+        listDireccionCliente=direccionSQLite.getListAddress(cardcode,addresscode);
+        for(int i=0;i<listDireccionCliente.size();i++)
+        {
+            domembarque_id=listDireccionCliente.get(i).getDomembarque_id();
+        }
+        try {
+            abrir();
+            ContentValues registro = new ContentValues();
+            registro.put("chk_ServerGeolocation",Stattus);
+            registro.put("MessageServerGeolocation",message);
+            bd.update("lead",registro,"cardcode=? and domembarque_id=?",new String[]{cardcode,domembarque_id});
+            status=1;
+
         }catch (Exception e){
             e.printStackTrace();
         }finally {

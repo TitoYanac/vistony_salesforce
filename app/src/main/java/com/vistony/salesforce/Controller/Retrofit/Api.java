@@ -66,6 +66,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
@@ -116,8 +117,10 @@ public interface Api {
         //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
     //Call<CobranzaDetalleEntity> sendCollectionCountSend ( @Body RequestBody params);
 
+    //@PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections")
     @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollection(@Path("codeSap") String codeSap, @Body RequestBody params);
+    //Call<CobranzaDetalleEntity> updateCollection(@Body RequestBody params);
 
     @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
@@ -138,7 +141,7 @@ public interface Api {
 
     @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Visit")
     //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Visit")
-    Call<VisitaEntity> sendVisit (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
+    Call<VisitaEntity> sendVisit (@Header("Token") String content_type, @Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/SalesOrder")
     Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Query("imei") String imei,@Query("fecha") String fecha);
@@ -148,9 +151,10 @@ public interface Api {
     Call<DepositList> sendDeposit (@Body RequestBody params);
 
 
-    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits/{codeSap}")
-    //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits/{codeSap}")
-    Call<DepositList> updateDeposit(@Path("codeSap") String codeSap, @Body RequestBody params);
+    //@PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits/{codeSap}")
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
+    //Call<DepositList> updateDeposit(@Path("codeSap") String codeSap, @Body RequestBody params);
+    Call<DepositList> updateDeposit(@Body RequestBody params);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
     Call<HistoricoDepositoEntityResponse> getHistoricoDeposito (@Query("imei") String imei,@Query("fecIni") String fecIni,@Query("fecFin") String fecFin);

@@ -1968,10 +1968,11 @@ public class FormulasController {
         try {
             for (int i = 0; i < Lista.size(); i++) {
                 //CadenaSMS="GlaGlaGla2";
-                CadenaSMS = "VISTONY\n " +
-                        "R.U.C N 20102306598 Mz. B1 Lt. 1 - Parque Industrial de Ancon -\n" +
-                        "Acompia Central: (01) 5521325 E-mail: ventas@vistony.com Web:\n" +
-                        "www.vistony.com\n"+
+                CadenaSMS = "ROFALAB\n" +
+                        "R.U.C N 20601500605\n" +
+                        "MZA. B1 LOTE. 01 INT. D1 PQUE.IND.DE ANCON - ACOMPIA(ALT.KM.46.5\n" +
+                        "PAN.NORTE) LIMA - LIMA - ANCON-\n" +
+                        "Telf: 945168184 E-mail: rofalab@tolbrin.com\n" +
                         Lista.get(i).getCliente_id() + "\n"  +
                         Lista.get(i).getNombrecliente() + "\n" +
                         "*********************DATOS COBRADOR*******************\n"  +

@@ -1,13 +1,32 @@
 package com.vistony.salesforce.View;
 
+import static android.app.Activity.RESULT_OK;
+
+import static com.vistony.salesforce.Controller.Utilitario.CifradoController.decrypt;
+
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,6 +37,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -27,6 +47,7 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricoOrdenVentaAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricoOrdenVentaDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoOrdenVentaWS;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
@@ -38,6 +59,8 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -45,7 +68,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
+import com.blikoon.qrcodescanner.QrCodeActivity;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HistoricoOrdenVentaView#newInstance} factory method to
@@ -62,7 +85,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
     private String mParam1;
     private String mParam2;
     View v;
-    ImageButton imb_calendario_historico_orden_venta;
+    ImageButton imb_calendario_historico_orden_venta,imb_consultar_QR;
     TextView tv_fecha_historico_orden_venta,tv_cantidad__orden_venta,tv_monto_orden_venta;
     Button btnconsultarfecha;
     ListView listviewhistoricoordenventa;
@@ -76,8 +99,8 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
     String fecha;
     private static OnFragmentInteractionListener mListener;
     private ProgressDialog pd;
-
-
+    private static final int REQUEST_CODE_QR_SCAN = 101;
+    private ActivityResultLauncher<Intent> someActivityResultLauncher;
     public HistoricoOrdenVentaView() {
         // Required empty public constructor
     }
@@ -131,6 +154,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
         tv_fecha_historico_orden_venta=(TextView) v.findViewById(R.id.tv_fecha_historico_orden_venta);
         tv_cantidad__orden_venta=(TextView) v.findViewById(R.id.tv_cantidad__orden_venta);
         tv_monto_orden_venta=(TextView) v.findViewById(R.id.tv_monto_orden_venta);
+        imb_consultar_QR=(ImageButton)v.findViewById(R.id.imb_consultar_QR);
         btnconsultarfecha=(Button) v.findViewById(R.id.btnconsultarfecha);
         listviewhistoricoordenventa=(ListView) v.findViewById(R.id.listviewhistoricoordenventa);
         imb_calendario_historico_orden_venta.setOnClickListener(this);
@@ -141,7 +165,56 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
         tv_fecha_historico_orden_venta.setText(fecha);
         hiloObtenerHistoricoOrdenVenta =  new HiloObtenerHistoricoOrdenVenta();
         hiloObtenerHistoricoOrdenVenta.execute();
+
+        imb_consultar_QR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                validateQR(getActivity());
+            }});
         return v;
+    }
+
+    public void validateQR( Activity activity)
+    {
+        try {
+            Log.e("REOS","statusDispatchRepository-->FotoGuia-->Inicia");
+            Intent i = new Intent(activity, QrCodeActivity.class);
+            startActivityForResult(i, REQUEST_CODE_QR_SCAN);
+        }catch (Exception e)
+        {
+            Toast.makeText(activity, "HistoricoOrdenVentaView-Error:" + e.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        try {
+            if (resultCode != getActivity().RESULT_OK) {
+                Toast.makeText(getActivity(), "No se pudo obtener una respuesta", Toast.LENGTH_SHORT).show();
+                String resultado = data.getStringExtra("com.blikoon.qrcodescanner.error_decoding_image");
+                if (resultado != null) {
+                    Toast.makeText(getActivity(), "No se pudo escanear el código QR", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+            if (requestCode == REQUEST_CODE_QR_SCAN) {
+                if (data != null) {
+                    String lectura = data.getStringExtra("com.blikoon.qrcodescanner.got_qr_scan_relult");
+                    String decData = "";
+                    try {
+                        decData = decrypt("Vistony2019*", Base64.decode(lectura.getBytes("UTF-16LE"), Base64.DEFAULT));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    //Toast.makeText(getActivity(), "Leído: " + decData, Toast.LENGTH_SHORT).show();
+                    alertdialogSalesOrderQR(getContext(), decData).show();
+                }
+            }
+        }catch (Exception e)
+        {
+            Toast.makeText(getActivity(), "No se puedo leer el QR - error:" + e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -453,7 +526,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
             if (Lista.isEmpty()){
                 Toast.makeText(getContext(), "No hay datos disponibles", Toast.LENGTH_SHORT).show();
             }else{
-                listaHistoricoOrdenVentaAdapter = new ListaHistoricoOrdenVentaAdapter(getActivity(), ListaHistoricoOrdenVentaDao.getInstance().getLeads(Lista));
+                listaHistoricoOrdenVentaAdapter = new ListaHistoricoOrdenVentaAdapter(getActivity(), ListaHistoricoOrdenVentaDao.getInstance().getLeads(Lista),getActivity());
                 listviewhistoricoordenventa.setAdapter(listaHistoricoOrdenVentaAdapter);
 
                 BigDecimal monto_total_orden_venta=new BigDecimal(0);
@@ -520,6 +593,56 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
     public void onDetach() {
         super.onDetach();
         ListenerBackPress.setTemporaIdentityFragment("onDetach");
+    }
+
+    private Dialog alertdialogSalesOrderQR(Context context, String data) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog_salesorder_qr);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView tv_salesorder_id=(TextView) dialog.findViewById(R.id.tv_salesorder_id);
+        TextView tv_cliente=(TextView) dialog.findViewById(R.id.tv_cliente);
+        TextView tv_seller=(TextView) dialog.findViewById(R.id.tv_seller);
+        TextView tv_date=(TextView) dialog.findViewById(R.id.tv_date);
+        TextView tv_amount_salesorder=(TextView) dialog.findViewById(R.id.tv_amount_salesorder);
+        TextView text=(TextView) dialog.findViewById(R.id.text);
+        text.setText("ORDEN DE VENTA");
+        String salesorderid="",orderdate="",client="",amount="",seller="";
+
+        try{
+            String[] salesorder_data= data.split("&&&");
+            salesorderid=salesorder_data[0];
+            orderdate=salesorder_data[1];
+            client=salesorder_data[2];
+            amount=salesorder_data[3];
+            seller=salesorder_data[4];
+        }catch (Exception e)
+        {
+            Toast.makeText(getContext(), "alertdialogSalesOrderQR-Error:" + e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+        tv_salesorder_id.setText(salesorderid);
+        tv_cliente.setText(client);
+        tv_seller.setText(seller);
+        tv_date.setText(orderdate);
+        tv_amount_salesorder.setText(amount);
+
+
+        // if button is clicked, close the custom dialog
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 
 }

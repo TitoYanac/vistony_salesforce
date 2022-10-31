@@ -96,6 +96,7 @@ public class ListaClienteCabeceraDao {
                         ,Lista.get(i).getItem_id()
                         ,Lista.get(i).getAddresscode()
                 ));
+                Log.e("REOS","ListaClienteCabeceraDao.getLeads.Lista.get(i).getTerminopago_id()())"+Lista.get(i).getTerminopago_id());
                 Log.e("REOS","ListaClienteCabeceraDao.getLeads.Lista.get(i).getLastpurchase())"+Lista.get(i).getLastpurchase());
                 Log.e("REOS","ListaClienteCabeceraDao.getLeads.Lista.get(i).getChk_ruta())"+Lista.get(i).getChk_ruta());
             }

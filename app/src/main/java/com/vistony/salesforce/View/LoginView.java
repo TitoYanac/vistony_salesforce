@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
@@ -87,6 +89,7 @@ public class LoginView extends AppCompatActivity{
     private Location mLocation;
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
+    ImageView imv_compania_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -103,6 +106,7 @@ public class LoginView extends AppCompatActivity{
         spnperfil =findViewById(R.id.spnperfil);
         spnnombre =findViewById(R.id.spnnombre);
         btnlogin =findViewById(R.id.btnlogin);
+        imv_compania_login=findViewById(R.id.imv_compania_login);
 
         final TextView viewVersion=findViewById(R.id.txt_internet);
         SqliteController db = new SqliteController(this);
@@ -118,6 +122,21 @@ public class LoginView extends AppCompatActivity{
         loadConfigurationPrinter();
         ObtenerVideo();
         verifyPermission();
+
+        /*if(BuildConfig.FLAVOR.equals("perurofalab"))
+        {
+            imv_compania_login.setImageResource(R.mipmap.rofalab304x90_2);
+        }*/
+
+        //set image company
+        switch (BuildConfig.FLAVOR) {
+            case "perurofalab":
+                imv_compania_login.setImageResource(R.mipmap.logo_rofalab_788_229);
+                break;
+            default:
+                imv_compania_login.setImageResource(R.mipmap.logo_factura);
+                break;
+        }
 
         loginRepository.getAndLoadUsers(Imei,this).observe(LoginView.this, data -> {
             if(data==null){

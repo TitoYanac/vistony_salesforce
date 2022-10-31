@@ -20,6 +20,36 @@ public class LeadAddressEntity
     @SerializedName("Message")
     public String Message;
 
+    public String chk_recibido;
+
+    public String fecha;
+
+    public String domembarque_id;
+
+    public String getDomembarque_id() {
+        return domembarque_id;
+    }
+
+    public void setDomembarque_id(String domembarque_id) {
+        this.domembarque_id = domembarque_id;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public String getChk_recibido() {
+        return chk_recibido;
+    }
+
+    public void setChk_recibido(String chk_recibido) {
+        this.chk_recibido = chk_recibido;
+    }
+
     public String getHaveError() {
         return haveError;
     }
