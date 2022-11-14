@@ -151,4 +151,5 @@
     <string name="lbl_dispatch_pending">Pendientes</string>
     <string name="lbl_dispatch_failed">Fallidos</string>
     <string name="lbl_dispatch_sucessfull">Exitosos</string>
+    <string name="lbl_date_dispatch">Fecha Despacho</string>
 </resources>

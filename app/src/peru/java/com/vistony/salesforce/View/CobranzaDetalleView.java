@@ -83,6 +83,7 @@ import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
+import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSMSSQLiteDao;
@@ -93,6 +94,7 @@ import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaDetalleDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
+import com.vistony.salesforce.Entity.SQLite.BancoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
@@ -1674,8 +1676,10 @@ public class CobranzaDetalleView extends Fragment {
     private void addDepositPOS(String montocobrado)
     {
         CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao=new CobranzaCabeceraSQLiteDao(getContext());
-        // BigDecimal bigDecimal=new BigDecimal(et_cobrado.toString());
-
+        String banco_id="";
+        ArrayList<BancoSQLiteEntity> listBankPOS=new ArrayList<>();
+        BancoSQLite bancoSQLite=new BancoSQLite(getContext());
+        listBankPOS=bancoSQLite.ObtenerBancoPOS();
         String Validacion="";
         int ValidaSQLite=0;
         String bancarizado="";
@@ -1687,11 +1691,17 @@ public class CobranzaDetalleView extends Fragment {
         {
             bancarizado="N";
         }
+        for(int i=0;i<listBankPOS.size();i++)
+        {
+            banco_id=listBankPOS.get(i).getBanco_id();
+        }
+
+
         ValidaSQLite=cobranzaCabeceraSQLiteDao.InsertaCobranzaCabecera(
                 SesionEntity.fuerzatrabajo_id+recibo,
                 SesionEntity.usuario_id,
                 SesionEntity.fuerzatrabajo_id,
-                "104111",
+                banco_id,
                 SesionEntity.compania_id,
                 montocobrado,
                 "Deposito",
@@ -1710,7 +1720,7 @@ public class CobranzaDetalleView extends Fragment {
                     SesionEntity.fuerzatrabajo_id+recibo,
                     recibo,
                     SesionEntity.compania_id,
-                    "104111"
+                    banco_id
             );
         }
         Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();

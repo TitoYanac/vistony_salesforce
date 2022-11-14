@@ -5,15 +5,108 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".View.ContainerDispatchSheetView">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp">
+
+                <ImageButton
+                    android:id="@+id/imb_edit_date_dispatch"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/custom_border_button_red"
+                    android:src="@drawable/ic_baseline_date_range_24_white"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginEnd="5dp"
+                    />
+                <TextView
+                    android:id="@+id/tv_sheet_distpatch_date"
+                    android:background="@drawable/borde_cuadrado_hoja_despacho_negro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingTop="15dp"
+                    android:layout_weight="1"
+                    android:enabled="true"
+                    android:hint=""
+                    android:textAlignment="center"
+                    android:text="1900-01-01"
+                    android:textSize="20dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginEnd="5dp"
+                    />
+
+                <ImageButton
+                    android:id="@+id/imb_get_date_dispatch"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/custom_border_button_red"
+                    android:src="@drawable/ic_search_white_24dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    android:layout_marginEnd="5dp"
+                    />
+
+                <ImageButton
+                    android:id="@+id/imb_update_date_dispatch"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/custom_border_button_red"
+                    android:src="@drawable/ic_baseline_update_white_24"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="5dp"
+                    />
+            </TableRow>
+        </TableLayout>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:id="@+id/tv_mensaje"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="Hoja de Despacho actualizado al :" />
+                <TextView
+                    android:id="@+id/tv_date_update"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                     />
+            </TableRow>
+        </TableLayout>
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tollbartab"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="5dp"
             app:layout_collapseMode="pin" />
 
         <com.google.android.material.tabs.TabLayout

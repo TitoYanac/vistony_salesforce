@@ -326,6 +326,7 @@ ParametrosView extends Fragment {
             case "bolivia":
             case "paraguay":
             case "perurofalab":
+            case "espania":
                 if (listaparametrosSQLiteEntity.isEmpty()) {
                     if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
                         //if (listaparametrosSQLiteEntity.isEmpty()) {
@@ -469,11 +470,7 @@ ParametrosView extends Fragment {
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
 
-            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
-            statusDispatchRepository.statusDispatchListSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
-                Log.e("REOS", "statusDispatchRepository-->statusDispatchListSend-->resultdata" + data);
-            });
+
 
             //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
@@ -485,6 +482,12 @@ ParametrosView extends Fragment {
             //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
             statusDispatchRepository.statusDispatchSendPhoto(getContext(),executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("REOS", "statusDispatchRepository-->statusDispatchSendPhoto-->resultdata" + data);
+            });
+
+            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+            statusDispatchRepository.statusDispatchListSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                Log.e("REOS", "statusDispatchRepository-->statusDispatchListSend-->resultdata" + data);
             });
 
         }
@@ -628,6 +631,7 @@ ParametrosView extends Fragment {
                                 break;
                             case "peru":
                             case "perurofalab":
+                            case "espania":
                                 if(!SesionEntity.perfil_id.equals("CHOFER"))
                                 {
                                  clienteRepository = new ClienteRepository(getContext());
@@ -642,7 +646,7 @@ ParametrosView extends Fragment {
                                 break;
                             case "bolivia":
                             case "paraguay":
-                                 clienteRepository = new ClienteRepository(getContext());
+                                 /*clienteRepository = new ClienteRepository(getContext());
                                 LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
@@ -656,7 +660,7 @@ ParametrosView extends Fragment {
                                     listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
                                     CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
                                     parametrosSQLite.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
-                                }
+                                }*/
                                 break;
                         }
 

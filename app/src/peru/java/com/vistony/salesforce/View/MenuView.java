@@ -141,7 +141,9 @@ public class MenuView extends AppCompatActivity
         CanvasView.OnFragmentInteractionListener,
         CurrencyChargedView.OnFragmentInteractionListener,
         MenuConsultaCotizacionView.OnFragmentInteractionListener,
-        HistoricQuotationView.OnFragmentInteractionListener
+        HistoricQuotationView.OnFragmentInteractionListener,
+        ContainerDispatchSheetView.OnFragmentInteractionListener
+
 
 
 {
@@ -758,7 +760,8 @@ public class MenuView extends AppCompatActivity
                 //fragmentSeleccionado=true;
                 //TAG_FRAGMENT="config_print";
 
-                HojaDespachoFragment = new DispatchSheetView();
+                //HojaDespachoFragment = new DispatchSheetView();
+                HojaDespachoFragment = new ContainerDispatchSheetView();
                 fragment="HojaDespachoView";
                 accion="inicio";
                 compuesto=fragment+"-"+accion;

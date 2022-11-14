@@ -110,12 +110,12 @@ public class StatusDispatchSQLite {
                 listHeaderStatusDispatchEntity.add(headerStatusDispatchEntity);
             }
 
-            bd.close();
+            //bd.close();
         }catch (Exception e)
         {
             // TODO: handle exception
             System.out.println(e.getMessage());
-            Log.e("REOS", "StatusDispatchSQlite-getListHeaderStatusDispatch-error"+e);
+            Log.e("REOS", "StatusDispatchSQlite-getListHeaderDispatchPhoto-error"+e);
         }
 
         bd.close();
@@ -127,7 +127,7 @@ public class StatusDispatchSQLite {
 
         ArrayList<DetailStatusDispatchEntity> listDetailStatusDispatchEntity=new ArrayList<>();
         DetailStatusDispatchEntity detailStatusDispatchEntity;
-        abrir();
+        //abrir();
         try {
             Cursor fila = bd.rawQuery(
                     "Select  * from statusdispatch" +
@@ -151,15 +151,15 @@ public class StatusDispatchSQLite {
                 listDetailStatusDispatchEntity.add(detailStatusDispatchEntity);
             }
 
-            bd.close();
+            //bd.close();
         }catch (Exception e)
         {
             // TODO: handle exception
             System.out.println(e.getMessage());
-            Log.e("REOS", "StatusDispatchSQlite-getListDetailStatusDispatch-error"+e);
+            Log.e("REOS", "StatusDispatchSQlite-getListDetailDispatchPhoto-error"+e);
         }
 
-        bd.close();
+        //bd.close();
         return listDetailStatusDispatchEntity;
     }
 
@@ -435,7 +435,7 @@ public class StatusDispatchSQLite {
                 listHeaderStatusDispatchEntity.add(headerStatusDispatchEntity);
             }
 
-            bd.close();
+            //bd.close();
         }catch (Exception e)
         {
             // TODO: handle exception
@@ -474,7 +474,7 @@ public class StatusDispatchSQLite {
                 listDetailStatusDispatchEntity.add(detailStatusDispatchEntity);
             }
 
-            bd.close();
+            //bd.close();
         }catch (Exception e)
         {
             // TODO: handle exception
@@ -539,7 +539,7 @@ public class StatusDispatchSQLite {
                 listHeaderStatusDispatchEntity.add(headerStatusDispatchEntity);
             }
 
-            bd.close();
+            //bd.close();
         }catch (Exception e)
         {
             // TODO: handle exception
@@ -556,7 +556,7 @@ public class StatusDispatchSQLite {
 
         ArrayList<DetailStatusDispatchEntity> listDetailStatusDispatchEntity=new ArrayList<>();
         DetailStatusDispatchEntity detailStatusDispatchEntity;
-        abrir();
+        //abrir();
         try {
             Cursor fila = bd.rawQuery(
                     "Select  * from statusdispatch" +
@@ -580,7 +580,7 @@ public class StatusDispatchSQLite {
                 listDetailStatusDispatchEntity.add(detailStatusDispatchEntity);
             }
 
-            bd.close();
+            //bd.close();
         }catch (Exception e)
         {
             // TODO: handle exception
@@ -588,7 +588,7 @@ public class StatusDispatchSQLite {
             Log.e("REOS", "StatusDispatchSQlite-getDetailListStatusDispatchTime-error"+e);
         }
 
-        bd.close();
+        //bd.close();
         return listDetailStatusDispatchEntity;
     }
 

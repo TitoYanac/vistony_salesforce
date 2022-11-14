@@ -1,14 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".View.DispatchSheetPendingView">
-
+    android:id="@+id/fragmentDiapatchSheetPending"
+    >
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginBottom="120dp"
+        android:id="@+id/list_sheet_pending"
+        />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:focusable="false">
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/lbl_count_total"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:focusable="false"
+                android:text="Total Clientes:"
+                android:textColor="@color/white"
+                android:textSize="24dp" />
+
+            <TextView
+                android:id="@+id/tv_count_total"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="4"
+                android:focusable="false"
+                android:gravity="right"
+                android:text="0"
+                android:textAlignment="gravity"
+                android:textColor="@color/white"
+                android:textSize="24dp">
+            </TextView>
+        </TableRow>
+    </TableLayout>
 </FrameLayout>

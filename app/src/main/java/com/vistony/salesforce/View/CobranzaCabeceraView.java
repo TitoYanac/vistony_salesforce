@@ -1,6 +1,7 @@
 package com.vistony.salesforce.View;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -104,17 +105,17 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    Spinner spnbanco;
+    static Spinner spnbanco;
     static Spinner spntipo;
     TextView txtfecha,txtsumacobrado,tv_fechacobrocheque_edit,tv_fechacobrocheque;
     View v;
     public static EditText etgrupo;
     List<String> listabanco;
-    BancoSQLite bancoSQLite;
-    List <String> Nombresbanco;
-    ArrayAdapter<String> Combonombresbanco;
+    static BancoSQLite bancoSQLite;
+    static List <String> Nombresbanco;
+    static ArrayAdapter<String> Combonombresbanco;
     static List<BancoSQLiteEntity> listabancosqliteentity;
-    ObtenerTareaBancos obtenerTareaBancos;
+    static ObtenerTareaBancos obtenerTareaBancos;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -160,6 +161,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     static int bancarizados=0,depositodirectos=0,count_check=0;
     static Context context;
     String calendar;
+    static Activity activity;
+
     public CobranzaCabeceraView() {
         // Required empty public constructor
     }
@@ -234,6 +237,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
         obtenerListaCobranzas.execute();
         updateTypeDeposit();
+
+        obtenerTareaBancos = new ObtenerTareaBancos();
+        obtenerTareaBancos.execute();
         return cobranzaCabeceraView;
 
     }
@@ -273,7 +279,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        activity=getActivity();
         listabanco = new ArrayList<>();
         bancoSQLite = new BancoSQLite(getContext());
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
@@ -401,6 +407,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     }
                 }
         );
+
         spnbanco.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -415,10 +422,16 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                                 banco=Nombresbanco.get(i).toString();
                             }
                         }
+
                         ArrayList<BancoSQLiteEntity> listaBancoSQLiteEntity = new ArrayList<BancoSQLiteEntity>();
                         BancoSQLite bancoSQLite =new BancoSQLite(getContext());
-                        listaBancoSQLiteEntity= bancoSQLite.ObtenerBancoporCombo(SesionEntity.compania_id,banco);
+                        /*if(chkdepositodirecto.isChecked()){
+                            listaBancoSQLiteEntity= bancoSQLite.getBankDriver();
+                        }else {
+                            listaBancoSQLiteEntity= bancoSQLite.ObtenerBancoporCombo(SesionEntity.compania_id,banco);
 
+                        }*/
+                        listaBancoSQLiteEntity= bancoSQLite.ObtenerBancoporCombo(SesionEntity.compania_id,banco);
                         for(int j=0;j<listaBancoSQLiteEntity.size();j++)
                         {
                             Banco=listaBancoSQLiteEntity.get(j).getBanco_id();
@@ -606,13 +619,26 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     }
 
 
-    private class ObtenerTareaBancos extends AsyncTask<String, Void, Object> {
+    static private class ObtenerTareaBancos extends AsyncTask<String, Void, Object> {
 
 
         @Override
         protected String doInBackground(String... arg0) {
             try {
-                listabancosqliteentity = bancoSQLite.ObtenerBanco();
+                //listabancosqliteentity = bancoSQLite.ObtenerBanco();
+                if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+                {
+                    if (chkdepositodirecto.isChecked()) {
+                        listabancosqliteentity = bancoSQLite.ObtenerBanco();
+                    } else {
+
+                        listabancosqliteentity = bancoSQLite.getBankDriver();
+                    }
+                }else
+                {
+                    listabancosqliteentity = bancoSQLite.ObtenerBanco();
+                }
+                //listabancosqliteentity = bancoSQLite.getBankDriver();
             } catch (Exception e)
             {
                 // TODO: handle exception
@@ -636,7 +662,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     }
 
             }
-            getActivity().setTitle("Deposito");
+            activity.setTitle("Deposito");
             ObtenerBanco();
 
         }
@@ -666,9 +692,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
 
 
 
-    public void ObtenerBanco()
+    static public void ObtenerBanco()
     {
-        Combonombresbanco= new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_item, Nombresbanco);
+        Combonombresbanco= new ArrayAdapter<>(activity,android.R.layout.simple_spinner_item, Nombresbanco);
         spnbanco.setAdapter(Combonombresbanco);
     }
 
@@ -766,7 +792,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 etgrupo.setEnabled(true);
                 agregar_foto_deposito.setEnabled(false);
                 chkbancarizado.setVisibility(View.INVISIBLE);
-                chkdepositodirecto.setVisibility(View.INVISIBLE);
+                //chkdepositodirecto.setVisibility(View.INVISIBLE);
                 imb_consultar_codigo_control.setEnabled(true);
                 imb_consultar_codigo_control.setClickable(true);
                 imb_consultar_codigo_control.setBackgroundColor(Color.parseColor("#D6001C"));
@@ -1061,8 +1087,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 spnbanco.setClickable(true);
                 fab.setEnabled(true);
                 fab.setClickable(true);
-                obtenerTareaBancos = new ObtenerTareaBancos();
-                obtenerTareaBancos.execute();
+                //obtenerTareaBancos = new ObtenerTareaBancos();
+                //obtenerTareaBancos.execute();
 
                 if(listaConsDepositoAdapterFragment.size()>0)
                 {

@@ -2,6 +2,7 @@ package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Entity.Adapters.ListaPendingCollectionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPriceListEntity;
 import com.vistony.salesforce.Entity.SQLite.PriceListSQLiteEntity;
@@ -13,7 +14,7 @@ import java.util.List;
 public class ListaPendingCollectionDao {
     Context context;
     public static ListaPendingCollectionDao repository = new ListaPendingCollectionDao();
-    public HashMap<String, ListaPendingCollectionEntity> leads = new HashMap<>();
+    public HashMap<Integer, ListaPendingCollectionEntity> leads = new HashMap<>();
     public static ListaPendingCollectionDao getInstance() {
         return repository;
     }
@@ -23,7 +24,7 @@ public class ListaPendingCollectionDao {
 
     }
     private void saveLead(ListaPendingCollectionEntity lead) {
-        leads.put(lead.getDate(), lead);
+        leads.put(Integer.parseInt(lead.getDate()), lead);
     }
 
     public List<ListaPendingCollectionEntity> getLeads(List<ListaPendingCollectionEntity> Lista) {

@@ -660,6 +660,7 @@ public class CobranzaDetalleSQLiteDao {
                             " and fuerzatrabajo_id='"+fuerzatrabajo_id+"' " +
                             //"and (fechacobranza< strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))-"+Induvis.getMaximoDiasDeposito()+") " +
                             "and (fechacobranza< strftime ('%Y',date('now','localtime',"+maxdatedeposit+"))||strftime ('%m',date('now','localtime',"+maxdatedeposit+"))||strftime ('%d',date('now','localtime',"+maxdatedeposit+"))) " +
+                            "and (fechacobranza>='20221101') " +
                             "and chkdepositado='N' and chkanulado='N'"
                     //--------------------------------
                     ,null);
@@ -695,11 +696,14 @@ public class CobranzaDetalleSQLiteDao {
                             //"and (fechacobranza< strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))-"+Induvis.getMaximoDiasDeposito()+") " +
                             "and (fechacobranza< strftime ('%Y',date('now','localtime',"+maxdatedeposit+"))||strftime ('%m',date('now','localtime',"+maxdatedeposit+"))||strftime ('%d',date('now','localtime',"+maxdatedeposit+"))) " +
                             "and chkdepositado='N' and chkanulado='N' " +
-                            "GROUP BY fechacobranza"
+                            "and (fechacobranza>='20221101' ) " +
+                            "GROUP BY fechacobranza "+
+                            "ORDER BY fechacobranza"
                     //--------------------------------
                     ,null);
 
             while (fila.moveToNext()){
+                Log.e("REOS", "CobranzaDetalleSQLiteDao-VerificaRecibosPendientesDeposito-setDate:" + fila.getString(1));
                 ObjlistaPendingCollectionEntity=new ListaPendingCollectionEntity();
                 ObjlistaPendingCollectionEntity.setCount(fila.getString(0));
                 ObjlistaPendingCollectionEntity.setDate(fila.getString(1));

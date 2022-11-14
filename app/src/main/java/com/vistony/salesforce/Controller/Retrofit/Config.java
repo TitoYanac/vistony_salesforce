@@ -28,7 +28,9 @@ public class Config {
         //if(BuildConfig.FLAVOR.equals("peru"))
         //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
         if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||
-                BuildConfig.FLAVOR.equals("bolivia")||BuildConfig.FLAVOR.equals("perurofalab"))
+                BuildConfig.FLAVOR.equals("bolivia")||BuildConfig.FLAVOR.equals("perurofalab")
+                ||BuildConfig.FLAVOR.equals("espania")
+        )
         {
             baseUrl = "https://salesforce.vistony.pe";
         }else {
@@ -78,6 +80,9 @@ public class Config {
                 break;
             case "paraguay":
                 puerto = ":8051";
+                break;
+            case "espania":
+                puerto = "";
                 break;
         }
         try{
@@ -113,7 +118,9 @@ public class Config {
         //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
         //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
         if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||
-                BuildConfig.FLAVOR.equals("bolivia")||BuildConfig.FLAVOR.equals("perurofalab"))
+                BuildConfig.FLAVOR.equals("bolivia")||BuildConfig.FLAVOR.equals("perurofalab")
+                ||BuildConfig.FLAVOR.equals("espania")
+        )
         {
             baseUrl = "https://salesforce.vistony.pe";
         }else {
@@ -163,6 +170,9 @@ public class Config {
                 break;
             case "paraguay":
                 puerto = ":8051";
+                break;
+            case "espania":
+                puerto = "";
                 break;
         }
         try{

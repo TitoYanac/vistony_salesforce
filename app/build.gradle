@@ -87,13 +87,13 @@ android {
             applicationIdSuffix ".peru"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //---------------------------
-            versionName "2.2.10"
+            versionName "2.2.11"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -141,6 +141,21 @@ android {
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
+        espania{
+            applicationIdSuffix ".espania"
+            buildConfigField('String' , 'IMEI_DEFAULT', '""')
+            //QA -------
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.es"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.es"')
+            //Produccion------
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            //---------------------------
+            versionName "1.0.0"
+            manifestPlaceholders = [country:"España"]
+            buildConfigField('String' , 'COUNTRY_DEFAULT', '"ES"')
+            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
+        }
     }
 
     /*
@@ -184,7 +199,6 @@ dependencies {
     //debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
     //PDF Libreria
-    implementation files('libs/droidText.0.4.jar')
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     //PDF Libreria
     implementation files('libs/android-viewbadger.jar')
@@ -198,6 +212,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     //Mapa de Google
+    implementation files('libs/droidText.0.4.jar')
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation "com.google.android.gms:play-services-location:18.0.0"
     implementation 'com.google.maps.android:android-maps-utils:0.4'

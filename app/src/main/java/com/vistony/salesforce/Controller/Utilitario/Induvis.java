@@ -71,6 +71,12 @@ public class Induvis {
                         "PAN.NORTE) LIMA - LIMA - ANCON " +
                         "Telf: 945168184 E-mail: rofalab@tolbrin.com" ;
                 break;
+            case "espania":
+                information="R.U.C N° 20601500605 " +
+                        "MZA. B1 LOTE. 01 INT. D1 PQUE.IND.DE ANCON - ACOMPIA(ALT.KM.46.5 " +
+                        "PAN.NORTE) LIMA - LIMA - ANCON " +
+                        "Telf: 945168184 E-mail: rofalab@tolbrin.com" ;
+                break;
         }
 
         return information;
@@ -89,6 +95,7 @@ public class Induvis {
             case "peru":
             case "paraguay":
             case "perurofalab":
+            case "espania":
                 year=dateBD.substring(0,4);
                 month=dateBD.substring(4,6);
                 day=dateBD.substring(6,8);
@@ -113,6 +120,7 @@ public class Induvis {
             case "ecuador":
             case "paraguay":
             case "perurofalab":
+            case "espania":
                 hour=timeBD.substring(0,2);
                 minute=timeBD.substring(2,4);
                 second=timeBD.substring(4,6);
@@ -136,6 +144,7 @@ public class Induvis {
                 case "chile":
                 case "paraguay":
                 case "perurofalab":
+                case "espania":
                     hour = timeBD.substring(0, 2);
                     minute = timeBD.substring(2, 4);
                     second = timeBD.substring(4, 6);
@@ -166,6 +175,8 @@ public class Induvis {
                 impuesto=0.10;
             case "perurofalab":
                 impuesto=0.18;
+            case "espania":
+                impuesto=0.18;
                 break;
         }
 
@@ -192,6 +203,9 @@ public class Induvis {
                 break;
             case "perurofalab":
                 impuesto="18";
+            case "espania":
+                impuesto="18";
+
                 break;
         }
 
@@ -235,6 +249,8 @@ public class Induvis {
                 break;
             case "peru":
             case "perurofalab":
+                case "espania":
+
                 impuesto="IGV";
                 break;
             case "paraguay":
@@ -250,6 +266,7 @@ public class Induvis {
 
             case "peru":
             case "perurofalab":
+            case "espania":
                 tituloventa="ORDEN VENTA";
                 break;
             case ("ecuador"):
@@ -352,6 +369,7 @@ public class Induvis {
             case "peru":
             case "paraguay":
             case "perurofalab":
+            case "espania":
                 dias=0;
                 break;
             case "ecuador":
@@ -367,6 +385,7 @@ public class Induvis {
         switch (BuildConfig.FLAVOR){
             case "peru":
             case "perurofalab":
+            case "espania":
                 draft="N";
                 break;
             case "ecuador":
@@ -476,6 +495,7 @@ public class Induvis {
                 case "peru":
                 case "paraguay":
                 case "perurofalab":
+                case "espania":
                     year=dateBD.substring(0,4);
                     month=dateBD.substring(4,6);
                     day=dateBD.substring(6,8);
@@ -489,6 +509,28 @@ public class Induvis {
         }
         Log.e("REOS","Induvis-getDate-dateView:"+dateView);
         return dateView;
+    }
+    public static ArrayList<String> getCurrency(){
+        ArrayList<String> currency = new  ArrayList<String>();
+        try {
+            switch (BuildConfig.FLAVOR){
+                case "bolivia":
+                case "india":
+                case "chile":
+                case "ecuador":
+                case "peru":
+                case "paraguay":
+                case "perurofalab":
+                case "espania":
+                    currency.add("EUR - Euro");
+                    break;
+            }
+        }catch (Exception e)
+        {
+            Log.e("REOS","Induvis-getCurrency-e:"+e);
+        }
+        Log.e("REOS","Induvis-getCurrency-currency:"+currency);
+        return currency;
     }
 
 }

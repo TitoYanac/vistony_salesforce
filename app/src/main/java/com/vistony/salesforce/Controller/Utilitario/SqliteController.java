@@ -20,7 +20,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 20;
+    private static final int VERSION = 21;
 
 
     public SqliteController(Context context){
@@ -107,7 +107,7 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE esc_colours_d (id_esc_colours_c TEXT,id TEXT,rangemin TEXT,rangemax TEXT,colourmin TEXT,colourmax TEXT,degrade TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT )");
 
             //Version 5 --Cobranzas Distribucion
-            db.execSQL("CREATE TABLE headerdispatchsheet (compania_id text,fuerzatrabajo_id text,usuario_id text,control_id TEXT,asistente_id TEXT,asistente TEXT,placa TEXT,marca TEXT,pesototal TEXT,fechahojadespacho TEXT,drivercode TEXT,vehiclecode TEXT,vehicleplate TEXT, drivermobile TEXT,drivername TEXT)");
+            db.execSQL("CREATE TABLE headerdispatchsheet (compania_id text,fuerzatrabajo_id text,usuario_id text,control_id TEXT,asistente_id TEXT,asistente TEXT,placa TEXT,marca TEXT,pesototal TEXT,fechahojadespacho TEXT,drivercode TEXT,vehiclecode TEXT,vehicleplate TEXT, drivermobile TEXT,drivername TEXT,datetimeregister TEXT )");
             db.execSQL("CREATE TABLE detaildispatchsheet (compania_id text,fuerzatrabajo_id text,usuario_id text,control_id TEXT,item_id TEXT,cliente_id TEXT,domembarque_id TEXT,direccion TEXT,factura_id TEXT,entrega_id TEXT,entrega TEXT,factura TEXT,saldo TEXT,estado TEXT, fuerzatrabajo_factura_id TEXT,fuerzatrabajo_factura TEXT,terminopago_id TEXT,terminopago TEXT,peso TEXT,comentariodespacho TEXT,estado_id TEXT,motivo TEXT,motivo_id TEXT,fotoguia TEXT,fotolocal TEXT)");
 
 
@@ -472,6 +472,9 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE lead ADD COLUMN MessageServerGeolocation TEXT");
         }
 
+        if(oldVersion==20&&newVersion==21) {
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN datetimeregister TEXT");
+        }
 
 
     }

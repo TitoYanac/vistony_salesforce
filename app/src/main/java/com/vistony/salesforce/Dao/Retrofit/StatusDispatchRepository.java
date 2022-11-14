@@ -25,6 +25,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricStatusDispatchEn
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.StatusDispatchEntityResponse;
 import com.vistony.salesforce.View.BuscarClienteView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -341,11 +342,12 @@ public class StatusDispatchRepository  extends ViewModel {
             Config.getClient().create(Api.class).sendStatusDispatch(jsonRequest).enqueue(new Callback<HeaderStatusDispatchEntityResponse>() {
                 @Override
                 public void onResponse(Call<HeaderStatusDispatchEntityResponse> call, Response<HeaderStatusDispatchEntityResponse> response) {
-
+                    ArrayList<String> responseData=new ArrayList<>();
+                    responseData.add("Inicia Envio de Status Photo");
                     HeaderStatusDispatchEntityResponse headerStatusDispatchEntityResponse=response.body();
 
                     if(response.isSuccessful() && headerStatusDispatchEntityResponse!=null){
-                        ArrayList<String> responseData=new ArrayList<>();
+
 
                         for (HeaderStatusDispatchEntity respuesta:headerStatusDispatchEntityResponse.getHeaderStatusDispatchEntityResponse()  )
                         {
@@ -364,14 +366,15 @@ public class StatusDispatchRepository  extends ViewModel {
                         callback.onResponseSap(responseData);
                         callback.onResponseErrorSap(response.message());
                     }else{
-
+                        responseData.add("El Estado de Despacho con Fotos no fue aceptado en SAP");
+                        callback.onResponseSap(responseData);
                         callback.onResponseErrorSap(response.message());
                     }
+
                 }
                 @Override
                 public void onFailure(Call<HeaderStatusDispatchEntityResponse> call, Throwable t) {
                     callback.onResponseErrorSap("Cayo en Error sendStatusDispatchPhoto:"+t.getMessage());
-
                     call.cancel();
                 }
             });

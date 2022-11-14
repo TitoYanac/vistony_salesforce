@@ -372,16 +372,8 @@ public class DispatchSheetView extends Fragment implements View.OnClickListener,
                 getListDispatchSheet(DispatchDate,context);
             }
         }
-
-
-        /*detailDispatchSheetRepository.getAndInsertDetailDispatchSheet(Imei,DispatchDate,context).observe(getActivity(), data -> {
-            Log.e("REOS", "DispatchSheetView-getMastersDelivery-detailDispatchSheetRepository-data" + data);
-        });*/
-
-
-
-
     }
+
     public void CargaSpinnerControl(String [] control_id)
     {
         ArrayAdapter<String> adapter_control_id = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, control_id);

@@ -188,5 +188,29 @@ public class BancoSQLite {
         return listaBancoSQLiteEntity;
     }
 
+    public ArrayList<BancoSQLiteEntity> getBankDriver ()
+    {
+        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
+        //SQLiteDatabase bd = admin.getWritableDatabase();
+        listaBancoSQLiteEntity = new ArrayList<BancoSQLiteEntity>();
+        BancoSQLiteEntity bancoSQLiteEntity;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select * from banco WHERE singledeposit='Y'",null);
+
+        while (fila.moveToNext())
+        {
+            bancoSQLiteEntity= new BancoSQLiteEntity();
+            bancoSQLiteEntity.setBanco_id(fila.getString(0));
+            bancoSQLiteEntity.setCompania_id(fila.getString(1));
+            bancoSQLiteEntity.setNombrebanco(fila.getString(2));
+            listaBancoSQLiteEntity.add(bancoSQLiteEntity);
+        }
+
+        bd.close();
+        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        return listaBancoSQLiteEntity;
+    }
+
 
 }

@@ -81,6 +81,7 @@ public class MenuConsultasView extends Fragment {
             case "ecuador":
             case "bolivia":
             case "perurofalab":
+            case "espania":
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view, container, false);
                 break;
             default:
@@ -111,7 +112,7 @@ public class MenuConsultasView extends Fragment {
             //cv_dispatch.setVisibility(View.GONE);
             cv_quotation.setVisibility(View.GONE);
         }
-        if(!(BuildConfig.FLAVOR.equals("peru")&&BuildConfig.FLAVOR.equals("perurofalab")))
+        if(!(BuildConfig.FLAVOR.equals("peru")))
         {
             cv_dispatch.setVisibility(View.GONE);
         }
@@ -144,6 +145,7 @@ public class MenuConsultasView extends Fragment {
                     case "ecuador":
                     case "bolivia":
                     case "perurofalab":
+                    case "espania":
                          Fragment="MenuConsultasView";
                          accion="menuconsultaspedidoview";
                          compuesto=Fragment+"-"+accion;
@@ -183,6 +185,7 @@ public class MenuConsultasView extends Fragment {
                     case "ecuador":
                     case "bolivia":
                     case "perurofalab":
+                    case "espania":
                         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
                         {
                             Fragment="HistoricoCobranzaView";

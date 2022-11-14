@@ -11,7 +11,9 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.HeaderDispatchSheetEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class HeaderDispatchSheetSQLite {
@@ -52,7 +54,10 @@ public class HeaderDispatchSheetSQLite {
 
     )
     {
+
         abrir();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        GregorianCalendar calendario = new GregorianCalendar();
         for (int i = 0; i < headerDispatchSheetEntity.size(); i++) {
             ContentValues registro = new ContentValues();
             registro.put("compania_id",SesionEntity.compania_id);
@@ -70,6 +75,7 @@ public class HeaderDispatchSheetSQLite {
             registro.put("vehicleplate",headerDispatchSheetEntity.get(i).getVehiclePlate());
             registro.put("drivermobile",headerDispatchSheetEntity.get(i).getDriverMobile());
             registro.put("drivername",headerDispatchSheetEntity.get(i).getDriverName());
+            registro.put("datetimeregister",sdf.format(calendario.getTime()));
             bd.insert("headerdispatchsheet",null,registro);
         }
 
@@ -175,6 +181,26 @@ public class HeaderDispatchSheetSQLite {
         }
         bd.close();
         return resultado;
+    }
+
+    public ArrayList<HojaDespachoCabeceraSQLiteEntity> getDateRegisterHeaderDispatchSheet (String DispatchDate)
+    {
+
+        listaHojaDespachoCabeceraSQLiteEntity = new ArrayList<>();
+        HojaDespachoCabeceraSQLiteEntity hojaDespachoCabeceraSQLiteEntity;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select datetimeregister from headerdispatchsheet where fechahojadespacho='"+DispatchDate+"' group by datetimeregister ",null);
+
+        while (fila.moveToNext())
+        {
+            hojaDespachoCabeceraSQLiteEntity= new HojaDespachoCabeceraSQLiteEntity();
+            hojaDespachoCabeceraSQLiteEntity.setDatetimeregister(fila.getString(fila.getColumnIndex("datetimeregister")));
+            listaHojaDespachoCabeceraSQLiteEntity.add(hojaDespachoCabeceraSQLiteEntity);
+        }
+
+        bd.close();
+        return listaHojaDespachoCabeceraSQLiteEntity;
     }
 }
 

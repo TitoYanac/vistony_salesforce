@@ -332,6 +332,8 @@ public class MenuAccionView extends Fragment {
                 case "peru":
                 case "paraguay":
                 case "perurofalab":
+                case "espania":
+
                     String Fragment="MenuAccionView";
                     String accion="pedido";
                     String compuesto=Fragment+"-"+accion;
@@ -631,7 +633,11 @@ public class MenuAccionView extends Fragment {
         textMsj.setText("Ud. cuenta con Recibos pendientes de Depositar, por favor verificar en CONSULTA COBRADO y realizar el deposito!");
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         ListView lv_pending_collection = (ListView) dialog.findViewById(R.id.lv_pending_collection);
-        ListaPendingCollectionAdapter ListaPendingCollectionAdapter=new ListaPendingCollectionAdapter(getContext(), ListaPendingCollectionDao.getInstance().getLeads(listaPendingCollectionEntity));
+        //ListaPendingCollectionAdapter ListaPendingCollectionAdapter=new ListaPendingCollectionAdapter(getContext(), ListaPendingCollectionDao.getInstance().getLeads(listaPendingCollectionEntity));
+        ListaPendingCollectionAdapter ListaPendingCollectionAdapter=new ListaPendingCollectionAdapter(getContext(),
+                //ListaPendingCollectionDao.getInstance().getLeads(listaPendingCollectionEntity)
+                listaPendingCollectionEntity
+        );
         lv_pending_collection.setAdapter(ListaPendingCollectionAdapter);
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
@@ -661,6 +667,7 @@ public class MenuAccionView extends Fragment {
             case "peru":
             case "chile":
             case "perurofalab":
+            case "espania":
             //case "ecuador":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
                 break;
@@ -677,7 +684,7 @@ public class MenuAccionView extends Fragment {
 
         if(SesionEntity.perfil_id.equals("CHOFER"))
         {
-            cv_cobranza_deposito_directo.setVisibility(View.GONE);
+            //cv_cobranza_deposito_directo.setVisibility(View.GONE);
         }
         if(!BuildConfig.FLAVOR.equals("chile"))
         {

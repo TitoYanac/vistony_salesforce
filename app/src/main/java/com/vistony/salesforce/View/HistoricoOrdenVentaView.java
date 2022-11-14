@@ -372,6 +372,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                     switch (BuildConfig.FLAVOR){
                                         case "peru":
                                         case "india":
+                                        case "perurofalab":
                                             listaHOV.setApprovalStatus("Pendiente");
                                             break;
                                         case "bolivia":
@@ -460,8 +461,8 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
 
                                     switch (BuildConfig.FLAVOR){
                                         case "peru":
-
                                         case "india":
+                                        case "perurofalab":
                                             listaHOV.setApprovalStatus("Pendiente");
                                             break;
                                         case "bolivia":
