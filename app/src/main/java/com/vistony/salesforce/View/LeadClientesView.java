@@ -230,14 +230,15 @@ public class LeadClientesView extends Fragment {
         ti_textcellphone=v.findViewById(R.id.ti_textcellphone);
 
         et_telfhouseclient=v.findViewById(R.id.et_telfhouseclient);
-        if(BuildConfig.FLAVOR.equals("peru"))
+        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("espania"))
         {
+            getActivity().setTitle(getResources().getString(R.string.lead_cliente));
             ti_commercial_name.setVisibility(View.GONE);
             //ti_textphone.setVisibility(View.GONE);
             ti_TextContactPerson.setVisibility(View.GONE);
             spinner.setVisibility(View.GONE);
             ti_TextWeb.setVisibility(View.GONE);
-            ti_TextCardCode.setVisibility(View.GONE);
+            //ti_TextCardCode.setVisibility(View.GONE);
             editTextCardName.setEnabled (false);
             editTextCardCode.setEnabled(false);
             editTextStreet.setEnabled(false);
@@ -246,7 +247,7 @@ public class LeadClientesView extends Fragment {
             editTextEmail.setEnabled(false);
             //linearLayoutGps.setVisibility(View.GONE);
             ti_editTextComments.setVisibility(View.GONE);
-            ti_TextEmail.setVisibility(View.GONE);
+            //ti_TextEmail.setVisibility(View.GONE);
             ti_textphone.setVisibility(View.GONE);
             editTextCellPhone.setVisibility(View.GONE);
             editTextPhone.setVisibility(View.GONE);
@@ -262,7 +263,7 @@ public class LeadClientesView extends Fragment {
                     //getActivity().setTitle(getResources().getString(R.string.lead_cliente));
                 }
             }
-            if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+            if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER")||BuildConfig.FLAVOR.equals("espania"))
             {
                 btnUpload.setText("ACEPTAR");
                 getActivity().setTitle("Consultar Cliente");
@@ -458,7 +459,13 @@ public class LeadClientesView extends Fragment {
                     getActivity().setTitle("Consultar Cliente");
 
                 } else if (type.equals("leadUpdateClientCensus")) {
-                    getActivity().setTitle("Geolocalización Cliente");
+                    if(BuildConfig.FLAVOR.equals("espania"))
+                    {
+                        getActivity().setTitle("Consultar Cliente");
+                    }else {
+                        getActivity().setTitle("Geolocalización Cliente");
+                    }
+
                 } else {
                     getActivity().setTitle(getResources().getString(R.string.lead_cliente));
                 }

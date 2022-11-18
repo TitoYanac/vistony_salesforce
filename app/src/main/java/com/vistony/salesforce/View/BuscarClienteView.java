@@ -167,7 +167,7 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().setTitle("Consulta Clientes");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.query_clients));
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -183,14 +183,14 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
         AppExecutors executor=new AppExecutors();
 
         pd = new ProgressDialog(getActivity());
-        pd = ProgressDialog.show(getActivity(), "Por favor espere", "Listando clientes", true, false);
+        pd = ProgressDialog.show(getActivity(), getContext().getResources().getString(R.string.please_wait), getContext().getResources().getString(R.string.list_clients), true, false);
 
         clienteRepository.getCustomerNotRoute(getContext(),executor.diskIO()).observe(getActivity(), data -> {
             if(data!=null){
                 listaConsClienteCabeceraAdapter = new ListaConsClienteCabeceraAdapter(getActivity(), ListaConsClienteCabeceraDao.getInstance().getLeads(data));
                 listconscliente.setAdapter(listaConsClienteCabeceraAdapter);
             }else{
-                Toast.makeText(getContext(), "Actualiza tus parametros, no hay clientes disponibles", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getContext().getResources().getString(R.string.msm_clients_available), Toast.LENGTH_LONG).show();
                 getActivity().getSupportFragmentManager().popBackStack();
             }
             pd.dismiss();
@@ -238,7 +238,7 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Cliente");
+        mSearchView.setQueryHint(getContext().getResources().getString(R.string.find_client));
     }
 
     @Override

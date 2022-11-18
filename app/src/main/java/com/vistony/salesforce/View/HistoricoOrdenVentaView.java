@@ -379,6 +379,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         case "ecuador":
                                         case "chile":
                                         case "paraguay":
+                                        case "espania":
                                             if(listaOrdenVentaSQLite.get(l).getQuotation()==null)
                                             {
                                                 listaOrdenVentaSQLite.get(l).setQuotation("N");
@@ -396,6 +397,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                                 }
                                             break;
                                         default:
+                                            listaHOV.setApprovalStatus("Pendiente");
                                             break;
                                     }
 
@@ -469,6 +471,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         case "ecuador":
                                         case "chile":
                                         case "paraguay":
+                                        case "espania":
                                             if(listaOrdenVentaSQLite.get(k).getQuotation()==null)
                                             {
                                                 listaOrdenVentaSQLite.get(k).setQuotation("N");
@@ -487,6 +490,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                             }
                                             break;
                                         default:
+                                            listaHOV.setApprovalStatus("Pendiente");
                                             break;
                                     }
 

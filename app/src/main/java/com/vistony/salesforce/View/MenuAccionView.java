@@ -283,6 +283,8 @@ public class MenuAccionView extends Fragment {
             intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
             startActivity(intent);
         });
+
+
         if(!BuildConfig.FLAVOR.equals("peru")&&BuildConfig.FLAVOR.equals("rofalab"))
         {
             cv_lead.setVisibility(View.GONE);
@@ -296,7 +298,7 @@ public class MenuAccionView extends Fragment {
                 cv_visit_section.setVisibility(View.GONE);
                 cv_dispatch.setVisibility(View.GONE);
                 if(SesionEntity.census.equals("N")){
-                    cv_lead.setVisibility(View.GONE);
+                    //cv_lead.setVisibility(View.GONE);
                 }
                 else {
 

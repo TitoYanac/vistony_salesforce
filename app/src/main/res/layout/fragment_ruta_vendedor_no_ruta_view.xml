@@ -24,82 +24,6 @@
         android:layout_marginBottom="160dp"
         android:src="@drawable/ic_add_black_24dp"
         app:backgroundTint="@color/Rojo_Vistony" />
-    <!--
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/colorPrimary"
-            android:focusable="false">
-
-            <TextView
-                android:id="@+id/tv_cantidad_cliente_no_ruta_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:text="0"
-                android:textColor="@color/White"
-                android:textSize="24dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toLeftOf="@id/tv_cantidad_cliente_no_ruta_total"
-                android:text="Total Clientes"
-                android:textColor="@color/White"
-                android:textSize="24dp" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/colorPrimary"
-            android:focusable="false">
-
-            <TextView
-                android:id="@+id/tv_cantidad_cliente_no_ruta_visita"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:text="0"
-                android:textColor="@color/White"
-                android:textSize="24dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toLeftOf="@id/tv_cantidad_cliente_no_ruta_visita"
-                android:text="Clientes Visitados"
-                android:textColor="@color/White"
-                android:textSize="24dp" />
-
-            <TextView
-                android:id="@+id/tv_cantidad_cliente_no_ruta_visita"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:text="0"
-                android:textColor="@color/White"
-                android:textSize="24dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toLeftOf="@id/tv_cantidad_cliente_no_ruta_visita"
-                android:text="Clientes Visitados"
-                android:textColor="@color/White"
-                android:textSize="24dp" />
-        </RelativeLayout>
-        -->
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Total Clientes:"
+                android:text="@string/total_client"
                 android:textColor="@color/white"
                 android:textSize="24dp" />
 
@@ -147,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Clientes Visita:"
+                android:text="@string/visit_client"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -177,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Clientes Pedido:"
+                android:text="@string/ordres_client"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -206,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Clientes Cobranza:"
+                android:text="@string/collection_client"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 

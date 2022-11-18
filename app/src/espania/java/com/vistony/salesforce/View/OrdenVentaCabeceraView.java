@@ -211,7 +211,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
         obtenerTituloFormulario();
         direccionSelecionada=(DireccionCliente)objeto;
-
         tv_direccion.setText(direccionSelecionada.getDireccion());
         cliente_domembarque_id=direccionSelecionada.getDomembarque_id();
         Log.e("REOS", "OrdenVentaCabeceraView-newInstanciaNuevaDireccion-cliente_domembarque_id:"+cliente_domembarque_id);
@@ -232,7 +231,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         }
         tv_orden_venta_agencia.setText(agencia);
-
+        obtenerTituloFormulario();
         return ordenVentaView;
     }
 
@@ -245,8 +244,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         /*SE DEBE PODER EDITAR AUN, POR QUE NO SE GUARDA*/
 
 
-        tv_terminopago.setEnabled(false);
-        btn_consultar_termino_pago.setEnabled(false);
+        //tv_terminopago.setEnabled(false);
+        //btn_consultar_termino_pago.setEnabled(false);
         chk_descuento_contado.setEnabled(false);
         spnmoneda.setEnabled (false);
         spnmoneda.setClickable (false);
@@ -256,7 +255,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         Utilitario.disabledButtton(btn_detalle_orden_venta);
         Utilitario.disabledImageButtton(btn_consultar_direccion,context);
-        Utilitario.disabledImageButtton(btn_consultar_termino_pago,context);
+        //Utilitario.disabledImageButtton(btn_consultar_termino_pago,context);
         Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia,context);
         Utilitario.disabledSpinner(spnmoneda);
         //Utilitario.disabledImageButtton(btn_dispatch_date);

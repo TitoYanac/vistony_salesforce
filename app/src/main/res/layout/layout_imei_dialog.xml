@@ -41,19 +41,20 @@
                 android:maxLines="1"
                 android:minLines="1"
                 android:scrollbars="vertical"
-                android:text="CONFIGURACIÓN DE SESIÓN"
+                android:text="@string/lbl_configuration_sesion"
+                android:textAllCaps="true"
                 android:textColor="#000000"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/jhjhjhjh"
+                android:id="@+id/lbl_subtittle_configuration_session"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="Ingresar el código de activación asignado a su dispositivo móvil" />
+                android:text="@string/lbl_subtittle_configuration_sesion" />
 
             <EditText
                 android:id="@+id/textEditImei"
@@ -91,7 +92,9 @@
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
                     android:text="CANCELAR"
-                    android:textColor="#0957C3" />
+                    android:textColor="#0957C3"
+                    android:textAllCaps="true"
+                    />
 
                 <Button
                     android:id="@+id/dialogButtonOK"
@@ -101,7 +104,9 @@
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
                     android:text="REGISTRAR"
-                    android:textColor="#0957C3" />
+                    android:textColor="#0957C3"
+                    android:textAllCaps="true"
+                    />
 
             </LinearLayout>
 

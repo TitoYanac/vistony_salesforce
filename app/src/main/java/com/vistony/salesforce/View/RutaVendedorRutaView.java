@@ -159,7 +159,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(getContext());
-            pd = ProgressDialog.show(getContext(), "Por favor espere", "Calculando Ruta de Trabajo", true, false);
+            pd = ProgressDialog.show(getContext(), getContext().getResources().getString(R.string.please_wait), getContext().getResources().getString(R.string.calculated_work_force), true, false);
         }
 
         @Override
@@ -173,7 +173,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                 Log.e("REOS", "RutaVendedorRutaView-ObtenerSQLiteRutaFuerzaTrabajo-listaRutaFuerzaTrabajoSQLiteEntity.size(): "+listaRutaFuerzaTrabajoSQLiteEntity.size());
                 if(listaRutaFuerzaTrabajoSQLiteEntity==null || listaRutaFuerzaTrabajoSQLiteEntity.isEmpty() || listaRutaFuerzaTrabajoSQLiteEntity.size()==0){
                     getActivity().runOnUiThread(() -> {
-                        Toast.makeText(getActivity(), "No hay ruta de trabajo para el dia de hoy", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getContext().getResources().getString(R.string.no_route_day), Toast.LENGTH_SHORT).show();
                     });
                 }
 
@@ -371,7 +371,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Cliente");
+        mSearchView.setQueryHint(this.getResources().getString(R.string.find_client));
     }
     @Override
     public boolean onQueryTextSubmit(String query) {

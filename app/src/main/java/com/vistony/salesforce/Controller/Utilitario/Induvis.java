@@ -72,10 +72,10 @@ public class Induvis {
                         "Telf: 945168184 E-mail: rofalab@tolbrin.com" ;
                 break;
             case "espania":
-                information="R.U.C N° 20601500605 " +
-                        "MZA. B1 LOTE. 01 INT. D1 PQUE.IND.DE ANCON - ACOMPIA(ALT.KM.46.5 " +
-                        "PAN.NORTE) LIMA - LIMA - ANCON " +
-                        "Telf: 945168184 E-mail: rofalab@tolbrin.com" ;
+                information="N.I.F: B45783081 " +
+                        "OFICINA: C/Rafael Alberti, 30 Pol. Industrial Fuente Techada ORGAZ " +
+                        "(Toledo) - Apdo. Correos 30, 45100 Sonseca " +
+                        "Telf: 925 910 177" ;
                 break;
         }
 
@@ -176,7 +176,7 @@ public class Induvis {
             case "perurofalab":
                 impuesto=0.18;
             case "espania":
-                impuesto=0.18;
+                impuesto=0.21;
                 break;
         }
 
@@ -204,7 +204,7 @@ public class Induvis {
             case "perurofalab":
                 impuesto="18";
             case "espania":
-                impuesto="18";
+                impuesto="21";
 
                 break;
         }
@@ -249,12 +249,12 @@ public class Induvis {
                 break;
             case "peru":
             case "perurofalab":
-                case "espania":
-
                 impuesto="IGV";
                 break;
             case "paraguay":
                 impuesto="IVA_10";
+            case "espania":
+                impuesto="R3";
                 break;
         }
         return impuesto;

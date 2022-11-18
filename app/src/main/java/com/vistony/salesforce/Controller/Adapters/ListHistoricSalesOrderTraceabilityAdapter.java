@@ -241,7 +241,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 holder.tv_status_aprob.setText("Facturado");
             }
         }
-        else if(BuildConfig.FLAVOR.equals("paraguay"))
+        else if(BuildConfig.FLAVOR.equals("paraguay")||BuildConfig.FLAVOR.equals("espania"))
         {
             Resources res = getContext().getResources(); // need this to fetch the drawable
             Drawable eraser,orders,invoices;
@@ -253,12 +253,12 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             Convert.setMarginsView(holder.imv_historic_orders,80, 400, 200, 145);
             Convert.setMarginsView(holder.imv_historic_order_aprob,330, 400, 200, 145);
             Convert.setMarginsView(holder.imv_historic_invoices,580, 400, 0, 145);
-
+            Convert.setMarginsView(holder.imv_historic_delivery,830, 400, 0, 145);
             eraser = res.getDrawable( R.drawable.ic_baseline_plagiarism_24);
             holder.imv_historic_orders.setImageDrawable(eraser);
             orders = res.getDrawable( R.drawable.ic_baseline_receipt_24);
             holder.imv_historic_order_aprob.setImageDrawable(orders);
-
+            holder.imv_historic_pend_rev.setVisibility(View.GONE);
             /*if (holder.imv_historic_orders.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
                 ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) holder.imv_historic_orders.getLayoutParams();
                 p.setMargins(30, 145, 145, 145);

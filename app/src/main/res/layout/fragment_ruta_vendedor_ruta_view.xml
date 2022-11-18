@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Total Clientes:"
+                android:text="@string/total_client"
                 android:textColor="@color/white"
                 android:textSize="24dp">
 
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Clientes Visita:"
+                android:text="@string/visit_client"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Clientes Pedido:"
+                android:text="@string/ordres_client"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Clientes Cobranza:"
+                android:text="@string/collection_client"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 

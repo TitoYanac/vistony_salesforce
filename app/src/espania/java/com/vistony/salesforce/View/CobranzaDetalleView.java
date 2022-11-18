@@ -982,8 +982,8 @@ public class CobranzaDetalleView extends Fragment {
                 }
                 return false;
             case R.id.generarpdf:
-                //alertaGenerarPDF().show();
-                if (SesionEntity.Print.equals("Y")) {
+                alertaGenerarPDF().show();
+                /*if (SesionEntity.Print.equals("Y")) {
                     alertaGenerarPDF().show();
                 } else
                 {
@@ -1000,12 +1000,13 @@ public class CobranzaDetalleView extends Fragment {
                         alertatypegeneratedocumentcollection().show();
                     }
 
-                }
+                }*/
 
 
                 return true;
             case R.id.validarqr:
-                if (SesionEntity.Print.equals("Y")) {
+                alertaEnviarSMS(getContext()).show();
+                /*if (SesionEntity.Print.equals("Y")) {
 
                     alertaValidarQR().show();
 
@@ -1020,7 +1021,7 @@ public class CobranzaDetalleView extends Fragment {
                         alertatypevalidatedocumentcollection().show();
                     }
 
-                }
+                }*/
                 return false;
             default:
                 break;
@@ -1399,6 +1400,8 @@ public class CobranzaDetalleView extends Fragment {
 
                 qrvalidado = "Y";
                 Log.e("REOS", "CobranzaDetalleView.GuardarCobranzaSQLite.qrvalidado:" + qrvalidado);
+            }else {
+                qrvalidado = "Y";
             }
 
             if (tipoCobranza.equals("Cobranza")) {
@@ -1614,8 +1617,9 @@ public class CobranzaDetalleView extends Fragment {
                     Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
                 } else {
                     //telefono="990249315";
-                    sendSMS(telefono);
-                    Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
+                    //Se desactivo por estar en un ambiente de Pruebas
+                    //sendSMS(telefono);
+                    //Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
                 }
             }
 

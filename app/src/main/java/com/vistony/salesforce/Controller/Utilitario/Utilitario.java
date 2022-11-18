@@ -114,8 +114,8 @@ public class Utilitario {
             final Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
             final Button dialogButtonExit =  dialog.findViewById(R.id.dialogButtonCancel);
 
-            dialogButton.setText("INGRESAR");
-            dialogButtonExit.setText("VER CÓDIGO");
+            dialogButton.setText(context.getResources().getString(R.string.lbl_enter_configuration_sesion));
+            dialogButtonExit.setText(context.getResources().getString(R.string.lbl_code_configuration_sesion));
 
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             image.setBackground(new ColorDrawable(Color.TRANSPARENT));
@@ -136,15 +136,15 @@ public class Utilitario {
                         editor.apply();
 
                         dialog.dismiss();
-                        Toast.makeText(context, "Código registrado", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, context.getResources().getString(R.string.lbl_code_register), Toast.LENGTH_LONG).show();
                         loginRepository.getAndLoadUsers(textDImei.getText().toString(),context);
 
                     }else{
-                        Toast.makeText(context, "Vuelva a presionar guardar para ingresar...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, context.getResources().getString(R.string.Push_and_save), Toast.LENGTH_SHORT).show();
                         temp=1;
                     }
                 }else{
-                    Toast.makeText(context, "Error al escribir el código de activación...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, context.getResources().getString(R.string.Error_and_code), Toast.LENGTH_SHORT).show();
                 }
             });
         }

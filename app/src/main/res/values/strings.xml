@@ -42,7 +42,7 @@
     <string name="CobranzaCabeceraN" translatable="false">N°</string>
     <string name="DepositoDirecto" translatable="false">Depósito Directo</string>
     <string name="DeleteCajaChica" translatable="false">Eliminar BD - Caja Chica</string>
-    <string name="HojaDespachoView" translatable="false">Hoja Despacho</string>
+    <string name="HojaDespachoView" translatable="true">Hoja Despacho</string>
     <string name="DineroCobradoView" translatable="false">Dinero Cobrado</string>
     <string name="AsistenciaCamionView" translatable="false">Camion</string>
     <string name="clearTemp" translatable="false">Liberar espacio</string>
@@ -200,4 +200,29 @@
     <string name="lbl_read_e_signature">Consultar E-Firma</string>
     <string name="lbl_visit_start">Vist.Ini</string>
     <string name="lbl_visit_end">Vist.Fin</string>
+    <string name="lbl_configuration_sesion">Configuración de Sesión</string>
+    <string name="lbl_subtittle_configuration_sesion">Ingresar el código de activación asignado a su dispositivo móvil</string>
+    <string name="lbl_code_configuration_sesion">Ver Código</string>
+    <string name="lbl_enter_configuration_sesion">Ingresar</string>
+    <string name="lbl_code_register">Código Registrado</string>
+    <string name="Push_and_save">Vuelva a presionar guardar para ingresar...</string>
+    <string name="Error_and_code">Error al escribir el código de activación</string>
+    <string name="Error_and_network">Ocurrio un error en la red</string>
+    <string name="locale_information_none">Sin informacion local</string>
+    <string name="route">Route</string>
+    <string name="no_route">NON ITINÉRAIRE</string>
+    <string name="please_wait">Por favor espere</string>
+    <string name="calculated_work_force">Calculando Ruta de Trabajo</string>
+    <string name="no_route_day">No hay ruta de trabajo para el dia de hoy</string>
+    <string name="find_client">Buscar Cliente</string>
+    <string name="msn_configuration_blueetohh">Impresora Blueetooh no fue configurada Correctamente</string>
+    <string name="total_client">Total Clientes</string>
+    <string name="visit_client">Clientes Visitados</string>
+    <string name="ordres_client">Clientes Pedido</string>
+    <string name="collection_client">Clientes Cobranza</string>
+    <string name="category_client">Categoria</string>
+    <string name="visits">Visita</string>
+    <string name="query_clients">Consultar Clientes</string>
+    <string name="list_clients">Listando Clientes</string>
+    <string name="msm_clients_available">Actualiza tus parametros, no hay clientes disponibles</string>
 </resources>

@@ -339,7 +339,12 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         fechadiferida="19000101";
         if(!SesionEntity.perfil_id.equals("CHOFER"))
         {
-            imb_consultar_codigo_control.setVisibility(View.GONE);
+            if(BuildConfig.FLAVOR.equals("espania"))
+            {
+
+            }else {
+                imb_consultar_codigo_control.setVisibility(View.GONE);
+            }
         }
         String [] valores = null;
         /*if(BuildConfig.FLAVOR.equals("chile"))
@@ -467,10 +472,15 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         imb_consultar_codigo_control.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(guardar_deposito.isEnabled())
+                if(BuildConfig.FLAVOR.equals("espania"))
                 {
-                    String texto = "Elija El el Codigo de Control: ";
-                    AlertaObtenerCodigoControlDespacho(texto).show();
+                    alertDepositDuplicate().show();
+                }else
+                {
+                    if (guardar_deposito.isEnabled()) {
+                        String texto = "Elija El el Codigo de Control: ";
+                        AlertaObtenerCodigoControlDespacho(texto).show();
+                    }
                 }
             }});
 
@@ -769,7 +779,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         }
         else
             {
-                if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+                if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer")||BuildConfig.FLAVOR.equals("espania"))
                 {
                 abrir = menu.findItem(R.id.abrir);
                 guardar_deposito = menu.findItem(R.id.guardar_deposito);
@@ -1304,7 +1314,13 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         textTitle.setText("CONFIRMACIÓN!");
 
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("¿El Nro de Depósito, esta duplicado, desea asignarle un ID unico?");
+        if(BuildConfig.FLAVOR.equals("espania"))
+        {
+            textMsj.setText("¿Desea asignar un ID unico a este Deposito?");
+        }else {
+            textMsj.setText("¿El Nro de Depósito, esta duplicado, desea asignarle un ID unico?");
+        }
+
 
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);

@@ -137,17 +137,19 @@ public class LoginView extends AppCompatActivity{
                 imv_compania_login.setImageResource(R.mipmap.logo_factura);
                 break;
         }
-
+        //Toast.makeText(this,  BuildConfig.COUNTRY_DEFAULT, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,  BuildConfig.LANGUAGE_DEFAULT, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,  this.getResources().getString(R.string.sinInfo), Toast.LENGTH_LONG).show();
         loginRepository.getAndLoadUsers(Imei,this).observe(LoginView.this, data -> {
             if(data==null){
-                Toast.makeText(this, "Ocurrio un error en la red", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, this.getResources().getString(R.string.Error_and_network), Toast.LENGTH_LONG).show();
             }else if(data.isEmpty()){
                 btnlogin.setEnabled(false);
                 btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_onclick));
-                btnlogin.setText(getResources().getString(R.string.sinInfo));
+                btnlogin.setText(this.getResources().getString(R.string.sinInfo));
                 btnlogin.setClickable(false);
 
-                Toast.makeText(this, "Sin información local", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, this.getResources().getString(R.string.locale_information_none), Toast.LENGTH_LONG).show();
             }else{
                 ArrayAdapter<String> adapterProfile = new ArrayAdapter<String>(this,R.layout.layout_custom_spinner,data);
                 spnperfil.setAdapter(adapterProfile);

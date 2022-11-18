@@ -52,6 +52,8 @@ public class HistoricoOrdenVentaWS {
                         case "bolivia":
                         case "ecuador":
                         case "chile":
+                        case "paraguay":
+                        case "espania":
                             ObjLHOrdenVenta.setApprovalStatus(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getObject());
                             break;
                     }

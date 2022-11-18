@@ -134,7 +134,7 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Ruta Vendedor");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.menu_ruta_vendedor));
         setHasOptionsMenu(true);
         context=getContext();
         if (getArguments() != null) {
@@ -334,7 +334,7 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Cliente");
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.find_client));
     }
     @Override
     public boolean onQueryTextSubmit(String query) {

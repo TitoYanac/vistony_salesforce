@@ -26,10 +26,10 @@
             android:focusable="false"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="CLIENTE 01"
+
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold"
-            tools:text="CLIENTE 01" />
+            />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -56,10 +56,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:text="RUC 01"
+                    android:text="@string/head_codigo"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold"
-                    tools:text="RUC 01" />
+                    />
             </TableRow>
 
             <TableRow
@@ -71,19 +71,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:text="Moneda"
+                    android:text="@string/lbl_currency"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="Moneda" />
+                    />
 
                 <TextView
                     android:id="@+id/tv_moneda"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:text="Moneda"
+                    android:text="@string/lbl_currency"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold"
-                    tools:text="Moneda" />
+                     />
             </TableRow>
 
             <TableRow
@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:focusable="false"
-                    android:text="Categoria   "
+                    android:text="@string/category_client"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
@@ -105,7 +105,7 @@
                     android:focusable="false"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="CATEGORIA"
+                    android:text="@string/category_client"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
             </TableRow>
@@ -122,7 +122,8 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:text="Saldo" />
+                    android:text="@string/lbl_balance"
+                    />
 
                 <TextView
                     android:id="@+id/tv_saldo_cliente_cabecera"
@@ -131,7 +132,7 @@
                     android:focusable="false"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="Saldo"
+                    android:text="@string/lbl_balance"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
             </TableRow>
@@ -231,7 +232,9 @@
                 android:layout_gravity="right"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="@string/LineCredit" />
+                android:text="@string/LineCredit"
+
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -312,7 +315,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:singleLine="true"
-                    android:text="Cobranza"
+                    android:text="@string/lbl_chk_collecion"
                     android:textAppearance="?attr/textAppearanceListItem" />
             </LinearLayout>
 
@@ -337,7 +340,7 @@
                     android:focusable="false"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:text="Visita"
+                    android:text="@string/visits"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
             </LinearLayout>

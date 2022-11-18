@@ -271,7 +271,7 @@ public class ClienteSQlite {
                             "a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
                             "a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lista_precio" +
                             ",a.domfactura_id,a.lastpurchase,a.lineofbusiness,g.terminopago,g.contado,d.latitud,d.longitud,d.addresscode,(case when d.latitud='0' or d.latitud is null then '0' else '1' end) as geolocalizado  FROM cliente a " +
-                            "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
+                            "LEFT JOIN (Select compania_id,cliente_id,SUM(saldo) saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
                             " and a.cliente_id=b.cliente_id " +
                             " INNER JOIN (SELECT compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud,addresscode FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud,addresscode) d ON a.compania_id=d.compania_id " +
@@ -510,7 +510,7 @@ public class ClienteSQlite {
                             "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
                             "a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lista_precio" +
                             ",a.domfactura_id,a.lastpurchase,a.lineofbusiness  FROM cliente a " +
-                            "LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
+                            "LEFT JOIN (Select compania_id,cliente_id,SUM(saldo) saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
                             "and a.cliente_id=b.cliente_id "  +
                             "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.domfactura_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.lastpurchase,a.lineofbusiness ",null);

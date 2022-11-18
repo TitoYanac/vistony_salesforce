@@ -377,6 +377,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
                 case "ecuador":
                 case "chile":
                 case "paraguay":
+                case "espania":
                     OpenDocumentPDF(recibo,context);
                     break;
                 case "peru":
