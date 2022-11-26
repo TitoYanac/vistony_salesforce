@@ -68,10 +68,10 @@
                 android:id="@+id/lbl_orden_venta_detalle_subtotal"
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="SubTotal"
+                android:text="@string/subtotal"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Descuento"
+                android:text="@string/descount"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="IVA"
+                android:text="@string/tax_code"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -166,7 +166,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Total"
+                android:text="@string/total"
                 android:textColor="@color/white"
                 android:textSize="24dp"
                 android:textStyle="bold"></TextView>

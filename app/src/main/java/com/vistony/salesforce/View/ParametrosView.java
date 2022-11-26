@@ -267,7 +267,7 @@ ParametrosView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        getActivity().setTitle("Parámetros");
+        getActivity().setTitle(getResources().getString(R.string.app_fragment_Parametro));
         setHasOptionsMenu(true);
         v = inflater.inflate(R.layout.fragment_parametros_view, container, false);
         listviewparametro = v.findViewById(R.id.listparametro);
@@ -301,25 +301,16 @@ ParametrosView extends Fragment {
             case "chile":
                 if (listaparametrosSQLiteEntity.isEmpty()) {
                     parametrosSQLite.LimpiarParametros();
-                    parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
-                    //parametrosSQLiteDao.InsertaParametros("3", "DOCUMENTOS", "0", getDateTime());
-                    //parametrosSQLiteDao.InsertaParametros("4", "RUTA VENDEDOR", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
-                    //parametrosSQLiteDao.InsertaParametros("8", "STOCK", "0", getDateTime());
-                    //parametrosSQLiteDao.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
-                    //parametrosSQLiteDao.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
-                    //parametrosSQLiteDao.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
-                    parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
-                    //parametrosSQLiteDao.InsertaParametros("13", "CATALOGO", "0", getDateTime());
-                    //parametrosSQLiteDao.InsertaParametros("14", "DIRECCION CLIENTE", "0", getDateTime());
-                    //parametrosSQLiteDao.InsertaParametros("15", "HOJA DESPACHO", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("1", this.getResources().getString(R.string.clients) ,"0", getDateTime());
+                    parametrosSQLite.InsertaParametros("2", this.getResources().getString(R.string.banks) , "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("5", this.getResources().getString(R.string.lbl_orderhed_payterms), "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("6", this.getResources().getString(R.string.Agencies), "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("7", this.getResources().getString(R.string.price_list), "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("12", this.getResources().getString(R.string.route_workforce), "0", getDateTime());
                 }
                 if(parametrosSQLite.ObtenerCantidadParametroID("17")==0)
                 {
-                    parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
+                    parametrosSQLite.InsertaParametros("17", this.getResources().getString(R.string.reasons_visit), "0", getDateTime());
                 }
                 break;
             case "peru":
@@ -327,36 +318,37 @@ ParametrosView extends Fragment {
             case "paraguay":
             case "perurofalab":
             case "espania":
+            case "marruecos":
                 if (listaparametrosSQLiteEntity.isEmpty()) {
                     if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
                         //if (listaparametrosSQLiteEntity.isEmpty()) {
                         parametrosSQLite.LimpiarParametros();
-                        parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("19", "HOJA DESPACHO", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("20", "HOJA DESPACHO DETALLE", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("23", "TIPO DESPACHO", "0", getDateTime());
-                        parametrosSQLite.InsertaParametros("24", "MOTIVO DESPACHO", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("1", this.getResources().getString(R.string.clients) ,"0", getDateTime());
+                        parametrosSQLite.InsertaParametros("2", this.getResources().getString(R.string.banks) , "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("19", this.getResources().getString(R.string.dispatch_sheet_head) , "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("20",  this.getResources().getString(R.string.dispatch_sheet_detail), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("23", this.getResources().getString(R.string.dispatch_type), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("24", this.getResources().getString(R.string.dispatch_reason), "0", getDateTime());
                         // }
                     } else {
                         if (listaparametrosSQLiteEntity.isEmpty()) {
                             parametrosSQLite.LimpiarParametros();
-                            parametrosSQLite.InsertaParametros("1", "CLIENTES", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("2", "BANCOS", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("5", "TÉRMINO PAGO", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("6", "AGENCIAS", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("7", "LISTA PRECIO", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("1", this.getResources().getString(R.string.clients), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("2",  this.getResources().getString(R.string.banks), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("5", this.getResources().getString(R.string.lbl_orderhed_payterms), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("6", this.getResources().getString(R.string.Agencies), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("7", this.getResources().getString(R.string.price_list), "0", getDateTime());
                             //parametrosSQLite.InsertaParametros("8", "STOCK", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("9", "LISTA PROMOCION", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("10", "PROMOCION CABECERA", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("11", "PROMOCION DETALLE", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("12", "RUTA FUERZATRABAJO", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("17", "MOTIVO VISITA", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("21", "COLORES CABECERA", "0", getDateTime());
-                            parametrosSQLite.InsertaParametros("22", "COLORES DETALLE", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("9", this.getResources().getString(R.string.list_promotion), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("10", this.getResources().getString(R.string.promotion_head), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("11", this.getResources().getString(R.string.promotion_detail), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("12",  this.getResources().getString(R.string.route_workforce), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("17", this.getResources().getString(R.string.reasons_visit), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("21", this.getResources().getString(R.string.colors_head), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("22",  this.getResources().getString(R.string.colors_detail), "0", getDateTime());
                         }
                         if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
-                            parametrosSQLite.InsertaParametros("18", "PRICE LIST", "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("18", this.getResources().getString(R.string.price_list), "0", getDateTime());
                         }
                     }
                 }
@@ -364,9 +356,9 @@ ParametrosView extends Fragment {
         }
         AppExecutors executor=new AppExecutors();
         /////////////////////Sincronizar Recibos Pendientes de Depositar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.SynchronizedepositedPendingCollection(getContext()).observe(getActivity(), data -> {
+        /*cobranzaRepository.SynchronizedepositedPendingCollection(getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
-        });
+        });*/
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         cobranzaRepository.UndepositedPendingCollection(getContext()).observe(getActivity(), data -> {
@@ -552,7 +544,7 @@ ParametrosView extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Descargando Parámetros", true, false);
+            pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.download_parameters), true, false);
         }
         @Override
         protected String doInBackground(String... arg0) {
@@ -560,7 +552,6 @@ ParametrosView extends Fragment {
                 int CantClientes=0,CantBancos=0,CantDocumentosDeuda=0,CantRutaVendedor=0,CantTerminoPago=0,
                         CantAgencia=0,CantListaPrecioDetalle=0,CantStock=0,CantListaPromocion=0,CantPromocionCabecera=0,
                 CantPromocionDetalle=0,CantRutaFuerzaTrabajo=0,CantCatalogo=0,CantDireccionCliente=0,CantHojaDespacho=0,CantMotivoVisita=0;
-
 
 
                 for(int i=0;i<arg0.length;i++) {
@@ -579,7 +570,7 @@ ParametrosView extends Fragment {
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
                                     CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-                                    parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), getDateTime());
+                                    parametrosSQLite.ActualizaCantidadRegistros("1",  getActivity().getResources().getString(R.string.clients), String.valueOf(CantClientes), getDateTime());
                                 }
 
                                 TerminoPagoWS terminoPagoWS = new TerminoPagoWS(getContext());
@@ -588,7 +579,7 @@ ParametrosView extends Fragment {
                                 if (!(LTPago.isEmpty())) {
                                     terminoPagoSQLiteDao.LimpiarTablaTerminoPago();
                                     CantTerminoPago = registrarTerminoPagoSQLite(LTPago);
-                                    parametrosSQLite.ActualizaCantidadRegistros("5", "TÉRMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
+                                    parametrosSQLite.ActualizaCantidadRegistros("5", getActivity().getResources().getString(R.string.lbl_orderhed_payterms), String.valueOf(CantTerminoPago), getDateTime());
 
                                 }
 
@@ -598,7 +589,7 @@ ParametrosView extends Fragment {
                                 if (!(LAgencia.isEmpty())) {
                                     agenciaSQLiteDao.LimpiarTablaAgencia();
                                     CantAgencia = registrarAgenciaSQLite(LAgencia);
-                                    parametrosSQLite.ActualizaCantidadRegistros("6", "AGENCIAS", String.valueOf(CantAgencia), getDateTime());
+                                    parametrosSQLite.ActualizaCantidadRegistros("6", getActivity().getResources().getString(R.string.Agencies), String.valueOf(CantAgencia), getDateTime());
                                 }
 
                                 listaPrecioRepository = new ListaPrecioRepository(getContext());
@@ -607,7 +598,7 @@ ParametrosView extends Fragment {
                                 if (!(LPDetalle.isEmpty())) {
                                     listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
                                     CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
-                                    parametrosSQLite.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
+                                    parametrosSQLite.ActualizaCantidadRegistros("7",  getActivity().getResources().getString(R.string.price_list), String.valueOf(CantListaPrecioDetalle), getDateTime());
                                 }
 
                                 /*RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
@@ -624,7 +615,7 @@ ParametrosView extends Fragment {
                                 if (!(LMVisita.isEmpty())) {
                                     motivoVisitaSQLiteDao.LimpiarTablaMotivoVisita();
                                     CantMotivoVisita = registrarMotivoVisita(LMVisita);
-                                    parametrosSQLite.ActualizaCantidadRegistros("17", "MOTIVO VISITA", String.valueOf(CantMotivoVisita), getDateTime());
+                                    parametrosSQLite.ActualizaCantidadRegistros("17",  getActivity() .getResources().getString(R.string.reasons_visit), String.valueOf(CantMotivoVisita), getDateTime());
                                 }
 
 
@@ -632,6 +623,7 @@ ParametrosView extends Fragment {
                             case "peru":
                             case "perurofalab":
                             case "espania":
+                            case "marruecos":
                                 if(!SesionEntity.perfil_id.equals("CHOFER"))
                                 {
                                  clienteRepository = new ClienteRepository(getContext());
@@ -639,7 +631,7 @@ ParametrosView extends Fragment {
 
                                 if (!LclientesqlSQLiteEntity.isEmpty()) {
                                     CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-                                    parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", String.valueOf(CantClientes), getDateTime());
+                                    parametrosSQLite.ActualizaCantidadRegistros("1",  getActivity().getResources().getString(R.string.clients), String.valueOf(CantClientes), getDateTime());
                                 }
                                 }
 
@@ -683,49 +675,50 @@ ParametrosView extends Fragment {
                     }
 
                     ///////////////////////FIN DE TODOS
-                    else if (argumento.equals("CLIENTES")) {
+                    else if (argumento.equals(getActivity().getResources().getString(R.string.clients))) {
                         ClienteRepository clienteRepository = new ClienteRepository(getContext());
                         LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
                         if (!(LclientesqlSQLiteEntity.isEmpty())) {
                             CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-                            parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("1",  getActivity().getResources().getString(R.string.clients), ""+CantClientes, getDateTime());
                         }
 
                     }
-                    else if (argumento.equals("BANCOS")) {
+
+                    else if (argumento.equals(getActivity().getResources().getString(R.string.banks))) {
                         bancoRepository.getAndInsertBank(SesionEntity.imei,getContext());
                     }
-                    else if (argumento.equals("TÉRMINO PAGO")) {
+                    else if (argumento.equals(getActivity().getResources().getString(R.string.lbl_orderhed_payterms))) {
                         TerminoPagoWS terminoPagoWS = new TerminoPagoWS(getContext());
                         LTPago = terminoPagoWS.getTerminoPagoWS(SesionEntity.imei);
 
                         if (!(LTPago.isEmpty())) {
                             terminoPagoSQLiteDao.LimpiarTablaTerminoPago();
                             CantTerminoPago = registrarTerminoPagoSQLite(LTPago);
-                            parametrosSQLite.ActualizaCantidadRegistros("5", "TÉRMINO PAGO", String.valueOf(CantTerminoPago), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("5", getActivity().getResources().getString(R.string.lbl_orderhed_payterms), String.valueOf(CantTerminoPago), getDateTime());
 
                         }
 
 
                     }
-                    else if (argumento.equals("AGENCIAS")) {
+                    else if (argumento.equals(getActivity().getResources().getString(R.string.Agencies))) {
                         AgenciaWS agenciaWS = new AgenciaWS(getContext());
                         LAgencia = agenciaWS.getAgenciaWS(SesionEntity.imei);
 
                         if (!(LAgencia.isEmpty())) {
                             agenciaSQLiteDao.LimpiarTablaAgencia();
                             CantAgencia = registrarAgenciaSQLite(LAgencia);
-                            parametrosSQLite.ActualizaCantidadRegistros("6", "AGENCIAS", String.valueOf(CantAgencia), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("6", getActivity().getResources().getString(R.string.Agencies), String.valueOf(CantAgencia), getDateTime());
                         }
                     }
-                    else if (argumento.equals("LISTA PRECIO")) {
+                    else if (argumento.equals(getActivity().getResources().getString(R.string.price_list))) {
                         ListaPrecioRepository listaPrecioRepository = new ListaPrecioRepository(getContext());
                         LPDetalle = listaPrecioRepository.getListaPrecioDetalleWS(SesionEntity.imei);
 
                         if (!(LPDetalle.isEmpty())) {
                             listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
                             CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
-                            parametrosSQLite.ActualizaCantidadRegistros("7", "LISTA PRECIO", String.valueOf(CantListaPrecioDetalle), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("7", getActivity().getResources().getString(R.string.price_list), String.valueOf(CantListaPrecioDetalle), getDateTime());
                         }
                     }
                     else if (argumento.equals("STOCK")) {
@@ -738,17 +731,17 @@ ParametrosView extends Fragment {
                             parametrosSQLite.ActualizaCantidadRegistros("8", "STOCK", String.valueOf(CantStock), getDateTime());
                         }
                     }
-                    else if (argumento.equals("LISTA PROMOCION")) {
+                    else if (argumento.equals(getActivity() .getResources().getString(R.string.list_promotion))) {
                     ListaPromocionWS listaPromocionWS = new ListaPromocionWS(getContext());
                     LPromocion = listaPromocionWS.GetListaPromocionWS(SesionEntity.imei);
 
                     if (!(LPromocion.isEmpty())) {
                         listaPromocionSQLiteDao.LimpiarTablaListaPromocion();
                         CantListaPromocion = registrarListaPromocionSQLite(LPromocion);
-                        parametrosSQLite.ActualizaCantidadRegistros("9", "LISTA PROMOCION", String.valueOf(CantListaPromocion), getDateTime());
+                        parametrosSQLite.ActualizaCantidadRegistros("9", getActivity().getResources().getString(R.string.list_promotion), String.valueOf(CantListaPromocion), getDateTime());
                     }
                     }
-                    else if (argumento.equals("PROMOCION CABECERA")) {
+                    else if (argumento.equals(getActivity().getResources().getString(R.string.promotion_head))) {
                         PromocionCabeceraWS promocionCabeceraWS = new PromocionCabeceraWS(getContext());
 
                         LPCabecera = promocionCabeceraWS.getPromocionCabeceraWS(SesionEntity.imei);
@@ -756,16 +749,16 @@ ParametrosView extends Fragment {
                         if (!(LPCabecera.isEmpty())) {
                             promocionCabeceraSQLiteDao.LimpiarTablaPromocionCabecera();
                             CantPromocionCabecera = registrarPromocionCabeceraSQLite(LPCabecera);
-                            parametrosSQLite.ActualizaCantidadRegistros("10", "PROMOCION CABECERA", String.valueOf(CantPromocionCabecera), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("10", getActivity().getResources().getString(R.string.promotion_head), String.valueOf(CantPromocionCabecera), getDateTime());
                         }
                     }
-                    else if (argumento.equals("PROMOCION DETALLE")) {
+                    else if (argumento.equals(getActivity().getResources().getString(R.string.promotion_detail))) {
                         PromocionDetalleWS promocionDetalleWS = new PromocionDetalleWS(getContext());
                         LPromocionDetalle = promocionDetalleWS.getPromocionDetalleWS(SesionEntity.imei);
                         if (!(LPromocionDetalle.isEmpty())) {
                             promocionDetalleSQLiteDao.LimpiarTablaPromocionDetalle();
                             CantPromocionDetalle = registrarPromocionDetalleSQLite(LPromocionDetalle);
-                            parametrosSQLite.ActualizaCantidadRegistros("11", "PROMOCION DETALLE", String.valueOf(CantPromocionDetalle), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("11", getActivity().getResources().getString(R.string.promotion_detail), String.valueOf(CantPromocionDetalle), getDateTime());
                         }
                     }
                     else if (argumento.equals("RUTA FUERZATRABAJO")) {
@@ -780,24 +773,24 @@ ParametrosView extends Fragment {
                             parametrosSQLite.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(CantRutaFuerzaTrabajo), getDateTime());
                         }*/
 
-                    }else if (argumento.equals("MOTIVO VISITA")) {
+                    }else if (argumento.equals(getActivity().getResources().getString(R.string.reasons_visit))) {
                         MotivoVisitaWS motivoVisitaWS = new MotivoVisitaWS(getContext());
                         LMVisita = motivoVisitaWS.getMotivoVisitaWS (SesionEntity.imei, SesionEntity.compania_id);
                         Log.e("REOS","ParametrosView.CargaParametroIndividual-LMVisita.size(): "+LMVisita.size());
                         if (!(LMVisita.isEmpty())) {
                             motivoVisitaSQLiteDao.LimpiarTablaMotivoVisita();
                             CantMotivoVisita = registrarMotivoVisita(LMVisita);
-                            parametrosSQLite.ActualizaCantidadRegistros("17", "MOTIVO VISITA", String.valueOf(CantMotivoVisita), getDateTime());
+                            parametrosSQLite.ActualizaCantidadRegistros("17", getActivity().getResources().getString(R.string.reasons_visit), String.valueOf(CantMotivoVisita), getDateTime());
                         }
 
-                }else if (argumento.equals("MOTIVO VISITA")) {
+                }else if (argumento.equals(getActivity().getResources().getString(R.string.reasons_visit))) {
                     MotivoVisitaWS motivoVisitaWS = new MotivoVisitaWS(getContext());
                     LMVisita = motivoVisitaWS.getMotivoVisitaWS (SesionEntity.imei, SesionEntity.compania_id);
                     Log.e("REOS","ParametrosView.CargaParametroIndividual-LMVisita.size(): "+LMVisita.size());
                     if (!(LMVisita.isEmpty())) {
                         motivoVisitaSQLiteDao.LimpiarTablaMotivoVisita();
                         CantMotivoVisita = registrarMotivoVisita(LMVisita);
-                        parametrosSQLite.ActualizaCantidadRegistros("17", "MOTIVO VISITA", String.valueOf(CantMotivoVisita), getDateTime());
+                        parametrosSQLite.ActualizaCantidadRegistros("17", getActivity().getResources().getString(R.string.reasons_visit), String.valueOf(CantMotivoVisita), getDateTime());
                     }
                 }else if (argumento.equals("PRICE LIST")) {
 
@@ -822,7 +815,7 @@ ParametrosView extends Fragment {
             listviewparametro.setAdapter(listaParametrosAdapter);
 
             pd.dismiss();
-            Toast.makeText(getContext(), "Parametros Actualizados...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getActivity().getResources().getString(R.string.parameters_updated), Toast.LENGTH_SHORT).show();
 
         }
 
@@ -1334,7 +1327,7 @@ ParametrosView extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.seleccionar_todo:
-                alertaSeleccionarTodo("Esta Seguro de Seleccionar Todos los parametros?").show();
+                alertaSeleccionarTodo(getActivity().getResources().getString(R.string.mse_selection_all_parameters)).show();
 
 
                 return false;

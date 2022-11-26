@@ -32,7 +32,8 @@
                     android:layout_marginTop="4dp"
                     android:layout_weight="4"
                     android:paddingLeft="10dp"
-                    android:text="CLIENTE"
+                    android:text="@string/client"
+                    android:textAllCaps="true"
                     android:textSize="20dp" />
             </TableRow>
 
@@ -48,9 +49,9 @@
                     android:layout_marginTop="4dp"
                     android:layout_weight="4"
                     android:paddingLeft="10dp"
-
-
-                    android:text="RUC" />
+                    android:text="@string/ruc"
+                    android:textAllCaps="true"
+                    />
             </TableRow>
 
             <TableRow
@@ -65,8 +66,9 @@
                     android:layout_marginTop="2dp"
                     android:layout_weight="4"
                     android:background="@color/Rojo_Vistony"
-                    android:text="DOCUMENTOS CON DEUDA"
+                    android:text="@string/document_with_debt"
                     android:textAlignment="center"
+                    android:textAllCaps="true"
                     android:textColor="@color/white" />
             </TableRow>
 
@@ -108,7 +110,7 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Documento:"
+                android:text="@string/documents"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -138,7 +140,7 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Deuda:"
+                android:text="@string/debt"
                 android:textColor="@color/white"
                 android:textSize="24dp">
 

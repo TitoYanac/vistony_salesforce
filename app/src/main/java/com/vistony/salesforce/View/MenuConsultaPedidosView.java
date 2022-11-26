@@ -88,7 +88,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
     MenuConsultasView.OnFragmentInteractionListener mListener;
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        getActivity().setTitle("Menu Consultas Pedidos");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.menu_query_salesorder));
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -126,7 +126,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
                 String accion="iniciar";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,"");*/
-                AlertaObtenerResumenDiario("Seleccione la Fecha a generar el Reporte del Dia:").show();
+                AlertaObtenerResumenDiario(getActivity().getResources().getString(R.string.selected_date_report)).show();
             }
         });
         cv_consulta_stock.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +178,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.layout_dialog_resumen_diario);
         TextView textTitle = dialog.findViewById(R.id.tv_titulo);
-        textTitle.setText("ADVERTENCIA!");
+        textTitle.setText(getActivity().getResources().getString(R.string.warning));
         TextView textMsj = dialog.findViewById(R.id.tv_mensaje);
         textMsj.setText(mensaje);
         tv_fecha_resumen_diario = dialog.findViewById(R.id.tv_fecha_resumen_diario);
@@ -202,7 +202,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 pd = new ProgressDialog(getActivity());
-                pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Resumen Diario", true, false);
+                pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait)    , getActivity().getResources().getString(R.string.querying_dates), true, false);
                 ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                 resumenDiarioRepository.getResumenDiario(SesionEntity.compania_id ,SesionEntity.imei,fechasap,getContext(),fechasap).observe(getActivity(), data1 -> {
                     summaryofeffectivenessRepository.getSummaryofEffectiveness(SesionEntity.imei,fechasap,fechasap).observe(getActivity(), data2 -> {

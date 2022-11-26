@@ -136,7 +136,7 @@ public class MenuConsultaCobradoView extends Fragment {
                 //String compuesto=Fragment+"-"+accion;
                 //mListener.onFragmentInteraction(compuesto,"");
 
-                alertaGetClient("Use el Boton de Buscar para Obtener el Cliente:").show();
+                alertaGetClient(getActivity().getResources().getString(R.string.use_button_find_get_client)).show();
             }
         });
         cv_kardex_of_payment.setOnClickListener(new View.OnClickListener() {
@@ -186,7 +186,7 @@ public class MenuConsultaCobradoView extends Fragment {
         textMsj.setText(texto);
         ImageView image = dialog.findViewById(R.id.image);
         image.setImageResource(R.mipmap.logo_circulo);
-        titulo.setText("IMPORTANTE!!!");
+        titulo.setText(getActivity().getResources().getText(R.string.important));
         ImageButton imb_obtener_cliente;
         tv_nombre_cliente_historic = dialog.findViewById(R.id.tv_nombre_cliente_historic);
         imb_obtener_cliente = dialog.findViewById(R.id.imb_obtener_cliente);
@@ -204,7 +204,7 @@ public class MenuConsultaCobradoView extends Fragment {
         dialogButtonOK.setOnClickListener(v -> {
             //
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Cálculo de Cuotas de Cliente", true, false);
+            pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.querying_dates), true, false);
             GenerarQuotaPerCustomerPDF();
             Log.e("REOS","MenuConsultaCobradoView.GenerarQuotaPerCustomerPDF.click:");
             //dialog.dismiss();
@@ -247,15 +247,19 @@ public class MenuConsultaCobradoView extends Fragment {
                 }
                 if(data1==null||data2==null)
                 {
-                    Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Cálculo", Toast.LENGTH_SHORT).show();
-                    alertdialogInformative(getContext(),"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
+                    Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
+                    alertdialogInformative(
+                            getContext(),
+                            getActivity().getResources().getString(R.string.important),
+                            getActivity().getResources().getString(R.string.mse_not_data_available)
+                    ).show();
                 }
 
             });
             if(data1==null)
             {
-                Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Cálculo", Toast.LENGTH_SHORT).show();
-                alertdialogInformative(getContext(),"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
+                alertdialogInformative(getContext(),getActivity().getResources().getString(R.string.important),getActivity().getResources().getString(R.string.mse_not_data_available)).show();
             }
 
         });
@@ -263,8 +267,8 @@ public class MenuConsultaCobradoView extends Fragment {
         }catch (Exception e)
         {
             Log.e("REOS","MenuConsultaCobradoView-GenerarQuotaPerCustomerPDF-e"+e.toString());
-            Toast.makeText(getContext(), "No se encontraron Documentos para realizar el Calculo", Toast.LENGTH_SHORT).show();
-            alertdialogInformative(getContext(),"IMPORTANTE!!!",e.toString()).show();
+            Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
+            alertdialogInformative(getContext(),getActivity().getResources().getString(R.string.important),e.toString()).show();
         }
 
         pd.dismiss();

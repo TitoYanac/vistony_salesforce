@@ -160,8 +160,8 @@ android {
             applicationIdSuffix ".marruecos"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.es"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.es"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.ma.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.ma.qa"')
             //Produccion------
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
@@ -169,7 +169,9 @@ android {
             versionName "1.0.0"
             manifestPlaceholders = [country:"Marruecos"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"MA"')
-            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"AR"')
+            buildConfigField('String' , 'LANGUAGE_DEFAULT', '"fr"')
+
+
         }
     }
 

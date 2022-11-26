@@ -49,7 +49,7 @@
                     android:enabled="true"
                     android:hint=""
                     android:paddingLeft="10dp"
-                    android:text="RUC1:"
+                    android:text="@string/ruc"
                     android:textSize="20dp" />
 
 
@@ -67,8 +67,9 @@
                     android:enabled="true"
                     android:hint=""
                     android:paddingLeft="10dp"
-                    android:text="CLIENTE"
+                    android:text="@string/DeudaDrawer"
                     android:textSize="15dp"
+                    android:textAllCaps="true"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -86,7 +87,7 @@
                     android:enabled="true"
                     android:hint=""
                     android:paddingLeft="10dp"
-                    android:text="Cliente1:"
+                    android:text="@string/DeudaDrawer"
                     android:textSize="20dp" />
             </TableRow>
 
@@ -102,8 +103,9 @@
                     android:enabled="true"
                     android:hint=""
                     android:paddingLeft="10dp"
-                    android:text="DIRECCIÓN"
+                    android:text="@string/lbl_address"
                     android:textSize="15dp"
+                    android:textAllCaps="true"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -145,8 +147,9 @@
                     android:enabled="true"
                     android:hint=""
                     android:paddingLeft="10dp"
-                    android:text="MONEDA"
+                    android:text="@string/lbl_currency"
                     android:textSize="15dp"
+                    android:textAllCaps="true"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -180,6 +183,7 @@
                     android:hint=""
                     android:paddingLeft="10dp"
                     android:text="@string/lbl_orderhed_payterms"
+                    android:textAllCaps="true"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </TableRow>
@@ -224,7 +228,8 @@
                     android:enabled="true"
                     android:hint=""
                     android:paddingLeft="10dp"
-                    android:text="AGENCIA"
+                    android:text="@string/agency"
+                    android:textAllCaps="true"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </TableRow>
@@ -266,7 +271,8 @@
                     android:enabled="true"
                     android:hint=""
                     android:paddingLeft="10dp"
-                    android:text="@string/lbl_dispatch_date"
+                    android:text="@string/dispatch_date"
+                    android:textAllCaps="true"
                     android:textSize="15dp"
                     android:textStyle="bold" />
             </TableRow>
@@ -308,7 +314,7 @@
                     android:layout_weight="4"
                     android:background="@drawable/borde_cuadrado"
                     android:enabled="true"
-                    android:hint="Ingresar comentario..."
+                    android:hint="@string/entry_commentary"
                     android:maxLength="100"
                     android:paddingLeft="10dp"
                     android:textAlignment="center"
@@ -330,7 +336,7 @@
                     android:background="@color/Rojo_Vistony"
                     android:drawableLeft="@drawable/ic_baseline_format_list_numbered_24"
                     android:enabled="true"
-                    android:text="DETALLE"
+                    android:text="@string/detail"
                     android:textColor="@color/white"
                     android:textSize="20dp" />
             </TableRow>
@@ -417,7 +423,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="SubTotal"
+                android:text="@string/subtotal"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -447,7 +453,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Descuento"
+                android:text="@string/descount"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -508,7 +514,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Total"
+                android:text="@string/total"
                 android:textColor="@color/white"
                 android:textSize="24dp"
                 android:textStyle="bold"></TextView>

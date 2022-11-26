@@ -260,25 +260,25 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
 
             PdfPTable tblcobrador = new PdfPTable(1);
             tblcobrador.setWidthPercentage(100);
-            PdfPCell cellcobrador = new PdfPCell(new Phrase("*********************DATOS COBRADOR*******************",font2 ));
+            PdfPCell cellcobrador = new PdfPCell(new Phrase(context.getResources().getString(R.string.separator_short)+context.getResources().getString(R.string.data).toUpperCase()+" "+context.getResources().getString(R.string.debt_collector).toUpperCase()+context.getResources().getString(R.string.separator_short),font2 ));
             cellcobrador.disableBorderSide(Rectangle.BOX);
-            cellcobrador.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cellcobrador.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblcobrador.addCell(cellcobrador);
             cellcobrador = new PdfPCell(new Phrase(fuerzatrabajo_id+" "+nombrefuerzatrabajo,font ));
 
             cellcobrador.disableBorderSide(Rectangle.BOX);
             cellcobrador.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblcobrador.addCell(cellcobrador);
-            cellcobrador = new PdfPCell(new Phrase("*********************DATOS DOCUMENTO*******************",font2 ));
+            cellcobrador = new PdfPCell(new Phrase(context.getResources().getString(R.string.separator_short)+context.getResources().getString(R.string.data).toUpperCase()+" "+context.getResources().getString(R.string.documents).toUpperCase()+context.getResources().getString(R.string.separator_short),font2 ));
             cellcobrador.disableBorderSide(Rectangle.BOX);
-            cellcobrador.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cellcobrador.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblcobrador.addCell(cellcobrador);
             documento.add(tblcobrador);
             Log.e("REOS","DocumentoCobranzaPDF-generarPdf-Datosdocumento");
             PdfPTable tbl = new PdfPTable(2);
             tbl.setWidthPercentage(100);
 
-            PdfPCell cell = new PdfPCell(new Phrase("Fecha:",font4));
+            PdfPCell cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.date),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
@@ -287,7 +287,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Recibo:",font4));
+            cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.receip),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
@@ -296,7 +296,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Documento:",font4));
+            cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.documents),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
@@ -305,7 +305,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Importe         :",font4));
+            cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.amount)+" "+context.getResources().getString(R.string.documents),font4));
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             cell.disableBorderSide(Rectangle.BOX);
             tbl.addCell(cell);
@@ -314,7 +314,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Saldo            :",font4));
+            cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.balance),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
@@ -323,7 +323,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Cobrado       :",font4));
+            cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.amount_charged),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
@@ -332,7 +332,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase("Nuevo Saldo:",font4));
+            cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.new_balance),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             tbl.addCell(cell);
@@ -382,6 +382,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
                     break;
                 case "peru":
                 case "perurofalab":
+                case "marruecos":
                     if(SesionEntity.Print.equals("N"))
                     {
                         OpenDocumentPDF(recibo,context);
@@ -456,7 +457,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             context.startActivity(target);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(context, "Es necesario que instales algun visor de PDF", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getResources().getText(R.string.mse_necessary_install_PDF), Toast.LENGTH_SHORT).show();
         }
     }
 

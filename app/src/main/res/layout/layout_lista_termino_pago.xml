@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Codigo:"
+        android:text="@string/code"
         android:textAppearance="?attr/textAppearanceListItem"
         android:visibility="invisible"
         />
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="10dp"
-        android:text="Codigo1"
+        android:text="@string/code"
         android:textAppearance="?attr/textAppearanceListItem"
         android:visibility="invisible"
         />
@@ -36,15 +36,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Descripcion:"
+        android:text="@string/description"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_terminopago"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
+        android:layout_marginLeft="110dp"
         android:layout_marginTop="30dp"
-        android:text="Descripcion1"
+        android:text="@string/description"
         android:textAppearance="?attr/textAppearanceListItem" />
 </RelativeLayout>

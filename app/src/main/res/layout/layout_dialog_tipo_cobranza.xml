@@ -83,7 +83,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
 
-                                android:text="Cobranza Ordinaria"
+                                android:text="@string/collecion_ordinare"
                                 android:textStyle="bold" />
 
 
@@ -177,8 +177,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-
-                                android:text="Pago POS"
+                                android:text="@string/payment_POS"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>

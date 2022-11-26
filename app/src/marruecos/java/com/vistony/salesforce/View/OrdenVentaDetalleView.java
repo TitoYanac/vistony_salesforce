@@ -255,7 +255,7 @@ public class OrdenVentaDetalleView extends Fragment {
         hiloAgregarListaProductos = new HiloAgregarListaProductos();
         hiloActualizarResumenMontos = new HiloActualizarResumenMontos();
         context=getContext();
-        getActivity().setTitle("Orden De Venta");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.salesorder));
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -324,7 +324,7 @@ public class OrdenVentaDetalleView extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Procesando...", true, false);
+            pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.querying_dates), true, false);
         }
 
         @Override
@@ -339,7 +339,7 @@ public class OrdenVentaDetalleView extends Fragment {
         }
 
         protected void onPostExecute(Object result){
-            getActivity().setTitle("Orden Venta Detalle");
+            getActivity().setTitle(getActivity().getResources().getString(R.string.salesorder));
             listaOrdenVentaDetalleAdapter = new ListSalesOrderDetailAdapter (getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
 
             if(lv_ordenventadetalle!=null)
@@ -352,7 +352,7 @@ public class OrdenVentaDetalleView extends Fragment {
                 setHasOptionsMenu(true);
             }
             else {
-                Toast.makeText(getContext(), "Consultar nuevamente el Cliente:", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_querying_encore_client), Toast.LENGTH_SHORT).show();
             }
             pd.dismiss();
         }
@@ -452,16 +452,16 @@ public class OrdenVentaDetalleView extends Fragment {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.layout_alert_dialog_orden_venta_detalle);
         TextView textTitle = dialog.findViewById(R.id.text_orden_venta_detalle);
-        textTitle.setText("ADVERTENCIA");
+        textTitle.setText(getActivity().getResources().getString(R.string.warning));
         final TextView textMsj = dialog.findViewById(R.id.textViewMsj_orden_venta_detalle);
-        textMsj.setText("Seguro de Finalizar el Ingreso de Lineas?");
+        textMsj.setText(getActivity().getResources().getString(R.string.mse_are_you_sure_register_lines));
         ImageView image = (ImageView) dialog.findViewById(R.id.image_orden_venta_detalle);
 
         image.setImageResource(R.mipmap.logo_circulo);
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK_orden_venta_detalle);
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel_orden_venta_detalle);
-        dialogButton.setText("ACEPTAR");
-        dialogButtonCancel.setText("CANCELAR");
+        dialogButton.setText(getActivity().getResources().getString(R.string.accept));
+        dialogButtonCancel.setText(getActivity().getResources().getString(R.string.cancel));
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -493,14 +493,14 @@ public class OrdenVentaDetalleView extends Fragment {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.layout_dialog);
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA");
+        textTitle.setText(getActivity().getResources().getString(R.string.warning));
         final TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("Tiene una Linea en Monto 0");
+        textMsj.setText(getActivity().getResources().getString(R.string.mse_you_have_line_amount_zero));
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-        dialogButton.setText("OK");
+        dialogButton.setText(getActivity().getResources().getString(R.string.accept));
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 

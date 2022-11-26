@@ -241,14 +241,20 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 holder.tv_status_aprob.setText("Facturado");
             }
         }
-        else if(BuildConfig.FLAVOR.equals("paraguay")||BuildConfig.FLAVOR.equals("espania"))
+        else if(BuildConfig.FLAVOR.equals("paraguay")||BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos"))
         {
             Resources res = getContext().getResources(); // need this to fetch the drawable
             Drawable eraser,orders,invoices;
             holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
-            String[] descriptionData = {"Borrador", "Orden\nVenta", "Facturacion","Despacho"};
+            String[] descriptionData = {
+                    Context.getResources().getString(R.string.eraser)
+                    , Context.getResources().getString(R.string.lbl_chk_pedido)
+                    , Context.getResources().getString(R.string.invoices)
+                    ,Context.getResources().getString(R.string.dispatch)};
             holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
             //holder.imv_historic_delivery.setVisibility(View.GONE);
+
+
 
             Convert.setMarginsView(holder.imv_historic_orders,80, 400, 200, 145);
             Convert.setMarginsView(holder.imv_historic_order_aprob,330, 400, 200, 145);
@@ -618,10 +624,10 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 ).show();*/
                 if(lead.getInvoices()!=null)
                 {
-                    getalertInvoices(lead.getInvoices(),"FACTURAS").show();
+                    getalertInvoices(lead.getInvoices(),Context.getResources().getString(R.string.invoice)).show();
                 }
                 else {
-                    Toast.makeText(getContext(), "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), Context.getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -630,10 +636,10 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             public void onClick(View v) {
                 if(lead.getInvoices()!=null)
                 {
-                getalertDelivery(lead.getInvoices(),"ENTREGAS").show();
+                getalertDelivery(lead.getInvoices(),Context.getResources().getString(R.string.delivery)).show();
                 }
                 else {
-                    Toast.makeText(getContext(), "No se encontraron Entregas", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), Context.getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -650,11 +656,11 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                         break;
                     case 3:
                         //holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
-                        getalertInvoices(lead.getInvoices(),"FACTURAS").show();
+                        getalertInvoices(lead.getInvoices(),Context.getResources().getString(R.string.invoice)).show();
                         break;
                     case 4:
                         //holder.your_state_progress_bar_id.setAllStatesCompleted(true);
-                        getalertDelivery(lead.getInvoices(),"ENTREGAS").show();
+                        getalertDelivery(lead.getInvoices(),Context.getResources().getString(R.string.delivery)).show();
                         break;
                 }
             }
@@ -676,9 +682,9 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
         dialog.setContentView(R.layout.layout_dialog_list_informative);
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA");
+        textTitle.setText(getContext().getResources().getString(R.string.warning).toUpperCase());
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("Entregas Vinculadas a la Orden de Venta");
+        textMsj.setText(getContext().getResources().getString(R.string.delivery_linked_salesorder));
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         ListView lv_pending_collection = (ListView) dialog.findViewById(R.id.lv_pending_collection);
         TextView txtdocumento = dialog.findViewById(R.id.txtdocumento);
@@ -708,9 +714,9 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
         dialog.setContentView(R.layout.layout_dialog_list_informative);
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA");
+        textTitle.setText(getContext().getResources().getString(R.string.invoice).toUpperCase());
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("Facturas Vinculadas a la Orden de Venta");
+        textMsj.setText(getContext().getResources().getString(R.string.invoice_linked_salesorder));
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         TextView txtdocumento = dialog.findViewById(R.id.txtdocumento);
         txtdocumento.setText(Type);

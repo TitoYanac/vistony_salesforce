@@ -34,7 +34,7 @@ public class VersionViewModel {
         //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
         if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||
                 BuildConfig.FLAVOR.equals("bolivia")||BuildConfig.FLAVOR.equals("perurofalab")
-                ||BuildConfig.FLAVOR.equals("espania")
+                ||BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos")
         )
         {
             baseUrl = "https://salesforce.vistony.pe";
@@ -91,6 +91,9 @@ public class VersionViewModel {
             case "espania":
                 puerto = "";
                 break;
+            case "marruecos":
+                puerto = "";
+                break;
         }
 
         String endPoint=baseUrl
@@ -108,6 +111,7 @@ public class VersionViewModel {
             case "peru":
             case "paraguay":
             case "espania":
+            case "marruecos":
                 String hashMd5=context.getPackageName()+"."+BuildConfig.BUILD_TYPE;
                 Log.e("El hash ess","=>"+hashMd5);
                 endPoint=endPoint+BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/version?imei="+imei+"&token="+md5(hashMd5);

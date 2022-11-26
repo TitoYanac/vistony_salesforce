@@ -47,7 +47,7 @@
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="Seleccione el Cliente:" />
+                    android:text="@string/selection_client" />
 
 
                 <TableRow
@@ -74,7 +74,8 @@
                         android:enabled="true"
                         android:hint=""
                         android:textAlignment="center"
-                        android:text="------SELECCIONAR------"
+                        android:text="@string/_selection_"
+                        android:textAllCaps="true"
                         android:textSize="20dp" />
 
                 </TableRow>
@@ -99,7 +100,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="CANCELAR"
+                    android:text="@string/cancel"
+                    android:textAllCaps="true"
                     android:textColor="#0957C3" />
 
                 <Button
@@ -110,7 +112,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="GENERAR"
+                    android:text="@string/generate"
+                    android:textAllCaps="true"
                     android:textColor="#0957C3" />
 
             </LinearLayout>

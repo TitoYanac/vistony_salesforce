@@ -127,7 +127,7 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_historico_deposito, container, false);
-        getActivity().setTitle("Consulta Déposito");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.query_deposit));
         tv_fechainidep = (TextView) v.findViewById(R.id.tv_fechainidep);
         tv_fechainidep.setText(fecha);
         tv_fechafindep = (TextView) v.findViewById(R.id.tv_fechafindep);
@@ -277,7 +277,7 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Depositos", true, false);
+            pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.querying_dates), true, false);
         }
         @Override
         protected String doInBackground(String... arg1) {
@@ -374,13 +374,13 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
 
                 listconsdepositos.setAdapter(listaHistoricoDepositoAdapter);
 
-                Toast.makeText(getContext(), "Depositos Obtenidos Exitosamente", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getActivity().getResources().getText(R.string.data_get_sucessful), Toast.LENGTH_LONG).show();
                 imb_consultardep.setEnabled(true);
                 imb_consultardep.setClickable(true);
 
 
             }else{
-                Toast.makeText(getContext(), "No se encontraron Depositos", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getActivity().getResources().getText(R.string.mse_not_data_available), Toast.LENGTH_LONG).show();
                 imb_consultardep.setEnabled(true);
                 imb_consultardep.setClickable(true);
             }

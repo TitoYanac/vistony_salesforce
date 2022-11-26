@@ -152,7 +152,7 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
             @Override
             public void onClick(View v) {
                 alertamostrarfactura(
-                        "Factura",
+                        Context.getResources().getString(R.string.invoice),
                         lead.getDocumento_id(),
                         lead.getNrofactura(),
                         lead.getFechaemisionfactura(),
@@ -166,7 +166,7 @@ public class ListaHistoricoFacturasAdapter extends ArrayAdapter<ListaHistoricoFa
             @Override
             public void onClick(View v) {
                 alertamostrardespacho(
-                        "Despacho",
+                        Context.getResources().getString(R.string.delivery),
                         lead.getNrofactura(),
                         lead.getNombrechofer(),
                         lead.getFechaprogramaciondespacho(),

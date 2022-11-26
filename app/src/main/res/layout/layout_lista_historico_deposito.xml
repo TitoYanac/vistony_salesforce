@@ -41,7 +41,7 @@
                     android:id="@+id/lbl_banco"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Banco"
+                    android:text="@string/banks"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold"
                     tools:text="Banco" />
@@ -50,10 +50,10 @@
                     android:id="@+id/tv_banco"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="@string/banks"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold"
-                    tools:text="" />
+                     />
             </TableRow>
 
             <TableRow
@@ -72,10 +72,9 @@
                     android:id="@+id/tv_deposito_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DEPOSITO"
+                    android:text="@string/menu_deposito"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold"
-                    tools:text="DEPOSITO" />
+                    android:textStyle="bold"/>
             </TableRow>
 
             <TableRow
@@ -86,17 +85,17 @@
                     android:id="@+id/lbl_monto_depositado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Monto"
+                    android:text="@string/amount"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="Monto" />
+                     />
 
                 <TextView
                     android:id="@+id/tv_monto_depositado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MONTO"
+                    android:text="@string/amount"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="MONTO" />
+                     />
 
             </TableRow>
 
@@ -108,19 +107,18 @@
                     android:id="@+id/lbl_estado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Estado"
+                    android:text="@string/status"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold"
-                    tools:text="Estado" />
+                     />
 
                 <TextView
                     android:id="@+id/tv_estado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="estado"
+                    android:text="@string/status"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold"
-                    tools:text="estado" />
+                    android:textStyle="bold" />
             </TableRow>
 
             <TableRow
@@ -131,17 +129,16 @@
                     android:id="@+id/lbl_fecha_deposito"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Fecha"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="Fecha" />
+                    android:text="@string/date"
+                    android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_fecha_deposito"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1900-01-01"
+                    android:text="@string/date"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="1900-01-01" />
+                     />
             </TableRow>
 
 
@@ -154,17 +151,17 @@
                     android:id="@+id/lbl_tipo_ingreso"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tipo"
+                    android:text="@string/type"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="Tipo" />
+                     />
 
                 <TextView
                     android:id="@+id/tv_tipo_ingreso"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="@string/type"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="" />
+                    />
 
             </TableRow>
 
@@ -176,17 +173,17 @@
                     android:id="@+id/lbl_fecha_diferida"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Diferido"
+                    android:text="@string/deferred"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="Diferido" />
+                     />
 
                 <TextView
                     android:id="@+id/tv_fecha_diferida"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1900-01-01"
+                    android:text="@string/deferred"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    tools:text="1900-01-01" />
+                     />
             </TableRow>
 
         </TableLayout>
@@ -212,9 +209,9 @@
                         android:id="@+id/lbl_anular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ANULAR"
+                        android:text="@string/anuller"
                         android:textAppearance="?attr/textAppearanceListItem"
-                        tools:text="ANULAR" />
+                         />
 
                     <ImageView
                         android:id="@+id/imv_anular"

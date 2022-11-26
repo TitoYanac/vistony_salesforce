@@ -24,7 +24,8 @@
                 android:id="@+id/lblrecibo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="RECIBO N°:"
+                android:text="@string/receip"
+                android:textAllCaps="true"
                 android:textSize="14dp"
                 android:textStyle="bold" />
 
@@ -52,7 +53,7 @@
                     android:id="@+id/tvpagoadelantado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Pago Adelantado" />
+                    android:text="@string/UR" />
 
                 <CheckBox
                     android:id="@+id/chkpagoadelantado"
@@ -67,7 +68,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Scan QR" />
+                    android:text="@string/qr_scan"
+
+                    />
 
                 <CheckBox
                     android:id="@+id/chk_validacionqr"
@@ -83,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="@string/lbl_cheque" />
+                    android:text="@string/cheque" />
 
                 <CheckBox
                     android:id="@+id/chk_collectioncheck"
@@ -104,7 +107,7 @@
                     android:id="@+id/tv_bancarizado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Bancarizado" />
+                    android:text="@string/Banked" />
 
                 <CheckBox
                     android:id="@+id/chk_bancarizado"
@@ -119,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Pago Directo" />
+                    android:text="@string/Direct_Depost" />
 
                 <CheckBox
                     android:id="@+id/chk_pago_directo"
@@ -134,7 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Pago POS"/>
+                    android:text="@string/pos"/>
 
                 <CheckBox
                     android:id="@+id/chk_pago_pos"
@@ -214,7 +217,7 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/ic_insert_comment_black_24dp"
-                android:text=" Comentario..."
+                android:text="@string/comentary"
                 android:textSize="13dp" />
         </LinearLayout>
 

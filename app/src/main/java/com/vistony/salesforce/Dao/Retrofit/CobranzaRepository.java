@@ -24,6 +24,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.SignatureEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.R;
 
 import org.json.JSONObject;
 
@@ -296,17 +297,17 @@ public class CobranzaRepository extends ViewModel {
         Api api = Config.getClient().create(Api.class);
         Call<HistoricoCobranzaEntityResponse> call=null;
 
-        if (TipoFecha.equals("COBRANZA"))
+        if (TipoFecha.equals(context.getResources().getString(R.string.collection)))
         {
             Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-COBRANZA-entro");
             call = api.getHistoricoCobranza(
                     Imei,
                     Fecha
             );
-            Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-COBRANZA-api"+api.toString());
+            Log.e("REOS","CobranzaRepository-getHistoricoCobranza-TipoFecha-COBRANZA-call"+call.toString());
         }else if(TipoFecha.equals("PENDIENTE_DEPOSITO"))
         {
-            if(BuildConfig.FLAVOR.equals("peru"))
+            if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("marruecos"))
             {
                 Log.e("REOS", "CobranzaRepository-getHistoricoCobranza-TipoFecha-PENDIENTE_DEPOSITO-entro");
                 call = api.getHistoricoCobranzaPDSupervisor(

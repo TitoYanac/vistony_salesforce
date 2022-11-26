@@ -80,7 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:text="@string/lbl_client_dispatch_sheet"
+                        android:text="@string/client"
                         android:textAppearance="?attr/textAppearanceListItem"
                          />
 
@@ -89,7 +89,7 @@
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:text="@string/lbl_client_dispatch_sheet"
+                        android:text="@string/client"
                         android:textAppearance="?attr/textAppearanceListItem"
                         android:textStyle="bold"
                         android:layout_marginStart="10dp"
@@ -105,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:text="@string/lbl_seller_dispatch_sheet"
+                        android:text="@string/seller"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -113,7 +113,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:text="@string/lbl_seller_dispatch_sheet"
+                        android:text="@string/seller"
                         android:textAppearance="?attr/textAppearanceListItem"
                         android:textStyle="bold"
                         android:layout_marginStart="10dp"
@@ -128,7 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        android:text="@string/FechaParametro"
+                        android:text="@string/date"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -138,7 +138,7 @@
                         android:focusable="false"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="@string/lbl_date_register"
+                        android:text="@string/date"
                         android:textAppearance="?attr/textAppearanceListItem"
                         android:textStyle="bold"
                         android:layout_marginStart="10dp"
@@ -156,7 +156,9 @@
                         android:layout_height="wrap_content"
                         android:focusable="false"
                         android:textAppearance="?attr/textAppearanceListItem"
-                        android:text="@string/lbl_DocAmount" />
+                        android:text="@string/amount"
+
+                        />
 
                     <TextView
                         android:id="@+id/tv_amount_salesorder"
@@ -165,7 +167,7 @@
                         android:focusable="false"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="@string/lbl_DocAmount"
+                        android:text="@string/amount"
                         android:textAppearance="?attr/textAppearanceListItem"
                         android:textStyle="bold"
                         android:layout_marginStart="10dp"

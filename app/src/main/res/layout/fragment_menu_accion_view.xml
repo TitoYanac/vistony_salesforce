@@ -96,7 +96,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Generar Entrega"
+                            android:text="@string/generate_delivery"
                             android:textStyle="bold" />
 
 
@@ -140,7 +140,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Generar Orden de Venta"
+                            android:text="@string/generate_salesorders"
                             android:textStyle="bold" />
 
 
@@ -186,7 +186,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Generar Cobranza"
+                            android:text="@string/generate_collection"
                             android:textStyle="bold" />
 
 
@@ -368,7 +368,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Prueba Canvas"
+                            android:text="@string/test_canvas"
                             android:textStyle="bold" />
 
 

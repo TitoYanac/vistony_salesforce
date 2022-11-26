@@ -116,7 +116,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@id/et_saldo"
-                android:text="SALDO"
+                android:text="@string/balance"
+                android:textAllCaps="true"
                 android:textColor="@color/Black"
                 android:textSize="16sp" />
 
@@ -141,7 +142,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@id/et_cobrado"
-                android:text="COBRADO"
+                android:text="@string/amount_charged"
+                android:textAllCaps="true"
                 android:textColor="@color/Black"
                 android:textSize="16sp" />
 
@@ -166,7 +168,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@id/et_nuevo_saldo"
-                android:text="NUEVO SALDO"
+                android:text="@string/new_balance"
+                android:textAllCaps="true"
                 android:textColor="@color/Black"
                 android:textSize="16sp" />
 

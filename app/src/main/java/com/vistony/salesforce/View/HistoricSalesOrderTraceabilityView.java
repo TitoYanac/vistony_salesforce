@@ -110,7 +110,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
         context=getContext();
         activity=getActivity();
         lifecycleOwner=getActivity();
-        getActivity().setTitle("Trazabilidad Orden Venta");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.traceability_salesorder));
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -197,7 +197,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Cliente");
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.find_client));
     }
 
     @Override
@@ -225,7 +225,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
     static private void getListHistoric(String Date)
     {
         pd = new ProgressDialog(activity);
-        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Ordenes de Venta", true, false);
+        pd = ProgressDialog.show(activity, activity.getResources().getString(R.string.please_wait), activity.getResources().getString(R.string.querying_dates), true, false);
         historicSalesOrderTraceabilityRepository.getHistoricSalesOrderTraceabilityRepository  (SesionEntity.imei, Date).observe(lifecycleOwner, data -> {
             Log.e("Jepicame","=>"+data);
             if(data!=null)
@@ -244,7 +244,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
                 }
                 tv_amount_historic_sales_order_traceability.setText(Convert.currencyForView(String.valueOf(amount)));
             }else {
-                Toast.makeText(context, "No se encontraron Documentos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getResources().getText(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
                 listview_historic_salesorder_traceability.setAdapter(null);
             }
             pd.dismiss();

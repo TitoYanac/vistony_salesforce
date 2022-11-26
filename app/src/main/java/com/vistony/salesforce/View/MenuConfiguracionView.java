@@ -80,6 +80,7 @@ public class MenuConfiguracionView extends Fragment {
             case "peru":
             case "paraguay":
             case "perurofalab":
+            case "marruecos":
                 v= inflater.inflate(R.layout.fragment_menu_configuracion, container, false);
                 break;
         }

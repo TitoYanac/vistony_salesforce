@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.widget.Toast;
 
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.R;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,11 +58,11 @@ public class FileController {
     }
 
     private void UnableToSave(String error) {
-        Toast.makeText(TheThis, "¡No se ha podido guardar la Archivo!-Error: "+error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(TheThis,TheThis.getResources().getText(R.string.dont_save_file)+  error, Toast.LENGTH_SHORT).show();
     }
 
     private void AbleToSave() {
-        Toast.makeText(TheThis, "Archivo guardada en la galería.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(TheThis, TheThis.getResources().getString(R.string.file_register_sucessful), Toast.LENGTH_SHORT).show();
     }
 
     public static File crearFichero(String nombreFichero) throws IOException {

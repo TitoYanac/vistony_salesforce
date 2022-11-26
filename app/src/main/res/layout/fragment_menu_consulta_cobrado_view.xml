@@ -56,7 +56,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Cobranza por Fecha"
+                            android:text="@string/collection_for_date"
                             android:textStyle="bold" />
 
 
@@ -101,7 +101,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Consulta de Cuota"
+                            android:text="@string/collection_for_quotas"
                             android:textStyle="bold" />
 
 

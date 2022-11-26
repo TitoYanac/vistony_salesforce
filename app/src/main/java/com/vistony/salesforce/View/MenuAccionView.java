@@ -307,7 +307,7 @@ public class MenuAccionView extends Fragment {
                         cv_lead.setVisibility(View.VISIBLE);
                         if(latitudesap==null&&longitudesap==null)
                         {
-                            alertdialogInformative(getContext(),"IMPORTANTE","El Cliente tiene no tiene la Geolocalizacion Actualizada, debe actualizar la ubicacion y tomar la Foto del Local...").show();
+                            alertdialogInformative(getContext(),getActivity().getResources().getString(R.string.important),getActivity().getResources().getString(R.string.mse_client_no_geolocation)).show();
 
                         }
                     }
@@ -335,7 +335,7 @@ public class MenuAccionView extends Fragment {
                 case "paraguay":
                 case "perurofalab":
                 case "espania":
-
+                case "marruecos":
                     String Fragment="MenuAccionView";
                     String accion="pedido";
                     String compuesto=Fragment+"-"+accion;
@@ -376,7 +376,7 @@ public class MenuAccionView extends Fragment {
                    //alertatiporecibos().show();
                 }
                 else {
-                    Toast.makeText(getActivity(), "Registre el inicio de la visita, para continuar!!!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.mse_register_visit), Toast.LENGTH_LONG).show();
                 }
                 //alertatiporecibos().show();
             }
@@ -391,10 +391,10 @@ public class MenuAccionView extends Fragment {
                     DialogFragment dialogFragment = new VisitaDialogController(objetoMenuAccionView);
                     dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
                 } else {
-                    Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.mse_module_availaible), Toast.LENGTH_LONG).show();
                 }
             }else{
-                Toast.makeText(getActivity(), "Este modulo solo esta disponible con INTERNET!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.mse_module_availaible), Toast.LENGTH_LONG).show();
             }
             //DialogFragment dialogFragment = new VisitaDialogController(objetoMenuAccionView);
             //dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
@@ -424,7 +424,7 @@ public class MenuAccionView extends Fragment {
                 androidx.fragment.app.DialogFragment dialogFragment = new StatusDispatchDialog(CardCode, CardName, Control_id, Item_id, DomEmbarque_ID);
                 dialogFragment.show(((FragmentActivity) getContext()).getSupportFragmentManager(), "un dialogo");
             }else {
-                Toast.makeText(getActivity(), "Registre el inicio de la visita, para continuar!!!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.mse_register_visit), Toast.LENGTH_LONG).show();
             }
             ///Intent i= new Intent(getContext(),   MapaView.class);
             //startActivity(i);
@@ -630,9 +630,9 @@ public class MenuAccionView extends Fragment {
         List<ListaPendingCollectionEntity> listaPendingCollectionEntity=new ArrayList<>();
         listaPendingCollectionEntity=cobranzaDetalleSQLiteDao.getDateandCollections(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA");
+        textTitle.setText(getActivity().getResources().getString(R.string.mse_register_visit));
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("Ud. cuenta con Recibos pendientes de Depositar, por favor verificar en CONSULTA COBRADO y realizar el deposito!");
+        textMsj.setText(getActivity().getResources().getString(R.string.mse_receips_pending));
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         ListView lv_pending_collection = (ListView) dialog.findViewById(R.id.lv_pending_collection);
         //ListaPendingCollectionAdapter ListaPendingCollectionAdapter=new ListaPendingCollectionAdapter(getContext(), ListaPendingCollectionDao.getInstance().getLeads(listaPendingCollectionEntity));
@@ -670,7 +670,7 @@ public class MenuAccionView extends Fragment {
             case "chile":
             case "perurofalab":
             case "espania":
-            //case "ecuador":
+            case "marruecos":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
                 break;
         }
@@ -701,7 +701,7 @@ public class MenuAccionView extends Fragment {
         }
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("Elija Tipo de Cobranza:");
+        textTitle.setText(getActivity().getResources().getString(R.string.mse_choise_collection));
 
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
@@ -870,7 +870,7 @@ public class MenuAccionView extends Fragment {
         cv_tipo_cotizacion=dialog.findViewById(R.id.cv_tipo_cotizacion);
         cv_tipo_ordenventa=dialog.findViewById(R.id.cv_tipo_ordenventa);
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("Elija Tipo de Venta:");
+        textTitle.setText(getActivity().getResources().getString(R.string.mse_choise_salesorder));
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
@@ -1003,17 +1003,17 @@ public class MenuAccionView extends Fragment {
                         btn_start_visitsection.setClickable(false);
 
                         Utilitario.disabledButtton(btn_start_visitsection);
-                        Toast.makeText(getActivity(), "Visita Iniciada!!!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.visit_start), Toast.LENGTH_LONG).show();
                         Utilitario.enableCardView(cv_dispatch, getContext(), imv_entrega);
                         Utilitario.enableCardView(cv_cobranza, getContext(), imv_cobranza);
                     }
                     else {
-                        Toast.makeText(getContext(), "Se tiene Visitas iniciadas debe finalizarlas para poder continuar...", Toast.LENGTH_SHORT).show();
-                        getalertListVisitUnClosed(listVisitSectionValidation,"VISITA ABIERTA","Debe cerrar las siguientes visitas para poder continuar...").show();
+                        Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_visits_no_finish), Toast.LENGTH_SHORT).show();
+                        getalertListVisitUnClosed(listVisitSectionValidation,getActivity().getResources().getString(R.string.visit_open),getActivity().getResources().getString(R.string.mse_finish_visit_next)).show();
                     }
                 }
                 else {
-                    Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_wait_moment_calculing_coordenates), Toast.LENGTH_SHORT).show();
                     getLocation();
                 }
             }
@@ -1078,14 +1078,14 @@ public class MenuAccionView extends Fragment {
                                     FormatFecha.format(date)
                             );
                         }
-                        Toast.makeText(getActivity(), "Visita Finalizada!!!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.visit_finish), Toast.LENGTH_LONG).show();
                     }else
                     {
-                        Toast.makeText(getContext(), "Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_wait_moment_calculing_coordenates), Toast.LENGTH_SHORT).show();
                         getLocation();
                     }
                 }else {
-                    Toast.makeText(getActivity(), "No ah generado cobranza o despacho a este cliente, sirvase a actualizar su despacho o generar su cobranza!!!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.mse_no_generation_collection), Toast.LENGTH_LONG).show();
                     //alertdialogInformative(getContext(),"","No ah generado cobranza o despacho a este cliente,Seguro que desea Finalizar la Visita?").show();
                 }
 
@@ -1172,7 +1172,7 @@ public class MenuAccionView extends Fragment {
         dialog.setContentView(R.layout.layout_dialog_list_informative);
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA");
+        textTitle.setText(getActivity().getResources().getString(R.string.dialog_advertencia));
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
         textMsj.setText(Message);
         ImageView image = (ImageView) dialog.findViewById(R.id.image);

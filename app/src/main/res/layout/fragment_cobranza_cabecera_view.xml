@@ -33,7 +33,7 @@
             android:digits="0123456789"
             android:ems="9"
             android:enabled="false"
-            android:hint="número de transacción..."
+            android:hint="@string/number_of_transaction"
             android:inputType="number"
             android:maxLength="50"
             android:maxLines="1"
@@ -85,7 +85,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="BANCO   " />
+                    android:text="@string/banks"
+                    android:textAllCaps="true"
+                    />
 
                 <Spinner
                     android:id="@+id/spnbanco"
@@ -108,7 +110,9 @@
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="TIPO" />
+                    android:text="@string/lbl_currency_type"
+                    android:textAllCaps="true"
+                    />
 
                 <Spinner
                     android:id="@+id/spntipo"
@@ -182,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="false"
-                android:text="BANCARIZADO" />
+                android:text="@string/Banked" />
 
             <CheckBox
                 android:id="@+id/chkdepositodirecto"
@@ -207,7 +211,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@color/colorPrimary"
-            android:text="DOCUMENTOS"
+            android:text="@string/lbl_legalnumber"
             android:textAlignment="center"
             android:textColor="@color/white" />
 
@@ -243,7 +247,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text=" TOTAL: "
+            android:text="@string/total_amount"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="30dp"></TextView>
 

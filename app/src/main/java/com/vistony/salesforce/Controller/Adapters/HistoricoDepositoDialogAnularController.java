@@ -74,7 +74,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
             dialog.setContentView(R.layout.layout_input_dialog);
 
             TextView textTitle = dialog.findViewById(R.id.text);
-            textTitle.setText("INGRESA UN COMENTARIO");
+            textTitle.setText(getActivity().getResources().getString(R.string.entry_commentary).toUpperCase());
 
             final EditText textMsj = dialog.findViewById(R.id.textEditViewMsj);
             textMsj.setSingleLine(false);  //add this
@@ -93,7 +93,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
             Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
             Button dialogButtonExit = (Button) dialog.findViewById(R.id.dialogButtonCancel);
             // if button is clicked, close the custom dialog
-            dialogButton.setText("GUARDAR Y ANULAR");
+            dialogButton.setText(getActivity().getResources().getString(R.string.anuller));
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -139,7 +139,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
 
                         dialog.dismiss();
                     }else{
-                        Toast.makeText(getActivity(), "Ingrese su descargo en la caja de comentario...", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), getContext().getResources().getString(R.string.entry_commentary).toUpperCase(), Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -198,9 +198,9 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                 Log.e("Jepicame", "=>" + data);
             });
 
-            Toast.makeText(getContext(), "Deposito Anulado Correctamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getContext().getResources().getString(R.string.deposit_cancel_sucessful), Toast.LENGTH_SHORT).show();
         }else{
-            Toast.makeText(getContext(), "Advertencia!! El Deposito no existe en el Equipo, no es posible Anular", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getContext().getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -406,7 +406,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
             }
 
             HistoricoDepositoView.imb_consultardep.performClick();
-            Toast.makeText(context, "Comentario agregado Exitosamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, getContext().getResources().getString(R.string.deposit_cancel_sucessful), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -651,7 +651,7 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
             }
             else
             {
-                Toast.makeText(context, "Revisar Acceso a internet x", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, context.getResources().getString(R.string.validate_access_internet), Toast.LENGTH_SHORT).show();
             }
 
         }

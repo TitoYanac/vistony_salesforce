@@ -203,7 +203,7 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
         pageAdapter= new PageAdapter(getChildFragmentManager());
         //mAdapter=new TabsPagerAdapter(getActivity().getSupportFragmentManager(), tabLayout.getTabCount());
         pageAdapter.addFRagment(new RutaVendedorRutaView(),this.getResources().getString(R.string.route));
-        pageAdapter.addFRagment(new RutaVendedorNoRutaView(),this.getResources().getString(R.string.route));
+        pageAdapter.addFRagment(new RutaVendedorNoRutaView(),this.getResources().getString(R.string.no)+" "+this.getResources().getString(R.string.route));
         viewPager.setAdapter(pageAdapter);
         //tabLayout.getTabAt(0).getCustomView()
 

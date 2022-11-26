@@ -159,7 +159,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Consulta Cobrado");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.find_collection));
         Listado = new ArrayList<ListaHistoricoDepositoEntity>();
         setHasOptionsMenu(true);
         if (getArguments() != null) {
@@ -458,7 +458,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Recibos", true, false);
+            pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.querying_dates), true, false);
         }
         @Override
         protected String doInBackground(String... arg1) {
@@ -667,9 +667,9 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
             pd.dismiss();
             if(validar==1)
             {
-                Toast.makeText(getContext(), "Cobranzas Obtenidas Exitosamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getText(R.string.data_get_sucessful), Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(getContext(), "No se obtuvieron Cobranzas", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getActivity().getResources().getText(R.string.mse_not_data_available), Toast.LENGTH_LONG).show();
             }
 
             obtenerHistoricoCobranza =  new ObtenerHistoricoCobranza();
@@ -722,7 +722,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Cliente");
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.find_client));
     }
 
     @Override

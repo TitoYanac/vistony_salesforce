@@ -104,9 +104,9 @@ public class DireccionClienteView extends Fragment {
         direccionRepository =  new ViewModelProvider(this).get(DireccionRepository.class);
 
         pd = new ProgressDialog(getActivity());
-        pd = ProgressDialog.show(getActivity(), "Por favor espere", "Cargando Direcciones", true, false);
+        pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.querying_dates), true, false);
 
-        getActivity().setTitle("Dirección Cliente");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.adresses));
         AppExecutors executor=new AppExecutors();
 
         direccionRepository.getAddress(getActivity(),executor.diskIO(),codigocliente).observe(getActivity(), direcciones -> {
@@ -114,7 +114,8 @@ public class DireccionClienteView extends Fragment {
                 ListaDireccionClienteAdapter listaDireccionClienteAdapter = new ListaDireccionClienteAdapter(direcciones,getContext());
                 lv_direccioncliente.setAdapter(listaDireccionClienteAdapter);
             }else{
-                Toast.makeText(getContext(),"Actualiza tus parametros, este cliente no tiene direcciones", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext()
+                        ,getActivity().getResources().getString(R.string.msm_data_available), Toast.LENGTH_LONG).show();
                 getActivity().getSupportFragmentManager().popBackStack();
             }
 
@@ -158,7 +159,7 @@ public class DireccionClienteView extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.habilitar_direccioncliente:
-                alertaHabilitarDireccionCliente("Esta Seguro de Habilitar las Direcciones?").show();
+                alertaHabilitarDireccionCliente(getActivity().getResources().getString(R.string.mse_enable_adresses)).show();
                 return false;
             default:
                 break;
@@ -189,7 +190,7 @@ public class DireccionClienteView extends Fragment {
                 lv_direccioncliente.setEnabled(true);
                 lv_direccioncliente.setClickable(true);
                 lv_direccioncliente.setFocusable(true);
-                Toast.makeText(getContext(), "Se Habilito Correctamente las Direcciones", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_enable_sucessful), Toast.LENGTH_SHORT).show();
 
                 dialog.dismiss();
             }
@@ -206,32 +207,5 @@ public class DireccionClienteView extends Fragment {
 
         return  dialog;
     }
-    public AlertDialog alertaHabilitarDireccionCliente2() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Advertencia")
-                .setMessage("Esta Seguro de Habilitar las Direcciones?")
-                .setPositiveButton("OK",
-
-                        new DialogInterface.OnClickListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.O)
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                lv_direccioncliente.setEnabled(true);
-                                lv_direccioncliente.setClickable(true);
-                                lv_direccioncliente.setFocusable(true);
-                                Toast.makeText(getContext(), "Se Habilito Correctamente las Direcciones", Toast.LENGTH_SHORT).show();
-
-                            }
-                        })
-                .setNegativeButton("CANCELAR",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-
-        return builder.create();
-    }
 }

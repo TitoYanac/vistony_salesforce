@@ -34,7 +34,8 @@
                 android:maxLines="1"
                 android:minLines="1"
                 android:scrollbars="vertical"
-                android:text="DETALLA TU VISITA"
+                android:text="@string/detail_visit"
+                android:textAllCaps="true"
                 android:textColor="#000000"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -89,7 +90,8 @@
                  android:ems="6"
                  android:gravity="center_horizontal|center_vertical"
                  android:scrollbars="vertical"
-                 android:text="MOTIVOS:"
+                 android:text="@string/reasons"
+                android:textAllCaps="true"
                  android:textAlignment="center"
                  android:textColor="#000000"
                  android:textSize="15dp"
@@ -168,7 +170,7 @@
     android:layout_margin="10dp"
     android:background="@drawable/border"
     android:gravity="center_horizontal|center_vertical"
-    android:hint="  Ingrese sus observaciones"
+    android:hint="@string/entry_commentary"
     android:paddingLeft="10dp"
     android:paddingTop="5dp"
     android:paddingRight="10dp"
@@ -192,7 +194,8 @@
         android:layout_marginBottom="15dp"
         android:layout_weight="1"
         android:background="@drawable/custom_border_button"
-        android:text="CANCELAR"
+        android:text="@string/cancel"
+        android:textAllCaps="true"
         android:textColor="#0957C3" />
 
     <Button
@@ -202,7 +205,8 @@
         android:layout_marginLeft="5dp"
         android:layout_weight="1"
         android:background="@drawable/custom_border_button"
-        android:text="REGISTRAR"
+        android:text="@string/register"
+        android:textAllCaps="true"
         android:textColor="#0957C3" />
 
 </LinearLayout>

@@ -12,6 +12,7 @@ import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
 import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
+import com.vistony.salesforce.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +40,7 @@ public class BancoRepository extends ViewModel {
                     bancoSQLite.LimpiarTablaBanco();
                     bancoSQLite.InsertaBanco(bancosList.getBancoEntity());
                     Integer countBank=getCountBank(context);
-                    parametrosSQLite.ActualizaCantidadRegistros("2", "BANCOS", ""+countBank, getDateTime());
+                    parametrosSQLite.ActualizaCantidadRegistros("2", context.getResources().getString(R.string.banks), ""+countBank, getDateTime());
                 }
 
                 status.setValue("1");

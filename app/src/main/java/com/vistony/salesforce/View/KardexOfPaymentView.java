@@ -126,7 +126,7 @@ public class KardexOfPaymentView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Kardex de Pago");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.lbl_kardex_of_payment));
         setHasOptionsMenu(true);
         kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
         context=getContext();
@@ -163,7 +163,7 @@ public class KardexOfPaymentView extends Fragment {
     static private void getListKardexOfPayment(String CardCode)
     {
         pd = new ProgressDialog(activity);
-        pd = ProgressDialog.show(activity, "Por favor espere", "Consultando Kardex de Pago de Cliente", true, false);
+        pd = ProgressDialog.show(activity, activity.getResources().getString(R.string.please_wait), activity.getResources().getString(R.string.querying_dates), true, false);
         kardexPagoEntityList=new ArrayList<>();
         listKardexOfPaymentEntityList=new ArrayList<>();
         docamount=0;
@@ -188,8 +188,8 @@ public class KardexOfPaymentView extends Fragment {
             tv_quantity_invoice_kardex.setText(String.valueOf(listKardexOfPaymentEntityList.size()));
             tv_docamount_kardex_invoice.setText(Convert.currencyForView(String.valueOf(docamount)));
             }else {
-                Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
-                alertdialogInformative(context,"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
+                Toast.makeText(context, activity.getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
+                alertdialogInformative(context,activity.getResources().getString(R.string.important),activity.getResources().getString(R.string.mse_not_data_available)).show();
             }
             pd.dismiss();
         });
@@ -234,7 +234,7 @@ public class KardexOfPaymentView extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.checklist_all:
-                alertaSeleccionarTodo("Esta Seguro de Seleccionar Todas las Facturas?").show();
+                alertaSeleccionarTodo(getActivity().getResources().getString(R.string.are_you_sure_selecction_all_invoices)).show();
                 return false;
             case R.id.generate_pdf:
                 //alertaSeleccionarTodo("Esta Seguro de Seleccionar Todos los parametros?").show();

@@ -16,6 +16,7 @@ import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.R;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -77,6 +78,12 @@ public class Induvis {
                         "(Toledo) - Apdo. Correos 30, 45100 Sonseca " +
                         "Telf: 925 910 177" ;
                 break;
+            case "marruecos":
+                information="RC - 19145- TP - 58200011 - NIF  : 15257896 - ICE: 000131448000037 -" +
+                        " CNSS: 4399912 - Nº COMPTE BANCAIRE - 0303 S000000197" +
+                        "Adresse : Tetouan Park, Lot 84 km 7 Route Tanger" +
+                        "TEL : 0666 17 33 65 - E-MAIL : halima.hayoun@vistony.com" ;
+                break;
         }
 
         return information;
@@ -96,6 +103,7 @@ public class Induvis {
             case "paraguay":
             case "perurofalab":
             case "espania":
+            case "marruecos":
                 year=dateBD.substring(0,4);
                 month=dateBD.substring(4,6);
                 day=dateBD.substring(6,8);
@@ -121,6 +129,7 @@ public class Induvis {
             case "paraguay":
             case "perurofalab":
             case "espania":
+            case "marruecos":
                 hour=timeBD.substring(0,2);
                 minute=timeBD.substring(2,4);
                 second=timeBD.substring(4,6);
@@ -145,6 +154,7 @@ public class Induvis {
                 case "paraguay":
                 case "perurofalab":
                 case "espania":
+                case "marruecos":
                     hour = timeBD.substring(0, 2);
                     minute = timeBD.substring(2, 4);
                     second = timeBD.substring(4, 6);
@@ -177,6 +187,8 @@ public class Induvis {
                 impuesto=0.18;
             case "espania":
                 impuesto=0.21;
+            case "marruecos":
+                impuesto=0.20;
                 break;
         }
 
@@ -205,7 +217,8 @@ public class Induvis {
                 impuesto="18";
             case "espania":
                 impuesto="21";
-
+            case "marruecos":
+                impuesto="20";
                 break;
         }
 
@@ -255,19 +268,22 @@ public class Induvis {
                 impuesto="IVA_10";
             case "espania":
                 impuesto="R3";
+            case "marruecos":
+                impuesto="C4";
                 break;
         }
         return impuesto;
     }
 
-    public static String getTituloVentaString(){
+    public static String getTituloVentaString(Context context){
         String tituloventa="";
         switch (BuildConfig.FLAVOR){
 
             case "peru":
             case "perurofalab":
             case "espania":
-                tituloventa="ORDEN VENTA";
+            case "marruecos":
+                tituloventa=context.getResources().getString(R.string.salesorder);
                 break;
             case ("ecuador"):
             case ("bolivia"):
@@ -275,11 +291,11 @@ public class Induvis {
             case "chile":
                 if(SesionEntity.quotation.equals("Y"))
                  {
-                     tituloventa="COTIZACIÓN";
+                     tituloventa=context.getResources().getString(R.string.quotation);
                  }
                  else
                      {
-                         tituloventa="ORDEN VENTA";
+                         tituloventa=context.getResources().getString(R.string.salesorder);
                      }
                 break;
         }
@@ -370,6 +386,7 @@ public class Induvis {
             case "paraguay":
             case "perurofalab":
             case "espania":
+            case "marruecos":
                 dias=0;
                 break;
             case "ecuador":
@@ -386,6 +403,7 @@ public class Induvis {
             case "peru":
             case "perurofalab":
             case "espania":
+            case "marruecos":
                 draft="N";
                 break;
             case "ecuador":
@@ -496,6 +514,7 @@ public class Induvis {
                 case "paraguay":
                 case "perurofalab":
                 case "espania":
+                case "marruecos":
                     year=dateBD.substring(0,4);
                     month=dateBD.substring(4,6);
                     day=dateBD.substring(6,8);
@@ -523,6 +542,9 @@ public class Induvis {
                 case "perurofalab":
                 case "espania":
                     currency.add("EUR - Euro");
+                    break;
+                case "marruecos":
+                    currency.add("MAD - Dírham marroquí");
                     break;
             }
         }catch (Exception e)

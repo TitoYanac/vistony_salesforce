@@ -97,7 +97,7 @@ public class ConsultaStockView extends Fragment  implements SearchView.OnQueryTe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Consulta de Stock");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.query_stock));
         SesionEntity.flagquerystock="Y";
         setHasOptionsMenu(true);
         if (getArguments() != null) {
@@ -159,7 +159,7 @@ public class ConsultaStockView extends Fragment  implements SearchView.OnQueryTe
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Producto");
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.find)+" "+getActivity().getResources().getString(R.string.article));
     }
     @Override
     public boolean onQueryTextSubmit(String query) {
@@ -178,13 +178,13 @@ public class ConsultaStockView extends Fragment  implements SearchView.OnQueryTe
     private void cargarConsultaStock()
     {
         pd = new ProgressDialog(getActivity());
-        pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Stock", true, false);
+        pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.mse_not_data_available_for_date), true, false);
         ArrayList<ListaConsultaStockEntity>  ListaConsultaStockEntity=new ArrayList<>();
         ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(getContext());
         ListaConsultaStockEntity=listaPrecioDetalleSQLiteDao.ObtenerConsultaStock(getContext());
 
         if(ListaConsultaStockEntity==null || ListaConsultaStockEntity.size()<0){
-            Toast.makeText(getContext(),"Actualiza tus parametros, no hay productos disponibles", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),getContext().getResources().getString(R.string.msm_data_available), Toast.LENGTH_LONG).show();
             getActivity().getSupportFragmentManager().popBackStack();
         }else{
             listaConsultaStockAdapter = new ListaConsultaStockAdapter(getActivity(), ListaConsultaStockDao.getInstance().getLeads(ListaConsultaStockEntity));

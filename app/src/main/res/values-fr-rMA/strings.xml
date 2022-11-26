@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vistony Sales Force</string>
+    <string name="app_fragment_Parametro" translatable="true">Paramètres</string>
+    <string name="title_activity_menu_view" translatable="false">MenuView</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">V001</string>
+    <string name="nav_header_subtitle" translatable="false">VENDEDOR 01</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings" translatable="true">réglages</string>
+    <string name="add" translatable="true">Chercher</string>
+    <string name="tag_select" translatable="true">Sélectionner</string>
+    <string name="UR" >Paiement anticipé</string>
+    <string name="CHK" translatable="true">Vérifier</string>
+    <string name="generar" translatable="true">Générer PDF</string>
+    <string name="save" translatable="true">Sauvegarder</string>
+    <string name="validar_qr" translatable="true">Valider QR</string>
+    <string name="actualizar" translatable="true">Mettre à jour</string>
+    <string name="abrir" translatable="true">ouvert</string>
+    <string name="TomarFoto" translatable="true">Prendre photo</string>
+    <string name="FechaCheque" translatable="true">Date de vérification</string>
+    <string name="CantidadParametro" translatable="true">Quantité</string>
+    <string name="NombreParametro" translatable="false">Nom</string>
+    <string name="FechaParametro" translatable="false">Date</string>
+    <string name="LogoPrincipal" translatable="false">LogoPrincipal</string>
+    <string name="PerfilPrincipal" translatable="false">PerfilPrincipal</string>
+    <string name="CompaniaPrincipal" translatable="false">CompaniaPrincipal</string>
+    <string name="UsuarioPrincipal" translatable="false">UsuarioPrincipal</string>
+    <string name="BotonPrincipalLogin">Commencer la session</string>
+    <string name="VersionLogin" translatable="false">Version 1.1.6</string>
+    <string name="DeudaDrawer" translatable="true">Client</string>
+    <string name="DepositoDrawer" translatable="false">Depósito</string>
+    <string name="RutaVendedorDrawer" translatable="false">Ruta Vendedor</string>
+    <string name="ConsultaDepositoDrawer" translatable="false">Consulta Depósito</string>
+    <string name="ConsultaCobradoDrawer" translatable="false">Consulta Cobrado</string>
+    <string name="ParametrosDrawer" translatable="false">Parametros</string>
+    <string name="ConfiguracionImpresoraDrawer" translatable="false">Configuracion Impresora</string>
+    <string name="ConfiguracionSistemaDrawer" translatable="true">Configuration du système</string>
+    <string name="AvanceVentasDrawer" translatable="false">Avance Ventas</string>
+    <string name="SalirDrawer">Salir</string>
+    <string name="CobranzaCabeceraN" translatable="false">N°</string>
+    <string name="DepositoDirecto" translatable="false">Depósito Directo</string>
+    <string name="DeleteCajaChica" translatable="false">Eliminar BD - Caja Chica</string>
+    <string name="HojaDespachoView" >Fiche "d'expédition</string>
+    <string name="DineroCobradoView" translatable="true">Argent collecté</string>
+    <string name="AsistenciaCamionView" translatable="true">Camion</string>
+    <string name="clearTemp" translatable="false">Liberar espacio</string>
+    <string name="EnablePrint">Habilitar Impresora</string>
+    <string name="LineUsed">Ligne Utilisé</string>
+    <string name="LineCredit">Ligne Le crédit</string>
+    <string name="quotation">Cotización</string>
+    <string name="lbl_orderhed_payterms">Modalite de paiement</string>
+    <string name="lbl_code">Código</string>
+    <string name="lbl_gallon">Gallon</string>
+    <string name="lbl_promotion">Promoción:</string>
+    <string name="Promotion_Summary">promotion sommaire</string>
+    <string name="Selected_Promotion">Promoción Seleccionada:</string>
+    <string name="Pending_Promotion">Promoción Pendiente:</string>
+    <string name="Promotion_Detail">DETALLE PROMOCION:</string>
+    <string name="Direct_Depost">Dépôt Droit</string>
+    <string name="Find_Deposit">Consulta Depósito</string>
+    <string name="lbl_update_parameters">Paramètres de mise à jour</string>
+    <string name="lbl_legalnumber">Document</string>
+    <string name="lbl_invoicedate">Fecha Emision</string>
+    <string name="lbl_duedate">Fecha Vencimiento</string>
+    <string name="lbl_DocAmount">Importe</string>
+    <string name="lbl_balance">Solde</string>
+    <string name="lbl_kardex_of_payment">Carte de paiement</string>
+    <string name="lbl_chk_pedido">Ordres</string>
+    <string name="lbl_type_generate_document_pdf">Generar PDF</string>
+    <string name="lbl_type_send_sms">Enviar SMS</string>
+    <string name="lbl_type_validate_document_pdf">Validar PDF</string>
+    <string name="lbl_type_validate_SMS">Validar SMS</string>
+    <string name="lbl_tittle_dialog_validate_SMS">VALIDAR SMS</string>
+    <string name="lbl_dialog_code_SMS">Codigo SMS:</string>
+    <string name="lbl_dispatch_date">Fecha Entrega:</string>
+    <string name="lbl_address">Adresse</string>
+    <string name="lbl_chk_geolocation">Géolocalisation</string>
+    <string name="lbl_route_sales_count_geolocation">Clients géolocalisés</string>
+    <string name="lbl_menu_action_update_client_geolocation">Actualizar Datos Cliente</string>
+    <string name="lbl_menu_action_visit_section">Tramo Visita</string>
+    <string name="lbl_layout_visit_section_start">Commencer "l'étirement</string>
+    <string name="lbl_layout_visit_section_finish">Dernière ligne droite</string>
+    <string name="lbl_layout_client_head_visitsection">Durée Visite</string>
+    <string name="lbl_find_stock_all_warehouse">Almacenes</string>
+    <string name="lbl_find_stock_all_warehouse_code">Código</string>
+    <string name="lbl_find_stock_all_warehouse_stock">Stock</string>
+    <string name="lbl_find_stock_all_warehouse_branch">Sucursal</string>
+    <string name="lbl_warehouses_count">Cantidad</string>
+    <string name="lbl_warehouses_amount">Monto</string>
+    <string name="lbl_historic_status_dispatch_delivery">Entrega</string>
+    <string name="lbl_historic_status_dispatch_type">Tipo</string>
+    <string name="lbl_historic_status_dispatch_reason">Motivo</string>
+    <string name="lbl_historic_status_dispatch_photo">Foto</string>
+    <string name="lbl_cheque">Vérifier</string>
+    <string name="lbl_deferred_date">Date différée</string>
+    <string name="lbl_find_dispatch">Consultation Expédition</string>
+    <string name="lbl_day_route">Día Ruta</string>
+    <string name="lbl_sales_of_class_commerce">Venta por Clase Commercial</string>
+    <string name="lbl_btn_get">Consultation</string>
+    <string name="lbl_class_commercial">Clase Comercial</string>
+    <string name="lbl_quote">Cuota</string>
+    <string name="lbl_advance_percent">% Avance</string>
+    <string name="lbl_prom_trim_anio_actual">Prom Trim</string>
+    <string name="lbl_prom_percent">Prom%</string>
+    <string name="lbl_month_before_year_before">Mes Antes</string>
+    <string name="lbl_percent_month_before_year_before">21/22</string>
+    <string name="lbl_indicator_month_before">Anterior</string>
+    <string name="lbl_indicator_biannual">Semestral</string>
+    <string name="lbl_indicator_percent_quota">Cuota</string>
+    <string name="lbl_formula">Formula</string>
+    <string name="lbl_variable1">Variable1</string>
+    <string name="lbl_variable2">Variable2</string>
+    <string name="lbl_resultado">Resultado</string>
+    <string name="lbl_edit_signature">Editar Firma</string>
+    <string name="lbl_percent">%</string>
+    <string name="lbl_money_charged">Dinero Cobrado</string>
+    <string name="lbl_amount_charged">Monto Cobrado</string>
+    <string name="lbl_amount_reported">Monto Reportado</string>
+    <string name="lbl_number_transaction">N° Operacion</string>
+    <string name="lbl_currency">Devise</string>
+    <string name="lbl_currency_type">Type</string>
+    <string name="lbl_currency_unit">Unidad</string>
+    <string name="lbl_distpatch_route">Total Programados</string>
+    <string name="lbl_status_distpatch">Total Despachados</string>
+    <string name="lbl_status">Estado</string>
+    <string name="lbl_send">Enviar</string>
+    <string name="lbl_find_quotation">Consultation Cotisation</string>
+    <string name="lbl_item">Item</string>
+    <string name="lbl_information_client">Données de Client</string>
+    <string name="lbl_create_visit">Générer Visite</string>
+    <string name="lbl_chk_collecion">Cobranza</string>
+    <string name="lbl_total_collection">Total Cobranza</string>
+    <string name="lbl_total_debt">Total Deuda</string>
+    <string name="lbl_delivery">Entrega</string>
+    <string name="lbl_dispatch">Despacho</string>
+    <string name="lbl_ocurrencies">Ocurrencia</string>
+    <string name="lbl_drivername">Nombre Chofer</string>
+    <string name="lbl_drivemobile">Telefono Chofer</string>
+    <string name="lbl_find_geolocation">Geolocalizacion enviada</string>
+    <string name="lbl_date_register">Fecha Registro</string>
+    <string name="lbl_dispatch_pending">Pendientes</string>
+    <string name="lbl_dispatch_failed">Fallidos</string>
+    <string name="lbl_dispatch_sucessfull">Exitosos</string>
+    <string name="lbl_date_dispatch">Fecha Despacho</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+
+
+    <string name="AddCliente" translatable="true">Suggestion client</string>
+    <string name="conectado">Connexion</string>
+    <string name="sinInfo">Aucune information</string>
+    <string name="Ingresando">Entrant...</string>
+    <string name="ficha_tecnica">Fiche technique</string>
+    <string name="reclamo_clientes">Réclamer de Clients</string>
+    <string name="lead_cliente">Conduire Génération</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="razon_social">Razón Social</string>
+    <string name="ruc">ICE/C.N.I</string>
+    <string name="nombre_comercial">Nom commercial</string>
+    <string name="numero_telefono">Téléphoner</string>
+    <string name="numero_celular">Téléphone portable</string>
+    <string name="persona_contacto">Personne contact</string>
+    <string name="email">Email</string>
+    <string name="web">Web</string>
+    <string name="coordenadas">Coordonnées...</string>
+    <string name="comentario">Commentaire</string>
+    <string name="enviar_lead">Envoyer Conduire</string>
+    <string name="head_codigo">Code</string>
+    <string name="head_usuario">Utilisateur</string>
+    <string name="menu_configuracion">Paramètre</string>
+    <string name="menu_formulario">Formulaire</string>
+    <string name="menu_salir">Sortir</string>
+    <string name="head_conexion">Connexion</string>
+    <string name="head_secuencia">Sequence</string>
+    <string name="menu_ruta_vendedor">Itinéraire Vendeur</string>
+    <string name="menu_deposito">Dépôt</string>
+    <string name="menu_consultas">Consultation</string>
+    <string name="menu_comisiones">Commissions</string>
+    <string name="dialog_advertencia">Mise en garde</string>
+    <string name="dialog_btn_salir">sortir</string>
+    <string name="dialog_btn_cancelar">Annuler</string>
+    <string name="dialog_text">Êtes-vous sûr de quitter "l'application?</string>
+    <string name="menu_tag">Choix Du Système</string>
+    <string name="tax_code">T.V.A</string>
+    <string name="zone">Zone</string>
+    <string name="head_zone">Zone:</string>
+    <string name="lbl_code_control">Code Control:</string>
+    <string name="lbl_client_dispatch_sheet">Client:</string>
+    <string name="lbl_seller_dispatch_sheet">Seller:</string>
+    <string name="lbl_payment_term">Modalite de paiement</string>
+    <string name="lbl_credit">Crédit:</string>
+    <string name="lbl_f_emision">F.Emisión:</string>
+    <string name="lbl_lastpurchase">Dernière acquisition</string>
+    <string name="lbl_street">Adresse</string>
+    <string name="lbl_signature">Firma Manuscrita Electronica</string>
+    <string name="lbl_sub_signature">Escriba su Firma</string>
+    <string name="lbl_e_signature">E-Firma</string>
+    <string name="lbl_read_e_signature">Consultar E-Firma</string>
+    <string name="lbl_visit_start">Vist.Ini</string>
+    <string name="lbl_visit_end">Vist.Fin</string>
+    <string name="lbl_configuration_sesion">Paramètre de Session</string>
+    <string name="lbl_subtittle_configuration_sesion">Entrez le code "d'activation" attribué à votre appareil mobile</string>
+    <string name="lbl_code_configuration_sesion">Voir Code</string>
+    <string name="lbl_enter_configuration_sesion">Entrer dans</string>
+    <string name="lbl_code_register">Code enregistré</string>
+    <string name="Push_and_save">Appuyez à nouveau sur Enregistrer pour entrer...</string>
+    <string name="Error_and_code">Erreur lors de la saisie du code "d'activation</string>
+    <string name="Error_and_network">Une erreur "s'est produite sur le réseau</string>
+    <string name="locale_information_none">Aucune information locale</string>
+    <string name="route">ITINÉRAIRE</string>
+    <string name="no_route">NON ITINÉRAIRE</string>
+    <string name="please_wait">"S'il-vous-plaît attendez</string>
+    <string name="calculated_work_force">Calcul Itinéraire de Travaillé</string>
+    <string name="no_route_day">Il "n'y a pas d'itinéraire de travail pour aujourd'hui</string>
+    <string name="find_client">Chercher Client</string>
+    <string name="msn_configuration_blueetohh">"L'imprimante Blueetooh n'a pas été configurée correctement</string>
+    <string name="total_client">Total Clients</string>
+    <string name="visit_client">Clients visités</string>
+    <string name="ordres_client">Clients ordres</string>
+    <string name="collection_client">Clientes Encaissement</string>
+    <string name="category_client">Catégorie</string>
+    <string name="visits">Visite</string>
+    <string name="query_clients">Consultation Clients</string>
+    <string name="list_clients">Répertorier les clients</string>
+    <string name="msm_clients_available">Mettez à jour vos paramètres, il "n'y a pas de clients disponibles</string>
+    <string name="generate_delivery">Générer Livraison</string>
+    <string name="generate_salesorders">Générer Bon de commande</string>
+    <string name="generate_collection">Générer Encaissement</string>
+    <string name="test_canvas">Toile de test</string>
+    <string name="important">IMPORTANT!!!</string>
+    <string name="mse_client_no_geolocation">Le Client ne dispose pas de la Géolocalisation mise à jour, il doit mettre à jour la localisation et prendre la Photo du Local...</string>
+    <string name="mse_register_visit">Enregistrez le début de la visite pour continuer!!!</string>
+    <string name="mse_module_availaible">Ce module est uniquement disponible avec INTERNET!!!</string>
+    <string name="mse_receips_pending">Vous avez des reçus en attente de dépôt, veuillez vérifier en consultation facturé et effectuer le dépôt</string>
+    <string name="receip">Reçu</string>
+    <string name="accept">Accepter</string>
+    <string name="collecion_ordinare">Encaissement ordinaire</string>
+    <string name="payment_POS">Paiement POS</string>
+    <string name="mse_choise_collection">Choisir le genre de Encaissement</string>
+    <string name="mse_choise_salesorder">Choisir le genre de Vente</string>
+    <string name="duration_visit">Durée Visite</string>
+    <string name="selection_section">Sélectionnez la rubrique</string>
+    <string name="start">Commencer</string>
+    <string name="finish">Fin</string>
+    <string name="mse_visits_no_finish">Si vous avez commencé des visites, vous devez les terminer pour pouvoir continuer...</string>
+    <string name="visit_start">Visite commencée!!!</string>
+    <string name="visit_open">VISITE LIBRE</string>
+    <string name="mse_finish_visit_next">Vous devez fermer les visites suivantes pour pouvoir continuer</string>
+    <string name="mse_wait_moment_calculing_coordenates">Un instant, "s'il vous plaît, calculez les coordonnées... Essayez d'enregistrer à nouveau</string>
+    <string name="visit_finish">Visite terminée !!!</string>
+    <string name="mse_no_generation_collection">"No ha generado cobranza o despacho a este cliente, sirvase a actualizar su despacho o generar su cobranza!!!</string>
+    <string name="clients">Clients</string>
+    <string name="banks">Banques</string>
+    <string name="Agencies">Agences</string>
+    <string name="reasons_visit">Raison Visite</string>
+    <string name="dispatch_sheet_head">Fiche "d'expédition Tête de lit</string>
+    <string name="dispatch_sheet_detail">Fiche "d'expédition Détail </string>
+    <string name="dispatch_type">Type Expédition</string>
+    <string name="dispatch_reason">Raison Expédition</string>
+    <string name="list_promotion">Liste Promotions</string>
+    <string name="promotion_head">Promotions Tête de lit</string>
+    <string name="promotion_detail">Promotions Détail</string>
+    <string name="colors_head">Couleurs Tête de lit</string>
+    <string name="colors_detail">Couleurs Détail</string>
+    <string name="download_parameters">Téléchargement Paramètres</string>
+    <string name="parameters_updated">Paramètres actualisé...</string>
+    <string name="mse_selection_all_parameters">Êtes-vous sûr de sélectionner tous les paramètres ?</string>
+    <string name="number_of_transaction">le numéro de transaction</string>
+    <string name="Banked">Encaissé</string>
+    <string name="mse_open_deposit">Êtes-vous sûr de générer un nouveau dépôt ?</string>
+    <string name="pending_deposit">Dépôt en attente</string>
+    <string name="quantity">Quantité</string>
+    <string name="amount">Montant</string>
+    <string name="mse_not_collection_of_day">Aucune collection du jour "n'a été trouvée</string>
+    <string name="mse_not_choise_receip">Aucun reçu "n'a été choisi, choisissez recevoir pour déposer</string>
+    <string name="mse_choise_all_receips">Êtes-vous sûr de sélectionner tous les reçus ?</string>
+    <string name="mse_mistake_response_server">Réponse erronée du serveur...</string>
+    <string name="validation_receips">Validation des reçus</string>
+    <string name="mse_system_no_identification_country">Le système "n'a pas pu identifier votre pays et la langue configurée</string>
+    <string name="unauthorized_equipment">Équipement non autorisé, contactez Helpdesk@vistony.com</string>
+    <string name="mse_unlinked_user">"L'utilisateur sélectionné n'est pas lié, sélectionnez un autre utilisateur</string>
+    <string name="unlinked_user">Unlinked user</string>
+    <string name="update_mobile_app">Mettre à jour "l'application mobile</string>
+    <string name="mse_necessary_connecting_internet">Il est nécessaire de se connecter à internet pour mettre à jour la version de "l'application</string>
+    <string name="menu_query">Menu Consultation</string>
+    <string name="query_salesorder">Consultation Bon de commande</string>
+    <string name="query_collection">Consultation Encaissement</string>
+    <string name="query_deposit">Consultation Dépôt</string>
+    <string name="query_invoices">Consultation Factures</string>
+    <string name="menu_query_salesorder">Menu Consultation Bon de commande</string>
+    <string name="query_salesorder_date">Bon de commande par date</string>
+    <string name="query_summary_diary">Résumé du quotidien</string>
+    <string name="query_stock">Consultation Stock</string>
+    <string name="traceability_salesorder">Traçabilité Bon de commande</string>
+    <string name="salesorder">Bon de commande</string>
+    <string name="query">Consultation</string>
+    <string name="querying_salesorder">Consultant Bon de commande</string>
+    <string name="mse_not_get_response">Impossible "d'obtenir une réponse</string>
+    <string name="mse_not_scanner_qr">Impossible de scanner le code QR</string>
+    <string name="mse_not_data_available_for_date">Aucune donnée disponible à la date sélectionnée</string>
+    <string name="mse_salesorder_get_sucessfull">Bons de commande obtenus correctement</string>
+    <string name="client">Client</string>
+    <string name="seller">Vendeur</string>
+    <string name="selected_date_report">Sélectionnez la date du rapport</string>
+    <string name="warning">Mise en garde</string>
+    <string name="generate">Générer</string>
+    <string name="querying_dates">Consultez les données</string>
+    <string name="separator">************************</string>
+    <string name="seller_data">Données du vendeur</string>
+    <string name="name">Nom</string>
+    <string name="hour">Heure</string>
+    <string name="conectivity">Connectivité</string>
+    <string name="product_focus">Orientation produit</string>
+    <string name="item">Article</string>
+    <string name="variable">Variable</string>
+    <string name="umd">UMD</string>
+    <string name="quotas">quotas</string>
+    <string name="gallon">Gallon</string>
+    <string name="day">Jour</string>
+    <string name="scheduled">Programmé</string>
+    <string name="debt">Dette</string>
+    <string name="type">Type</string>
+    <string name="collection">Encaissement</string>
+    <string name="effectiveness">Efficacité</string>
+    <string name="avance">Avance</string>
+    <string name="no">Non</string>
+    <string name="mse_necessary_install_PDF">Vous devez installer une visionneuse PDF</string>
+    <string name="code">Code</string>
+    <string name="date">Date</string>
+    <string name="find">Chercher</string>
+    <string name="article">Produits</string>
+    <string name="msm_data_available">Mettez à jour vos paramètres, aucune donnée disponible</string>
+    <string name="stock">Stock</string>
+    <string name="counted">Dénombré</string>
+    <string name="credit">Le crédit</string>
+    <string name="promotion">Promotions</string>
+    <string name="warehouse">Magasin</string>
+    <string name="agency">Agence</string>
+    <string name="delivery">Livraison</string>
+    <string name="dispatch_date">Date Livraison</string>
+    <string name="entry_commentary">Entrée Commentaire</string>
+    <string name="detail">Détail</string>
+    <string name="descount">Reduction</string>
+    <string name="mse_are_you_sure_new_order">Êtes-vous sûr "d'ouvrir une nouvelle commande ?</string>
+    <string name="none_commentary">Sans commentaire</string>
+    <string name="mse_are_you_sure_save_order">Êtes-vous sûr de sauvegarder la commande client ?</string>
+    <string name="mse_are_you_sure_send_order">Êtes-vous sûr "d'envoyer le bon de commande au Cloud ??</string>
+    <string name="mse_are_you_sure_generate_PDF">Êtes-vous sûr de générer le fichier PDF ?</string>
+    <string name="mse_salesorden_deliverydate_elderly_two_days">La date de livraison de la commande client doit être
+        différente de la date du jour, il est suggéré 2 jours à "l'avance</string>
+    <string name="mse_save_salesorder_sucessful">La commande client a été enregistrée avec succès</string>
+    <string name="sending">Envoi en cours</string>
+    <string name="adresses">Adresses</string>
+    <string name="mse_enable_adresses">Êtes-vous sûr "d'avoir activé les adresses ?</string>
+    <string name="mse_enable_sucessful">Il a été activé correctement</string>
+    <string name="payment_terms">Modalite de paiement</string>
+    <string name="mse_not_data_available">Pas de données disponibles</string>
+    <string name="description">La description</string>
+    <string name="mse_querying_encore_client">Consulter à nouveau le Client</string>
+    <string name="total">Prix T.T.C</string>
+    <string name="cancel">Annuler</string>
+    <string name="mse_are_you_sure_register_lines">Sûr de terminer la saisie des lignes ?</string>
+    <string name="mse_you_have_line_amount_zero">A une ligne en montant 0</string>
+    <string name="price">Prix</string>
+    <string name="general">Général</string>
+    <string name="stock_general">Stock Général</string>
+    <string name="document_with_debt">Document avec dette</string>
+    <string name="documents">Documents</string>
+    <string name="summary">Résumé</string>
+    <string name="entry_amount_collection_valid">Entrez un montant de collecte valide</string>
+    <string name="mse_are_you_sure_receip_bank">Êtes-vous sûr de marquer le reçu comme mis en banque ?</string>
+    <string name="mse_are_you_sure_incheck_receip_bank">Êtes-vous sûr de ne pas marquer le reçu comme mis en banque</string>
+    <string name="printer_not_linked">Avertissement : Imprimante non liée - Vérifier les paramètres</string>
+    <string name="your_session_expired">Votre session a expiré</string>
+    <string name="start_session">Commencer la session</string>
+    <string name="send_SMS">Envoyer SMS</string>
+    <string name="cellphone">Téléphone portable</string>
+    <string name="send">Envoyer</string>
+    <string name="mse_are_you_sure_save_collection">Êtes-vous sûr de conserver la collection ?</string>
+    <string name="not_save_receip_zero">No puedes Guardar un Recibo con valor 0 </string>
+    <string name="save_collection_correctement">La collection est enregistrée correctement</string>
+    <string name="not_save_collection_call_administrator">
+La collection "n'a pas été enregistrée. Communiquez avec l'administrateur
+    </string>
+    <string name="PDF_generate_sucessful">Fichier PDF généré avec succès</string>
+    <string name="not_generate_PDF">Impossible de générer le fichier PDF</string>
+    <string name="start_validation_qr">Lancer la validation QR ?</string>
+    <string name="article_stock_zero">Le produit choisi a 0 stock, voulez-vous continuer ?</string>
+    <string name="gallon_total">Gallon Total</string>
+    <string name="erase">Effacer</string>
+    <string name="cellphone_linked_seller">El Numero Telefonico pertenece al Vendedor</string>
+    <string name="sms_send_client">SMS envoyé au Numéro Client</string>
+    <string name="deposit_register_sucessful">Dépôt enregistré correctement</string>
+    <string name="validate_sms">Valider SMS</string>
+    <string name="validate">Valider</string>
+    <string name="code_update_sucessful">Code mis à jour correctement</string>
+    <string name="code_error_retry">Le code saisi "n'est pas correct, réessayez</string>
+    <string name="sms_send_sucessful">Le SMS a bien été envoyé</string>
+    <string name="sms_send_sucessful_get_code_client">
+Le SMS a bien été envoyé, demander au Client le code SMS</string>
+    <string name="data">Les données</string>
+    <string name="debt_collector">Agent de recouvrement</string>
+    <string name="space">"           "</string>
+    <string name="balance">Solde</string>
+    <string name="amount_charged">Montant collecté</string>
+    <string name="new_balance">Nouveau Solde</string>
+    <string name="code_validation">Code de validation</string>
+    <string name="qr_scan">Analyse qr</string>
+    <string name="cheque">Vérifier</string>
+    <string name="pos">POS</string>
+    <string name="comentary">Commentaire</string>
+    <string name="collection_for_date">Collecte par date</string>
+    <string name="collection_for_quotas">Collecte par quotas</string>
+    <string name="find_collection">Requête facturée</string>
+    <string name="get_collection_sucessful">Collections obtenues avec succès</string>
+    <string name="data_get_sucessful">
+Données obtenues avec succès</string>
+    <string name="status">Condition</string>
+    <string name="response">Résponse</string>
+    <string name="mesagge">Mesagge</string>
+    <string name="not_cancel_receip">Il "n'est pas possible d'annuler un reçu avec le statut "Annulé"</string>
+    <string name="not_cancel_receip_reconciled">Il "n'est pas possible d'annuler un reçu avec le statut "réconcilié"</string>
+    <string name="mesagge_server">Message Server</string>
+    <string name="use_button_find_get_client">Utilisez le bouton Rechercher pour obtenir le client</string>
+    <string name="selection_client">Sélectionnez le client</string>
+    <string name="_selection_">------Sélectionner------</string>
+    <string name="subtotal">Prix HT</string>
+    <string name="are_you_sure_selecction_all_invoices">Êtes-vous sûr "d'avoir sélectionné toutes les factures ?</string>
+    <string name="phone">Téléphoner</string>
+    <string name="ubigeous">Ubigéo</string>
+    <string name="generate_with">Généré par</string>
+    <string name="generate_date">Date de génération</string>
+    <string name="date_issue">Date de diffusion</string>
+    <string name="date_expiration">Date "d'expiration</string>
+    <string name="payment">Date Paiement</string>
+    <string name="date_payment">Jour de paie</string>
+    <string name="number_operation">N° Opération</string>
+    <string name="separator_">-------------------------</string>
+    <string name="amount_weekly">Montant par semaine</string>
+    <string name="number_weekly">N° semaines</string>
+    <string name="days_debt">Jours "d'arriérés</string>
+    <string name="date_collection">Date de collecte</string>
+    <string name="total_amount">Total</string>
+    <string name="mse_are_you_sure_save_deposit">
+Êtes-vous sûr de conserver la caution ?</string>
+    <string name="selection_bank">---SÉLECTIONNER LA BANQUE---</string>
+    <string name="camera">Caméra</string>
+    <string name="galery">Galerie</string>
+    <string name="choise">Choix</string>
+    <string name="open_galeries">Galeries "d'ouverture</string>
+    <string name="point_suspenses">...</string>
+    <string name="selection_image">SÉLECTIONNER UNE IMAGE</string>
+    <string name="not_selection_bank_choise_bank">
+        Aucune banque "n'a été choisie, vous devez choisir une banque pour continuer</string>
+    <string name="image_save_galery">Image enregistrée dans la galerie</string>
+    <string name="dont_sava_image">
+Échec de "l'enregistrement de l'image-Erreur</string>
+    <string name="open_deposit_before_photo">Ouvrez le dépôt avant de prendre la photo</string>
+    <string name="date_elderly_today_selection_retry">
+La date doit être supérieure à la date actuelle, sélectionnez à nouveau</string>
+    <string name="not_register_code_deposit">
+Je "n'ai pas entré de code de dépôt</string>
+    <string name="choise_bank_save_deposit">Vous devez choisir une banque pour pouvoir enregistrer le dépôt</string>
+    <string name="not_send_deposit_none_receip">Impossible "d'envoyer un dépôt sans reçus</string>
+    <string name="selecction_code_control_register_code_deposit">Sélectionnez votre code de contrôle pour "l'enregistrer en tant que code de dépôt</string>
+    <string name="code_control">Code Contrôler</string>
+    <string name="are_you_sure_id_unique_deposit">
+Voulez-vous attribuer un identifiant unique à ce référentiel ?</string>
+    <string name="numer_deposit_duplicate_register_id_unique">Le numéro de dépôt est-il dupliqué, souhaitez-vous lui attribuer un identifiant unique ?</string>
+    <string name="read">Lis</string>
+    <string name="qr_validate_sucessful">QR validé correctement</string>
+    <string name="qr_scan_not_linked">Le QR scanné ne correspond pas au QR généré</string>
+    <string name="detail_visit">DÉTAILLEZ VOTRE VISITE</string>
+    <string name="reasons">Les raisons</string>
+    <string name="register">Enregistrer</string>
+    <string name="file_register_sucessful">Fichier généré avec succès</string>
+    <string name="dont_save_file">
+Le fichier "n'a pas été généré - Erreur</string>
+    <string name="eraser">La gomme</string>
+    <string name="invoices">Facturation</string>
+    <string name="dispatch">Expédition</string>
+    <string name="check_day">VérifierJour</string>
+    <string name="deferred">Différé</string>
+    <string name="anuller">Annuler</string>
+    <string name="not_cancel_deposit">Il "n'est pas possible d'annuler un Dépôt avec le statut "Annulé"</string>
+    <string name="not_cancel_deposit_POS">Il "n'est pas possible d'annuler un Dépôt avec le statut "POS"</string>
+    <string name="cancel_deposit_not_linked_receips">
+Le dépôt annulé "n'a pas de reçus liés</string>
+    <string name="cancel_deposit_available_conexion_internet">
+"L'option de dépôt annulé ne peut être utilisée qu'avec un accès Internet</string>
+    <string name="deposit_cancel_sucessful">Dépôt annulé correctement</string>
+    <string name="validate_access_internet">
+Vérifier "l'accès à Internet</string>
+    <string name="invoice">Facture</string>
+    <string name="delivery_linked_salesorder">Livraisons liées à la commande client</string>
+    <string name="invoice_linked_salesorder">Factures liées à la commande client</string>
+    <string name="calcule_quotas">Calcul des quotas</string>
+    <string name="defeated">Vaincu</string>
+    <string name="stream">Flux</string>
+    <string name="choise_client">Choisir le client</string>
+    <string name="invoice_with_date">
+Factures par date</string>
+    <string name="historical_sales_client">Historique des ventes par client</string>
+    <string name="sales_commercialclass">Vente par Classe Affaires</string>
+    <string name="consulting">Consultation</string>
+
+</resources>

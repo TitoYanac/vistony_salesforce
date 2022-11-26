@@ -56,7 +56,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Factura por Fecha"
+                            android:text="@string/invoice_with_date"
                             android:textStyle="bold" />
 
 
@@ -101,7 +101,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Historico de Venta por Cliente"
+                            android:text="@string/historical_sales_client"
                             android:textStyle="bold" />
 
 
@@ -145,7 +145,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="@string/lbl_sales_of_class_commerce"
+                            android:text="@string/sales_commercialclass"
                             android:textStyle="bold" />
 
 

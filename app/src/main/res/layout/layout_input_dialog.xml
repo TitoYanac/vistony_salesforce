@@ -34,7 +34,8 @@
                 android:maxLines="1"
                 android:minLines="1"
                 android:scrollbars="vertical"
-                android:text="INGRESA UN COMENTARIO"
+                android:text="@string/entry_commentary"
+                android:textAllCaps="true"
                 android:textColor="#000000"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -46,7 +47,7 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/border"
                 android:gravity="center_horizontal|center_vertical"
-                android:hint="  Ingresa un comentario breve..."
+                android:hint="@string/entry_commentary"
                 android:paddingLeft="10dp"
                 android:paddingTop="5dp"
                 android:paddingRight="10dp"
@@ -71,7 +72,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="NO ANULAR"
+                    android:text="@string/menu_salir"
+                    android:textAllCaps="true"
                     android:textColor="#0957C3" />
 
                 <Button

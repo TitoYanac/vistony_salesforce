@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -23,6 +24,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,6 +77,8 @@ import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -180,7 +184,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     public static OrdenVentaCabeceraView newInstanciaTerminoPago(Object objeto) {
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
-        obtenerTituloFormulario();
+        obtenerTituloFormulario(context);
         Bundle b = new Bundle();
         ListaTerminoPago = (ArrayList<TerminoPagoSQLiteEntity>) objeto;
         for(int i=0;i<ListaTerminoPago.size();i++){
@@ -209,7 +213,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Log.e("XASD","paso por aqui direccion");
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
-        obtenerTituloFormulario();
+        obtenerTituloFormulario(context);
         direccionSelecionada=(DireccionCliente)objeto;
 
         tv_direccion.setText(direccionSelecionada.getDireccion());
@@ -222,7 +226,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
         OrdenVentaCabeceraView ordenVentaView = new OrdenVentaCabeceraView();
-        obtenerTituloFormulario();
+        obtenerTituloFormulario(context);
         Bundle b = new Bundle();
         ListaAgencia = (ArrayList<AgenciaSQLiteEntity>) objeto;
         for(int i=0;i<ListaAgencia.size();i++)
@@ -276,7 +280,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         SesionEntity.flagquerystock="N";
         hiloObtenerResumenOrdenVenta=new HiloObtenerResumenOrdenVenta();
         activity=getActivity();
-        obtenerTituloFormulario();
+        obtenerTituloFormulario(context);
         hiloObtenerAgencia=new HiloObtenerAgencia();
 
         listaTerminopago=new ArrayList<>();
@@ -372,7 +376,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 for(int m=0;m<listaAgenciasqliteentity.size();m++){
                     historicoordenventa_agencia= listaAgenciasqliteentity.get(m).getAgencia();
                 }
-                obtenerTituloFormulario();
+                obtenerTituloFormulario(getContext());
             }
 
             if(Listado !=null){
@@ -491,7 +495,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                // myTrace.start();
                 btn_detalle_orden_venta.setEnabled(false);
                 btn_detalle_orden_venta.setClickable(false);
-                alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
+                alertaCrearOrdenVenta(getActivity().getResources().getString(R.string.mse_are_you_sure_new_order)).show();
             }
         });
 
@@ -540,7 +544,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 et_comentario.setText(comentario);
                 values=new ArrayList<>();
                 values.add(historicoOVcantidaddescuento);
-                obtenerTituloFormulario();
+                obtenerTituloFormulario(context);
                 hiloObtenerResumenOrdenVenta.execute();
             }
         }
@@ -591,7 +595,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         }
 
         protected void onPostExecute(Object result){
-            obtenerTituloFormulario();
+            obtenerTituloFormulario(context);
 
             ActualizarResumenMontos(tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones);
 
@@ -632,7 +636,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 Utilitario.disabledSpinner(spnmoneda);
 
                 if(et_comentario.getText().length()==0){
-                    et_comentario.setHint("Sin comentario");
+                    et_comentario.setHint(getActivity().getResources().getString(R.string.none_commentary));
                 }
 
                 Utilitario.disabledEditText(et_comentario);
@@ -656,6 +660,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             case "peru":
             case "perurofalab":
             case "espania":
+            case "marruecos":
                 inflater.inflate(R.menu.menu_orden_venta_cabecera_peru, menu);
                 break;
             default:
@@ -774,19 +779,27 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
                 date = new Date();
                 fechacomparativa =dateFormat.format(date);
-                if(!parametrofecha.equals(fechacomparativa))
+                if(BuildConfig.FLAVOR.equals("marruecos"))
                 {
-                alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                    alertaGuardarOrdenVenta(getActivity().getResources().getString(R.string.mse_are_you_sure_save_order)).show();
                 }else {
+                    if(!parametrofecha.equals(fechacomparativa))
+                    {
+                        alertaGuardarOrdenVenta(getActivity().getResources().getString(R.string.mse_are_you_sure_save_order)).show();
+                    }else {
 
-                    alertdialogInformative(getContext(),"ADVERTENCIA","La Fecha de entrega de la Orden de Venta, debe ser distinta a la fecha actual, se sugiere 2 dias en adelante...").show();
+                        alertdialogInformative(getContext(),getActivity().getResources().getString(R.string.warning),getActivity().getResources().getString(R.string.mse_salesorden_deliverydate_elderly_two_days)).show();
+                    }
                 }
+
+
+
                 return false;
             case R.id.enviar_erp:
-                alertaEnviarERP("Esta Seguro de Enviar a la Nube la Orden de Venta?").show();
+                alertaEnviarERP(getActivity().getResources().getString(R.string.mse_are_you_sure_send_order)).show();
                 return true;
             case R.id.generarpdf:
-                alertaGenerarPDF("Esta Seguro de Generar el Archivo PDF?").show();
+                alertaGenerarPDF(getActivity().getResources().getString(R.string.mse_are_you_sure_generate_PDF)).show();
                 return true;
             default:
                 break;
@@ -811,7 +824,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
                 Utilitario.disabledImageButtton(btn_dispatch_date, context);
                 RegistrarOrdenVentaBD();
-                Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_save_salesorder_sucessful), Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
 
         });
@@ -824,32 +837,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     }
 
 
-    public AlertDialog alertaGuardarOrdenVenta2() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Advertencia")
-                .setMessage("Esta Seguro de Guardar la Orden de Venta?")
-                .setPositiveButton("OK",
-
-                        new DialogInterface.OnClickListener() {
-                            @RequiresApi(api = Build.VERSION_CODES.O)
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                RegistrarOrdenVentaBD ();
-                                Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
-
-                            }
-                        })
-                .setNegativeButton("CANCELAR",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-
-        return builder.create();
-    }
     private Dialog alertaGenerarPDF(String texto) {
 
         final Dialog dialog = new Dialog(context);
@@ -912,6 +899,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 break;
             case "peru":
             case "espania":
+                case "marruecos":
+
                 break;
             default:
                 break;
@@ -1069,7 +1058,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         dialogButtonOK.setOnClickListener(v -> {
 
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando Orden de Venta", true, false);
+            pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.sending)+" "
+                    +getActivity().getResources().getString(R.string.salesorder) ,true, false);
             OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite=new OrdenVentaCabeceraSQLite(getContext());
             ordenVentaCabeceraSQLite.UpdateStatusOVenviada(ordenventa_id);
             ordenVentaRepository.sendSalesOrder(ordenventa_id,getContext()).observe(getActivity(), data->{
@@ -1296,9 +1286,9 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Log.e("REOS","OrdenVentaCabeceraView-OnCreateView-sp_cantidaddescuento.getSelectedItem().toString():"+sp_cantidaddescuento.getSelectedItem().toString());
     }
 
-    static private void obtenerTituloFormulario()
+    static private void obtenerTituloFormulario(Context context)
     {
-        activity.setTitle(Induvis.getTituloVentaString());
+        activity.setTitle(Induvis.getTituloVentaString(context));
     }
 
     @Override
@@ -1306,6 +1296,13 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         switch (v.getId())
         {
             case R.id.btn_dispatch_date:
+                //initPicker(getContext());
+                //Locale.setDefault(Locale.FRENCH);
+                /*Locale locale = new Locale("FR");
+                Locale.setDefault(locale);
+                Configuration config = new Configuration();
+                config.locale = locale;
+                getActivity().getResources().updateConfiguration(config, null);*/
                 final Calendar c1 = Calendar.getInstance();
                 day_dispatch_date = c1.get(Calendar.DAY_OF_MONTH);
                 mes_dispatch_date = c1.get(Calendar.MONTH);
@@ -1316,6 +1313,21 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                         day_dispatch_date
                 );
                 oyenteSelectorFecha.show();
+
+                /*Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Locale localef = new Locale("AR");
+                        Locale.setDefault(localef);
+                        Configuration configf = new Configuration();
+                        configf.locale = localef;
+                        getActivity().getResources().updateConfiguration(configf, null);
+                    }
+                }, 2000);*/
+
+
+
                 break;
             default:
                 break;
@@ -1365,4 +1377,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         return  dialog;
     }
+
+
 }

@@ -10,120 +10,138 @@
     android:paddingTop="8dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="8dp">
-    <TextView
-        android:id="@+id/lbl_orden_venta_ERP_id"
-        android:layout_width="wrap_content"
+
+    <TableLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:text="N° Orden:"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:layout_marginBottom="5dp">
 
-    <TextView
-        android:id="@+id/tv_salesorderid"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="10dp"
-        android:textStyle="bold"
-        android:text="1"
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/lbl_orden_venta_ERP_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/code"
+                android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-        android:id="@+id/lbl_rucdnni"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/ruc"
-        android:textAppearance="?attr/textAppearanceListItem" />
-    <TextView
-        android:id="@+id/tv_rucdni"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="95dp"
-        android:textStyle="bold"
-        android:layout_marginTop="30dp"
-        android:text="00000000"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+            <TextView
+                android:id="@+id/tv_salesorderid"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:text="@string/code"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </TableRow>
 
-    <TextView
-        android:id="@+id/lbl_nombrecliente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="110dp"
-        android:text="Cliente:"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="110dp"
-        android:text="Cliente01"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/lbl_rucdnni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ruc"
+                android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/tv_rucdni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/ruc"
+                android:textAppearance="?attr/textAppearanceListItem"/>
+        </TableRow>
 
-    <TextView
-        android:id="@+id/lbl_cond_venta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="70dp"
-        android:text="Cónd.Venta:"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_cond_venta"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="70dp"
-        android:text="Cond.Vent1"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/lbl_nombrecliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/client"
+                android:textAppearance="?attr/textAppearanceListItem" />
 
-    <TextView
-        android:id="@+id/lbl_status_aprob"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="90dp"
-        android:text="Estado:"
-        android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/client"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_status_aprob"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="90dp"
-        android:text="Estado"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        </TableRow>
 
-    <TextView
-        android:id="@+id/lbl_monto_orden_venta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="50dp"
-        android:text="Monto"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tablerowbalance"
+            >
+            <TextView
+                android:id="@+id/lbl_cond_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_terms"
+                android:textAppearance="?attr/textAppearanceListItem" />
 
-    <TextView
-        android:id="@+id/tv_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="50dp"
-        android:textStyle="bold"
-        android:text="0.00"
-        android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/tv_cond_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/payment_terms"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tablerowlastpurchase">
+            <TextView
+                android:id="@+id/lbl_status_aprob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status"
+                android:textAppearance="?attr/textAppearanceListItem" />
 
+            <TextView
+                android:id="@+id/tv_status_aprob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status"
+                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceListItem"/>
+
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tablerowpaymentterms">
+
+            <TextView
+                android:id="@+id/lbl_monto_orden_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/amount"
+                android:textAppearance="?attr/textAppearanceListItem" />
+
+            <TextView
+                android:id="@+id/tv_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textStyle="bold"
+                android:text="@string/amount"
+                android:textAppearance="?attr/textAppearanceListItem" />
+
+        </TableRow>
+    </TableLayout>
     <ImageView
         android:id="@+id/imv_historic_orders"
         android:layout_width="30dp"

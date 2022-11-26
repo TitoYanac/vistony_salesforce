@@ -138,7 +138,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
         super.onCreate(savedInstanceState);
         hiloObtenerHistoricoOrdenVenta = new HiloObtenerHistoricoOrdenVenta();
         setHasOptionsMenu(true);
-        getActivity().setTitle("Consulta Orden Venta");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.query_salesorder));
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -191,10 +191,10 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
 
         try {
             if (resultCode != getActivity().RESULT_OK) {
-                Toast.makeText(getActivity(), "No se pudo obtener una respuesta", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.mse_not_get_response), Toast.LENGTH_SHORT).show();
                 String resultado = data.getStringExtra("com.blikoon.qrcodescanner.error_decoding_image");
                 if (resultado != null) {
-                    Toast.makeText(getActivity(), "No se pudo escanear el código QR", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.mse_not_scanner_qr), Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
@@ -276,7 +276,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Cliente");
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.find_client));
     }
 
     @Override
@@ -297,7 +297,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Ordenes de Venta", true, false);
+            pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.querying_salesorder), true, false);
         }
         @Override
         protected Object doInBackground(String... arg0) {
@@ -380,6 +380,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         case "chile":
                                         case "paraguay":
                                         case "espania":
+                                        case "marruecos":
                                             if(listaOrdenVentaSQLite.get(l).getQuotation()==null)
                                             {
                                                 listaOrdenVentaSQLite.get(l).setQuotation("N");
@@ -472,6 +473,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         case "chile":
                                         case "paraguay":
                                         case "espania":
+                                        case "marruecos":
                                             if(listaOrdenVentaSQLite.get(k).getQuotation()==null)
                                             {
                                                 listaOrdenVentaSQLite.get(k).setQuotation("N");
@@ -529,7 +531,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
         {
             ArrayList<ListaHistoricoOrdenVentaEntity> Lista = (ArrayList<ListaHistoricoOrdenVentaEntity>) result;
             if (Lista.isEmpty()){
-                Toast.makeText(getContext(), "No hay datos disponibles", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_not_data_available_for_date) , Toast.LENGTH_SHORT).show();
             }else{
                 listaHistoricoOrdenVentaAdapter = new ListaHistoricoOrdenVentaAdapter(getActivity(), ListaHistoricoOrdenVentaDao.getInstance().getLeads(Lista),getActivity());
                 listviewhistoricoordenventa.setAdapter(listaHistoricoOrdenVentaAdapter);
@@ -541,7 +543,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                 tv_cantidad__orden_venta.setText(String.valueOf(Lista.size()));
                 tv_monto_orden_venta.setText(Convert.currencyForView(monto_total_orden_venta.setScale(3, RoundingMode.HALF_UP).toString()));
 
-                Toast.makeText(getContext(), "Ordenes de Venta Obtenidas Correctamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_salesorder_get_sucessfull), Toast.LENGTH_SHORT).show();
 
             }
             pd.dismiss();
@@ -614,7 +616,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
         TextView tv_date=(TextView) dialog.findViewById(R.id.tv_date);
         TextView tv_amount_salesorder=(TextView) dialog.findViewById(R.id.tv_amount_salesorder);
         TextView text=(TextView) dialog.findViewById(R.id.text);
-        text.setText("ORDEN DE VENTA");
+        text.setText(getActivity().getResources().getString(R.string.salesorder));
         String salesorderid="",orderdate="",client="",amount="",seller="";
 
         try{

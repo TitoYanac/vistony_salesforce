@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="ID:"
+        android:text="@string/code"
         />
     <TextView
         android:id="@+id/tv_domembarque_id"
@@ -27,10 +27,9 @@
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
         android:layout_marginTop="10dp"
-        android:text="ID1"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textStyle="bold"
-
+        android:text="@string/code"
         />
 
     <TextView
@@ -39,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Zona:"
+        android:text="@string/zone"
 
         />
 
@@ -50,7 +49,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
         android:layout_marginTop="30dp"
-        android:text="Zona1"
+        android:text="@string/zone"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textStyle="bold" />
 
@@ -60,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Direccion:"
+        android:text="@string/adresses"
         />
 
     <TextView
@@ -70,7 +69,7 @@
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
         android:layout_marginTop="50dp"
-        android:text="Direccion1"
+        android:text="@string/adresses"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textStyle="bold"/>
 
@@ -80,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Vendedor:"
+        android:text="@string/seller"
         />
 
     <TextView
@@ -90,8 +89,10 @@
         android:layout_marginStart="80dp"
         android:layout_marginLeft="80dp"
         android:layout_marginTop="70dp"
-        android:text="Vendedor1"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:text="@string/seller"
+
+        />
 
 </RelativeLayout>

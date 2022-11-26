@@ -59,7 +59,7 @@ public class MenuConsultasView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Menu Consultas");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.menu_query));
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -82,6 +82,7 @@ public class MenuConsultasView extends Fragment {
             case "bolivia":
             case "perurofalab":
             case "espania":
+            case "marruecos":
                 v= inflater.inflate(R.layout.fragment_menu_consultas_view, container, false);
                 break;
             default:
@@ -146,6 +147,7 @@ public class MenuConsultasView extends Fragment {
                     case "bolivia":
                     case "perurofalab":
                     case "espania":
+                    case "marruecos":
                          Fragment="MenuConsultasView";
                          accion="menuconsultaspedidoview";
                          compuesto=Fragment+"-"+accion;
@@ -186,6 +188,7 @@ public class MenuConsultasView extends Fragment {
                     case "bolivia":
                     case "perurofalab":
                     case "espania":
+                    case "marruecos":
                         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
                         {
                             Fragment="HistoricoCobranzaView";
@@ -224,7 +227,7 @@ public class MenuConsultasView extends Fragment {
                 mListener.onFragmentInteraction(compuesto,"");
             }
         });
-        cv_consulta_deposito.setOnClickListener(new View.OnClickListener() {
+        /*cv_consulta_deposito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String Fragment="HistoricoDepositoView";
@@ -232,7 +235,7 @@ public class MenuConsultasView extends Fragment {
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,"");
             }
-        });
+        });*/
         cv_dispatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -242,24 +245,6 @@ public class MenuConsultasView extends Fragment {
                 mListener.onFragmentInteraction(compuesto,"");
             }
         });
-        /*cv_consulta_stock.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String Fragment="MenuConsultasView";
-                String accion="stock";
-                String compuesto=Fragment+"-"+accion;
-                mListener.onFragmentInteraction(compuesto,"");
-            }
-        });
-        cv_consulta_orden_venta_estado.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String Fragment="MenuConsultasView";
-                String accion="Consulta_Orden_Venta_Estado";
-                String compuesto=Fragment+"-"+accion;
-                mListener.onFragmentInteraction(compuesto,"");
-            }
-        });*/
         return v;
     }
 

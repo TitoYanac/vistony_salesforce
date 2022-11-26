@@ -83,6 +83,13 @@ public class Convert {
                 amountRedonded =new BigDecimal(amount).setScale(3, RoundingMode.HALF_UP);
                 locale=new Locale("ES","ES");
                 break;
+            case "marruecos":
+                if(amount.equals("")){
+                    amount="0";
+                }
+                locale=null;
+                amountRedonded=new BigDecimal(amount).setScale(0, RoundingMode.HALF_UP);
+                break;
         }
 
         Log.e("REOS","Convert-currencyForView-amountRedonded-Antes"+amountRedonded.toString());
@@ -104,7 +111,11 @@ public class Convert {
             case "paraguay":
             case "perurofalab":
             case "espania":
+
                 resultado= NumberFormat.getCurrencyInstance(locale).format(amountRedonded);
+            case "marruecos":
+                resultado=new BigDecimal(amount).setScale(2, RoundingMode.HALF_UP).toString()+ " MAD";
+
                 break;
         }
         Log.e("REOS","Convert-currencyForView-amountRedonded-Despues"+amountRedonded.toString());

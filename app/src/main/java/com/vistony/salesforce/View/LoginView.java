@@ -108,6 +108,17 @@ public class LoginView extends AppCompatActivity{
         btnlogin =findViewById(R.id.btnlogin);
         imv_compania_login=findViewById(R.id.imv_compania_login);
 
+        //language
+        //Locale.setDefault(Locale.FRENCH);
+        if(BuildConfig.FLAVOR.equals("marruecos"))
+        {
+            Locale locale = new Locale("FR");
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.locale = locale;
+            this.getResources().updateConfiguration(config, null);
+        }
+
         final TextView viewVersion=findViewById(R.id.txt_internet);
         SqliteController db = new SqliteController(this);
         String env=BuildConfig.BASE_ENVIRONMENT.equals("/api")?"Producción":"Test";
@@ -350,7 +361,7 @@ public class LoginView extends AppCompatActivity{
         Log.e("REOS", "LoginView-btnLogin-mPhoneNumber:" + mPhoneNumber);*/
         btnlogin.setEnabled(false);
         btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_onclick));
-        btnlogin.setText(getResources().getString(R.string.Ingresando));
+        btnlogin.setText(this.getResources().getString(R.string.Ingresando));
 
         btnlogin.setClickable(false);
 
@@ -417,7 +428,7 @@ public class LoginView extends AppCompatActivity{
 
 
             if( country==null  && language==null){
-                Toast.makeText(this, "El sistema no pudo indentificar su País y Lenguaje configurado...", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, this.getResources().getString(R.string.mse_system_no_identification_country), Toast.LENGTH_LONG).show();
                 btnlogin.setEnabled(true);
 
                 btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_red));
@@ -434,7 +445,7 @@ public class LoginView extends AppCompatActivity{
                 verificationVersion();
             }
         }else{
-            Toast.makeText(this, "Equipo No Autorizado, Comunicarse a Helpdesk@vistony.com", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getResources().getString(R.string.unauthorized_equipment), Toast.LENGTH_SHORT).show();
             btnlogin.setEnabled(true);
 
             btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_red));
@@ -473,7 +484,7 @@ public class LoginView extends AppCompatActivity{
                                 Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show();
                                 readUserAndLogin(intent);
                             }else{
-                                btnlogin.setText("Validando Recibos...");
+                                btnlogin.setText(this.getResources().getString(R.string.validation_receips));
                                 ObtenerPendientesEnvioWS();
                                 new UpdateApp(btnlogin,data.toString(),this);
                             }
@@ -482,21 +493,21 @@ public class LoginView extends AppCompatActivity{
                         }
                         //readUserAndLogin(intent);
                     }else{
-                        Toast.makeText(this, "Error en la respuesta del servidor...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, this.getResources().getString(R.string.mse_mistake_response_server), Toast.LENGTH_SHORT).show();
                         readUserAndLogin(intent);
                     }
                 });
             }else{
-                btnlogin.setText("Usuario Desvinculado");
-                Toast.makeText(this, "El usuario selecionado no esta vinculado, SELECIONE OTRO USUARIO", Toast.LENGTH_LONG).show();
+                btnlogin.setText(this.getResources().getString(R.string.unlinked_user));
+                Toast.makeText(this, this.getResources().getString(R.string.mse_unlinked_user), Toast.LENGTH_LONG).show();
             }
         }else{
             if(statusImei.getString("status", "not").equals("yes")){
                 startActivity(intent);
                 finish();
             }else{
-                btnlogin.setText("Actualiza la App movil");
-                Toast.makeText(this, "Es necesario conectarse a internet para actualizar esta version de la App", Toast.LENGTH_LONG).show();
+                btnlogin.setText(this.getResources().getString(R.string.update_mobile_app));
+                Toast.makeText(this, this.getResources().getString(R.string.mse_necessary_connecting_internet), Toast.LENGTH_LONG).show();
             }
         }
     }

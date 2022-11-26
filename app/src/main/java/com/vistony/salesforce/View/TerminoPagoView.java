@@ -95,7 +95,7 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Termino Pago");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.payment_terms));
         setHasOptionsMenu(true);
         terminoPagoSQLiteDao = new TerminoPagoSQLiteDao(getContext());
         if (getArguments() != null) {
@@ -143,7 +143,7 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
             listaterminopago.setAdapter(listaTerminoPagoAdapter);
         }else
         {
-            Toast.makeText(getActivity(), "No hay termino de pago,", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
             getActivity().getSupportFragmentManager().popBackStack();
         }
     }
@@ -183,7 +183,7 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Termino Pago");
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.find)+" "+getActivity().getResources().getString(R.string.payment_terms));
     }
     @Override
     public boolean onQueryTextSubmit(String query) {

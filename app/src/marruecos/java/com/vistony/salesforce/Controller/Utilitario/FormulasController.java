@@ -45,6 +45,7 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
+import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.OrdenVentaDetalleView;
 
 import java.math.BigDecimal;
@@ -786,7 +787,7 @@ public class FormulasController {
                 U_SYP_FECAT_07="10";
                 COGSAccountCode="";
                 taxOnly="N";
-                taxCode="R3";
+                taxCode="C4";
                 U_VIST_CTAINGDCTO="";
                 montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
                 PercentDescnt=listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento();
@@ -1970,23 +1971,24 @@ public class FormulasController {
             for (int i = 0; i < Lista.size(); i++) {
                 //CadenaSMS="GlaGlaGla2";
                 CadenaSMS = "VISTONY\n " +
-                        "N.I.F: B45783081 OFICINA: C/Rafael Alberti, 30 Pol. Industrial Fuente Techada ORGAZ  -\n" +
-                        "(Toledo) - Apdo. Correos 30, 45100 Sonseca \n" +
-                        "Telf: 925 910 177 \n"+
+                        "RC - 19145- TP - 58200011 - NIF  : 15257896 - ICE: 000131448000037 -\n" +
+                        " CNSS: 4399912 - Nº COMPTE BANCAIRE - 0303 S000000197\n" +
+                        "Adresse : Tetouan Park, Lot 84 km 7 Route Tanger\n" +
+                        "TEL : 0666 17 33 65 - E-MAIL : halima.hayoun@vistony.com\n"+
                         Lista.get(i).getCliente_id() + "\n"  +
                         Lista.get(i).getNombrecliente() + "\n" +
-                        "*********************DATOS COBRADOR*******************\n"  +
+                        Context.getResources().getString(R.string.separator)+Context.getResources().getString(R.string.data).toUpperCase()+" "+Context.getResources().getString(R.string.debt_collector).toUpperCase()+Context.getResources().getString(R.string.separator)+ "\n"  +
                         fuerzatrabajo_id + " " + nombrefuerzatrabajo + "\n" +
-                        "*********************DATOS DOCUMENTO******************" + "\n" +
-                        "Fecha:     " + Induvis.getDate(BuildConfig.FLAVOR,fecharecibo)  + "\n"+
-                        "Recibo:     " + recibo + "\n" +
-                        "Documento:     " +(Lista.get(i).getNrodocumento())  + "\n" +
-                        "Importe :     " + Convert.currencyForView(Lista.get(i).getImporte()) + "\n" +
-                        "Saldo :.      " + Convert.currencyForView(Lista.get(i).getSaldo()) + "\n" +
-                        "Cobrado :.     " + Convert.currencyForView(Lista.get(i).getCobrado()) + "\n" +
-                        "Nuevo Saldo:.     " + Convert.currencyForView(Lista.get(i).getNuevo_saldo()) + "\n" +
+                        Context.getResources().getString(R.string.separator)+Context.getResources().getString(R.string.data).toUpperCase()+" "+Context.getResources().getString(R.string.documents).toUpperCase()+Context.getResources().getString(R.string.separator)+ "\n"  +
+                        Context.getResources().getString(R.string.date)+Context.getResources().getString(R.string.space) + Induvis.getDate(BuildConfig.FLAVOR,fecharecibo)  + "\n"+
+                        Context.getResources().getString(R.string.receip)+Context.getResources().getString(R.string.space) + recibo + "\n" +
+                        Context.getResources().getString(R.string.documents)+Context.getResources().getString(R.string.space) +(Lista.get(i).getNrodocumento())  + "\n" +
+                        Context.getResources().getString(R.string.amount)+" "+Context.getResources().getString(R.string.documents)+Context.getResources().getString(R.string.space) + Convert.currencyForView(Lista.get(i).getImporte()) + "\n" +
+                        Context.getResources().getString(R.string.balance)+Context.getResources().getString(R.string.space) + Convert.currencyForView(Lista.get(i).getSaldo()) + "\n" +
+                        Context.getResources().getString(R.string.amount_charged)+Context.getResources().getString(R.string.space) + Convert.currencyForView(Lista.get(i).getCobrado()) + "\n" +
+                        Context.getResources().getString(R.string.new_balance)+Context.getResources().getString(R.string.space) + Convert.currencyForView(Lista.get(i).getNuevo_saldo()) + "\n" +
                         //"www.vistony.com/intranet/hash="+encHash+ "\n" +
-                        "Codigo Validacion SMS:"+codeSMS+""
+                        Context.getResources().getString(R.string.code_validation)+Context.getResources().getString(R.string.space) +codeSMS+""
                 ;
                 ;
                /* SmsManager sm = SmsManager.getDefault();

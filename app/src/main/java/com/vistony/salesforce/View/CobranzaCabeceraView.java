@@ -318,7 +318,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v=inflater.inflate(R.layout.fragment_cobranza_cabecera_view, container, false);
-        getActivity().setTitle("Depósito");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.menu_deposito) );
         spnbanco=(Spinner) v.findViewById(R.id.spnbanco);
         tv_fechacobrocheque_edit = (TextView) v.findViewById(R.id.tv_fechacobrocheque_edit);
         spnbanco.setEnabled(false);
@@ -353,7 +353,10 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         }else {
             valores =  new String[]{"Deposito","Cheque"};
         }*/
-        valores =  new String[]{"Deposito","Cheque"};
+        valores =  new String[]{
+                getActivity().getResources().getString(R.string.menu_deposito),
+                getActivity().getResources().getString(R.string.cheque)
+        };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, valores);
@@ -375,7 +378,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     {
                         if(position==0)
                         {
-                            tipo="Deposito";
+                            tipo=getActivity().getResources().getString(R.string.menu_deposito);
                             imv_calendario_cheque.setVisibility(View.INVISIBLE);
                             tv_fechacobrocheque_edit.setVisibility(View.INVISIBLE);
                             tv_fechacobrocheque.setVisibility(View.INVISIBLE);
@@ -383,7 +386,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                         }
                         if(position==1)
                         {
-                            tipo="Cheque";
+                            tipo=getActivity().getResources().getString(R.string.cheque);
                             tv_fechacobrocheque_edit.setText(Induvis.getDate(BuildConfig.FLAVOR,dateFormat.format(date)));
                             fechadiferida=dateFormat.format(date);
                             tv_fechacobrocheque_edit.setVisibility(View.VISIBLE);
@@ -395,7 +398,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                         }
                         if(position==2)
                         {
-                            tipo="ChequeDia";
+                            tipo=getActivity().getResources().getString(R.string.check_day);
                             tv_fechacobrocheque_edit.setText(Induvis.getDate(BuildConfig.FLAVOR,dateFormat.format(date)));
                             fechadiferida=dateFormat.format(date);
                             tv_fechacobrocheque_edit.setVisibility(View.VISIBLE);
@@ -505,7 +508,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             valores =  new String[]{"Deposito","Cheque"};
         }*/
 
-        valores =  new String[]{"Deposito","Cheque"};
+        valores =  new String[]{activity.getResources().getString(R.string.menu_deposito),activity.getResources().getString(R.string.cheque)};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                 android.R.layout.simple_list_item_1, android.R.id.text1, valores);
 
@@ -578,7 +581,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 fechadiferida = year + mes + dia;
 
             }else {
-                Toast.makeText(getContext(), "La fecha debe ser mayor a la actual, seleccione nuevamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.date_elderly_today_selection_retry), Toast.LENGTH_SHORT).show();
             }
         }
         else if(calendar.equals("imb_consultar_fecha_hoja_despacho"))
@@ -663,7 +666,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             {
                 if(i==0)
                 {
-                    Nombresbanco.add("---SELECCIONAR BANCO---");
+                    Nombresbanco.add(context.getResources().getString(R.string.selection_bank));
                     Nombresbanco.add(listabancosqliteentity.get(i).getNombrebanco());
                 }
                     else
@@ -672,7 +675,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     }
 
             }
-            activity.setTitle("Deposito");
+            activity.setTitle(activity.getResources().getString(R.string.menu_deposito));
             ObtenerBanco();
 
         }
@@ -852,7 +855,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     tipo="1";
                     Alerta(tipo).show();
                 }
-                else if(banco.equals("---SELECCIONAR BANCO---")||banco==null)
+                else if(banco.equals(context.getResources().getString(R.string.selection_bank))||banco==null)
                 {
                     tipo="2";
                     Alerta(tipo).show();
@@ -882,9 +885,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     public AlertDialog alertaGuardarDeposito() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Advertencia")
-                .setMessage("Seguro de Guardar el Deposito?")
-                .setPositiveButton("OK",
+        builder.setTitle(getActivity().getResources().getString(R.string.warning))
+                .setMessage(getActivity().getResources().getString(R.string.mse_are_you_sure_save_deposit))
+                .setPositiveButton(getActivity().getResources().getString(R.string.accept),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -917,7 +920,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                                 GuardarDepositoVincularRecibos();
                             }
                         })
-                .setNegativeButton("CANCELAR",
+                .setNegativeButton(getActivity().getResources().getString(R.string.cancel),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -966,7 +969,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             spnbanco.setEnabled(false);
             spnbanco.setClickable(false);
 
-            Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getActivity().getResources().getString(R.string.deposit_register_sucessful), Toast.LENGTH_SHORT).show();
             String fragment = "", accion = "", compuesto = "";
             fragment = "CobranzaCabeceraView";
             accion = "nuevoinicio";
@@ -984,7 +987,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             });
         }
         else {
-            Toast.makeText(getContext(), "No se eligio Banco, debe elegir banco para poder continuar...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getActivity().getResources().getString(R.string.not_selection_bank_choise_bank), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1007,16 +1010,17 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             }
         }else{
             estado=0;
-            Toast.makeText(getContext(), "Abrir el Deposito Antes de Realizar la Foto", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getActivity().getResources().getString(R.string.open_deposit_before_photo), Toast.LENGTH_SHORT).show();
         }
     }
 
     public AlertDialog alertaFotoDeposito() {
 
-        String[] colors = {"Camara", "Galeria"};
+        String[] colors = {getActivity().getResources().getString(R.string.camera)
+                , getActivity().getResources().getString(R.string.galery)};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("OPCIÓN");
+        builder.setTitle(getActivity().getResources().getString(R.string.choise).toUpperCase());
         builder.setItems(colors, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -1024,10 +1028,13 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                         camaraTomar();
                         break;
                     case 1:
-                        Toast.makeText(getContext(), "Abriendo galerias...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),
+                                getActivity().getResources().getString(R.string.open_galeries)
+                                +getActivity().getResources().getString(R.string.point_suspenses)
+                                , Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         intent.setType("image/*");
-                        getActivity().startActivityForResult(intent.createChooser(intent, "SELECIONE LA IMAGEN"), 155);
+                        getActivity().startActivityForResult(intent.createChooser(intent, getActivity().getResources().getString(R.string.selection_image)), 155);
 
                         break;
                     default:
@@ -1071,10 +1078,10 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         dialog.setCanceledOnTouchOutside(false);
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("CONFIRMACIÓN!");
+        textTitle.setText(getActivity().getResources().getText(R.string.important));
 
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("¿Esta seguro de generar un nuevo deposito?");
+        textMsj.setText(getActivity().getResources().getText(R.string.mse_open_deposit));
 
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
@@ -1141,22 +1148,22 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         String mensaje="";
         if(tipo.equals("1"))
         {
-            mensaje="No se ah Ingresado un Codigo de Deposito";
+            mensaje=getActivity().getResources().getString(R.string.not_register_code_deposit);
         }
         else if(tipo.equals("2"))
         {
-            mensaje="Debe Elegir un Banco para poder Guardar el Deposito";
+            mensaje=getActivity().getResources().getString(R.string.choise_bank_save_deposit);
         }
         else if(tipo.equals("3"))
         {
-            mensaje="No se puede Enviar un Deposito sin recibos";
+            mensaje=getActivity().getResources().getString(R.string.not_send_deposit_none_receip);
         }
 
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.layout_dialog);
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA!");
+        textTitle.setText(getActivity().getResources().getString(R.string.warning).toUpperCase());
 
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
         textMsj.setText(mensaje);
@@ -1196,7 +1203,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         dialog.setContentView(R.layout.layout_dialog_obtener_codigo_control_despacho);
 
         TextView textTitle = dialog.findViewById(R.id.tv_titulo);
-        textTitle.setText("ADVERTENCIA!");
+        textTitle.setText(getActivity().getResources().getString(R.string.warning).toUpperCase());
 
         TextView textMsj = dialog.findViewById(R.id.tv_mensaje);
         textMsj.setText(mensaje);
@@ -1311,14 +1318,14 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         dialog.setCanceledOnTouchOutside(false);
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("CONFIRMACIÓN!");
+        textTitle.setText(getActivity().getResources().getString(R.string.warning).toUpperCase());
 
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
         if(BuildConfig.FLAVOR.equals("espania"))
         {
-            textMsj.setText("¿Desea asignar un ID unico a este Deposito?");
+            textMsj.setText(getActivity().getResources().getString(R.string.are_you_sure_id_unique_deposit));
         }else {
-            textMsj.setText("¿El Nro de Depósito, esta duplicado, desea asignarle un ID unico?");
+            textMsj.setText(getActivity().getResources().getString(R.string.numer_deposit_duplicate_register_id_unique));
         }
 
 

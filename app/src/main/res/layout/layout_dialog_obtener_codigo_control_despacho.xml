@@ -47,7 +47,7 @@
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="Seleccione su Código de Control para registrarlo como Código de Depósito:" />
+                    android:text="@string/selecction_code_control_register_code_deposit" />
 
 
                 <TableRow
@@ -107,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
-                        android:text="@string/lbl_code_control"
+                        android:text="@string/code_control"
                         android:textSize="20dp"
                         android:textStyle="bold" />
 
@@ -141,7 +141,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="CANCELAR"
+                    android:text="@string/cancel"
+                    android:textAllCaps="true"
                     android:textColor="#0957C3" />
 
                 <Button
@@ -152,7 +153,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="ACEPTAR"
+                    android:text="@string/accept"
+                    android:textAllCaps="true"
                     android:textColor="#0957C3" />
 
             </LinearLayout>

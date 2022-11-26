@@ -40,7 +40,7 @@
                     android:id="@+id/lbl_producto_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/head_codigo"
+                    android:text="@string/code"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
@@ -48,24 +48,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="30dp"
-                    android:text=""
+                    android:text="@string/code"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:textStyle="bold"
-                    tools:text="Producto_id1" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/lbl_umd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
-                    android:text="UMD:"
+                    android:text="@string/umd"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_umd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="UMD1"
+                    android:text="@string/umd"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
             </TableRow>
@@ -78,14 +77,14 @@
                     android:id="@+id/lbl_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Stock:"
+                    android:text="@string/stock"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Stock1"
+                    android:text="@string/stock"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
 
@@ -93,14 +92,14 @@
                     android:id="@+id/lbl_gal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lbl_gallon"
+                    android:text="@string/gallon"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_gal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Galon1"
+                    android:text="@string/gallon"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
 
@@ -117,14 +116,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
-                    android:text="Contado:"
+                    android:text="@string/counted"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
                     android:id="@+id/tv_price_cash"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Precio1"
+                    android:text="@string/counted"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
 
@@ -132,7 +131,7 @@
                     android:id="@+id/lbl_price_credit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lbl_credit"
+                    android:text="@string/credit"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:visibility="visible" />
 
@@ -140,7 +139,7 @@
                     android:id="@+id/tv_price_credit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
+                    android:text="@string/credit"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold"
                     android:visibility="visible" />
@@ -164,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="20dp"
-                    android:text="Promocion?:"
+                    android:text="@string/promotion"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <ImageView
@@ -177,7 +176,7 @@
                     android:id="@+id/lbl_enable_warehouses"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lbl_find_stock_all_warehouse"
+                    android:text="@string/warehouse"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <ImageView

@@ -70,7 +70,7 @@ public class MenuConsultasFacturasView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getActivity().setTitle("Consultas Factura");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.query_invoices));
         v= inflater.inflate(R.layout.fragment_menu_consultas_facturas_view, container, false);
         cv_historico_venta=v.findViewById(R.id.cv_historico_venta);
         cv_facturaporfecha=v.findViewById(R.id.cv_facturaporfecha);

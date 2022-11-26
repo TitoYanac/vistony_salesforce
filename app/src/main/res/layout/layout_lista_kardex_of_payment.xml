@@ -67,7 +67,7 @@
                         android:id="@+id/lbl_invoicedate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lbl_invoicedate"
+                        android:text="@string/date_issue"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -86,7 +86,7 @@
                         android:id="@+id/lbl_duedate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lbl_duedate"
+                        android:text="@string/date_expiration"
 
                         android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -106,7 +106,7 @@
                         android:id="@+id/lbl_DocAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lbl_DocAmount"
+                        android:text="@string/amount"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -125,7 +125,7 @@
                         android:id="@+id/lbl_balance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/lbl_balance"
+                        android:text="@string/balance"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView

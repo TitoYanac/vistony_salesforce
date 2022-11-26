@@ -39,7 +39,8 @@
                         android:id="@+id/tv_recibo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="RECIBO"
+                        android:text="@string/receip"
+                        android:textAllCaps="true"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -58,7 +59,8 @@
                         android:id="@+id/tv_documento"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="DOCUMENTO"
+                        android:text="@string/documents"
+                        android:textAllCaps="true"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -76,7 +78,8 @@
                         android:id="@+id/tv_importe"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="IMPORTE"
+                        android:text="@string/lbl_DocAmount"
+                        android:textAllCaps="true"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -94,7 +97,8 @@
                         android:id="@+id/tv_cobrado"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="COBRADO"
+                        android:text="@string/collection"
+                        android:textAllCaps="true"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -112,7 +116,8 @@
                         android:id="@+id/tv_saldo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="SALDO"
+                        android:text="@string/balance"
+                        android:textAllCaps="true"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -131,7 +136,8 @@
                         android:id="@+id/tv_nuevo_saldo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="NUEVO SALDO"
+                        android:text="@string/new_balance"
+                        android:textAllCaps="true"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -149,7 +155,8 @@
                         android:id="@+id/lbl_bancarizado"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="BANCARIZADO"
+                        android:text="@string/Banked"
+                        android:textAllCaps="true"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -169,7 +176,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
-                        android:text="PAGO DIRECTO"
+                        android:text="@string/Direct_Depost"
+                        android:textAllCaps="true"
                         android:textAppearance="?attr/textAppearanceListItem" />
 
                     <TextView
@@ -188,7 +196,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
-                        android:text="@string/lbl_cheque"
+                        android:text="@string/cheque"
                         android:textAllCaps="true"
                         android:textAppearance="?attr/textAppearanceListItem" />
 

@@ -56,7 +56,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Consulta Orden de Venta"
+                            android:text="@string/query_salesorder"
                             android:textStyle="bold" />
 
 
@@ -101,7 +101,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Consulta Cobrado"
+                            android:text="@string/query_collection"
                             android:textStyle="bold" />
 
 
@@ -146,7 +146,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="@string/Find_Deposit"
+                            android:text="@string/query_deposit"
                             android:textStyle="bold" />
 
 
@@ -190,7 +190,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Consulta Facturas"
+                            android:text="@string/query_invoices"
                             android:textStyle="bold" />
 
 

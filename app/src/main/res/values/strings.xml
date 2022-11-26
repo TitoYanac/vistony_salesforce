@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vistony Sales Force</string>
     <string name="app_fragment_Parametro" translatable="false">Parametros</string>
@@ -9,8 +10,7 @@
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings" translatable="false">Settings</string>
     <string name="add" translatable="false">Buscar</string>
-    <string name="tag_select" translatable="false">&lt;SELECCIONAR&gt;</string>
-    <string name="send" translatable="false">Enviar</string>
+    <string name="tag_select" translatable="true">&lt;SELECCIONAR&gt;</string>
     <string name="UR" translatable="false">Pago Adelantado</string>
     <string name="CHK" translatable="false">Cheque</string>
     <string name="generar" translatable="false">Generar_PDF</string>
@@ -29,14 +29,14 @@
     <string name="UsuarioPrincipal" translatable="false">UsuarioPrincipal</string>
     <string name="BotonPrincipalLogin">Iniciar sesión</string>
     <string name="VersionLogin" translatable="false">Version 1.1.6</string>
-    <string name="DeudaDrawer" translatable="false">Cliente</string>
+    <string name="DeudaDrawer" translatable="true">Cliente</string>
     <string name="DepositoDrawer" translatable="false">Depósito</string>
     <string name="RutaVendedorDrawer" translatable="false">Ruta Vendedor</string>
     <string name="ConsultaDepositoDrawer" translatable="false">Consulta Depósito</string>
     <string name="ConsultaCobradoDrawer" translatable="false">Consulta Cobrado</string>
-    <string name="ParametrosDrawer" translatable="false">Parametros</string>
+    <string name="ParametrosDrawer" translatable="true">Parametros</string>
     <string name="ConfiguracionImpresoraDrawer" translatable="false">Configuracion Impresora</string>
-    <string name="ConfiguracionSistemaDrawer" translatable="false">Configuracion Sistema</string>
+    <string name="ConfiguracionSistemaDrawer" translatable="true">Configuracion Sistema</string>
     <string name="AvanceVentasDrawer" translatable="false">Avance Ventas</string>
     <string name="SalirDrawer">Salir</string>
     <string name="CobranzaCabeceraN" translatable="false">N°</string>
@@ -49,7 +49,7 @@
     <string name="EnablePrint">Habilitar Impresora</string>
     <string name="LineUsed">Linea Utilizada</string>
     <string name="LineCredit">Línea de Crédito</string>
-    <string name="Quotation">Cotización</string>
+    <string name="quotation">Cotización</string>
     <string name="lbl_orderhed_payterms">TÉRMINO DE PAGO</string>
     <string name="lbl_code">Código</string>
     <string name="lbl_gallon">Gallon</string>
@@ -67,7 +67,7 @@
     <string name="lbl_DocAmount">Importe</string>
     <string name="lbl_balance">Saldo</string>
     <string name="lbl_kardex_of_payment">Kardex de Pago</string>
-    <string name="lbl_chk_pedido">Pedido</string>
+    <string name="lbl_chk_pedido">Orden Venta</string>
     <string name="lbl_type_generate_document_pdf">Generar PDF</string>
     <string name="lbl_type_send_sms">Enviar SMS</string>
     <string name="lbl_type_validate_document_pdf">Validar PDF</string>
@@ -180,7 +180,8 @@
     <string name="menu_comisiones">Commissions</string>
     <string name="dialog_advertencia">Warning</string>
     <string name="dialog_btn_salir">Exit</string>
-    <string name="dialog_btn_cancelar">Cancel</string>
+    <string name="dialog_btn_cancelar">Annuler
+</string>
     <string name="dialog_text">Are you sure to exit the application?</string>
     <string name="menu_tag">Opciones del sistema</string>
     <string name="tax_code">tax code</string>
@@ -225,4 +226,275 @@
     <string name="query_clients">Consultar Clientes</string>
     <string name="list_clients">Listando Clientes</string>
     <string name="msm_clients_available">Actualiza tus parametros, no hay clientes disponibles</string>
+    <string name="generate_delivery">Generar Entrega</string>
+    <string name="generate_salesorders">Generar Orden Venta</string>
+    <string name="generate_collection">Generar Cobranza</string>
+    <string name="test_canvas">Prueba Canvas</string>
+    <string name="important">IMPORTANTE!!!</string>
+    <string name="mse_client_no_geolocation">El Cliente no tiene la Geolocalizacion Actualizada, debe actualizar la ubicacion y tomar la Foto del Local...</string>
+    <string name="mse_register_visit">Registre el inicio de la visita, para continuar!!!</string>
+    <string name="mse_module_availaible">Este modulo solo esta disponible con INTERNET!!!</string>
+    <string name="mse_receips_pending">Ud. cuenta con Recibos pendientes de Depositar, por favor verificar en CONSULTA COBRADO y realizar el deposito!!!</string>
+    <string name="receip">Recibo</string>
+    <string name="accept">Aceptar</string>
+    <string name="collecion_ordinare">Cobranza Ordinaria</string>
+    <string name="payment_POS">Pago POS</string>
+    <string name="mse_choise_collection">Elija Tipo de Cobranza</string>
+    <string name="mse_choise_salesorder">Elija Tipo de Venta</string>
+    <string name="duration_visit">Duracion Visita</string>
+    <string name="selection_section">Seleccione el tramo</string>
+    <string name="start">Iniciar</string>
+    <string name="finish">Finalizar</string>
+    <string name="mse_visits_no_finish">Se tiene Visitas iniciadas debe finalizarlas para poder continuar...</string>
+    <string name="visit_start">Visita Iniciada!!!</string>
+    <string name="visit_open">VISITA ABIERTA</string>
+    <string name="mse_finish_visit_next">Debe cerrar las siguientes visitas para poder continuar</string>
+    <string name="mse_wait_moment_calculing_coordenates">Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente</string>
+    <string name="visit_finish">Visita Finalizada!!!</string>
+    <string name="mse_no_generation_collection">"No ha generado cobranza o despacho a este cliente, sirvase a actualizar su despacho o generar su cobranza!!!</string>
+    <string name="agency">Agencia</string>
+    <string name="clients">Clients</string>
+    <string name="banks">Bancos</string>
+    <string name="Agencies">Agencias</string>
+    <string name="price_list">Liste Prix</string>
+    <string name="route_workforce">Itinéraire ForceWork</string>
+    <string name="reasons_visit">Motivo Visita </string>
+    <string name="dispatch_sheet_head">Hoja Despacho Cabecera </string>
+    <string name="dispatch_sheet_detail">Hoja Despacho Detalle </string>
+    <string name="dispatch_type">Tipo Despacho</string>
+    <string name="dispatch_reason">Motivo Despacho</string>
+    <string name="list_promotion">Lista Promocion</string>
+    <string name="promotion_head">Promocion Cabecera</string>
+    <string name="promotion_detail">Promocion Detalle</string>
+    <string name="colors_head">Color Cabecera</string>
+    <string name="colors_detail">Color Detalle</string>
+    <string name="download_parameters">Descargando Parametros</string>
+    <string name="parameters_updated">Parametros Actualizados...</string>
+    <string name="mse_selection_all_parameters">¿Estás seguro de haber seleccionado todas las configuraciones?</string>
+    <string name="number_of_transaction">número de transacción...</string>
+    <string name="Banked">Bancarizado</string>
+    <string name="mse_open_deposit">¿Esta seguro de generar un nuevo deposito?</string>
+    <string name="pending_deposit">Pendientes Depósito</string>
+    <string name="quantity">Cantidad</string>
+    <string name="amount">Monto</string>
+    <string name="mse_not_collection_of_day">No se encontraron Cobranzas del dia</string>
+    <string name="mse_not_choise_receip">No se eligio recibos, elegir recibir para depositar</string>
+    <string name="mse_choise_all_receips">Esta Seguro de Seleccionar todos los recibos?</string>
+    <string name="mse_mistake_response_server">Error en la respuesta del servidor...</string>
+    <string name="validation_receips">Validando Recibos</string>
+    <string name="mse_system_no_identification_country">El Sistema no pudo identificar su pais y lenguaje configurado</string>
+    <string name="unauthorized_equipment">Equipo No Autorizado, comunicarse a Helpdesk@vistony.com</string>
+    <string name="mse_unlinked_user">El usuario seleccionado no esta vinculado, seleccione otro usuario</string>
+    <string name="unlinked_user">Usuario desvinculado</string>
+    <string name="update_mobile_app">Actualiza la App movil</string>
+    <string name="mse_necessary_connecting_internet">Es necesario conectarse a internet para actualizar esta version de la App</string>
+    <string name="menu_query">Menu Consulta</string>
+    <string name="query_salesorder">Consulta Orden de Venta</string>
+    <string name="query_collection">Consulta Cobranza</string>
+    <string name="query_deposit">Consulta Deposito</string>
+    <string name="query_invoices">Consulta Facturas</string>
+    <string name="menu_query_salesorder">Menu Consulta Orden Venta</string>
+    <string name="query_salesorder_date">Orden Venta por Fecha</string>
+    <string name="query_summary_diary">Resumen Diario</string>
+    <string name="query_stock">Consulta Stock</string>
+    <string name="traceability_salesorder">Trazabilidad Orden Venta</string>
+    <string name="salesorder">Orden de Venta</string>
+    <string name="query">Consulta</string>
+    <string name="querying_salesorder">Consultando Orden de Venta</string>
+    <string name="mse_not_get_response">No se pudo obtener una respuesta</string>
+    <string name="mse_not_scanner_qr">No se pudo escanear el código QR</string>
+    <string name="mse_not_data_available_for_date">No hay Datos disponibles en la fecha seleccionada</string>
+    <string name="mse_salesorder_get_sucessfull">Ordenes de Venta Obtenidas Correctamente</string>
+    <string name="client">Cliente</string>
+    <string name="seller">Vendedor</string>
+    <string name="date">Fecha</string>
+    <string name="selected_date_report">Seleccione la fecha del reporte</string>
+    <string name="warning">Advertencia</string>
+    <string name="generate">Generar</string>
+    <string name="querying_dates">Consultando Datos</string>
+    <string name="separator">********************************</string>
+    <string name="seller_data">Datos de Vendedor</string>
+    <string name="name">Nombre</string>
+    <string name="hour">Hora</string>
+    <string name="conectivity">Conectividad</string>
+    <string name="product_focus">Producto foco</string>
+    <string name="item">Item</string>
+    <string name="variable">Variable</string>
+    <string name="umd">UMD</string>
+    <string name="quotas">Cuotas</string>
+    <string name="gallon">Galon</string>
+    <string name="day">Dia</string>
+    <string name="scheduled">Programados</string>
+    <string name="debt">Deuda</string>
+    <string name="type">Type</string>
+    <string name="collection">Cobranza</string>
+    <string name="effectiveness">Efectividad</string>
+    <string name="avance">Avance</string>
+    <string name="no">Not</string>
+    <string name="mse_necessary_install_PDF">Es necesario que instales algun visor de PDF</string>
+    <string name="code">Código</string>
+    <string name="find">Buscar</string>
+    <string name="article">Producto</string>
+    <string name="msm_data_available">Actualiza tus parametros, no hay datos disponibles</string>
+    <string name="stock">Stock</string>
+    <string name="counted">Contado</string>
+    <string name="credit">Crédito</string>
+    <string name="promotion">Promoción</string>
+    <string name="warehouse">Almacen</string>
+    <string name="delivery">Entrega</string>
+    <string name="dispatch_date">Fecha Entrega</string>
+    <string name="entry_commentary">Ingrese Comentario</string>
+    <string name="detail">Detalle</string>
+    <string name="subtotal">Sous Total</string>
+    <string name="descount">Descuento</string>
+    <string name="mse_are_you_sure_new_order">Esta Seguro de Abrir una Orden Nueva?</string>
+    <string name="none_commentary">Sin Comentario</string>
+    <string name="mse_are_you_sure_save_order">Esta Seguro de Guardar la Orden de Venta?</string>
+    <string name="mse_are_you_sure_send_order">Esta Seguro de Enviar a la Nube, la Orden de Venta?</string>
+    <string name="mse_are_you_sure_generate_PDF">Esta Seguro de Generar el Archivo PDF?</string>
+    <string name="mse_salesorden_deliverydate_elderly_two_days">La fecha de entrega de la orden de venta,
+        debe ser distinta a la fecha actual, se sugiere 2 dias en adelante</string>
+    <string name="mse_save_salesorder_sucessful">Se guardo correctamente la orden de venta</string>
+    <string name="sending">Enviando</string>
+    <string name="adresses">Direcciones</string>
+    <string name="mse_enable_adresses">Esta Seguro de Habilitar las Direcciones?</string>
+    <string name="mse_enable_sucessful">Se habilito correctamente</string>
+    <string name="payment_terms">Termino de Pago</string>
+    <string name="mse_not_data_available">No hay Data Disponible</string>
+    <string name="description">Descripción</string>
+    <string name="mse_querying_encore_client">Consultar nuevamente el Cliente</string>
+    <string name="total">Total</string>
+    <string name="cancel">Cancelar</string>
+    <string name="mse_are_you_sure_register_lines">Seguro de Finalizar el Ingreso de Lineas?</string>
+    <string name="mse_you_have_line_amount_zero">Tiene una Linea en Monto 0</string>
+    <string name="price">Precio</string>
+    <string name="general">Général</string>
+    <string name="stock_general">Stock General</string>
+    <string name="document_with_debt">Documento con Deuda</string>
+    <string name="documents">Documentos</string>
+    <string name="summary">Resumen</string>
+    <string name="entry_amount_collection_valid">Ingrese un Monto de cobranza Valido</string>
+    <string name="mse_are_you_sure_receip_bank">Esta Seguro de Marcar el Recibo como Bancarizado</string>
+    <string name="mse_are_you_sure_incheck_receip_bank">Esta Seguro de DesMarcar el Recibo como Bancarizado?</string>
+    <string name="printer_not_linked">Advertencia: Impresora No Vinculada - Revisar en Configuracion</string>
+    <string name="your_session_expired">Tu Sesión ha expirado</string>
+    <string name="start_session">Iniciar Sesión</string>
+    <string name="send_SMS">Enviar SMS</string>
+    <string name="cellphone">Celular</string>
+    <string name="send">Enviar</string>
+    <string name="mse_are_you_sure_save_collection">Esta Seguro de Guardar la Cobranza</string>
+    <string name="not_save_receip_zero">No puedes Guardar un Recibo con valor 0 </string>
+    <string name="save_collection_correctement">Se Guardo Correctamente la Cobranza</string>
+    <string name="not_save_collection_call_administrator">No se Guardo la Cobranza Comunicarse con El Administrador</string>
+    <string name="PDF_generate_sucessful">Archivo PDF generado correctamente</string>
+    <string name="not_generate_PDF">No se pudo generar el Archivo PDF</string>
+    <string name="start_validation_qr">Iniciar validacion QR?</string>
+    <string name="article_stock_zero">El producto elegido tiene stock 0, desea continuar?</string>
+    <string name="gallon_total">Galon Total</string>
+    <string name="erase">Borrar</string>
+    <string name="cellphone_linked_seller">Le numéro de téléphone appartient au vendeur</string>
+    <string name="sms_send_client">SMS enviado al Numero del Cliente</string>
+    <string name="deposit_register_sucessful">Deposito Registrado Correctamente</string>
+    <string name="validate_sms">Validar SMS</string>
+    <string name="validate">Validar</string>
+    <string name="code_update_sucessful">Codigo Actualizado Correctamente</string>
+    <string name="code_error_retry">El codigo Ingresado no es el Correcto, Intente Nuevamente</string>
+    <string name="sms_send_sucessful">El SMS fue enviado Correctamente</string>
+    <string name="sms_send_sucessful_get_code_client">El SMS fue enviado Correctamente</string>
+    <string name="data">Datos</string>
+    <string name="debt_collector">Cobrador</string>
+    <string name="space">      </string>
+    <string name="balance">Saldo</string>
+    <string name="amount_charged">Monto Cobrado</string>
+    <string name="new_balance">Nuevo Saldo</string>
+    <string name="code_validation">Codigo Validacion</string>
+    <string name="qr_scan">Scaneo QR</string>
+    <string name="cheque">Cheque</string>
+    <string name="pos">POS</string>
+    <string name="comentary">Comentario</string>
+    <string name="separator_short">******</string>
+    <string name="collection_for_date">Cobranza por fecha</string>
+    <string name="collection_for_quotas">Cobranza por cuotas</string>
+    <string name="find_collection">Consulta Cobrado</string>
+    <string name="get_collection_sucessful">Cobranzas Obtenidas Exitosamente</string>
+    <string name="data_get_sucessful">Datos obtenidos exitosamente</string>
+    <string name="status">Estado</string>
+    <string name="response">Recibido</string>
+    <string name="mesagge">Mensaje</string>
+    <string name="not_cancel_receip">No se puede Anular un Recibo con Estado "Anulado"</string>
+    <string name="not_cancel_receip_reconciled">No se puede Anular un Recibo con Estado "Conciliado"</string>
+    <string name="mesagge_server">Mensaje Server</string>
+    <string name="use_button_find_get_client">Use el Boton de Buscar para Obtener el Cliente</string>
+    <string name="selection_client">Seleccione el Cliente</string>
+    <string name="_selection_">------SELECCIONAR------</string>
+    <string name="are_you_sure_selecction_all_invoices">Esta Seguro de Seleccionar Todas las Facturas?</string>
+    <string name="phone">Telefono</string>
+    <string name="ubigeous">Ubigeo</string>
+    <string name="generate_with">Generado por</string>
+    <string name="generate_date">Fecha Generación</string>
+    <string name="date_issue">Fecha Emisión</string>
+    <string name="date_expiration">Fecha Vencimiento</string>
+    <string name="payment">Pago</string>
+    <string name="date_payment">Fecha Pago</string>
+    <string name="number_operation">N° Operacion</string>
+    <string name="separator_">-------------------------</string>
+    <string name="amount_weekly">Monto Semanal</string>
+    <string name="number_weekly">N° semaines</string>
+    <string name="days_debt">Dias Mora</string>
+    <string name="date_collection">Fecha Cobro</string>
+    <string name="total_amount">Total</string>
+    <string name="mse_are_you_sure_save_deposit">Esta Seguro de Guardar la Deposito?</string>
+    <string name="selection_bank">---SELECCIONAR BANCO---</string>
+    <string name="camera">Camara</string>
+    <string name="galery">Galeria</string>
+    <string name="choise">Opción</string>
+    <string name="open_galeries">Abriendo Galerias</string>
+    <string name="point_suspenses">...</string>
+    <string name="selection_image">SELECCIONE LA IMAGEN</string>
+    <string name="not_selection_bank_choise_bank">
+No se eligio Banco, debe elegir banco para poder continuar</string>
+    <string name="image_save_galery">Imagen guardada en la galería</string>
+    <string name="dont_sava_image">No se ha podido guardar la imagen-Error</string>
+    <string name="open_deposit_before_photo">Abrir el Deposito Antes de Realizar la Foto</string>
+    <string name="date_elderly_today_selection_retry">La fecha debe ser mayor a la actual, seleccione nuevamente</string>
+    <string name="not_register_code_deposit">No se ah Ingresado un Codigo de Deposito</string>
+    <string name="choise_bank_save_deposit">Debe Elegir un Banco para poder Guardar el Deposito</string>
+    <string name="not_send_deposit_none_receip">No se puede Enviar un Deposito sin recibos</string>
+    <string name="selecction_code_control_register_code_deposit">Seleccione su Código de Control para registrarlo como Código de Depósito</string>
+    <string name="code_control">Code Control</string>
+    <string name="are_you_sure_id_unique_deposit">¿Desea asignar un ID unico a este Deposito?</string>
+    <string name="numer_deposit_duplicate_register_id_unique">¿El Nro de Depósito, esta duplicado, desea asignarle un ID unico?</string>
+    <string name="read">Leido</string>
+    <string name="qr_validate_sucessful">QR Validado Correctamente</string>
+    <string name="qr_scan_not_linked">El QR Scaneado no coindice con el Generado</string>
+    <string name="detail_visit">DETALLA TU VISITA</string>
+    <string name="reasons">Motivos</string>
+    <string name="register">Registrar</string>
+    <string name="file_register_sucessful">Archivo Generado Correctamente</string>
+    <string name="dont_save_file">No se ha generado el Archivo - Error </string>
+    <string name="eraser">Borrador</string>
+    <string name="invoices">Facturación</string>
+    <string name="dispatch">Despacho</string>
+    <string name="check_day">ChequeDia</string>
+    <string name="deferred">Diferido</string>
+    <string name="anuller">Anular</string>
+    <string name="not_cancel_deposit">No se puede Anular un Deposito con Estado "Anulado"</string>
+    <string name="not_cancel_deposit_POS">No se puede Anular un Deposito con Estado "POS"</string>
+    <string name="cancel_deposit_not_linked_receips">El Deposito Anulado no tiene recibos vinculados</string>
+    <string name="cancel_deposit_available_conexion_internet">La Opcion de anular deposito solo puede usarse con acceso a internet</string>
+    <string name="deposit_cancel_sucessful">Deposito Anulado Correctamente</string>
+    <string name="validate_access_internet">Revisar Acceso a internet</string>
+    <string name="invoice">Factura</string>
+    <string name="delivery_linked_salesorder">Entregas Vinculadas a la Orden de Venta</string>
+    <string name="invoice_linked_salesorder">Facturas Vinculadas a la Orden de Venta</string>
+    <string name="calcule_quotas">Calculo de Cuotas</string>
+    <string name="defeated">Vencido</string>
+    <string name="stream">Corriente</string>
+    <string name="choise_client">Elegir Cliente</string>
+    <string name="invoice_with_date">Facturas por Fecha</string>
+    <string name="historical_sales_client">Historico de Venta por Cliente</string>
+
+    <string name="sales_commercialclass">Venta por Clase Comercial</string>
+    <string name="consulting">Consultar</string>
+
 </resources>

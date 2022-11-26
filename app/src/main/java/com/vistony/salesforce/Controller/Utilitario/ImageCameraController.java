@@ -19,6 +19,7 @@ import androidx.core.content.FileProvider;
 
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -157,11 +158,11 @@ public class ImageCameraController {
     }
 
     private void UnableToSave(String error) {
-        Toast.makeText(TheThis, "¡No se ha podido guardar la imagen!-Error: "+error, Toast.LENGTH_SHORT).show();
+        Toast.makeText(TheThis, TheThis.getResources().getString(R.string.dont_sava_image) +error, Toast.LENGTH_SHORT).show();
     }
 
     private void AbleToSave() {
-        Toast.makeText(TheThis, "Imagen guardada en la galería.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(TheThis, TheThis.getResources().getString(R.string.image_save_galery), Toast.LENGTH_SHORT).show();
     }
 
     public byte[] getImageSDtoByte(Context context,String file_path) {

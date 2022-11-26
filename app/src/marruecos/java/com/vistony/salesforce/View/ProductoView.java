@@ -76,7 +76,7 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Productos");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.article));
         setHasOptionsMenu(true);
         listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(getContext());
         if (getArguments() != null) {
@@ -114,7 +114,7 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
             ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(codigoCliente,terminoPago);
 
         if(ListaProductoEntity==null || ListaProductoEntity.size()<0){
-            Toast.makeText(getContext(),"Actualiza tus parametros, no hay productos disponibles", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),getActivity().getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_LONG).show();
             getActivity().getSupportFragmentManager().popBackStack();
         }else{
             listaProductoAdapter = new ListaProductoAdapter(getActivity(), ListaProductoDao.getInstance().getLeads(ListaProductoEntity));
@@ -157,7 +157,7 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Producto");
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.find)+" "+getActivity().getResources().getString(R.string.article));
     }
     @Override
     public boolean onQueryTextSubmit(String query) {

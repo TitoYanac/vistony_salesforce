@@ -65,7 +65,7 @@
                     android:layout_marginBottom="15dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="CANCELAR"
+                    android:text="@string/dialog_btn_cancelar"
                     android:textColor="#0957C3" />
 
                 <Button
@@ -76,7 +76,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="ACEPTAR"
+                    android:text="@string/accept"
+                    android:textAllCaps="true"
                     android:textColor="#0957C3" />
 
             </LinearLayout>

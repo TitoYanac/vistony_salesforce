@@ -81,7 +81,7 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         hiloObtenerHistoricoFacturas = new HiloObtenerHistoricoFacturas();
         setHasOptionsMenu(true);
-        getActivity().setTitle("Consulta Factura");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.query_invoices));
 
 
 
@@ -170,7 +170,7 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Cliente");
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.find_client));
     }
 
     @Override
@@ -224,7 +224,7 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
             ArrayList<ListaHistoricoFacturasEntity> Lista = (ArrayList<ListaHistoricoFacturasEntity>) result;
             if (Lista.isEmpty())
             {
-                Toast.makeText(getContext(), "No se Encontraron Documentos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
                 listviewhistoricofacturas.setAdapter(null);
             }else
             {
@@ -232,7 +232,7 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
                 listaHistoricoFacturasAdapter = new ListaHistoricoFacturasAdapter(getActivity(),
                         ListaHistoricoFacturasDao.getInstance().getLeads(Lista));
                 listviewhistoricofacturas.setAdapter(listaHistoricoFacturasAdapter);
-                Toast.makeText(getContext(), "Facturas Obtenidas Correctamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.msm_data_available), Toast.LENGTH_SHORT).show();
                 String montoordenventa;
                 for(int i=0;i<Lista.size();i++)
                 {

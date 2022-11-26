@@ -73,11 +73,11 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
 
 
     public Dialog Alerta() {
-        String mensaje = "La Opcion de anular deposito solo puede usarse con acceso a internet";
+        String mensaje = getContext().getResources().getString(R.string.cancel_deposit_available_conexion_internet);
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.layout_dialog);
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("MENSAJE");
+        textTitle.setText(getContext().getResources().getString(R.string.mesagge).toUpperCase());
         final TextView textMsj = dialog.findViewById(R.id.textViewMsj);
         textMsj.setText(mensaje);
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
@@ -86,7 +86,7 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         //Button dialogButtonExit = (Button) dialog.findViewById(R.id.dialogButtonCancel);
         // if button is clicked, close the custom dialog
-        dialogButton.setText("ACEPTAR");
+        dialogButton.setText(getContext().getResources().getString(R.string.accept).toUpperCase());
         // dialogButtonExit.setVisibility(View.INVISIBLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -186,11 +186,11 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
             public void onClick(View v) {
                 //Toast.makeText(getContext(), "click", Toast.LENGTH_LONG).show();
                         if(lead.getEstado().equals("CONCILIADO")) {
-                            Toast.makeText(getContext(), "No se puede Anular un Deposito - Conciliado", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), getContext().getResources().getText(R.string.not_cancel_receip_reconciled), Toast.LENGTH_LONG).show();
                         }else if(lead.getEstado().equals("Anulado")){
-                            Toast.makeText(getContext(), "El deposito ya esta anulado", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),getContext().getResources().getText(R.string.not_cancel_deposit) , Toast.LENGTH_LONG).show();
                         }else if(lead.getPospay().equals("Y")){
-                            Toast.makeText(getContext(), "No se puede Anular un Depósito POS", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), getContext().getResources().getText(R.string.not_cancel_deposit_POS), Toast.LENGTH_LONG).show();
                         }else if(lead.getEstado().equals("Pendiente")){
                             ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                             NetworkInfo networkInfo = manager.getActiveNetworkInfo();
@@ -248,7 +248,7 @@ public class ListaHistoricoDepositoAdapter extends ArrayAdapter<ListaHistoricoDe
                                                      //String Texto1=Texto;
                                                      if(lead.getEstado().equals("Anulado"))
                                                      {
-                                                         Toast.makeText(getContext(), "El Deposito Anulado no tiene recibos vinculados", Toast.LENGTH_LONG).show();
+                                                         Toast.makeText(getContext(), getContext().getResources().getText(R.string.cancel_deposit_not_linked_receips), Toast.LENGTH_LONG).show();
                                                      }
                                                      else if(lead.getEstado().equals("Pendiente")) {
                                                          ArraylistaHistoricoDepositoEntity = new ArrayList<ListaHistoricoDepositoEntity>();

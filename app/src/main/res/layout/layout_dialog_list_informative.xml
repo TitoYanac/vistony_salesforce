@@ -54,9 +54,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:text="RECIBOS"
+                android:text="@string/receip"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textAllCaps="true"
+                />
             <ListView
                 android:id="@+id/lv_pending_collection"
                 android:layout_width="wrap_content"
@@ -86,7 +88,7 @@
                 android:background="@drawable/custom_border_button"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
-                android:text="ACEPTAR"
+                android:text="@string/accept"
                 android:textColor="#0957C3" />
 
         </LinearLayout>

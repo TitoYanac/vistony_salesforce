@@ -34,7 +34,8 @@
                 android:maxLines="1"
                 android:minLines="1"
                 android:scrollbars="vertical"
-                android:text="ENVIO DE SMS"
+                android:text="@string/send_SMS"
+                android:textAllCaps="true"
                 android:textColor="#000000"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -56,7 +57,7 @@
                     android:textColor="#000000"
                     android:layout_weight="0.5"
                     android:textSize="15dp"
-                    android:text="N° Movil:" />
+                    android:text="@string/cellphone" />
 
                 <EditText
                     android:id="@+id/et_numero_telefonico"
@@ -85,7 +86,8 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="ENVIAR"
+                    android:text="@string/send"
+                    android:textAllCaps="true"
                     android:textColor="#0957C3" />
                 <Button
                     android:id="@+id/dialogButtonCancel"
@@ -95,7 +97,8 @@
                     android:layout_marginBottom="15dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="CANCELAR"
+                    android:text="@string/cancel"
+                    android:textAllCaps="true"
                     android:textColor="#0957C3" />
 
 

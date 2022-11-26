@@ -19,7 +19,7 @@
         android:layout_weight="4"
         android:background="@drawable/edittext"
         android:enabled="true"
-        android:hint=" Escriba Comentario"
+        android:hint="@string/entry_commentary"
         android:maxLength="150"
         android:paddingLeft="5dp" />
 

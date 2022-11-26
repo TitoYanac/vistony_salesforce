@@ -510,7 +510,7 @@ public class CobranzaDetalleView extends Fragment {
         );
 
 
-        getActivity().setTitle("Cobranza");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.collection));
         listViewCobranzaDetalle = (ListView) v.findViewById(R.id.listViewCobranzaCabecera);
         obtenerWSCobranzaDetalle = new ObtenerWSCobranzaDetalle();
 
@@ -566,7 +566,7 @@ public class CobranzaDetalleView extends Fragment {
                         Log.e("Monto montoIngresado.compareTo(BigDecimal.ZERO) =>", "" + montoIngresado.compareTo(BigDecimal.ZERO));
                         if (!(montoIngresado.compareTo(BigDecimal.ZERO) > 0)|| Float.parseFloat(et_cobrado_edit.getText().toString()) < 1 ) {
                             et_cobrado_edit.setText(null);
-                            Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getActivity().getResources().getString(R.string.entry_amount_collection_valid) , Toast.LENGTH_SHORT).show();
                         } else {
 
 
@@ -627,7 +627,7 @@ public class CobranzaDetalleView extends Fragment {
                                         listaClienteDetalleAdapterFragment.get(i).setNuevo_saldo(nuevo_saldo.setScale(3, RoundingMode.HALF_UP).toString());
 
                                     } else {
-                                        Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), getActivity().getResources().getString(R.string.entry_amount_collection_valid), Toast.LENGTH_SHORT).show();
 
                                     }
                                     obtenerWSCobranzaDetalle = new ObtenerWSCobranzaDetalle();
@@ -637,7 +637,7 @@ public class CobranzaDetalleView extends Fragment {
 
                         }
                     } else {
-                        Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getActivity().getResources().getString(R.string.entry_amount_collection_valid), Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -796,9 +796,9 @@ public class CobranzaDetalleView extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setCancelable(true);
         if (estado) {
-            builder.setTitle("Advertencia")
-                    .setMessage("Esta Seguro de Marcar el Recibo como Bancarizado")
-                    .setPositiveButton("OK",
+            builder.setTitle(getActivity().getResources().getString(R.string.warning))
+                    .setMessage(getActivity().getResources().getString(R.string.mse_are_you_sure_receip_bank))
+                    .setPositiveButton(getActivity().getResources().getText(R.string.accept),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -806,7 +806,7 @@ public class CobranzaDetalleView extends Fragment {
 
                                 }
                             })
-                    .setNegativeButton("CANCELAR",
+                    .setNegativeButton(getActivity().getResources().getText(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -814,9 +814,9 @@ public class CobranzaDetalleView extends Fragment {
                                 }
                             });
         } else {
-            builder.setTitle("Advertencia")
-                    .setMessage("Esta Seguro de DesMarcar el Recibo como Bancarizado")
-                    .setPositiveButton("OK",
+            builder.setTitle(getActivity().getResources().getString(R.string.warning))
+                    .setMessage(getActivity().getResources().getString(R.string.mse_are_you_sure_incheck_receip_bank))
+                    .setPositiveButton(getActivity().getResources().getText(R.string.accept),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -824,7 +824,7 @@ public class CobranzaDetalleView extends Fragment {
 
                                 }
                             })
-                    .setNegativeButton("CANCELAR",
+                    .setNegativeButton(getActivity().getResources().getText(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -899,7 +899,7 @@ public class CobranzaDetalleView extends Fragment {
             }
             if (vinculaimpresora.equals("0")) {
                 generarpdf.setIcon(R.drawable.ic_warning_yellow_24dp);
-                Toast.makeText(getContext(), "Advertencia: Impresora No Vinculada - Revisar en Configuracion" + comentario, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.printer_not_linked) + comentario, Toast.LENGTH_SHORT).show();
             }
 
         } else {
@@ -961,9 +961,9 @@ public class CobranzaDetalleView extends Fragment {
                 if (SesionEntity.fuerzatrabajo_id == null && SesionEntity.nombrefuerzadetrabajo == null && SesionEntity.compania_id == null) {
                     //if(true){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Advertencia")
-                            .setMessage("Tu sesión a expirado")
-                            .setPositiveButton("INICIAR SESIóN",
+                    builder.setTitle(getActivity().getResources().getString(R.string.warning))
+                            .setMessage(getActivity().getResources().getString(R.string.your_session_expired))
+                            .setPositiveButton(getActivity().getResources().getString(R.string.start_session),
                                     (dialog, which) -> {
                                         Intent i = getContext().getPackageManager().getLaunchIntentForPackage(getContext().getPackageName());
                                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -1091,17 +1091,17 @@ public class CobranzaDetalleView extends Fragment {
     public AlertDialog alertaGuardarCobranza() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Advertencia")
-                .setMessage("Esta Seguro de Guardar la Cobranza?")
-                .setPositiveButton("OK",
+        builder.setTitle(getActivity().getResources().getString(R.string.warning))
+                .setMessage(getActivity().getResources().getString(R.string.mse_are_you_sure_save_collection))
+                .setPositiveButton(getActivity().getResources().getString(R.string.accept),
                         (dialog, which) -> {
                             if (et_cobrado_edit.getText().toString().equals("0")) {
-                                Toast.makeText(getContext(), "No puedes Guardar un Recibo con valor 0 ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.not_save_receip_zero), Toast.LENGTH_SHORT).show();
                             } else {
 
                                 if (vinculaimpresora.equals("0")) {
                                     //generarpdf.setEnabled(true);
-                                    Toast.makeText(getContext(), "Impresora No Vinculada - Favor de Vincular para proseguir", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), getActivity().getResources().getString(R.string.printer_not_linked), Toast.LENGTH_SHORT).show();
                                 } else {
                                     switch (SesionEntity.pagopos) {
                                         case "Y":
@@ -1158,14 +1158,14 @@ public class CobranzaDetalleView extends Fragment {
                                         imbcancelar.setEnabled(false);
                                         et_cobrado_edit.setEnabled(false);
 
-                                        Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), getActivity().getResources().getString(R.string.save_collection_correctement), Toast.LENGTH_SHORT).show();
                                         //Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
                                         //enviarWSCobranzaDetalle =  new EnviarWSCobranzaDetalle();
                                         //enviarWSCobranzaDetalle.execute();
 
 
                                     } else {
-                                        Toast.makeText(getContext(), "No se Guardo la Cobranza Comunicarse con El Administrador", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), getActivity().getResources().getString(R.string.not_save_collection_call_administrator) , Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -1173,7 +1173,7 @@ public class CobranzaDetalleView extends Fragment {
 
 
                         })
-                .setNegativeButton("CANCELAR",
+                .setNegativeButton(getActivity().getResources().getString(R.string.cancel),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -1187,9 +1187,9 @@ public class CobranzaDetalleView extends Fragment {
     public AlertDialog alertaGenerarPDF() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Advertencia")
-                .setMessage("Esta Seguro de Generar el Archivo PDF?")
-                .setPositiveButton("OK",
+        builder.setTitle(getActivity().getResources().getString(R.string.warning))
+                .setMessage(getActivity().getResources().getString(R.string.mse_are_you_sure_generate_PDF))
+                .setPositiveButton(getActivity().getResources().getString(R.string.accept),
 
                         (dialog, which) -> {
 
@@ -1275,12 +1275,12 @@ public class CobranzaDetalleView extends Fragment {
                                         Log.e("REOS","CobranzaDetalleView-alertaGenerarPDF-MenuView.getPrinterInstance().printPdf-e: "+e.toString());
                                     }
                                 }
-                                Toast.makeText(getContext(), "Se creo tu archivo pdf", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.PDF_generate_sucessful),  Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(getContext(), "No se creo el archivo pdf", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.not_generate_PDF) , Toast.LENGTH_SHORT).show();
                             }
                         })
-                .setNegativeButton("CANCELAR",
+                .setNegativeButton(getActivity().getResources().getString(R.string.cancel),
                         (dialog, which) -> {
                             //listener.onNegativeButtonClick();
                         });
@@ -1291,9 +1291,9 @@ public class CobranzaDetalleView extends Fragment {
     public AlertDialog alertaValidarQR() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Advertencia")
-                .setMessage("Iniciar validacion QR?")
-                .setPositiveButton("OK",
+        builder.setTitle(getActivity().getResources().getString(R.string.warning))
+                .setMessage(getActivity().getResources().getString(R.string.start_validation_qr))
+                .setPositiveButton(getActivity().getResources().getString(R.string.accept),
                         (dialog, which) -> {
                             SesionEntity.imagen = "R" + recibo;
                             final Activity activity = getActivity();
@@ -1308,7 +1308,7 @@ public class CobranzaDetalleView extends Fragment {
                             integrator.initiateScan();
 
                         })
-                .setNegativeButton("CANCELAR",
+                .setNegativeButton(getActivity().getResources().getString(R.string.cancel),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -1614,11 +1614,11 @@ public class CobranzaDetalleView extends Fragment {
                 Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-mPhoneNumber:" + mPhoneNumber);
                 Log.e("REOS", "CobranzaDetalleView-GuardarCobranzaSQLite-Guardar-telefono:" + telefono);
                 if (telefono.equals(mPhoneNumber)) {
-                    Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getActivity().getResources().getString(R.string.cellphone_linked_seller), Toast.LENGTH_SHORT).show();
                 } else {
                     //telefono="990249315";
-                    sendSMS(telefono);
-                    Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
+                    //sendSMS(telefono);
+                    //Toast.makeText(getContext(), getActivity().getResources().getString(R.string.sms_send_client) + telefono, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1634,7 +1634,7 @@ public class CobranzaDetalleView extends Fragment {
         }
         else {
             et_cobrado_edit.setText(null);
-            Toast.makeText(getContext(), "Ingrese un Monto de cobranza Valido, verifique su cobranza por:  "+valorcobranza, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getActivity().getResources().getString(R.string.entry_amount_collection_valid) +valorcobranza, Toast.LENGTH_SHORT).show();
             Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
             drawable = DrawableCompat.wrap(drawable);
             DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
@@ -1653,7 +1653,7 @@ public class CobranzaDetalleView extends Fragment {
         return resultado;
     }
 
-
+/*
     private void UpdateSendReceipt()
     {
         Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
@@ -1674,7 +1674,7 @@ public class CobranzaDetalleView extends Fragment {
         imbcancelar.setEnabled(false);
         et_cobrado_edit.setEnabled(false);
         Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-    }
+    }*/
 
     private void addDepositPOS(String montocobrado)
     {
@@ -1707,7 +1707,7 @@ public class CobranzaDetalleView extends Fragment {
                 banco_id,
                 SesionEntity.compania_id,
                 montocobrado,
-                "Deposito",
+                getContext().getResources().getString(R.string.menu_deposito),
                 bancarizado,
                 "19000101",
                 fecha,
@@ -1726,7 +1726,7 @@ public class CobranzaDetalleView extends Fragment {
                     banco_id
             );
         }
-        Toast.makeText(getContext(), "Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getActivity().getResources().getString(R.string.deposit_register_sucessful), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -1893,12 +1893,12 @@ public class CobranzaDetalleView extends Fragment {
                     cobranzaDetalleSQLiteDao.ActualizaValidacionQRCobranzaDetalle(recibo,SesionEntity.compania_id,SesionEntity.usuario_id);
                     chk_validacionqr.setChecked(true);
                     cobranzaRepository.PendingCollectionQR(context);
-                    Toast.makeText(getContext(), "Codigo Actualizado Correctamente!!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getActivity().getResources().getText(R.string.code_update_sucessful), Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
                 else
                 {
-                    Toast.makeText(getContext(), "El codigo Ingresado no es el Correcto, Intente Nuevamente!!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getActivity().getResources().getText(R.string.code_error_retry), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -1935,7 +1935,7 @@ public class CobranzaDetalleView extends Fragment {
                     ,parts
                     , null
                     , null);
-            Toast.makeText(getContext(), "Mensaje de Texto Enviado Correctamente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getActivity().getResources().getText(R.string.sms_send_sucessful), Toast.LENGTH_SHORT).show();
             alertdialogInformative(getContext()).show();
         }
         catch (Exception e)
@@ -1954,14 +1954,14 @@ public class CobranzaDetalleView extends Fragment {
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
         TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj);
         TextView text=(TextView) dialog.findViewById(R.id.text);
-        text.setText("IMPORTANTE!!!");
+        text.setText(getActivity().getResources().getText(R.string.important));
         if(SesionEntity.perfil_id.equals("CHOFER"))
         {
-            textViewMsj.setText("El SMS fue enviado Correctamente!!!");
+            textViewMsj.setText(getActivity().getResources().getText(R.string.sms_send_sucessful));
         }
         else
         {
-            textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
+            textViewMsj.setText(getActivity().getResources().getText(R.string.sms_send_sucessful_get_code_client));
         }
         // if button is clicked, close the custom dialog
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {

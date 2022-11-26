@@ -276,7 +276,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
         tv_monto_consdeposito= (TextView) v.findViewById(R.id.tv_monto_consdeposito);
 
 
-        getActivity().setTitle("Pendientes Depósito");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.pending_deposit));
         return v;
     }
 
@@ -318,7 +318,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
                 listaViewCobranzas.setAdapter(listaConsDepositoAdapter);
                 listaConsDepositoAdapter.notifyDataSetChanged();
             }else{
-                Toast.makeText(getContext(), "No se encontraron Cobranzas del dia", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_not_collection_of_day), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -473,12 +473,12 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
                 }
                 else
                   {
-                       Toast.makeText(getContext(), "No se eligio recibos, elegir recibir para depositar", Toast.LENGTH_LONG).show();
+                       Toast.makeText(getContext(), getActivity().getResources().getString(R.string.mse_not_choise_receip), Toast.LENGTH_LONG).show();
                    }
 
                 return false;
             case R.id.seleccionar_todo:
-                alertaSeleccionartodo("Esta Seguro de Seleccionar todos los recibos?",getContext()).show();
+                alertaSeleccionartodo(getActivity().getResources().getString(R.string.mse_choise_all_receips) ,getContext()).show();
 
 
                 return false;

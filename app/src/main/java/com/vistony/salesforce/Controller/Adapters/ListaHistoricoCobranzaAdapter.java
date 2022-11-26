@@ -177,9 +177,9 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
                 //Toast.makeText(getContext(), "click", Toast.LENGTH_LONG).show();
 
                 if (lead.getEstado().equals("CONCILIADO")) {
-                    Toast.makeText(getContext(), "No se puede Anular un Recibo - Conciliado", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getContext().getResources().getText(R.string.not_cancel_receip_reconciled), Toast.LENGTH_LONG).show();
                 } else if (lead.getEstado().equals("Anulado")) {
-                    Toast.makeText(getContext(), "No se puede Anular un Recibo - Anulado", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getContext().getResources().getText(R.string.not_cancel_receip), Toast.LENGTH_LONG).show();
                 } else if (lead.getEstado().equals("Pendiente")) {
                     //createSimpleDialog(lead.getRecibo()) .show();
                     recibo = lead.getRecibo();
@@ -211,7 +211,7 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
         holder.imv_historico_cobranza_respuesta_ws.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertamostrarcomentario("Comentario Ws",lead.getMensajeWS()).show();
+                alertamostrarcomentario(Context.getResources().getString(R.string.mesagge_server) ,lead.getMensajeWS()).show();
             }
         });
 
@@ -273,7 +273,7 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
         textTitle.setText(Titulo);
 
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText((Comentario==null)?"Sin Comentario":Comentario);
+        textMsj.setText((Comentario==null)?Context.getResources().getText(R.string.none_commentary) :Comentario);
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
 

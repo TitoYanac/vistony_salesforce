@@ -82,13 +82,13 @@ public class AgenciaView extends Fragment implements SearchView.OnQueryTextListe
         String accion="inicio";
         String compuesto=Fragment+"-"+accion;
         mListener.onFragmentInteraction(compuesto,objeto);
-        activity.setTitle("ORDEN VENTA");
+        activity.setTitle(activity.getResources().getString(R.string.salesorder));
         return agenciaView;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        getActivity().setTitle("Agencias");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.agency));
         activity=getActivity();
         setHasOptionsMenu(true);
         agenciaSQLiteDao= new AgenciaSQLiteDao(getContext());
@@ -156,7 +156,7 @@ public class AgenciaView extends Fragment implements SearchView.OnQueryTextListe
         mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
         mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setQueryHint("Buscar Agencia");
+        mSearchView.setQueryHint(getActivity().getResources().getString(R.string.find)+" "+getActivity().getResources().getString(R.string.agency));
     }
     @Override
     public boolean onQueryTextSubmit(String query) {

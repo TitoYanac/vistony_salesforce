@@ -37,7 +37,7 @@
                     android:layout_height="30dp"
                     android:layout_weight="4"
                     android:enabled="true"
-                    android:hint="Elegir Cliente................"
+                    android:hint="@string/choise_client"
                     android:textAlignment="center"
                     android:text=""
                     android:textSize="20dp" />
@@ -93,7 +93,7 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cantidad:"
+                android:text="@string/quantity"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
 
@@ -120,7 +120,7 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Monto:"
+                android:text="@string/amount"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
 

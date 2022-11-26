@@ -145,9 +145,10 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
                             break;
                         case "peru":
                         case "espania":
+                        case "marruecos":
                             if(Double.parseDouble (lead.getStock()) <=0)
                             {
-                                alertaProductoSinStock(getContext(), "El Producto Elegido tiene Stock 0,desea continuar?", lead).show();
+                                alertaProductoSinStock(getContext(), Context.getResources().getString(R.string.article_stock_zero), lead).show();
                             }else
                                 {
                                     sendArrayProduct(lead);

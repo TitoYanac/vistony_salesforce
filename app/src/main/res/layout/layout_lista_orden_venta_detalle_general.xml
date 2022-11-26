@@ -56,7 +56,7 @@
                 android:id="@+id/lbl_orden_detalle_stock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stock:"
+                android:text="@string/stock"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
@@ -65,13 +65,13 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="Stock1" />
+                android:text="@string/stock" />
 
             <TextView
                 android:id="@+id/lbl_orden_detalle_cantidad"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:text="Cantidad:"
+                android:text="@string/quantity"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <EditText
@@ -104,7 +104,7 @@
                 android:id="@+id/lbl_orden_detalle_galon_unitario"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:text="Gal Unit:"
+                android:text="@string/gallon"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
@@ -113,13 +113,13 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="Gal Unit" />
+                android:text="@string/gallon" />
 
             <TextView
                 android:id="@+id/lbl_orden_detalle_galon_acumulado"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Gal Total:"
+                android:text="@string/gallon_total"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
@@ -128,7 +128,7 @@
                 android:layout_height="match_parent"
                 android:textAlignment="center"
                 android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="Gal 100" />
+                android:text="@string/gallon_total" />
         </TableRow>
 
         <TableRow
@@ -141,7 +141,7 @@
                 android:id="@+id/lbl_orden_detalle_precio"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:text="Pre Unit:"
+                android:text="@string/price"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
@@ -150,14 +150,14 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="Precio1" />
+                android:text="@string/price" />
 
             <TextView
                 android:id="@+id/lbl_editDspPorcentaje"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="Desct %"
+                android:text="@string/descount"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <EditText
@@ -253,13 +253,13 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="IGV1" />
+                android:text="@string/tax_code" />
 
             <TextView
                 android:id="@+id/lbl_orden_detalle_total"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Total:"
+                android:text="@string/total"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textStyle="bold" />
 
@@ -270,7 +270,7 @@
                 android:textAlignment="center"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textStyle="bold"
-                tools:text="Total1" />
+                android:text="@string/total" />
         </TableRow>
 
         <TableRow
@@ -283,7 +283,7 @@
                 android:id="@+id/lbl_orden_detalle_promocion_cabecera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/lbl_promotion"
+                android:text="@string/promotion"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
             <ImageView
@@ -297,7 +297,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="Borrar:"
+                android:text="@string/erase"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textStyle="bold" />
 

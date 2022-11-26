@@ -14,6 +14,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.DepositEntity;
 import com.vistony.salesforce.Entity.SQLite.BancoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
 
@@ -228,15 +229,15 @@ public class CobranzaCabeceraSQLiteDao {
                 //deposito.setChkdepositado(fila.getString(5));
                 //deposito.setChkanulado(fila.getString(6));
                 deposito.setSlpCode(fila.getString(7));
-                if(fila.getString(8).equals("Deposito"))
+                if(fila.getString(8).equals(Context.getResources().getString(R.string.menu_deposito)))
                 {
                     deposito_id="DE";
                 }
-                else if(fila.getString(8).equals("Cheque"))
+                else if(fila.getString(8).equals(Context.getResources().getString(R.string.cheque)))
                 {
                     deposito_id="CH";
                 }
-                else if(fila.getString(8).equals("ChequeDia"))
+                else if(fila.getString(8).equals(Context.getResources().getString(R.string.check_day)))
                 {
                     deposito_id="CHD";
                 }
@@ -630,15 +631,15 @@ public class CobranzaCabeceraSQLiteDao {
                 //deposito.setChkdepositado(fila.getString(5));
                 //deposito.setChkanulado(fila.getString(6));
                 deposito.setSlpCode(fila.getString(7));
-                if(fila.getString(8).equals("Deposito"))
+                if(fila.getString(8).equals(Context.getResources().getString(R.string.menu_deposito)))
                 {
                     deposito_id="DE";
                 }
-                else if(fila.getString(8).equals("Cheque"))
+                else if(fila.getString(8).equals(Context.getResources().getString(R.string.cheque)))
                 {
                     deposito_id="CH";
                 }
-                else if(fila.getString(8).equals("ChequeDia"))
+                else if(fila.getString(8).equals(Context.getResources().getString(R.string.check_day)))
                 {
                     deposito_id="CHD";
                 }

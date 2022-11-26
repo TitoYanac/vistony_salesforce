@@ -10,14 +10,15 @@
     android:paddingTop="8dp"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="8dp">
+
     <TextView
         android:id="@+id/lbl_orden_venta_ERP_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="10dp"
-        android:text="N° Orden:"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:text="@string/code"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_orden_venta_ERP_id"
@@ -26,8 +27,7 @@
         android:layout_marginLeft="95dp"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
-        android:text="1"
-
+        android:text="@string/code"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
@@ -45,7 +45,7 @@
         android:layout_marginLeft="95dp"
         android:textStyle="bold"
         android:layout_marginTop="30dp"
-        android:text="00000000"
+        android:text="@string/ruc"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
     <TextView
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="50dp"
-        android:text="Cliente:"
+        android:text="@string/client"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
@@ -63,7 +63,7 @@
         android:layout_height="20dp"
         android:layout_marginLeft="95dp"
         android:layout_marginTop="50dp"
-        android:text="Cliente01"
+        android:text="@string/client"
         android:textStyle="bold"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="70dp"
-        android:text="Monto"
+        android:text="@string/amount"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
@@ -83,7 +83,7 @@
         android:layout_marginLeft="95dp"
         android:layout_marginTop="70dp"
         android:textStyle="bold"
-        android:text="0.00"
+        android:text="@string/amount"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="95dp"
         android:layout_marginTop="90dp"
-        android:text="Estado"
+        android:text="@string/status"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textStyle="bold" />
 
@@ -102,7 +102,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="90dp"
-        android:text="Estado"
+        android:text="@string/status"
         android:textAppearance="?attr/textAppearanceListItem" />
 
 
@@ -131,7 +131,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="170dp"
         android:layout_marginTop="120dp"
-        android:text="Recibido"
+        android:text="@string/response"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <CheckBox
@@ -149,7 +149,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="120dp"
-        android:text="Envio"
+        android:text="@string/send"
         android:textAppearance="?attr/textAppearanceListItem" />
 
 
@@ -169,7 +169,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="250dp"
         android:layout_marginTop="120dp"
-        android:text="Respuesta"
+        android:text="@string/mesagge"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <ImageView

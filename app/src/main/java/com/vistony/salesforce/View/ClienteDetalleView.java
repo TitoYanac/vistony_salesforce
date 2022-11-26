@@ -310,7 +310,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         texto=new String();
         setHasOptionsMenu(true);
 
-        getActivity().setTitle("Documento Con Deuda");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.document_with_debt));
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         if (getArguments() != null) {
 
@@ -385,7 +385,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
 
             tv_monto_cliente_detalle.setText(Convert.currencyForView(monto_cliente_detalle.setScale(3, RoundingMode.HALF_UP).toString()));
 
-            pd = ProgressDialog.show(getContext(), "Por favor espere", "Consultando el acceso", true, false);
+            pd = ProgressDialog.show(getContext(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.querying_dates), true, false);
 
             listaClienteDetalleDao = new ListaClienteDetalleDao();
             pd.cancel();

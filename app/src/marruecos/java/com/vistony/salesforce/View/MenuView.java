@@ -425,7 +425,7 @@ public class MenuView extends AppCompatActivity
                 break;
             case "peru":
                 case "espania":
-
+            case "marruecos":
                 navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
@@ -2093,7 +2093,7 @@ public class MenuView extends AppCompatActivity
 
                     SesionEntity.imagen = "DEP";
 
-                    Toast.makeText(this, "Imagen guardada correctamente...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, this.getResources().getString(R.string.image_save_galery), Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
@@ -2137,7 +2137,7 @@ public class MenuView extends AppCompatActivity
                         drawable4 = DrawableCompat.wrap(drawable4);
                     DrawableCompat.setTint(drawable4, getResources().getColor(R.color.Black));
 
-                    Toast.makeText(this, "Imagen adjuntada...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, this.getResources().getString(R.string.image_save_galery), Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (Exception e) {
@@ -2162,7 +2162,7 @@ public class MenuView extends AppCompatActivity
                    if (data != null) {
                        //Toast.makeText(this, "QR ORDEN VENTA", Toast.LENGTH_LONG).show();
                        if (data == null) {
-                           Toast.makeText(this, "Tu has canceladp el Scaneo", Toast.LENGTH_LONG).show();
+                           Toast.makeText(this, this.getResources().getString(R.string.mse_not_scanner_qr), Toast.LENGTH_LONG).show();
                        } else {
                        String decData = "";
                        try {
@@ -2170,7 +2170,7 @@ public class MenuView extends AppCompatActivity
                        } catch (Exception e) {
                            e.printStackTrace();
                        }
-                           Toast.makeText(this, "Leído: " + data.toString(), Toast.LENGTH_SHORT).show();
+                           Toast.makeText(this, this.getResources().getString(R.string.read) + data.toString(), Toast.LENGTH_SHORT).show();
                            //alertdialogSalesOrderQR(this,decData).show();
                        }
                    }
@@ -2193,10 +2193,10 @@ public class MenuView extends AppCompatActivity
 
         if (result != null) {
             if (result.getContents() == null) {
-                Toast.makeText(this, "Tu has canceladp el Scaneo", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, this.getResources().getString(R.string.mse_not_scanner_qr), Toast.LENGTH_LONG).show();
             } else {
                 String decData = "";
-                Toast.makeText(this, "Leído2: " + result.getContents().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, this.getResources().getString(R.string.read) + result.getContents().toString(), Toast.LENGTH_SHORT).show();
                 try {
                     decData = decrypt("Vistony2019*", Base64.decode(result.getContents().getBytes("UTF-16LE"), Base64.DEFAULT));
                 } catch (Exception e) {
@@ -2209,7 +2209,7 @@ public class MenuView extends AppCompatActivity
 
                 if (QRScaneado.equals(cobranzaDetalleView.recibo)) {
                     recibovalidado = QRScaneado;
-                    Toast.makeText(this, "QR Validado Correctamente", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, this.getResources().getString(R.string.qr_validate_sucessful), Toast.LENGTH_LONG).show();
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -2227,7 +2227,10 @@ public class MenuView extends AppCompatActivity
                     }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
                 } else {
-                    Toast.makeText(this, "El QR Scaneado no coindice con el Generado: "+QRScaneado, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,
+                            this.getResources().getString(R.string.qr_scan_not_linked)+
+                    this.getResources().getString(R.string.space)
+                                    +QRScaneado, Toast.LENGTH_LONG).show();
                 }
             }
         }

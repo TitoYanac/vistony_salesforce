@@ -46,7 +46,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_weight="4"
                     android:background="@drawable/custom_border_button_red"
-                    android:text="CONSULTAR"
+                    android:text="@string/query"
                     android:textColor="@color/white"
                     android:drawableLeft="@drawable/ic_search_white_24dp"
                     />
@@ -74,7 +74,7 @@
                     android:layout_marginTop="6dp"
                     android:layout_weight="4"
                     android:background="@color/colorPrimary"
-                    android:text="Orden Venta"
+                    android:text="@string/salesorder"
                     android:textAlignment="center"
                     android:textColor="@color/white" />
             </TableRow>
@@ -102,7 +102,7 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cantidad:"
+                android:text="@string/quantity"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
 
@@ -126,7 +126,7 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Monto:"
+                android:text="@string/amount"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
 
