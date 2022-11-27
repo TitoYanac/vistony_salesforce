@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="80dp"
-            android:text="Cuota"
+            android:text="@string/quote"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="70dp"
             android:layout_marginTop="80dp"
-            android:text="Cuota1"
+            android:text="@string/quote"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold" />
 
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="100dp"
-            android:text="Avance"
+            android:text="@string/avance"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="70dp"
             android:layout_marginTop="100dp"
-            android:text="Avance1"
+            android:text="@string/avance"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold" />
 
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="210dp"
             android:layout_marginTop="80dp"
-            android:text="UMD"
+            android:text="@string/umd"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="290dp"
             android:layout_marginTop="80dp"
-            android:text="UMD"
+            android:text="@string/umd"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold" />
 
@@ -107,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="210dp"
             android:layout_marginTop="100dp"
-            android:text="% Avance"
+            android:text="@string/advance_percent"
             android:textAppearance="?attr/textAppearanceListItem" />
 
         <TextView
@@ -116,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="290dp"
             android:layout_marginTop="100dp"
-            android:text="%"
+            android:text="@string/advance_percent"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textStyle="bold" />
 

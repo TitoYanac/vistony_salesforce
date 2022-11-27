@@ -72,7 +72,7 @@ public class ContenedorComisionesView extends Fragment {
         activity=getActivity();
         context=getContext();
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Avance Ventas");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.commissions));
         if (getArguments() != null) {
 
         }
@@ -87,8 +87,8 @@ public class ContenedorComisionesView extends Fragment {
         viewPager=v.findViewById(R.id.viewpager);
         tabLayout=v.findViewById(R.id.tablayout);
         pageAdapter= new PageAdapter(getChildFragmentManager());
-        pageAdapter.addFRagment(new ComisionesView(),"PERIODO ACTUAL");
-        pageAdapter.addFRagment(new PronosticoComisionesView(),"PERIODO ANTERIOR");
+        pageAdapter.addFRagment(new ComisionesView(),getActivity().getResources().getString(R.string.period_current));
+        pageAdapter.addFRagment(new PronosticoComisionesView(),getActivity().getResources().getString(R.string.period_before));
         viewPager.setAdapter(pageAdapter);
         tabLayout.setupWithViewPager(viewPager);
         ComisionesView.newInstance("");

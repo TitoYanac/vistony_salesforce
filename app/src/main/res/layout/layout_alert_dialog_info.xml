@@ -63,7 +63,8 @@
                     android:layout_marginLeft="70dp"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button"
-                    android:text="ACEPTAR"
+                    android:text="@string/accept"
+                    android:textAllCaps="true"
                     android:textColor="#0957C3" />
 
             </LinearLayout>

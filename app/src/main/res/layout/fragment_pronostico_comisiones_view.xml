@@ -28,7 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="Año:"
+                    android:text="@string/year"
                     />
                 <TextView
                     android:id="@+id/tv_ano"
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
                     android:layout_weight="4"
-                    android:text="Periodo:"
+                    android:text="@string/period"
                     android:gravity="center_horizontal"
                     android:layout_gravity="center"
                     />
@@ -73,7 +73,8 @@
                     android:layout_marginTop="6dp"
                     android:layout_weight="4"
                     android:background="@color/colorPrimary"
-                    android:text="RESUMEN"
+                    android:text="@string/summary"
+                    android:textAllCaps="true"
                     android:textAlignment="center"
                     android:textColor="@color/white" />
             </TableRow>
@@ -96,7 +97,8 @@
             android:layout_marginTop="6dp"
             android:layout_weight="4"
             android:background="@color/colorPrimary"
-            android:text="SEMAFORO"
+            android:text="@string/variable"
+            android:textAllCaps="true"
             android:textAlignment="center"
             android:textColor="@color/white" />
         <!--<LinearLayout

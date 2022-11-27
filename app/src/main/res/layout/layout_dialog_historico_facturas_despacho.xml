@@ -49,35 +49,38 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal|center_vertical"
                     android:layout_marginLeft="20dp"
-                    android:text="Documento:"
+                    android:text="@string/documents"
                     android:textSize="18dp" />
+
                 <TextView
                     android:id="@+id/tv_historico_facturas_despacho_nrofactura"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="130dp"
                     android:gravity="center_horizontal|center_vertical"
-                    android:layout_marginLeft="120dp"
-                    android:textStyle="bold"
-                    android:text="Documento1"
-                    android:textSize="18dp" />
+                    android:text="@string/documents"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/lbl_historico_facturas_despacho_nombrechofer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:layout_marginTop="20dp"
                     android:layout_marginLeft="20dp"
-                    android:text="Chofer:"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/driver"
                     android:textSize="18dp" />
+
                 <TextView
                     android:id="@+id/tv_historico_facturas_despacho_nombrechofer"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
+                    android:layout_marginLeft="130dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="120dp"
-                    android:textStyle="bold"
-                    android:text="Chofer1"
-                    android:textSize="18dp" />
+                    android:text="@string/driver"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
                 <TextView
                     android:id="@+id/lbl_historico_facturas_despacho_fechaprogramaciondespacho"
                     android:layout_width="wrap_content"
@@ -85,7 +88,7 @@
                     android:gravity="center_horizontal|center_vertical"
                     android:layout_marginTop="40dp"
                     android:layout_marginLeft="20dp"
-                    android:text="F.Despacho:"
+                    android:text="@string/dispatch"
                     android:textSize="18dp" />
                 <TextView
                     android:id="@+id/tv_historico_facturas_despacho_fechaprogramaciondespacho"
@@ -93,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal|center_vertical"
                     android:layout_marginTop="40dp"
-                    android:layout_marginLeft="120dp"
+                    android:layout_marginLeft="130dp"
                     android:textStyle="bold"
                     android:text="1900-01-01"
                     android:textSize="18dp" />
@@ -104,7 +107,7 @@
                     android:gravity="center_horizontal|center_vertical"
                     android:layout_marginTop="60dp"
                     android:layout_marginLeft="20dp"
-                    android:text="Estado:"
+                    android:text="@string/status"
                     android:textSize="18dp" />
                 <TextView
                     android:id="@+id/tv_historico_facturas_despacho_estadodespacho"
@@ -112,9 +115,9 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal|center_vertical"
                     android:layout_marginTop="60dp"
-                    android:layout_marginLeft="120dp"
+                    android:layout_marginLeft="130dp"
                     android:textStyle="bold"
-                    android:text="Estado1"
+                    android:text="@string/status"
                     android:textSize="18dp" />
                 <TextView
                     android:id="@+id/lbl_historico_facturas_despacho_motivoestado"
@@ -123,16 +126,16 @@
                     android:gravity="center_horizontal|center_vertical"
                     android:layout_marginTop="80dp"
                     android:layout_marginLeft="20dp"
-                    android:text="Motivo:"
+                    android:text="@string/reasons"
                     android:textSize="18dp" />
                 <TextView
                     android:id="@+id/tv_historico_facturas_despacho_motivoestado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="80dp"
-                    android:layout_marginLeft="120dp"
+                    android:layout_marginLeft="130dp"
                     android:textStyle="bold"
-                    android:text="Motivo1"
+                    android:text="@string/reasons"
                     android:textSize="18dp" />
                 <TextView
                     android:id="@+id/lbl_historico_facturas_despacho_telefono"
@@ -141,16 +144,16 @@
                     android:gravity="center_horizontal|center_vertical"
                     android:layout_marginTop="100dp"
                     android:layout_marginLeft="20dp"
-                    android:text="Telefono:"
+                    android:text="@string/phone"
                     android:textSize="18dp" />
                 <TextView
                     android:id="@+id/tv_historico_facturas_despacho_telefono"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="100dp"
-                    android:layout_marginLeft="120dp"
+                    android:layout_marginLeft="130dp"
                     android:textStyle="bold"
-                    android:text="Telefono1"
+                    android:text="@string/phone"
                     android:textSize="18dp" />
 
                 <ImageView
@@ -174,7 +177,8 @@
                 android:background="@drawable/custom_border_button"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
-                android:text="ACEPTAR"
+                android:text="@string/accept"
+                android:textAllCaps="true"
                 android:textColor="#0957C3" />
 
         </LinearLayout>

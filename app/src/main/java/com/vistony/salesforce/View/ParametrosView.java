@@ -347,9 +347,9 @@ ParametrosView extends Fragment {
                             parametrosSQLite.InsertaParametros("21", this.getResources().getString(R.string.colors_head), "0", getDateTime());
                             parametrosSQLite.InsertaParametros("22",  this.getResources().getString(R.string.colors_detail), "0", getDateTime());
                         }
-                        if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
+                        /*if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
                             parametrosSQLite.InsertaParametros("18", this.getResources().getString(R.string.price_list), "0", getDateTime());
-                        }
+                        }*/
                     }
                 }
                 break;

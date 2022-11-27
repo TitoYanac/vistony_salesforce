@@ -505,5 +505,47 @@ Factures par date</string>
     <string name="historical_sales_client">Historique des ventes par client</string>
     <string name="sales_commercialclass">Vente par Classe Affaires</string>
     <string name="consulting">Consultation</string>
+    <string name="driver">Chauffeur</string>
+    <string name="historical_SKU">Historique SKU</string>
+    <string name="historical_sales_six_months">
+        Historique des ventes sur 6 mois, produits non achetés sur 3 mois en rouge
+    </string>
+    <string name="line_business">Secteur "d'activité</string>
+    <string name="period_current">Période actuelle</string>
+    <string name="period_before">Période précédente</string>
+    <string name="commissions">Commissions</string>
+    <string name="quote">Quota</string>
+    <string name="advance_percent">% avance</string>
+    <string name="legend">Légende</string>
+    <string name="range_with_percent_max_and_minim_commissions">
+Les plages sont minimales et maximales, et sont exprimées en %</string>
+    <string name="id">ID</string>
+    <string name="max">Max</string>
+    <string name="min">Min</string>
+    <string name="year">An</string>
+    <string name="period">Période</string>
+    <string name="configuration_system">Configuration du système</string>
+    <string name="configuration_printer">Configuration du Imprimante</string>
+    <string name="configuration_menu">Menu Configuration</string>
+    <string name="delete_bd">Supprimer la base de données</string>
+    <string name="anality_app">Analyse Applicative</string>
+    <string name="enable_printer">Activer "l'imprimante</string>
+    <string name="liberaty_space">libérer de "l'espace</string>
+    <string name="linked_bd">Synchroniser la base de données</string>
+    <string name="loading">Mise en charge</string>
+    <string name="analysis_sucessful">Analyse envoyée au serveur</string>
+    <string name="are_you_sure_eliminate_bd">
+"L'application sera fermée et vous devrez vous reconnecter Êtes-vous sûr de vouloir supprimer la base de données locale ?</string>
+    <string name="yes_next">Oui continuer</string>
+    <string name="alert_1">
+Vous avez des dépôts en attente de synchronisation, vérifiez dans Consultation des dépôts</string>
+    <string name="alert_2">
+    Vous avez des reçus en attente de dépôt, déposez tous vos reçus avant de supprimer la base de données</string>
+    <string name="alert_3">
+Vous avez des reçus en attente de synchronisation, passez en revue dans la requête collectée</string>
+    <string name="alert_4">Vous avez des commandes client en attente "d'expédition, consultez-les dans la requête de commande client</string>
+    <string name="alert_5">Vous avez des reçus/commandes/visites en attente "d'être envoyés à SAP, fermez l'application et ré-entrez avec une connexion Internet</string>
+    <string name="alert_6">Cette option est activée avec Internet</string>
+
 
 </resources>

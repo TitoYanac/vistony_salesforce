@@ -205,8 +205,8 @@ public class ListaComisionesDetalleAdapter  extends
         ListView lv_legend_comissions=dialog.findViewById(R.id.lv_legend_comissions);
         TextView textViewMsj=(TextView) dialog.findViewById(R.id.textViewMsj_alert_dialog_info);
         TextView text=(TextView) dialog.findViewById(R.id.text_alert_dialog_info);
-        text.setText("LEYENDA");
-        textViewMsj.setText("Los Rangos estan minimo y maximo, y estan expresados en %:");
+        text.setText(context.getResources().getString(R.string.legend));
+        textViewMsj.setText(context.getResources().getString(R.string.range_with_percent_max_and_minim_commissions));
         //textViewMsj.setText("El SMS fue enviado Correctamente,solicitar al Cliente el codigo de SMS!!!");
         // if button is clicked, close the custom dialog
         Log.e("REOS", "ListaComisionesDetalleAdaptar-alertgetLegend-lead.getCodecolor():" + lead.getCodecolor());

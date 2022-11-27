@@ -11,102 +11,110 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="8dp">
 
-
-    <TextView
-        android:id="@+id/lbl_orden_venta_ERP_id"
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/code"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:layout_marginBottom="5dp">
 
-    <TextView
-        android:id="@+id/tv_historico_facturas_orden_venta_ERP_id"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="10dp"
-        android:textStyle="bold"
-        android:text="@string/code"
-        android:textAppearance="?attr/textAppearanceListItem" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/lbl_orden_venta_ERP_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/code"
+            android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-        android:id="@+id/lbl_rucdnni"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/ruc"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        <TextView
+            android:id="@+id/tv_historico_facturas_orden_venta_ERP_id"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginLeft="20dp"
+            android:textStyle="bold"
+            android:text="@string/code"
+            android:textAppearance="?attr/textAppearanceListItem" />
+    </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_rucdnni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ruc"
+                android:textAppearance="?attr/textAppearanceListItem" />
 
-    <TextView
-        android:id="@+id/tv_historico_facturas_rucdnni"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="95dp"
-        android:textStyle="bold"
-        android:layout_marginTop="30dp"
-        android:text="@string/ruc"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+            <TextView
+                android:id="@+id/tv_historico_facturas_rucdnni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:textStyle="bold"
+                android:text="@string/ruc"
+                android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <TextView
-        android:id="@+id/lbl_nombrecliente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="90dp"
-        android:text="@string/client"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_nombrecliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/client"
+                android:textAppearance="?attr/textAppearanceListItem" />
 
-    <TextView
-        android:id="@+id/tv_historico_facturas_nombrecliente"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="90dp"
-        android:text="@string/client"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_historico_facturas_nombrecliente"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:text="@string/client"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_cond_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_terms"
+                android:textAppearance="?attr/textAppearanceListItem" />
 
-    <TextView
-        android:id="@+id/lbl_cond_venta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="70dp"
-        android:text="@string/payment_terms"
-        android:textAppearance="?attr/textAppearanceListItem" />
+            <TextView
+                android:id="@+id/tv_cond_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginLeft="20dp"
+                android:text="@string/payment_terms"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_monto_orden_venta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/amount"
+                android:textAppearance="?attr/textAppearanceListItem" />
 
-    <TextView
-        android:id="@+id/tv_cond_venta"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="70dp"
-        android:text="@string/payment_terms"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tv_historico_facturas_monto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
 
-    <TextView
-        android:id="@+id/lbl_monto_orden_venta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="50dp"
-        android:text="@string/amount"
-        android:textAppearance="?attr/textAppearanceListItem" />
+                android:textStyle="bold"
+                android:text="@string/amount"
+                android:textAppearance="?attr/textAppearanceListItem" />
 
-    <TextView
-        android:id="@+id/tv_historico_facturas_monto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="50dp"
-        android:textStyle="bold"
-        android:text="@string/amount"
-        android:textAppearance="?attr/textAppearanceListItem" />
-
+        </TableRow>
+    </TableLayout>
     <TextView
         android:id="@+id/lbl_historico_facturas_reparto"
         android:layout_width="wrap_content"

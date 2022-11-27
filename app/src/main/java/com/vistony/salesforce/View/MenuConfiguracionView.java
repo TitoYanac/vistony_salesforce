@@ -59,6 +59,7 @@ public class MenuConfiguracionView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(getActivity().getResources().getString(R.string.configuration_menu));
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -122,7 +123,9 @@ public class MenuConfiguracionView extends Fragment {
 
         if(     BuildConfig.FLAVOR.equals("peru")||
                 BuildConfig.FLAVOR.equals("paraguay")||
-                BuildConfig.FLAVOR.equals("perurofalab"))
+                BuildConfig.FLAVOR.equals("perurofalab")||
+                BuildConfig.FLAVOR.equals("marruecos")
+        )
         {
             if(SesionEntity.Print.equals("N"))
             {

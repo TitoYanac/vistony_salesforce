@@ -56,7 +56,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Eliminar Base de Datos"
+                            android:text="@string/delete_bd"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -99,7 +99,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Analizar aplicativo"
+                            android:text="@string/anality_app"
                             android:textStyle="bold" />
 
 
@@ -143,7 +143,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="@string/EnablePrint"
+                            android:text="@string/enable_printer"
                             android:textStyle="bold" />
 
 
@@ -187,7 +187,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="@string/clearTemp"
+                            android:text="@string/liberaty_space"
                             android:textStyle="bold" />
 
 
@@ -232,7 +232,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="Sincronizar Base de Datos"
+                            android:text="@string/linked_bd"
                             android:textStyle="bold" />
 
 

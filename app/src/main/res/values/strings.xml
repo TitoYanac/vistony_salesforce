@@ -493,8 +493,44 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="choise_client">Elegir Cliente</string>
     <string name="invoice_with_date">Facturas por Fecha</string>
     <string name="historical_sales_client">Historico de Venta por Cliente</string>
-
     <string name="sales_commercialclass">Venta por Clase Comercial</string>
     <string name="consulting">Consultar</string>
+    <string name="driver">Chofer</string>
+    <string name="historical_SKU">Historico SKU</string>
+    <string name="historical_sales_six_months">
+        Historico de Venta a 6 meses, Productos no comprados en 3 meses en Rojo
+    </string>
+    <string name="line_business">Linea de Negocio</string>
+    <string name="period_current">Periodo Actual</string>
+    <string name="period_before">Periodo Anterior</string>
+    <string name="commissions">Comisiones</string>
+    <string name="quote">Cuota</string>
+    <string name="advance_percent">% avance</string>
+    <string name="legend">Leyenda</string>
+    <string name="range_with_percent_max_and_minim_commissions">Los Rangos estan minimo y maximo, y estan expresados en %</string>
+    <string name="id">ID</string>
+    <string name="max">Max</string>
+    <string name="min">Min</string>
+    <string name="year">Año</string>
+    <string name="period">Periodo</string>
+    <string name="configuration_system">Configuración de Sistema</string>
+    <string name="configuration_printer">Configuración de Impresora</string>
+    <string name="configuration_menu">Menu Configuración</string>
+    <string name="delete_bd">Eliminar Base de Datos</string>
+    <string name="anality_app">Analizar Aplicativo</string>
+    <string name="enable_printer">Habilitar Impresora</string>
+    <string name="liberaty_space">Liberar Espacio</string>
+    <string name="linked_bd">Sincronizar Base de Datos</string>
+    <string name="loading">Cargando</string>
+    <string name="analysis_sucessful">Analisis enviado al servidor</string>
+    <string name="are_you_sure_eliminate_bd">Se cerrara la aplicacion y tendra que volver a ingresar ¿Seguro de Eliminar la Base de Datos Local?</string>
+    <string name="yes_next">Si, Continuar</string>
+    <string name="alert_1">Ud. Cuenta con Depositos Pendientes de Sincronizacion, revisar en Consulta Deposito</string>
+    <string name="alert_2">Ud. Cuenta con Recibos Pendiente de Deposito, Depositar todos sus recibos antes de Eliminar Base de Datos</string>
+    <string name="alert_3">Ud. Cuenta con Recibos Pendientes de Sincronizacion, revisar en Consulta Cobrado</string>
+    <string name="alert_4">Ud. Cuenta con Ordenes de Venta Pendientes de Envio,revisar en Consulta de Orden Venta</string>
+    <string name="alert_5">Ud. Cuenta con recibos/ordenes de Venta/visitas pendientes de envio a SAP, cierre la aplicación y vuelva a ingresar con Conexion a Internet</string>
+    <string name="alert_6">Esta opción esta habilitada con internet</string>
+
 
 </resources>

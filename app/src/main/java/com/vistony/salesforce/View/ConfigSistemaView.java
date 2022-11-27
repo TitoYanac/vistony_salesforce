@@ -125,7 +125,7 @@ public class ConfigSistemaView extends Fragment{
         usuarioSQLite =new UsuarioSQLite(getContext());
         cobranzaRepository = new ViewModelProvider(getActivity()).get(CobranzaRepository.class);
         LinearLayout linear=v.findViewById(R.id.firstFile);
-
+        getActivity().setTitle(getActivity().getResources().getString(R.string.configuration_system));
         /*if(fileRuta.exists()) {
             linear.setVisibility(View.GONE);
         }else{
@@ -167,13 +167,13 @@ public class ConfigSistemaView extends Fragment{
         cveliminar.setOnClickListener(v -> AlertaEliminarDialog().show());
         cvsincronizar.setOnClickListener(v -> {
             ProgressDialog progress = new ProgressDialog(getActivity());
-            progress.setTitle("Cargando");
-            progress.setMessage("Por favor espere...");
+            progress.setTitle(getActivity().getResources().getString(R.string.loading));
+            progress.setMessage(getActivity().getResources().getString(R.string.please_wait));
             //AlertaSincronizarDialog().show()
                     try {
                         fileController.CopyDbcobranzas(getContext());
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "¡No se ha podido guardar el fichero!-Error: " + e, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getActivity().getResources().getString(R.string.dont_save_file) + e, Toast.LENGTH_SHORT).show();
                     }
             progress.dismiss();
                 }
@@ -262,8 +262,8 @@ public class ConfigSistemaView extends Fragment{
             //AlertaCreateFile().show();
 
             ProgressDialog progress = new ProgressDialog(getActivity());
-            progress.setTitle("Cargando");
-            progress.setMessage("Por favor espere...");
+            progress.setTitle(getActivity().getResources().getString(R.string.loading));
+            progress.setMessage(getActivity().getResources().getString(R.string.please_wait));
             progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
             progress.show();
 
@@ -274,7 +274,7 @@ public class ConfigSistemaView extends Fragment{
                 if(data.getClass().getName().equals("java.lang.String")){
                     Toast.makeText(getContext(), data.toString(), Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(getContext(), "Analisis enviado al servidor", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getActivity().getResources().getString(R.string.analysis_sucessful), Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -399,10 +399,10 @@ public class ConfigSistemaView extends Fragment{
         dialog.setContentView(R.layout.layout_alert_dialog);
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("ADVERTENCIA");
+        textTitle.setText(getActivity().getResources().getString(R.string.warning).toUpperCase());
 
         final TextView textMsj = dialog.findViewById(R.id.textViewMsj);
-        textMsj.setText("Se cerrara la aplicacion y tendra que volver a ingresar ¿Seguro de Eliminar la Base de Datos Local?");
+        textMsj.setText(getActivity().getResources().getString(R.string.are_you_sure_eliminate_bd));
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
 
@@ -412,8 +412,8 @@ public class ConfigSistemaView extends Fragment{
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonExit = (Button) dialog.findViewById(R.id.dialogButtonCancel);
 
-        dialogButton.setText("SI, CONTINUAR");
-        dialogButtonExit.setText("CANCELAR");
+        dialogButton.setText(getActivity().getResources().getString(R.string.yes_next).toUpperCase());
+        dialogButtonExit.setText(getActivity().getResources().getString(R.string.cancel).toUpperCase());
 
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -616,31 +616,31 @@ public class ConfigSistemaView extends Fragment{
         String mensaje="";
         if(tipo.equals("1"))
         {
-            mensaje="Ud. Cuenta con Depositos Pendientes de Sincronizacion, revisar en Consulta Deposito";
+            mensaje=getActivity().getResources().getString(R.string.alert_1);
         }
         else if(tipo.equals("2"))
         {
-            mensaje="Ud. Cuenta con Recibos Pendiente de Deposito, Depositar todos sus recibos antes de Eliminar Base de Datos";
+            mensaje=getActivity().getResources().getString(R.string.alert_2);
         }
         else if(tipo.equals("3"))
         {
-            mensaje="Ud. Cuenta con Recibos Pendientes de Sincronizacion, revisar en Consulta Cobrado";
+            mensaje=getActivity().getResources().getString(R.string.alert_3);
         }
         else if(tipo.equals("4"))
         {
-            mensaje="Ud. Cuenta con Ordenes de Venta Pendientes de Envio,revisar en Consulta de Orden Venta";
+            mensaje=getActivity().getResources().getString(R.string.alert_4);
         }else if(tipo.equals("5")){
-            mensaje="Ud. Cuenta con recibos/ordenes de Venta/visitas pendientes de envio a SAP, cierre la aplicación y vuelva a ingresar con Conexion a Internet";
+            mensaje=getActivity().getResources().getString(R.string.alert_5);
         }
         else if(tipo.equals("6")){
-            mensaje="Esta opción esta habilitada con internet";
+            mensaje=getActivity().getResources().getString(R.string.alert_6);
         }
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.layout_alert_dialog_info);
 
         TextView textTitle = dialog.findViewById(R.id.text_alert_dialog_info);
-        textTitle.setText("MENSAJE");
+        textTitle.setText(getActivity().getResources().getString(R.string.mesagge).toUpperCase());
 
         final TextView textMsj = dialog.findViewById(R.id.textViewMsj_alert_dialog_info);
         textMsj.setText(mensaje);

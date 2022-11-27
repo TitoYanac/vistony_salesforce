@@ -121,7 +121,7 @@ public class HistoricContainerSKU extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Induvis.setTituloContenedor("HISTORICO SKU",getActivity());
+        Induvis.setTituloContenedor(getActivity().getResources().getString(R.string.historical_SKU) ,getActivity());
         activity=getActivity();
         Activity=getActivity();
         setHasOptionsMenu(true);
@@ -225,7 +225,8 @@ public class HistoricContainerSKU extends Fragment {
     static public void ObtenerListaHistoricContainerSKU()
     {
         pd = new ProgressDialog(Activity);
-        pd = ProgressDialog.show(Activity, "Por favor espere", "Consultando Facturas", true, false);
+        pd = ProgressDialog.show(Activity, Activity.getResources().getString(R.string.please_wait)
+                , Activity.getResources().getString(R.string.querying_dates), true, false);
         try {
             historicContainerSalesRepository.getHistoricContainerSales(
                     SesionEntity.imei,
@@ -241,8 +242,9 @@ public class HistoricContainerSKU extends Fragment {
                 if(data==null)
                 {
                     lv_HistoricContainerSKU.setAdapter(null);
-                    Toast.makeText(context, "No se encontraron Facturas", Toast.LENGTH_SHORT).show();
-                    alertdialogInformative(context,"IMPORTANTE!!!","No se encontraron Documentos para realizar el Calculo").show();
+                    Toast.makeText(context, Activity.getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
+                    alertdialogInformative(context,Activity.getResources().getString(R.string.important).toUpperCase()
+                            ,Activity.getResources().getString(R.string.mse_not_data_available)).show();
                 }
                 else {
                     ListarHistoricContainerSalesSKU(data);

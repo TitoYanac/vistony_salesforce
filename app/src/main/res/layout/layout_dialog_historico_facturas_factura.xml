@@ -19,7 +19,6 @@
             android:layout_marginTop="60dp"
             android:background="@drawable/custom_background_alert"
             android:orientation="vertical">
-
             <TextView
                 android:id="@+id/tv_titulo"
                 android:layout_width="wrap_content"
@@ -38,6 +37,17 @@
                 android:textColor="#000000"
                 android:textSize="20dp"
                 android:textStyle="bold" />
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </TableRow>
+            </TableLayout>
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,23 +63,25 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/lbl_code"
                 android:textSize="18dp" />
+
             <TextView
                 android:id="@+id/tv_historico_facturas_facturacion_documento_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="130dp"
                 android:gravity="center_horizontal|center_vertical"
-                android:layout_marginLeft="120dp"
-                android:textStyle="bold"
-                android:text="Codigo1"
-                android:textSize="18dp" />
+                android:text="@string/lbl_code"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/lbl_historico_facturas_facturacion_nrofactura"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
-                android:text="Documento:"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/documents"
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/tv_historico_facturas_facturacion_nrofactura"
@@ -77,9 +89,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="120dp"
+                android:layout_marginLeft="130dp"
                 android:textStyle="bold"
-                android:text="Documento1"
+                android:text="@string/documents"
                 android:textSize="18dp" />
 
             <TextView
@@ -89,7 +101,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="40dp"
                 android:gravity="center_horizontal|center_vertical"
-                android:text="@string/lbl_f_emision"
+                android:text="@string/date"
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/tv_historico_facturas_facturacion_fechaemision"
@@ -97,18 +109,19 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_marginTop="40dp"
-                android:layout_marginLeft="120dp"
+                android:layout_marginLeft="130dp"
                 android:textStyle="bold"
-                android:text="1900-01-01"
+                android:text="@string/date_issue"
                 android:textSize="18dp" />
+
             <TextView
                 android:id="@+id/lbl_historico_facturas_facturacion_montoimporte"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_marginTop="60dp"
                 android:layout_marginLeft="20dp"
-                android:text="Importe:"
+                android:layout_marginTop="60dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/amount"
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/tv_historico_facturas_facturacion_montoimporte"
@@ -116,9 +129,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_marginTop="60dp"
-                android:layout_marginLeft="120dp"
+                android:layout_marginLeft="130dp"
                 android:textStyle="bold"
-                android:text="0"
+                android:text="@string/amount"
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/lbl_historico_facturas_facturacion_saldo"
@@ -127,7 +140,7 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_marginTop="80dp"
                 android:layout_marginLeft="20dp"
-                android:text="Saldo:"
+                android:text="@string/balance"
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/tv_historico_facturas_facturacion_saldo"
@@ -135,9 +148,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_marginTop="80dp"
-                android:layout_marginLeft="120dp"
+                android:layout_marginLeft="130dp"
                 android:textStyle="bold"
-                android:text="0"
+                android:text="@string/balance"
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/lbl_historico_facturas_facturacion_lineas_no_facturadas"
@@ -146,7 +159,7 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_marginTop="100dp"
                 android:layout_marginLeft="20dp"
-                android:text="Tipo:"
+                android:text="@string/type"
                 android:textSize="18dp" />
             <TextView
                 android:id="@+id/tv_historico_facturas_facturacion_lineas_no_facturadas"
@@ -154,9 +167,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_marginTop="100dp"
-                android:layout_marginLeft="120dp"
+                android:layout_marginLeft="130dp"
                 android:textStyle="bold"
-                android:text="0"
+                android:text="@string/type"
                 android:textSize="18dp" />
             <ImageView
                 android:id="@+id/imv_historico_orden_venta_facturacion"
@@ -178,7 +191,8 @@
                 android:background="@drawable/custom_border_button"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
-                android:text="ACEPTAR"
+                android:text="@string/accept"
+                android:textAllCaps="true"
                 android:textColor="#0957C3" />
 
         </LinearLayout>

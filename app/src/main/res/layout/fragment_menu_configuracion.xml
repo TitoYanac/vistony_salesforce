@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Configuracion Sistema"
+                        android:text="@string/configuration_system"
                         android:textStyle="bold" />
 
 
@@ -141,7 +141,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="Configuracion Impresora"
+                        android:text="@string/configuration_printer"
                         android:textStyle="bold" />
 
 

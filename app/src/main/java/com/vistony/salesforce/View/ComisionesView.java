@@ -111,7 +111,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         activity=getActivity();
         context=getContext();
-        getActivity().setTitle("Comisiones");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.commissions));
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -319,7 +319,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         protected void onPreExecute() {
             super.onPreExecute();
             pd = new ProgressDialog(ContenedorComisionesView.activity);
-            pd = ProgressDialog.show(ContenedorComisionesView.activity, "Por favor espere", "Consultando Avance Variables Periodo Actual", true, false);
+            pd = ProgressDialog.show(ContenedorComisionesView.activity, ContenedorComisionesView.activity.getResources().getString(R.string.please_wait), ContenedorComisionesView.activity.getResources().getString(R.string.querying_dates), true, false);
         }
         @Override
         protected Object doInBackground(String... arg0) {
@@ -363,7 +363,7 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
             ArrayList<ComisionesSQLiteEntity> Lista = (ArrayList<ComisionesSQLiteEntity>) result;
             if (Lista.isEmpty())
             {
-                Toast.makeText(ContenedorComisionesView.context, "No hay Data Disponible, en este Periodo", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ContenedorComisionesView.context, ContenedorComisionesView.activity.getResources().getString(R.string.mse_not_data_available), Toast.LENGTH_SHORT).show();
             }else
             {
                 cargarVariables(Lista);

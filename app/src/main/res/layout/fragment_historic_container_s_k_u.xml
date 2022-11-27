@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:text="Historico de Venta a 6 meses, Productos no comprados en 3 meses en Rojo"
+                android:text="@string/historical_sales_six_months"
                 android:textAlignment="center"
                 android:gravity="center"
                 android:layout_gravity="center"
@@ -61,7 +61,7 @@
                 android:layout_height="25dp"
                 android:gravity="center"
                 android:layout_weight="1"
-                android:text="Linea Negocio:"
+                android:text="@string/line_business"
                 android:textColor="@color/white"
                 android:textSize="16dp"
                 android:textStyle="bold"
@@ -93,7 +93,7 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cantidad:"
+                android:text="@string/quantity"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
 
@@ -117,7 +117,7 @@
                 style="@android:style/TextAppearance.Widget.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Monto:"
+                android:text="@string/amount"
                 android:textColor="@color/white"
                 android:textSize="25dp"></TextView>
 
