@@ -39,6 +39,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +69,7 @@ import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
@@ -147,6 +149,9 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
+    TableRow tr_taxoil;
+
+
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
@@ -455,6 +460,19 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         btn_dispatch_date = (ImageButton) v.findViewById(R.id.btn_dispatch_date);
         btn_dispatch_date.setOnClickListener(this);
         tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
+        tr_taxoil=v.findViewById(R.id.tr_taxoil);
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
+
+        if(BuildConfig.FLAVOR.equals("espania"))
+        {
+            usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
+            if(usuarioSQLiteEntity.getOiltaxstatus().equals("Y")){
+                tr_taxoil.setVisibility(View.GONE);
+            }else {
+                tr_taxoil.setVisibility(View.GONE);
+            }
+        }
 
 
         ArrayList<String> currencyList = Induvis.getCurrency();
@@ -592,7 +610,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         protected void onPostExecute(Object result){
             obtenerTituloFormulario();
 
-            ActualizarResumenMontos(tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones);
+            ActualizarResumenMontos(tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,getContext());
 
             hiloObtenerResumenOrdenVenta= new HiloObtenerResumenOrdenVenta();
             setHasOptionsMenu(true);
@@ -964,7 +982,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
             listaOrdenVentaDetalleEntyCopia=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listaOrdenVentaDetalleEntities);
 
-            TotalSalesOrder totalSalesOrder=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntyCopia);
+            TotalSalesOrder totalSalesOrder=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntyCopia,getContext());
 
             /*AQUI SE ASIGNA LOSDATOS PARA LA CABECERA*/
             listaOrdenVentaCabeceraEntity.orden_cabecera_montosubtotal=""+totalSalesOrder.getSubtotal();
@@ -1297,7 +1315,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
     static private void obtenerTituloFormulario()
     {
-        activity.setTitle(Induvis.getTituloVentaString());
+        activity.setTitle(Induvis.getTituloVentaString(activity));
     }
 
     @Override

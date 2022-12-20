@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minHeight="?attr/listPreferredItemHeight"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="8dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="8dp"
+    android:id="@+id/realtive_ruta">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_comision_detalle"
+        android:layout_width="380dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/tv_client"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Cliente"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:text="Cliente"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/imv_delivery_status"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="100dp"
+            app:srcCompat="@mipmap/entrega_espera_512" />
+
+        <ImageView
+            android:id="@+id/imv_collection_status"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="150dp"
+            android:layout_marginTop="100dp"
+            app:srcCompat="@mipmap/pay_money_wait_512" />
+
+        <ImageView
+            android:id="@+id/imv_visit_status"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="270dp"
+            android:layout_marginTop="100dp"
+            app:srcCompat="@mipmap/marker_wait_512_2" />
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

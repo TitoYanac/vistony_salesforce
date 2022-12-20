@@ -51,7 +51,7 @@
                 android:maxLines="1"
                 android:minLines="1"
                 android:scrollbars="vertical"
-                android:text="Valorizacion de Promocion:"
+                android:text="@string/valorization_promotion"
                 android:textColor="#000000"
                 android:textSize="14dp"/>
             <TableLayout
@@ -64,7 +64,9 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
-                    android:paddingRight="5dp">
+                    android:paddingRight="5dp"
+                    android:layout_weight="10"
+                    >
                 <TextView
                     android:id="@+id/lbl_tipo"
                     android:layout_width="match_parent"
@@ -73,10 +75,11 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:textColor="#000000"
-
                     android:textStyle="bold"
-                    android:layout_weight="1"
-                    android:text="TIPO" />
+                    android:layout_weight="20"
+                    android:text="@string/type"
+                    android:textAllCaps="true"
+                    />
                 <TextView
                     android:id="@+id/lbl_contado"
                     android:layout_width="match_parent"
@@ -86,9 +89,10 @@
                     android:paddingRight="5dp"
                     android:textColor="#000000"
                     android:layout_weight="1"
-
                     android:textStyle="bold"
-                    android:text="CONTADO" />
+                    android:text="@string/counted"
+                    android:textAllCaps="true"
+                    />
                 <TextView
                     android:id="@+id/lbl_credito"
                     android:layout_width="match_parent"
@@ -99,23 +103,29 @@
                     android:textStyle="bold"
                     android:paddingRight="5dp"
                     android:layout_weight="1"
-                    android:text="CREDITO" />
+                    android:text="@string/credit"
+                    android:textAllCaps="true"
+                    />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
-                    android:paddingRight="5dp">
+                    android:paddingRight="5dp"
+                    android:layout_weight="5"
+                    >
                     <TextView
                         android:id="@+id/lbl_precio_lista"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:layout_weight="1"
+                        android:layout_weight="20"
                         android:textAlignment="textStart"
-                        android:text="PRECIO" />
+                        android:text="@string/price"
+                        android:textAllCaps="true"
+                        />
                     <TextView
                         android:id="@+id/tv_precio_contado"
                         android:layout_width="match_parent"
@@ -140,17 +150,20 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
-                    android:paddingRight="5dp">
+                    android:paddingRight="5dp"
+                    android:layout_weight="5"
+                    >
                     <TextView
                         android:id="@+id/lbl_precio_pack"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:layout_weight="1"
+                        android:layout_weight="20"
                         android:textAlignment="textStart"
-                        android:text="PACK" />
+                        android:text="@string/pack"
+                        android:textAllCaps="true"
+                        />
                     <TextView
                         android:id="@+id/tv_pack_contado"
                         android:layout_width="match_parent"
@@ -176,16 +189,20 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
-                    android:paddingRight="5dp">
+                    android:paddingRight="5dp"
+                    android:layout_weight="5"
+                    >
                     <TextView
                         android:id="@+id/lbl_descuento_pack"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:layout_weight="1"
+                        android:layout_weight="20"
                         android:textAlignment="textStart"
-                        android:text="DSCTO" />
+                        android:text="@string/descount"
+                        android:textAllCaps="true"
+                        />
                     <TextView
                         android:id="@+id/tv_descuento_pack_contado"
                         android:layout_width="match_parent"
@@ -210,7 +227,9 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
-                    android:paddingRight="5dp">
+                    android:paddingRight="5dp"
+                    android:layout_weight="5"
+                    >
                     <TextView
                         android:id="@+id/lbl_total"
                         android:layout_width="match_parent"
@@ -218,10 +237,12 @@
                         android:textAlignment="textStart"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:layout_weight="1"
+                        android:layout_weight="20"
                         android:textStyle="bold"
                         android:textColor="#000000"
-                        android:text="TOTAL" />
+                        android:text="@string/total"
+                        android:textAllCaps="true"
+                        />
                     <TextView
                         android:id="@+id/tv_total_pack_contado"
                         android:layout_width="match_parent"
@@ -250,7 +271,9 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
-                    android:paddingRight="5dp">
+                    android:paddingRight="5dp"
+                    android:layout_weight="5"
+                    >
                     <TextView
                         android:id="@+id/lbl_bonificacion"
                         android:layout_width="match_parent"
@@ -258,9 +281,11 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:textAlignment="textStart"
-                        android:layout_weight="1"
+                        android:layout_weight="20"
                         android:textColor="#D6001C"
-                        android:text="BONO" />
+                        android:text="@string/bonus"
+                        android:textAllCaps="true"
+                        />
                     <TextView
                         android:id="@+id/tv_bono_pack_contado"
                         android:layout_width="match_parent"
@@ -288,7 +313,9 @@
                     android:layout_height="match_parent"
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
-                    android:paddingRight="5dp">
+                    android:paddingRight="5dp"
+                    android:layout_weight="5"
+                    >
                     <TextView
                         android:id="@+id/lbl_precio_referencial"
                         android:layout_width="match_parent"
@@ -296,10 +323,12 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:textAlignment="textStart"
-                        android:layout_weight="1"
+                        android:layout_weight="20"
                         android:textStyle="bold"
                         android:textColor="#D6001C"
-                        android:text="P.PROMO" />
+                        android:text="@string/price_promotional"
+                        android:textAllCaps="true"
+                        />
                     <TextView
                         android:id="@+id/tv_precio_referencial_pack_contado"
                         android:layout_width="match_parent"
@@ -329,6 +358,7 @@
                     android:paddingLeft="5dp"
                     android:paddingTop="5dp"
                     android:paddingRight="5dp"
+                    android:layout_weight="5"
                     android:id="@+id/tablerowppromounit"
                     >
                     <TextView
@@ -338,10 +368,12 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:textAlignment="textStart"
-                        android:layout_weight="1"
+                        android:layout_weight="20"
                         android:textStyle="bold"
                         android:textColor="#D6001C"
-                        android:text="P.PROMO UNIT." />
+                        android:text="@string/price_promotional_unit"
+                        android:textAllCaps="true"
+                        />
                     <TextView
                         android:id="@+id/tv_precio_referencial_pack_contado_unit"
                         android:layout_width="match_parent"

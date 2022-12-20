@@ -867,10 +867,16 @@ public class MenuView extends AppCompatActivity
 
         dialogButton.setOnClickListener(v -> {
             dialog.dismiss();
-            if (bluetoothAdapter.isEnabled()) {
-                bluetoothAdapter.disable();
-            } else {
-                bluetoothAdapter.enable();
+
+            if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos"))
+            {
+
+            }else {
+                if (bluetoothAdapter.isEnabled()) {
+                    bluetoothAdapter.disable();
+                } else {
+                    bluetoothAdapter.enable();
+                }
             }
 
             System.exit(0);

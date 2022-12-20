@@ -145,11 +145,11 @@ android {
             applicationIdSuffix ".espania"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.es.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.es.qa"')
+            //Produccion------
             buildConfigField('String' , 'BASE_ENDPOINT', '"get.es"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.es"')
-            //Produccion------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //---------------------------
             versionName "1.0.0"
             manifestPlaceholders = [country:"España"]
@@ -160,11 +160,11 @@ android {
             applicationIdSuffix ".marruecos"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.ma.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.ma.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.ma.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.ma.qa"')
             //Produccion------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.ma"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.ma"')
             //---------------------------
             versionName "1.0.0"
             manifestPlaceholders = [country:"Marruecos"]

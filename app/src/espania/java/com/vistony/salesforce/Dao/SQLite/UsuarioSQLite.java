@@ -82,6 +82,7 @@ public class UsuarioSQLite {
                 registro.put("planta", vendedor.get(i).getPhone());
                 registro.put("quotation", vendedor.get(i).getQuotation());
                 registro.put("census", vendedor.get(i).getCensus());
+                registro.put("oiltaxstatus", vendedor.get(i).getSettings().get(0).getOilTaxStatus());
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.rate: " + vendedor.get(i).getRate());
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.vendedor.get(i).getNombreusuario(): " + vendedor.get(i).getNombreusuario());
                 bd.insert("usuario", null, registro);
@@ -200,6 +201,11 @@ public class UsuarioSQLite {
                     usuarioSQLiteEntity.setPlanta (fila.getString(fila.getColumnIndex("planta")));
                     usuarioSQLiteEntity.setMigratequotation (fila.getString(fila.getColumnIndex("quotation")));
                     usuarioSQLiteEntity.setCensus (fila.getString(fila.getColumnIndex("census")));
+                    usuarioSQLiteEntity.setOiltaxstatus (fila.getString(fila.getColumnIndex("oiltaxstatus")));
+                    usuarioSQLiteEntity.setOiltaxdesc (fila.getString(fila.getColumnIndex("oiltaxdesc")));
+                    usuarioSQLiteEntity.setOiltaxvalue (fila.getString(fila.getColumnIndex("oiltaxvalue")));
+
+
                 } while (fila.moveToNext());
             }
 

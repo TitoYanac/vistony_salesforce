@@ -23,18 +23,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListSalesOrderDetailAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaOrdenVentaDetalleDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -70,6 +74,7 @@ public class OrdenVentaDetalleView extends Fragment {
     static String listaprecio_id,descuentocontado,terminopago_id;
     static Context context;
     private ProgressDialog pd;
+    TableRow tr_taxoil;
 
     public static OrdenVentaDetalleView newInstanceEnviaListaPromocion (Object objeto) {
 
@@ -172,6 +177,11 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_chk_descuentocontado_cabecera= descuentocontadocabecera;
             ObjListaProductosEntity.orden_detalle_cardcode= listaprecio_id;
             ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=productoAgregado.getPorcentaje_dsct();
+            ObjListaProductosEntity.orden_detalle_oil_tax= productoAgregado.getOiltax();
+            ObjListaProductosEntity.orden_detalle_liter= productoAgregado.getLiter();
+            ObjListaProductosEntity.orden_detalle_SIGAUS= productoAgregado.getSIGAUS();
+        Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-getOiltax:"+String.valueOf(productoAgregado.getOiltax()));
+            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-orden_detalle_liter:"+String.valueOf(productoAgregado.getLiter()));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-descuentocontado:"+String.valueOf(descuentocontado));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-terminopago_id:"+String.valueOf(terminopago_id));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-terminopago_id:"+String.valueOf(descuentocontadocabecera));
@@ -244,7 +254,7 @@ public class OrdenVentaDetalleView extends Fragment {
         Bundle b = new Bundle();
         ordenVentaDetalleView.setArguments(b);
 
-        ActualizarResumenMontos(tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones);
+        ActualizarResumenMontos(tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones,context);
 
         return ordenVentaDetalleView;
     }
@@ -279,7 +289,20 @@ public class OrdenVentaDetalleView extends Fragment {
         ClienteAtendido cliente=new ClienteAtendido();
         cliente.setCardCode(listaprecio_id);//contiene CardCode
         cliente.setPymntGroup(terminopago_id);
+        tr_taxoil=v.findViewById(R.id.tr_taxoil);
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
 
+
+        if(BuildConfig.FLAVOR.equals("espania"))
+        {
+            usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
+            if(usuarioSQLiteEntity.getOiltaxstatus().equals("Y")){
+                tr_taxoil.setVisibility(View.GONE);
+            }else {
+                tr_taxoil.setVisibility(View.GONE);
+            }
+        }
 
         fab_consulta_productos.setOnClickListener(view -> {
             String Fragment="OrdenVentaDetalleView";
@@ -347,7 +370,7 @@ public class OrdenVentaDetalleView extends Fragment {
                 lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
                 hiloAgregarListaProductos = new HiloAgregarListaProductos();
 
-                ActualizarResumenMontos(tv_orden_venta_detalle_subtotal, tv_orden_venta_detalle_descuento, tv_orden_venta_detalle_igv, tv_orden_venta_detalle_total, tv_orden_detalle_galones);
+                ActualizarResumenMontos(tv_orden_venta_detalle_subtotal, tv_orden_venta_detalle_descuento, tv_orden_venta_detalle_igv, tv_orden_venta_detalle_total, tv_orden_detalle_galones,getContext());
 
                 setHasOptionsMenu(true);
             }
@@ -359,12 +382,12 @@ public class OrdenVentaDetalleView extends Fragment {
     }
 
     //ESTA FUNCION MUESTRA EL CALCULADO EN ORDEN VENTA DETALLE, NO EN CABECERA
-    public static void ActualizarResumenMontos(TextView textSubTotal,TextView textSescuento,TextView textIgv,TextView textTotal,TextView textGalones){
-        FormulasController formulasController=new FormulasController(context);
+    public static void ActualizarResumenMontos(TextView textSubTotal,TextView textSescuento,TextView textIgv,TextView textTotal,TextView textGalones,Context contexto){
+        FormulasController formulasController=new FormulasController(contexto);
         ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
 
         listaOrdenVentaDetalleEntities=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
-        TotalSalesOrder salesOrder=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities);
+        TotalSalesOrder salesOrder=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities,contexto );
 
         textSubTotal.setText(Convert.currencyForView(salesOrder.getSubtotal()));
         textSescuento.setText(Convert.currencyForView(salesOrder.getDescuento()));
@@ -383,7 +406,7 @@ public class OrdenVentaDetalleView extends Fragment {
         protected void onPostExecute(Object result){
 
             hiloActualizarResumenMontos =  new HiloActualizarResumenMontos();
-            ActualizarResumenMontos(tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones);
+            ActualizarResumenMontos(tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones,getContext());
             setHasOptionsMenu(true);
         }
     }
@@ -439,13 +462,69 @@ public class OrdenVentaDetalleView extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.vincular_orden_venta_cabecera:
-                DialogoOrdenVentaDetalle().show();
+
+                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+                UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
+                if(BuildConfig.FLAVOR.equals("espania"))
+                {
+                    int SIGAUS=0,OilTax=0;
+                    usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
+                    if(usuarioSQLiteEntity.getOiltaxstatus().equals("Y")){
+                        for(int i=0;i<listadoProductosAgregados.size();++i)
+                        {
+                            if(listadoProductosAgregados.get(i).getOrden_detalle_producto_id().equals("SIGAUS"))
+                            {
+                               SIGAUS++;
+                            }
+                            if(listadoProductosAgregados.get(i).getOrden_detalle_oil_tax().equals("Y"))
+                            {
+                                OilTax++;
+                            }
+                        }
+                        Log.e("REOS","OrdenVentaDetalleView-vincular_orden_venta_cabecera-SIGAUS: "+SIGAUS);
+                        Log.e("REOS","OrdenVentaDetalleView-vincular_orden_venta_cabecera-OilTax: "+OilTax);
+                        if(OilTax==0)
+                        {
+                            DialogoOrdenVentaDetalle().show();
+                        }else
+                        {
+                            if(SIGAUS>0){
+                                DialogoOrdenVentaDetalle().show();
+                            }else {
+                                //calculateSIGAUS();
+                                alertAddSIGAUS().show();
+                            }
+
+                        }
+
+                    }else {
+                        DialogoOrdenVentaDetalle().show();
+                    }
+                }
+                else {
+                    DialogoOrdenVentaDetalle().show();
+                }
+
+
 
                 return false;
             default:
                 break;
         }
         return false;
+    }
+
+    public void calculateSIGAUS(){
+    FormulasController formulasController=new FormulasController(getContext());
+    ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
+    //listaOrdenVentaDetalleEntities=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
+    //formulasController.addSIGAUS(listaOrdenVentaDetalleEntities,listadoProductosAgregados);
+        if(!formulasController.addSIGAUS(listadoProductosAgregados).isEmpty())
+        {
+            hiloAgregarListaProductos.execute();
+            //DialogoOrdenVentaDetalle().show();
+        }
+
     }
 
     public Dialog DialogoOrdenVentaDetalle() {
@@ -513,5 +592,31 @@ public class OrdenVentaDetalleView extends Fragment {
         return  dialog;
     }
 
+
+    public Dialog alertAddSIGAUS() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog);
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText("ADVERTENCIA");
+        final TextView textMsj = dialog.findViewById(R.id.textViewMsj);
+        textMsj.setText("Se generara la Linea de SIGAUS, reintente el vincular para finalizar");
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        dialogButton.setText("OK");
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                calculateSIGAUS();
+                dialog.dismiss();
+            }
+        });
+        return  dialog;
+    }
 
 }

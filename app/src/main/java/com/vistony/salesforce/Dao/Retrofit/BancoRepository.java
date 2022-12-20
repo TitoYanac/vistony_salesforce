@@ -32,7 +32,7 @@ public class BancoRepository extends ViewModel {
 
                 BancoEntityResponse bancosList=response.body();
 
-                if(response.isSuccessful() && bancosList.getBancoEntity().size()>0){
+                if(response.isSuccessful() && bancosList.getBancoEntity()!=null){
 
                     bancoSQLite = new BancoSQLite(context);
                     parametrosSQLite = new ParametrosSQLite(context);

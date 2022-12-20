@@ -66,7 +66,7 @@ public class VisitaDialogController extends DialogFragment {
         dialog.setContentView(R.layout.layout_visita_dialog);
 
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText("DETALLA TU VISITA");
+        textTitle.setText(getActivity().getResources().getString(R.string.detail_visit));
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             Log.e("REOS","MenuAccionView: No tiene ACCESS_FINE_LOCATION ");
@@ -118,8 +118,8 @@ public class VisitaDialogController extends DialogFragment {
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         Button dialogButtonExit = (Button) dialog.findViewById(R.id.dialogButtonCancel);
         // if button is clicked, close the custom dialog
-        dialogButton.setText("GUARDAR");
-        dialogButtonExit.setText("CANCELAR");
+        dialogButton.setText(getActivity().getResources().getString(R.string.register).toUpperCase());
+        dialogButtonExit.setText(getActivity().getResources().getString(R.string.cancel).toUpperCase());
 
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -155,11 +155,11 @@ public class VisitaDialogController extends DialogFragment {
                visitaNativa.setAmount("0");
                formulasController.RegistraVisita(visitaNativa,getActivity(),"0");
 
-                Toast.makeText(getContext(), "Visita registrada...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getActivity().getResources().getString(R.string.visit_register)+getActivity().getResources().getString(R.string.point_suspenses), Toast.LENGTH_SHORT).show();
 
                 dialog.dismiss();
             }else{
-               textDescargo.setError("Es necesario llenar este campo");
+               textDescargo.setError(getActivity().getResources().getString(R.string.necesary_entry_comment));
             }
         });
 

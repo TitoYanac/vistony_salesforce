@@ -1,5 +1,6 @@
 package com.vistony.salesforce.View;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.vistony.salesforce.Controller.Adapters.ListDispatchSheetAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaHojaDespachoAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaHojaDespachoDao;
 import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
@@ -41,11 +43,13 @@ public class DispatchSheetSucessful extends Fragment {
     View v;
     static TextView tv_count_total;
     static ListaHojaDespachoAdapter listaHojaDespachoAdapter;
-    static ListView list_sheet_failed;
+    static ListView list_sheet_sucessful;
     static Context context;
     SimpleDateFormat dateFormat;
     Date date;
     String parametrofecha;
+    static ListDispatchSheetAdapter listDispatchSheetAdapter;
+    static Activity activity;
 
     public DispatchSheetSucessful() {
         // Required empty public constructor
@@ -75,13 +79,14 @@ public class DispatchSheetSucessful extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
-        getListDetailDispatchSheet(param1,context);
+        getListDetailDispatchSheet(ContainerDispatchSheetView.parametrofecha,context);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity=getActivity();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -93,12 +98,12 @@ public class DispatchSheetSucessful extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_dispatch_sheet_sucessful, container, false);
-        list_sheet_failed=v.findViewById(R.id.list_sheet_failed);
-        tv_count_total=v.findViewById(R.id.tv_count_total);
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        date = new Date();
-        parametrofecha =dateFormat.format(date);
-        getListDetailDispatchSheet(parametrofecha,getContext());
+        list_sheet_sucessful=v.findViewById(R.id.list_sheet_sucessful);
+        //tv_count_total=v.findViewById(R.id.tv_count_total);
+        //dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        //date = new Date();
+        //parametrofecha =dateFormat.format(date);
+        getListDetailDispatchSheet(ContainerDispatchSheetView.parametrofecha,getContext());
         return v;
     }
 
@@ -108,9 +113,10 @@ public class DispatchSheetSucessful extends Fragment {
         DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(context);
         listDetailDispatchSheetSQLite=detailDispatchSheetSQLite.getDetailDispatchSheetforDispatchDateSucessful(dateDispatch);
         Log.e("REOS", "DispatchSheetView-getMastersDelivery-headerDispatchSheetRepository-listDetailDispatchSheetSQLite" + listDetailDispatchSheetSQLite.size());
-        listaHojaDespachoAdapter = new ListaHojaDespachoAdapter(context, ListaHojaDespachoDao.getInstance().getLeads(listDetailDispatchSheetSQLite));
-        list_sheet_failed.setAdapter(listaHojaDespachoAdapter);
-        tv_count_total.setText(String.valueOf(listDetailDispatchSheetSQLite.size()));
+        //listaHojaDespachoAdapter = new ListaHojaDespachoAdapter(context, ListaHojaDespachoDao.getInstance().getLeads(listDetailDispatchSheetSQLite));
+        listDispatchSheetAdapter = new ListDispatchSheetAdapter(context, ListaHojaDespachoDao.getInstance().getLeads(listDetailDispatchSheetSQLite),activity);
+        list_sheet_sucessful.setAdapter(listDispatchSheetAdapter);
+        //tv_count_total.setText(String.valueOf(listDetailDispatchSheetSQLite.size()));
     }
 
 

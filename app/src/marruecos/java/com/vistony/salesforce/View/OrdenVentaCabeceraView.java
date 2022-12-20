@@ -41,6 +41,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -151,6 +152,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
+    TableRow tr_taxoil;
+
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
@@ -460,8 +463,10 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         btn_dispatch_date = (ImageButton) v.findViewById(R.id.btn_dispatch_date);
         btn_dispatch_date.setOnClickListener(this);
         tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
+        tr_taxoil=v.findViewById(R.id.tr_taxoil);
 
 
+        tr_taxoil.setVisibility(View.GONE);
         ArrayList<String> currencyList = Induvis.getCurrency();
         ArrayAdapter<String> adapterCurrency = new ArrayAdapter<String>(getContext(),R.layout.support_simple_spinner_dropdown_item,currencyList);
         spnmoneda.setAdapter(adapterCurrency);

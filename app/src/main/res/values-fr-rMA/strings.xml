@@ -56,8 +56,8 @@
     <string name="lbl_promotion">Promoción:</string>
     <string name="Promotion_Summary">promotion sommaire</string>
     <string name="Selected_Promotion">Promoción Seleccionada:</string>
-    <string name="Pending_Promotion">Promoción Pendiente:</string>
-    <string name="Promotion_Detail">DETALLE PROMOCION:</string>
+    <string name="Pending_Promotion">Promotion en attente</string>
+    <string name="Promotion_Detail">Détail de la promotion</string>
     <string name="Direct_Depost">Dépôt Droit</string>
     <string name="Find_Deposit">Consulta Depósito</string>
     <string name="lbl_update_parameters">Paramètres de mise à jour</string>
@@ -93,7 +93,7 @@
     <string name="lbl_historic_status_dispatch_type">Tipo</string>
     <string name="lbl_historic_status_dispatch_reason">Motivo</string>
     <string name="lbl_historic_status_dispatch_photo">Foto</string>
-    <string name="lbl_cheque">Vérifier</string>
+    <string name="lbl_cheque">CHEQUE</string>
     <string name="lbl_deferred_date">Date différée</string>
     <string name="lbl_find_dispatch">Consultation Expédition</string>
     <string name="lbl_day_route">Día Ruta</string>
@@ -156,7 +156,7 @@
     <string name="reclamo_clientes">Réclamer de Clients</string>
     <string name="lead_cliente">Conduire Génération</string>
     <string name="title_activity_maps">Map</string>
-    <string name="razon_social">Razón Social</string>
+    <string name="razon_social">Raison sociale</string>
     <string name="ruc">ICE/C.N.I</string>
     <string name="nombre_comercial">Nom commercial</string>
     <string name="numero_telefono">Téléphoner</string>
@@ -219,7 +219,7 @@
     <string name="total_client">Total Clients</string>
     <string name="visit_client">Clients visités</string>
     <string name="ordres_client">Clients ordres</string>
-    <string name="collection_client">Clientes Encaissement</string>
+    <string name="collection_client">Clients Encaissement</string>
     <string name="category_client">Catégorie</string>
     <string name="visits">Visite</string>
     <string name="query_clients">Consultation Clients</string>
@@ -408,7 +408,7 @@ Le SMS a bien été envoyé, demander au Client le code SMS</string>
     <string name="new_balance">Nouveau Solde</string>
     <string name="code_validation">Code de validation</string>
     <string name="qr_scan">Analyse qr</string>
-    <string name="cheque">Vérifier</string>
+    <string name="cheque">CHEQUE</string>
     <string name="pos">POS</string>
     <string name="comentary">Commentaire</string>
     <string name="collection_for_date">Collecte par date</string>
@@ -546,6 +546,23 @@ Vous avez des reçus en attente de synchronisation, passez en revue dans la requ
     <string name="alert_4">Vous avez des commandes client en attente "d'expédition, consultez-les dans la requête de commande client</string>
     <string name="alert_5">Vous avez des reçus/commandes/visites en attente "d'être envoyés à SAP, fermez l'application et ré-entrez avec une connexion Internet</string>
     <string name="alert_6">Cette option est activée avec Internet</string>
-
+    <string name="route_workforce">Itinéraire de vente</string>
+    <string name="price_list">Liste Prix</string>
+    <string name="data_client">Données clients</string>
+    <string name="visit_register">Visita Registrada</string>
+    <string name="necesary_entry_comment">Il est nécessaire de saisir un commentaire</string>
+    <string name="menu_forms">Menu Formulaires</string>
+    <string name="disabled_descount_for_the_promotion">
+"L'attribution de remise dans la ligne sera désactivée, si nécessaire, attribuez d'abord la remise, puis la promotion</string>
+    <string name="menu_promotion">Menu promotionnel</string>
+    <string name="quantity_sales">Quantité Vente</string>
+    <string name="promotion_selection">Promotion sélectionnée</string>
+    <string name="pack">Pack</string>
+    <string name="valorization">Valorisation</string>
+    <string name="lines">Lignes</string>
+    <string name="valorization_promotion">Valorisation des promotions</string>
+    <string name="bonus">Bonus</string>
+    <string name="price_promotional">Prix promotionnel</string>
+    <string name="price_promotional_unit">Prix Unitaire Promotionnel</string>
 
 </resources>

@@ -305,7 +305,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
-            cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.amount)+" "+context.getResources().getString(R.string.documents),font4));
+            cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.amount),font4));
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             cell.disableBorderSide(Rectangle.BOX);
             tbl.addCell(cell);

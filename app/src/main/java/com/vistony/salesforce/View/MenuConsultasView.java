@@ -113,7 +113,24 @@ public class MenuConsultasView extends Fragment {
             //cv_dispatch.setVisibility(View.GONE);
             cv_quotation.setVisibility(View.GONE);
         }
-        if(!(BuildConfig.FLAVOR.equals("peru")))
+
+        switch (BuildConfig.FLAVOR) {
+
+            case "paraguay":
+            case "chile":
+            case "ecuador":
+            case "bolivia":
+            case "perurofalab":
+            case "marruecos":
+                cv_dispatch.setVisibility(View.GONE);
+                break;
+            case "peru":
+            case "espania":
+
+                break;
+        }
+
+        /*if(!(BuildConfig.FLAVOR.equals("peru")))
         {
             cv_dispatch.setVisibility(View.GONE);
         }
@@ -122,7 +139,7 @@ public class MenuConsultasView extends Fragment {
             {
                 //cv_dispatch.setVisibility(View.GONE);
             }
-        }
+        }*/
 
         cv_quotation.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,5 +1,6 @@
 package com.vistony.salesforce.View;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.vistony.salesforce.Controller.Adapters.ListDispatchSheetAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaHojaDespachoAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaHojaDespachoDao;
 import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
@@ -46,6 +48,9 @@ public class DispatchSheetFailedView extends Fragment {
     String parametrofecha;
     static TextView tv_count_total;
     static ListaHojaDespachoAdapter listaHojaDespachoAdapter;
+    static ListDispatchSheetAdapter listDispatchSheetAdapter;
+    static Activity activity;
+
 
     public DispatchSheetFailedView() {
         // Required empty public constructor
@@ -74,6 +79,7 @@ public class DispatchSheetFailedView extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
+        getListDetailDispatchSheet(ContainerDispatchSheetView.parametrofecha,context);
         return fragment;
     }
 
@@ -82,6 +88,7 @@ public class DispatchSheetFailedView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activity=getActivity();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -94,22 +101,25 @@ public class DispatchSheetFailedView extends Fragment {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_dispatch_sheet_failed_view, container, false);
         list_sheet_failed=v.findViewById(R.id.list_sheet_failed);
-        tv_count_total=v.findViewById(R.id.tv_count_total);
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        date = new Date();
-        parametrofecha =dateFormat.format(date);
-        getListDetailDispatchSheet(parametrofecha,getContext());
+        //tv_count_total=v.findViewById(R.id.tv_count_total);
+        //dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        //date = new Date();
+        //parametrofecha =dateFormat.format(date);
+
+        getListDetailDispatchSheet(ContainerDispatchSheetView.parametrofecha,getContext());
+
         return v;
     }
 
-    static public void getListDetailDispatchSheet (String dateDispatch, Context context){
+        static public void getListDetailDispatchSheet (String dateDispatch, Context context){
         Log.e("REOS", "DispatchSheetView-getMastersDelivery-headerDispatchSheetRepository-dateDispatch" + dateDispatch);
         ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetSQLite=new ArrayList<>();
         DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(context);
         listDetailDispatchSheetSQLite=detailDispatchSheetSQLite.getDetailDispatchSheetforDispatchDateFailed(dateDispatch);
         Log.e("REOS", "DispatchSheetView-getMastersDelivery-headerDispatchSheetRepository-listDetailDispatchSheetSQLite" + listDetailDispatchSheetSQLite.size());
-        listaHojaDespachoAdapter = new ListaHojaDespachoAdapter(context, ListaHojaDespachoDao.getInstance().getLeads(listDetailDispatchSheetSQLite));
-        list_sheet_failed.setAdapter(listaHojaDespachoAdapter);
-        tv_count_total.setText(String.valueOf(listDetailDispatchSheetSQLite.size()));
+        //listaHojaDespachoAdapter = new ListaHojaDespachoAdapter(context, ListaHojaDespachoDao.getInstance().getLeads(listDetailDispatchSheetSQLite));
+            listDispatchSheetAdapter = new ListDispatchSheetAdapter(context, ListaHojaDespachoDao.getInstance().getLeads(listDetailDispatchSheetSQLite),activity);
+            list_sheet_failed.setAdapter(listDispatchSheetAdapter);
+        //tv_count_total.setText(String.valueOf(listDetailDispatchSheetSQLite.size()));
     }
 }

@@ -9,12 +9,11 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ListView
+        android:id="@+id/list_sheet_sucessful"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="120dp"
-        android:id="@+id/list_sheet_failed"
-        />
-    <TableLayout
+        android:layout_height="match_parent" />
+
+    <!--<TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -50,5 +49,5 @@
                 android:textSize="24dp">
             </TextView>
         </TableRow>
-    </TableLayout>
+    </TableLayout>-->
 </FrameLayout>

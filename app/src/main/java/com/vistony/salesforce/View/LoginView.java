@@ -130,7 +130,13 @@ public class LoginView extends AppCompatActivity{
         loginRepository =  new ViewModelProvider(this).get(LoginRepository.class);
         Imei=obtenerImei(statusImei,this,loginRepository);
 
-        loadConfigurationPrinter();
+        if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos"))
+        {
+
+        }else {
+            loadConfigurationPrinter();
+        }
+
         ObtenerVideo();
         verifyPermission();
 
@@ -528,11 +534,17 @@ public class LoginView extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        if (bluetoothAdapter.isEnabled()) {
-            bluetoothAdapter.disable();
-        } else {
-            bluetoothAdapter.enable();
+        if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos"))
+        {
+
+        }else {
+            if (bluetoothAdapter.isEnabled()) {
+                bluetoothAdapter.disable();
+            } else {
+                bluetoothAdapter.enable();
+            }
         }
+
         System.exit(0);
     }
 

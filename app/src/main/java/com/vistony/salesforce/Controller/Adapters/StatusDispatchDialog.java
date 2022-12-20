@@ -45,6 +45,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lowagie.text.DocumentException;
 import com.vistony.salesforce.AppExecutors;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
@@ -63,6 +64,7 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.View.LoginView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -369,7 +371,21 @@ public class StatusDispatchDialog extends DialogFragment {
                     photoFile = createImageFile(Entrega+"_"+getDate(),"G");
 
                     if (photoFile != null) {
-                        Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                        //Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                        Uri photoURI=null;
+                        switch (BuildConfig.FLAVOR){
+                            case "bolivia":
+                            case "ecuador":
+                            case "chile":
+                            case "peru":
+                            case "marruecos":
+                            case "paraguay":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                                break;
+                            case "espania":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.espania" , photoFile);
+                                break;
+                        }
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         //startActivityForResult(intent,20);
                         someActivityResultLauncherGuia.launch(intent);
@@ -425,7 +441,21 @@ public class StatusDispatchDialog extends DialogFragment {
 
                     if (photoFile != null) {
                         Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
-                        Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                        Uri photoURI =null;
+                        switch (BuildConfig.FLAVOR){
+                            case "bolivia":
+                            case "ecuador":
+                            case "chile":
+                            case "peru":
+                            case "marruecos":
+                            case "paraguay":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                                break;
+                            case "espania":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.espania" , photoFile);
+                                break;
+                        }
+                        //Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         //startActivityForResult(intent,20);
                         someActivityResultLauncher.launch(intent);

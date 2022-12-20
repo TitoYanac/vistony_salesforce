@@ -221,7 +221,7 @@ public class MenuView extends AppCompatActivity
     QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
     HistoricContainerSalesRepository historicContainerSalesRepository;
     TableRow tablerowzona;
-    public Activity activity;
+    public static Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

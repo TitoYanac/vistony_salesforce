@@ -121,6 +121,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         holder.tv_orden_detalle_umd.setText(lead.getOrden_detalle_producto_id());
         holder.tv_orden_detalle_stock.setText(Convert.numberForView2 (lead.getOrden_detalle_stock()));
         holder.tv_orden_detalle_precio.setText(Convert.numberForView2(lead.getOrden_detalle_precio_unitario()));
+        //holder.tv_orden_detalle_precio.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(),SesionEntity.Impuesto)));
+        //holder.tv_orden_detalle_precio.setText("100");
         holder.et_orden_detalle_cantidad.setText(lead.getOrden_detalle_cantidad());
         holder.tv_orden_detalle_galon_unitario.setText(Convert.numberForView2(lead.getOrden_detalle_gal()));
         holder.tv_orden_detalle_precio_igv.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(),SesionEntity.Impuesto)));

@@ -14,6 +14,34 @@ public class ListaPrecioDetalleSQLiteEntity {
     private String stock_almacen;
     private String stock_general;
     private String unit;
+    private String oiltax;
+    private String liter;
+    private String SIGAUS;
+
+
+    public String getOiltax() {
+        return oiltax;
+    }
+
+    public void setOiltax(String oiltax) {
+        this.oiltax = oiltax;
+    }
+
+    public String getLiter() {
+        return liter;
+    }
+
+    public void setLiter(String liter) {
+        this.liter = liter;
+    }
+
+    public String getSIGAUS() {
+        return SIGAUS;
+    }
+
+    public void setSIGAUS(String SIGAUS) {
+        this.SIGAUS = SIGAUS;
+    }
 
     public String getUnit() {
         return unit;

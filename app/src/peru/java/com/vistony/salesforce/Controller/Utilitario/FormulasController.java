@@ -2022,5 +2022,20 @@ public class FormulasController {
         return String.valueOf(format.format(resultado));
     }
 
+    public String ObtenerCalculoPrecioImpuesto(String preciounitario,String FactorImpuesto){
+
+        BigDecimal acum = new BigDecimal(0);
+        Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+        Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-FactorImpuesto-"+FactorImpuesto);
+        preciounitario=(preciounitario.equals(""))?"0":preciounitario;
+
+        BigDecimal preUnit = new BigDecimal(preciounitario).setScale(5,RoundingMode.HALF_UP);
+        BigDecimal cant = new BigDecimal(FactorImpuesto);
+
+        BigDecimal subTotalLine=preUnit.multiply(cant.multiply(new BigDecimal(0.01)).add(new BigDecimal(1)));
+
+        Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-resultado-"+subTotalLine.setScale(5,RoundingMode.DOWN).toString());
+        return subTotalLine.setScale(5,RoundingMode.DOWN).toString();
+    }
 
 }

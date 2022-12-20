@@ -52,7 +52,9 @@ public class ListaOrdenVentaDetalleDao {
                 {
                     contadodescuento="0";
                 }*/
-                Log.e("REOS", "regreso here 1 de " + ListenerBackPress.getCurrentFragment());
+                Log.e("REOS", "ListaOrdenVentaDetalleDao-getLeads-Lista.get(i).getOrden_detalle_oil_tax()" + Lista.get(i).getOrden_detalle_oil_tax());
+                Log.e("REOS", "ListaOrdenVentaDetalleDao-getLeads-Lista.get(i).getOrden_detalle_liter()" + Lista.get(i).getOrden_detalle_liter());
+                Log.e("REOS", "ListaOrdenVentaDetalleDao-getLeads-Lista.get(i).getOrden_detalle_SIGAUS()" + Lista.get(i).getOrden_detalle_SIGAUS());
                 saveLead(new ListaOrdenVentaDetalleEntity(
                         Lista.get(i).getOrden_detalle_item(),
                         Lista.get(i).getOrden_detalle_producto_id(),
@@ -78,7 +80,10 @@ public class ListaOrdenVentaDetalleDao {
                         Lista.get(i).isOrden_detalle_chk_descuentocontado_aplicado(),
                         Lista.get(i).isOrden_detalle_chk_descuentocontado_cabecera(),
                         Lista.get(i).getOrden_detalle_cardcode(),
-                        Lista.get(i).getOrden_detalle_porcentaje_descuento_maximo()
+                        Lista.get(i).getOrden_detalle_porcentaje_descuento_maximo(),
+                        Lista.get(i).getOrden_detalle_oil_tax(),
+                        Lista.get(i).getOrden_detalle_liter(),
+                        Lista.get(i).getOrden_detalle_SIGAUS()
                 ));
             }
         }catch (Exception e)

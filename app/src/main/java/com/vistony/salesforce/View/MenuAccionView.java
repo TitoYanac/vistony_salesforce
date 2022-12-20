@@ -919,7 +919,7 @@ public class MenuAccionView extends Fragment {
         SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         Date date = new Date();
         //TextView textTitle = dialog.findViewById(R.id.tv_mensaje);
-        //textTitle.setText("Elija Tipo de Venta:");
+        //textTitle.setlistVisitSectionText("Elija Tipo de Venta:");
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);

@@ -18,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,10 +31,14 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
+import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.OrdenVentaDetalleView;
@@ -72,7 +77,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        final ListaOrdenVentaDetalleAdapter.ViewHolder holder;
+        final ViewHolder holder;
 
         // ¿Ya se infló este view?
         if (null == convertView) {
@@ -82,7 +87,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                     parent,
                     false);
 
-            holder = new ListaOrdenVentaDetalleAdapter.ViewHolder();
+            holder = new ViewHolder();
             // holder.lbl_documento = (TextView) convertView.findViewById(R.id.lbl_documento);
             holder.tv_orden_detalle_item = (TextView) convertView.findViewById(R.id.tv_orden_detalle_item);
             holder.tv_orden_detalle_producto = (TextView) convertView.findViewById(R.id.tv_orden_detalle_producto);
@@ -103,10 +108,14 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
             holder.et_porcentaje_descuento_contado=(EditText) convertView.findViewById(R.id.et_porcentaje_descuento_contado);
             holder.tv_orden_detalle_precio_igv = (TextView) convertView.findViewById(R.id.tv_orden_detalle_precio_igv);
             holder.tv_orden_detalle_total_igv = (TextView) convertView.findViewById(R.id.tv_orden_detalle_total_igv);
+            holder.tv_orden_liter = (TextView) convertView.findViewById(R.id.tv_orden_liter);
+            holder.tv_orden_detalle_sigaus = (TextView) convertView.findViewById(R.id.tv_orden_detalle_sigaus);
+            holder.tr_sigaus = (TableRow) convertView.findViewById(R.id.tr_sigaus);
+
             holder.layout=(ViewGroup) convertView.findViewById(R.id.content);
             convertView.setTag(holder);
         } else {
-            holder = (ListaOrdenVentaDetalleAdapter.ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
         // Lead actual.
@@ -119,10 +128,52 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         holder.tv_orden_detalle_producto.setText(lead.getOrden_detalle_producto());
         holder.tv_orden_detalle_umd.setText(lead.getOrden_detalle_producto_id());
         holder.tv_orden_detalle_stock.setText(Convert.numberForView2 (lead.getOrden_detalle_stock()));
-        holder.tv_orden_detalle_precio.setText(Convert.numberForView2(lead.getOrden_detalle_precio_unitario()));
+
+        if(BuildConfig.FLAVOR.equals("marrruecos"))
+        {
+            holder.tv_orden_detalle_precio.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(), SesionEntity.Impuesto)));
+        }else {
+            holder.tv_orden_detalle_precio.setText(Convert.numberForView2(lead.getOrden_detalle_precio_unitario()));
+        }
+
         holder.et_orden_detalle_cantidad.setText(lead.getOrden_detalle_cantidad());
         holder.tv_orden_detalle_galon_unitario.setText(Convert.numberForView2(lead.getOrden_detalle_gal()));
         holder.tv_orden_detalle_precio_igv.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(), SesionEntity.Impuesto)));
+
+
+
+        if(BuildConfig.FLAVOR.equals("espania"))
+        {
+            if(lead.getOrden_detalle_oil_tax().equals("Y"))
+            {
+                ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
+                ArrayList<ListaPrecioDetalleSQLiteEntity> listSIGAUS=new ArrayList<>();
+                listSIGAUS=listaPrecioDetalleSQLiteDao.getProductSIGAUS();
+
+                String preciobase="";
+                for(int i=0;i<listSIGAUS.size();i++)
+                {
+                    preciobase=listSIGAUS.get(i).getContado();
+                }
+
+
+                holder.tv_orden_liter.setText(Convert.convertLiterAcum(lead.getOrden_detalle_liter(),lead.getOrden_detalle_cantidad()));
+                holder.tv_orden_detalle_sigaus.setText(Convert.convertSIGAUS(Convert.convertLiterAcum(lead.getOrden_detalle_liter(),lead.getOrden_detalle_cantidad())
+                        // ,lead.getOrden_detalle_precio_unitario()
+                        ,preciobase
+                ));
+            }
+            else {
+                holder.tr_sigaus.setVisibility(View.GONE);
+            }
+
+        }
+        else{
+            holder.tr_sigaus.setVisibility(View.GONE);
+        }
+
+
+
 
         // holder.tv_orden_detalle_porcentaje_descuento.setText(String.valueOf(format.format(Float.parseFloat(lead.getOrden_detalle_stock_general()))));
         /*if(lead.isOrden_detalle_chk_descuentocontado())
@@ -135,7 +186,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
             }
 */
 
-        if(BuildConfig.FLAVOR.equals("espania"))
+        if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos"))
         {
             Resources res = getContext().getResources(); // need this to fetch the drawable
             Drawable borde_editext_orden_venta_detalle_inhabilitado = res.getDrawable( R.drawable.borde_editext_ov_negro);
@@ -1120,10 +1171,10 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         dialog.setContentView(R.layout.layout_alert_dialog_orden_venta_detalle);
 
         TextView textTitle = dialog.findViewById(R.id.text_orden_venta_detalle);
-        textTitle.setText("Advertencia!!!");
+        textTitle.setText(Context.getResources().getString(R.string.warning).toUpperCase());
 
         TextView textMsj = dialog.findViewById(R.id.textViewMsj_orden_venta_detalle);
-        textMsj.setText("Se deshabilitara la Asignacion de Descuento en la Linea, si es necesario asigne Primero el Descuento y Despues la Promocion..");
+        textMsj.setText(Context.getResources().getString(R.string.disabled_descount_for_the_promotion));
 
         ImageView image = (ImageView) dialog.findViewById(R.id.image_orden_venta_detalle);
 
@@ -1185,6 +1236,9 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         EditText editDspPorcentaje;
         TextView tv_orden_detalle_precio_igv;
         TextView tv_orden_detalle_total_igv;
+        TextView tv_orden_liter;
+        TextView tv_orden_detalle_sigaus;
+        TableRow tr_sigaus;
         ViewGroup layout;
 
     }

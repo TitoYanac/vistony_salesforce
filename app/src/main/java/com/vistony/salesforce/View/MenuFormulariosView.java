@@ -59,7 +59,7 @@ public class MenuFormulariosView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Menu Formularios");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.menu_forms));
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);

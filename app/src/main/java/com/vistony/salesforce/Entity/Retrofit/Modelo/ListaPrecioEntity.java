@@ -40,6 +40,39 @@ public class ListaPrecioEntity {
     @SerializedName("Units")
     private String unit;
 
+    @SerializedName("OilTax")
+    private String oiltax;
+
+    @SerializedName("Liter")
+    private String liter;
+
+    @SerializedName("SIGAUS")
+    private String SIGAUS;
+
+    public String getOiltax() {
+        return oiltax;
+    }
+
+    public void setOiltax(String oiltax) {
+        this.oiltax = oiltax;
+    }
+
+    public String getLiter() {
+        return liter;
+    }
+
+    public void setLiter(String liter) {
+        this.liter = liter;
+    }
+
+    public String getSIGAUS() {
+        return SIGAUS;
+    }
+
+    public void setSIGAUS(String SIGAUS) {
+        this.SIGAUS = SIGAUS;
+    }
+
     public String getUnit() {
         return unit;
     }

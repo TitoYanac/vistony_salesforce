@@ -56,6 +56,19 @@ public class SettingsUserEntity {
     private String cashDscnt;
 
     @NonNull
+    @SerializedName("OilTaxStatus")
+    private String oilTaxStatus;
+
+    @NonNull
+    public String getOilTaxStatus() {
+        return oilTaxStatus;
+    }
+
+    public void setOilTaxStatus(@NonNull String oilTaxStatus) {
+        this.oilTaxStatus = oilTaxStatus;
+    }
+
+    @NonNull
     public String getCashDscnt() {
         return cashDscnt;
     }

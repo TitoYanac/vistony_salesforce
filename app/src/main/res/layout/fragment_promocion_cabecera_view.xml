@@ -39,7 +39,7 @@ tools:context=".View.PromocionCabeceraView">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Cantidad Venta:"
+            android:text="@string/quantity_sales"
             android:textColor="@color/white"
             android:textSize="24dp">
 
@@ -72,7 +72,7 @@ tools:context=".View.PromocionCabeceraView">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="@string/Selected_Promotion"
+            android:text="@string/promotion_selection"
             android:textColor="@color/white"
             android:textSize="24dp"></TextView>
 

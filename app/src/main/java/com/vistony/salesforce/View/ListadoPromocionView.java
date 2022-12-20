@@ -144,7 +144,7 @@ public class ListadoPromocionView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Listado Promocion");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.list_promotion));
         hiloObtenerListadoPromocion = new HiloObtenerListadoPromocion();
         if (getArguments() != null) {
             Listado = (ArrayList<ListaPromocionCabeceraEntity>)getArguments().getSerializable(TAG_1);

@@ -51,7 +51,9 @@ public class ListaProductoDao {
                 listaProductoEntity.setPrecioigv(Lista.get(i).getPrecioigv());
                 listaProductoEntity.setGal(Lista.get(i).getGal());
                 listaProductoEntity.setPorcentaje_dsct(Lista.get(i).getPorcentaje_dsct());
-
+                listaProductoEntity.setOiltax(Lista.get(i).getOiltax());
+                listaProductoEntity.setLiter(Lista.get(i).getLiter());
+                listaProductoEntity.setSIGAUS(Lista.get(i).getSIGAUS());
                 saveLead(listaProductoEntity);
             }
         }catch (Exception e)

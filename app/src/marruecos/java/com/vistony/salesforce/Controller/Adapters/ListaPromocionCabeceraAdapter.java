@@ -474,7 +474,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.layout_dialog_lista_promocion_valorizada);
         TextView textTitle = dialog.findViewById(R.id.tv_titulo);
-        textTitle.setText("IMPORTANTE!!!");
+        textTitle.setText(getContext().getResources().getString(R.string.warning).toUpperCase());
         final TextView tv_pack_contado,tv_pack_credito,tv_descuento_pack_contado,tv_descuento_pack_credito
                 ,tv_bono_pack_contado,tv_bono_pack_credito,tv_total_pack_contado,tv_total_pack_credito,
                 tv_precio_referencial_pack_contado,tv_precio_referencial_pack_credito,tv_precio_contado,tv_precio_credito
@@ -660,7 +660,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         image.setImageResource(R.mipmap.logo_circulo);
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
         //Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel_orden_venta_detalle);
-        dialogButton.setText("ACEPTAR");
+        dialogButton.setText(getContext().getResources().getString(R.string.accept).toUpperCase());
         //dialogButtonCancel.setText("CANCELAR");
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         //image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

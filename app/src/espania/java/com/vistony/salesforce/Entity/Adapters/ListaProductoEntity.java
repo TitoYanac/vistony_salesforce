@@ -10,8 +10,17 @@ public class ListaProductoEntity {
     public String precioigv;
     public String gal;
     public String porcentaje_dsct;
+    public String oiltax;
+    public String liter;
+    public String SIGAUS;
 
-    public ListaProductoEntity(String producto_item_id, String producto_id, String producto, String umd, String stock, String preciobase, String precioigv, String gal, String porcentaje_dsct) {
+    public ListaProductoEntity(
+            String producto_item_id, String producto_id, String producto, String umd, String stock, String preciobase, String precioigv
+            , String gal, String porcentaje_dsct
+            , String oiltax
+            , String liter
+            , String SIGAUS
+    ) {
         this.producto_item_id = producto_item_id;
         this.producto_id = producto_id;
         this.producto = producto;
@@ -21,9 +30,36 @@ public class ListaProductoEntity {
         this.precioigv = precioigv;
         this.gal = gal;
         this.porcentaje_dsct = porcentaje_dsct;
+        this.oiltax = oiltax;
+        this.liter = liter;
+        this.SIGAUS = SIGAUS;
     }
 
     public ListaProductoEntity() {
+    }
+
+    public String getOiltax() {
+        return oiltax;
+    }
+
+    public void setOiltax(String oiltax) {
+        this.oiltax = oiltax;
+    }
+
+    public String getLiter() {
+        return liter;
+    }
+
+    public void setLiter(String liter) {
+        this.liter = liter;
+    }
+
+    public String getSIGAUS() {
+        return SIGAUS;
+    }
+
+    public void setSIGAUS(String SIGAUS) {
+        this.SIGAUS = SIGAUS;
     }
 
     public String getPorcentaje_dsct() {

@@ -21,8 +21,11 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ProductoView;
 
@@ -122,12 +125,13 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
 
         // Lead actual.
         final ListaProductoEntity lead = getItem(position);
-
+        FormulasController formulasController=new FormulasController(getContext());
         // Setup.
         holder.tv_productoid.setText(lead.getProducto_id());
         holder.tv_producto.setText(lead.getProducto());
         holder.tv_umd.setText(lead.getUmd());
-        holder.tv_precio.setText(lead.getPreciobase());
+        //holder.tv_precio.setText(lead.getPreciobase());
+        holder.tv_precio.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getPreciobase(), SesionEntity.Impuesto)));
         //holder.tv_igv.setText(lead.getPrecioigv());
         holder.tv_igv.setText(lead.getStock());
         holder.tv_stock.setText(lead.getStock());

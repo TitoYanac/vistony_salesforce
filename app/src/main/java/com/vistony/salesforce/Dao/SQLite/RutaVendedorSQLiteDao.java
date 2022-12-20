@@ -281,7 +281,22 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setChk_cobranza(visitcollection);
             ObjListaClienteCabeceraEntity.setChk_ruta(checkRuta);
             ObjListaClienteCabeceraEntity.setFecharuta(fila.getString(24));
-            ObjListaClienteCabeceraEntity.setSaldo(fila.getString(25));
+
+
+            if(checkRuta.equals("0"))
+            {
+                ClienteSQlite clienteSQlite1 = new ClienteSQlite(context);
+                ArrayList<ListaClienteCabeceraEntity> listClient = new ArrayList<>();
+                listClient = clienteSQlite1.ObtenerClienteporClienteID(fila.getString(0));
+                for (int i = 0; i < listClient.size(); i++) {
+                    ObjListaClienteCabeceraEntity.setSaldo(listClient.get(i).getSaldo());
+                }
+            }else {
+                ObjListaClienteCabeceraEntity.setSaldo(fila.getString(25));
+            }
+
+
+
 
             ObjListaClienteCabeceraEntity.setLastpurchase(fila.getString(30));
             ObjListaClienteCabeceraEntity.setChkgeolocation(fila.getString(32));

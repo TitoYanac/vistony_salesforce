@@ -77,21 +77,21 @@ public class FormulasController {
         BigDecimal temp1=new BigDecimal(num1);
         BigDecimal rpta=temp1.add(new BigDecimal(num2));
 
-        return rpta.setScale(3, RoundingMode.HALF_UP).toString();
+        return rpta.setScale(2, RoundingMode.HALF_UP).toString();
     }
 
     public String CalcularMontoTotalconDescuento(String MontoTotalLineaSinDescuento,String MontoDescuento){
         BigDecimal temp1=new BigDecimal(MontoTotalLineaSinDescuento);
 
-        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).setScale(2, RoundingMode.HALF_UP);
 
         return repta.toString();
     }
 
     public String CalcularMontoTotalporLinea(String MontoSubTotalSinDescuento,String MontoDescuento,String MontoImpuesto) {
 
-        BigDecimal xd1=new BigDecimal(MontoSubTotalSinDescuento).setScale(3, RoundingMode.HALF_UP);
-        BigDecimal xd2=new BigDecimal(MontoDescuento).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal xd1=new BigDecimal(MontoSubTotalSinDescuento).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal xd2=new BigDecimal(MontoDescuento).setScale(2, RoundingMode.HALF_UP);
 
         BigDecimal rpta=xd1.subtract(xd2).add(new BigDecimal(MontoImpuesto));
 
@@ -99,8 +99,8 @@ public class FormulasController {
     }
 
     public String CalcularMontoImpuestoPorLinea(String MontoSubtotal,String MontoDescuento,String Impuesto){
-        BigDecimal xd1=new BigDecimal(MontoSubtotal).setScale(3, RoundingMode.HALF_UP);
-        BigDecimal xd2=new BigDecimal(MontoDescuento).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal xd1=new BigDecimal(MontoSubtotal).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal xd2=new BigDecimal(MontoDescuento).setScale(2, RoundingMode.HALF_UP);
         return ""+xd1.subtract(xd2).multiply((new BigDecimal(Impuesto)).multiply(new BigDecimal("0.01")));
     }
 
@@ -128,7 +128,7 @@ public class FormulasController {
         BigDecimal monto = new BigDecimal(MontoTotalLineaSinIGV);
         BigDecimal porcentaje = new BigDecimal(PorcentajeDescuento);
 
-        BigDecimal montoDescuento=monto.multiply(porcentaje).divide(new BigDecimal(100)).setScale(3,RoundingMode.HALF_UP);
+        BigDecimal montoDescuento=monto.multiply(porcentaje).divide(new BigDecimal(100)).setScale(2,RoundingMode.HALF_UP);
         Log.e("applyDiscountPercentageForLine","=>"+montoDescuento);
 
         return montoDescuento.toString();
@@ -166,7 +166,7 @@ public class FormulasController {
     }
 
     //CALCULAR PARA MOSTRAR EN CABECERA
-    public TotalSalesOrder CalcularMontosPedidoCabeceraDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity){
+    public TotalSalesOrder CalcularMontosPedidoCabeceraDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity, Context context){
 
         String CalculoTotalDescuento,CalculoTotalGalonaje;
 
@@ -174,11 +174,11 @@ public class FormulasController {
         CalculoTotalGalonaje=ObtenerCalculoTotalGalonesOrdenDetallePromocion(listaOrdenVentaDetalleEntity);
 
         String CalculoTotalIGV="",CalculoTotal="";
-        BigDecimal CalculoSubTotal=new BigDecimal(ObtenerCalculoMontoSubTotalOrdenDetallePromocion(listaOrdenVentaDetalleEntity)).setScale(3,RoundingMode.HALF_UP);
-        BigDecimal CalculoTotalDsct=new BigDecimal(CalculoTotalDescuento).setScale(3,RoundingMode.HALF_UP);
+        BigDecimal CalculoSubTotal=new BigDecimal(ObtenerCalculoMontoSubTotalOrdenDetallePromocion(listaOrdenVentaDetalleEntity,context)).setScale(2,RoundingMode.HALF_UP);
+        BigDecimal CalculoTotalDsct=new BigDecimal(CalculoTotalDescuento).setScale(2,RoundingMode.HALF_UP);
 
-        CalculoTotalIGV=""+CalculoSubTotal.subtract(CalculoTotalDsct).multiply( new BigDecimal(Induvis.getImpuestoDouble())).setScale(3,RoundingMode.HALF_UP);
-        CalculoTotal=CalculoSubTotal.subtract(CalculoTotalDsct).add(new BigDecimal(CalculoTotalIGV)).setScale(3,RoundingMode.HALF_UP).toString();
+        CalculoTotalIGV=""+CalculoSubTotal.subtract(CalculoTotalDsct).multiply( new BigDecimal(Induvis.getImpuestoDouble())).setScale(2,RoundingMode.HALF_UP);
+        CalculoTotal=CalculoSubTotal.subtract(CalculoTotalDsct).add(new BigDecimal(CalculoTotalIGV)).setScale(2,RoundingMode.HALF_UP).toString();
 
 
         Log.e("setSubtotal",""+CalculoSubTotal);
@@ -214,7 +214,7 @@ public class FormulasController {
             for(int i=0;i<lead.getOrden_detalle_lista_orden_detalle_promocion().size();i++){
                 Log.e("REOS", "formulascontroller-CalcularMontoImpuestoOrdenDetallePromocionLinea-lead.getOrden_detalle_lista_orden_detalle_promocion().get(i).getOrden_detalle_monto_igv():"+lead.getOrden_detalle_lista_orden_detalle_promocion().get(i).getOrden_detalle_monto_igv());
 
-                calculoImpuesto=calculoImpuesto.add(new BigDecimal(lead.getOrden_detalle_lista_orden_detalle_promocion().get(i).getOrden_detalle_monto_igv()).setScale(3,RoundingMode.HALF_UP));
+                calculoImpuesto=calculoImpuesto.add(new BigDecimal(lead.getOrden_detalle_lista_orden_detalle_promocion().get(i).getOrden_detalle_monto_igv()).setScale(2,RoundingMode.HALF_UP));
             }
         }
 
@@ -247,23 +247,95 @@ public class FormulasController {
             }
         }
         Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>"+cacculoDsct);
-        return cacculoDsct.setScale(3, RoundingMode.HALF_UP).toString();
+        return cacculoDsct.setScale(2, RoundingMode.HALF_UP).toString();
     }
 
-    public String ObtenerCalculoMontoSubTotalOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista){
+    public String ObtenerCalculoMontoSubTotalOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista, Context context){
 
         BigDecimal acum = new BigDecimal(0);
 
-        for(int i=0;i<Lista.size();i++) {
+        ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(context);
+        ArrayList<ListaPrecioDetalleSQLiteEntity> listSIGAUS=new ArrayList<>();
+        listSIGAUS=listaPrecioDetalleSQLiteDao.getProductSIGAUS();
 
-            //if(Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())<100)
-            //{
+        String preciobase="";
+        int SIGAUS=0;
+        for(int j=0;j<listSIGAUS.size();j++)
+        {
+            preciobase=listSIGAUS.get(j).getContado();
+        }
+        for(int g=0;g<Lista.size();g++)
+        {
+            Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.get(g).getOrden_detalle_lista_promocion_cabecera(): "+Lista.get(g).getOrden_detalle_lista_promocion_cabecera());
+            if(Lista.get(g).getOrden_detalle_producto_id().equals("SIGAUS"))
+            {
+                SIGAUS++;
+            }
+        }
+
+        Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.preciobase: "+preciobase);
+        Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.size: "+Lista.size());
+        if(SIGAUS==0)
+        {
+            for(int i=0;i<Lista.size();i++) {
+                if(BuildConfig.FLAVOR.equals("espania"))
+                {
+                    if(Lista.get(i).getOrden_detalle_oil_tax()!=null)
+                    {
+                        Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.get(i).getOrden_detalle_oil_tax()"+ Lista.get(i).getOrden_detalle_oil_tax());
+                        if (Lista.get(i).getOrden_detalle_oil_tax().equals("Y")) {
+                            Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.get(i).Lista.get(i).getOrden_detalle_liter())"+Lista.get(i).getOrden_detalle_liter());
+                            Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.get(i).getOrden_detalle_producto_id"+Lista.get(i).getOrden_detalle_producto_id());
+                            Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.get(i).getOrden_detalle_cantidad"+Lista.get(i).getOrden_detalle_cantidad());
+                            Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.get(i).getOrden_detalle_gal"+Lista.get(i).getOrden_detalle_gal());
+                            Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.get(i).getOrden_detalle_montosubtotal"+Lista.get(i).getOrden_detalle_montosubtotal());
+                            Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.get(i).SIGAUS"+(Convert.convertSIGAUS(
+                                    Convert.convertLiterAcum
+                                            (
+                                                    Lista.get(i).getOrden_detalle_liter(),
+                                                    Lista.get(i).getOrden_detalle_cantidad()
+                                            ),
+                                    preciobase
+                            )));
+                            acum = acum.add(new BigDecimal(
+                                            String.valueOf(
+                                            Float.parseFloat(Lista.get(i).getOrden_detalle_montosubtotal())
+                                            +
+                                            Float.parseFloat(Convert.convertSIGAUS(
+                                                    Convert.convertLiterAcum
+                                                            (
+                                                                    Lista.get(i).getOrden_detalle_liter(),
+                                                                    Lista.get(i).getOrden_detalle_cantidad()
+                                                            ),
+                                                    preciobase
+                                            ))
+                                            )
+                            ));
+
+                        } else {
+                            acum = acum.add(new BigDecimal(Lista.get(i).getOrden_detalle_montosubtotal()));
+                        }
+                    }
+                    else {
+                        Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.Lista.get(i).getOrden_detalle_oil_tax()"+ Lista.get(i).getOrden_detalle_oil_tax());
+
+                        acum = acum.add(new BigDecimal(Lista.get(i).getOrden_detalle_montosubtotal()));
+                    }
+                }
+                else {
+                    Log.e("REOS","FormulasController.ObtenerCalculoMontoSubTotalOrdenDetallePromocion.not BuildConfig.FLAVOR.equals(\"espania\")");
+
+                    acum = acum.add(new BigDecimal(Lista.get(i).getOrden_detalle_montosubtotal()));
+                }
+            }
+        }else {
+            for(int i=0;i<Lista.size();i++) {
                 acum = acum.add(new BigDecimal(Lista.get(i).getOrden_detalle_montosubtotal()));
-            //}
+            }
         }
 
 
-        return ""+acum.setScale(3, RoundingMode.HALF_UP);
+        return ""+acum.setScale(2, RoundingMode.HALF_UP);
     }
 
     /*public Float ObtenerCalculoPromocion(ArrayList<ListaPromocionCabeceraEntity> Lista) {
@@ -453,37 +525,41 @@ public class FormulasController {
                 );
 
                 //Empieza OrdenVentaDetallePromocion sin Lineas de Promocion
-                for(int g=0;g<listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().size();g++){
-                    cantidadlistaOrdenVentaDetallepromocion++;
-                    Log.e("REOS","FormulasController-OrdenVentaDetallePromocionsin Lineas de Promocion-listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre():"+listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre());
-                    ordenVentaDetallePromocionSQLiteDao.InsertaOrdenVentaDetallePromocion(
-                            ObjUsuario.compania_id,
-                            OrdenVenta_id,
-                            String.valueOf(cantidadlistaOrdenVentaDetallepromocion),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_producto_id(),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_umd(),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_cantidad(),
-                            ""+Convert.stringToDouble(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_precio_unitario()),
-                            //String.valueOf(Float.valueOf(format.format(Float.valueOf()))),
+                if(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion()!=null)
+                {
+                    for(int g=0;g<listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().size();g++)
+                    {
+                        cantidadlistaOrdenVentaDetallepromocion++;
+                        Log.e("REOS", "FormulasController-OrdenVentaDetallePromocionsin Lineas de Promocion-listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre():" + listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre());
+                        ordenVentaDetallePromocionSQLiteDao.InsertaOrdenVentaDetallePromocion(
+                                ObjUsuario.compania_id,
+                                OrdenVenta_id,
+                                String.valueOf(cantidadlistaOrdenVentaDetallepromocion),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_producto_id(),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_umd(),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_cantidad(),
+                                "" + Convert.stringToDouble(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_precio_unitario()),
+                                //String.valueOf(Float.valueOf(format.format(Float.valueOf()))),
 
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_montosubtotal(),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_porcentaje_descuento(),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_monto_descuento(),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_monto_igv(),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_montototallinea(),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre(),
-                            impuesto_id,
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_producto(),
-                            "",
-                            almacen_id,
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_promocion_id(),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_gal(),
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_gal_acumulado(),
-                            "10",
-                            //MontoSubTotalporLinea
-                            listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_montosubtotalcondescuento(),
-                            String.valueOf(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).isOrden_detalle_chk_descuentocontado())
-                    );
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_montosubtotal(),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_porcentaje_descuento(),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_monto_descuento(),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_monto_igv(),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_montototallinea(),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_linea_referencia_padre(),
+                                impuesto_id,
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_producto(),
+                                "",
+                                almacen_id,
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_promocion_id(),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_gal(),
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_gal_acumulado(),
+                                "10",
+                                //MontoSubTotalporLinea
+                                listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).getOrden_detalle_montosubtotalcondescuento(),
+                                String.valueOf(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_lista_orden_detalle_promocion().get(g).isOrden_detalle_chk_descuentocontado())
+                        );
+                    }
 
                 }
 
@@ -753,8 +829,9 @@ public class FormulasController {
                 taxOnly="Y";
                 taxCode="EXE_IGV";
                 U_VIST_CTAINGDCTO="741111";*/
+
                 montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotal();
-                PercentDescnt="0";
+                PercentDescnt="100";
                 //montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
             }
             //Casustica Descuento
@@ -1407,11 +1484,7 @@ public class FormulasController {
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_porcentaje_descuento=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_porcentaje_descuento();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_descuento=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_descuento();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_igv=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_igv();
-
-
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_montototallinea =listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montototallinea();
-
-
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_lista_promocion_cabecera = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_lista_promocion_cabecera();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_promocion_habilitada = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_promocion_habilitada();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_gal = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_gal();
@@ -1420,6 +1493,9 @@ public class FormulasController {
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_lista_orden_detalle_promocion = null;
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_descuentocontado = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_descuentocontado();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_chk_descuentocontado_aplicado = listaOrdenVentaDetalleEntity.get(a).isOrden_detalle_chk_descuentocontado_aplicado();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_oil_tax = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_oil_tax();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_liter = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_liter();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_SIGAUS = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_SIGAUS();
                         listaOrdenVentaDetalleEntitycopia.add(ObjlistaOrdenVentaDetalleEntity);
                     }
                 }
@@ -2008,7 +2084,7 @@ public class FormulasController {
     public String CalcularMontoTotalPromocionconDescuentoyBono(String MontoTotalLineaSinDescuento,String MontoDescuento,String Bono ){
         BigDecimal temp1=new BigDecimal(MontoTotalLineaSinDescuento);
 
-        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).subtract(new BigDecimal(Bono).setScale(3, RoundingMode.HALF_UP));
+        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).subtract(new BigDecimal(Bono).setScale(2, RoundingMode.HALF_UP));
 
         return repta.toString();
     }
@@ -2035,6 +2111,88 @@ public class FormulasController {
 
         BigDecimal subTotalLine=preUnit.multiply(cant.multiply(new BigDecimal(0.01)).add(new BigDecimal(1)));
         return subTotalLine.setScale(5,RoundingMode.DOWN).toString();
+    }
+
+
+    public ArrayList<ListaOrdenVentaDetalleEntity> addSIGAUS
+            (ArrayList<ListaOrdenVentaDetalleEntity> listSalesOrder
+             //,ArrayList<ListaOrdenVentaDetalleEntity> listadoProductosAgregados
+            )
+    {
+        ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
+        ArrayList<ListaPrecioDetalleSQLiteEntity> listSIGAUS=new ArrayList<>();
+        listSIGAUS=listaPrecioDetalleSQLiteDao.getProductSIGAUS();
+        Log.e("REOS", "FormulasController-addSIGAUS-listSIGAUS.size(): "+listSIGAUS.size());
+
+        String producto_id="",producto="",umd="",stock="",preciobase="";
+        Float cantidad=0f;
+        for(int i=0;i<listSIGAUS.size();i++)
+        {
+            producto_id=listSIGAUS.get(i).getProducto_id();
+            producto=listSIGAUS.get(i).getProducto();
+            umd=listSIGAUS.get(i).getUmd();
+            stock=listSIGAUS.get(i).getStock_almacen();
+            preciobase=listSIGAUS.get(i).getContado();
+        }
+
+        Log.e("REOS", "FormulasController-addSIGAUS-listSalesOrder.size(): "+listSalesOrder.size());
+        Log.e("REOS", "FormulasController-addSIGAUS-preciobase: "+preciobase);
+        ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
+        listaOrdenVentaDetalleEntities=ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listSalesOrder);
+        for(int j=0;j<listaOrdenVentaDetalleEntities.size();j++)
+        {
+            Log.e("REOS", "FormulasController-addSIGAUS-listSalesOrder.get(j).getOrden_detalle_oil_tax(): "+listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_liter());
+            Log.e("REOS", "FormulasController-addSIGAUS-listSalesOrder.get(j).getOrden_detalle_liter(): "+listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_cantidad());
+            if(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_oil_tax() .equals("Y"))
+            {
+                cantidad=cantidad+
+                        (
+                                Float.parseFloat(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_liter())
+                                *
+                                Float.parseFloat(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_cantidad())
+                        )
+                ;
+            }
+        }
+        ListaOrdenVentaDetalleEntity ObjListaProductosEntity=new ListaOrdenVentaDetalleEntity();
+        String indice="0";
+        if(listSalesOrder.isEmpty())
+        {
+            indice="1";
+        }
+        else
+        {
+            indice=String.valueOf(listSalesOrder.size()+1);
+        }
+
+        ObjListaProductosEntity.orden_detalle_item=(indice);
+        ObjListaProductosEntity.orden_detalle_producto_id=producto_id;
+        ObjListaProductosEntity.orden_detalle_producto=producto;
+        ObjListaProductosEntity.orden_detalle_umd=umd;
+        ObjListaProductosEntity.orden_detalle_stock=stock;
+        ObjListaProductosEntity.orden_detalle_precio_unitario=preciobase;
+        ObjListaProductosEntity.orden_detalle_gal="0";
+        ObjListaProductosEntity.orden_detalle_monto_igv="0";
+        //Cambio
+        ObjListaProductosEntity.orden_detalle_cantidad=cantidad.toString();
+        //
+        ObjListaProductosEntity.orden_detalle_monto_descuento="0";
+        ObjListaProductosEntity.orden_detalle_montototallinea="0";
+        ObjListaProductosEntity.orden_detalle_promocion_habilitada="0";
+        ObjListaProductosEntity.orden_detalle_lista_promocion_cabecera=null;
+        ObjListaProductosEntity.orden_detalle_porcentaje_descuento="0";
+        ObjListaProductosEntity.orden_detalle_montosubtotal="0";
+        ObjListaProductosEntity.orden_detalle_gal_acumulado="0";
+        ObjListaProductosEntity.orden_detalle_descuentocontado="0";
+        ObjListaProductosEntity.orden_detalle_terminopago_id="0";
+        ObjListaProductosEntity.orden_detalle_chk_descuentocontado_cabecera= true;
+        ObjListaProductosEntity.orden_detalle_cardcode= "";
+        ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo="";
+        ObjListaProductosEntity.orden_detalle_oil_tax="";
+        ObjListaProductosEntity.orden_detalle_liter="";
+        listSalesOrder.add(ObjListaProductosEntity);
+
+        return listSalesOrder;
     }
 
 

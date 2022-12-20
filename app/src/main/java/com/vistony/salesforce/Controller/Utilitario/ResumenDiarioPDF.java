@@ -303,7 +303,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tbllblvendedor = new PdfPTable(1);
             tbllblvendedor.setWidthPercentage(100);
             PdfPCell cellTablelblvendedor = null;
-            cellTablelblvendedor=new PdfPCell(new Phrase(context.getResources().getString(R.string.separator)+context.getResources().getString(R.string.seller_data).toUpperCase()+context.getResources().getString(R.string.separator) ,font6));
+            cellTablelblvendedor=new PdfPCell(new Phrase(context.getResources().getString(R.string.separator_short)+context.getResources().getString(R.string.seller_data).toUpperCase()+context.getResources().getString(R.string.separator_short) ,font6));
             cellTablelblvendedor.disableBorderSide(Rectangle.BOX);
             cellTablelblvendedor.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbllblvendedor.addCell(cellTablelblvendedor);
@@ -357,7 +357,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tbllblvariable = new PdfPTable(1);
             tbllblvariable.setWidthPercentage(100);
             PdfPCell cellTablelblvariable= null;
-            cellTablelblvariable=new PdfPCell(new Phrase(context.getResources().getString(R.string.separator)+context.getResources().getString(R.string.product_focus).toUpperCase()+context.getResources().getString(R.string.separator),font6));
+            cellTablelblvariable=new PdfPCell(new Phrase(context.getResources().getString(R.string.separator_short)+context.getResources().getString(R.string.product_focus).toUpperCase()+context.getResources().getString(R.string.separator_short),font6));
             cellTablelblvariable.disableBorderSide(Rectangle.BOX);
             cellTablelblvariable.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbllblvariable.addCell(cellTablelblvariable);
@@ -573,8 +573,8 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tbefecruta = new PdfPTable(1);
             tbefecruta.setWidthPercentage(100);
             PdfPCell celltbefecruta = null;
-            celltbefecruta=new PdfPCell(new Phrase(context.getResources().getString(R.string.separator)+context.getResources().getString(R.string.effectiveness).toUpperCase()+" "
-                    +context.getResources().getString(R.string.route).toUpperCase()+context.getResources().getString(R.string.separator)  ,font6));
+            celltbefecruta=new PdfPCell(new Phrase(context.getResources().getString(R.string.separator_short)+context.getResources().getString(R.string.effectiveness).toUpperCase()+" "
+                    +context.getResources().getString(R.string.route).toUpperCase()+context.getResources().getString(R.string.separator_short)  ,font6));
             celltbefecruta.disableBorderSide(Rectangle.BOX);
             celltbefecruta.setHorizontalAlignment(Element.ALIGN_CENTER);
             tbefecruta.addCell(celltbefecruta);
@@ -705,8 +705,8 @@ public class ResumenDiarioPDF extends AppCompatActivity {
             PdfPTable tblnoruta = new PdfPTable(1);
             tblnoruta.setWidthPercentage(100);
             PdfPCell cellTablenoruta = null;
-            cellTablenoruta=new PdfPCell(new Phrase(context.getResources().getString(R.string.separator)+context.getResources().getString(R.string.no).toUpperCase()+" "
-                    +context.getResources().getString(R.string.route).toUpperCase()+context.getResources().getString(R.string.separator)
+            cellTablenoruta=new PdfPCell(new Phrase(context.getResources().getString(R.string.separator_short)+context.getResources().getString(R.string.no).toUpperCase()+" "
+                    +context.getResources().getString(R.string.route).toUpperCase()+context.getResources().getString(R.string.separator_short)
                     ,font6));
             cellTablenoruta.disableBorderSide(Rectangle.BOX);
             cellTablenoruta.setHorizontalAlignment(Element.ALIGN_CENTER);

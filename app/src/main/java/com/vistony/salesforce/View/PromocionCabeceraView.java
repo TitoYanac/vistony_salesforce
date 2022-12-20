@@ -218,7 +218,7 @@ public class PromocionCabeceraView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().setTitle("Menu Promociones");
+        getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
         context=getContext();
         hiloObtenerPromocionCabecera= new HiloObtenerPromocionCabecera();
         if (getArguments() != null) {

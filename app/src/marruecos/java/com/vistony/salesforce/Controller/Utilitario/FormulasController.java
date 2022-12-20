@@ -755,7 +755,7 @@ public class FormulasController {
                 taxCode="EXE_IGV";
                 U_VIST_CTAINGDCTO="741111";*/
                 montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotal();
-                PercentDescnt="0";
+                PercentDescnt="100";
                 //montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
             }
             //Casustica Descuento
@@ -2036,6 +2036,8 @@ public class FormulasController {
         BigDecimal cant = new BigDecimal(FactorImpuesto);
 
         BigDecimal subTotalLine=preUnit.multiply(cant.multiply(new BigDecimal(0.01)).add(new BigDecimal(1)));
+
+        Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-resultado-"+subTotalLine.setScale(5,RoundingMode.DOWN).toString());
         return subTotalLine.setScale(5,RoundingMode.DOWN).toString();
     }
 

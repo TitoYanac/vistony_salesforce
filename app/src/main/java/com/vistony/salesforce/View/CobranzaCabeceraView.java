@@ -644,8 +644,13 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     if (chkdepositodirecto.isChecked()) {
                         listabancosqliteentity = bancoSQLite.ObtenerBanco();
                     } else {
+                        if(BuildConfig.FLAVOR.equals("espania"))
+                        {
+                            listabancosqliteentity = bancoSQLite.ObtenerBanco();
+                        }else {
+                            listabancosqliteentity = bancoSQLite.getBankDriver();
+                        }
 
-                        listabancosqliteentity = bancoSQLite.getBankDriver();
                     }
                 }else
                 {

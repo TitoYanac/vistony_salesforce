@@ -11,42 +11,54 @@
     android:id="@+id/relativeListaListadoPromocion"
     >
 
-    <TextView
-        android:id="@+id/lbl_id"
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:text="ID:"
-        android:textAppearance="?attr/textAppearanceListItem"
-        tools:text="id" />
-    <TextView
-        android:id="@+id/tv_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="90dp"
-        android:layout_marginTop="0dp"
-        android:text="ID1"
-        android:textAppearance="?attr/textAppearanceListItem"
-         />
-    <TextView
-        android:id="@+id/lbl_lista_precio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="30dp"
-        android:text="Lista Precio:"
-        android:textAppearance="?attr/textAppearanceListItem"
-         />
+        android:layout_marginBottom="5dp">
 
-    <TextView
-        android:id="@+id/tv_lista_precio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="90dp"
-        android:layout_marginTop="30dp"
-        android:text="Lista Precio:"
-        android:textAppearance="?attr/textAppearanceListItem"
-        />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/lbl_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/code"
+            android:textAppearance="?attr/textAppearanceListItem"
+            tools:text="id" />
+        <TextView
+            android:id="@+id/tv_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/code"
+            android:layout_marginLeft="5dp"
+            android:textAppearance="?attr/textAppearanceListItem"
+            />
+    </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/lbl_lista_precio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price_list"
+                android:textAppearance="?attr/textAppearanceListItem" />
+
+            <TextView
+                android:id="@+id/tv_lista_precio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price_list"
+                android:layout_marginLeft="5dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                />
+        </TableRow>
+    </TableLayout>
+
+
+
 
 </RelativeLayout>

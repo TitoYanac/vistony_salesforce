@@ -152,4 +152,8 @@
     <string name="lbl_dispatch_failed">Fallidos</string>
     <string name="lbl_dispatch_sucessfull">Exitosos</string>
     <string name="lbl_date_dispatch">Fecha Despacho</string>
+    <string name="tax_oil">Sigaus</string>
+    <string name="liter">Litrós</string>
+    <string name="sigaus">SIGAUS</string>
+
 </resources>

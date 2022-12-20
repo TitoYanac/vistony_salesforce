@@ -49,6 +49,10 @@ public class Convert {
 
     public static String currencyForView(String amount){
         String resultado="";
+        if(amount==null)
+        {
+            amount="0";
+        }
        if(amount.equals("")){
            amount="0";
        }
@@ -113,6 +117,7 @@ public class Convert {
             case "espania":
 
                 resultado= NumberFormat.getCurrencyInstance(locale).format(amountRedonded);
+                break;
             case "marruecos":
                 resultado=new BigDecimal(amount).setScale(2, RoundingMode.HALF_UP).toString()+ " MAD";
 
@@ -411,6 +416,42 @@ public class Convert {
         {
             Toast.makeText(activity, "No se pudo redimensionar la imagen- error: "+e.toString(), Toast.LENGTH_SHORT).show();
         }
-
     }
+
+    public static String convertGalatliter(String gallon,String quantity){
+        if(gallon.equals("")){
+            gallon="0";
+        }
+        if(quantity.equals("")){
+            quantity="0";
+        }
+        BigDecimal calcliter=new BigDecimal("3.78");
+        BigDecimal quantityProduc=new BigDecimal(quantity);
+        BigDecimal amountRedonded=new BigDecimal(gallon).multiply(calcliter).multiply(quantityProduc).setScale(2, RoundingMode.HALF_UP);
+        return amountRedonded.toString();
+    }
+    public static String convertSIGAUS(String literAcum,String price){
+        if(price.equals("")){
+            price="0";
+        }
+        if(literAcum.equals("")){
+            literAcum="0";
+        }
+        BigDecimal priceSigaus=new BigDecimal(price);
+        BigDecimal amountRedonded=new BigDecimal(literAcum).multiply(priceSigaus).setScale(2, RoundingMode.HALF_UP);
+        return amountRedonded.toString();
+    }
+
+    public static String convertLiterAcum(String liter,String quantity){
+        if(liter.equals("")){
+            liter="0";
+        }
+        if(quantity.equals("")){
+            quantity="0";
+        }
+        BigDecimal quantityProduc=new BigDecimal(quantity);
+        BigDecimal amountRedonded=new BigDecimal(liter).multiply(quantityProduc).setScale(2, RoundingMode.HALF_UP);
+        return amountRedonded.toString();
+    }
+
 }

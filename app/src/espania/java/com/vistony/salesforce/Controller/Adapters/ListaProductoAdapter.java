@@ -208,6 +208,10 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
 
     private void sendArrayProduct(ListaProductoEntity lead)
     {
+        Log.e("REOS", "ListaProductoAdapter-sendArrayProduct-lead.getProducto_id(): "+lead.getProducto_id());
+        Log.e("REOS", "ListaProductoAdapter-sendArrayProduct-lead.getLiter(): "+lead.getLiter());
+        Log.e("REOS", "ListaProductoAdapter-sendArrayProduct-lead.getOiltax(): "+lead.getOiltax());
+
         ListaProductoEntity listaProductoEntity=new ListaProductoEntity();
         listaProductoEntity.setProducto_id(lead.getProducto_id());
         listaProductoEntity.setProducto(lead.getProducto());
@@ -217,6 +221,10 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         listaProductoEntity.setPrecioigv(lead.getPrecioigv()) ;
         listaProductoEntity.setGal(lead.getGal());
         listaProductoEntity.setPorcentaje_dsct(lead.getPorcentaje_dsct());
+        listaProductoEntity.setOiltax(lead.getOiltax());
+        listaProductoEntity.setLiter(lead.getLiter());
+        listaProductoEntity.setSIGAUS(lead.getSIGAUS());
+
         ProductoView.newInstancia(listaProductoEntity);
     }
 

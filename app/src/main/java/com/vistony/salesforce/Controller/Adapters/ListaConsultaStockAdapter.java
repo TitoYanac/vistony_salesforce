@@ -207,6 +207,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
                         case "paraguay":
                         case "perurofalab":
                         case "espania":
+                        case "marruecos":
                             ArrayList<ListaPromocionCabeceraEntity> listaListadoPromocionCabeceraEntity=new ArrayList<>();
                             PromocionCabeceraSQLiteDao promocionCabeceraSQLiteDao=new PromocionCabeceraSQLiteDao(getContext());
                             listaListadoPromocionCabeceraEntity=promocionCabeceraSQLiteDao.ObtenerPromocionCabeceraConsultaStock(

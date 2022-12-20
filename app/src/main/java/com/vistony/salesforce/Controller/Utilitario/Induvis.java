@@ -183,10 +183,13 @@ public class Induvis {
                 break;
             case "paraguay":
                 impuesto=0.10;
+                break;
             case "perurofalab":
                 impuesto=0.18;
+                break;
             case "espania":
                 impuesto=0.21;
+                break;
             case "marruecos":
                 impuesto=0.20;
                 break;
@@ -215,8 +218,10 @@ public class Induvis {
                 break;
             case "perurofalab":
                 impuesto="18";
+                break;
             case "espania":
                 impuesto="21";
+                break;
             case "marruecos":
                 impuesto="20";
                 break;
@@ -242,6 +247,7 @@ public class Induvis {
                 break;
             case "paraguay":
                 agencia="P80035312-9";
+                break;
             case "perurofalab":
                 agencia="P20102306598";
                 break;
@@ -266,8 +272,10 @@ public class Induvis {
                 break;
             case "paraguay":
                 impuesto="IVA_10";
+                break;
             case "espania":
                 impuesto="R3";
+                break;
             case "marruecos":
                 impuesto="C4";
                 break;

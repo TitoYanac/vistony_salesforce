@@ -31,10 +31,12 @@ import com.google.android.material.tabs.TabLayout;
 import com.vistony.salesforce.Controller.Adapters.PageAdapter;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
 import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
+import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.HeaderDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoCabeceraSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
@@ -70,7 +72,7 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
     List<ClienteSQLiteEntity> LclientesqlSQLiteEntity;
     SimpleDateFormat dateFormat;
     Date date;
-    String parametrofecha;
+    public static String parametrofecha;
     private SearchView mSearchView;
     TextView tv_sheet_distpatch_date,tv_date_update;
     ImageButton imb_edit_date_dispatch,imb_get_date_dispatch,imb_update_date_dispatch;
@@ -118,14 +120,11 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
         viewPager=v.findViewById(R.id.viewpager);
         tabLayout=v.findViewById(R.id.tablayout);
         pageAdapter= new PageAdapter(getChildFragmentManager());
-        pageAdapter.addFRagment(new DispatchSheetPendingView(),"PENDIENTES");
-        pageAdapter.addFRagment(new DispatchSheetSucessful(),"EXITOSOS");
-        pageAdapter.addFRagment(new DispatchSheetFailedView(),"FALLIDOS");
-        viewPager.setAdapter(pageAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+
         getActivity().setTitle("Hoja de Despacho");
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = new Date();
+
         parametrofecha =dateFormat.format(date);
 
         tv_sheet_distpatch_date=v.findViewById(R.id.tv_sheet_distpatch_date);
@@ -138,7 +137,7 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
         imb_edit_date_dispatch.setOnClickListener(this);
         imb_get_date_dispatch.setOnClickListener(this);
         imb_update_date_dispatch.setOnClickListener(this);
-        getMastersDelivery(SesionEntity.imei,parametrofecha);
+        //getMastersDelivery(SesionEntity.imei,parametrofecha);
         return v;
     }
 
@@ -180,12 +179,72 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
         {
             tv_date_update.setText(listHeaderDispatchSqlite.get(i).getDatetimeregister());
         }
+
+        ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetPending=new ArrayList<>();
+        ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetSucesful=new ArrayList<>();
+        ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetFailed=new ArrayList<>();
+        DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(getContext());
+
+        listDetailDispatchSheetPending=detailDispatchSheetSQLite.getDetailDispatchSheetforDispatchDate(DispatchDate);
+        listDetailDispatchSheetSucesful=detailDispatchSheetSQLite.getDetailDispatchSheetforDispatchDateSucessful(DispatchDate);
+        listDetailDispatchSheetFailed=detailDispatchSheetSQLite.getDetailDispatchSheetforDispatchDateFailed(DispatchDate);
+
+       // tabLayout.removeAllTabs();
+        //tabLayout.removeAllViews();
+        //tabLayout.removeAllViewsInLayout();
+        tollbartab=v.findViewById(R.id.tollbartab);
+        viewPager=v.findViewById(R.id.viewpager);
+        tabLayout=v.findViewById(R.id.tablayout);
+        pageAdapter= new PageAdapter(getChildFragmentManager());
+
+        pageAdapter.addFRagment(new DispatchSheetPendingView(),listDetailDispatchSheetPending.size()+"\nPENDIENTES");
+        pageAdapter.addFRagment(new DispatchSheetSucessful(),listDetailDispatchSheetSucesful.size()+"\nEXITOSOS");
+        pageAdapter.addFRagment(new DispatchSheetFailedView(),listDetailDispatchSheetFailed.size()+"\nFALLIDOS");
+
+        viewPager.setAdapter(pageAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        //getListDispatchSheet(DispatchDate);
     }
 
     public void getListDispatchSheet(String Dispatchdate){
-        DispatchSheetPendingView.newInstanceDateDispatch(Dispatchdate,getContext());
-        DispatchSheetFailedView.newInstanceDateDispatch(Dispatchdate,getContext());
-        DispatchSheetSucessful.newInstanceDateDispatch(Dispatchdate,getContext());
+
+        //DispatchSheetPendingView.newInstanceDateDispatch(Dispatchdate,getContext());
+        //DispatchSheetFailedView.newInstanceDateDispatch(Dispatchdate,getContext());
+        //DispatchSheetSucessful.newInstanceDateDispatch(Dispatchdate,getContext());
+        ArrayList<HojaDespachoCabeceraSQLiteEntity> listHeaderDispatchSqlite=new ArrayList<>();
+        HeaderDispatchSheetSQLite headerDispatchSheetSQLite=new HeaderDispatchSheetSQLite(getContext());
+
+        ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetPending=new ArrayList<>();
+        ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetSucesful=new ArrayList<>();
+        ArrayList<HojaDespachoDetalleSQLiteEntity> listDetailDispatchSheetFailed=new ArrayList<>();
+        DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(getContext());
+
+        listDetailDispatchSheetPending=detailDispatchSheetSQLite.getDetailDispatchSheetforDispatchDate(Dispatchdate);
+        listDetailDispatchSheetSucesful=detailDispatchSheetSQLite.getDetailDispatchSheetforDispatchDateSucessful(Dispatchdate);
+        listDetailDispatchSheetFailed=detailDispatchSheetSQLite.getDetailDispatchSheetforDispatchDateFailed(Dispatchdate);
+
+        //tabLayout.removeAllTabs();
+        //tabLayout.removeAllViews();
+        //tabLayout.removeAllViewsInLayout();
+        tollbartab=v.findViewById(R.id.tollbartab);
+        viewPager=v.findViewById(R.id.viewpager);
+        tabLayout=v.findViewById(R.id.tablayout);
+        pageAdapter= new PageAdapter(getChildFragmentManager());
+
+        pageAdapter.addFRagment(new DispatchSheetPendingView(),"PENDIENTES ("+listDetailDispatchSheetPending.size()+")");
+        pageAdapter.addFRagment(new DispatchSheetSucessful(),"EXITOSOS ("+listDetailDispatchSheetSucesful.size()+")");
+        pageAdapter.addFRagment(new DispatchSheetFailedView(),"FALLIDOS ("+listDetailDispatchSheetFailed.size()+")");
+
+        viewPager.setAdapter(pageAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+        listHeaderDispatchSqlite=headerDispatchSheetSQLite.getDateRegisterHeaderDispatchSheet(Dispatchdate);
+        for(int i=0;i<listHeaderDispatchSqlite.size();i++)
+        {
+            tv_date_update.setText(listHeaderDispatchSqlite.get(i).getDatetimeregister());
+        }
 
     }
 
@@ -220,10 +279,13 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
             if (!(LclientesqlSQLiteEntity.isEmpty())) {
                 CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
                 parametrosSQLite.ActualizaCantidadRegistros("1", "CLIENTES", ""+CantClientes, getDateTime());
+
             }
+            //getHeadder(SesionEntity.imei ,parametrofecha);
             return 1;
         }
         protected void onPostExecute(Object result) {
+            getListDispatchSheet(parametrofecha);
             pd.dismiss();
         }
     }
@@ -311,8 +373,20 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
                 break;
 
             case R.id.imb_get_date_dispatch:
-                getListDispatchSheet(parametrofecha);
+                //getListDispatchSheet(parametrofecha);
                 //UpdateListView(SesionEntity.imei,parametrofecha);
+                ArrayList<HojaDespachoCabeceraSQLiteEntity> listHeaderDispatchSqlite=new ArrayList<>();
+                HeaderDispatchSheetSQLite headerDispatchSheetSQLite=new HeaderDispatchSheetSQLite(getContext());
+                listHeaderDispatchSqlite=headerDispatchSheetSQLite.getDateRegisterHeaderDispatchSheet(parametrofecha);
+                if(listHeaderDispatchSqlite.isEmpty())
+                {
+                    UpdateListView(SesionEntity.imei,parametrofecha);
+                }else
+                {
+                    getListDispatchSheet(parametrofecha);
+                }
+
+
                 break;
 
             case R.id.imb_update_date_dispatch:
@@ -336,7 +410,7 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
         HeaderDispatchSheetSQLite headerDispatchSheetSQLite=new HeaderDispatchSheetSQLite(getContext());
         if(headerDispatchSheetSQLite.getCountHeaderDispatchSheetDate(DispatchDate)>0)
         {
-            getListDispatchSheet(DispatchDate);
+            //getListDispatchSheet(DispatchDate);
         }else {
             if (networkInfo != null) {
                 if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
@@ -345,7 +419,7 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
                     getAsyncTaskCustomer.execute();
                     headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(Imei,DispatchDate,getContext()).observe(getActivity(), data -> {
                         Log.e("REOS","DispatchSheetView-getMastersDelivery-data"+data.toString());
-                        getListDispatchSheet(DispatchDate);
+                        //getListDispatchSheet(DispatchDate);
                     });
 
                 } else {
@@ -353,7 +427,7 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
                 }
             }else{
                 Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
-                getListDispatchSheet(DispatchDate);
+                //getListDispatchSheet(DispatchDate);
             }
         }
         listHeaderDispatchSqlite=headerDispatchSheetSQLite.getDateRegisterHeaderDispatchSheet(DispatchDate);
@@ -374,11 +448,15 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
         if (networkInfo != null) {
             if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                 Log.e("REOS","DispatchSheetView-getMastersDelivery-entraif");
-                getAsyncTaskCustomer=new GetAsyncTaskCustomer();
-                getAsyncTaskCustomer.execute();
+                pd = new ProgressDialog(getActivity());
+                pd = ProgressDialog.show(getActivity(), "Por favor espere", "Consultando Datos", true, false);
                 headerDispatchSheetRepository.getAndInsertHeaderDispatchSheet(Imei,DispatchDate,getContext()).observe(getActivity(), data -> {
                     Log.e("REOS","DispatchSheetView-getMastersDelivery-data"+data.toString());
-                    getListDispatchSheet(DispatchDate);
+                    //getListDispatchSheet(DispatchDate);
+                    pd.dismiss();
+                    getAsyncTaskCustomer=new GetAsyncTaskCustomer();
+                    getAsyncTaskCustomer.execute();
+
                 });
 
             } else {
@@ -387,11 +465,6 @@ public class ContainerDispatchSheetView extends Fragment implements View.OnClick
         }else{
             Log.e("REOS","DispatchSheetView-getMastersDelivery-entraelse");
             getListDispatchSheet(DispatchDate);
-        }
-        listHeaderDispatchSqlite=headerDispatchSheetSQLite.getDateRegisterHeaderDispatchSheet(DispatchDate);
-        for(int i=0;i<listHeaderDispatchSqlite.size();i++)
-        {
-            tv_date_update.setText(listHeaderDispatchSqlite.get(i).getDatetimeregister());
         }
     }
 

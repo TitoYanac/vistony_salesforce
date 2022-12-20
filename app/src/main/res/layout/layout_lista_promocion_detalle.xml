@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
-        android:text="Item:"
-        android:textAppearance="?attr/textAppearanceListItem"
-        />
+        android:text="@string/code"
+        android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/tv_id_promocion_detalle"
@@ -24,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="0dp"
-        android:text="id1"
+        android:text="@string/code"
         android:textStyle="bold"
         android:textAppearance="?attr/textAppearanceListItem" />
     <TextView
@@ -33,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="20dp"
-        android:text="Producto:"
+        android:text="@string/article"
         android:textAppearance="?attr/textAppearanceListItem" />
     <TextView
         android:id="@+id/tv_producto_promocion_detalle"
@@ -41,17 +40,18 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
         android:layout_marginTop="20dp"
-        android:text="Producto1"
+        android:text="@string/article"
         android:textStyle="bold"
         android:textAppearance="?attr/textAppearanceListItem" />
+
     <TextView
         android:id="@+id/lbl_cant_producto_promocion_detalle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="0dp"
-        android:text="Cantidad:"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:text="@string/quantity"
+        android:textAppearance="?attr/textAppearanceListItem" />
     <TextView
         android:id="@+id/tv_cant_producto_promocion_detalle"
         android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
         android:layout_marginLeft="170dp"
         android:layout_marginTop="0dp"
         android:textStyle="bold"
-        android:text="Cantidad1"
+        android:text="@string/quantity"
         android:textAppearance="?attr/textAppearanceListItem" />
     <TextView
         android:id="@+id/lbl_cant_producto_promocion_umd"
@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="230dp"
         android:layout_marginTop="0dp"
-        android:text="UMD:"
+        android:text="@string/umd"
         android:textAppearance="?attr/textAppearanceListItem"/>
     <TextView
         android:id="@+id/tv_cant_producto_promocion_umd"
@@ -76,7 +76,7 @@
         android:layout_marginLeft="270dp"
         android:layout_marginTop="0dp"
         android:textStyle="bold"
-        android:text="UMD1"
+        android:text="@string/umd"
         android:textAppearance="?attr/textAppearanceListItem"
         />
 

@@ -36,6 +36,34 @@ public class UsuarioSQLiteEntity {
     public String activecurrency;
     public String migratequotation;
     public String census;
+    public String oiltaxstatus;
+    public String oiltaxdesc;
+    public String oiltaxvalue;
+
+
+    public String getOiltaxstatus() {
+        return oiltaxstatus;
+    }
+
+    public void setOiltaxstatus(String oiltaxstatus) {
+        this.oiltaxstatus = oiltaxstatus;
+    }
+
+    public String getOiltaxdesc() {
+        return oiltaxdesc;
+    }
+
+    public void setOiltaxdesc(String oiltaxdesc) {
+        this.oiltaxdesc = oiltaxdesc;
+    }
+
+    public String getOiltaxvalue() {
+        return oiltaxvalue;
+    }
+
+    public void setOiltaxvalue(String oiltaxvalue) {
+        this.oiltaxvalue = oiltaxvalue;
+    }
 
     public String getCensus() {
         return census;

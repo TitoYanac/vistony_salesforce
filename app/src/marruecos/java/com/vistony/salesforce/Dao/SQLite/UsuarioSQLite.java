@@ -82,6 +82,10 @@ public class UsuarioSQLite {
                 registro.put("planta", vendedor.get(i).getPhone());
                 registro.put("quotation", vendedor.get(i).getQuotation());
                 registro.put("census", vendedor.get(i).getCensus());
+
+
+
+
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.rate: " + vendedor.get(i).getRate());
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.vendedor.get(i).getNombreusuario(): " + vendedor.get(i).getNombreusuario());
                 bd.insert("usuario", null, registro);

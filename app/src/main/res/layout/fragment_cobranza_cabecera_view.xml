@@ -201,7 +201,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:clickable="false"
-                android:text="@string/lbl_cheque" />
+                android:text="@string/lbl_cheque"
+                android:visibility="gone"
+                />
         </TableRow>
 
         <TextView

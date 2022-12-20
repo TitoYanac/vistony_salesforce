@@ -14,15 +14,17 @@
     android:id="@+id/relativeListaPromocionCabecera"
     android:background="@drawable/borde_cuadrado_promocion_cabecera"
     >
+
     <TextView
         android:id="@+id/lbl_promocion_cabecera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="00dp"
         android:layout_marginTop="10dp"
-        android:text="PACK DE:"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:text="@string/pack"
+        android:textAllCaps="true"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_promocion_id"
@@ -147,8 +149,9 @@
         android:layout_marginLeft="0dp"
         android:layout_marginTop="90dp"
         android:gravity="center_horizontal"
-        android:text="VALORIZACION:"
+        android:text="@string/valorization"
         android:textAlignment="center"
+        android:textAllCaps="true"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textStyle="bold" />
 
