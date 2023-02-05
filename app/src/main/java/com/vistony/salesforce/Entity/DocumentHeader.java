@@ -41,6 +41,33 @@ public class DocumentHeader {
     private String Brand;
     private String OSVersion;
     private String Intent;
+    private String Route;
+    private String U_SYP_PDTREV;
+    private String U_SYP_PDTCRE;
+
+    public String getU_SYP_PDTREV() {
+        return U_SYP_PDTREV;
+    }
+
+    public void setU_SYP_PDTREV(String u_SYP_PDTREV) {
+        U_SYP_PDTREV = u_SYP_PDTREV;
+    }
+
+    public String getU_SYP_PDTCRE() {
+        return U_SYP_PDTCRE;
+    }
+
+    public void setU_SYP_PDTCRE(String u_SYP_PDTCRE) {
+        U_SYP_PDTCRE = u_SYP_PDTCRE;
+    }
+
+    public String getRoute() {
+        return Route;
+    }
+
+    public void setRoute(String route) {
+        Route = route;
+    }
 
     public String getIntent() {
         return Intent;

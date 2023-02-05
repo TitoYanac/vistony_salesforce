@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -69,6 +70,7 @@ public class OrdenVentaDetalleView extends Fragment {
     static String listaprecio_id,descuentocontado,terminopago_id;
     static Context context;
     private ProgressDialog pd;
+    TableRow tr_taxoil;
 
     public static OrdenVentaDetalleView newInstanceEnviaListaPromocion (Object objeto) {
 
@@ -266,6 +268,8 @@ public class OrdenVentaDetalleView extends Fragment {
         tv_orden_venta_detalle_igv = v.findViewById(R.id.tv_orden_venta_detalle_igv);
         tv_orden_venta_detalle_total = v.findViewById(R.id.tv_orden_venta_detalle_total);
         tv_orden_detalle_galones = v.findViewById(R.id.tv_orden_detalle_galones);
+        tr_taxoil=v.findViewById(R.id.tr_taxoil);
+        tr_taxoil.setVisibility(View.GONE);
 
         fab_consulta_productos.setOnClickListener(view -> {
 

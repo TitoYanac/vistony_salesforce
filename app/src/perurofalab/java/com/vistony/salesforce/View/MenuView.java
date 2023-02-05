@@ -2321,6 +2321,12 @@ public class MenuView extends AppCompatActivity
         Log.e("REOS","MenuView-onResume");
         super.onResume();
         registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
+        {
+            Intent intent = new Intent(this, LoginView.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override

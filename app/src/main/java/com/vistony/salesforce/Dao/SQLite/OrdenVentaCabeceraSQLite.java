@@ -72,7 +72,8 @@ public class OrdenVentaCabeceraSQLite {
             String U_SYP_MDMT,
             String U_SYP_STATUS,
             String rate,
-            String dispatchdate
+            String dispatchdate,
+            String route
 
     ){
 
@@ -160,6 +161,7 @@ public class OrdenVentaCabeceraSQLite {
         registro.put("U_SYP_MDMT",U_SYP_MDMT);
         registro.put("dispatchdate",dispatchdate);
         registro.put("countsend","1");
+        registro.put("route",route);
 
         bd.insert("ordenventacabecera",null,registro);
         bd.close();
@@ -300,7 +302,7 @@ public class OrdenVentaCabeceraSQLite {
             Cursor fila = bd.rawQuery("SELECT compania_id,ordenventa_id,cliente_id,domembarque_id,domfactura_id,terminopago_id," +
                     "agencia_id,U_VIS_AgencyRUC,U_VIS_AgencyName,U_VIS_AgencyDir,moneda_id,comentario,almacen_id,impuesto_id,montosubtotal,montodescuento,montoimpuesto,montototal,fuerzatrabajo_id," +
                     "usuario_id,enviadoERP,recibidoERP,ordenventa_ERP_id,listaprecio_id,planta_id,fecharegistro,tipocambio,fechatipocambio,rucdni,DocType," +
-                    "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito,domembarque_text,cliente_text,terminopago_text,quotation,U_SYP_MDTD,U_SYP_MDSD,U_SYP_MDCD,U_SYP_MDMT,U_SYP_STATUS,dispatchdate,countsend " +
+                    "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito,domembarque_text,cliente_text,terminopago_text,quotation,U_SYP_MDTD,U_SYP_MDSD,U_SYP_MDCD,U_SYP_MDMT,U_SYP_STATUS,dispatchdate,countsend,IFNULL(route,'0') AS route" +
                     " FROM ordenventacabecera WHERE ordenventa_id=? LIMIT 1",new String[]{ordenventa_id});
             if (fila.moveToFirst()) {
                 do {
@@ -358,6 +360,15 @@ public class OrdenVentaCabeceraSQLite {
                     ordenVentaCabeceraSQLiteEntity.setU_SYP_STATUS(fila.getString(fila.getColumnIndex("U_SYP_STATUS")));
                     ordenVentaCabeceraSQLiteEntity.setDispatchdate(fila.getString(fila.getColumnIndex("dispatchdate")));
                     ordenVentaCabeceraSQLiteEntity.setIntent(fila.getString(fila.getColumnIndex("countsend")));
+                    //ordenVentaCabeceraSQLiteEntity.setRoute(fila.getString(fila.getColumnIndex("route")));
+                    if(fila.getString(fila.getColumnIndex("route")).equals("1"))
+                    {
+                        ordenVentaCabeceraSQLiteEntity.setRoute("Y");
+                    }else {
+                        ordenVentaCabeceraSQLiteEntity.setRoute("N");
+                    }
+
+
 
                     listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
 
@@ -366,6 +377,7 @@ public class OrdenVentaCabeceraSQLite {
             }
         }catch(Exception e){
             e.printStackTrace();
+            Log.e("REOS", "OrdenVentaCabeceraSQLite-ObtenerOrdenVentaCabeceraporID-error:"+e.toString());
         }finally {
             bd.close();
         }

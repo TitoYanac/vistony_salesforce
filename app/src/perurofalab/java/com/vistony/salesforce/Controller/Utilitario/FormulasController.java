@@ -656,18 +656,20 @@ public class FormulasController {
 
         String agenciaruc="", agenciadir="", agencianombre="", agenciacode="",U_SYP_MDMT="",U_SYP_TVENTA="",U_SYP_VIST_TG="";
 
-
-        if(ovCabecera.getTerminopago_id().equals("47"))
+        Log.e("REOSV","-FormulasController.GenerayConvierteaJSONOV.ovCabecera..getTerminopago_id: "+ovCabecera.getTerminopago_id());
+        if(ovCabecera.getTerminopago_id().equals("40"))
         {
             U_SYP_MDMT="08";
             U_SYP_TVENTA="03";
             U_SYP_VIST_TG="Y";
+            Log.e("REOS-FormulasController-GenerayConvierteaJSONOV","Entro_IF");
         }
         else
         {
             U_SYP_MDMT=ovCabecera.getU_SYP_MDMT();
             U_SYP_TVENTA="01";
             U_SYP_VIST_TG="N";
+            Log.e("REOS-FormulasController-GenerayConvierteaJSONOV","Entro_else");
         }
 
         DocumentHeader documentHeader=new DocumentHeader();
@@ -770,7 +772,7 @@ public class FormulasController {
                 PercentDescnt=listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento();
             }
             //Casuistica Transferencia Gratuita
-            else if(ovCabecera.getTerminopago_id().equals("47"))
+            else if(ovCabecera.getTerminopago_id().equals("40"))
             {
                 COGSAccountCode="659419";
                 U_SYP_FECAT_07="11";
@@ -819,6 +821,8 @@ public class FormulasController {
             documentLine.setCOGSAccountCode(COGSAccountCode);
             listadoDocumentLines.add(documentLine);
         }
+        //Documento Borrador
+        documentHeader.setDraft("Y");
 
 
         documentHeader.setDocumentLines(listadoDocumentLines);

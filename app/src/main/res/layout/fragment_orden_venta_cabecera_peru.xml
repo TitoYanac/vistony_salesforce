@@ -203,6 +203,7 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/tr_dsct_cont"
                     >
                     <CheckBox
                         android:id="@+id/chk_descuento_contado"

@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.zxing.BarcodeFormat;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -32,6 +34,7 @@ import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.View.MenuView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -59,7 +62,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
         }
     }
 
-    public void generarPdf(Context context, ArrayList<OrdenVentaCabeceraSQLiteEntity> ListaOrdenVentaCabecera, ArrayList<OrdenVentaDetallePromocionSQLiteEntity> ListaOrdenVentaDetalle ) {
+    public void generarPdf(Context context, ArrayList<OrdenVentaCabeceraSQLiteEntity> ListaOrdenVentaCabecera, ArrayList<OrdenVentaDetallePromocionSQLiteEntity> ListaOrdenVentaDetalle,String printpdf ) {
         String cliente_id="",nombrecliente="",direccion="",fechaemision="",terminopago="",subtotal="",igv="",descuento="",total="",ordenventa_id="",ordenventa_erp_id="",vendedor="",moneda="";
 
         for(int i=0;i<ListaOrdenVentaCabecera.size();i++){
@@ -354,9 +357,33 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellResu = new PdfPCell(new Phrase(Convert.currencyForView(total),font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            tblResu.addCell(cellResu);
-            documento.add(tblResu);
+            //tblResu.addCell(cellResu);
+            //documento.add(tblResu);
 
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            String encData="",Data="";
+            Data=ordenventa_id+"&&&"+fechaemision+"&&&"+nombrecliente+"&&&"+total+"&&&"+SesionEntity.fuerzatrabajo_id+" "+SesionEntity.nombrefuerzadetrabajo;
+            try {
+                Log.e("REOS","DocumentoCobranzaPDF-generarPdf-EntroalTryCifrado");
+                encData= CifradoController.encrypt("Vistony2019*".getBytes("UTF-16LE"), Data.getBytes("UTF-16LE"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Bitmap bitmapqr = barcodeEncoder.encodeBitmap(encData, BarcodeFormat.QR_CODE, 400, 400);
+
+            ByteArrayOutputStream streamqr = new ByteArrayOutputStream();
+
+            bitmapqr.compress(Bitmap.CompressFormat.PNG, 50, streamqr);
+            Image imagenqr = Image.getInstance(streamqr.toByteArray());
+            imagenqr.setAlignment(Element.ALIGN_CENTER);
+
+
+
+            tblResu.addCell(cellResu);
+            tblResu.addCell(imagenqr);
+
+            documento.add(tblResu);
+            documento.add(imagenqr);
 
 
 
@@ -382,17 +409,28 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + File.separator+"OrdenVenta"+File.separator+ordenventa_id+".pdf");
 
             Uri  excelPath = FileProvider.getUriForFile(context, context.getPackageName(), file);
+                Log.e("REOS","DocumentoPedidoPDF-file: "+ file);
+                /*Intent target = new Intent(Intent.ACTION_VIEW);
+                target.setDataAndType(excelPath,"application/pdf");
+                target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);*/
+            if(printpdf.equals("Y"))
+            {
+                MenuView menuView=new MenuView();
+                menuView.getPrinterInstance().printPdf(file.toString(), 500, 0, 0, 0, 20);
 
+            }else {
                 Intent target = new Intent(Intent.ACTION_VIEW);
                 target.setDataAndType(excelPath,"application/pdf");
                 target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-            try {
+                try {
                     context.startActivity(target);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(context, "Es necesario que instales algun visor de PDF", Toast.LENGTH_SHORT).show();
                 }
+            }
+
+
 
             ///////////////////////////////////////////////////
 

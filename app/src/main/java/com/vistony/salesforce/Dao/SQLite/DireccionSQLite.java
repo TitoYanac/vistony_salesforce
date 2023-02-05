@@ -45,7 +45,8 @@ public class DireccionSQLite {
             String nombrefuerzatrabajo,
             String latitud,
             String longitud,
-            String addresscode
+            String addresscode,
+            String deliveryday
 
     )
     {
@@ -63,6 +64,7 @@ public class DireccionSQLite {
         registro.put("latitud",latitud);
         registro.put("longitud",longitud);
         registro.put("addresscode",addresscode);
+        registro.put("deliveryday",deliveryday);
         sqlite.insert("direccioncliente",null,registro);
         DataBaseManager.getInstance().closeDatabase();
 
@@ -229,6 +231,30 @@ public class DireccionSQLite {
         }
 
         return LDCliente;
+    }
+
+    public String getDayAddress (String cliente_id,String domembarque_id)
+    {
+        String resultado="";
+
+        abrir();
+
+        try {
+            Cursor filafrecuencia = bd.rawQuery(
+                    "Select  deliveryday from direccioncliente where cliente_id='"+cliente_id+"' and domembarque_id='"+domembarque_id+"'",null);
+
+            while (filafrecuencia.moveToNext())
+            {
+                resultado= (filafrecuencia.getString(0));
+
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-error"+e.toString());
+        }
+        bd.close();
+        return resultado;
     }
 
 

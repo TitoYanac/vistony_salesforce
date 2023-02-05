@@ -28,9 +28,22 @@ public class ListaOrdenVentaDetalleEntity implements Serializable  {
     public boolean orden_detalle_chk_descuentocontado;
     public String orden_detalle_terminopago_id;
     public boolean orden_detalle_chk_descuentocontado_aplicado;
+    public boolean orden_detalle_chk_descuentocontado_cabecera;
+    public String orden_detalle_cardcode;
+    public String orden_detalle_oil_tax;
+    public String orden_detalle_liter;
+    public String orden_detalle_SIGAUS;
 
 
-    public ListaOrdenVentaDetalleEntity(String orden_detalle_item, String orden_detalle_producto_id, String orden_detalle_producto, String orden_detalle_umd, String orden_detalle_stock_almacen,String orden_detalle_stock_general, String orden_detalle_cantidad, String orden_detalle_precio_unitario, String orden_detalle_montosubtotal, String orden_detalle_porcentaje_descuento, String orden_detalle_monto_descuento, String orden_detalle_monto_igv, String orden_detalle_montototallinea, ArrayList<ListaPromocionCabeceraEntity> orden_detalle_lista_promocion_cabecera, String orden_detalle_promocion_habilitada, String orden_detalle_gal, String orden_detalle_gal_acumulado, String orden_detalle_montosubtotalcondescuento, ArrayList<ListaOrdenVentaDetallePromocionEntity> orden_detalle_lista_orden_detalle_promocion, String orden_detalle_descuentocontado, boolean orden_detalle_chk_descuentocontado, String orden_detalle_terminopago_id, boolean orden_detalle_chk_descuentocontado_aplicado,String orden_detalle_porcentaje_descuento_maximo) {
+    public ListaOrdenVentaDetalleEntity(String orden_detalle_item, String orden_detalle_producto_id, String orden_detalle_producto, String orden_detalle_umd, String orden_detalle_stock_almacen,String orden_detalle_stock_general, String orden_detalle_cantidad, String orden_detalle_precio_unitario, String orden_detalle_montosubtotal, String orden_detalle_porcentaje_descuento, String orden_detalle_monto_descuento, String orden_detalle_monto_igv, String orden_detalle_montototallinea, ArrayList<ListaPromocionCabeceraEntity> orden_detalle_lista_promocion_cabecera, String orden_detalle_promocion_habilitada, String orden_detalle_gal, String orden_detalle_gal_acumulado, String orden_detalle_montosubtotalcondescuento, ArrayList<ListaOrdenVentaDetallePromocionEntity> orden_detalle_lista_orden_detalle_promocion, String orden_detalle_descuentocontado, boolean orden_detalle_chk_descuentocontado
+            , String orden_detalle_terminopago_id
+            , boolean orden_detalle_chk_descuentocontado_aplicado
+            ,String orden_detalle_porcentaje_descuento_maximo
+            , String orden_detalle_cardcode
+            , String orden_detalle_oil_tax
+            , String orden_detalle_liter
+            , String orden_detalle_SIGAUS
+    ) {
         this.orden_detalle_item = orden_detalle_item;
         this.orden_detalle_producto_id = orden_detalle_producto_id;
         this.orden_detalle_producto = orden_detalle_producto;
@@ -55,10 +68,55 @@ public class ListaOrdenVentaDetalleEntity implements Serializable  {
         this.orden_detalle_terminopago_id = orden_detalle_terminopago_id;
         this.orden_detalle_chk_descuentocontado_aplicado = orden_detalle_chk_descuentocontado_aplicado;
         this.orden_detalle_porcentaje_descuento_maximo=orden_detalle_porcentaje_descuento_maximo;
+        this.orden_detalle_cardcode = orden_detalle_cardcode;
+        this.orden_detalle_oil_tax = orden_detalle_oil_tax;
+        this.orden_detalle_liter = orden_detalle_liter;
+        this.orden_detalle_SIGAUS = orden_detalle_SIGAUS;
+
     }
 
     public ListaOrdenVentaDetalleEntity() {
 
+    }
+
+    public boolean isOrden_detalle_chk_descuentocontado_cabecera() {
+        return orden_detalle_chk_descuentocontado_cabecera;
+    }
+
+    public void setOrden_detalle_chk_descuentocontado_cabecera(boolean orden_detalle_chk_descuentocontado_cabecera) {
+        this.orden_detalle_chk_descuentocontado_cabecera = orden_detalle_chk_descuentocontado_cabecera;
+    }
+
+    public String getOrden_detalle_cardcode() {
+        return orden_detalle_cardcode;
+    }
+
+    public void setOrden_detalle_cardcode(String orden_detalle_cardcode) {
+        this.orden_detalle_cardcode = orden_detalle_cardcode;
+    }
+
+    public String getOrden_detalle_oil_tax() {
+        return orden_detalle_oil_tax;
+    }
+
+    public void setOrden_detalle_oil_tax(String orden_detalle_oil_tax) {
+        this.orden_detalle_oil_tax = orden_detalle_oil_tax;
+    }
+
+    public String getOrden_detalle_liter() {
+        return orden_detalle_liter;
+    }
+
+    public void setOrden_detalle_liter(String orden_detalle_liter) {
+        this.orden_detalle_liter = orden_detalle_liter;
+    }
+
+    public String getOrden_detalle_SIGAUS() {
+        return orden_detalle_SIGAUS;
+    }
+
+    public void setOrden_detalle_SIGAUS(String orden_detalle_SIGAUS) {
+        this.orden_detalle_SIGAUS = orden_detalle_SIGAUS;
     }
 
     public String getOrden_detalle_porcentaje_descuento_maximo() {

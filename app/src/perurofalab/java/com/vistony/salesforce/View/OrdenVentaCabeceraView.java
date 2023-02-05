@@ -39,6 +39,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
@@ -64,6 +66,7 @@ import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
@@ -147,6 +150,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
+    TableRow tr_dsct_cont;
+
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
@@ -456,7 +461,12 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         btn_dispatch_date = (ImageButton) v.findViewById(R.id.btn_dispatch_date);
         btn_dispatch_date.setOnClickListener(this);
         tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
+        tr_dsct_cont=(TableRow) v.findViewById(R.id.tr_dsct_cont);
 
+        if(BuildConfig.FLAVOR.equals("perurofalab"))
+        {
+            tr_dsct_cont.setVisibility(View.GONE);
+        }
 
         for(int i=0;i<listaTerminopago.size();i++)
         {
@@ -466,8 +476,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             if(listaTerminopago.get(i).getTerminopago_id().equals("-1"))
             {
                 chk_descuento_contado.setEnabled(true);
-
-
             }else
             {
                 chk_descuento_contado.setEnabled(false);
@@ -813,12 +821,77 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 alertaEnviarERP("Esta Seguro de Enviar a la Nube la Orden de Venta?").show();
                 return true;
             case R.id.generarpdf:
-                alertaGenerarPDF("Esta Seguro de Generar el Archivo PDF?").show();
+                if (SesionEntity.Print.equals("Y"))
+                {
+
+                    alertChoissePrintPdf("Elegir accion:").show();
+
+                }else{
+                    alertaGenerarPDF("Esta Seguro de Generar el Archivo PDF?","N").show();
+                }
+
+
                 return true;
             default:
                 break;
         }
         return false;
+    }
+
+    ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabeceraprintPDF=new ArrayList<>();
+    ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaOrdenVentaDetallePromocionprintPDF=new ArrayList<>();
+
+    private Dialog alertChoissePrintPdf(String texto) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_dialog_advertencia);
+        TextView textMsj = dialog.findViewById(R.id.tv_texto);
+        TextView titulo = dialog.findViewById(R.id.tv_titulo);
+        textMsj.setText(texto);
+        ImageView image = dialog.findViewById(R.id.image);
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+        titulo.setText("IMPORTANTE");
+        dialogButtonOK.setText("Generar PDF");
+        dialogButtonCancel.setText("Imprimir PDF");
+
+
+        OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(getContext());
+        OrdenVentaDetallePromocionSQLiteDao ordenVentaDetallePromocionSQLiteDao=new OrdenVentaDetallePromocionSQLiteDao(getContext());
+
+        listaOrdenVentaCabeceraprintPDF= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
+        listaOrdenVentaDetallePromocionprintPDF=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
+
+        dialogButtonOK.setOnClickListener(v -> {
+
+            DocumentoPedidoPDF documentoPedidoPdf =new DocumentoPedidoPDF();
+            documentoPedidoPdf.generarPdf(getContext(),listaOrdenVentaCabeceraprintPDF,listaOrdenVentaDetallePromocionprintPDF,"N");
+            dialog.dismiss();
+
+        });
+        dialogButtonCancel.setOnClickListener(v -> {
+            String vinculaimpresora="0";
+            ConfiguracionSQLiteDao configuracionSQLiteDao = new ConfiguracionSQLiteDao(getContext());
+            ArrayList<ConfiguracionSQLEntity> listaConfiguracionSQLEntity = new ArrayList<>();
+            listaConfiguracionSQLEntity = configuracionSQLiteDao.ObtenerConfiguracion();
+            for (int i = 0; i < listaConfiguracionSQLEntity.size(); i++) {
+                vinculaimpresora = listaConfiguracionSQLEntity.get(i).getVinculaimpresora();
+            }
+            if (vinculaimpresora.equals("0")) {
+                Toast.makeText(getContext(), "Advertencia: Impresora No Vinculada - Revisar en Configuracion", Toast.LENGTH_SHORT).show();
+            }else{
+                DocumentoPedidoPDF documentoPedidoPdf =new DocumentoPedidoPDF();
+                documentoPedidoPdf.generarPdf(getContext(),listaOrdenVentaCabeceraprintPDF,listaOrdenVentaDetallePromocionprintPDF,"Y");
+                dialog.dismiss();
+            }
+        }
+        );
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
     }
 
     private Dialog alertaGuardarOrdenVenta(String texto) {
@@ -877,7 +950,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         return builder.create();
     }
-    private Dialog alertaGenerarPDF(String texto) {
+    private Dialog alertaGenerarPDF(String texto,String printpdf) {
 
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.layout_dialog_advertencia);
@@ -893,7 +966,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
 
         dialogButtonOK.setOnClickListener(v -> {
-            GenerarArchivoPDF ();
+            GenerarArchivoPDF (printpdf);
             dialog.dismiss();
         });
         dialogButtonCancel.setOnClickListener(v -> {
@@ -906,7 +979,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         return  dialog;
     }
 
-    public void GenerarArchivoPDF() {
+    public void GenerarArchivoPDF(String printpdf) {
 
         ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabecera=new ArrayList<>();
         ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaOrdenVentaDetallePromocion=new ArrayList<>();
@@ -918,7 +991,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         listaOrdenVentaDetallePromocion=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
 
         DocumentoPedidoPDF documentoPedidoPdf =new DocumentoPedidoPDF();
-        documentoPedidoPdf.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
+        documentoPedidoPdf.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion,printpdf);
         //TOAST DE ARCHIVOC READO ESTA EN EL generarPdf
 
         switch (BuildConfig.FLAVOR){

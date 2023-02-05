@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHojaDespachoEntity;
@@ -123,6 +125,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
             holder.chk_collection=convertView.findViewById(R.id.chk_collection);
             holder.tv_status_dispatch=convertView.findViewById(R.id.tv_status_dispatch);
             holder.tv_ocurrencies=convertView.findViewById(R.id.tv_ocurrencies);
+            holder.tr_entrega=convertView.findViewById(R.id.tr_entrega);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -146,6 +149,11 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         holder.tv_status_dispatch.setText(lead.getEstado());
         holder.tv_ocurrencies.setText(lead.getOcurrencia());
         ArraylistaClienteCabeceraEntity=new ArrayList<>();
+
+        if(BuildConfig.FLAVOR.equals("bolivia"))
+        {
+            holder.tr_entrega.setVisibility(View.GONE);
+        }
         /*ArrayList<ClienteSQLiteEntity> listaClienteEnvio=new ArrayList<>();
         ClienteSQliteDAO clienteSQliteDAO=new ClienteSQliteDAO(getContext());
         listaClienteEnvio=clienteSQliteDAO.ObtenerDatosCliente(lead.nombrecliente);
@@ -244,6 +252,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         CheckBox chk_collection;
         TextView tv_status_dispatch;
         TextView tv_ocurrencies;
+        TableRow tr_entrega;
 
     }
 

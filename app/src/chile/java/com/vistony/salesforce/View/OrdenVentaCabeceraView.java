@@ -1311,7 +1311,7 @@ public class OrdenVentaCabeceraView extends Fragment  implements View.OnClickLis
 
     private void obtenerTituloFormulario()
     {
-        getActivity().setTitle(Induvis.getTituloVentaString());
+        getActivity().setTitle(Induvis.getTituloVentaString(getContext()));
     }
 
 

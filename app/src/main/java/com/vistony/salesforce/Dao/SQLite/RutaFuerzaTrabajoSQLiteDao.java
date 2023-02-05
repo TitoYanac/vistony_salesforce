@@ -6,11 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.RutaFuerzaTrabajoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.UserEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaFuerzaTrabajoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -265,6 +268,52 @@ public class RutaFuerzaTrabajoSQLiteDao {
             bd.close();
             return null;
         }
+    }
+
+    public String getDateWorkPathforZone (String zone_id,String cliente_id,String domembarque_id)
+    {
+        String resultado="",frecuenciastring="",fechainicioruta="",diaruta="";
+        abrir();
+        DireccionSQLite direccionSQLite=new DireccionSQLite(context);
+
+        try {
+            frecuenciastring=direccionSQLite.getDayAddress(cliente_id,domembarque_id);
+            Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-frecuencia"+frecuenciastring.toString());
+            Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-zone_id"+zone_id.toString());
+
+            Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-frecuenciaupdate"+frecuenciastring.toString());
+            Cursor filafechainicioruta = bd.rawQuery(
+                    "Select  fechainicioruta,dia from rutafuerzatrabajo where zona_id='"+zone_id+"'",null);
+            while (filafechainicioruta.moveToNext())
+            {
+                fechainicioruta= (filafechainicioruta.getString(0));
+                diaruta= (filafechainicioruta.getString(1));
+            }
+
+            if(diaruta.equals("VIERNES")||diaruta.equals("VIERNES2")||diaruta.equals("SABADO")||diaruta.equals("SABAD02"))
+            {
+                frecuenciastring=String.valueOf(Integer.valueOf(frecuenciastring)+1) ;
+            }
+            frecuenciastring="'+"+ frecuenciastring+" day'";
+
+            fechainicioruta= Induvis.getDate(BuildConfig.FLAVOR,fechainicioruta);
+            fechainicioruta="'"+fechainicioruta+"'";
+
+            Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-fechainicioruta"+fechainicioruta);
+            Cursor fila = bd.rawQuery(
+                    "Select  DATE("+fechainicioruta+","+frecuenciastring+") AS fecha from rutafuerzatrabajo where zona_id='"+zone_id+"'",null);
+            while (fila.moveToNext())
+            {
+                resultado= (fila.getString(0));
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-error"+e.toString());
+        }
+        bd.close();
+        Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-resultado"+resultado.toString());
+        return resultado;
     }
 
 }

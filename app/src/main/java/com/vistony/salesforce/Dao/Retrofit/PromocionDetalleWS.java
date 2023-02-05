@@ -19,7 +19,7 @@ public class PromocionDetalleWS {
 
     private ArrayList<PromocionDetalleSQLiteEntity> LPDetalle =  new ArrayList<>();
     private Context context;
-    DecimalFormat format = new DecimalFormat("#0");
+
     public PromocionDetalleWS (final Context context){
         this.context=context;
     }
@@ -44,14 +44,14 @@ public class PromocionDetalleWS {
                     ObjPDetalle.producto_id = promocionDetalleEntityResponse.getPromocionDetalleEntity().get(i).getProducto_id();
                     ObjPDetalle.producto = promocionDetalleEntityResponse.getPromocionDetalleEntity().get(i).getProducto();
                     ObjPDetalle.umd = promocionDetalleEntityResponse.getPromocionDetalleEntity().get(i).getUmd();
-                    ObjPDetalle.cantidad = String.valueOf(Integer.parseInt(format.format(Float.parseFloat(promocionDetalleEntityResponse.getPromocionDetalleEntity().get(i).getCantidad()))));
+                    ObjPDetalle.cantidad = promocionDetalleEntityResponse.getPromocionDetalleEntity().get(i).getCantidad();
                     ObjPDetalle.compania_id = SesionEntity.compania_id;
                     ObjPDetalle.fuerzatrabajo_id = SesionEntity.fuerzatrabajo_id;
                     ObjPDetalle.usuario_id = SesionEntity.usuario_id;
                     //ObjPDetalle.preciobase = promocionDetalleEntityResponse.getPromocionDetalleEntity().get(i).getPreciobase();
                     ObjPDetalle.preciobase = "0";
                     //ObjPDetalle.chkdescuento = promocionDetalleEntityResponse.getPromocionDetalleEntity().get(i).getChkdescuento();
-                    ObjPDetalle.descuento =  String.valueOf(Integer.parseInt(format.format(Float.parseFloat(promocionDetalleEntityResponse.getPromocionDetalleEntity().get(i).getDescuento()))));
+                    ObjPDetalle.descuento =  promocionDetalleEntityResponse.getPromocionDetalleEntity().get(i).getDescuento();
                     LPDetalle.add(ObjPDetalle);
                 }
             }

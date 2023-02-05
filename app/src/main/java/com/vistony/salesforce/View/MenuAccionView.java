@@ -630,7 +630,7 @@ public class MenuAccionView extends Fragment {
         List<ListaPendingCollectionEntity> listaPendingCollectionEntity=new ArrayList<>();
         listaPendingCollectionEntity=cobranzaDetalleSQLiteDao.getDateandCollections(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id);
         TextView textTitle = dialog.findViewById(R.id.text);
-        textTitle.setText(getActivity().getResources().getString(R.string.mse_register_visit));
+        textTitle.setText(getActivity().getResources().getString(R.string.warning));
         TextView textMsj = dialog.findViewById(R.id.textViewMsj);
         textMsj.setText(getActivity().getResources().getString(R.string.mse_receips_pending));
         ImageView image = (ImageView) dialog.findViewById(R.id.image);

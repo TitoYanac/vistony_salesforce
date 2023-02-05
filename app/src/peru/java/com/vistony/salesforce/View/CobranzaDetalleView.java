@@ -203,6 +203,9 @@ public class CobranzaDetalleView extends Fragment {
     String arrayCircle[] = {"Guardar","Generar","Validar","Firma"};
     ImageView imv_prueba_mostrarfirma;
     TableRow tablerow_e_signature;
+    private static final int REQUEST_PERMISSION_READ_SMS=255;
+    private static final int REQUEST_PERMISSION_PHONE_NUMBERS=255;
+    private static final int REQUEST_PERMISSION_PHONE_STATES=255;
 
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm", "Este es NUEVA ISNTANCIA 1");
@@ -1597,13 +1600,16 @@ public class CobranzaDetalleView extends Fragment {
             String mPhoneNumber = "";
             TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
 
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS)
-                    != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(getContext(),
-                            Manifest.permission.READ_PHONE_NUMBERS)
-                            != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                mPhoneNumber = tMgr.getLine1Number();
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+            {
+                requestPermissions(new String[]{Manifest.permission.READ_SMS}, REQUEST_PERMISSION_READ_SMS);
+                requestPermissions(new String[]{Manifest.permission.READ_PHONE_NUMBERS}, REQUEST_PERMISSION_PHONE_NUMBERS);
+                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_PERMISSION_PHONE_STATES);
+            }
+            else {
+                //mPhoneNumber = tMgr.getLine1Number();
             }
             if(!SesionEntity.perfil_id.equals("CHOFER"))
             {

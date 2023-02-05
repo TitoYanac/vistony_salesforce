@@ -37,6 +37,15 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_U_SYP_MDMT;
     public String orden_cabecera_U_SYP_STATUS;
     public String orden_cabecera_dispatch_date;
+    public String orden_cabecera_route;
+
+    public String getOrden_cabecera_route() {
+        return orden_cabecera_route;
+    }
+
+    public void setOrden_cabecera_route(String orden_cabecera_route) {
+        this.orden_cabecera_route = orden_cabecera_route;
+    }
 
     public String getOrden_cabecera_dispatch_date() {
         return orden_cabecera_dispatch_date;

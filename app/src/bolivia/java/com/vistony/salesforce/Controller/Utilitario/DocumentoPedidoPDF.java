@@ -183,7 +183,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblcliente.addCell(cellTable);
-            cellTable = new PdfPCell(new Phrase("*********************************"+Induvis.getTituloVentaString()+"*******************************",font3));
+            cellTable = new PdfPCell(new Phrase("*********************************"+Induvis.getTituloVentaString(context)+"*******************************",font3));
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblcliente.addCell(cellTable);

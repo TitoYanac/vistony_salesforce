@@ -160,6 +160,8 @@ public class CobranzaDetalleView extends Fragment {
     private ProgressDialog pd;
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
     FloatingActionButton fab_invoice_cancelation,fab_edit_signature;
+    ImageView imv_prueba_mostrarfirma;
+
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm","Este es NUEVA ISNTANCIA 1");
         CobranzaDetalleView fragment = new CobranzaDetalleView();
@@ -390,6 +392,10 @@ public class CobranzaDetalleView extends Fragment {
         tv_recibo = (TextView) v.findViewById(R.id.tv_recibo);
         chk_bancarizado = (CheckBox) v.findViewById(R.id.chk_bancarizado);
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
+        imv_prueba_mostrarfirma = (ImageView) v.findViewById(R.id.imv_prueba_mostrarfirma);
+
+        imv_prueba_mostrarfirma.setVisibility(View.GONE);
+
         fab_invoice_cancelation = (FloatingActionButton) v.findViewById(R.id.fab_invoice_cancelation);
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo= (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);

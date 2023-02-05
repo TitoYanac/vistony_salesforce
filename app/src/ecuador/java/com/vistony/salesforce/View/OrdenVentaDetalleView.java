@@ -23,10 +23,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lowagie.text.List;
+import com.vistony.salesforce.Controller.Adapters.ListSalesOrderDetailAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
@@ -60,7 +62,7 @@ public class OrdenVentaDetalleView extends Fragment {
     FloatingActionButton fab_consulta_productos;
     static HiloAgregarListaProductos hiloAgregarListaProductos;
     static HiloActualizarResumenMontos hiloActualizarResumenMontos;
-    static ListaOrdenVentaDetalleAdapter listaOrdenVentaDetalleAdapter;
+    //static ListaOrdenVentaDetalleAdapter listaOrdenVentaDetalleAdapter;
     ListView lv_ordenventadetalle;
     static TextView tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones;
     public static ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabecera=new ArrayList<>();
@@ -69,6 +71,8 @@ public class OrdenVentaDetalleView extends Fragment {
     static String listaprecio_id,descuentocontado,terminopago_id;
     static Context context;
     private ProgressDialog pd;
+    static ListSalesOrderDetailAdapter listaOrdenVentaDetalleAdapter;
+    TableRow tr_taxoil;
 
     public static OrdenVentaDetalleView newInstanceEnviaListaPromocion (Object objeto) {
 
@@ -84,17 +88,12 @@ public class OrdenVentaDetalleView extends Fragment {
     }
 
     public static OrdenVentaDetalleView newInstance(Object objeto){
-
-
         String [] arrayObject= (String[]) objeto;
-
         for(int i=0;i<arrayObject.length;i++){
             Log.e("JEPICAME","=>"+arrayObject[i]);
         }
-
         String objetostring=arrayObject[1];
         String[] compuesto = objetostring.split("-");
-
         if(compuesto[0]!=null||compuesto[1]!=null||compuesto[2]!=null){
 
             listaprecio_id=arrayObject[0]; //codigocliente
@@ -165,6 +164,10 @@ public class OrdenVentaDetalleView extends Fragment {
         ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=productoAgregado.getPorcentaje_descuento_max();
         ObjListaProductosEntity.orden_detalle_stock_almacen=productoAgregado.getStock_almacen();
         ObjListaProductosEntity.orden_detalle_stock_general=productoAgregado.getStock_general();
+        ObjListaProductosEntity.orden_detalle_cardcode= listaprecio_id;
+        //ObjListaProductosEntity.orden_detalle_oil_tax= productoAgregado.getOiltax();
+        //ObjListaProductosEntity.orden_detalle_liter= productoAgregado.getLiter();
+        //ObjListaProductosEntity.orden_detalle_SIGAUS= productoAgregado.getSIGAUS();
 
         listadoProductosAgregados.add(ObjListaProductosEntity);
         //}
@@ -259,6 +262,7 @@ public class OrdenVentaDetalleView extends Fragment {
 
         setHasOptionsMenu(true);
         v= inflater.inflate(R.layout.fragment_orden_venta_detalle_view, container, false);
+
         fab_consulta_productos = v.findViewById(R.id.fab_consulta_productos);
         lv_ordenventadetalle = v.findViewById(R.id.lv_ordenventadetalle);
         tv_orden_venta_detalle_subtotal = v.findViewById(R.id.tv_orden_venta_detalle_subtotal);
@@ -266,6 +270,8 @@ public class OrdenVentaDetalleView extends Fragment {
         tv_orden_venta_detalle_igv = v.findViewById(R.id.tv_orden_venta_detalle_igv);
         tv_orden_venta_detalle_total = v.findViewById(R.id.tv_orden_venta_detalle_total);
         tv_orden_detalle_galones = v.findViewById(R.id.tv_orden_detalle_galones);
+        tr_taxoil=v.findViewById(R.id.tr_taxoil);
+        tr_taxoil.setVisibility(View.GONE);
 
         fab_consulta_productos.setOnClickListener(view -> {
 
@@ -332,7 +338,8 @@ public class OrdenVentaDetalleView extends Fragment {
 
         protected void onPostExecute(Object result){
             getActivity().setTitle("Orden Venta Detalle");
-            listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
+            //listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
+            listaOrdenVentaDetalleAdapter = new ListSalesOrderDetailAdapter (getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
 
             lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
             hiloAgregarListaProductos =  new HiloAgregarListaProductos();

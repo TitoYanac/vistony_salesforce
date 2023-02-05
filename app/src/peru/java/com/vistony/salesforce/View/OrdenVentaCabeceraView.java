@@ -56,6 +56,7 @@ import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.RutaFuerzaTrabajoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
@@ -100,7 +101,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     OnFragmentInteractionListener mListener;
     String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta;
     static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
-    static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id;
+    static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id,zona_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;
     static EditText et_comentario;
     static TextView tv_terminopago,tv_orden_venta_agencia,tv_direccion;
@@ -285,10 +286,10 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         listaOrdenVentaDetalleEntities=new ArrayList<>();
 
         values=new ArrayList<String>();
-        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-        date = new Date();
-        fecha =dateFormat.format(date);
-        parametrofecha=fecha;
+        //dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        //date = new Date();
+        //fecha =dateFormat.format(date);
+        //parametrofecha=fecha;
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -388,6 +389,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     cliente_terminopago_id=Listado.get(i).getTerminopago_id();
                     cliente_domembarque_id=Listado.get(i).getDomembarque_id();
                     chkruta=Listado.get(i).getChk_ruta();
+                    zona_id=Listado.get(i).getZona_id();
+                    Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.zona_id: "+zona_id);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.Listado.get(i).getTerminopago_id(): "+Listado.get(i).getTerminopago_id());
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.cliente_terminopago_id: "+cliente_terminopago_id);
 
@@ -455,8 +458,15 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         listaTerminopago=terminoPagoSQLiteDao.ObtenerTerminoPagoporID(cliente_terminopago_id,SesionEntity.compania_id);
         btn_dispatch_date = (ImageButton) v.findViewById(R.id.btn_dispatch_date);
         btn_dispatch_date.setOnClickListener(this);
-        tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
 
+
+
+        //Pruebas de Fecha de entrega
+        //tv_dispatch_date.setText(getDateWorkPathforZone());
+        //Utilitario.disabledImageButtton(btn_dispatch_date,getContext());
+
+        //Produccion
+        tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
 
         for(int i=0;i<listaTerminopago.size();i++)
         {
@@ -466,8 +476,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             if(listaTerminopago.get(i).getTerminopago_id().equals("-1"))
             {
                 chk_descuento_contado.setEnabled(true);
-
-
             }else
             {
                 chk_descuento_contado.setEnabled(false);
@@ -578,6 +586,16 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         }
         hiloObtenerAgencia.execute();
         return v;
+    }
+
+    public String getDateWorkPathforZone()
+    {
+        String date="";
+        RutaFuerzaTrabajoSQLiteDao rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(getContext());
+        date=rutaFuerzaTrabajoSQLiteDao.getDateWorkPathforZone(zona_id,codigocliente,cliente_domembarque_id);
+        parametrofecha=date;
+        parametrofecha=Induvis.ConvertdatefordateSAP(parametrofecha);
+        return date;
     }
 
     public interface OnFragmentInteractionListener {
@@ -797,7 +815,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.guardar_orden_venta:
-                dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                /*dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
                 date = new Date();
                 fechacomparativa =dateFormat.format(date);
                 if(!parametrofecha.equals(fechacomparativa))
@@ -806,7 +824,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 }else {
 
                     alertdialogInformative(getContext(),"ADVERTENCIA","La Fecha de entrega de la Orden de Venta, debe ser distinta a la fecha actual, se sugiere 2 dias en adelante...").show();
-                }
+                }*/
+                alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
                 return false;
             case R.id.enviar_erp:
                 alertaEnviarERP("Esta Seguro de Enviar a la Nube la Orden de Venta?").show();
@@ -1024,6 +1043,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDMT="01";
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_STATUS="V";
             listaOrdenVentaCabeceraEntity.orden_cabecera_dispatch_date= parametrofecha;
+            listaOrdenVentaCabeceraEntity.orden_cabecera_route=chkruta;
+
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);
             visita.setAddress(cliente_domembarque_id);
@@ -1044,13 +1065,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         formulasController = new FormulasController(getContext());
 
         ///////////GUARDA LA ORDEN DE VENTA\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-
-
         formulasController.RegistrarPedidoenBD(listaOrdenVentaCabeceraEntities,listaOrdenVentaDetalleEntities);
-
-
-
         /////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
         Drawable drawable = menu_variable.findItem(R.id.guardar_orden_venta).getIcon();

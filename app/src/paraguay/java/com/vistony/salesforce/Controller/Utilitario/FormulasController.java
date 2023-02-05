@@ -1109,6 +1109,7 @@ public class FormulasController {
                         listaClienteCabeceraEntities.get(i).getTerminopago(),
                         listaClienteCabeceraEntities.get(i).getContado()
                         ,"",""
+                        ,listaClienteCabeceraEntities.get(i).getAddresscode()
 
                 );
             }

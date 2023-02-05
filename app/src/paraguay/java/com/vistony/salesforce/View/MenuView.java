@@ -128,7 +128,8 @@ public class MenuView extends AppCompatActivity
         MenuConsultaCobradoView.OnFragmentInteractionListener,
         KardexOfPaymentView.OnFragmentInteractionListener,
         MenuConsultasFacturasView.OnFragmentInteractionListener,
-        HistoricContainerSKU.OnFragmentInteractionListener
+        HistoricContainerSKU.OnFragmentInteractionListener,
+        DispatchSheetView.OnFragmentInteractionListener
 
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
@@ -163,6 +164,9 @@ public class MenuView extends AppCompatActivity
     Fragment KardexOfPaymentFragment;
     Fragment HistoricContainerSaleFragment;
     Fragment ConsultaStockFragment;
+    Fragment HojaDespachoFragment;
+    Fragment HojaDespachoView;
+
 
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     private static int TAKE_PICTURE = 1888;
@@ -227,7 +231,8 @@ public class MenuView extends AppCompatActivity
         KardexOfPaymentFragment = new Fragment();
         HistoricContainerSaleFragment = new Fragment();
         ConsultaStockFragment= new Fragment();
-
+        HojaDespachoFragment = new Fragment();
+        HojaDespachoView = new Fragment();
         arraylistConfiguracionentity= new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao =  new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -342,7 +347,7 @@ public class MenuView extends AppCompatActivity
             case "CHOFER":
             case "Chofer":
                 onNavigationItemSelected(navigationView.getMenu().getItem(1).setVisible(false));
-                onNavigationItemSelected(navigationView.getMenu().getItem(3).setVisible(false));
+                onNavigationItemSelected(navigationView.getMenu().getItem(4).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(5).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
                 break;
@@ -365,7 +370,7 @@ public class MenuView extends AppCompatActivity
             case "peru":
             case "ecuador":
             case "chile":
-            case "paraguay":
+
                 navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
@@ -387,6 +392,18 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_configuracion_general).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
+                break;
+            case "paraguay":
+                navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_formularios).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_configuracion_general).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
                 break;
             default:
@@ -702,6 +719,12 @@ public class MenuView extends AppCompatActivity
                 fragmentSeleccionado=true;
                 TAG_FRAGMENT="config_print";*/
                 //Toast.makeText(context, "Vista no construida", Toast.LENGTH_SHORT).show();
+                HojaDespachoFragment = new DispatchSheetView();
+                fragment="HojaDespachoView";
+                accion="inicio";
+                compuesto=fragment+"-"+accion;
+                object=null;
+                onFragmentInteraction(compuesto,object);
                 break;
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
@@ -1367,6 +1390,13 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
+            if(tag2.equals("dispatch"))
+            {
+                contentFragment=new HistoricStatusDispatchView() ;
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
         }
 
         if(tag.equals("MenuFormulariosView")){
@@ -1783,6 +1813,30 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
             }
         }
+        if(tag.equals("HojaDespachoView"))
+        {
+
+            if(tag2.equals("inicio"))
+            {
+                //Log.e("jpcm","inicio====");
+                //ListenerBackPress.setTemporaIdentityFragment("Deposito");
+                String taginicio=tag;
+                ft.replace(R.id.content_menu_view,HojaDespachoFragment,taginicio);
+                ft.addToBackStack("popqqqqqq");
+                ft.commit();
+            }
+            if(tag2.equals("inicioHojaDespachoViewView"))
+            {
+                String tagHojaDespachoView="HojaDespachoView";
+                tag2="inicioRutaVendedorView";
+                HojaDespachoView = getSupportFragmentManager().findFragmentByTag(tagHojaDespachoView);
+                ft.remove(HojaDespachoView);
+                //ft.add(R.id.content_menu_view,ClienteDetalleView.newInstance(Lista),tag3);
+                ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("2pop");
+                ft.commit();
+            }
+        }
     }
 
     public void EnviarFragmentCobranza(int i)
@@ -2122,6 +2176,12 @@ public class MenuView extends AppCompatActivity
     public void onResume() {
         super.onResume();
         registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
+        {
+            Intent intent = new Intent(this, LoginView.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -2146,7 +2206,7 @@ public class MenuView extends AppCompatActivity
     }
     private void obtenerTituloFormulario()
     {
-        setTitle(Induvis.getTituloVentaString());
+        setTitle(Induvis.getTituloVentaString(this));
     }
 
     public static BixolonPrinterController getPrinterInstance()

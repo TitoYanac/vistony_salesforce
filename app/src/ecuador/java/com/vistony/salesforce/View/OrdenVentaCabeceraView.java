@@ -38,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -145,6 +146,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
+    TableRow tr_taxoil;
+
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
@@ -265,7 +268,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         obtenerTituloFormulario();
         context=getContext();
-
+        SesionEntity.flagquerystock="N";
         hiloObtenerResumenOrdenVenta=new HiloObtenerResumenOrdenVenta();
 
         hiloObtenerAgencia=new HiloObtenerAgencia();
@@ -450,6 +453,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         btn_dispatch_date.setOnClickListener(this);
         tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
         tv_ruc.setText(rucdni);
+        tr_taxoil=v.findViewById(R.id.tr_taxoil);
+        tr_taxoil.setVisibility(View.GONE);
 
         tv_cliente.setText(nombrecliente);
         tv_direccion.setText(direccioncliente);
@@ -1007,6 +1012,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_MDMT="01";
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_STATUS="V";
             listaOrdenVentaCabeceraEntity.orden_cabecera_dispatch_date= parametrofecha;
+            listaOrdenVentaCabeceraEntity.orden_cabecera_route="0";
+
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);
             //visita.setAddress(listaOrdenVentaCabeceraEntity.orden_cabecera_domembarque_id);
@@ -1302,7 +1309,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
     private void obtenerTituloFormulario()
     {
-        getActivity().setTitle(Induvis.getTituloVentaString());
+        getActivity().setTitle(Induvis.getTituloVentaString(getContext()));
     }
 
 

@@ -142,13 +142,9 @@ public class MenuView extends AppCompatActivity
         CurrencyChargedView.OnFragmentInteractionListener,
         MenuConsultaCotizacionView.OnFragmentInteractionListener,
         HistoricQuotationView.OnFragmentInteractionListener,
-        ContainerDispatchSheetView.OnFragmentInteractionListener
-
-
-
-{
+        ContainerDispatchSheetView.OnFragmentInteractionListener {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
-    Fragment contentFragment,contentHistoryFragment;
+    Fragment contentFragment, contentHistoryFragment;
     ClienteCabeceraView clienteCabeceraView;
     ClienteDetalleView consultarCobranzaView;
     ParametrosView parametrosView;
@@ -185,24 +181,24 @@ public class MenuView extends AppCompatActivity
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
     private File file = new File(ruta_fotos);
-    TextView tv_fuerzatrabajo_id_navheader,tv_nombrefuerzatrabajo_navheader,tv_correlativo_navheader,tv_conexion_navheader,tv_zona;
+    TextView tv_fuerzatrabajo_id_navheader, tv_nombrefuerzatrabajo_navheader, tv_correlativo_navheader, tv_conexion_navheader, tv_zona;
     FragmentManager fragmentManager;
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     ArrayList<ConfiguracionSQLEntity> listaConfiguracionEntity;
     ArrayList<ConfiguracionSQLEntity> arraylistConfiguracionentity;
-    String correlativo="";
+    String correlativo = "";
     ConfiguracionSQLiteDao configuracionSQLiteDao;
     BluetoothAdapter bluetoothAdapter;
     public static Context context;
     ImageView imv_compania_menu;
-    public static  String indicador="0";
+    public static String indicador = "0";
     UsuarioSQLite usuarioSQLite;
-    String Conexion="";
-    private final int MY_PERMISSIONS_REQUEST_CAMERA=1;
+    String Conexion = "";
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
     private String NameOfFolder = "/RECIBOS";
     private String NameOfFile = "imagen";
-    public static String mCurrentPhotoPath="";
+    public static String mCurrentPhotoPath = "";
     private ValueCallback<Uri> uploadMessage;
     SimpleDateFormat dateFormat;
     Date date;
@@ -210,12 +206,12 @@ public class MenuView extends AppCompatActivity
     RutaFuerzaTrabajoSQLiteDao rutaFuerzaTrabajoSQLiteDao;
 
     /*VARIABLES TEMPORALESS*/
-    final int COD_FOTO=20;
+    final int COD_FOTO = 20;
     private TextView textViewStatus;
     String path;
     private CobranzaRepository cobranzaRepository;
 
-    private  String recibovalidado = "";
+    private String recibovalidado = "";
     private ConnectivityManager manager;
     private static BixolonPrinterController bxlPrinter = null;
     QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
@@ -233,36 +229,36 @@ public class MenuView extends AppCompatActivity
         setSupportActionBar(toolbar);
         dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
-        fecha =dateFormat.format(date);
-        activity=this;
-        view= (MenuItem) findViewById(R.id.nav_cobranzas);
+        fecha = dateFormat.format(date);
+        activity = this;
+        view = (MenuItem) findViewById(R.id.nav_cobranzas);
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(this);
-        CobranzaCabeceraFragment= new Fragment();
-        ConsDepositoFragment=new Fragment();
-        ConsDepositoFragment2=new Fragment();
-        ClienteCabeceraView= new Fragment();
+        CobranzaCabeceraFragment = new Fragment();
+        ConsDepositoFragment = new Fragment();
+        ConsDepositoFragment2 = new Fragment();
+        ClienteCabeceraView = new Fragment();
         RutaVendedorView = new Fragment();
         MenuAccionViewFragment = new Fragment();
         HistoricoCobranzaFragment = new Fragment();
         HistoricoDepositoFragment = new Fragment();
         OrdenVentaCabeceraFragment = new Fragment();
         DireccionClienteFragment = new Fragment();
-        ConsClienteFragment =new Fragment();
+        ConsClienteFragment = new Fragment();
         historicoOrdenVentaFragment = new Fragment();
         MenuConsultasPedidosFragment = new Fragment();
         HistoricContainerSaleFragment = new Fragment();
         BuscarClienteFragment = new Fragment();
         QuotasPerCustomerFragment = new Fragment();
-        ConsultaStockFragment= new Fragment();
+        ConsultaStockFragment = new Fragment();
         MenuConsultaCobranzaFragment = new Fragment();
         KardexOfPaymentFragment = new Fragment();
         HojaDespachoView = new Fragment();
         HojaDespachoFragment = new Fragment();
         LeadFragment = new Fragment();
-        arraylistConfiguracionentity= new ArrayList<ConfiguracionSQLEntity>();
-        configuracionSQLiteDao =  new ConfiguracionSQLiteDao(this);
+        arraylistConfiguracionentity = new ArrayList<ConfiguracionSQLEntity>();
+        configuracionSQLiteDao = new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        context=this;
+        context = this;
         usuarioSQLite = new UsuarioSQLite(this);
         quotasPerCustomerRepository = new ViewModelProvider(this).get(QuotasPerCustomerHeadRepository.class);
         quotasPerCustomerDetailRepository = new ViewModelProvider(this).get(QuotasPerCustomerDetailRepository.class);
@@ -271,14 +267,14 @@ public class MenuView extends AppCompatActivity
             Log.e("Jepicame","=>"+data);
         });*/
         historicContainerSalesRepository = new ViewModelProvider(this).get(HistoricContainerSalesRepository.class);
-        Conexion=usuarioSQLite.ObtenerUsuarioSesion().getOnline();
-        rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(this);
+        Conexion = usuarioSQLite.ObtenerUsuarioSesion().getOnline();
+        rutaFuerzaTrabajoSQLiteDao = new RutaFuerzaTrabajoSQLiteDao(this);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle( this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         clienteCabeceraView = new ClienteCabeceraView();
-        consultarCobranzaView= new ClienteDetalleView();
+        consultarCobranzaView = new ClienteDetalleView();
         parametrosView = new ParametrosView();
 
         cobranzaCabeceraView = new CobranzaCabeceraView();
@@ -287,33 +283,29 @@ public class MenuView extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
         bxlPrinter = new BixolonPrinterController(this);
-        tv_fuerzatrabajo_id_navheader=(TextView)
+        tv_fuerzatrabajo_id_navheader = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_fuerzatrabajo_id_navheader);
         //findViewById( R.id.tv_fuerzatrabajo_id_navheader);
-        tv_nombrefuerzatrabajo_navheader=(TextView)
+        tv_nombrefuerzatrabajo_navheader = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_nombrefuerzatrabajo_navheader);
 
-        tv_zona=(TextView)navigationView.getHeaderView(0).findViewById(R.id.tv_zona);
+        tv_zona = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_zona);
         tv_zona.setText(rutaFuerzaTrabajoSQLiteDao.ObtenerZonaRutaFuerzaTrabajo(fecha));
         //tv_conexion_navheader=(TextView)
         //        navigationView.getHeaderView(0).findViewById(R.id.tv_Conexion_navheader);
-        imv_compania_menu=(ImageView)
+        imv_compania_menu = (ImageView)
                 navigationView.getHeaderView(0).findViewById(R.id.imv_compania_menu);
-        textViewStatus=navigationView.getHeaderView(0).findViewById(R.id.textViewStatus);
-        listaConfiguracionEntity= new ArrayList<ConfiguracionSQLEntity>();
-        listaConfiguracionEntity=configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
-        tablerowzona= navigationView.getHeaderView(0).findViewById(R.id.tablerowzona);
+        textViewStatus = navigationView.getHeaderView(0).findViewById(R.id.textViewStatus);
+        listaConfiguracionEntity = new ArrayList<ConfiguracionSQLEntity>();
+        listaConfiguracionEntity = configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
+        tablerowzona = navigationView.getHeaderView(0).findViewById(R.id.tablerowzona);
 
 
-
-
-        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
-        {
+        if (SesionEntity.perfil_id.equals("CHOFER") || SesionEntity.perfil_id.equals("Chofer")) {
             tv_zona.setVisibility(View.GONE);
             tablerowzona.setVisibility(View.GONE);
         }
-        if(listaConfiguracionEntity.isEmpty())
-        {
+        if (listaConfiguracionEntity.isEmpty()) {
             configuracionSQLiteDao.InsertaConfiguracion(
                     "80mm",
                     "0",
@@ -328,30 +320,24 @@ public class MenuView extends AppCompatActivity
 
         arraylistConfiguracionentity = configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
 
-        for (int j=0;j<arraylistConfiguracionentity.size();j++)
-        {
-            correlativo=arraylistConfiguracionentity.get(j).getSecuenciarecibos();
+        for (int j = 0; j < arraylistConfiguracionentity.size(); j++) {
+            correlativo = arraylistConfiguracionentity.get(j).getSecuenciarecibos();
         }
 
         tv_fuerzatrabajo_id_navheader.setText(String.valueOf(SesionEntity.fuerzatrabajo_id));
         tv_nombrefuerzatrabajo_navheader.setText(String.valueOf(SesionEntity.nombrefuerzadetrabajo));
 //      tv_correlativo_navheader.setText(String.valueOf(correlativo));
 
-        if(SesionEntity.compania_id.equals("C011"))
-        {
+        if (SesionEntity.compania_id.equals("C011")) {
             imv_compania_menu.setImageResource(R.mipmap.logo_bluker_2);
-        }
-        else if(SesionEntity.compania_id.equals("C013"))
-        {
+        } else if (SesionEntity.compania_id.equals("C013")) {
             imv_compania_menu.setImageResource(R.mipmap.rofalab304x90_2);
         }
 
 
-        if(SesionEntity.Print.equals("Y"))
-        {
-            SesionEntity.formhabilPrint=("Y");
+        if (SesionEntity.Print.equals("Y")) {
+            SesionEntity.formhabilPrint = ("Y");
         }
-
 
 
         //Manejo de Perfiles
@@ -370,7 +356,7 @@ public class MenuView extends AppCompatActivity
             onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
             onNavigationItemSelected(navigationView.getMenu().getItem(7).setVisible(false));
         }*/
-        switch (SesionEntity.perfil_id){
+        switch (SesionEntity.perfil_id) {
             case "CHOFER":
             case "Chofer":
                 onNavigationItemSelected(navigationView.getMenu().getItem(1).setVisible(false));
@@ -388,7 +374,7 @@ public class MenuView extends AppCompatActivity
                 onNavigationItemSelected(navigationView.getMenu().getItem(7).setVisible(false));
                 break;
             default:
-                Log.e("REOS","Se creo sin navigation.getMenu().perfil");
+                Log.e("REOS", "Se creo sin navigation.getMenu().perfil");
                 //El error de que aparecen todas las opciones
                 Intent intent = new Intent(this, LoginView.class);
                 startActivity(intent);
@@ -397,8 +383,7 @@ public class MenuView extends AppCompatActivity
         ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-        switch (BuildConfig.FLAVOR){
+        switch (BuildConfig.FLAVOR) {
             case "bolivia":
             case "ecuador":
             case "chile":
@@ -438,7 +423,7 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
                 break;
             default:
-                Log.e("REOS","Se creo sin navigation.getMenu()");
+                Log.e("REOS", "Se creo sin navigation.getMenu()");
                 Intent intent = new Intent(this, LoginView.class);
                 startActivity(intent);
                 break;
@@ -449,27 +434,27 @@ public class MenuView extends AppCompatActivity
         //String Fragment="MenuFormulariosView";
         //String accion="agregarcliente";
 
-        String Fragment="ParametrosView";
-        String accion="Todos";
+        String Fragment = "ParametrosView";
+        String accion = "Todos";
 
-        if(BuildConfig.FLAVOR.equals("india")){
-            Fragment="MenuFormulariosView";
-            accion="agregarcliente";
-       }
+        if (BuildConfig.FLAVOR.equals("india")) {
+            Fragment = "MenuFormulariosView";
+            accion = "agregarcliente";
+        }
 
-        String compuesto=Fragment+"-"+accion;
-        onFragmentInteraction(compuesto,"");
+        String compuesto = Fragment + "-" + accion;
+        onFragmentInteraction(compuesto, "");
     }
 
     @Override
     public void onBackPressed() {
 
-        Log.e("jpcm","se esta intentando retroceder "+ListenerBackPress.getCurrentFragment()+" "+ListenerBackPress.getTemporaIdentityFragment());
+        Log.e("jpcm", "se esta intentando retroceder " + ListenerBackPress.getCurrentFragment() + " " + ListenerBackPress.getTemporaIdentityFragment());
 
-        if(ListenerBackPress.getCurrentFragment()!=null){
-            switch (ListenerBackPress.getCurrentFragment()){
+        if (ListenerBackPress.getCurrentFragment() != null) {
+            switch (ListenerBackPress.getCurrentFragment()) {
                 case "HistoricoFacturasView":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("onAttach")) {
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("onAttach")) {
                         super.onBackPressed();
                         this.setTitle("Menu Consultas");
                     }
@@ -482,10 +467,10 @@ public class MenuView extends AppCompatActivity
                     //fragmento base
                     break;
                 case "Webview":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("onDetach")){
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("onDetach")) {
                         //super.onBackPressed();
                         //fragmento base
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("onAttach")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("onAttach")) {
                         super.onBackPressed();
                     }
                     break;
@@ -503,33 +488,31 @@ public class MenuView extends AppCompatActivity
 
                     break;
                 case "FormaAsociatyListCobranzaDeposito":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")){
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")) {
                         onNavigationItemSelected(navigationView.getMenu().getItem(5).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("HistoricoDepositoViewCobranzasDetails")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("HistoricoDepositoViewCobranzasDetails")) {
                         //fragmento base de consultas
                         super.onBackPressed();
                         //onNavigationItemSelected(navigationView.getMenu().getItem(3).setChecked(true));
-                    }else{
+                    } else {
                         onNavigationItemSelected(navigationView.getMenu().getItem(3).setChecked(true));
                     }
                     break;
                 case "FormCobranzaDetalleFromHistoryCobranza":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("HistoricoDepositoViewCobranzasDetails")){
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("HistoricoDepositoViewCobranzasDetails")) {
                         super.onBackPressed();
-                    }else{
+                    } else {
                         onNavigationItemSelected(navigationView.getMenu().getItem(5).setChecked(true));
                     }
                     break;
                 case "FormListaDeudaCliente":
                 case "MenuAccionView":
                     //no necesita ir mas atras ya que es un fragmento base
-                    if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
-                    {
+                    if (SesionEntity.perfil_id.equals("CHOFER") || SesionEntity.perfil_id.equals("Chofer")) {
                         onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
-                    }else
-                        {
-                            onNavigationItemSelected(navigationView.getMenu().getItem(1).setChecked(true));
-                        }
+                    } else {
+                        onNavigationItemSelected(navigationView.getMenu().getItem(1).setChecked(true));
+                    }
 
                     /*
                     if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("rutaVendedor")){
@@ -542,22 +525,22 @@ public class MenuView extends AppCompatActivity
 
                     break;
                 case "FormDetalleCobranzaCliente":
-                    Log.e("jpcm","se regreso al tab layout");
+                    Log.e("jpcm", "se regreso al tab layout");
                     super.onBackPressed();
                     break;
                 case "catalogoView":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("onAttach")) {
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("onAttach")) {
                         super.onBackPressed();
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("onDetach")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("onDetach")) {
                         //fragmento base
                     }
                     break;
                 case "ConfigSistemaView":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("menuConfig")){
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("menuConfig")) {
                         // fragmento base
 
                         super.onBackPressed();
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("configuracion")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("configuracion")) {
                         super.onBackPressed();
                     }
                     //onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
@@ -567,11 +550,11 @@ public class MenuView extends AppCompatActivity
                     break;
                 case "ConfigImpresoraView":
 
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("fragmentoConfigImpresora")) {
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("fragmentoConfigImpresora")) {
                         //getFragmentManager().popBackStack();
                         super.onBackPressed();
                         //onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null  && ListenerBackPress.getTemporaIdentityFragment().equals("menuConfig")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("menuConfig")) {
                         //es fragmento base
                         //ListenerBackPress.setCurrentFragment(null);
                         //getFragmentManager().popBackStack();
@@ -590,50 +573,50 @@ public class MenuView extends AppCompatActivity
                     //onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
                     break;
                 case "HistoricoDepositoView":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("onAttach")){
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("onAttach")) {
                         super.onBackPressed();
                     }
                     break;
                 case "HistoricoCobranzaView":
-                    Log.e("jpcm","historico cobrnaza");
+                    Log.e("jpcm", "historico cobrnaza");
                     onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
                     break;
                 case "CLIENTE ASDASD":
-                    Log.e("jpcm","cliente  XDDD");
+                    Log.e("jpcm", "cliente  XDDD");
                     onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
                     break;
                 case "CLIENTEDEUDA":
-                    Log.e("jpcm","cliente  deuda");
+                    Log.e("jpcm", "cliente  deuda");
                     onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
                     break;
                 case "CLIENTESINDEUDA":
-                    Log.e("jpcm","cliente  sin deuda");
+                    Log.e("jpcm", "cliente  sin deuda");
                     onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
                     break;
                 case "DepositoViewXd":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")){
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")) {
                         onNavigationItemSelected(navigationView.getMenu().getItem(2).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("redirectToDepositoItem1")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("redirectToDepositoItem1")) {
                         onNavigationItemSelected(navigationView.getMenu().getItem(1).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("temporaAddCorbaznaToListDeposito")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("temporaAddCorbaznaToListDeposito")) {
                         super.onBackPressed();
                     }
                     break;
                 case "PagoDirecto":
-                    Log.e("jpcm","pago directoooo");
+                    Log.e("jpcm", "pago directoooo");
                     onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
                     break;
                 case "CObranzaDetalleView":
-                    Log.e("jpcm","cobranza detalle view");
+                    Log.e("jpcm", "cobranza detalle view");
                     break;
                 case "ConsultaCobranzaParaDepositarView":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")){
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("Deposito")) {
                         onNavigationItemSelected(navigationView.getMenu().getItem(7).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("redirectToDepositoItem1")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("redirectToDepositoItem1")) {
                         onNavigationItemSelected(navigationView.getMenu().getItem(2).setChecked(true));
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("temporaAddCorbaznaToListDeposito")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("temporaAddCorbaznaToListDeposito")) {
                         super.onBackPressed();
-                    }else{
+                    } else {
                         super.onBackPressed();
                     }
                     break;
@@ -645,21 +628,21 @@ public class MenuView extends AppCompatActivity
                     super.onBackPressed();
                     break;
                 case "OrdenVentaDetalleView":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("NoTieneLineas")){
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("NoTieneLineas")) {
                         super.onBackPressed();
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("TieneLineas")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("TieneLineas")) {
                         Toast.makeText(getApplicationContext(), "No es posible retroceder por que tiene productos agregados", Toast.LENGTH_LONG).show();
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("cestoCompra")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("cestoCompra")) {
                         //Toast.makeText(context, "segura que desea salir y eliminar los productos agregados, mostrar dialog", Toast.LENGTH_SHORT).show();
                         //super.onBackPressed();
-                    }else if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("rutaVendedor")){
+                    } else if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("rutaVendedor")) {
                         super.onBackPressed(); //carro de compras vacio y puede retroceder fresh
                     }
                     break;
                 case "ProductoView":
-                    if(ListenerBackPress.getTemporaIdentityFragment()!=null && ListenerBackPress.getTemporaIdentityFragment().equals("TieneLineas")) {
+                    if (ListenerBackPress.getTemporaIdentityFragment() != null && ListenerBackPress.getTemporaIdentityFragment().equals("TieneLineas")) {
                         Toast.makeText(getApplicationContext(), "No es posible retroceder por que tiene productos agregados", Toast.LENGTH_LONG).show();
-                    }else{
+                    } else {
                         super.onBackPressed();
                     }
                     break;
@@ -695,21 +678,21 @@ public class MenuView extends AppCompatActivity
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        contentFragment=null;
-        boolean fragmentSeleccionado=false;
-        String TAG_FRAGMENT=null;
-        String fragment=null;
-        String accion=null;
-        String compuesto=null;
-        Object object=null;
-        String validarblockpay=null;
-        int validar=0;
-        UsuarioSQLite usuarioSQLite =null;
-        ArrayList<UsuarioSQLiteEntity> listausuariosqliteentity=null;
+        contentFragment = null;
+        boolean fragmentSeleccionado = false;
+        String TAG_FRAGMENT = null;
+        String fragment = null;
+        String accion = null;
+        String compuesto = null;
+        Object object = null;
+        String validarblockpay = null;
+        int validar = 0;
+        UsuarioSQLite usuarioSQLite = null;
+        ArrayList<UsuarioSQLiteEntity> listausuariosqliteentity = null;
 
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
-        switch(id){
+        switch (id) {
             /*case R.id.nav_clientes:
                 item.setEnabled(false);
 
@@ -761,22 +744,23 @@ public class MenuView extends AppCompatActivity
                 //TAG_FRAGMENT="config_print";
 
                 //HojaDespachoFragment = new DispatchSheetView();
-                HojaDespachoFragment = new ContainerDispatchSheetView();
-                fragment="HojaDespachoView";
-                accion="inicio";
-                compuesto=fragment+"-"+accion;
-                object=null;
-                onFragmentInteraction(compuesto,object);
+                //HojaDespachoFragment = new ContainerDispatchSheetView();
+                HojaDespachoFragment = new ContainerDispatchView();
+                fragment = "HojaDespachoView";
+                accion = "inicio";
+                compuesto = fragment + "-" + accion;
+                object = null;
+                onFragmentInteraction(compuesto, object);
                 break;
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
                 //fragmentSeleccionado=true;
                 CobranzaCabeceraFragment = new CobranzaCabeceraView();
-                fragment="CobranzaCabeceraView";
-                accion="inicio";
-                compuesto=fragment+"-"+accion;
-                object=null;
-                onFragmentInteraction(compuesto,object);
+                fragment = "CobranzaCabeceraView";
+                accion = "inicio";
+                compuesto = fragment + "-" + accion;
+                object = null;
+                onFragmentInteraction(compuesto, object);
 
 
                 /*if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
@@ -785,40 +769,40 @@ public class MenuView extends AppCompatActivity
                 break;
             case R.id.nav_ruta_vendedor:
 
-                SesionEntity.pagodirecto="0";
+                SesionEntity.pagodirecto = "0";
                 contentFragment = new RutaVendedorView();
                 fragment = "RutaVendedorView";
                 accion = "nuevoinicioRutaVendedorView";
                 compuesto = fragment + "-" + accion;
                 object = null;
                 onFragmentInteraction(compuesto, object);
-                Log.e("jpcm","Entramos aqui");
+                Log.e("jpcm", "Entramos aqui");
 
                 break;
             case R.id.nav_consultas:
-                contentFragment=new MenuConsultasView();
-                fragmentSeleccionado=true;
-                TAG_FRAGMENT="config_print";
+                contentFragment = new MenuConsultasView();
+                fragmentSeleccionado = true;
+                TAG_FRAGMENT = "config_print";
                 break;
             case R.id.nav_comisiones:
-                contentFragment=new ContenedorComisionesView();
-                fragmentSeleccionado=true;
-                TAG_FRAGMENT="config_print";
+                contentFragment = new ContenedorComisionesView();
+                fragmentSeleccionado = true;
+                TAG_FRAGMENT = "config_print";
                 break;
             case R.id.nav_formularios:
-                contentFragment=new MenuFormulariosView();
-                fragmentSeleccionado=true;
-                TAG_FRAGMENT="config_print";
+                contentFragment = new MenuFormulariosView();
+                fragmentSeleccionado = true;
+                TAG_FRAGMENT = "config_print";
                 break;
             case R.id.nav_configuracion_general:
-                contentFragment=new MenuConfiguracionView();
-                fragmentSeleccionado=true;
-                TAG_FRAGMENT="config_print";
+                contentFragment = new MenuConfiguracionView();
+                fragmentSeleccionado = true;
+                TAG_FRAGMENT = "config_print";
                 break;
             case R.id.nav_dinero_cobrado:
-                contentFragment=new CurrencyChargedView();
-                fragmentSeleccionado=true;
-                TAG_FRAGMENT="money_charged";
+                contentFragment = new CurrencyChargedView();
+                fragmentSeleccionado = true;
+                TAG_FRAGMENT = "money_charged";
                 break;
             case R.id.nav_asistencia_chofer:
                 //contentFragment=new HojaDespachoView();
@@ -829,12 +813,11 @@ public class MenuView extends AppCompatActivity
         }
 
 
-
-        if (fragmentSeleccionado==true){
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_menu_view,contentFragment,contentFragment.getClass().getName()).commit();
+        if (fragmentSeleccionado == true) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_menu_view, contentFragment, contentFragment.getClass().getName()).commit();
         }
 
-        DrawerLayout drawer =findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         item.setEnabled(true);
@@ -868,12 +851,25 @@ public class MenuView extends AppCompatActivity
 
         dialogButton.setOnClickListener(v -> {
             dialog.dismiss();
-            if (bluetoothAdapter.isEnabled()) {
-                bluetoothAdapter.disable();
-            } else {
-                bluetoothAdapter.enable();
-            }
 
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+
+                }else{
+                    if(bluetoothAdapter.isEnabled())
+                    {
+                        bluetoothAdapter.disable();
+                    }else {
+                        //bluetoothAdapter.enable();
+                    }
+
+                }
             System.exit(0);
         });
 
@@ -2415,9 +2411,5 @@ public class MenuView extends AppCompatActivity
         Log.e("REOS","MenuView-onRestart");
         super.onRestart();
         Induvis.refreshGlobalVariables(this);
-        //Intent intent = new Intent(this, LoginView.class);
-        //startActivity(intent);
-        //finish();
-        //registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
     }
 }

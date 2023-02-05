@@ -751,5 +751,114 @@ public class DetailDispatchSheetSQLite {
         return listaHojaDespachoSQLiteEntity;
     }
 
+    public ArrayList<HojaDespachoDetalleSQLiteEntity>
+    getDetailDispatchSheetforCodeControlMap
+            (String codeControl)
+    {
+
+        ArrayList<HojaDespachoDetalleSQLiteEntity> listaHojaDespachoSQLiteEntity = new ArrayList<>();
+        HojaDespachoDetalleSQLiteEntity hojaDespachoSQLiteEntity;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
+                        "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
+                        ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch,I.latitud,I.longitud " +
+                        //", '0' timeini, '0' timefin " +
+                        "from detaildispatchsheet A" +
+                        " left outer join cliente B ON  " +
+                        "A.cliente_id=B.cliente_id " +
+                        " left outer join (SELECT control_id,fechahojadespacho,fuerzatrabajo_id FROM headerdispatchsheet group by control_id,fechahojadespacho,fuerzatrabajo_id ) D ON  " +
+                        "A.fuerzatrabajo_id=D.fuerzatrabajo_id  AND " +
+                        "A.control_id=D.control_id   " +
+                        " left outer join (SELECT compania_id,cliente_id,entrega_id,fuerzatrabajo_id,control_id,item_id FROM statusdispatch group by compania_id,cliente_id,entrega_id,fuerzatrabajo_id,control_id,item_id ) C ON  " +
+                        "A.cliente_id=C.cliente_id  AND " +
+                        "A.entrega_id=C.entrega_id  AND " +
+                        "A.fuerzatrabajo_id=C.fuerzatrabajo_id AND " +
+                        //"C.fecha_registro=D.fechahojadespacho " +
+                        "A.control_id=C.control_id AND " +
+                        "A.item_id=C.item_id " +
+                        " left outer join visitsection E ON  " +
+                        "D.fuerzatrabajo_id=E.fuerzatrabajo_id  AND " +
+                        "D.control_id=E.idref AND " +
+                        "A.cliente_id=E.cliente_id AND " +
+                        "A.domembarque_id=E.domembarque_id  " +
+                        "LEFT OUTER JOIN cobranzadetalle F ON " +
+                        "A.cliente_id=F.cliente_id  AND " +
+                        "F.docentry=A.factura_id" +
+                        " LEFT OUTER JOIN typedispatch G ON " +
+                        "A.estado_id=G.typedispatch_id  " +
+                        " LEFT OUTER JOIN reasondispatch H ON " +
+                        "A.motivo_id=H.reasondispatch_id  " +
+                        " LEFT OUTER JOIN direccioncliente I ON " +
+                        "A.cliente_id=I.cliente_id AND " +
+                        "A.domembarque_id=I.domembarque_id  " +
+                        "  where A.control_id='"+codeControl+"'" +
+                        " ORDER BY A.item_id",null);
+
+        while (fila.moveToNext())
+        {
+            boolean chkupdatedispatch,chkvisitsectionstart,chkvisitsectionend,chkcollection;
+            hojaDespachoSQLiteEntity= new HojaDespachoDetalleSQLiteEntity();
+            hojaDespachoSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
+            hojaDespachoSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
+            hojaDespachoSQLiteEntity.setUsuario_id(fila.getString(fila.getColumnIndex("usuario_id")));
+            hojaDespachoSQLiteEntity.setControl_id(fila.getString(fila.getColumnIndex("control_id")));
+            hojaDespachoSQLiteEntity.setItem_id(fila.getString(fila.getColumnIndex("item_id")));
+            hojaDespachoSQLiteEntity.setCliente_id(fila.getString(fila.getColumnIndex("cliente_id")));
+            hojaDespachoSQLiteEntity.setDomembarque_id(fila.getString(fila.getColumnIndex("domembarque_id")));
+            hojaDespachoSQLiteEntity.setDireccion(fila.getString(fila.getColumnIndex("direccion")));
+            hojaDespachoSQLiteEntity.setFactura_id(fila.getString(fila.getColumnIndex("factura_id")));
+            hojaDespachoSQLiteEntity.setEntrega_id(fila.getString(fila.getColumnIndex("entrega_id")));
+            hojaDespachoSQLiteEntity.setEntrega(fila.getString(fila.getColumnIndex("entrega")));
+            hojaDespachoSQLiteEntity.setFactura(fila.getString(fila.getColumnIndex("factura")));
+            hojaDespachoSQLiteEntity.setSaldo(fila.getString(fila.getColumnIndex("saldo")));
+            hojaDespachoSQLiteEntity.setEstado(fila.getString(fila.getColumnIndex("estado")));
+            hojaDespachoSQLiteEntity.setFuerzatrabajo_factura_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_factura_id")));
+            hojaDespachoSQLiteEntity.setFuerzatrabajo_factura(fila.getString(fila.getColumnIndex("fuerzatrabajo_factura")));
+            hojaDespachoSQLiteEntity.setTerminopago_id(fila.getString(fila.getColumnIndex("terminopago_id")));
+            hojaDespachoSQLiteEntity.setTerminopago(fila.getString(fila.getColumnIndex("terminopago")));
+            hojaDespachoSQLiteEntity.setPeso(fila.getString(fila.getColumnIndex("peso")));
+            hojaDespachoSQLiteEntity.setComentariodespacho(fila.getString(fila.getColumnIndex("comentariodespacho")));
+            hojaDespachoSQLiteEntity.setNombrecliente(fila.getString(fila.getColumnIndex("nombrecliente")));
+            Log.e("REOS", "DetailDispatchSheetSQLite-getDetailDispatchSheetforCodeControl-chkupdatedispatch" + fila.getString(fila.getColumnIndex("chkupdatedispatch")));
+            if(fila.getString(fila.getColumnIndex("chkupdatedispatch")).equals(""))
+            {
+                chkupdatedispatch=false;
+            }else {
+                chkupdatedispatch=true;
+            }
+            hojaDespachoSQLiteEntity.setChkupdatedispatch(chkupdatedispatch);
+            if(fila.getString(fila.getColumnIndex("timeini")).equals("0"))
+            {
+                chkvisitsectionstart=false;
+            }else {
+                chkvisitsectionstart=true;
+            }
+            hojaDespachoSQLiteEntity.setChkvisitsectionstart (chkvisitsectionstart);
+            if(fila.getString(fila.getColumnIndex("timefin")).equals("0"))
+            {
+                chkvisitsectionend=false;
+            }else {
+                chkvisitsectionend=true;
+            }
+            hojaDespachoSQLiteEntity.setChkvisitsectionend (chkvisitsectionend);
+
+            if(fila.getString(fila.getColumnIndex("chk_collection")).equals(""))
+            {
+                chkcollection=false;
+            }else {
+                chkcollection=true;
+            }
+            hojaDespachoSQLiteEntity.setChkcollection (chkcollection);
+            hojaDespachoSQLiteEntity.setEstado (fila.getString(fila.getColumnIndex("typedispatch")));
+            hojaDespachoSQLiteEntity.setOcurrencies(fila.getString(fila.getColumnIndex("reasondispatch")));
+            hojaDespachoSQLiteEntity.setLatitud(fila.getString(fila.getColumnIndex("latitud")));
+            hojaDespachoSQLiteEntity.setLongitud(fila.getString(fila.getColumnIndex("longitud")));
+            listaHojaDespachoSQLiteEntity.add(hojaDespachoSQLiteEntity);
+        }
+
+        bd.close();
+        return listaHojaDespachoSQLiteEntity;
+    }
 
 }

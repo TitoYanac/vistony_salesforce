@@ -4,16 +4,16 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.vistony.salesforce.peru",
-  "variantName": "peruRelease",
+  "applicationId": "com.vistony.salesforce.perurofalab",
+  "variantName": "perurofalabRelease",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
       "versionCode": 1,
-      "versionName": "2.2.9",
-      "outputFile": "app-peru-release.apk"
+      "versionName": "1.0.1",
+      "outputFile": "app-perurofalab-release.apk"
     }
   ],
   "elementType": "File"

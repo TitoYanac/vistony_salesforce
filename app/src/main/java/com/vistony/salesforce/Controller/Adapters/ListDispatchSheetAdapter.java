@@ -52,8 +52,10 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ClienteCabeceraView;
+import com.vistony.salesforce.View.DialogMain;
 import com.vistony.salesforce.View.DireccionClienteView;
 import com.vistony.salesforce.View.DispatchSheetView;
+import com.vistony.salesforce.features.featureone.SomeScreenKt;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -190,6 +192,18 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
             holder.imv_visit_status.setImageResource(R.mipmap.marker_wait_512_2);
         }
 
+        holder.imv_visit_status.setOnClickListener(new View.OnClickListener() {
+                                                       @Override
+
+                                                       public void onClick(View v)
+                                                       {
+                                                           Log.e("REOS", "ListDispatchSheetAdapter-holder.imv_visit_status-DialogMain()");
+                                                           new DialogMain().showDialog(1);
+                                                       }
+                                                   }
+
+        );
+
         holder.imv_delivery_status.setOnClickListener(new View.OnClickListener() {
                                                                 @Override
 
@@ -204,14 +218,14 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         );
 
         AlertDialogController alertDialogController=new AlertDialogController(activity);
-        alertDialogController.alertDialogVisitSection(
+        /*alertDialogController.alertDialogVisitSection(
                 getContext(),
                 lead.getCliente_id(),
                 lead.getDomembarque_id(),
                 lead.getControl_id(),
                 lead.getItem_id(),
                 activity
-                ).show();
+                ).show();*/
         /*holder.relativeListaHojaDespacho.setOnClickListener(new View.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(View v) {

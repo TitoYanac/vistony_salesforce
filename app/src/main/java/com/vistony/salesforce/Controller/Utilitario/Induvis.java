@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Induvis {
     static DecimalFormat format = new DecimalFormat("#0.00");
@@ -249,7 +250,7 @@ public class Induvis {
                 agencia="P80035312-9";
                 break;
             case "perurofalab":
-                agencia="P20102306598";
+                agencia="P20601500605";
                 break;
         }
 
@@ -561,6 +562,32 @@ public class Induvis {
         }
         Log.e("REOS","Induvis-getCurrency-currency:"+currency);
         return currency;
+    }
+
+    static SimpleDateFormat dateFormat;
+    static Date datefecha;
+    static String fecha;
+    public static String ConvertdatefordateSAP(String date){
+        String dateSAP="";
+        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+        datefecha = new Date();
+        fecha =dateFormat.format(datefecha);
+        if(date!=null) {
+
+            if (date.length() == 10) {
+                String[] sourcedate = date.split("-");
+                String año = sourcedate[0];
+                String mes = sourcedate[1];
+                String dia = sourcedate[2];
+                dateSAP = año + mes + dia;
+
+            } else {
+                dateSAP= fecha;
+            }
+        }
+
+        return dateSAP;
+
     }
 
 }

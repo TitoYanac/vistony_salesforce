@@ -18,12 +18,14 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
@@ -97,7 +99,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
             holder.imv_eliminar_orden_venta_detalle=(ImageView) convertView.findViewById(R.id.imv_eliminar_orden_venta_detalle);
             holder.chk_descuento_contado=(CheckBox) convertView.findViewById(R.id.chk_descuento_contado);
             holder.et_porcentaje_descuento_contado=(EditText) convertView.findViewById(R.id.et_porcentaje_descuento_contado);
-
+            holder.tr_dsct_cont_detail=(TableRow) convertView.findViewById(R.id.tr_dsct_cont_detail);
             holder.layout=(ViewGroup) convertView.findViewById(R.id.content);
             convertView.setTag(holder);
         } else {
@@ -119,6 +121,11 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         holder.tv_orden_detalle_precio.setText(Convert.numberForViewDecimals(lead.getOrden_detalle_precio_unitario(),2));
         holder.et_orden_detalle_cantidad.setText(lead.getOrden_detalle_cantidad());
         holder.tv_orden_detalle_galon_unitario.setText(Convert.numberForViewDecimals(lead.getOrden_detalle_gal(),2));
+
+        if(BuildConfig.FLAVOR.equals("perurofalab"))
+        {
+            holder.tr_dsct_cont_detail.setVisibility(View.GONE);
+        }
 
         if(lead.isOrden_detalle_chk_descuentocontado_cabecera()&&!(lead.getOrden_detalle_cantidad().equals(""))&&!lead.getOrden_detalle_terminopago_id().equals("47"))
         {
@@ -813,6 +820,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         ImageView imv_eliminar_orden_venta_detalle;
         CheckBox chk_descuento_contado;
         EditText et_porcentaje_descuento_contado;
+        TableRow tr_dsct_cont_detail;
         ViewGroup layout;
 
     }

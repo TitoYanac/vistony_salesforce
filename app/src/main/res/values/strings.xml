@@ -256,11 +256,11 @@
     <string name="clients">Clientes</string>
     <string name="banks">Bancos</string>
     <string name="Agencies">Agencias</string>
-    <string name="price_list">Lista de Precios</string>
+    <string name="price_list">Lista Precio</string>
     <string name="route_workforce">Ruta Venta</string>
     <string name="reasons_visit">Motivo Visita </string>
-    <string name="dispatch_sheet_head">Hoja Despacho Cabecera </string>
-    <string name="dispatch_sheet_detail">Hoja Despacho Detalle </string>
+    <string name="dispatch_sheet_head">Hoja Cabecera </string>
+    <string name="dispatch_sheet_detail">Hoja Detalle </string>
     <string name="dispatch_type">Tipo Despacho</string>
     <string name="dispatch_reason">Motivo Despacho</string>
     <string name="list_promotion">Lista Promocion</string>
@@ -549,5 +549,6 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="bonus">Bonus</string>
     <string name="price_promotional">Precio Promocional</string>
     <string name="price_promotional_unit">Precio Promocional Unitario</string>
+    <string name="title_activity_google_maps">GoogleMaps</string>
 
 </resources>

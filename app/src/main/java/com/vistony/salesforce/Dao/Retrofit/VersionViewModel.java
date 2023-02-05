@@ -32,7 +32,7 @@ public class VersionViewModel {
         //if(BuildConfig.FLAVOR.equals("peru"))
         //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile"))
         //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
-        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||
+        /*if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||
                 BuildConfig.FLAVOR.equals("bolivia")||BuildConfig.FLAVOR.equals("perurofalab")
                 ||BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos")
         )
@@ -40,6 +40,26 @@ public class VersionViewModel {
             baseUrl = "https://salesforce.vistony.pe";
         }else {
             baseUrl = "http://salesforce.vistony.com";
+        }*/
+        switch (BuildConfig.FLAVOR) {
+            case "chile":
+            //case "peru":
+                //Produccion
+            case "ecuador":
+            case "espania":
+            case "marruecos":
+                baseUrl = "https://salesforce.vistony.pe";
+                break;
+            case "perurofalab":
+                //Ultima milla prueba bolivia
+            case "bolivia":
+            case "paraguay":
+            case "peru":
+                baseUrl = "https://app.vistony.pe";
+                break;
+            default:
+                baseUrl = "http://salesforce.vistony.com";
+                break;
         }
 
         //Produccion-------------------------------
@@ -66,8 +86,8 @@ public class VersionViewModel {
                 puerto = "";
                 break;
             case "ecuador":
-                puerto = ":8050";
-
+                //puerto = ":8050";
+                puerto = "";
                 break;
             case "peru":
                 //Produccion----------
@@ -86,7 +106,10 @@ public class VersionViewModel {
                 //-----------------------
                 break;
             case "paraguay":
-                puerto = ":8051";
+                //puerto = ":8051";
+                //--------------------
+                //Pruebas QA------------- Nueva Produccion
+                puerto = "";
                 break;
             case "espania":
                 puerto = "";
@@ -112,6 +135,7 @@ public class VersionViewModel {
             case "paraguay":
             case "espania":
             case "marruecos":
+            case "perurofalab":
                 String hashMd5=context.getPackageName()+"."+BuildConfig.BUILD_TYPE;
                 Log.e("El hash ess","=>"+hashMd5);
                 endPoint=endPoint+BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/version?imei="+imei+"&token="+md5(hashMd5);

@@ -35,6 +35,15 @@ public class ClienteSQLiteEntity {
     private String dueDays;
     private String lineofbusiness;
     private String lastpurchase;
+    private String DeliveryDay;
+
+    public String getDeliveryDay() {
+        return DeliveryDay;
+    }
+
+    public void setDeliveryDay(String deliveryDay) {
+        DeliveryDay = deliveryDay;
+    }
 
     public String getLineofbusiness() {
         return lineofbusiness;

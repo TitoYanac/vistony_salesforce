@@ -5,20 +5,28 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
     <uses-feature android:name="android.hardware.usb.host" />
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage"/>
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -26,10 +34,11 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.WRITE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
-    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -37,9 +46,27 @@
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/logo"
-
         android:label="${country} ${appName}"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:label"
+        >
+        <!--<activity
+            android:name=".GoogleMaps"
+            android:exported="false"
+            android:label="@string/title_activity_google_maps"
+            android:theme="@style/AppTheme.NoActionBar" />-->
+        <!--
+    <application
+        android:name="androidx.multidex.MultiDexApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/splashrofalab"
+        android:label="Perú Rofalab Producción"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true"
@@ -48,28 +75,30 @@
         tools:replace="android:label"
         android:largeHeap="true"
     >
-
-    <!--<meta-data android:icon="@mipmap/logo_factura"
+        -->
+        <!--
+<meta-data android:icon="@mipmap/logo_factura"
         android:name="com.google.android.geo.API_KEY"
-        android:value="@string/google_maps_key" />-->
+        android:value="@string/google_maps_key" />
+        -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAXXBoIS1O-9Vhvg5ccRyT_vWCnry4_9ds" />
-
-
         <meta-data
             android:name="firebase_performance_logcat_enabled"
             android:value="true" />
+
         <activity
             android:name=".View.LoginView"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
             />
-
         <activity
             android:name=".View.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -77,12 +106,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--
+        <activity
+            android:name=".View.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashThemeRofalab"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        -->
         <activity
             android:name=".View.MenuView"
             android:alwaysRetainTaskState="true"
             android:configChanges="screenSize|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
@@ -90,13 +133,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             tools:replace="android:screenOrientation" />
-
         <activity
             android:name=".Controller.Utilitario.DocumentoCobranzaPDF"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -105,8 +146,9 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <meta-data android:name="io.sentry.dsn" android:value="https://1e04f8569f5647118d8e2d0594523f38@o663251.ingest.sentry.io/5920963" />
-
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://1e04f8569f5647118d8e2d0594523f38@o663251.ingest.sentry.io/5920963" />
         <meta-data
             android:name="io.sentry.anr.enable"
             android:value="false" />

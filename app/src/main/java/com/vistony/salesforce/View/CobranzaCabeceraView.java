@@ -148,7 +148,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     String Grupo="",Sumacobrado="";
     BigDecimal sumacobrado;
     public static Menu menu_variable;
-    private final int  MY_PERMISSIONS_REQUEST_CAMERA=0;
+    private final int  MY_PERMISSIONS_REQUEST_CAMERA=255;
     String mCurrentPhotoPath="";
     private final int REQUEST_IMAGE_CAPTURE =1;
     public static int estado=0;
@@ -796,10 +796,19 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
                 menu.findItem(R.id.abrir).setIcon(drawable);
-                Drawable drawable3 = menu.findItem(R.id.agregar_foto_deposito).getIcon();
-                drawable3 = DrawableCompat.wrap(drawable3);
-                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black));
-                menu.findItem(R.id.agregar_foto_deposito).setIcon(drawable3);
+                if(!BuildConfig.FLAVOR.equals("peru"))
+                {
+                    Drawable drawable3 = menu.findItem(R.id.agregar_foto_deposito).getIcon();
+                    drawable3 = DrawableCompat.wrap(drawable3);
+                    DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black));
+                    menu.findItem(R.id.agregar_foto_deposito).setIcon(drawable3);
+                }
+                else {
+                    Drawable drawable3 = menu.findItem(R.id.agregar_foto_deposito).getIcon();
+                    drawable3 = DrawableCompat.wrap(drawable3);
+                    DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
+                    menu.findItem(R.id.agregar_foto_deposito).setIcon(drawable3);
+                }
                 Drawable drawable2 = menu.findItem(R.id.guardar_deposito).getIcon();
                 drawable2 = DrawableCompat.wrap(drawable2);
                 DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.white));
@@ -808,7 +817,12 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 guardar_deposito.setEnabled(true);
                 spntipo.setEnabled(true);
                 etgrupo.setEnabled(true);
-                agregar_foto_deposito.setEnabled(false);
+                if(!BuildConfig.FLAVOR.equals("peru"))
+                {
+                    agregar_foto_deposito.setEnabled(false);
+                }else {
+                    agregar_foto_deposito.setEnabled(true);
+                }
                 chkbancarizado.setVisibility(View.INVISIBLE);
                 //chkdepositodirecto.setVisibility(View.INVISIBLE);
                 imb_consultar_codigo_control.setEnabled(true);

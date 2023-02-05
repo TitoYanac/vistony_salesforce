@@ -106,6 +106,7 @@ public class AlertDialogController extends DialogFragment {
         listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date),Control_id);
 
         statusDispatchRepository = new ViewModelProvider(viewModelStoreOwner).get(StatusDispatchRepository.class);
+
         for(int i=0;i<listVisitSection.size();i++)
         {
             if(listVisitSection.get(i).getLatitudini()!=null)

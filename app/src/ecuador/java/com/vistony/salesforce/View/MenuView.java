@@ -161,6 +161,7 @@ public class MenuView extends AppCompatActivity
     Fragment KardexOfPaymentFragment;
     Fragment HistoricContainerSaleFragment;
     Fragment LeadFragment;
+    Fragment ConsultaStockFragment;
 
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
@@ -182,7 +183,7 @@ public class MenuView extends AppCompatActivity
     public static  String indicador="0";
     UsuarioSQLite usuarioSQLite;
     String Conexion="";
-    private final int MY_PERMISSIONS_REQUEST_CAMERA=1;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA=255;
     private String NameOfFolder = "/RECIBOS";
     private String NameOfFile = "imagen";
     public static String mCurrentPhotoPath="";
@@ -229,6 +230,7 @@ public class MenuView extends AppCompatActivity
         KardexOfPaymentFragment = new Fragment();
         HistoricContainerSaleFragment = new Fragment();
         LeadFragment = new Fragment();
+        ConsultaStockFragment= new Fragment();
 
         quotasPerCustomerRepository = new ViewModelProvider(this).get(QuotasPerCustomerHeadRepository.class);
         quotasPerCustomerDetailRepository = new ViewModelProvider(this).get(QuotasPerCustomerDetailRepository.class);
@@ -1704,6 +1706,44 @@ public class MenuView extends AppCompatActivity
                 HistoricContainerSKU.newInstanceRecibirCliente(Lista);
             }
         }
+        if(tag.equals("ConsultaStockView"))
+        {
+            if(tag2.equals( "listadopromocion"))
+            {
+                String tag3="consulta_stock";
+                ConsultaStockFragment = getSupportFragmentManager().findFragmentByTag(tag3);
+                ft.hide(ConsultaStockFragment);
+                ft.add(R.id.content_menu_view, ListadoPromocionView.newInstanceRecibePromocionConsultaStock(Lista), tag2);
+                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            else if(tag2.equals( "mostrarConsultaStock"))
+            {
+                Induvis.setTituloContenedor("Consulta Stock",this);
+                String tag3="consulta_stock",tag4="promociondetalle";
+                PromocionCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tag4);
+                ConsultaStockFragment = getSupportFragmentManager().findFragmentByTag(tag3);
+
+                ft.remove(PromocionCabeceraFragment);
+                ft.show(ConsultaStockFragment);
+                //ft.add(R.id.content_menu_view, ListadoPromocionView.newInstanceRecibePromocionConsultaStock(Lista), tag2);
+                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            else if(tag2.equals( "warehouses"))
+            {
+                String tag3="consulta_stock";
+                ConsultaStockFragment = getSupportFragmentManager().findFragmentByTag(tag3);
+                ft.hide(ConsultaStockFragment);
+                ft.add(R.id.content_menu_view, WareHousesView
+                        .newInstanceGetItemCode(Lista), tag2);
+                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+        }
 
     }
 
@@ -2042,6 +2082,12 @@ public class MenuView extends AppCompatActivity
         super.onResume();
         Log.e("REOS","MenuView-OnResume");
         registerReceiver(networkStateReceiver, new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
+        if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
+        {
+            Intent intent = new Intent(this, LoginView.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override

@@ -47,6 +47,7 @@ public class HistoricoOrdenVentaWS {
                     switch (BuildConfig.FLAVOR){
                         case "peru":
                         case "india":
+                        case "perurofalab":
                             ObjLHOrdenVenta.setApprovalStatus(historicoOrdenVentaEntityResponse.getHistoricoOrdenVenta().get(i).getEstadoaprobacion());
                             break;
                         case "bolivia":

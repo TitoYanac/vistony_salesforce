@@ -54,33 +54,45 @@ public class ListaConsDepositoDao {
         try {
             for( int i=0;i<Lista.size();i++)
             {
-                /*String nombrecliente="",cliente_id="";
-                cliente_id=Lista.get(i).getCliente_id();
-                listaclienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(cliente_id, SesionEntity.compania_id);
-
-
-                for(int g=0;g<listaclienteSQLiteEntity.size();g++)
+                if(Lista.get(i).getPagodirecto().equals("Y"))
                 {
-                    nombrecliente=listaclienteSQLiteEntity.get(g).getNombrecliente();
-                }*/
+                    saveLead(new ListaConsDepositoEntity(
+                                    Lista.get(i).getCliente_id()
+                                    ,Lista.get(i).getCardname()
+                                    ,Lista.get(i).getRecibo()
+                                    ,Lista.get(i).getDocumento_id()
+                                    ,Lista.get(i).getNrofactura()
+                                    ,Lista.get(i).getFechacobranza()
+                                    ,Lista.get(i).getImportedocumento()
+                                    ,Lista.get(i).getSaldodocumento()
+                                    ,Lista.get(i).getSaldocobrado()
+                                    ,Lista.get(i).getNuevosaldodocumento()
+                                    ,false
+                                    ,Lista.get(i).getChkbancarizado()
+                                    ,Lista.get(i).getPagodirecto()
+                                    ,Lista.get(i).getCollectioncheck()
+                            )
+                    );
+                }else {
+                    saveLead(new ListaConsDepositoEntity(
+                                    Lista.get(i).getCliente_id()
+                                    ,Lista.get(i).getCardname()
+                                    ,Lista.get(i).getRecibo()
+                                    ,Lista.get(i).getDocumento_id()
+                                    ,Lista.get(i).getNrofactura()
+                                    ,Lista.get(i).getFechacobranza()
+                                    ,Lista.get(i).getImportedocumento()
+                                    ,Lista.get(i).getSaldodocumento()
+                                    ,Lista.get(i).getSaldocobrado()
+                                    ,Lista.get(i).getNuevosaldodocumento()
+                                    ,estado
+                                    ,Lista.get(i).getChkbancarizado()
+                                    ,Lista.get(i).getPagodirecto()
+                                    ,Lista.get(i).getCollectioncheck()
+                            )
+                    );
+                }
 
-                saveLead(new ListaConsDepositoEntity(
-                        Lista.get(i).getCliente_id()
-                        ,Lista.get(i).getCardname()
-                        ,Lista.get(i).getRecibo()
-                        ,Lista.get(i).getDocumento_id()
-                        ,Lista.get(i).getNrofactura()
-                        ,Lista.get(i).getFechacobranza()
-                        ,Lista.get(i).getImportedocumento()
-                        ,Lista.get(i).getSaldodocumento()
-                        ,Lista.get(i).getSaldocobrado()
-                        ,Lista.get(i).getNuevosaldodocumento()
-                        ,estado
-                        ,Lista.get(i).getChkbancarizado()
-                        ,Lista.get(i).getPagodirecto()
-                        ,Lista.get(i).getCollectioncheck()
-                        )
-                );
 
             }
         }catch (Exception e)

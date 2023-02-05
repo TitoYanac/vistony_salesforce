@@ -128,7 +128,9 @@ public class Convert {
     }
 
     public static double stringToDouble(String amount){
+
         amount=amount.replace(",",".");
+
         double amountx=Double.parseDouble(amount);
         return amountx;
     }

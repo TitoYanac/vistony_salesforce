@@ -1,5 +1,7 @@
 package com.vistony.salesforce.Controller.Utilitario;
 
+import static com.vistony.salesforce.Controller.Utilitario.Induvis.format;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -106,7 +108,7 @@ public class FormulasController {
 
         Cantidad=(Cantidad.equals(""))?"0":Cantidad;
 
-        BigDecimal preUnit = new BigDecimal(PrecioUnitario).setScale(6,RoundingMode.HALF_UP);
+        BigDecimal preUnit = new BigDecimal(PrecioUnitario).setScale(2,RoundingMode.HALF_UP);
         BigDecimal cant = new BigDecimal(Cantidad);
 
         BigDecimal subTotalLine=preUnit.multiply(cant);
@@ -223,6 +225,7 @@ public class FormulasController {
         return cacculoDsct.toString();
     }*/
 
+    /*
     public String ObtenerCalculoDescuentoOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista){
         BigDecimal cacculoDsct=new BigDecimal(0);
         Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>>"+Lista.size());
@@ -239,6 +242,7 @@ public class FormulasController {
         Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>"+cacculoDsct);
         return cacculoDsct.setScale(6, RoundingMode.HALF_UP).toString();
     }
+    */
 
     public String ObtenerCalculoMontoSubTotalOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista){
 
@@ -365,7 +369,8 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDMT(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route()
             );
         }
 
@@ -663,6 +668,7 @@ public class FormulasController {
         documentHeader.setBrand(fabricante);
         documentHeader.setOSVersion(AndroidVersion);
         documentHeader.setModel(modelo);
+
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
@@ -707,7 +713,7 @@ public class FormulasController {
 
         listaordenVentaDetalleSQLiteEntity=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
         for(int j=0;j<listaordenVentaDetalleSQLiteEntity.size();j++){
-            String COGSAccountCode=SesionEntity.cogsacct,U_SYP_FECAT_07="",taxOnly="N",taxCode=SesionEntity.Impuesto_ID,U_VIST_CTAINGDCTO=SesionEntity.u_vist_ctaingdcto,montolineatotal="";
+            String COGSAccountCode=SesionEntity.cogsacct,U_SYP_FECAT_07="",taxOnly="N",taxCode=SesionEntity.Impuesto_ID,U_VIST_CTAINGDCTO=SesionEntity.u_vist_ctaingdcto,montolineatotal="",discountpercent="";
 
             //Casuistica Bonificacion
             if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100"))
@@ -719,6 +725,8 @@ public class FormulasController {
                 //U_VIST_CTAINGDCTO="741111";
                 //montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotal();
                 montolineatotal="0";
+                //discountpercent="99.90";
+
             }
             //Casustica Descuento
             else if(Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())>0&&
@@ -761,6 +769,13 @@ public class FormulasController {
             documentLine.setCostingCode2(SesionEntity.CentroCosto);
             documentLine.setCostingCode3(SesionEntity.LineaProduccion);
             //el vendedor puede desde 0 a 99.9%, de 0 a 5% todo ok en adelnate mostrar alerta
+            /*if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100"))
+            {
+                documentLine.setDiscountPercent("99.99");
+            }
+            else {
+                documentLine.setDiscountPercent(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
+            }*/
             documentLine.setDiscountPercent(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
             documentLine.setDscription(ObtenerProductoDescripcion(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id(),context));
             documentLine.setItemCode(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id());
@@ -1342,6 +1357,7 @@ public class FormulasController {
         return cantidadlineas;
     }
 
+    /*
     public ArrayList<ListaOrdenVentaDetalleEntity> ConversionListaOrdenDetallepoListaOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity)
     {
         //Declaracion de Variables
@@ -1395,7 +1411,7 @@ public class FormulasController {
 
 
         return listaOrdenVentaDetalleEntitycopia;
-    }
+    }*/
 
     public ArrayList<ListaOrdenVentaDetalleEntity> ActualizaciondeConversionListaOrdenDetallepoListaOrdenDetallePromocion
             (ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity)
@@ -1877,4 +1893,111 @@ public class FormulasController {
 
         return resultadofinal;
     }
+
+    public String ObtenerCalculoPrecioImpuesto(String preciounitario,String FactorImpuesto){
+
+        BigDecimal acum = new BigDecimal(0);
+        Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+        Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-FactorImpuesto-"+FactorImpuesto);
+        preciounitario=(preciounitario.equals(""))?"0":preciounitario;
+
+        BigDecimal preUnit = new BigDecimal(preciounitario).setScale(5,RoundingMode.HALF_UP);
+        BigDecimal cant = new BigDecimal(FactorImpuesto);
+
+        BigDecimal subTotalLine=preUnit.multiply(cant.multiply(new BigDecimal(0.01)).add(new BigDecimal(1)));
+        return subTotalLine.setScale(5,RoundingMode.DOWN).toString();
+    }
+
+    public String CalcularMontoTotalPromocionconDescuentoyBono(String MontoTotalLineaSinDescuento,String MontoDescuento,String Bono ){
+        BigDecimal temp1=new BigDecimal(MontoTotalLineaSinDescuento);
+
+        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).subtract(new BigDecimal(Bono).setScale(2, RoundingMode.HALF_UP));
+
+        return repta.toString();
+    }
+
+    public  String getPriceReferencePack(String PrecioPackconDescuento,String QuantityPackPromotion){
+        //String efectividad="";
+        Log.e("REOS","FormulasController.getPriceReferencePack.PrecioPackconDescuento:" + PrecioPackconDescuento);
+        Log.e("REOS","FormulasController.getPriceReferencePack.QuantityPackPromotion:" + QuantityPackPromotion);
+        //double resultado;
+        BigDecimal precioPackconDescuento=new BigDecimal(PrecioPackconDescuento);
+        BigDecimal quantityPackPromotion=new BigDecimal(QuantityPackPromotion);
+        //resultado=(Double.parseDouble(PrecioPackconDescuento)/Double.parseDouble(QuantityPackPromotion))
+        BigDecimal resultado=precioPackconDescuento.divide(quantityPackPromotion,2,RoundingMode.HALF_UP);;
+        Log.e("REOS","FormulasController.getPriceReferencePack.resultado:" + resultado);
+        return resultado.toString();
+    }
+
+    public ArrayList<ListaOrdenVentaDetalleEntity> ConversionListaOrdenDetallepoListaOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity)
+    {
+        //Declaracion de Variables
+        ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntitycopia=new ArrayList<>();
+        ListaOrdenVentaDetalleEntity ObjlistaOrdenVentaDetalleEntity;
+
+        //Inicia Bucle
+
+        if(listaOrdenVentaDetalleEntity!=null){
+            for(int a=0;a<listaOrdenVentaDetalleEntity.size();a++)
+            {
+                Log.e("REOS","FormulasController-ConversionListaOrdenDetallepoListaOrdenDetallePromocion-a"+String.valueOf(a));
+                //Evalua si Promocion es diferente a vacia
+                if(listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion()!=null)
+                {
+                    Log.e("REOS","FormulasController-ConversionListaOrdenDetallepoListaOrdenDetallePromocion-listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion()!=null-true");
+                    //Inicia Bucle que recorre la Lista de Promociones
+                    for(int b=0;b<listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().size();b++)
+                    {
+                        ObjlistaOrdenVentaDetalleEntity=new ListaOrdenVentaDetalleEntity();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_item=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_item();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto_id();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_umd();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock_almacen=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_cantidad();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_precio_unitario();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montosubtotal();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_porcentaje_descuento=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_porcentaje_descuento();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_descuento=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_descuento();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_igv=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_igv();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_montototallinea =listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montototallinea();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_lista_promocion_cabecera = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_lista_promocion_cabecera();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_promocion_habilitada = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_promocion_habilitada();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_gal = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_gal();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_gal_acumulado = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_gal_acumulado();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotalcondescuento = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montosubtotalcondescuento();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_lista_orden_detalle_promocion = null;
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_descuentocontado = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_descuentocontado();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_chk_descuentocontado_aplicado = listaOrdenVentaDetalleEntity.get(a).isOrden_detalle_chk_descuentocontado_aplicado();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_oil_tax = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_oil_tax();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_liter = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_liter();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_SIGAUS = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_SIGAUS();
+                        listaOrdenVentaDetalleEntitycopia.add(ObjlistaOrdenVentaDetalleEntity);
+                    }
+                }
+            }
+        }
+
+
+
+        return listaOrdenVentaDetalleEntitycopia;
+    }
+
+    public String ObtenerCalculoDescuentoOrdenDetallePromocion(ArrayList<ListaOrdenVentaDetalleEntity> Lista){
+        BigDecimal cacculoDsct=new BigDecimal(0);
+        Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>>"+Lista.size());
+        for(int i=0;i<Lista.size();i++){
+            Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>>"+Lista.get(i).getOrden_detalle_monto_descuento());
+            if(Lista.get(i).getOrden_detalle_porcentaje_descuento()!=null){
+                //if(Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())>0&&Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())<100) {
+                Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>"+Lista.get(i).getOrden_detalle_porcentaje_descuento());
+                cacculoDsct=cacculoDsct.add(new BigDecimal(Lista.get(i).getOrden_detalle_monto_descuento()));
+                Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>"+Lista.get(i).getOrden_detalle_monto_descuento());
+                // }
+            }
+        }
+        Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>"+cacculoDsct);
+        return cacculoDsct.setScale(2, RoundingMode.HALF_UP).toString();
+    }
+
 }

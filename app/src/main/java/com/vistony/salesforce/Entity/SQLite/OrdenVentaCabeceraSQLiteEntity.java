@@ -50,6 +50,15 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String rate;
     public String dispatchdate;
     public String Intent;
+    public String Route;
+
+    public String getRoute() {
+        return Route;
+    }
+
+    public void setRoute(String route) {
+        Route = route;
+    }
 
     public String getIntent() {
         return Intent;

@@ -35,6 +35,17 @@ public class AddressEntity {
     @SerializedName("AddressCode")
     private String addresscode;
 
+    @SerializedName("DayDelivery")
+    private String DeliveryDay;
+
+    public String getDeliveryDay() {
+        return DeliveryDay;
+    }
+
+    public void setDeliveryDay(String deliveryDay) {
+        DeliveryDay = deliveryDay;
+    }
+
     public String getAddresscode() {
         return addresscode;
     }

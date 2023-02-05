@@ -1500,7 +1500,7 @@ public class CobranzaDetalleView extends Fragment {
                             ObjUsuario.usuario_id,
                             comentario,
                             "Y",
-                            qrvalidado,
+                            "Y",
                             "104111",
                             "N",
                             "N",
@@ -1613,8 +1613,8 @@ public class CobranzaDetalleView extends Fragment {
                     Toast.makeText(getContext(), "El Numero Telefonico pertenece al Vendedor", Toast.LENGTH_SHORT).show();
                 } else {
                     //telefono="990249315";
-                    sendSMS(telefono);
-                    Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
+                    //sendSMS(telefono);
+                    //Toast.makeText(getContext(), "SMS enviado al N° del Cliente: " + telefono, Toast.LENGTH_SHORT).show();
                 }
             }
 

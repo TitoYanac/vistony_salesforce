@@ -278,9 +278,13 @@ public class KardexPagoPDF extends AppCompatActivity {
             tbllbldetalle.setWidthPercentage(100);
             PdfPCell celltbllbldetalle = null;
             celltbllbldetalle=new PdfPCell(new Phrase(
-                    context.getResources().getString(R.string.separator)
+                    context.getResources().getString(R.string.separator_short)
+                            +context.getResources().getString(R.string.separator_short)
+                            +context.getResources().getString(R.string.separator_short)
                     +context.getResources().getString(R.string.detail).toUpperCase()
-                    +context.getResources().getString(R.string.separator)
+                    +context.getResources().getString(R.string.separator_short)
+                    +context.getResources().getString(R.string.separator_short)
+                            +context.getResources().getString(R.string.separator_short)
                     ,font2 ));
             celltbllbldetalle.disableBorderSide(Rectangle.BOX);
             celltbllbldetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -293,7 +297,7 @@ public class KardexPagoPDF extends AppCompatActivity {
                 PdfPTable tbllblfactura = new PdfPTable(1);
                 tbllblfactura.setWidthPercentage(100);
                 PdfPCell celltbllblfactura = null;
-                celltbllblfactura=new PdfPCell(new Phrase(Correlativo.get(l).toString()+context.getResources().getString(R.string.separator)+context.getResources().getString(R.string.separator) ,font5 ));
+                celltbllblfactura=new PdfPCell(new Phrase(Correlativo.get(l).toString()+context.getResources().getString(R.string.separator_short)+context.getResources().getString(R.string.separator_short) +context.getResources().getString(R.string.separator_short)+context.getResources().getString(R.string.separator_short),font5 ));
                 celltbllblfactura.disableBorderSide(Rectangle.BOX);
                 celltbllblfactura.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tbllblfactura.addCell(celltbllblfactura);

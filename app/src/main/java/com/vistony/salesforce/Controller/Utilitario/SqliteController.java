@@ -20,7 +20,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 22;
+    private static final int VERSION = 24;
 
 
     public SqliteController(Context context){
@@ -85,13 +85,13 @@ public class SqliteController extends SQLiteOpenHelper {
 
             //db.execSQL("CREATE TABLE stock (compania_id text,producto_id TEXT,producto TEXT,umd TEXT,stock TEXT,almacen_id TEXT,comprometido TEXT,enstock TEXT,pedido TEXT)");
             db.execSQL("CREATE TABLE rutafuerzatrabajo (compania_id text,zona_id TEXT,zona TEXT,dia TEXT,frecuencia TEXT,fechainicioruta TEXT,estado TEXT)");
-            db.execSQL("CREATE TABLE direccioncliente (compania_id text,cliente_id text,domembarque_id text,direccion text,zona_id TEXT,zona TEXT,fuerzatrabajo_id TEXT,nombrefuerzatrabajo TEXT,latitud TEXT,longitud TEXT,addresscode TEXT)");
+            db.execSQL("CREATE TABLE direccioncliente (compania_id text,cliente_id text,domembarque_id text,direccion text,zona_id TEXT,zona TEXT,fuerzatrabajo_id TEXT,nombrefuerzatrabajo TEXT,latitud TEXT,longitud TEXT,addresscode TEXT, deliveryday TEXT)");
 
             //Transaccional
             db.execSQL("CREATE TABLE ordenventacabecera (compania_id text ,ordenventa_id TEXT,cliente_id TEXT ,domembarque_id TEXT,terminopago_id TEXT,agencia_id TEXT,moneda_id TEXT,comentario " +
                     "TEXT,almacen_id TEXT, impuesto_id TEXT,montosubtotal TEXT,montodescuento TEXT,montoimpuesto TEXT,montototal TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,enviadoERP TEXT,recibidoERP TEXT,ordenventa_ERP_id" +
                     " TEXT,listaprecio_id TEXT,planta_id TEXT,fecharegistro TEXT,tipocambio TEXT,fechatipocambio TEXT,rucdni TEXT,U_SYP_MDTD TEXT,U_SYP_MDSD TEXT,U_SYP_MDCD TEXT," +
-                    "U_SYP_MDMT TEXT,U_SYP_STATUS TEXT,DocType TEXT,mensajeWS TEXT,total_gal_acumulado TEXT,descuentocontado TEXT,dueDays_cliente TEXT,excede_lineacredito TEXT,U_VIS_AgencyRUC TEXT,U_VIS_AgencyName TEXT,U_VIS_AgencyDir TEXT,domfactura_id TEXT,domembarque_text TEXT,cliente_text TEXT, terminopago_text TEXT,quotation TEXT,dispatchdate TEXT,countsend TEXT)");
+                    "U_SYP_MDMT TEXT,U_SYP_STATUS TEXT,DocType TEXT,mensajeWS TEXT,total_gal_acumulado TEXT,descuentocontado TEXT,dueDays_cliente TEXT,excede_lineacredito TEXT,U_VIS_AgencyRUC TEXT,U_VIS_AgencyName TEXT,U_VIS_AgencyDir TEXT,domfactura_id TEXT,domembarque_text TEXT,cliente_text TEXT, terminopago_text TEXT,quotation TEXT,dispatchdate TEXT,countsend TEXT,route TEXT)");
 
             db.execSQL("CREATE TABLE ordenventadetalle (compania_id text ,ordenventa_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT,chk_descuentocontado TEXT)");
             db.execSQL("CREATE TABLE ordenventadetallepromocion (compania_id text ,ordenventa_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT,chk_descuentocontado TEXT )");
@@ -449,7 +449,6 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerStatusDispatch TEXT");
         }
         if(oldVersion==16&&newVersion==19) {
-
             db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivercode TEXT");
             db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehiclecode TEXT");
             db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehicleplate TEXT");
@@ -482,8 +481,167 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN oiltax TEXT");
             db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN liter TEXT");
         }
+        if(oldVersion==22&&newVersion==23){
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN deliveryday TEXT");
+        }
+        if(oldVersion==20&&newVersion==23){
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN datetimeregister TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN oiltaxstatus TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN oiltax TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN liter TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN deliveryday TEXT");
+        }
 
+        if(oldVersion==14&&newVersion==23) {
 
+            db.execSQL("ALTER TABLE usuario ADD COLUMN quotation TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN e_signature TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN chkesignature TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN phone TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN latitud TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN longitud TEXT");
+            db.execSQL("CREATE TABLE cobranzadetalleSMS (id INTEGER PRIMARY KEY AUTOINCREMENT,recibo TEXT,phone TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,date TEXT,hour TEXT,chk_send TEXT)");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN control_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN item_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN domembarque_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN checkintime TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN checkouttime TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_timestatus TEXT");
+            db.execSQL("CREATE TABLE quoteeffectiveness (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,type TEXT,quote TEXT,umd TEXT)");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN estado_id TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN motivo TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN motivo_id TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotoguia TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotolocal TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idref TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivercode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehiclecode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehicleplate TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivermobile TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivername TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN messageserver TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN census TEXT");
+            db.execSQL("ALTER TABLE typedispatch ADD COLUMN statusupdate TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idrefitemid TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN legalnumberref TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN fuerzatrabajo TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerTimeDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_statusServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerStatusDispatch TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN chk_ServerGeolocation TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN MessageServerGeolocation TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN datetimeregister TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN oiltaxstatus TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN oiltax TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN liter TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN deliveryday TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN SIGAUS TEXT");
+        }
+
+        if(oldVersion==15&&newVersion==23) {
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN phone TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN control_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN item_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN domembarque_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN checkintime TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN checkouttime TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_timestatus TEXT");
+            db.execSQL("CREATE TABLE quoteeffectiveness (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,type TEXT,quote TEXT,umd TEXT)");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN estado_id TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN motivo TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN motivo_id TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotoguia TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotolocal TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idref TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivercode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehiclecode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehicleplate TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivermobile TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivername TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN messageserver TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN census TEXT");
+            db.execSQL("ALTER TABLE typedispatch ADD COLUMN statusupdate TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idrefitemid TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN legalnumberref TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN fuerzatrabajo TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerTimeDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_statusServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerStatusDispatch TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN chk_ServerGeolocation TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN MessageServerGeolocation TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN datetimeregister TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN oiltaxstatus TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN oiltax TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN liter TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN deliveryday TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN SIGAUS TEXT");
+        }
+        if(oldVersion==23&&newVersion==24)
+        {
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN route TEXT");
+
+        }
+
+        if(oldVersion==15&&newVersion==24) {
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN phone TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN control_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN item_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN domembarque_id TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN checkintime TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN checkouttime TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_timestatus TEXT");
+            db.execSQL("CREATE TABLE quoteeffectiveness (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,type TEXT,quote TEXT,umd TEXT)");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN estado_id TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN motivo TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN motivo_id TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotoguia TEXT");
+            db.execSQL("ALTER TABLE detaildispatchsheet ADD COLUMN fotolocal TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idref TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivercode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehiclecode TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN vehicleplate TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivermobile TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN drivername TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN messageserver TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN addresscode TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN census TEXT");
+            db.execSQL("ALTER TABLE typedispatch ADD COLUMN statusupdate TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN idrefitemid TEXT");
+            db.execSQL("ALTER TABLE visitsection ADD COLUMN legalnumberref TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN fuerzatrabajo TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerTimeDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN chk_statusServerDispatch TEXT");
+            db.execSQL("ALTER TABLE statusdispatch ADD COLUMN messageServerStatusDispatch TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN chk_ServerGeolocation TEXT");
+            db.execSQL("ALTER TABLE lead ADD COLUMN MessageServerGeolocation TEXT");
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN datetimeregister TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN oiltaxstatus TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN oiltax TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN liter TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN deliveryday TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN SIGAUS TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN route TEXT");
+        }
+        if(oldVersion==20&&newVersion==24){
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN datetimeregister TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN oiltaxstatus TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN oiltax TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN liter TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN deliveryday TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN SIGAUS TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN route TEXT");
+        }
 
     }
 

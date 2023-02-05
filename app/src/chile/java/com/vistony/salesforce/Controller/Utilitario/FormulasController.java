@@ -365,7 +365,8 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDMT(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route()
             );
         }
 
@@ -1102,6 +1103,7 @@ public class FormulasController {
                         listaClienteCabeceraEntities.get(i).getContado()
                         ,listaClienteCabeceraEntities.get(i).getLatitud()
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
+                        ,listaClienteCabeceraEntities.get(i).getAddresscode()
                 );
             }
 
@@ -1887,5 +1889,21 @@ public class FormulasController {
         Log.e("REOS","formulascontroller-validadescuentocontado-resultadofinal-"+resultadofinal);
 
         return resultadofinal;
+    }
+
+    public String ObtenerCalculoPrecioImpuesto(String preciounitario,String FactorImpuesto){
+
+        BigDecimal acum = new BigDecimal(0);
+        Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+        Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-FactorImpuesto-"+FactorImpuesto);
+        preciounitario=(preciounitario.equals(""))?"0":preciounitario;
+
+        BigDecimal preUnit = new BigDecimal(preciounitario).setScale(5,RoundingMode.HALF_UP);
+        BigDecimal cant = new BigDecimal(FactorImpuesto);
+
+        BigDecimal subTotalLine=preUnit.multiply(cant.multiply(new BigDecimal(0.01)).add(new BigDecimal(1)));
+
+        Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-resultado-"+subTotalLine.setScale(5,RoundingMode.DOWN).toString());
+        return subTotalLine.setScale(5,RoundingMode.DOWN).toString();
     }
 }

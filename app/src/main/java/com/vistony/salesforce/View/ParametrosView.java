@@ -297,7 +297,7 @@ ParametrosView extends Fragment {
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
         switch (BuildConfig.FLAVOR){
 
-            case "ecuador":
+            //case "ecuador":
             case "chile":
                 if (listaparametrosSQLiteEntity.isEmpty()) {
                     parametrosSQLite.LimpiarParametros();
@@ -319,6 +319,7 @@ ParametrosView extends Fragment {
             case "perurofalab":
             case "espania":
             case "marruecos":
+            case "ecuador":
                 if (listaparametrosSQLiteEntity.isEmpty()) {
                     if (SesionEntity.perfil_id.equals("Chofer") || SesionEntity.perfil_id.equals("CHOFER")) {
                         //if (listaparametrosSQLiteEntity.isEmpty()) {
@@ -351,14 +352,32 @@ ParametrosView extends Fragment {
                             parametrosSQLite.InsertaParametros("18", this.getResources().getString(R.string.price_list), "0", getDateTime());
                         }*/
                     }
+                }else {
+                    if(listaparametrosSQLiteEntity.size()==7)
+                    {
+                        parametrosSQLite.LimpiarParametros();
+                        parametrosSQLite.InsertaParametros("1", this.getResources().getString(R.string.clients).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("2",  this.getResources().getString(R.string.banks).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("5", this.getResources().getString(R.string.lbl_orderhed_payterms).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("6", this.getResources().getString(R.string.Agencies).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("7", this.getResources().getString(R.string.price_list).toUpperCase(), "0", getDateTime());
+                        //parametrosSQLite.InsertaParametros("8", "STOCK", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("9", this.getResources().getString(R.string.list_promotion).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("10", this.getResources().getString(R.string.promotion_head).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("11", this.getResources().getString(R.string.promotion_detail).toUpperCase(),"0", getDateTime());
+                        parametrosSQLite.InsertaParametros("12",  this.getResources().getString(R.string.route_workforce).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("17", this.getResources().getString(R.string.reasons_visit).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("21", this.getResources().getString(R.string.colors_head).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("22",  this.getResources().getString(R.string.colors_detail).toUpperCase(), "0", getDateTime());
+                    }
                 }
                 break;
         }
         AppExecutors executor=new AppExecutors();
         /////////////////////Sincronizar Recibos Pendientes de Depositar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        /*cobranzaRepository.SynchronizedepositedPendingCollection(getContext()).observe(getActivity(), data -> {
+        cobranzaRepository.SynchronizedepositedPendingCollection(getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame","=>"+data);
-        });*/
+        });
 
         /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
         cobranzaRepository.UndepositedPendingCollection(getContext()).observe(getActivity(), data -> {
@@ -438,12 +457,16 @@ ParametrosView extends Fragment {
             Log.e("Jepicame","=>"+data);
         });
 
-        if(!BuildConfig.FLAVOR.equals("bolivia") ){
         ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
         reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
             Log.e("Jepicame", "=>" + data);
         });
-        }
+        /*if(!BuildConfig.FLAVOR.equals("bolivia") ){
+        ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
+        reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
+            Log.e("Jepicame", "=>" + data);
+        });
+        }*/
 
         //Envio de Geolocalizacion con Foto
         leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {

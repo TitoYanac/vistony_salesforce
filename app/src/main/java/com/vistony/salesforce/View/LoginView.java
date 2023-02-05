@@ -33,11 +33,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
@@ -60,23 +62,25 @@ import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
+
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
 import kotlin.jvm.Throws;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-public class LoginView extends AppCompatActivity{
+public class LoginView extends AppCompatActivity {
     public OmegaCenterIconButton btnlogin;
     private Spinner spncompania, spnperfil, spnnombre;
     private static String Imei;
-    private SesionEntity Sesion= new SesionEntity();
+    private SesionEntity Sesion = new SesionEntity();
     private String perfil, Companiatext, vendedortext;
     private BluetoothAdapter bluetoothAdapter;
     private VideoView videoBG;
@@ -89,10 +93,11 @@ public class LoginView extends AppCompatActivity{
     private Location mLocation;
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
+    private static final int REQUEST_PERMISSION_BLUETOOH = 255;
     ImageView imv_compania_login;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_login);
 
@@ -100,18 +105,17 @@ public class LoginView extends AppCompatActivity{
         w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         statusImei = getSharedPreferences("imeiRegister", Context.MODE_PRIVATE);
-        setLocale(statusImei.getString("language", BuildConfig.LANGUAGE_DEFAULT),statusImei.getString("country", BuildConfig.COUNTRY_DEFAULT));
+        setLocale(statusImei.getString("language", BuildConfig.LANGUAGE_DEFAULT), statusImei.getString("country", BuildConfig.COUNTRY_DEFAULT));
 
-        spncompania =findViewById(R.id.spncompania);
-        spnperfil =findViewById(R.id.spnperfil);
-        spnnombre =findViewById(R.id.spnnombre);
-        btnlogin =findViewById(R.id.btnlogin);
-        imv_compania_login=findViewById(R.id.imv_compania_login);
+        spncompania = findViewById(R.id.spncompania);
+        spnperfil = findViewById(R.id.spnperfil);
+        spnnombre = findViewById(R.id.spnnombre);
+        btnlogin = findViewById(R.id.btnlogin);
+        imv_compania_login = findViewById(R.id.imv_compania_login);
 
         //language
         //Locale.setDefault(Locale.FRENCH);
-        if(BuildConfig.FLAVOR.equals("marruecos"))
-        {
+        if (BuildConfig.FLAVOR.equals("marruecos")) {
             Locale locale = new Locale("FR");
             Locale.setDefault(locale);
             Configuration config = new Configuration();
@@ -119,21 +123,20 @@ public class LoginView extends AppCompatActivity{
             this.getResources().updateConfiguration(config, null);
         }
 
-        final TextView viewVersion=findViewById(R.id.txt_internet);
+        final TextView viewVersion = findViewById(R.id.txt_internet);
         SqliteController db = new SqliteController(this);
-        String env=BuildConfig.BASE_ENVIRONMENT.equals("/api")?"Producción":"Test";
-        version=Utilitario.getVersion(getApplication());
+        String env = BuildConfig.BASE_ENVIRONMENT.equals("/api") ? "Producción" : "Test";
+        version = Utilitario.getVersion(getApplication());
 
-        viewVersion.setText(env+": "+version+" db: "+db.getWritableDatabase().getVersion());
+        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion());
 
-       // locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        loginRepository =  new ViewModelProvider(this).get(LoginRepository.class);
-        Imei=obtenerImei(statusImei,this,loginRepository);
+        // locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        loginRepository = new ViewModelProvider(this).get(LoginRepository.class);
+        Imei = obtenerImei(statusImei, this, loginRepository);
 
-        if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos"))
-        {
+        if (BuildConfig.FLAVOR.equals("espania") || BuildConfig.FLAVOR.equals("marruecos")) {
 
-        }else {
+        } else {
             loadConfigurationPrinter();
         }
 
@@ -157,63 +160,67 @@ public class LoginView extends AppCompatActivity{
         //Toast.makeText(this,  BuildConfig.COUNTRY_DEFAULT, Toast.LENGTH_LONG).show();
         //Toast.makeText(this,  BuildConfig.LANGUAGE_DEFAULT, Toast.LENGTH_LONG).show();
         //Toast.makeText(this,  this.getResources().getString(R.string.sinInfo), Toast.LENGTH_LONG).show();
-        loginRepository.getAndLoadUsers(Imei,this).observe(LoginView.this, data -> {
-            if(data==null){
+        loginRepository.getAndLoadUsers(Imei, this).observe(LoginView.this, data -> {
+            if (data == null) {
                 Toast.makeText(this, this.getResources().getString(R.string.Error_and_network), Toast.LENGTH_LONG).show();
-            }else if(data.isEmpty()){
+            } else if (data.isEmpty()) {
                 btnlogin.setEnabled(false);
-                btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_onclick));
+                btnlogin.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_border_button_onclick));
                 btnlogin.setText(this.getResources().getString(R.string.sinInfo));
                 btnlogin.setClickable(false);
 
                 Toast.makeText(this, this.getResources().getString(R.string.locale_information_none), Toast.LENGTH_LONG).show();
-            }else{
-                ArrayAdapter<String> adapterProfile = new ArrayAdapter<String>(this,R.layout.layout_custom_spinner,data);
+            } else {
+                ArrayAdapter<String> adapterProfile = new ArrayAdapter<String>(this, R.layout.layout_custom_spinner, data);
                 spnperfil.setAdapter(adapterProfile);
                 adapterProfile.notifyDataSetChanged();
             }
         });
 
         /****Mejora**
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
-            dialogFragment.show(((FragmentActivity) this). getSupportFragmentManager (),"un dialogo");
-        }
-        ******/
+         if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+         androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
+         dialogFragment.show(((FragmentActivity) this). getSupportFragmentManager (),"un dialogo");
+         }
+         ******/
 
         //turnGPSOn();
 
         spnperfil.setOnItemSelectedListener(
-            new OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
-                    perfil = parent.getItemAtPosition(position).toString();
+                new OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        perfil = parent.getItemAtPosition(position).toString();
 
-                    ArrayList<String> companiaList = loginRepository.getCompanies(perfil);
+                        ArrayList<String> companiaList = loginRepository.getCompanies(perfil);
 
-                    ArrayAdapter<String> adapterCompania = new ArrayAdapter<String>(LoginView.this,R.layout.layout_custom_spinner,companiaList);
-                    spncompania.setAdapter(adapterCompania);
-                    adapterCompania.notifyDataSetChanged();
-                }@Override
-                public void onNothingSelected(AdapterView<?> parent) {
+                        ArrayAdapter<String> adapterCompania = new ArrayAdapter<String>(LoginView.this, R.layout.layout_custom_spinner, companiaList);
+                        spncompania.setAdapter(adapterCompania);
+                        adapterCompania.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
                 }
-            }
         );
 
         spncompania.setOnItemSelectedListener(
-            new OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Companiatext = spncompania.getSelectedItem().toString();
-                    ArrayList<String> usuarioList = loginRepository.getUsers(perfil,Companiatext);
+                new OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        Companiatext = spncompania.getSelectedItem().toString();
+                        ArrayList<String> usuarioList = loginRepository.getUsers(perfil, Companiatext);
 
-                    ArrayAdapter<String> adapterUser = new ArrayAdapter<String>(LoginView.this,R.layout.layout_custom_spinner,usuarioList);
-                    spnnombre.setAdapter(adapterUser);
-                    adapterUser.notifyDataSetChanged();
+                        ArrayAdapter<String> adapterUser = new ArrayAdapter<String>(LoginView.this, R.layout.layout_custom_spinner, usuarioList);
+                        spnnombre.setAdapter(adapterUser);
+                        adapterUser.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
                 }
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
-            }
         );
 
         spnnombre.setOnItemSelectedListener(
@@ -223,74 +230,89 @@ public class LoginView extends AppCompatActivity{
                         vendedortext = spnnombre.getSelectedItem().toString();
 
                         btnlogin.setEnabled(true);
-                        btnlogin.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.custom_border_button_red));
+                        btnlogin.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.custom_border_button_red));
                         btnlogin.setText(getResources().getString(R.string.BotonPrincipalLogin));
                         btnlogin.setClickable(true);
 
                     }
+
                     @Override
-                    public void onNothingSelected(AdapterView<?> parent) {}
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
                 }
         );
 
         getLocation();
-        
+
 
     }
 
 
-    private void getLocation(){
-        locationManager = (LocationManager) this. getSystemService(LOCATION_SERVICE);
-        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+    private void getLocation() {
+        locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             // AlertNoGps();
             androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
-            dialogFragment.show(((FragmentActivity) this). getSupportFragmentManager (),"un dialogo");
+            dialogFragment.show(((FragmentActivity) this).getSupportFragmentManager(), "un dialogo");
         }
 
 
         // When you need the permission, e.g. onCreate, OnClick etc.
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            Log.e("REOS","MenuAccionView: No tiene ACCESS_FINE_LOCATION ");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("REOS", "MenuAccionView: No tiene ACCESS_FINE_LOCATION ");
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
 
         } else {
-            Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
+            Log.e("REOS", "MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
             // We have already permission to use the location
             try {
-                gpsController =  new GPSController(this);
+                gpsController = new GPSController(this);
                 mLocation = gpsController.getLocation(mLocation);
                 latitude = mLocation.getLatitude();
-                longitude= mLocation.getLongitude();
-            }catch (Exception e)
-            {
+                longitude = mLocation.getLongitude();
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
 
         }
     }
 
-    private void getCrash()
-    {
+    private void getCrash() {
         Induvis.getCrashLytics();
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         ObtenerVideo();
     }
 
-    private void loadConfigurationPrinter(){
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        bluetoothAdapter.enable();
-        ConfiguracionSQLiteDao configuracionSQLiteDao5=  new ConfiguracionSQLiteDao(getBaseContext());
+    private void loadConfigurationPrinter() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_PERMISSION_BLUETOOH);
+            Log.e("REOS", "LoginView-loadConfigurationPrinter.SinPermisobluetooh");
+            return;
+        }else {
+            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            bluetoothAdapter.enable();
+            Log.e("REOS", "LoginView-loadConfigurationPrinter.conPermisobluetooh");
+        }
+
+        ConfiguracionSQLiteDao configuracionSQLiteDao5 = new ConfiguracionSQLiteDao(getBaseContext());
         configuracionSQLiteDao5.ActualizaVinculo("0");
     }
 
-    private void ObtenerVideo(){
-        Uri uri = Uri.parse("android.resource://"+ getPackageName()+ "/" + R.raw.plane);
-        videoBG  = findViewById(R.id.videoView);
+    private void ObtenerVideo() {
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.plane);
+        videoBG = findViewById(R.id.videoView);
         videoBG.setVideoURI(uri);
         videoBG.requestFocus();
         videoBG.start();
@@ -299,15 +321,15 @@ public class LoginView extends AppCompatActivity{
 
     private void verifyPermission() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            int permsRequestCode = 100;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int permsRequestCode = 255;
 
             String[] perms = {
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
             };
 
             int accessReadPhoneState = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
@@ -316,7 +338,9 @@ public class LoginView extends AppCompatActivity{
             int accessCoarseLocation = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
             int accessReadExternalStorage = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
 
-            if (accessReadPhoneState == PackageManager.PERMISSION_GRANTED && accessWriteExternalStorage == PackageManager.PERMISSION_GRANTED && accessCamera == PackageManager.PERMISSION_GRANTED &&  accessCoarseLocation == PackageManager.PERMISSION_GRANTED && accessReadExternalStorage==PackageManager.PERMISSION_GRANTED) {
+            if (accessReadPhoneState == PackageManager.PERMISSION_GRANTED && accessWriteExternalStorage == PackageManager.PERMISSION_GRANTED && accessCamera == PackageManager.PERMISSION_GRANTED && accessCoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && accessReadExternalStorage == PackageManager.PERMISSION_GRANTED
+            ) {
                 //se realiza metodo si es necesario...
             } else {
                 requestPermissions(perms, permsRequestCode);
@@ -327,17 +351,17 @@ public class LoginView extends AppCompatActivity{
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==100){
-            for (int i=0;i<grantResults.length;i++) {
-                if(grantResults[i]==-1){
-                    verifyPermission();
+        if (requestCode == 255) {
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] == -1) {
+                    //verifyPermission();
                     break;
                 }
             }
         }
     }
 
-    public void btnLogin(View v){
+    public void btnLogin(View v) {
 
         /*TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         String mPhoneNumber="";
@@ -366,15 +390,14 @@ public class LoginView extends AppCompatActivity{
         Log.e("REOS", "LoginView-btnLogin-phoneNumber:" + phoneNumber);
         Log.e("REOS", "LoginView-btnLogin-mPhoneNumber:" + mPhoneNumber);*/
         btnlogin.setEnabled(false);
-        btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_onclick));
+        btnlogin.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_border_button_onclick));
         btnlogin.setText(this.getResources().getString(R.string.Ingresando));
 
         btnlogin.setClickable(false);
 
-        UsuarioSQLiteEntity userEntity= loginRepository.loginUser(Companiatext,vendedortext);
+        UsuarioSQLiteEntity userEntity = loginRepository.loginUser(Companiatext, vendedortext);
 
-        if(userEntity!=null) {
-
+        if (userEntity != null) {
 
 
             Sesion.compania_id = userEntity.getCompania_id();
@@ -385,46 +408,44 @@ public class LoginView extends AppCompatActivity{
             Sesion.usuario_id = userEntity.getUsuario_id();
             Sesion.imei = userEntity.getImei();
             Sesion.recibo = userEntity.getRecibo();
-            Sesion.almacen_id=userEntity.getAlmacen_id();
-            Sesion.planta_id=userEntity.getPlanta();
-            Sesion.perfil_id=userEntity.getPerfil();
-            Sesion.cogsacct=userEntity.getCogsacct();
-            Sesion.u_vist_ctaingdcto=userEntity.getU_vist_ctaingdcto();
-            Sesion.documentsowner=userEntity.getDocumentsowner();
-            Sesion.U_VIST_SUCUSU=userEntity.getU_VIST_SUCUSU();
-            Sesion.CentroCosto=userEntity.getCentroCosto();
-            Sesion.UnidadNegocio=userEntity.getUnidadNegocio();
-            Sesion.LineaProduccion=userEntity.getLineaProduccion();
-            Sesion.Impuesto_ID=userEntity.getImpuesto_ID();
-            Sesion.Impuesto=userEntity.getImpuesto();
-            Sesion.U_VIS_CashDscnt=userEntity.getU_VIS_CashDscnt();
-            Sesion.FLAG_STOCK=userEntity.getFLAG_STOCK();
-            Sesion.FLAG_BACKUP=userEntity.getFLAG_BACKUP();
-            Sesion.rate=userEntity.getRate();
-            Sesion.Print=userEntity.getPrint();
-            Sesion.activecurrency=userEntity.getActivecurrency();
-            Sesion.phone=userEntity.getPlanta();
-            Sesion.maxDateDeposit=userEntity.getChkbloqueopago();
-            if(userEntity.getMigratequotation()==null)
-            {
-                Sesion.migratequotation="N";
-            }else {
-                Sesion.migratequotation=userEntity.getMigratequotation();
+            Sesion.almacen_id = userEntity.getAlmacen_id();
+            Sesion.planta_id = userEntity.getPlanta();
+            Sesion.perfil_id = userEntity.getPerfil();
+            Sesion.cogsacct = userEntity.getCogsacct();
+            Sesion.u_vist_ctaingdcto = userEntity.getU_vist_ctaingdcto();
+            Sesion.documentsowner = userEntity.getDocumentsowner();
+            Sesion.U_VIST_SUCUSU = userEntity.getU_VIST_SUCUSU();
+            Sesion.CentroCosto = userEntity.getCentroCosto();
+            Sesion.UnidadNegocio = userEntity.getUnidadNegocio();
+            Sesion.LineaProduccion = userEntity.getLineaProduccion();
+            Sesion.Impuesto_ID = userEntity.getImpuesto_ID();
+            Sesion.Impuesto = userEntity.getImpuesto();
+            Sesion.U_VIS_CashDscnt = userEntity.getU_VIS_CashDscnt();
+            Sesion.FLAG_STOCK = userEntity.getFLAG_STOCK();
+            Sesion.FLAG_BACKUP = userEntity.getFLAG_BACKUP();
+            Sesion.rate = userEntity.getRate();
+            Sesion.Print = userEntity.getPrint();
+            Sesion.activecurrency = userEntity.getActivecurrency();
+            Sesion.phone = userEntity.getPlanta();
+            Sesion.maxDateDeposit = userEntity.getChkbloqueopago();
+            if (userEntity.getMigratequotation() == null) {
+                Sesion.migratequotation = "N";
+            } else {
+                Sesion.migratequotation = userEntity.getMigratequotation();
             }
-            if(userEntity.getCensus()==null)
-            {
-                Sesion.census="N";
-            }else {
-                Sesion.census=userEntity.getCensus();
+            if (userEntity.getCensus() == null) {
+                Sesion.census = "N";
+            } else {
+                Sesion.census = userEntity.getCensus();
             }
 
-            Log.e("REOS","LoginView.Sesion.rate: "+Sesion.rate);
-            Log.e("REOS","LoginView.Sesion.U_VIS_CashDscnt: "+Sesion.U_VIS_CashDscnt);
-            Log.e("REOS","LoginView.Sesion.maxDateDeposit: "+Sesion.maxDateDeposit);
-            String country=userEntity.getCountry();
-            String language=userEntity.getLenguage();
+            Log.e("REOS", "LoginView.Sesion.rate: " + Sesion.rate);
+            Log.e("REOS", "LoginView.Sesion.U_VIS_CashDscnt: " + Sesion.U_VIS_CashDscnt);
+            Log.e("REOS", "LoginView.Sesion.maxDateDeposit: " + Sesion.maxDateDeposit);
+            String country = userEntity.getCountry();
+            String language = userEntity.getLenguage();
 
-            Log.e("REOS","LoginView-SesionEntity.Print" + Sesion.Print);
+            Log.e("REOS", "LoginView-SesionEntity.Print" + Sesion.Print);
             getCrash();
 
             /*String dato="",dato1="",dato2="";
@@ -433,36 +454,36 @@ public class LoginView extends AppCompatActivity{
             dato2=forzadoerror[1];*/
 
 
-            if( country==null  && language==null){
+            if (country == null && language == null) {
                 Toast.makeText(this, this.getResources().getString(R.string.mse_system_no_identification_country), Toast.LENGTH_LONG).show();
                 btnlogin.setEnabled(true);
 
-                btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_red));
+                btnlogin.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_border_button_red));
                 btnlogin.setText(getResources().getString(R.string.BotonPrincipalLogin));
                 btnlogin.setClickable(true);
-            }else{
+            } else {
 
                 SharedPreferences.Editor editor = statusImei.edit();
-                editor.putString("country",userEntity.getCountry());
-                editor.putString("language",userEntity.getLenguage());
+                editor.putString("country", userEntity.getCountry());
+                editor.putString("language", userEntity.getLenguage());
                 editor.apply();
 
 
                 verificationVersion();
             }
-        }else{
+        } else {
             Toast.makeText(this, this.getResources().getString(R.string.unauthorized_equipment), Toast.LENGTH_SHORT).show();
             btnlogin.setEnabled(true);
 
-            btnlogin.setBackground(ContextCompat.getDrawable(this,R.drawable.custom_border_button_red));
+            btnlogin.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_border_button_red));
             btnlogin.setText(getResources().getString(R.string.BotonPrincipalLogin));
             btnlogin.setClickable(true);
         }
     }
 
-    public void setLocale(String lang,String country) {
+    public void setLocale(String lang, String country) {
 
-        Locale myLocale = new Locale(lang,country);
+        Locale myLocale = new Locale(lang, country);
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
 
@@ -473,55 +494,55 @@ public class LoginView extends AppCompatActivity{
         //Location.getTime();
     }
 
-    private void verificationVersion(){
+    private void verificationVersion() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         Intent intent = new Intent(this, MenuView.class);
 
-        if(networkInfo != null && networkInfo.isConnected()){
-            boolean userUnlinked=(SesionEntity.compania_id==null)?true:false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            boolean userUnlinked = (SesionEntity.compania_id == null) ? true : false;
             //verificamos que el usuario elegido para la sesion tenga codigo de compania
 
-            if(!userUnlinked){
-                new VersionViewModel().getVs(SesionEntity.imei,version,this).observe(this, data -> {
-                    if(data!=null){
-                        if(data.getClass().getName().equals("java.lang.String")){
-                            if(data.toString().length()>6){
+            if (!userUnlinked) {
+                new VersionViewModel().getVs(SesionEntity.imei, version, this).observe(this, data -> {
+                    if (data != null) {
+                        if (data.getClass().getName().equals("java.lang.String")) {
+                            if (data.toString().length() > 6) {
                                 Toast.makeText(this, data.toString(), Toast.LENGTH_LONG).show();
                                 readUserAndLogin(intent);
-                            }else{
+                            } else {
                                 btnlogin.setText(this.getResources().getString(R.string.validation_receips));
                                 ObtenerPendientesEnvioWS();
-                                new UpdateApp(btnlogin,data.toString(),this);
+                                new UpdateApp(btnlogin, data.toString(), this);
                             }
-                        }else if(data.getClass().getName().equals("java.lang.Boolean")){
+                        } else if (data.getClass().getName().equals("java.lang.Boolean")) {
                             readUserAndLogin(intent);
                         }
                         //readUserAndLogin(intent);
-                    }else{
+                    } else {
                         Toast.makeText(this, this.getResources().getString(R.string.mse_mistake_response_server), Toast.LENGTH_SHORT).show();
                         readUserAndLogin(intent);
                     }
                 });
-            }else{
+            } else {
                 btnlogin.setText(this.getResources().getString(R.string.unlinked_user));
                 Toast.makeText(this, this.getResources().getString(R.string.mse_unlinked_user), Toast.LENGTH_LONG).show();
             }
-        }else{
-            if(statusImei.getString("status", "not").equals("yes")){
+        } else {
+            if (statusImei.getString("status", "not").equals("yes")) {
                 startActivity(intent);
                 finish();
-            }else{
+            } else {
                 btnlogin.setText(this.getResources().getString(R.string.update_mobile_app));
                 Toast.makeText(this, this.getResources().getString(R.string.mse_necessary_connecting_internet), Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private void readUserAndLogin(Intent intent){
+    private void readUserAndLogin(Intent intent) {
         Map<String, String> vendedor = new HashMap<>();
         vendedor.put("Imei", SesionEntity.imei);
-        vendedor.put("Compañia",SesionEntity.compania_id);
+        vendedor.put("Compañia", SesionEntity.compania_id);
         vendedor.put("Fuerza de Venta", SesionEntity.fuerzatrabajo_id);
 
         User user = new User();
@@ -534,15 +555,31 @@ public class LoginView extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos"))
-        {
+        if (BuildConfig.FLAVOR.equals("espania") || BuildConfig.FLAVOR.equals("marruecos")) {
 
-        }else {
-            if (bluetoothAdapter.isEnabled()) {
-                bluetoothAdapter.disable();
-            } else {
-                bluetoothAdapter.enable();
-            }
+        } else {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    Log.e("REOS", "LoginView-onBackPressed.sinPermisobluetooh");
+                    requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_PERMISSION_BLUETOOH);
+                    return;
+                }
+                else    {
+                    Log.e("REOS", "LoginView-onBackPressed.conPermisobluetooh");
+                    if(bluetoothAdapter.isEnabled())
+                    {
+                        //bluetoothAdapter.disable();
+                    }
+                    else {
+                        bluetoothAdapter.enable();
+                    }
+                }
         }
 
         System.exit(0);

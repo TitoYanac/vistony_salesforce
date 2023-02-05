@@ -148,6 +148,15 @@ public class StatusDispatchDialog extends DialogFragment {
         imageViewPhoto.setBackgroundResource(R.drawable.portail);
         imageViewPhoto2 = dialog.findViewById(R.id.imageViewPhoto2);
         imageViewPhoto2.setBackgroundResource(R.drawable.portail);
+        TextView lbl_referral_guide=dialog.findViewById(R.id.lbl_referral_guide);
+        TextView lbl_delivery=dialog.findViewById(R.id.lbl_delivery);
+        TextView tv_description=dialog.findViewById(R.id.tv_description);
+        if(BuildConfig.FLAVOR.equals("bolivia"))
+        {
+            lbl_referral_guide.setText("Documento");
+            lbl_delivery.setText("Documento");
+            tv_description.setText("Elija el documento y seleccione el estado,motivo y ponga observacion");
+        }
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
         Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
@@ -374,16 +383,23 @@ public class StatusDispatchDialog extends DialogFragment {
                         //Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
                         Uri photoURI=null;
                         switch (BuildConfig.FLAVOR){
-                            case "bolivia":
                             case "ecuador":
                             case "chile":
                             case "peru":
                             case "marruecos":
-                            case "paraguay":
                                 photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
                                 break;
                             case "espania":
                                 photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.espania" , photoFile);
+                                break;
+                            case "perurofalab":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.perurofalab" , photoFile);
+                                break;
+                            case "bolivia":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.bolivia" , photoFile);
+                                break;
+                            case "paraguay":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.paraguay" , photoFile);
                                 break;
                         }
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -443,17 +459,25 @@ public class StatusDispatchDialog extends DialogFragment {
                         Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
                         Uri photoURI =null;
                         switch (BuildConfig.FLAVOR){
-                            case "bolivia":
                             case "ecuador":
                             case "chile":
                             case "peru":
                             case "marruecos":
-                            case "paraguay":
                                 photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
                                 break;
                             case "espania":
                                 photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.espania" , photoFile);
                                 break;
+                            case "perurofalab":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.perurofalab" , photoFile);
+                                break;
+                            case "bolivia":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.bolivia" , photoFile);
+                                break;
+                            case "paraguay":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.paraguay" , photoFile);
+                                break;
+
                         }
                         //Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);

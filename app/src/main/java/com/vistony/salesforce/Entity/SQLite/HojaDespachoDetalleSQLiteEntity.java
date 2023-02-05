@@ -32,6 +32,8 @@ public class HojaDespachoDetalleSQLiteEntity {
     public String fotolocal;
     public boolean chkcollection;
     public String ocurrencies;
+    public String latitud;
+    public String longitud;
 
     public HojaDespachoDetalleSQLiteEntity(
             String compania_id, String fuerzatrabajo_id, String usuario_id, String control_id, String item_id, String cliente_id,
@@ -48,6 +50,8 @@ public class HojaDespachoDetalleSQLiteEntity {
             ,String fotolocal
             ,boolean chkcollection
             ,String ocurrencies
+            ,String latitud
+            ,String longitud
     ) {
         this.compania_id = compania_id;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
@@ -80,11 +84,29 @@ public class HojaDespachoDetalleSQLiteEntity {
         this.fotolocal = fotolocal;
         this.chkcollection = chkcollection;
         this.ocurrencies = ocurrencies;
+        this.latitud = latitud;
+        this.longitud = longitud;
 
     }
 
     public HojaDespachoDetalleSQLiteEntity() {
 
+    }
+
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
     }
 
     public String getOcurrencies() {

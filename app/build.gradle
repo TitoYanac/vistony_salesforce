@@ -4,6 +4,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 // Apply the Performance Monitoring plugin
 apply plugin: 'com.google.firebase.firebase-perf'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     signingConfigs {
@@ -15,13 +16,13 @@ android {
         }
     }
 
-    compileSdkVersion 30
+    compileSdkVersion 31
     //buildToolsVersion "29.0.3"
     defaultConfig {
             //applicationId "com.vistony.salesforceHuawey"
             applicationId "com.vistony.salesforce"
             minSdkVersion 27
-            targetSdkVersion 30
+            targetSdkVersion 31
             versionCode 1
             versionName "0.0.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -32,6 +33,9 @@ android {
             manifestPlaceholders = [appName:"Test Sales Force"]
             buildConfigField('String' , 'BASE_ENVIRONMENT', '".qa/api"')
             signingConfig  signingConfigs.config
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
 
     buildTypes {
@@ -67,7 +71,7 @@ android {
             //Prueba
             buildConfigField('String' , 'BASE_ENDPOINT', '"get.cl"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.cl"')
-            versionName "1.0.2"
+            versionName "1.0.3"
             manifestPlaceholders = [country:"Chile"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"CL"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -76,9 +80,11 @@ android {
             applicationIdSuffix ".ecuador"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //buildConfigField('String' , 'BASE_EDPOINT', '"/ec"')
-            buildConfigField('String' , 'BASE_ENDPOINT', '"ec.get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"ec.post"')
-            versionName "1.0.7"
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"ec.get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"ec.post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.ec"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.ec"')
+            versionName "1.0.9"
             manifestPlaceholders = [country:"Ecuador"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"EC"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -90,9 +96,12 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //---------------------------
+            //QA Fecha Entrega-------
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.pe"')
             versionName "2.2.11"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
@@ -107,10 +116,13 @@ android {
             //----------Ambiente 113
             //buildConfigField('String' , 'BASE_ENDPOINT', '"bo.get"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"bo.post"')
-            //----------Ambiente Server20
+            //----------Ambiente Server20 Produccion
             buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo"')
-            versionName "1.0.8"
+            //----------Ambiente Ultima Milla
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo.qa"')
+            versionName "1.0.9"
             manifestPlaceholders = [country:"Bolivia"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"BO"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -119,9 +131,11 @@ android {
             applicationIdSuffix ".paraguay"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //buildConfigField('String' , 'BASE_ENDPOINT', '"/bo"')
-            buildConfigField('String' , 'BASE_ENDPOINT', '"py.get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"py.post"')
-            versionName "1.0.0"
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"py.get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"py.post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.py"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.py"')
+            versionName "1.0.1"
             manifestPlaceholders = [country:"Paraguay"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PY"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -130,13 +144,13 @@ android {
             applicationIdSuffix ".perurofalab"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.rf"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.rf"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //---------------------------
-            versionName "1.0.0"
+            versionName "1.0.1"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
@@ -187,6 +201,20 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
 }
 
 dependencies {
@@ -205,6 +233,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.activity:activity-compose:1.3.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -271,4 +304,16 @@ dependencies {
 
     //QR Scanner
     implementation 'com.github.blikoon:QRCodeScanner:0.1.2'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
+    //Map de Google Kotlin
+    implementation "com.google.maps.android:maps-compose:1.0.0"
+    implementation "com.google.android.gms:play-services-maps:18.0.2"
+
+    // Ciclo de vida + Modelo de vista
+    //implementation 'androidx.lifecycle: lifecycle-runtime-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+
 }

@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,7 @@ public class OrdenVentaDetalleView extends Fragment {
     static Context context;
     private ProgressDialog pd;
     HiloUpdateListaPrecios hiloUpdateListaPrecios;
+    TableRow tr_taxoil;
     public static OrdenVentaDetalleView newInstanceEnviaListaPromocion (Object objeto) {
 
         ListenerBackPress.setCurrentFragment("OrdenVentaDetalleView");
@@ -293,7 +295,12 @@ public class OrdenVentaDetalleView extends Fragment {
         tv_orden_venta_detalle_igv = v.findViewById(R.id.tv_orden_venta_detalle_igv);
         tv_orden_venta_detalle_total = v.findViewById(R.id.tv_orden_venta_detalle_total);
         tv_orden_detalle_galones = v.findViewById(R.id.tv_orden_detalle_galones);
+        tr_taxoil= v.findViewById(R.id.tr_taxoil);
 
+        if(BuildConfig.FLAVOR.equals("bolivia"))
+        {
+            tr_taxoil.setVisibility(View.GONE);
+        }
         fab_consulta_productos.setOnClickListener(view -> {
             switch (BuildConfig.FLAVOR){
                 case "india":
@@ -612,7 +619,10 @@ public class OrdenVentaDetalleView extends Fragment {
                             Lista.get(i).getPorcentaje_descuento(),
                             Lista.get(i).getStock_almacen(),
                             Lista.get(i).getStock_general(),
-                            Lista.get(i).getUnit()
+                            Lista.get(i).getUnit(),
+                            Lista.get(i).getOiltax(),
+                            Lista.get(i).getLiter(),
+                            Lista.get(i).getSIGAUS()
 
                     );
                 }
