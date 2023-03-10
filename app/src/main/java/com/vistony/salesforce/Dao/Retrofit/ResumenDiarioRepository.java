@@ -46,7 +46,7 @@ public class ResumenDiarioRepository extends ViewModel {
                 HistoricContainerSalesEntityResponse historicContainerSalesEntityResponse=response.body();
                 Log.e("REOS","ResumenDiarioRepository-getResumenDiario-call"+call);
                 Log.e("REOS","ResumenDiarioRepository-getResumenDiario-response"+response);
-                if(response.isSuccessful() && historicContainerSalesEntityResponse.getHistoricContainerSales() .size()>0){
+                if(response.isSuccessful() && historicContainerSalesEntityResponse!=null){
                     for(int i=0;i<historicContainerSalesEntityResponse.getHistoricContainerSales().size();i++)
                     {
                         historicContainerSalesEntityResponse.getHistoricContainerSales().get(i).setFechasap(fechaini);

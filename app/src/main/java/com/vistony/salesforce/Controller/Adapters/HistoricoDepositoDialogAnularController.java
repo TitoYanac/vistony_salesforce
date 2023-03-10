@@ -467,7 +467,8 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                             fechadiferida,
                             Fecha,
                             chkdepositodirecto,
-                            "0"
+                            "0",
+                            "N"
                     );
                 }
 
@@ -623,6 +624,9 @@ public class HistoricoDepositoDialogAnularController extends DialogFragment {
                                         ,""
                                         ,"0"
                                         ,""
+                                        , arraylistahistoricocobranzaentity.get(i).getCollection_salesperson()
+                                        , arraylistahistoricocobranzaentity.get(i).getType()
+
                                 );
 
                     }

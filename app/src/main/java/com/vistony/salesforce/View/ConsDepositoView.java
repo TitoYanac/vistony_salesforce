@@ -308,7 +308,6 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
 
             if(listacobranzaDetalleSQLiteEntity.size()>0)
             {
-                //listaConsDepositoAdapter.clear();
                 listaConsDepositoAdapter = new ListaConsDepositoAdapter(
                         getActivity(),
                         ListaConsDepositoDao.getInstance().getLeads(listacobranzaDetalleSQLiteEntity

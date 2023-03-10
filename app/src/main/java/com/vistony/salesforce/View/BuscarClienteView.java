@@ -155,6 +155,19 @@ public class BuscarClienteView extends Fragment implements SearchView.OnQueryTex
         return fragment;
     }
 
+    public static BuscarClienteView newInstanciaEnviarValidationAccountClient(Object param1) {
+        BuscarClienteView fragment = new BuscarClienteView();
+        String Fragment="ValidationAccountClient";
+        String accion="sendClient";
+        String compuesto=Fragment+"-"+accion;
+        if(mListener!=null)
+        {
+            mListener.onFragmentInteraction(compuesto, param1);
+        }
+        return fragment;
+    }
+
+
     public static BuscarClienteView newInstanceFlujoNoRuta(Object object) {
         BuscarClienteView fragment = new BuscarClienteView();
         Bundle args = new Bundle();

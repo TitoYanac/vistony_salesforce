@@ -438,7 +438,7 @@ public class DetailDispatchSheetSQLite {
         Cursor fila = bd.rawQuery(
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
                         "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
-                        ", IFNULL(E.timeini,'0') timeini, IFNULL(A.estado,IFNULL(E.timefin,'0')) timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch " +
+                        ", IFNULL(E.timeini,'0') timeini, IFNULL(A.estado,IFNULL(E.timefin,'0')) timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch,IFNULL(I.latitud,'0') as latitud, IFNULL(I.longitud,'0') as longitud " +
                         //", '0' timeini, '0' timefin " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
@@ -465,6 +465,9 @@ public class DetailDispatchSheetSQLite {
                         "A.estado_id=G.typedispatch_id  " +
                         " LEFT OUTER JOIN reasondispatch H ON " +
                         "A.motivo_id=H.reasondispatch_id  " +
+                        " LEFT OUTER JOIN direccioncliente I ON " +
+                        "a.cliente_id=I.cliente_id and " +
+                        "a.domembarque_id=I.domembarque_id  " +
                         " where D.fechahojadespacho='"+dateDispatch+"'" +
                         " AND G.typedispatch_id in ('S','P')" +
                         " ORDER BY A.item_id",null);
@@ -526,7 +529,8 @@ public class DetailDispatchSheetSQLite {
             hojaDespachoSQLiteEntity.setChkcollection (chkcollection);
             hojaDespachoSQLiteEntity.setEstado (fila.getString(fila.getColumnIndex("typedispatch")));
             hojaDespachoSQLiteEntity.setOcurrencies(fila.getString(fila.getColumnIndex("reasondispatch")));
-
+            hojaDespachoSQLiteEntity.setLatitud (fila.getString(fila.getColumnIndex("latitud")));
+            hojaDespachoSQLiteEntity.setLongitud (fila.getString(fila.getColumnIndex("longitud")));
 
             listaHojaDespachoSQLiteEntity.add(hojaDespachoSQLiteEntity);
         }
@@ -546,7 +550,7 @@ public class DetailDispatchSheetSQLite {
         Cursor fila = bd.rawQuery(
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
                         "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
-                        ", IFNULL(E.timeini,'0') timeini, IFNULL(A.estado,IFNULL(E.timefin,'0')) timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch " +
+                        ", IFNULL(E.timeini,'0') timeini, IFNULL(A.estado,IFNULL(E.timefin,'0')) timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch,IFNULL(I.latitud,'0') latitud,IFNULL(I.longitud,'0') longitud " +
                         //", '0' timeini, '0' timefin " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
@@ -573,6 +577,9 @@ public class DetailDispatchSheetSQLite {
                         "A.estado_id=G.typedispatch_id  " +
                         " LEFT OUTER JOIN reasondispatch H ON " +
                         "A.motivo_id=H.reasondispatch_id  " +
+                        " LEFT OUTER JOIN direccioncliente I ON " +
+                        "a.cliente_id=I.cliente_id  AND " +
+                        "a.domembarque_id=I.domembarque_id  " +
                         " where D.fechahojadespacho='"+dateDispatch+"'" +
                         " AND G.typedispatch_id in ('E') " +
                         " ORDER BY A.item_id",null);
@@ -634,7 +641,8 @@ public class DetailDispatchSheetSQLite {
             hojaDespachoSQLiteEntity.setChkcollection (chkcollection);
             hojaDespachoSQLiteEntity.setEstado (fila.getString(fila.getColumnIndex("typedispatch")));
             hojaDespachoSQLiteEntity.setOcurrencies(fila.getString(fila.getColumnIndex("reasondispatch")));
-
+            hojaDespachoSQLiteEntity.setLatitud (fila.getString(fila.getColumnIndex("latitud")));
+            hojaDespachoSQLiteEntity.setLongitud (fila.getString(fila.getColumnIndex("longitud")));
 
             listaHojaDespachoSQLiteEntity.add(hojaDespachoSQLiteEntity);
         }
@@ -654,7 +662,7 @@ public class DetailDispatchSheetSQLite {
         Cursor fila = bd.rawQuery(
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
                         "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
-                        ", IFNULL(E.timeini,'0') timeini, IFNULL(A.estado,IFNULL(E.timefin,'0')) timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch " +
+                        ", IFNULL(E.timeini,'0') timeini, IFNULL(A.estado,IFNULL(E.timefin,'0')) timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch,IFNULL(I.latitud,'0') latitud,IFNULL(I.longitud,'0') longitud  " +
                         //", '0' timeini, '0' timefin " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
@@ -681,6 +689,9 @@ public class DetailDispatchSheetSQLite {
                         "A.estado_id=G.typedispatch_id  " +
                         " LEFT OUTER JOIN reasondispatch H ON " +
                         "A.motivo_id=H.reasondispatch_id  " +
+                        " LEFT OUTER JOIN direccioncliente I ON " +
+                        "a.cliente_id=I.cliente_id AND " +
+                        "a.domembarque_id=I.domembarque_id  " +
                         " where D.fechahojadespacho='"+dateDispatch+"'" +
                         " AND G.typedispatch_id in ('A','V') " +
                         " ORDER BY A.item_id",null);
@@ -742,7 +753,8 @@ public class DetailDispatchSheetSQLite {
             hojaDespachoSQLiteEntity.setChkcollection (chkcollection);
             hojaDespachoSQLiteEntity.setEstado (fila.getString(fila.getColumnIndex("typedispatch")));
             hojaDespachoSQLiteEntity.setOcurrencies(fila.getString(fila.getColumnIndex("reasondispatch")));
-
+            hojaDespachoSQLiteEntity.setLatitud (fila.getString(fila.getColumnIndex("latitud")));
+            hojaDespachoSQLiteEntity.setLongitud (fila.getString(fila.getColumnIndex("longitud")));
 
             listaHojaDespachoSQLiteEntity.add(hojaDespachoSQLiteEntity);
         }
@@ -762,7 +774,7 @@ public class DetailDispatchSheetSQLite {
         Cursor fila = bd.rawQuery(
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
                         "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
-                        ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch,I.latitud,I.longitud " +
+                        ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch,IFNULL(I.latitud,'0') latitud,IFNULL(I.longitud,'0') longitud  " +
                         //", '0' timeini, '0' timefin " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +

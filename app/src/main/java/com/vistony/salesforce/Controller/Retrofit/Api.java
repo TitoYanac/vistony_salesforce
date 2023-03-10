@@ -57,6 +57,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.SummaryofeffectivenessEn
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.TerminoPagoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.TypeDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.WareHousesEntityResponse;
+import com.vistony.salesforce.kotlin.validationaccountclient.data.ValidationAccountClientModelResponse;
 
 import java.util.List;
 
@@ -315,7 +316,8 @@ public interface Api {
     @PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Customers/Address")
     Call<LeadAddressEntityResponse> sendLeadAddress (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
-
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ValidationAccountClient")
+    Call<ValidationAccountClientModelResponse> getValidationAccountClient(@Query("SalesRepCode") String SalesRepCode,@Query("Day") String Day);
 
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);

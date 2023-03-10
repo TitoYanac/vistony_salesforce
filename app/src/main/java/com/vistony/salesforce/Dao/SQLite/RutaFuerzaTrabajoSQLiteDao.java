@@ -103,6 +103,9 @@ public class RutaFuerzaTrabajoSQLiteDao {
 
     public ArrayList<RutaFuerzaTrabajoSQLiteEntity> ObtenerRutaFuerzaTrabajo ()
     {
+        Log.e(
+                "REOS",
+                "RutaFuerzaTrabajoSQLiteDao-ObtenerRutaFuerzaTrabajo-inicia");
         listaRutaFuerzaTrabajoSQLiteEntity = new ArrayList<RutaFuerzaTrabajoSQLiteEntity>();
         RutaFuerzaTrabajoSQLiteEntity rutaFuerzaTrabajoSQLiteEntity;
         abrir();
@@ -123,6 +126,9 @@ public class RutaFuerzaTrabajoSQLiteDao {
         }
 
         bd.close();
+        Log.e(
+                "REOS",
+                "RutaFuerzaTrabajoSQLiteDao-ObtenerRutaFuerzaTrabajo-listaRutaFuerzaTrabajoSQLiteEntity.size()"+listaRutaFuerzaTrabajoSQLiteEntity.size());
         return listaRutaFuerzaTrabajoSQLiteEntity;
     }
 

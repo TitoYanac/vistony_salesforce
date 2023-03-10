@@ -41,7 +41,7 @@ public class ListaHojaDespachoDao {
         try {
             for( int i=0;i<Lista.size();i++)
             {
-                saveLead(new ListaHojaDespachoEntity(
+                saveLead(  new ListaHojaDespachoEntity(
                         Lista.get(i).getNombrecliente()
                         , Lista.get(i).getDireccion()
                         , Lista.get(i).getFactura()
@@ -59,6 +59,8 @@ public class ListaHojaDespachoDao {
                         ,Lista.get(i).isChkcollection()
                         ,Lista.get(i).getEstado()
                         ,Lista.get(i).getOcurrencies()
+                        ,Lista.get(i).getLatitud()
+                        ,Lista.get(i).getLongitud()
                 ));
             }
         }catch (Exception e)

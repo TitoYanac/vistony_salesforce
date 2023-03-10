@@ -202,6 +202,8 @@ public class FormulasController {
         BigDecimal acum=new BigDecimal(0);
         double CalculoIGV=0.0;
         for(int i=0;i<Lista.size();i++){
+            Log.e("REOS", "formulascontroller-ObtenerCalculoTotalGalonesOrdenDetallePromocion-Lista.get(i).getOrden_detalle_gal_acumulado():"+Lista.get(i).getOrden_detalle_gal_acumulado());
+            Log.e("REOS", "formulascontroller-ObtenerCalculoTotalGalonesOrdenDetallePromocion-Lista.get(i).getOrden_detalle_gal():"+Lista.get(i).getOrden_detalle_gal());
             acum=acum.add(new BigDecimal(Lista.get(i).getOrden_detalle_gal_acumulado()));
         }
         return acum.toString();
@@ -1409,11 +1411,7 @@ public class FormulasController {
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_porcentaje_descuento=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_porcentaje_descuento();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_descuento=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_descuento();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_igv=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_igv();
-
-
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_montototallinea =listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montototallinea();
-
-
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_lista_promocion_cabecera = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_lista_promocion_cabecera();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_promocion_habilitada = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_promocion_habilitada();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_gal = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_gal();

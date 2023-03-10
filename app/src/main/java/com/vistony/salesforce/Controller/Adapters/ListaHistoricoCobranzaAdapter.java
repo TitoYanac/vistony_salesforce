@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
@@ -127,12 +129,14 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
             holder.tv_monto_cobrado = (TextView) convertView.findViewById(R.id.tv_monto_cobrado);
             holder.tv_documento_cobrado = (TextView) convertView.findViewById(R.id.tv_documento_cobrado);
             holder.tv_estado_historico_cobranza = (TextView) convertView.findViewById(R.id.tv_estado_historico_cobranza);
-            holder.imv_anular_historico_cobranza = (ImageView) convertView.findViewById(R.id.imv_anular_historico_cobranza);
+            //holder.imv_anular_historico_cobranza = (ImageView) convertView.findViewById(R.id.imv_anular_historico_cobranza);
             holder.imv_flecha_historico_cobranza = (ImageView) convertView.findViewById(R.id.imv_flecha_historico_cobranza);
             holder.chk_validacionqrhistoricocobranza = (CheckBox) convertView.findViewById(R.id.chk_validacionqrhistoricocobranza);
             holder.imv_historico_cobranza_respuesta_ws = (ImageView) convertView.findViewById(R.id.imv_historico_cobranza_respuesta_ws);
-
             holder.chk_wsrecibido = (CheckBox) convertView.findViewById(R.id.chk_wsrecibido);
+            holder.tv_type = (TextView) convertView.findViewById(R.id.tv_type);
+            holder.tbl_row_type=(TableRow) convertView.findViewById(R.id.tbl_row_type);
+
             //holder.chk_cobranzaconciliada = (CheckBox) convertView.findViewById(R.id.chk_cobranzaconciliada);
             convertView.setTag(holder);
         } else {
@@ -152,11 +156,18 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
                 holder.tv_fecha_cobranza.setText(lead.getDeposito_id());
             }
 
+        if(!BuildConfig.FLAVOR.equals("peru"))
+        {
+            holder.tbl_row_type.setVisibility(View.GONE);
+        }else {
+
+        }
+
         holder.tv_recibo.setText(lead.getRecibo());
         holder.tv_monto_cobrado.setText((Convert.currencyForView(lead.getMontocobrado())));
         holder.tv_documento_cobrado.setText(lead.getNro_documento());
         holder.tv_estado_historico_cobranza.setText(lead.getEstado());
-
+        holder.tv_type.setText(lead.getType());
 
         if (lead.getChkwsrecibido().equals("Y")) {
             holder.chk_wsrecibido.setChecked(true);
@@ -171,7 +182,7 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
             holder.chk_validacionqrhistoricocobranza.setChecked(false);
         }
         final View finalConvertView = convertView;
-        holder.imv_anular_historico_cobranza.setOnClickListener(new View.OnClickListener() {
+        /*holder.imv_anular_historico_cobranza.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(getContext(), "click", Toast.LENGTH_LONG).show();
@@ -192,7 +203,7 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
                 }
 
             }
-        });
+        });*/
 
         holder.imv_flecha_historico_cobranza.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,6 +245,9 @@ public class ListaHistoricoCobranzaAdapter  extends ArrayAdapter<ListaHistoricoC
         CheckBox chk_validacionqrhistoricocobranza;
         CheckBox chk_wsrecibido;
         ImageView imv_historico_cobranza_respuesta_ws;
+        TextView tv_type;
+        TableRow tbl_row_type;
+
     }
 
     public AlertDialog createSimpleDialog(final String recibo) {

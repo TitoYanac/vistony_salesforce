@@ -49,8 +49,10 @@ import harmony.java.awt.Color;
 import com.journeyapps.barcodescanner.*;
 import com.google.zxing.BarcodeFormat;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
+import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
@@ -99,15 +101,20 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
         }
     }
 
-    public void generarPdf(Context context, ArrayList<ListaClienteDetalleEntity> Lista, String fuerzatrabajo_id, String nombrefuerzatrabajo, String recibo, String fecharecibo,String horarecibo) {
+    public void generarPdf(
+            Context context, ArrayList<ListaClienteDetalleEntity> Lista, String fuerzatrabajo_id, String nombrefuerzatrabajo, String recibo, String fecharecibo,String horarecibo,String type_description) {
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-Lista: "+Lista.size());
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-fuerzatrabajo_id: "+fuerzatrabajo_id);
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-nombrefuerzatrabajo: "+nombrefuerzatrabajo);
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-recibo: "+recibo);
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-fecharecibo: "+fecharecibo);
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-horarecibo: "+horarecibo);
-        String cliente_id="",nombrecliente="",direccion="",fechaemision="",fechavencimiento="",nrodocumento="",documento_id="",importe="",saldo="",cobrado="",nuevo_saldo="";
+        String cliente_id="",nombrecliente="",direccion="",fechaemision="",fechavencimiento="",nrodocumento="",documento_id="",importe="",saldo="",cobrado="",nuevo_saldo="",type="";
         //DeleteDocumentPDF(recibo,context);
+        //Get Date User
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
         for(int i=0;i<Lista.size();i++)
         {
@@ -125,8 +132,7 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
 
 
         }
-
-
+        type=type_description;
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-cliente_id: "+cliente_id);
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-nombrecliente: "+nombrecliente);
         Log.e("REOS","DocumentoCobranzaPDF-generarPdf-nrodocumento: "+nrodocumento);
@@ -179,24 +185,36 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             //DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL);
 
             documento.open();
+            Font font,font3,font1,font2,font4;
 
-            Font font = FontFactory.getFont(FontFactory.HELVETICA, 28,
-                    Font.BOLD, Color.black);
-            Font font2 = FontFactory.getFont(FontFactory.HELVETICA, 20,
-                    Font.BOLD, Color.black);
+            if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+            {
+                font = FontFactory.getFont(FontFactory.HELVETICA, 28,
+                        Font.BOLD, Color.black);
+                font2 = FontFactory.getFont(FontFactory.HELVETICA, 20,
+                        Font.BOLD, Color.black);
 
-            Font font3 = FontFactory.getFont(FontFactory.HELVETICA, 16,
-                    Font.BOLD, Color.black);
-            Font font4 = FontFactory.getFont(FontFactory.HELVETICA, 32,
-                    Font.BOLD, Color.black);
+                font3 = FontFactory.getFont(FontFactory.HELVETICA, 16,
+                        Font.BOLD, Color.black);
+                font4 = FontFactory.getFont(FontFactory.HELVETICA, 28,
+                        Font.BOLD, Color.black);
+            }else {
+                font = FontFactory.getFont(FontFactory.HELVETICA, 28,
+                        Font.BOLD, Color.black);
+                font2 = FontFactory.getFont(FontFactory.HELVETICA, 20,
+                        Font.BOLD, Color.black);
+
+                font3 = FontFactory.getFont(FontFactory.HELVETICA, 16,
+                        Font.BOLD, Color.black);
+                font4 = FontFactory.getFont(FontFactory.HELVETICA, 32,
+                        Font.BOLD, Color.black);
+            }
+
             // Insertamos una imagen que se encuentra en los recursos de la
             // aplicacion.
             Bitmap bitmap = null;
 
-            //Get Date User
-            UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
-            UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
-            ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
 
             //set image company
             switch (ObjUsuario.compania_id) {
@@ -214,20 +232,6 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
                     break;
             }
 
-            /*if(SesionEntity.compania_id.equals("01"))
-            {
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
-            }
-            else if(SesionEntity.compania_id.equals("C011")) {
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_bluker_negro);
-            }
-            else if(SesionEntity.compania_id.equals("13"))
-            {
-                bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo_rofalab_negro2);
-            }else{
-                bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
-            }*/
-            //bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100 ,stream);
             Image imagen = Image.getInstance(stream.toByteArray());
@@ -296,6 +300,22 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tbl.addCell(cell);
+
+            Log.e("REOS", "DocumentCobranzaPDF.generarPdf.BuildConfig.FLAVOR.:" + BuildConfig.FLAVOR);
+            if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+            {
+                cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.type_collection), font4));
+                cell.disableBorderSide(Rectangle.BOX);
+                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                tbl.addCell(cell);
+                Log.e("REOS", "DocumentCobranzaPDF.generarPdf.type:" + type);
+
+                cell = new PdfPCell(new Phrase(type, font4));
+                cell.disableBorderSide(Rectangle.BOX);
+                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                tbl.addCell(cell);
+            }
+
             cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.documents),font4));
             cell.disableBorderSide(Rectangle.BOX);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);

@@ -109,7 +109,9 @@ public class CobranzaDetalleSQLiteDao {
                                        String collectioncheck
                                         ,String e_signature
                                         ,String chkesignature
-                                       ,String phone
+                                        ,String phone
+                                        ,String collection_salesperson
+                                        ,String type_description
     )
     {
         int resultado;
@@ -155,6 +157,8 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("e_signature",e_signature);
             registro.put("chkesignature",chkesignature);
             registro.put("phone",phone);
+            registro.put("collection_salesperson",collection_salesperson);
+            registro.put("type_description",type_description);
             bd.insert("cobranzadetalle", null, registro);
 
             resultado=1;
@@ -212,6 +216,8 @@ public class CobranzaDetalleSQLiteDao {
             registro.put("e_signature","");
             registro.put("chkesignature","N");
             registro.put("codeSMS",codeSMS);
+            registro.put("collection_salesperson",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getU_VIS_CollectionSalesperson());
+            registro.put("type_description",historicoCobranzaEntityResponse.getHistoricoCobranza().get(i).getU_VIS_Type());
             bd.insert("cobranzadetalle", null, registro);
         }
 
@@ -265,7 +271,23 @@ public class CobranzaDetalleSQLiteDao {
                 else {
                     cobdetalleentity.setCollectioncheck(fila.getString(36));
                 }
+                if(fila.getString(40)==null) {
+                    cobdetalleentity.setCollectionsalesperson("N");
+                }
+                else {
+                    cobdetalleentity.setCollectionsalesperson(fila.getString(40));
+                }
+
+                if(fila.getString(41)==null) {
+                    cobdetalleentity.setTypedescription("Cobranza Ordinaria");
+                }
+                else {
+                    cobdetalleentity.setTypedescription(fila.getString(41));
+                }
+
                 //cobdetalleentity.setCompania_id(fila.getString(3));
+
+
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
 
@@ -448,6 +470,7 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setMensajews(fila.getString(fila.getColumnIndex("mensajeWS")));
                 cobdetalleentity.setHoracobranza(fila.getString(fila.getColumnIndex("horacobranza")));
                 cobdetalleentity.setCodeSMS(fila.getString(fila.getColumnIndex("codeSMS")));
+                cobdetalleentity.setTypedescription(fila.getString(fila.getColumnIndex("type_description")));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
 
@@ -923,6 +946,8 @@ public class CobranzaDetalleSQLiteDao {
                 cobdetalleentity.setMensajews(fila.getString(30));
                 cobdetalleentity.setHoracobranza(fila.getString(31));
                 cobdetalleentity.setCollectioncheck(fila.getString(36));
+                cobdetalleentity.setCollectionsalesperson(fila.getString(40));
+                cobdetalleentity.setTypedescription(fila.getString(41));
                 //cobdetalleentity.setCompania_id(fila.getString(3));
                 listaCobranzaDetalleSQLiteEntity.add(cobdetalleentity);
             }
@@ -1345,7 +1370,10 @@ public class CobranzaDetalleSQLiteDao {
                             "IFNULL(a.horacobranza,'') as IncomeTime, " +
                             "IFNULL(docentry,0 )  AS documentoentry, " +
                             "IFNULL(a.countsend,'1') as countsend," +
-                            "IFNULL(a.collectioncheck,'N') as collectioncheck " +
+                            //"IFNULL(a.collectioncheck,'N') as collectioncheck " +
+                             "IFNULL(a.collectioncheck,'N') as collectioncheck, " +
+                             "IFNULL(a.collection_salesperson,'N') as collection_salesperson, " +
+                             "IFNULL(a.type_description,'Cobranza ordinaria') as type_description " +
                             " from cobranzadetalle a " +
                             " where (chkwsrecibido='N' or  chkwsrecibido='0') " +
                             //" and chkwsdepositorecibido='0'" +
@@ -1448,6 +1476,8 @@ public class CobranzaDetalleSQLiteDao {
                 //{
                     collectionEntity.setCollectionCheck(fila.getString(fila.getColumnIndex("collectioncheck")));
                 //}
+                collectionEntity.setU_VIS_CollectionSalesperson (fila.getString(fila.getColumnIndex("collection_salesperson")));
+                collectionEntity.setU_VIS_Type(fila.getString(fila.getColumnIndex("type_description")));
                 listCollectionEntity.add(collectionEntity);
 
                 UpdateCountSend(fila.getString(fila.getColumnIndex("Receip")),ObjUsuario.compania_id,ObjUsuario.usuario_id,fila.getString(fila.getColumnIndex("countsend")));

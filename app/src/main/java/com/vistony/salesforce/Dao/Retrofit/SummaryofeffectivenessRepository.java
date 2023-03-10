@@ -35,9 +35,15 @@ public class SummaryofeffectivenessRepository extends ViewModel {
                 SummaryofeffectivenessEntityResponse summaryofeffectivenessEntityResponse=response.body();
                 Log.e("REOS","SummaryofeffectivenessRepository-getSummaryofEffectiveness-call"+call);
                 Log.e("REOS","SummaryofeffectivenessRepository-getSummaryofEffectiveness-response"+response);
-                if(response.isSuccessful() && summaryofeffectivenessEntityResponse.getSummaryofeffectivenessEntities() .size()>0){
+                if(response.isSuccessful() && summaryofeffectivenessEntityResponse.getSummaryofeffectivenessEntities()!=null){
                     Log.e("REOS","SummaryofeffectivenessRepository-getSummaryofEffectiveness-summaryofeffectivenessEntityResponse:"+summaryofeffectivenessEntityResponse.toString());
-                    summaryofeffectivenessEntityList.setValue(summaryofeffectivenessEntityResponse.getSummaryofeffectivenessEntities());
+                    if (summaryofeffectivenessEntityResponse.getSummaryofeffectivenessEntities().size()>0)
+                    {
+                        summaryofeffectivenessEntityList.setValue(summaryofeffectivenessEntityResponse.getSummaryofeffectivenessEntities());
+                    }
+                    else {
+                        summaryofeffectivenessEntityList.setValue(null);
+                    }
                 }else
                 {
                     summaryofeffectivenessEntityList.setValue(null);

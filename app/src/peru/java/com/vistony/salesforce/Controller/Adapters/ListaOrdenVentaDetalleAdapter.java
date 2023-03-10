@@ -950,7 +950,10 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_lista_promocion_cabecera = null;
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_promocion_habilitada = "0";
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_gal = lead.getOrden_detalle_gal();
-                    listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado = String.valueOf(Float.parseFloat(lead.getOrden_detalle_lista_promocion_cabecera().get(a).getCantidadcompra()) * Float.parseFloat(lead.getOrden_detalle_gal()));
+                    Log.e("REOS","ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-InsertaLineaPadre-lead.getOrden_detalle_lista_promocion_cabecera().get(a).getCantidadpromocion()"+lead.getOrden_detalle_lista_promocion_cabecera().get(a).getCantidadpromocion());
+                    Log.e("REOS","ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-InsertaLineaPadre-lead.getOrden_detalle_gal()"+lead.getOrden_detalle_gal());
+                    listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado = String.valueOf(Float.parseFloat(listaOrdenVentaDetallePromocionEntity.getOrden_detalle_cantidad()) * Float.parseFloat(lead.getOrden_detalle_gal()));
+                    Log.e("REOS","ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-InsertaLineaPadre-listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado"+listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado);
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_montosubtotalcondescuento = formulasController.CalcularMontoTotalconDescuento(
                             //Variable 1 Monto Total Linea Sin IGV
                             listaOrdenVentaDetallePromocionEntity.getOrden_detalle_montosubtotal(),
@@ -1086,6 +1089,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_promocion_habilitada = "0";
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_gal = lead.getOrden_detalle_gal();
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado = String.valueOf(Float.parseFloat(listaOrdenVentaDetallePromocionEntity.getOrden_detalle_cantidad()) * Float.parseFloat(lead.getOrden_detalle_gal()));
+                    Log.e("REOS","ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-InsertacantidadRestantedelaLineaPadre-listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado"+listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado);
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_montosubtotalcondescuento = formulasController.CalcularMontoTotalconDescuento(
                             //Variable 1 Monto Total Linea Sin IGV
                             listaOrdenVentaDetallePromocionEntity.getOrden_detalle_montosubtotal(),
@@ -1163,7 +1167,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                 } else {
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado = String.valueOf(Float.parseFloat(lead.getOrden_detalle_cantidad()) * Float.parseFloat(lead.getOrden_detalle_gal()));
                 }
-
+                Log.e("REOS","ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-InsertacantidadRestantedelaLineaPadre-listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado"+listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado);
 
                 listaOrdenVentaDetallePromocionEntity.orden_detalle_montosubtotalcondescuento = formulasController.CalcularMontoTotalconDescuento(
                         //Variable 1 Monto Total Linea Sin IGV

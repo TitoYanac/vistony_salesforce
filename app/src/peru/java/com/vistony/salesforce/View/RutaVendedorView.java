@@ -69,7 +69,7 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
     private PageAdapter pageAdapter;
 
 
-    private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=2;
+    private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=255;
     ConfigImpresoraView configImpresoraView;
     public static TabItem tabiruta,tabinoruta;
     private TabsPagerAdapter mAdapter;

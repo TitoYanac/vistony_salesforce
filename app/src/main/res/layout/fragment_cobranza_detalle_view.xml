@@ -124,7 +124,6 @@
                     android:id="@+id/tv_pago_directo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:text="@string/Direct_Depost" />
 
                 <CheckBox
@@ -139,7 +138,6 @@
                     android:id="@+id/tv_pago_pos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:text="@string/pos"/>
 
                 <CheckBox
@@ -162,7 +160,6 @@
                     android:id="@+id/tv_check1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
                     android:visibility="invisible"
                     />
 
@@ -176,26 +173,27 @@
                     android:text="" />
 
                 <TextView
-                    android:id="@+id/tv_check2"
+                    android:id="@+id/tv_collection_salesperson"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:visibility="invisible" />
+                    android:text="@string/collection_salesperson"
+                     />
 
                 <CheckBox
-                    android:id="@+id/chk_check2"
+                    android:id="@+id/chk_collection_salesperson"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:focusable="false"
-                    android:visibility="invisible" />
+                    />
 
                 <TextView
                     android:id="@+id/tv_E_signature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/lbl_e_signature"/>
+                    android:text="@string/lbl_e_signature"
+                    android:visibility="invisible"
+                    />
 
                 <CheckBox
                     android:id="@+id/chk_E_signature"
@@ -204,6 +202,7 @@
                     android:checked="false"
                     android:clickable="false"
                     android:focusable="false"
+                    android:visibility="invisible"
                     android:text="" />
             </TableRow>
         </TableLayout>

@@ -43,7 +43,7 @@ public class VersionViewModel {
         }*/
         switch (BuildConfig.FLAVOR) {
             case "chile":
-            //case "peru":
+            case "peru":
                 //Produccion
             case "ecuador":
             case "espania":
@@ -54,7 +54,7 @@ public class VersionViewModel {
                 //Ultima milla prueba bolivia
             case "bolivia":
             case "paraguay":
-            case "peru":
+            //case "peru":
                 baseUrl = "https://app.vistony.pe";
                 break;
             default:

@@ -663,7 +663,6 @@ public class MenuAccionView extends Fragment {
         switch (BuildConfig.FLAVOR) {
             case "bolivia":
             case "paraguay":
-            case "ecuador":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza_induvis);
                 break;
             case "peru":
@@ -671,34 +670,44 @@ public class MenuAccionView extends Fragment {
             case "perurofalab":
             case "espania":
             case "marruecos":
+            case "ecuador":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
                 break;
         }
 
 
-        CardView cv_cobranza_ordinaria,cv_cobranza_deposito_directo,cv_cobranza_pago_pos,cv_cobranza_kardex_pago,cv_collection_check;
+        CardView cv_cobranza_ordinaria,cv_cobranza_deposito_directo,cv_cobranza_pago_pos,cv_cobranza_kardex_pago,cv_collection_check,cv_collection_salesperson;
         cv_cobranza_ordinaria=dialog.findViewById(R.id.cv_cobranza_ordinaria);
         cv_cobranza_deposito_directo=dialog.findViewById(R.id.cv_cobranza_deposito_directo);
         cv_cobranza_pago_pos=dialog.findViewById(R.id.cv_cobranza_pago_pos);
         cv_collection_check=dialog.findViewById(R.id.cv_collection_check);
+        cv_collection_salesperson=dialog.findViewById(R.id.cv_collection_salesperson);
         //cv_cobranza_kardex_pago=dialog.findViewById(R.id.cv_cobranza_kardex_pago);
         kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
 
-        if(SesionEntity.perfil_id.equals("CHOFER"))
+        if(!BuildConfig.FLAVOR.equals("peru"))
         {
-            //cv_cobranza_deposito_directo.setVisibility(View.GONE);
+            cv_collection_salesperson.setVisibility(View.GONE);
         }
+        else {
+            //cv_collection_check.setVisibility(View.GONE);
+            if(SesionEntity.perfil_id.equals("CHOFER"))
+            {
+                //cv_cobranza_deposito_directo.setVisibility(View.GONE);
+            }else {
+                cv_collection_salesperson.setVisibility(View.GONE);
+            }
+        }
+
+
         if(!BuildConfig.FLAVOR.equals("chile"))
         {
             cv_collection_check.setVisibility(View.GONE);
         }
         else {
-            /*if(Contado.equals("1"))
-            {
-                cv_collection_check.setVisibility(View.GONE);
-            }*/
             cv_collection_check.setVisibility(View.GONE);
         }
+
 
         TextView textTitle = dialog.findViewById(R.id.text);
         textTitle.setText(getActivity().getResources().getString(R.string.mse_choise_collection));
@@ -721,6 +730,7 @@ public class MenuAccionView extends Fragment {
                 SesionEntity.pagodirecto="N";
                 SesionEntity.pagopos="N";
                 SesionEntity.collectioncheck="N";
+                SesionEntity.collection_salesperson="N";
                 dialog.dismiss();
             }
         });
@@ -735,6 +745,7 @@ public class MenuAccionView extends Fragment {
                 SesionEntity.pagodirecto="Y";
                 SesionEntity.pagopos="N";
                 SesionEntity.collectioncheck="N";
+                SesionEntity.collection_salesperson="N";
                 dialog.dismiss();
             }
         });
@@ -749,6 +760,7 @@ public class MenuAccionView extends Fragment {
                 SesionEntity.pagodirecto="N";
                 SesionEntity.pagopos="Y";
                 SesionEntity.collectioncheck="N";
+                SesionEntity.collection_salesperson="N";
                 dialog.dismiss();
             }
         });
@@ -763,9 +775,27 @@ public class MenuAccionView extends Fragment {
                 SesionEntity.pagodirecto="N";
                 SesionEntity.pagopos="N";
                 SesionEntity.collectioncheck="Y";
+                SesionEntity.collection_salesperson="N";
                 dialog.dismiss();
             }
         });
+        cv_collection_salesperson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //alertatiporecibos().show();
+                String Fragment="MenuAccionView";
+                String accion="cobranza";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+                SesionEntity.pagodirecto="N";
+                SesionEntity.pagopos="N";
+                SesionEntity.collectioncheck="N";
+                SesionEntity.collection_salesperson="Y";
+                dialog.dismiss();
+            }
+        });
+
+
         /*cv_cobranza_kardex_pago.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -902,6 +932,7 @@ public class MenuAccionView extends Fragment {
         return  dialog;
     }
     ArrayList<VisitSectionEntity> listVisitSection=new ArrayList<>();
+
     private Dialog alertDialogVisitSection() {
 
         final Dialog dialog = new Dialog(getContext());
@@ -1032,8 +1063,9 @@ public class MenuAccionView extends Fragment {
 
 
                 if(
-                        cobranzaDetalleSQLiteDao.getCountCollectionDate(FormatFecha.format(date),ObjUsuario.fuerzatrabajo_id,CardCode)>0
-                        || statusDispatchSQLite.getCountStatusDispatchforDate(ObjUsuario.fuerzatrabajo_id,CardCode,Control_id,Item_id)   >0
+                        //cobranzaDetalleSQLiteDao.getCountCollectionDate(FormatFecha.format(date),ObjUsuario.fuerzatrabajo_id,CardCode)>0
+                        //||
+                                statusDispatchSQLite.getCountStatusDispatchforDate(ObjUsuario.fuerzatrabajo_id,CardCode,Control_id,Item_id)   >0
                 )
                 {
                     Log.e("REOS","MenuAccion-alertDialogVisitSection-btn_finish_visitsection-longitude: "+longitude);

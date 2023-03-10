@@ -39,7 +39,16 @@ public class UsuarioSQLiteEntity {
     public String oiltaxstatus;
     public String oiltaxdesc;
     public String oiltaxvalue;
+    public String deliverydateauto;
 
+
+    public String getDeliverydateauto() {
+        return deliverydateauto;
+    }
+
+    public void setDeliverydateauto(String deliverydateauto) {
+        this.deliverydateauto = deliverydateauto;
+    }
 
     public String getOiltaxstatus() {
         return oiltaxstatus;

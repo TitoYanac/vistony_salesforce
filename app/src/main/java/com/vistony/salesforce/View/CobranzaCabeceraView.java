@@ -122,7 +122,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     SimpleDateFormat dateFormat,dataFormatToday;
     private OnFragmentInteractionListener mListener;
     Date date;
-    String fecha,tipo,bancarizado,fechadiferida,depositodirecto;
+    String fecha,tipo,bancarizado,fechadiferida,depositodirecto,collectionsalesperson;
     ListaClienteDetalleAdapter listaClienteDetalleAdapter;
     ListView listViewCobranzaCabecera;
     ListaClienteDetalleEntity listaClienteDetalleEntity;
@@ -143,7 +143,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     ImageButton imv_calendario_cheque;
     private  int diadespacho,mesdespacho,anodespacho,hora,minutos,diadespacho2,mesdespacho2,anodespacho2;
     private static DatePickerDialog oyenteSelectorFecha3;
-    static CheckBox chkbancarizado,chkdepositodirecto,chk_check;
+    static CheckBox chkbancarizado,chkdepositodirecto,chk_check,chk_collection_salesperson;
     static ArrayList<ListaConsDepositoEntity> listaAdd= new ArrayList<ListaConsDepositoEntity>();
     String Grupo="",Sumacobrado="";
     BigDecimal sumacobrado;
@@ -158,7 +158,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     Spinner spn_control_despacho_id;
     ImageButton imb_consultar_codigo_control;
     TextView tv_fecha_hoja_despacho;
-    static int bancarizados=0,depositodirectos=0,count_check=0;
+    static int bancarizados=0,depositodirectos=0,count_check=0,count_salesperson=0;
     static Context context;
     String calendar;
     static Activity activity;
@@ -189,6 +189,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         bancarizados=0;
         depositodirectos=0;
         count_check=0;
+        count_salesperson=0;
         CobranzaCabeceraView cobranzaCabeceraView = new CobranzaCabeceraView();
         ArrayList<String> Listado = new ArrayList<String>();
         Bundle b = new Bundle();
@@ -214,17 +215,21 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             {
                 count_check++;
             }
+            if(Lista.get(k).getCollectionsalesperson().equals("Y"))
+            {
+                count_salesperson++;
+            }
             Log.e("REOS","CobranzaCabeceraView-newInstancia-bancarizados"+bancarizados);
             Log.e("REOS","CobranzaCabeceraView-newInstancia-depositodirectos"+depositodirectos);
             Log.e("REOS","CobranzaCabeceraView-newInstancia-count_check"+count_check);
+            Log.e("REOS","CobranzaCabeceraView-newInstancia-count_salesperson"+count_salesperson);
+
         }
 
         if(bancarizados>0)
         {
-
             chkbancarizado.setChecked(true);
             spntipo.setEnabled(false);
-
         }
         if(depositodirectos>0)
         {
@@ -233,6 +238,10 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         if(count_check>0)
         {
             chk_check.setChecked(true);
+        }
+        if(count_salesperson>0)
+        {
+            chk_collection_salesperson.setChecked(true);
         }
 
         obtenerListaCobranzas.execute();
@@ -334,7 +343,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         chkbancarizado = (CheckBox) v.findViewById(R.id.chkbancarizado);
         chkdepositodirecto = (CheckBox) v.findViewById(R.id.chkdepositodirecto);
         chk_check = (CheckBox) v.findViewById(R.id.chk_check);
-
+        chk_collection_salesperson= (CheckBox) v.findViewById(R.id.chk_collection_salesperson);
         imb_consultar_codigo_control= (ImageButton)  v.findViewById(R.id.imb_consultar_codigo_control);
         fechadiferida="19000101";
         if(!SesionEntity.perfil_id.equals("CHOFER"))
@@ -925,7 +934,13 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                                 {
                                     depositodirecto="N";
                                 }
-
+                                if(chk_collection_salesperson .isChecked())
+                                {
+                                    collectionsalesperson="Y";
+                                }else
+                                {
+                                    collectionsalesperson="N";
+                                }
                                 if(imv_calendario_cheque.getVisibility()==View.VISIBLE)
                                 {
 
@@ -969,7 +984,8 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     fechadiferida,
                     fecha,
                     depositodirecto,
-                    "N"
+                    "N",
+                    collectionsalesperson
             );
 
             if (ValidaSQLite == 1) {

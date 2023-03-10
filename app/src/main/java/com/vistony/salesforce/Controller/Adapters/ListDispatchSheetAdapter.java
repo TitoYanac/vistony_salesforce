@@ -4,62 +4,34 @@ import static android.content.Context.LOCATION_SERVICE;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
-import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.Controller.Utilitario.AlertDialogController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
-import com.vistony.salesforce.Controller.Utilitario.Utilitario;
-import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
-import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
-import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
-import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.StatusDispatchSQLite;
-import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
-import com.vistony.salesforce.Dao.SQLite.VisitSectionSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHojaDespachoEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitSectionEntity;
-import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ClienteCabeceraView;
-import com.vistony.salesforce.View.DialogMain;
 import com.vistony.salesforce.View.DireccionClienteView;
 import com.vistony.salesforce.View.DispatchSheetView;
-import com.vistony.salesforce.features.featureone.SomeScreenKt;
+import com.vistony.salesforce.kotlin.dispatchsheet.ui.DialogMain;
+//import com.vistony.salesforce.features.featureone.SomeScreenKt;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -76,6 +48,11 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
     public DispatchSheetView hojaDespachoView;
     public static ArrayList<ListaClienteCabeceraEntity> ArraylistaClienteCabeceraEntity;
     Activity activity;
+    LocationManager locationManager;
+    private GPSController gpsController;
+    private Location mLocation;
+    static double latitude, longitude;
+    private static final int REQUEST_PERMISSION_LOCATION = 255;
 
     public ListDispatchSheetAdapter(
             android.content.Context context,
@@ -133,7 +110,7 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-
+        getLocation();
         // Obtener inflater.
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -198,7 +175,34 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
                                                        public void onClick(View v)
                                                        {
                                                            Log.e("REOS", "ListDispatchSheetAdapter-holder.imv_visit_status-DialogMain()");
-                                                           new DialogMain().showDialog(1);
+                                                           //new SomeScreenKt().DialogScreenOne(new SomeScreenViewModel());
+                                                           //new DialogMain().showDialog(0);
+                                                           //new DialogMain().startActivity(new Intent());
+                                                           //new SomeScreenKt();
+                                                           //new SomeScreenKt().DialogScreenOne(new SomeScreenViewModel());
+                                                           //new DialogKt();
+                                                           //DialogMain.instantiate(getContext(),"");
+                                                           //SomeScreenKt.DialogScreenOne(new SomeScreenViewModel());
+                                                           Log.e("REOS", "ListDispatchSheetAdapter-holder.imv_visit_status-DialogMain().lead.getLatitude()"+lead.getLatitude());
+                                                           Log.e("REOS", "ListDispatchSheetAdapter-holder.imv_visit_status-DialogMain().lead.getLongitude()"+lead.getLongitude());
+                                                           DialogMain dialogMain = new DialogMain();
+                                                           dialogMain.vary(String.valueOf(latitude) ,String.valueOf(longitude),lead.getLatitude(),lead.getLongitude() );
+                                                           fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+                                                           dialogMain.show(fragmentManager,"");
+
+                                                          //new DialogMain().show();
+                                                          //new DialogScreen().DefaultPreview1();
+                                                           //ok
+                                                          //new DialogBasic().showNewNameDialog(activity);
+
+                                                          //new DialogScreen().show(fragmentManager,"");
+                                                          //new DialogScreen().DialogScreenOne(new SomeScreenViewModel());
+                                                          // new DialogMain().show(fragmentManager,"");
+                                                          //new DialogScreen().DialogScreenOne(new SomeScreenViewModel());
+                                                            //new DialogMain().MyDialog();
+                                                            //new DialogMain().onCreate(activity);
+                                                           //new DialogScreenOne().
+
                                                        }
                                                    }
 
@@ -540,5 +544,37 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
 
         }
     }*/
+
+
+    private void getLocation()
+    {
+        locationManager = (LocationManager) activity. getSystemService(LOCATION_SERVICE);
+        //****Mejora****
+        if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            // AlertNoGps();
+            androidx.fragment.app.DialogFragment dialogFragment = new AlertGPSDialogController();
+            dialogFragment.show(((FragmentActivity) getContext()). getSupportFragmentManager (),"un dialogo");
+        }
+        // When you need the permission, e.g. onCreate, OnClick etc.
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            Log.e("REOS","MenuAccionView: No tiene ACCESS_FINE_LOCATION ");
+            //requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSION_LOCATION);
+
+        } else {
+            Log.e("REOS","MenuAccionView: si tiene ACCESS_FINE_LOCATION ");
+            // We have already permission to use the location
+            try {
+                gpsController =  new GPSController(getContext());
+                mLocation = gpsController.getLocation(mLocation);
+                latitude = mLocation.getLatitude();
+                longitude= mLocation.getLongitude();
+            }catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+            }
+
+        }
+    }
 
 }

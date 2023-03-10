@@ -127,7 +127,8 @@ public class MenuView extends AppCompatActivity
         MenuConsultaCobradoView.OnFragmentInteractionListener,
         KardexOfPaymentView.OnFragmentInteractionListener,
         MenuConsultasFacturasView.OnFragmentInteractionListener,
-        HistoricContainerSKU.OnFragmentInteractionListener
+        HistoricContainerSKU.OnFragmentInteractionListener,
+        DispatchSheetView.OnFragmentInteractionListener
 
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
@@ -162,6 +163,8 @@ public class MenuView extends AppCompatActivity
     Fragment HistoricContainerSaleFragment;
     Fragment LeadFragment;
     Fragment ConsultaStockFragment;
+    Fragment HojaDespachoFragment;
+    Fragment HojaDespachoView;
 
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     QuotasPerCustomerDetailRepository quotasPerCustomerDetailRepository;
@@ -231,6 +234,8 @@ public class MenuView extends AppCompatActivity
         HistoricContainerSaleFragment = new Fragment();
         LeadFragment = new Fragment();
         ConsultaStockFragment= new Fragment();
+        HojaDespachoFragment = new Fragment();
+        HojaDespachoView = new Fragment();
 
         quotasPerCustomerRepository = new ViewModelProvider(this).get(QuotasPerCustomerHeadRepository.class);
         quotasPerCustomerDetailRepository = new ViewModelProvider(this).get(QuotasPerCustomerDetailRepository.class);
@@ -340,7 +345,7 @@ public class MenuView extends AppCompatActivity
             case "CHOFER":
             case "Chofer":
                 onNavigationItemSelected(navigationView.getMenu().getItem(1).setVisible(false));
-                onNavigationItemSelected(navigationView.getMenu().getItem(3).setVisible(false));
+                onNavigationItemSelected(navigationView.getMenu().getItem(4).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(5).setVisible(false));
                 onNavigationItemSelected(navigationView.getMenu().getItem(6).setVisible(false));
                 break;
@@ -361,7 +366,7 @@ public class MenuView extends AppCompatActivity
         switch (BuildConfig.FLAVOR){
             case "bolivia":
             case "peru":
-            case "ecuador":
+
             case "chile":
                 navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
@@ -384,6 +389,18 @@ public class MenuView extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
                 navigationView.getMenu().findItem(R.id.nav_configuracion_general).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
+                break;
+            case "ecuador":
+                navigationView.getMenu().findItem(R.id.nav_hoja_despacho).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_ruta_vendedor).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_cobranzas).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_consultas).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_comisiones).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_formularios).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_dinero_cobrado).setEnabled(true);
+                navigationView.getMenu().findItem(R.id.nav_asistencia_chofer).setEnabled(false);
+                navigationView.getMenu().findItem(R.id.nav_configuracion_general).setEnabled(true);
                 navigationView.getMenu().findItem(R.id.nav_salir).setEnabled(true);
                 break;
             default:
@@ -699,6 +716,14 @@ public class MenuView extends AppCompatActivity
                 fragmentSeleccionado=true;
                 TAG_FRAGMENT="config_print";*/
                 //Toast.makeText(context, "Vista no construida", Toast.LENGTH_SHORT).show();
+                HojaDespachoFragment = new DispatchSheetView();
+                //HojaDespachoFragment = new ContainerDispatchSheetView();
+                //HojaDespachoFragment = new ContainerDispatchView();
+                fragment = "HojaDespachoView";
+                accion = "inicio";
+                compuesto = fragment + "-" + accion;
+                object = null;
+                onFragmentInteraction(compuesto, object);
                 break;
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
@@ -1366,6 +1391,13 @@ public class MenuView extends AppCompatActivity
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
             }
+            if(tag2.equals("dispatch"))
+            {
+                contentFragment=new HistoricStatusDispatchView() ;
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
         }
 
         if(tag.equals("MenuFormulariosView")){
@@ -1741,6 +1773,30 @@ public class MenuView extends AppCompatActivity
                         .newInstanceGetItemCode(Lista), tag2);
                 //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                 ft.addToBackStack("po1p");
+                ft.commit();
+            }
+        }
+        if(tag.equals("HojaDespachoView"))
+        {
+
+            if(tag2.equals("inicio"))
+            {
+                //Log.e("jpcm","inicio====");
+                //ListenerBackPress.setTemporaIdentityFragment("Deposito");
+                String taginicio=tag;
+                ft.replace(R.id.content_menu_view,HojaDespachoFragment,taginicio);
+                ft.addToBackStack("popqqqqqq");
+                ft.commit();
+            }
+            if(tag2.equals("inicioHojaDespachoViewView"))
+            {
+                String tagHojaDespachoView="HojaDespachoView";
+                tag2="inicioRutaVendedorView";
+                HojaDespachoView = getSupportFragmentManager().findFragmentByTag(tagHojaDespachoView);
+                ft.remove(HojaDespachoView);
+                //ft.add(R.id.content_menu_view,ClienteDetalleView.newInstance(Lista),tag3);
+                ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("2pop");
                 ft.commit();
             }
         }

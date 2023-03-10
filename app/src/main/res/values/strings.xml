@@ -251,7 +251,7 @@
     <string name="mse_finish_visit_next">Debe cerrar las siguientes visitas para poder continuar</string>
     <string name="mse_wait_moment_calculing_coordenates">Un Momento Por favor Calculando Coordenadas... Intente Guardar Nuevamente</string>
     <string name="visit_finish">Visita Finalizada!!!</string>
-    <string name="mse_no_generation_collection">"No ha generado cobranza o despacho a este cliente, sirvase a actualizar su despacho o generar su cobranza!!!</string>
+    <string name="mse_no_generation_collection">"No se ha actualizado, el despacho a este cliente, sirvase a actualizar su despacho para poder continuar!!!</string>
     <string name="agency">Agencia</string>
     <string name="clients">Clientes</string>
     <string name="banks">Bancos</string>
@@ -550,5 +550,9 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="price_promotional">Precio Promocional</string>
     <string name="price_promotional_unit">Precio Promocional Unitario</string>
     <string name="title_activity_google_maps">GoogleMaps</string>
-
+    <string name="type_collection">Tipo</string>
+    <string name="qr">QR</string>
+    <string name="collection_salesperson">Cobró Vendedor</string>
+    <string name="dialog_start_game">Cobró Vendedor</string>
+    <string name="validation_account_client">Validacion Cuenta Cliente</string>
 </resources>

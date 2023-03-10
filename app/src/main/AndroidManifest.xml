@@ -95,6 +95,18 @@
             android:exported="true"
             />
         <activity
+            android:name=".View.ValidationAccountClient"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
+            />
+        <activity
+            android:name=".View.MenuLateral"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
+            />
+        <activity
             android:name=".View.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
@@ -106,6 +118,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <!--
         <activity
             android:name=".View.SplashActivity"

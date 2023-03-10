@@ -373,7 +373,8 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDMT(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
+                    "Y"
             );
         }
 

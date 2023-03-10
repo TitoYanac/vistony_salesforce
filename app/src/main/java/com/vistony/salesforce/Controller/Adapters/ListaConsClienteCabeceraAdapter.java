@@ -255,6 +255,11 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
                 Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo-kardex:"+BuscarClienteView.Flujo+"NoEntroFlujo");
                 transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarClienteKardexOfPayment(ArraylistaClienteCabeceraEntity));
             }
+            else if(BuscarClienteView.Flujo.equals("findClientValidationAccountClient"))
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo-kardex:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarValidationAccountClient(ArraylistaClienteCabeceraEntity));
+            }
             else
                     {
                         Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo:"+BuscarClienteView.Flujo+"NoEntroFlujo");

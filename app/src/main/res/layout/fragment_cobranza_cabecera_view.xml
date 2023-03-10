@@ -204,6 +204,14 @@
                 android:text="@string/lbl_cheque"
                 android:visibility="gone"
                 />
+            <CheckBox
+                android:id="@+id/chk_collection_salesperson"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:clickable="false"
+                android:text="@string/collection_salesperson"
+                />
         </TableRow>
 
         <TextView

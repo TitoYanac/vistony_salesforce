@@ -90,13 +90,18 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
         v= inflater.inflate(R.layout.fragment_producto_view, container, false);
         lv_producto=v.findViewById(R.id.lv_producto);
 
-        cargarProductosSqlite(
-                vendedor.getCliente().getCardCode(),
-                vendedor.getCliente().getPymntGroup(),
-                vendedor.getCliente().getChkpricelist(),
-                vendedor.getCliente().getPriceList_id(),
-                vendedor.getCliente().getPriceList()
-        );
+        if(vendedor.getCliente()!=null)
+        {
+            cargarProductosSqlite(
+                    vendedor.getCliente().getCardCode(),
+                    vendedor.getCliente().getPymntGroup(),
+                    vendedor.getCliente().getChkpricelist(),
+                    vendedor.getCliente().getPriceList_id(),
+                    vendedor.getCliente().getPriceList()
+            );
+        }else {
+            Toast.makeText(getContext(),"No se cargaron, correctamente los datos del cliente, reingrese a la app!!!", Toast.LENGTH_LONG).show();
+        }
         return v;
     }
 

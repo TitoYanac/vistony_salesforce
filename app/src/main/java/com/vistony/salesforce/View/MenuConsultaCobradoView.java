@@ -8,8 +8,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -31,6 +33,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerInvoiceEnt
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.kotlin.validationaccountclient.ui.DialogValidationAccountClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +54,7 @@ public class MenuConsultaCobradoView extends Fragment {
     private String mParam1;
     private String mParam2;
     View v;
-    CardView cv_cobradoporfecha,cv_calculo_cuotas,cv_kardex_of_payment;
+    CardView cv_cobradoporfecha,cv_calculo_cuotas,cv_kardex_of_payment,cv_validation_account_client;
     public static OnFragmentInteractionListener mListener;
     static Dialog dialog=null;
     static public String CardCode="",CardName="";
@@ -118,6 +121,9 @@ public class MenuConsultaCobradoView extends Fragment {
         cv_cobradoporfecha=v.findViewById(R.id.cv_cobradoporfecha);
         cv_calculo_cuotas=v.findViewById(R.id.cv_calculo_cuotas);
         cv_kardex_of_payment=v.findViewById(R.id.cv_kardex_of_payment);
+        cv_validation_account_client=v.findViewById(R.id.cv_validation_account_client);
+        cv_validation_account_client.setVisibility(View.GONE);
+
         cv_cobradoporfecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +155,18 @@ public class MenuConsultaCobradoView extends Fragment {
             }
         });
 
+        cv_validation_account_client.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*String Fragment="ValidationAccountClient";
+                String accion="start";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,"");*/
+                DialogValidationAccountClient dialogValidationAccountClient = new DialogValidationAccountClient();
+                FragmentManager fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                dialogValidationAccountClient.show(fragmentManager,"");
+            }
+        });
 
 
         return v;

@@ -28,7 +28,7 @@ public class Config {
         switch (BuildConfig.FLAVOR) {
             case "chile":
             case "ecuador":
-            //case "peru":
+                case "peru":
                 //Produccion
                 //case "bolivia":
             case "espania":
@@ -40,7 +40,7 @@ public class Config {
             case "bolivia":
             case "paraguay":
                 //QA Peru
-            case "peru":
+            //case "peru":
                 baseUrl = "https://app.vistony.pe";
                 break;
             default:
@@ -124,7 +124,7 @@ public class Config {
         String baseUrl=null;
         switch (BuildConfig.FLAVOR) {
             case "chile":
-            //case "peru":
+            case "peru":
                 //Produccion
             case "ecuador":
             case "espania":
@@ -136,7 +136,7 @@ public class Config {
             case "bolivia":
             case "paraguay":
                 //QA Peru
-            case "peru":
+            //case "peru":
                 baseUrl = "https://app.vistony.pe";
                 break;
 
@@ -230,7 +230,7 @@ public class Config {
         }*/
         switch (BuildConfig.FLAVOR) {
             case "chile":
-            //case "peru":
+            case "peru":
             case "ecuador":
             case "espania":
             case "marruecos":
@@ -239,7 +239,7 @@ public class Config {
             case "perurofalab":
             case "bolivia":
             case "paraguay":
-            case "peru":
+            //case "peru":
                 baseUrl = "https://app.vistony.pe";
                 break;
             default:

@@ -72,6 +72,10 @@ public class UserEntity {
     @SerializedName("Census")
     private String census;
 
+
+
+
+
     @NonNull
     public String getCensus() {
         return census;

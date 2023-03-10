@@ -20,7 +20,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 24;
+    private static final int VERSION = 26;
 
 
     public SqliteController(Context context){
@@ -52,7 +52,7 @@ public class SqliteController extends SQLiteOpenHelper {
         db.execSQL("create table parametros (parametro_id text,nombreparametro text, cantidadregistros text, fechacarga text)");
         db.execSQL("create table configuracion (papel text,tamanio text, totalrecibos text, secuenciarecibos text,modeloimpresora text, direccionimpresora text,tipoimpresora text,vinculaimpresora text )");
         db.execSQL("create table usuario (compania_id text,fuerzatrabajo_id text ,nombrecompania text, nombrefuerzatrabajo text,nombreusuario text,usuario_id text,recibo text, chksesion text, online text,perfil text,chkbloqueopago text,listaPrecios_id_1 text,listaPrecios_id_2 text,planta text,almacen_id text,CogsAcct text,U_VIST_CTAINGDCTO text,DocumentsOwner text,U_VIST_SUCUSU text,CentroCosto text,UnidadNegocio text,LineaProduccion text,Impuesto_ID text,Impuesto text,U_VIS_CashDscnt text,Language text,Country text,flag_stock TEXT,flag_backup TEXT,imei TEXT,rate TEXT,print TEXT,activecurrency TEXT,quotation TEXT,census TEXT" +
-                ",oiltaxstatus TEXT)");
+                ",oiltaxstatus TEXT, deliverydateauto TEXT)");
 
         //Cobranzas
         //Maestros
@@ -65,10 +65,10 @@ public class SqliteController extends SQLiteOpenHelper {
                 ",terminopago TEXT,contado TEXT,latitud TEXT,longitud TEXT,addresscode TEXT)");
 
         //Transaccional
-        db.execSQL("CREATE TABLE cobranzacabecera (cobranza_id text , usuario_id text,banco_id text,compania_id text,totalmontocobrado text,chkdepositado text,chkanulado text,fuerzatrabajo_id text ,tipoingreso text,chkbancarizado text,fechadiferido text, chkwsrecibido text, fechadeposito text,comentarioanulado  text,chkwsanulado text,chkupdate text,chkwsupdate text,pagodirecto text,pagopos text,sap_code TEXT,mensajeWS TEXT,countsend TEXT)");
+        db.execSQL("CREATE TABLE cobranzacabecera (cobranza_id text , usuario_id text,banco_id text,compania_id text,totalmontocobrado text,chkdepositado text,chkanulado text,fuerzatrabajo_id text ,tipoingreso text,chkbancarizado text,fechadiferido text, chkwsrecibido text, fechadeposito text,comentarioanulado  text,chkwsanulado text,chkupdate text,chkwsupdate text,pagodirecto text,pagopos text,sap_code TEXT,mensajeWS TEXT,countsend TEXT,collection_salesperson TEXT)");
         db.execSQL("CREATE TABLE cobranzadetalle (id INTEGER PRIMARY KEY AUTOINCREMENT,cobranza_id text , cliente_id text,documento_id text,compania_id text,importedocumento text,saldodocumento text,nuevosaldodocumento text,saldocobrado text, fechacobranza text,recibo text,nrofactura text,chkdepositado text,chkqrvalidado text,chkanulado text ,fuerzatrabajo_id text,chkbancarizado text,motivoanulacion text," +
                 "usuario_id text, chkwsrecibido text,banco_id text,chkwsdepositorecibido text,chkwsqrvalidado text,comentario text,chkwsanulado text,chkupdate text,chkwsupdate text,pagodirecto text,pagopos text,sap_code TEXT,mensajeWS TEXT,horacobranza TEXT,countsend TEXT, cardname TEXT, codeSMS TEXT,docentry TEXT,collectioncheck TEXT" +
-                ",e_signature TEXT,chkesignature TEXT,phone TEXT" +
+                ",e_signature TEXT,chkesignature TEXT,phone TEXT,collection_salesperson TEXT,type_description TEXT" +
                 ")");
         db.execSQL("CREATE TABLE cobranzadetalleSMS (id INTEGER PRIMARY KEY AUTOINCREMENT,recibo TEXT,phone TEXT,compania_id text,fuerzatrabajo_id TEXT,usuario_id TEXT,date TEXT,hour TEXT,chk_send TEXT)");
         db.execSQL("CREATE TABLE visita (id TEXT,compania_id TEXT,cliente_id TEXT,direccion_id TEXT,fecha_registro TEXT,hora_registro TEXT,zona_id TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,tipo TEXT,motivo TEXT,observacion TEXT,chkenviado TEXT,chkrecibido TEXT,latitud TEXT,longitud TEXT,countsend TEXT,chkruta TEXT,id_trans_mobile TEXT,amount TEXT,terminopago_id TEXT,hora_anterior TEXT)");
@@ -85,7 +85,7 @@ public class SqliteController extends SQLiteOpenHelper {
 
             //db.execSQL("CREATE TABLE stock (compania_id text,producto_id TEXT,producto TEXT,umd TEXT,stock TEXT,almacen_id TEXT,comprometido TEXT,enstock TEXT,pedido TEXT)");
             db.execSQL("CREATE TABLE rutafuerzatrabajo (compania_id text,zona_id TEXT,zona TEXT,dia TEXT,frecuencia TEXT,fechainicioruta TEXT,estado TEXT)");
-            db.execSQL("CREATE TABLE direccioncliente (compania_id text,cliente_id text,domembarque_id text,direccion text,zona_id TEXT,zona TEXT,fuerzatrabajo_id TEXT,nombrefuerzatrabajo TEXT,latitud TEXT,longitud TEXT,addresscode TEXT, deliveryday TEXT)");
+            db.execSQL("CREATE TABLE direccioncliente (compania_id text,cliente_id text,domembarque_id text,direccion text,zona_id TEXT,zona TEXT,fuerzatrabajo_id TEXT,nombrefuerzatrabajo TEXT,latitud TEXT,longitud TEXT,addresscode TEXT, deliveryday TEXT, zipcode TEXT)");
 
             //Transaccional
             db.execSQL("CREATE TABLE ordenventacabecera (compania_id text ,ordenventa_id TEXT,cliente_id TEXT ,domembarque_id TEXT,terminopago_id TEXT,agencia_id TEXT,moneda_id TEXT,comentario " +
@@ -123,6 +123,9 @@ public class SqliteController extends SQLiteOpenHelper {
 
             //Version 12  --Tramo de Visita
             db.execSQL("CREATE TABLE quoteeffectiveness (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,type TEXT,quote TEXT,umd TEXT)");
+
+            //Version 26  --Tramo de Visita
+            db.execSQL("CREATE TABLE ubigeous (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,U_SYP_DEPA TEXT,U_SYP_PROV TEXT,U_SYP_DIST TEXT,U_VIS_Flete TEXT)");
 
     }
 
@@ -587,7 +590,6 @@ public class SqliteController extends SQLiteOpenHelper {
         if(oldVersion==23&&newVersion==24)
         {
             db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN route TEXT");
-
         }
 
         if(oldVersion==15&&newVersion==24) {
@@ -641,6 +643,40 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE direccioncliente ADD COLUMN deliveryday TEXT");
             db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN SIGAUS TEXT");
             db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN route TEXT");
+        }
+
+        if(oldVersion==24&&newVersion==25){
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliverydateauto TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collection_salesperson TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN type_description TEXT");
+            db.execSQL("ALTER TABLE cobranzacabecera ADD COLUMN collection_salesperson TEXT");
+        }
+
+        if(oldVersion==20&&newVersion==25){
+            db.execSQL("ALTER TABLE headerdispatchsheet ADD COLUMN datetimeregister TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN oiltaxstatus TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN oiltax TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN liter TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN deliveryday TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN SIGAUS TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN route TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliverydateauto TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collection_salesperson TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN type_description TEXT");
+            db.execSQL("ALTER TABLE cobranzacabecera ADD COLUMN collection_salesperson TEXT");
+        }
+        if(oldVersion==22&&newVersion==25){
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN deliveryday TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN route TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliverydateauto TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collection_salesperson TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN type_description TEXT");
+            db.execSQL("ALTER TABLE cobranzacabecera ADD COLUMN collection_salesperson TEXT");
+        }
+
+        if(oldVersion==26&&newVersion==26){
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN zipcode TEXT");
+            db.execSQL("CREATE TABLE ubigeous (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,U_SYP_DEPA TEXT,U_SYP_PROV TEXT,U_SYP_DIST TEXT,U_VIS_Flete TEXT)");
         }
 
     }

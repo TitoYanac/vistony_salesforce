@@ -35,6 +35,9 @@ public class CobranzaDetalleSQLiteEntity {
     public String cardname;
     public String codeSMS;
     public String collectioncheck;
+    public String collectionsalesperson;
+    public String typedescription;
+
     public CobranzaDetalleSQLiteEntity(
             String id, String cobranza_id, String cliente_id, String documento_id, String documento_entry,
             String compania_id, String importedocumento, String saldodocumento, String nuevosaldodocumento,
@@ -42,7 +45,12 @@ public class CobranzaDetalleSQLiteEntity {
             String chkbancarizado, String motivoanulacion, String usuario_id, String chkwsrecibido,
             String banco_id, String chkwsdepositorecibido, String comentario, String chkwsupdate,
             String chkdepositado, String chkwsqrvalidado, String chkanulado, String pagodirecto, String pagopos,
-            String sap_code, String mensajews, String horacobranza, String cardname, String codeSMS,String collectioncheck) {
+            String sap_code, String mensajews, String horacobranza, String cardname, String codeSMS
+            ,String collectioncheck
+            ,String collectionsalesperson
+            ,String typedescription
+
+    ) {
         this.id = id;
         this.cobranza_id = cobranza_id;
         this.cliente_id = cliente_id;
@@ -76,10 +84,28 @@ public class CobranzaDetalleSQLiteEntity {
         this.cardname = cardname;
         this.codeSMS = codeSMS;
         this.collectioncheck = collectioncheck;
+        this.collectionsalesperson = collectionsalesperson;
+        this.typedescription = typedescription;
     }
 
     public CobranzaDetalleSQLiteEntity() {
 
+    }
+
+    public String getCollectionsalesperson() {
+        return collectionsalesperson;
+    }
+
+    public void setCollectionsalesperson(String collectionsalesperson) {
+        this.collectionsalesperson = collectionsalesperson;
+    }
+
+    public String getTypedescription() {
+        return typedescription;
+    }
+
+    public void setTypedescription(String typedescription) {
+        this.typedescription = typedescription;
     }
 
     public String getCollectioncheck() {

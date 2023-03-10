@@ -55,7 +55,12 @@ public class OrdenVentaRepository extends ViewModel {
                 if(data==null){
                     temp.setValue("No hay ordenes de venta pendientes de enviar");
                 }else{
-                   temp.setValue(data.get(0));
+
+                    for(int i=0;i<data.size();i++)
+                    {
+                        temp.setValue(data.get(i));
+                    }
+
                 }
             }
             @Override
@@ -107,7 +112,7 @@ public class OrdenVentaRepository extends ViewModel {
 
                     if(response.isSuccessful() && salesOrderEntityResponse!=null){
                         ArrayList<String> responseData=new ArrayList<>();
-
+                        //responseData.add("Sin datos");
                         for (SalesOrderEntity respuesta:salesOrderEntityResponse.getSalesOrderEntity()) {
                             if(respuesta.getErrorCode().equals("0")){//se envio
                                 if(respuesta.getDocEntry()==null && respuesta.getDocNum()==null){//pasa por flujo de aprobacion

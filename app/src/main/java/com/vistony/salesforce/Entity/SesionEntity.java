@@ -47,5 +47,7 @@ public class SesionEntity {
     public static String updateclient ="N";
     public static String migratequotation ="N";
     public static String census ="N";
+    public static String collection_salesperson ="N";
+    public static String deliverydateauto="N";
 }
 

@@ -87,6 +87,8 @@ public class ListaHistoricoCobranzaDao {
                         ,Lista.get(i).getCollectioncheck()
                         ,Lista.get(i).getE_signature()
                         ,Lista.get(i).getChkesignature()
+                        ,Lista.get(i).getType()
+                        ,Lista.get(i).getCollection_salesperson()
                 ));
             }
         }catch (Exception e)

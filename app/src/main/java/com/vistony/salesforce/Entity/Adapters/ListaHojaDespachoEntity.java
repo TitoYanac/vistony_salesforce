@@ -19,12 +19,15 @@ public class ListaHojaDespachoEntity {
     public boolean chkcollection;
     public String estado;
     public String ocurrencia;
+    public String latitude;
+    public String longitude;
 
     public ListaHojaDespachoEntity(
             String nombrecliente, String direccion, String nrofactura, String saldo, String nombrefuerzatrabajo,
             String terminopago, String cliente_id, String domembarque_id,boolean chkupdatedispatch,
             String control_id,String item_id,boolean chkvisitsectionstart,boolean chkvisitsectionend,
-            String entrega,boolean chkcollection,String estado,String ocurrencia
+            String entrega,boolean chkcollection,String estado,String ocurrencia,
+            String latitude,String longitude
 
     ) {
         this.nombrecliente = nombrecliente;
@@ -44,11 +47,29 @@ public class ListaHojaDespachoEntity {
         this.chkcollection = chkcollection;
         this.estado = estado;
         this.ocurrencia = ocurrencia;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
 
     public ListaHojaDespachoEntity() {
 
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public String getEstado() {

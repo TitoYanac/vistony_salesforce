@@ -54,7 +54,7 @@ public class ListaConsDepositoDao {
         try {
             for( int i=0;i<Lista.size();i++)
             {
-                if(Lista.get(i).getPagodirecto().equals("Y"))
+                if(Lista.get(i).getPagodirecto().equals("Y")||Lista.get(i).getCollectionsalesperson().equals("Y"))
                 {
                     saveLead(new ListaConsDepositoEntity(
                                     Lista.get(i).getCliente_id()
@@ -71,6 +71,8 @@ public class ListaConsDepositoDao {
                                     ,Lista.get(i).getChkbancarizado()
                                     ,Lista.get(i).getPagodirecto()
                                     ,Lista.get(i).getCollectioncheck()
+                                    ,Lista.get(i).getCollectionsalesperson()
+                                    ,Lista.get(i).getTypedescription()
                             )
                     );
                 }else {
@@ -89,6 +91,8 @@ public class ListaConsDepositoDao {
                                     ,Lista.get(i).getChkbancarizado()
                                     ,Lista.get(i).getPagodirecto()
                                     ,Lista.get(i).getCollectioncheck()
+                                    ,Lista.get(i).getCollectionsalesperson()
+                                    ,Lista.get(i).getTypedescription()
                             )
                     );
                 }

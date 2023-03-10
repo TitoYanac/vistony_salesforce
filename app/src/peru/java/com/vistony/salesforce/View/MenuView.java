@@ -40,6 +40,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.compose.runtime.Composer;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -72,6 +73,7 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.kotlin.validationaccountclient.ui.ValidationAccountClient;
 
 import java.io.Closeable;
 import java.io.File;
@@ -142,7 +144,11 @@ public class MenuView extends AppCompatActivity
         CurrencyChargedView.OnFragmentInteractionListener,
         MenuConsultaCotizacionView.OnFragmentInteractionListener,
         HistoricQuotationView.OnFragmentInteractionListener,
-        ContainerDispatchSheetView.OnFragmentInteractionListener {
+        ContainerDispatchSheetView.OnFragmentInteractionListener,
+        ValidationAccountClient.OnFragmentInteractionListener
+
+
+{
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
     Fragment contentFragment, contentHistoryFragment;
     ClienteCabeceraView clienteCabeceraView;
@@ -177,6 +183,7 @@ public class MenuView extends AppCompatActivity
     Fragment HojaDespachoView;
     Fragment HojaDespachoFragment;
     Fragment LeadFragment;
+    Fragment ValidationAccountClientFragment;
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
@@ -195,7 +202,7 @@ public class MenuView extends AppCompatActivity
     public static String indicador = "0";
     UsuarioSQLite usuarioSQLite;
     String Conexion = "";
-    private final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA = 255;
     private String NameOfFolder = "/RECIBOS";
     private String NameOfFile = "imagen";
     public static String mCurrentPhotoPath = "";
@@ -255,6 +262,7 @@ public class MenuView extends AppCompatActivity
         HojaDespachoView = new Fragment();
         HojaDespachoFragment = new Fragment();
         LeadFragment = new Fragment();
+        ValidationAccountClientFragment = new Fragment();
         arraylistConfiguracionentity = new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao = new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -743,7 +751,7 @@ public class MenuView extends AppCompatActivity
                 //fragmentSeleccionado=true;
                 //TAG_FRAGMENT="config_print";
 
-                //HojaDespachoFragment = new DispatchSheetView();
+                ///HojaDespachoFragment = new DispatchSheetView();
                 //HojaDespachoFragment = new ContainerDispatchSheetView();
                 HojaDespachoFragment = new ContainerDispatchView();
                 fragment = "HojaDespachoView";
@@ -883,7 +891,7 @@ public class MenuView extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(String Tag, Object Lista) {
-
+        Log.e("REOS","MenuView-onFragmentInteraction-init");
         String tag="",tag2="";
 
         String[] separada = Tag.split("-");
@@ -1051,9 +1059,7 @@ public class MenuView extends AppCompatActivity
             {
                 ConsDepositoFragment = getSupportFragmentManager().findFragmentByTag(tag2);
                 ft.remove(ConsDepositoFragment);
-
                 ft.show(CobranzaCabeceraFragment);
-
                 CobranzaCabeceraView.newInstancia(Lista);
                 ft.addToBackStack("popiuytu");
                 ft.commit();
@@ -1730,53 +1736,6 @@ public class MenuView extends AppCompatActivity
                     Induvis.setTituloContenedor( nomblecliente,this);
 
                 }
-                /*dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                date = new Date();
-                fecha =dateFormat.format(date);
-
-                HistoricContainerSaleView.newInstanceRecibirCliente(Lista);
-                historicContainerSalesRepository = new ViewModelProvider(this).get(HistoricContainerSalesRepository.class);
-                try {
-                    historicContainerSalesRepository.getHistoricContainerSales(
-                            SesionEntity.imei,
-                            this,
-                            HistoricContainerSaleView.CardCode,
-                            Induvis.changeMonth(fecha,-6),
-                            fecha,
-                            "FOCOS",
-                            "FOCOS"
-                    ).observe(this, data -> {
-                        HistoricContainerSaleFocoView.newInstanceListarClienteFoco(data);
-                        Log.e("REOS","RESPUESTAFOCO"+data);
-                    });
-                    historicContainerSalesRepository.getHistoricContainerSales(
-                            SesionEntity.imei,
-                            this,
-                            HistoricContainerSaleView.CardCode,
-                            Induvis.changeMonth(fecha,-6),
-                            fecha,
-                            "FAMILIA",
-                            "FAMILIA"
-                    ).observe(this, data -> {
-                        HistoricContainerSalesFamilyView.newInstanceListarClienteFamily(data);
-                        Log.e("REOS","RESPUESTAFAMILIA"+data);
-                    });
-                    historicContainerSalesRepository.getHistoricContainerSales(
-                            SesionEntity.imei,
-                            this,
-                            HistoricContainerSaleView.CardCode,
-                            Induvis.changeMonth(fecha,-6),
-                            fecha,
-                            "SEMAFORO",
-                            "SEMAFORO"
-                    ).observe(this, data -> {
-                        Log.e("REOS","RESPUESTASEMAFORO"+data);
-                        HistoricContainerSalesSemaforoView.newInstanceListarClienteSemaforo(data);
-                    });
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                */
             }
             if(tag2.equals("recibirclienteSKU"))
             {
@@ -1898,6 +1857,7 @@ public class MenuView extends AppCompatActivity
                 ft.show(KardexOfPaymentFragment);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
+
                 KardexOfPaymentView.newInstanceRecibirLista(Lista);
                 this.setTitle("Kardex de Pago");
             }
@@ -1935,6 +1895,75 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
             }
         }
+        if(tag.equals("ValidationAccountClient")){
+            if(tag2.equals("start"))
+            {
+                Log.e("REOS","MenuView-onFragmentInteraction-ValidationAccountClient-start");
+                contentFragment=new ValidationAccountClient();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                //Intent intent = new Intent(this, ValidationAccountClient.class);
+                //Intent intent = new Intent(this, ValidationAccountClient.class);
+                //startActivity(intent);
+            }
+            if(tag2.equals( "findClient"))
+            {
+                Log.e("REOS","MenuView-onFragmentInteraction-ValidationAccountClient-iniciafindClient");
+                contentFragment=new BuscarClienteView();
+
+                String tagValidationAccountClient="start";
+                ValidationAccountClientFragment =getSupportFragmentManager().findFragmentByTag(tagValidationAccountClient);
+                ft.hide(ValidationAccountClientFragment);
+                //ft.add(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                Log.e("REOS","MenuView-onFragmentInteraction-ValidationAccountClient-terminafindClient");
+            }
+            if(tag2.equals( "sendClient"))
+            {
+                String tagBuscarClienteView="findClient";
+                String tagValidationAccountClientFragment="start";
+                BuscarClienteFragment =getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
+                ValidationAccountClientFragment  =getSupportFragmentManager().findFragmentByTag(tagValidationAccountClientFragment);
+                ft.remove(BuscarClienteFragment);
+                //ft.show(ValidationAccountClientFragment);
+                ft.remove(ValidationAccountClientFragment);
+                contentFragment=new ValidationAccountClient();
+                String nombrecliente="";
+                ArrayList<ListaClienteCabeceraEntity> objeto = (ArrayList<ListaClienteCabeceraEntity>) Lista;
+                for(int s=0;s<objeto.size();s++){
+                    nombrecliente=objeto.get(s).getNombrecliente();
+                }
+
+                ft.add(R.id.content_menu_view, ValidationAccountClient.newInstanceValidationAccountClient (nombrecliente),tag2);
+                //
+                //contentFragment=new ValidationAccountClient();
+                //ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                //
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                //KardexOfPaymentView.newInstanceRecibirLista(Lista);
+
+                //ValidationAccountClient validationAccountClient=new ValidationAccountClient();
+                /*contentFragment=new ValidationAccountClient();
+                String nombrecliente="";
+                ArrayList<ListaClienteCabeceraEntity> objeto = (ArrayList<ListaClienteCabeceraEntity>) Lista;
+                for(int s=0;s<objeto.size();s++){
+                    nombrecliente=objeto.get(s).getNombrecliente();
+                }*/
+
+                //ValidationAccountClient. (nombrecliente);
+                //ValidationAccountClient validationAccountClient=new ValidationAccountClient();
+                //ValidationAccountClient.newInstanceValidationAccountClient (nombrecliente);
+
+                this.setTitle("Validacion Cuenta Cliente");
+            }
+        }
+
+
+
     }
 
     public void EnviarFragmentCobranza(int i)

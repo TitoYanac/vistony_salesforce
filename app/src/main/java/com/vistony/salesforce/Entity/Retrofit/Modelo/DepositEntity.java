@@ -35,6 +35,15 @@ public class DepositEntity {
     private String Brand;
     private String OSVersion;
     private String Intent;
+    private String U_VIS_CollectionSalesPerson;
+
+    public String getU_VIS_CollectionSalesPerson() {
+        return U_VIS_CollectionSalesPerson;
+    }
+
+    public void setU_VIS_CollectionSalesPerson(String u_VIS_CollectionSalesPerson) {
+        U_VIS_CollectionSalesPerson = u_VIS_CollectionSalesPerson;
+    }
 
     public String getIntent() {
         return Intent;

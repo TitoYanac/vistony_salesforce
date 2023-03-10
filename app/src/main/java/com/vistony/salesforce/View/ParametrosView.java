@@ -830,13 +830,14 @@ ParametrosView extends Fragment {
 
         protected void onPostExecute(String argumento)
         {
-            //getActivity().setTitle("Parametros");
             ArrayList<ParametrosSQLiteEntity> listaparametrosSQlentity = new ArrayList<ParametrosSQLiteEntity>();
             listaparametrosSQlentity= parametrosSQLite.ObtenerParametros();
 
-            listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQlentity,false));
-            listviewparametro.setAdapter(listaParametrosAdapter);
-
+            if(getActivity()!=null)
+            {
+                listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQlentity, false));
+                listviewparametro.setAdapter(listaParametrosAdapter);
+            }
             pd.dismiss();
             Toast.makeText(getContext(), getActivity().getResources().getString(R.string.parameters_updated), Toast.LENGTH_SHORT).show();
 
@@ -910,6 +911,8 @@ ParametrosView extends Fragment {
                                         ,""
                                         ,"0"
                                         ,""
+                                        ,ListaCobranzaDetalleSQLiteEntity.get(i).getCollection_salesperson()
+                                        ,ListaCobranzaDetalleSQLiteEntity.get(i).getType()
                                 );
                     }
                 }
@@ -1336,8 +1339,11 @@ ParametrosView extends Fragment {
         ArrayList<ParametrosSQLiteEntity> listaparametrosSQlentity = new ArrayList<ParametrosSQLiteEntity>();
         listaparametrosSQlentity= parametrosSQLite.ObtenerParametros();
 
-        listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQlentity,true));
-        listviewparametro.setAdapter(listaParametrosAdapter);
+        if(getActivity()!=null)
+        {
+            listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQlentity, true));
+            listviewparametro.setAdapter(listaParametrosAdapter);
+        }
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

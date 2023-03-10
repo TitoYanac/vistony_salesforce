@@ -37,6 +37,24 @@ public class CollectionEntity {
     private String LegalNumber;
     private String CodeSMS;
     private String Phone;
+    private String U_VIS_CollectionSalesperson;
+    private String U_VIS_Type;
+
+    public String getU_VIS_CollectionSalesperson() {
+        return U_VIS_CollectionSalesperson;
+    }
+
+    public void setU_VIS_CollectionSalesperson(String u_VIS_CollectionSalesperson) {
+        U_VIS_CollectionSalesperson = u_VIS_CollectionSalesperson;
+    }
+
+    public String getU_VIS_Type() {
+        return U_VIS_Type;
+    }
+
+    public void setU_VIS_Type(String u_VIS_Type) {
+        U_VIS_Type = u_VIS_Type;
+    }
 
     public String getPhone() {
         return Phone;

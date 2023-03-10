@@ -69,19 +69,12 @@ public class ImageCameraController {
         String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + NameOfFolder;
         String CurrentDateAndTime = getCurrentDateAndTime();
         File dir = new File(file_path);
-
-       /* if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        File file = new File(dir,SesionEntity.imagen+SesionEntity.compania_id+SesionEntity.fuerzatrabajo_id+CurrentDateAndTime + ".JPG");
-        */
         try {
             File file = crearFichero(SesionEntity.imagen+SesionEntity.compania_id+SesionEntity.fuerzatrabajo_id+CurrentDateAndTime + ".JPG");
             //File f = crearFichero(recibo+".pdf");
             FileOutputStream fOut = new FileOutputStream(file);
             //El elegir el PNG no obliga a trabajar con filtro, en cambio el JPEG si obliga
-            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 35, fOut);
+            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 10, fOut);
             fOut.flush();
             fOut.close();
             MakeSureFileWasCreatedThenMakeAvabile(file);

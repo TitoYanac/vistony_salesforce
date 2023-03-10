@@ -475,7 +475,8 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDMT(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route()
 
 
             );
@@ -2190,6 +2191,8 @@ public class FormulasController {
         ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo="";
         ObjListaProductosEntity.orden_detalle_oil_tax="";
         ObjListaProductosEntity.orden_detalle_liter="";
+        ObjListaProductosEntity.orden_detalle_montosubtotalcondescuento="0";
+
         listSalesOrder.add(ObjListaProductosEntity);
 
         return listSalesOrder;

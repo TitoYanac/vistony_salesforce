@@ -43,7 +43,10 @@ public class CobranzaCabeceraSQLiteDao {
     }
 
     public int InsertaCobranzaCabecera (String cobranza_id,String usuario_id,String cobrador_id,String banco_id,String compania_id
-            ,String totalmontocobrado, String tipoingreso,String chkbancarizado,String fechadiferido,String fechadeposito,String depositodirecto,String pagopos)
+            ,String totalmontocobrado, String tipoingreso,String chkbancarizado,String fechadiferido,String fechadeposito,String depositodirecto
+            ,String pagopos
+            ,String collectionsalesperson
+    )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
         // SQLiteDatabase bd = admin.getWritableDatabase();
@@ -72,6 +75,7 @@ public class CobranzaCabeceraSQLiteDao {
             registro.put("sap_code","");
             registro.put("mensajeWS","");
             registro.put("countsend","1");
+            registro.put("collection_salesperson",collectionsalesperson);
 
             bd.insert("cobranzacabecera",null,registro);
             bd.close();
@@ -256,6 +260,13 @@ public class CobranzaCabeceraSQLiteDao {
                 deposito.setBrand(brand);
                 deposito.setOSVersion(osVersion);
                 deposito.setIntent (fila.getString(fila.getColumnIndex("countsend")));
+                if(fila.getString(fila.getColumnIndex("collection_salesperson"))==null)
+                {
+                    deposito.setU_VIS_CollectionSalesPerson("N");
+                }else {
+                    deposito.setU_VIS_CollectionSalesPerson(fila.getString(fila.getColumnIndex("collection_salesperson")));
+                }
+
                 depositos.add(deposito);
 
                 UpdateCountSend(fila.getString(fila.getColumnIndex("cobranza_id")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
@@ -631,7 +642,7 @@ public class CobranzaCabeceraSQLiteDao {
                 //deposito.setChkdepositado(fila.getString(5));
                 //deposito.setChkanulado(fila.getString(6));
                 deposito.setSlpCode(fila.getString(7));
-                if(fila.getString(8).equals(Context.getResources().getString(R.string.menu_deposito)))
+                if(fila.getString(8).equals(Context.getResources().getString(R.string.menu_deposito))||fila.getString(8).equals("Deposito"))
                 {
                     deposito_id="DE";
                 }
@@ -658,6 +669,14 @@ public class CobranzaCabeceraSQLiteDao {
                 deposito.setBrand(brand);
                 deposito.setOSVersion(osVersion);
                 deposito.setIntent (fila.getString(fila.getColumnIndex("countsend")));
+                //deposito.setU_VIS_CollectionSalesPerson(fila.getString(fila.getColumnIndex("collection_salesperson")));
+                if(fila.getString(fila.getColumnIndex("collection_salesperson"))==null)
+                {
+                    deposito.setU_VIS_CollectionSalesPerson("N");
+                }else {
+                    deposito.setU_VIS_CollectionSalesPerson(fila.getString(fila.getColumnIndex("collection_salesperson")));
+                }
+
                 depositos.add(deposito);
 
                 UpdateCountSend(fila.getString(fila.getColumnIndex("cobranza_id")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));

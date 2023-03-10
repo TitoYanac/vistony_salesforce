@@ -60,6 +60,19 @@ public class SettingsUserEntity {
     private String oilTaxStatus;
 
     @NonNull
+    @SerializedName("FechaEntregaAuto")
+    private String deliverydateauto;
+
+    @NonNull
+    public String getDeliverydateauto() {
+        return deliverydateauto;
+    }
+
+    public void setDeliverydateauto(@NonNull String deliverydateauto) {
+        this.deliverydateauto = deliverydateauto;
+    }
+
+    @NonNull
     public String getOilTaxStatus() {
         return oilTaxStatus;
     }

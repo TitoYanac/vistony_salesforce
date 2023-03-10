@@ -180,6 +180,7 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_oil_tax= productoAgregado.getOiltax();
             ObjListaProductosEntity.orden_detalle_liter= productoAgregado.getLiter();
             ObjListaProductosEntity.orden_detalle_SIGAUS= productoAgregado.getSIGAUS();
+            ObjListaProductosEntity.orden_detalle_montosubtotalcondescuento="0";
         Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-getOiltax:"+String.valueOf(productoAgregado.getOiltax()));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-orden_detalle_liter:"+String.valueOf(productoAgregado.getLiter()));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-descuentocontado:"+String.valueOf(descuentocontado));

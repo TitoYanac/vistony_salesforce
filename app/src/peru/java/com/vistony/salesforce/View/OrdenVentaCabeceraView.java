@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.fonts.Font;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -44,6 +45,8 @@ import android.widget.Toast;
 
 import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.Phrase;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoPedidoPDF;
@@ -286,10 +289,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         listaOrdenVentaDetalleEntities=new ArrayList<>();
 
         values=new ArrayList<String>();
-        //dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-        //date = new Date();
-        //fecha =dateFormat.format(date);
-        //parametrofecha=fecha;
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -462,11 +461,20 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
 
         //Pruebas de Fecha de entrega
-        //tv_dispatch_date.setText(getDateWorkPathforZone());
-        //Utilitario.disabledImageButtton(btn_dispatch_date,getContext());
+        if(SesionEntity.deliverydateauto.equals("Y"))
+        {
+            tv_dispatch_date.setText(getDateWorkPathforZone());
+            Utilitario.disabledImageButtton(btn_dispatch_date, getContext());
+        }
+        else {
+            //Produccion
+            dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+            date = new Date();
+            fecha =dateFormat.format(date);
+            parametrofecha=fecha;
+            tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
+        }
 
-        //Produccion
-        tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
 
         for(int i=0;i<listaTerminopago.size();i++)
         {
@@ -490,11 +498,17 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         btn_detalle_orden_venta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //myTrace = FirebasePerformance.getInstance().newTrace("test_trace");
-               // myTrace.start();
-                btn_detalle_orden_venta.setEnabled(false);
-                btn_detalle_orden_venta.setClickable(false);
-                alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
+
+                if(cliente_terminopago_id.equals("-1")&&!agencia_id.equals("P20102306598"))
+                {
+                    alertdialogInformative(getContext(),"Advertencia!!!","Motivo: \n Termino de Pago (Contado) no debe ir vinculado con agencia.\n Sugerencia: \n Cambiar a termino de pago (Pago adelantado) si se desea seguir con agencia.").show();
+                }else {
+                    btn_detalle_orden_venta.setEnabled(false);
+                    btn_detalle_orden_venta.setClickable(false);
+                    alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
+                }
+
+
             }
         });
 
@@ -815,17 +829,21 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.guardar_orden_venta:
-                /*dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                date = new Date();
-                fechacomparativa =dateFormat.format(date);
-                if(!parametrofecha.equals(fechacomparativa))
-                {
-                alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
-                }else {
 
-                    alertdialogInformative(getContext(),"ADVERTENCIA","La Fecha de entrega de la Orden de Venta, debe ser distinta a la fecha actual, se sugiere 2 dias en adelante...").show();
-                }*/
-                alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                if(SesionEntity.deliverydateauto.equals("Y")) {
+                    alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                }else {
+                    dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                    date = new Date();
+                    fechacomparativa =dateFormat.format(date);
+                    if(!parametrofecha.equals(fechacomparativa))
+                    {
+                    alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                    }else {
+
+                        alertdialogInformative(getContext(),"ADVERTENCIA","La Fecha de entrega de la Orden de Venta, debe ser distinta a la fecha actual, se sugiere 2 dias en adelante...").show();
+                    }
+                }
                 return false;
             case R.id.enviar_erp:
                 alertaEnviarERP("Esta Seguro de Enviar a la Nube la Orden de Venta?").show();

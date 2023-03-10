@@ -88,8 +88,7 @@ public class ListaConsDepositoAdapter extends
             holder.tv_txtbancarizado = (TextView) convertView.findViewById(R.id.tv_txtbancarizado);
             holder.tv_txtpagodirecto = (TextView) convertView.findViewById(R.id.tv_txtpagodirecto);
             holder.tv_collectioncheck= (TextView) convertView.findViewById(R.id.tv_collectioncheck);
-
-
+            holder.tv_collectionsalesperson= (TextView) convertView.findViewById(R.id.tv_collectionsalesperson);
 
             
 
@@ -149,6 +148,12 @@ public class ListaConsDepositoAdapter extends
             holder.tv_collectioncheck.setText("NO");
         }
 
+        if(lead.getCollectionsalesperson().equals("Y")){
+            holder.tv_collectionsalesperson.setText("SI");
+        }
+        else {
+            holder.tv_collectionsalesperson.setText("NO");
+        }
 
         //holder.checkBox.setTag(position);
 
@@ -178,7 +183,7 @@ public class ListaConsDepositoAdapter extends
                                                  @Override
                                                  public void onClick(View v) {
                                                      String validacheck="",validabancarizado="",validapagodirecto="";
-                                                     int cantpagodirecto=0,cantbancarizado=0,cantcobronormal=0,cantcobrosnobancarizados=0,countcollectioncheck=0;
+                                                     int cantpagodirecto=0,cantbancarizado=0,cantcobronormal=0,cantcobrosnobancarizados=0,countcollectioncheck=0,countcollectionSalesperson=0;
                                                      //int cantcobrosnobancarizados=0;
                                                      boolean estado=holder.checkBox.isChecked();
                                                      //Colocar Check
@@ -195,8 +200,6 @@ public class ListaConsDepositoAdapter extends
                                                              if(ArraylistaConsDepositoEntity.get(j).isCheckbox()&&ArraylistaConsDepositoEntity.get(j).getTv_txtbancarizado().equals("Y")
                                                              )
                                                              {
-                                                                 //validacheck="1";
-                                                                 //validabancarizado="1";
                                                                  cantbancarizado++;
 
                                                              }
@@ -212,9 +215,16 @@ public class ListaConsDepositoAdapter extends
                                                              {
                                                                  countcollectioncheck++;
                                                              }
+                                                             //Validacion de Cobranza Vendedor
+                                                             if(ArraylistaConsDepositoEntity.get(j).getCollectionsalesperson().equals("Y")&&ArraylistaConsDepositoEntity.get(j).isCheckbox()
+                                                             )
+                                                             {
+                                                                 countcollectionSalesperson++;
+                                                             }
                                                              else if(
                                                                      ArraylistaConsDepositoEntity.get(j).getTv_txtbancarizado().equals("N")
                                                                              && ArraylistaConsDepositoEntity.get(j).getTv_txtpagodirecto().equals("N")
+                                                                             && ArraylistaConsDepositoEntity.get(j).getCollectionsalesperson().equals("N")
                                                                              &&ArraylistaConsDepositoEntity.get(j).isCheckbox()
                                                              )
                                                              {
@@ -277,7 +287,7 @@ public class ListaConsDepositoAdapter extends
                                                          }
                                                      }
                                                      //Evalua si es
-                                                     else if(cantpagodirecto>0&&(cantcobronormal>0||cantbancarizado>0||countcollectioncheck>0))
+                                                     else if(cantpagodirecto>0&&(cantcobronormal>0||cantbancarizado>0||countcollectioncheck>0||countcollectionSalesperson>0))
                                                      {
                                                          Toast.makeText(getContext(),"Un Recibo que ingreso Como Pago Directo solo debe vincularse a otro Recibo como pago Directo", Toast.LENGTH_SHORT).show();
                                                          holder.checkBox.setChecked(false);
@@ -292,10 +302,24 @@ public class ListaConsDepositoAdapter extends
 
                                                      }
                                                      //Evalua si se cuenta con un cheque en la seleccion
-
-                                                     else if(countcollectioncheck >0&&(cantcobronormal>0||cantbancarizado>0||cantpagodirecto>0))
+                                                     else if(countcollectioncheck >0&&(cantcobronormal>0||cantbancarizado>0||cantpagodirecto>0||countcollectionSalesperson>0))
                                                      {
                                                          Toast.makeText(getContext(),"Un Recibo ingresado como cheque solo puede vincularse a otro Recibo como Cheque", Toast.LENGTH_SHORT).show();
+                                                         holder.checkBox.setChecked(false);
+                                                         for(int k=0;k<ArraylistaConsDepositoEntity.size();k++)
+                                                         {
+                                                             ////busca la posicion en la lista y quita el check
+                                                             if(position==k)
+                                                             {
+                                                                 ArraylistaConsDepositoEntity.get(k).setCheckbox(false);
+                                                             }
+                                                         }
+
+                                                     }
+                                                     //Evalua si se cuenta con un cobro vendedor en la seleccion
+                                                     else if(countcollectionSalesperson>0&&(cantcobronormal>0||cantbancarizado>0||cantpagodirecto>0||countcollectioncheck>0))
+                                                     {
+                                                         Toast.makeText(getContext(),"Un Recibo ingresado como cobró vendedor solo puede vincularse a otro Recibo como cobró vendedor", Toast.LENGTH_SHORT).show();
                                                          holder.checkBox.setChecked(false);
                                                          for(int k=0;k<ArraylistaConsDepositoEntity.size();k++)
                                                          {
@@ -367,6 +391,8 @@ public class ListaConsDepositoAdapter extends
         TextView tv_txtbancarizado;
         TextView tv_txtpagodirecto;
         TextView tv_collectioncheck;
+        TextView tv_collectionsalesperson;
+
         CheckBox checkBox;
 
     }
@@ -397,6 +423,8 @@ public class ListaConsDepositoAdapter extends
                     listaConsDepositoEntity.tv_txtbancarizado=ArraylistaConsDepositoEntity.get(i).getTv_txtbancarizado();
                     listaConsDepositoEntity.tv_txtpagodirecto=ArraylistaConsDepositoEntity.get(i).getTv_txtpagodirecto();
                     listaConsDepositoEntity.collectioncheck=ArraylistaConsDepositoEntity.get(i).getCollectioncheck();
+                    listaConsDepositoEntity.collectionsalesperson =ArraylistaConsDepositoEntity.get(i).getCollectionsalesperson();
+                    listaConsDepositoEntity.type=ArraylistaConsDepositoEntity.get(i).getType();
                     ObjetoListaConsDepositoEntity.add(listaConsDepositoEntity);
                 }
             }

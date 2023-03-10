@@ -1067,7 +1067,7 @@ public class CobranzaDetalleView extends Fragment {
                                 validarqr.setEnabled(false); //no aplica validar qr //peru si
 
 
-                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual());
+                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual(),"");
                                 //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
                                 if (SesionEntity.Print.equals("Y")) {
                                     //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
@@ -1252,6 +1252,8 @@ public class CobranzaDetalleView extends Fragment {
                             ,""
                             ,""
                             ,""
+                            ,""
+                            ,""
                     );
 
                     ActualizaDocumentoDeuda(ObjUsuario.compania_id,
@@ -1302,6 +1304,8 @@ public class CobranzaDetalleView extends Fragment {
                             String.valueOf(n),
                             Lista.get(i).getDocentry(),
                             SesionEntity.collectioncheck
+                            ,""
+                            ,""
                             ,""
                             ,""
                             ,""
@@ -1639,7 +1643,8 @@ public class CobranzaDetalleView extends Fragment {
                 "19000101",
                 fecha,
                 SesionEntity.pagodirecto,
-                "Y"
+                "Y",
+                ""
         );
 
         if(ValidaSQLite==1)
@@ -1694,6 +1699,7 @@ public class CobranzaDetalleView extends Fragment {
                         "19000101",
                         fecha,
                         SesionEntity.pagodirecto,
+                        "N",
                         "N"
                 );
 
@@ -1897,7 +1903,8 @@ public class CobranzaDetalleView extends Fragment {
                         arg0[5],
                         arg0[6],
                         arg0[7],
-                        "Y"
+                        "Y",
+                        "N"
                 );
 
                 resultadoccabeceraenviows=

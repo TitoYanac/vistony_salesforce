@@ -118,11 +118,12 @@ public class MenuConsultasView extends Fragment {
 
 
             case "chile":
-            case "ecuador":
+
             case "marruecos":
                 cv_dispatch.setVisibility(View.GONE);
                 break;
             case "peru":
+            case "ecuador":
             case "perurofalab":
             case "espania":
             case "bolivia":

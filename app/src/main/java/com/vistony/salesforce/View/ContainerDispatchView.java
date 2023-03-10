@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import com.google.android.material.tabs.TabLayout;
 import com.vistony.salesforce.Controller.Adapters.PageAdapter;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.kotlin.dispatchsheet.ui.DispatchSheetMapScreen;
+import com.vistony.salesforce.kotlin.dispatchsheet.ui.DispatchSheetMapScreenKt;
+import com.vistony.salesforce.kotlin.dispatchsheet.ui.NavegationMapDialogKt;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,7 +78,7 @@ public class ContainerDispatchView extends Fragment {
         tabLayout=v.findViewById(R.id.tablayout);
         pageAdapter= new PageAdapter(getChildFragmentManager());
         pageAdapter.addFRagment(new ContainerDispatchSheetView(),"Despacho");
-        pageAdapter.addFRagment(new GoogleMaps() ,"Mapa");
+        pageAdapter.addFRagment(new DispatchSheetMapScreen(),"Mapa");
 
         //tabLayout.getTabAt(0).getCustomView()
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_delete_black_24dp));

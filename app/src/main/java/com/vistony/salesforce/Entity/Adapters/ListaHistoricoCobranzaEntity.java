@@ -37,6 +37,9 @@ public class ListaHistoricoCobranzaEntity implements Serializable {
     public String collectioncheck;
     public String e_signature;
     public String chkesignature;
+    public String type;
+    public String collection_salesperson;
+
 
     public ListaHistoricoCobranzaEntity(
             String bancarizacion, String banco_id, String cliente_id, String cliente_nombre,
@@ -47,7 +50,7 @@ public class ListaHistoricoCobranzaEntity implements Serializable {
             String saldodocumento, String tipoingreso, String usuario_id, boolean chkconciliado,
             String chkwsrecibido, String depositodirecto, String pagopos, String codesap,
             String mensajeWS, String horacobranza, String docentry,String collectioncheck,
-            String e_signature,String chkesignature
+            String e_signature,String chkesignature,String type, String collection_salesperson
     ) {
         this.bancarizacion = bancarizacion;
         this.banco_id = banco_id;
@@ -83,9 +86,28 @@ public class ListaHistoricoCobranzaEntity implements Serializable {
         this.collectioncheck = collectioncheck;
         this.e_signature = e_signature;
         this.chkesignature = chkesignature;
+        this.type = type;
+        this.collection_salesperson = collection_salesperson;
+
     }
 
     public ListaHistoricoCobranzaEntity() {
+    }
+
+    public String getCollection_salesperson() {
+        return collection_salesperson;
+    }
+
+    public void setCollection_salesperson(String collection_salesperson) {
+        this.collection_salesperson = collection_salesperson;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getE_signature() {

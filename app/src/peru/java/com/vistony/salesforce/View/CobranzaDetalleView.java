@@ -166,7 +166,7 @@ public class CobranzaDetalleView extends Fragment {
     int resultado = 0, correlativorecibo = 0, ultimocorrelativorecibo = 0, correlativorecibows = 0;
     private OnFragmentInteractionListener mListener;
     static public ImageView imvprueba;
-    CheckBox chkpagoadelantado, chk_bancarizado, chk_pago_directo, chk_pago_pos,chk_E_signature;
+    CheckBox chkpagoadelantado, chk_bancarizado, chk_pago_directo, chk_pago_pos,chk_E_signature,chk_collection_salesperson;
     MenuItem generarpdf, validarqr, guardar,edit_signature;
     TextView tv_recibo;
     public static CheckBox chk_validacionqr;
@@ -206,6 +206,7 @@ public class CobranzaDetalleView extends Fragment {
     private static final int REQUEST_PERMISSION_READ_SMS=255;
     private static final int REQUEST_PERMISSION_PHONE_NUMBERS=255;
     private static final int REQUEST_PERMISSION_PHONE_STATES=255;
+    String type_description;
 
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm", "Este es NUEVA ISNTANCIA 1");
@@ -369,36 +370,18 @@ public class CobranzaDetalleView extends Fragment {
                         } else {
                             Estadopagoadelantado = "0";
                         }
-
-                       /* String  FechaDiferida="";
-                        if(sourceSplitefechadiferida.length>1)
-                        {
-                            FechaDiferida=sourceSplitefechadiferida[0];
-                            String HoraDiferida=sourceSplitefechadiferida[1];
-                        }else
-                        {
-                            FechaDiferida=sourceSplitefechadiferida[0];
-                        }
-
-                Log.e("jcpm","sin splip->"+FechaDiferida+" co hora"+Listado.get(j).getFechacobranza());
-                        String[] sourceSplitemision2= FechaDiferida.split("-");
-                        String anioemision= sourceSplitemision2[0];
-                        String mesemision= sourceSplitemision2[1];
-                        String diaemision= sourceSplitemision2[2];
-
-                        String fechadiferida=diaemision+"-"+mesemision+"-"+anioemision;
-
-                        //REVISAR HERE line code*/
-
                         Log.e("jpcm", "fecha->" + fecha);
-                        //fecha= Listado.get(j).getFechacobranza();//+" "+Listado.get(j).getFechacobranza();
                         listaClienteDetalleEntity.fechaemision = "0";
                         listaClienteDetalleEntity.fechavencimiento = "0";
                         listaClienteDetalleEntity.direccion = "0";
                         listaClienteDetalleEntity.nrodocumento = Listado.get(j).getNro_documento();
                         listaClienteDetalleEntity.documento_id = Listado.get(j).getDocumento_id();
-
-                        //listaClienteDetalleEntity.fechaemision=Listado.get(j).getFechacobranza();
+                        type_description=Listado.get(j).getType();
+                        Log.e("REOS", "CobranzaDetalleView.Listado.get(j).getCollection_salesperson():"+Listado.get(j).getCollection_salesperson());
+                        if(Listado.get(j).getCollection_salesperson().equals("Y"))
+                        {
+                            SesionEntity.collection_salesperson="Y";
+                        }
 
                         listaClienteDetalleAdapterFragment.add(listaClienteDetalleEntity);
                         //fecha= Listado.get(j).getFechacobranza();
@@ -448,7 +431,6 @@ public class CobranzaDetalleView extends Fragment {
         chk_pago_directo = (CheckBox) v.findViewById(R.id.chk_pago_directo);
         chk_E_signature = (CheckBox) v.findViewById(R.id.chk_E_signature);
         tablerow_e_signature=v.findViewById(R.id.tablerow_e_signature);
-
         //imvprueba = (ImageView) v.findViewById(R.id.imvprueba);
         imbcomentariorecibo = (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
         fab_invoice_cancelation =  (FloatingActionButton) v.findViewById(R.id.fab_invoice_cancelation);
@@ -457,9 +439,10 @@ public class CobranzaDetalleView extends Fragment {
         imv_prueba_mostrarfirma =  (ImageView) v.findViewById(R.id.imv_prueba_mostrarfirma);
         circleMenu.setVisibility(View.GONE);
         imv_prueba_mostrarfirma.setVisibility(View.GONE);
-
         fab_edit_signature.setVisibility(View.GONE);
-        tablerow_e_signature.setVisibility(View.GONE);
+        //tablerow_e_signature.setVisibility(View.GONE);
+        chk_collection_salesperson= (CheckBox) v.findViewById(R.id.chk_collection_salesperson);
+
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
             fab_edit_signature.setVisibility(View.GONE);
@@ -469,10 +452,11 @@ public class CobranzaDetalleView extends Fragment {
         else{
             if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
             {
-                fab_edit_signature.setVisibility(View.GONE);
+
             }
             else {
-
+                fab_edit_signature.setVisibility(View.GONE);
+                tablerow_e_signature.setVisibility(View.GONE);
             }
 
         }
@@ -751,6 +735,14 @@ public class CobranzaDetalleView extends Fragment {
             //chk_bancarizado.setFocusable(false);
             //chk_bancarizado.setClickable(false);
         }
+        //Cobranza Vendedor
+        if (SesionEntity.collection_salesperson.equals("Y")) {
+
+            chk_collection_salesperson.setChecked(true);
+        } else  {
+            chk_collection_salesperson.setChecked(false);
+        }
+
         obtenerWSCobranzaDetalle = new ObtenerWSCobranzaDetalle();
         obtenerWSCobranzaDetalle.execute();
 
@@ -854,26 +846,74 @@ public class CobranzaDetalleView extends Fragment {
 
         if (getArguments() != null) {
             if (!(Listado == null)) {
-                guardar.setEnabled(false);
-                generarpdf.setEnabled(true);
-                validarqr.setEnabled(true);
-                Drawable drawable = menu.findItem(R.id.guardar).getIcon();
-                drawable = DrawableCompat.wrap(drawable);
 
-                DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
-                menu.findItem(R.id.guardar).setIcon(drawable);
-                Drawable drawable2 = menu.findItem(R.id.generarpdf).getIcon();
-                drawable2 = DrawableCompat.wrap(drawable2);
-                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.white));
-                menu.findItem(R.id.generarpdf).setIcon(drawable2);
-                Drawable drawable3 = menu.findItem(R.id.validarqr).getIcon();
-                drawable3 = DrawableCompat.wrap(drawable3);
-                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
-                menu.findItem(R.id.validarqr).setIcon(drawable3);
-                imbaceptar.setEnabled(false);
-                imbcancelar.setEnabled(false);
-                et_cobrado_edit.setEnabled(false);
-                imbcomentariorecibo.setEnabled(false);
+                if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+                {
+                    if(SesionEntity.collection_salesperson.equals("Y"))
+                    {
+                        guardar.setEnabled(false);
+                        generarpdf.setEnabled(false);
+                        validarqr.setEnabled(false);
+                        Drawable drawable = menu.findItem(R.id.guardar).getIcon();
+                        drawable = DrawableCompat.wrap(drawable);
+                        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+                        menu.findItem(R.id.guardar).setIcon(drawable);
+                        Drawable drawable2 = menu.findItem(R.id.generarpdf).getIcon();
+                        drawable2 = DrawableCompat.wrap(drawable2);
+                        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
+                        menu.findItem(R.id.generarpdf).setIcon(drawable2);
+                        Drawable drawable3 = menu.findItem(R.id.validarqr).getIcon();
+                        drawable3 = DrawableCompat.wrap(drawable3);
+                        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black));
+                        menu.findItem(R.id.validarqr).setIcon(drawable3);
+                        imbaceptar.setEnabled(false);
+                        imbcancelar.setEnabled(false);
+                        et_cobrado_edit.setEnabled(false);
+                        imbcomentariorecibo.setEnabled(false);
+                    }else {
+                        guardar.setEnabled(false);
+                        generarpdf.setEnabled(true);
+                        validarqr.setEnabled(true);
+                        Drawable drawable = menu.findItem(R.id.guardar).getIcon();
+                        drawable = DrawableCompat.wrap(drawable);
+                        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+                        menu.findItem(R.id.guardar).setIcon(drawable);
+                        Drawable drawable2 = menu.findItem(R.id.generarpdf).getIcon();
+                        drawable2 = DrawableCompat.wrap(drawable2);
+                        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.white));
+                        menu.findItem(R.id.generarpdf).setIcon(drawable2);
+                        Drawable drawable3 = menu.findItem(R.id.validarqr).getIcon();
+                        drawable3 = DrawableCompat.wrap(drawable3);
+                        DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
+                        menu.findItem(R.id.validarqr).setIcon(drawable3);
+                        imbaceptar.setEnabled(false);
+                        imbcancelar.setEnabled(false);
+                        et_cobrado_edit.setEnabled(false);
+                        imbcomentariorecibo.setEnabled(false);
+                    }
+
+                }else {
+                    guardar.setEnabled(false);
+                    generarpdf.setEnabled(true);
+                    validarqr.setEnabled(true);
+                    Drawable drawable = menu.findItem(R.id.guardar).getIcon();
+                    drawable = DrawableCompat.wrap(drawable);
+                    DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
+                    menu.findItem(R.id.guardar).setIcon(drawable);
+                    Drawable drawable2 = menu.findItem(R.id.generarpdf).getIcon();
+                    drawable2 = DrawableCompat.wrap(drawable2);
+                    DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.white));
+                    menu.findItem(R.id.generarpdf).setIcon(drawable2);
+                    Drawable drawable3 = menu.findItem(R.id.validarqr).getIcon();
+                    drawable3 = DrawableCompat.wrap(drawable3);
+                    DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
+                    menu.findItem(R.id.validarqr).setIcon(drawable3);
+                    imbaceptar.setEnabled(false);
+                    imbcancelar.setEnabled(false);
+                    et_cobrado_edit.setEnabled(false);
+                    imbcomentariorecibo.setEnabled(false);
+                }
+
 
             } else {
                 comentario = "";
@@ -1124,22 +1164,46 @@ public class CobranzaDetalleView extends Fragment {
                                         drawable = DrawableCompat.wrap(drawable);
                                         DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));
                                         menu_variable.findItem(R.id.guardar).setIcon(drawable);
-                                        Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                                        drawable2 = DrawableCompat.wrap(drawable2);
-                                        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.white));
-                                        menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                                        //guardar.setEnabled(false);
-                                        //imbcomentariorecibo.setColorFilter(Color.BLACK);
-                                        if (!SesionEntity.Print.equals("Y")) {
+
+
                                             if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
                                             {
-                                                Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
-                                                drawable3 = DrawableCompat.wrap(drawable3);
-                                                DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
-                                                menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
-                                                validarqr.setEnabled(true);
+                                                if(SesionEntity.collection_salesperson.equals("Y"))
+                                                {
+                                                    Drawable drawable4 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                                                    drawable4 = DrawableCompat.wrap(drawable4);
+                                                    DrawableCompat.setTint(drawable4, ContextCompat.getColor(getContext(), R.color.Black));
+                                                    menu_variable.findItem(R.id.generarpdf).setIcon(drawable4);
+                                                    generarpdf.setEnabled(false);
+
+
+                                                    Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
+                                                    drawable3 = DrawableCompat.wrap(drawable3);
+                                                    DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.Black));
+                                                    menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
+                                                    validarqr.setEnabled(false);
+                                                }else {
+                                                    Drawable drawable4 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                                                    drawable4 = DrawableCompat.wrap(drawable4);
+                                                    DrawableCompat.setTint(drawable4, ContextCompat.getColor(getContext(), R.color.white));
+                                                    menu_variable.findItem(R.id.generarpdf).setIcon(drawable4);
+                                                    generarpdf.setEnabled(true);
+
+                                                    Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
+                                                    drawable3 = DrawableCompat.wrap(drawable3);
+                                                    DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
+                                                    menu_variable.findItem(R.id.validarqr).setIcon(drawable3);
+                                                    validarqr.setEnabled(true);
+                                                }
+
                                             }else
                                             {
+                                                Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+                                                drawable2 = DrawableCompat.wrap(drawable2);
+                                                DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.white));
+                                                menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+                                                generarpdf.setEnabled(true);
+
                                                 Drawable drawable3 = menu_variable.findItem(R.id.validarqr).getIcon();
                                                 drawable3 = DrawableCompat.wrap(drawable3);
                                                 DrawableCompat.setTint(drawable3, ContextCompat.getColor(getContext(), R.color.white));
@@ -1147,13 +1211,11 @@ public class CobranzaDetalleView extends Fragment {
                                                 validarqr.setEnabled(true);
                                             }
 
-
-                                        }
                                         imbcomentariorecibo.setEnabled(false);
 
-                                        if (vinculaimpresora.equals("1")) {
+                                        /*if (vinculaimpresora.equals("1")) {
                                             generarpdf.setEnabled(true);
-                                        }
+                                        }*/
 
                                         tv_recibo.setText(recibo);
                                         imbaceptar.setEnabled(false);
@@ -1161,9 +1223,6 @@ public class CobranzaDetalleView extends Fragment {
                                         et_cobrado_edit.setEnabled(false);
 
                                         Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-                                        //Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-                                        //enviarWSCobranzaDetalle =  new EnviarWSCobranzaDetalle();
-                                        //enviarWSCobranzaDetalle.execute();
 
 
                                     } else {
@@ -1248,6 +1307,27 @@ public class CobranzaDetalleView extends Fragment {
                                     DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(), R.color.Black));
                                     menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
                                 }
+                                ArrayList<CobranzaDetalleSQLiteEntity> listCobranzaDetalle=new ArrayList<>();
+                                CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(context);
+                                UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+                                ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+                                String type="";
+                                listCobranzaDetalle=cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
+                                        recibo,
+                                        ObjUsuario.compania_id,
+                                        ObjUsuario.fuerzatrabajo_id
+                                );
+                                if(listCobranzaDetalle.isEmpty())
+                                {
+                                    type=type_description;
+                                }else {
+                                    for(int i=0;i<listCobranzaDetalle.size();i++)
+                                    {
+                                        type=listCobranzaDetalle.get(i).getTypedescription();
+                                    }
+                                }
+                                Log.e("REOS","CobranzaDetalleView-alertaGenerarPDF-type: "+type);
 
                                 // If you have access to the external storage, do whatever you need
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -1255,7 +1335,10 @@ public class CobranzaDetalleView extends Fragment {
 
                                         // If you don't have access, launch a new activity to show the user the system's dialog
                                         // to allow access to the external storage
-                                        documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual());
+
+
+                                        documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual(),type);
+                                        //new DocumentoPDFcopy().generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual(),type);
                                     }else{
                                         Intent intent = new Intent();
                                         intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
@@ -1266,7 +1349,8 @@ public class CobranzaDetalleView extends Fragment {
                                 }
                                 else
                                 {
-                                    documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual());
+                                    documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual(),type);
+                                   // new DocumentoPDFcopy().generarPdf(getContext(), listaClienteDetalleAdapterFragment, SesionEntity.fuerzatrabajo_id, SesionEntity.nombrefuerzadetrabajo, recibo, fecha, obtenerHoraActual(),type);
                                 }
                                 if (SesionEntity.Print.equals("Y")) {
                                     try
@@ -1340,7 +1424,7 @@ public class CobranzaDetalleView extends Fragment {
 
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza) {
         int resultado = 0, recibows = 0;
-        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0",chkruta="",contado="0";
+        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0",chkruta="",contado="0",type="";
         FormulasController formulasController = new FormulasController(getContext());
         Random numAleatorio = new Random();
         int n = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
@@ -1404,6 +1488,26 @@ public class CobranzaDetalleView extends Fragment {
                 Log.e("REOS", "CobranzaDetalleView.GuardarCobranzaSQLite.qrvalidado:" + qrvalidado);
             }
 
+            if(bancarizado.equals("Y"))
+            {
+                type ="Bancarizado";
+            }
+            else if(SesionEntity.pagodirecto.equals("Y"))
+            {
+                type="Pago Directo";
+            }
+            else if(SesionEntity.pagopos.equals("Y"))
+            {
+                type="Pago POS";
+            }
+            else if(SesionEntity.collection_salesperson.equals("Y"))
+            {
+                type="Cobró Vendedor";
+            }
+            else {
+                type="Cobranza Ordinaria";
+            }
+
             if (tipoCobranza.equals("Cobranza")) {
                 for (int i = 0; i < Lista.size(); i++) {
 
@@ -1452,6 +1556,8 @@ public class CobranzaDetalleView extends Fragment {
                             ,""
                             ,"N"
                             ,""
+                            ,SesionEntity.collection_salesperson
+                            ,type
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1521,6 +1627,8 @@ public class CobranzaDetalleView extends Fragment {
                             ,""
                             ,"N"
                             ,""
+                            ,SesionEntity.collection_salesperson
+                            ,type
                     );
 
                     if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1656,29 +1764,6 @@ public class CobranzaDetalleView extends Fragment {
         return resultado;
     }
 
-
-    private void UpdateSendReceipt()
-    {
-        Drawable drawable = menu_variable.findItem(R.id.guardar).getIcon();
-        drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(),R.color.Black));
-        menu_variable.findItem(R.id.guardar).setIcon(drawable);
-        Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-        drawable2 = DrawableCompat.wrap(drawable2);
-        DrawableCompat.setTint(drawable2, ContextCompat.getColor(getContext(),R.color.white));
-        menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-        imbcomentariorecibo.setEnabled(false);
-        if(vinculaimpresora.equals("1"))
-        {
-            generarpdf.setEnabled(true);
-        }
-        tv_recibo.setText(recibo);
-        imbaceptar.setEnabled(false);
-        imbcancelar.setEnabled(false);
-        et_cobrado_edit.setEnabled(false);
-        Toast.makeText(getContext(), "Se Guardo Correctamente la Cobranza", Toast.LENGTH_SHORT).show();
-    }
-
     private void addDepositPOS(String montocobrado)
     {
         CobranzaCabeceraSQLiteDao cobranzaCabeceraSQLiteDao=new CobranzaCabeceraSQLiteDao(getContext());
@@ -1715,7 +1800,8 @@ public class CobranzaDetalleView extends Fragment {
                 "19000101",
                 fecha,
                 SesionEntity.pagodirecto,
-                "Y"
+                "Y",
+                "N"
         );
 
         if(ValidaSQLite==1)

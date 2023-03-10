@@ -438,6 +438,7 @@ public class LoginView extends AppCompatActivity {
             } else {
                 Sesion.census = userEntity.getCensus();
             }
+            Sesion.deliverydateauto= userEntity.getDeliverydateauto();
 
             Log.e("REOS", "LoginView.Sesion.rate: " + Sesion.rate);
             Log.e("REOS", "LoginView.Sesion.U_VIS_CashDscnt: " + Sesion.U_VIS_CashDscnt);
@@ -446,7 +447,12 @@ public class LoginView extends AppCompatActivity {
             String language = userEntity.getLenguage();
 
             Log.e("REOS", "LoginView-SesionEntity.Print" + Sesion.Print);
-            getCrash();
+            try {
+                getCrash();
+            }catch (Exception e){
+                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            }
+
 
             /*String dato="",dato1="",dato2="";
             String [] forzadoerror=dato.split("-");

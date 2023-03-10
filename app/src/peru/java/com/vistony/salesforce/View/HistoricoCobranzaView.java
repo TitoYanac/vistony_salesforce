@@ -613,7 +613,9 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
                                     listaHCE.chkwsrecibido = listareciboSQLite.get(l).getChkwsrecibido();
                                     listaHCE.depositodirecto = listareciboSQLite.get(l).getPagodirecto();
                                     listaHCE.mensajeWS = listareciboSQLite.get(l).getMensajews();
-                                    //listaHCE.chkconciliado=listareciboSQLite.get(l).getC
+                                    listaHCE.type =listareciboSQLite.get(l).getTypedescription();
+                                    listaHCE.collection_salesperson =listareciboSQLite.get(l).getCollectionsalesperson();
+
                                     arraylistahistoricocobranzaentity.add(listaHCE);
                                 }
                             }

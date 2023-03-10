@@ -36,6 +36,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
@@ -372,47 +373,66 @@ public class StatusDispatchDialog extends DialogFragment {
             public void onClick(View v) {
                 Log.e("REOS","statusDispatchRepository-->FotoGuia-->Inicia");
                 //Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    // Crea el File
-                    File photoFile = null;
-                    //startActivityForResult(intent,0);
-                    photoFile = createImageFile(Entrega+"_"+getDate(),"G");
+                int permsRequestCode = 255;
 
-                    if (photoFile != null) {
-                        //Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
-                        Uri photoURI=null;
-                        switch (BuildConfig.FLAVOR){
-                            case "ecuador":
-                            case "chile":
-                            case "peru":
-                            case "marruecos":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
-                                break;
-                            case "espania":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.espania" , photoFile);
-                                break;
-                            case "perurofalab":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.perurofalab" , photoFile);
-                                break;
-                            case "bolivia":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.bolivia" , photoFile);
-                                break;
-                            case "paraguay":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.paraguay" , photoFile);
-                                break;
-                        }
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        //startActivityForResult(intent,20);
-                        someActivityResultLauncherGuia.launch(intent);
+                String[] perms = {
+                        Manifest.permission.CAMERA
+                };
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    requestPermissions(perms, permsRequestCode);
+                }else{
+                    try {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        // Crea el File
+                        File photoFile = null;
+                        //startActivityForResult(intent,0);
+                        photoFile = createImageFile(Entrega+"_"+getDate(),"G");
+
+                        if (photoFile != null) {
+                            //Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                            Uri photoURI=null;
+                            switch (BuildConfig.FLAVOR){
+                                case "ecuador":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.ecuador" , photoFile);
+                                    break;
+                                case "chile":
+                                case "peru":
+                                case "marruecos":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                                    break;
+                                case "espania":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.espania" , photoFile);
+                                    break;
+                                case "perurofalab":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.perurofalab" , photoFile);
+                                    break;
+                                case "bolivia":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.bolivia" , photoFile);
+                                    break;
+                                case "paraguay":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.paraguay" , photoFile);
+                                    break;
+                            }
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            //startActivityForResult(intent,20);
+                            someActivityResultLauncherGuia.launch(intent);
                             /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                                 someActivityResultLauncherGuia.launch(intent);
                             }*/
 
+                        }
+                    } catch (IOException ex) {
+                        Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto-error:"+ex);
                     }
-                } catch (IOException ex) {
-                    Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto-error:"+ex);
                 }
+
 
             }});
 
@@ -447,52 +467,73 @@ public class StatusDispatchDialog extends DialogFragment {
                 //if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                 //   someActivityResultLauncher.launch(intent);
                 //}
-                try {
-                    Log.e("REOS","statusDispatchRepository-->FotoLocal-->Inicia");
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    // Crea el File
-                    File photoFile = null;
+                int permsRequestCode = 255;
 
-                    photoFile = createImageFile(Entrega+"_"+getDate(),"L");
+                String[] perms = {
+                        Manifest.permission.CAMERA
+                };
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    requestPermissions(perms, permsRequestCode);
+                }else{
+                    try {
+                        Log.e("REOS","statusDispatchRepository-->FotoLocal-->Inicia");
 
-                    if (photoFile != null) {
-                        Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
-                        Uri photoURI =null;
-                        switch (BuildConfig.FLAVOR){
-                            case "ecuador":
-                            case "chile":
-                            case "peru":
-                            case "marruecos":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
-                                break;
-                            case "espania":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.espania" , photoFile);
-                                break;
-                            case "perurofalab":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.perurofalab" , photoFile);
-                                break;
-                            case "bolivia":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.bolivia" , photoFile);
-                                break;
-                            case "paraguay":
-                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.paraguay" , photoFile);
-                                break;
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        // Crea el File
+                        File photoFile = null;
 
-                        }
-                        //Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        //startActivityForResult(intent,20);
-                        someActivityResultLauncher.launch(intent);
+                        photoFile = createImageFile(Entrega+"_"+getDate(),"L");
+
+                        if (photoFile != null) {
+                            Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
+                            Uri photoURI =null;
+                            switch (BuildConfig.FLAVOR){
+                                case "ecuador":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.ecuador" , photoFile);
+                                    break;
+                                case "chile":
+                                case "peru":
+                                case "marruecos":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                                    break;
+                                case "espania":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.espania" , photoFile);
+                                    break;
+                                case "perurofalab":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.perurofalab" , photoFile);
+                                    break;
+                                case "bolivia":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.bolivia" , photoFile);
+                                    break;
+                                case "paraguay":
+                                    photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.paraguay" , photoFile);
+                                    break;
+
+                            }
+                            //Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            //startActivityForResult(intent,20);
+                            someActivityResultLauncher.launch(intent);
                             /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                                 Log.e("REOS","statusDispatchRepository-->FotoLocal-->intent.resolveActivity(getActivity().getPackageManager()) != null");
                                 someActivityResultLauncher.launch(intent);
                             }*/
 
+                        }
+                    } catch (IOException ex) {
+                        Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto2-error:"+ex);
                     }
-                } catch (IOException ex) {
-                    Log.e("REOS,","StatusDispatchDialog-onCreateDialog-imageViewPhoto2-error:"+ex);
+                    Log.e("REOS","statusDispatchRepository-->FotoLocal-->Fin");
+
                 }
-                Log.e("REOS","statusDispatchRepository-->FotoLocal-->Fin");
+
             }});
 
         dialogButtonOK.setOnClickListener(new View.OnClickListener() {
