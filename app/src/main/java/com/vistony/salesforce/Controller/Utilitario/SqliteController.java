@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
+
 import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 
 import io.sentry.BuildConfig;
@@ -20,7 +22,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 26;
+    private static final int VERSION = 27;
 
 
     public SqliteController(Context context){
@@ -91,7 +93,7 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE ordenventacabecera (compania_id text ,ordenventa_id TEXT,cliente_id TEXT ,domembarque_id TEXT,terminopago_id TEXT,agencia_id TEXT,moneda_id TEXT,comentario " +
                     "TEXT,almacen_id TEXT, impuesto_id TEXT,montosubtotal TEXT,montodescuento TEXT,montoimpuesto TEXT,montototal TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,enviadoERP TEXT,recibidoERP TEXT,ordenventa_ERP_id" +
                     " TEXT,listaprecio_id TEXT,planta_id TEXT,fecharegistro TEXT,tipocambio TEXT,fechatipocambio TEXT,rucdni TEXT,U_SYP_MDTD TEXT,U_SYP_MDSD TEXT,U_SYP_MDCD TEXT," +
-                    "U_SYP_MDMT TEXT,U_SYP_STATUS TEXT,DocType TEXT,mensajeWS TEXT,total_gal_acumulado TEXT,descuentocontado TEXT,dueDays_cliente TEXT,excede_lineacredito TEXT,U_VIS_AgencyRUC TEXT,U_VIS_AgencyName TEXT,U_VIS_AgencyDir TEXT,domfactura_id TEXT,domembarque_text TEXT,cliente_text TEXT, terminopago_text TEXT,quotation TEXT,dispatchdate TEXT,countsend TEXT,route TEXT)");
+                    "U_SYP_MDMT TEXT,U_SYP_STATUS TEXT,DocType TEXT,mensajeWS TEXT,total_gal_acumulado TEXT,descuentocontado TEXT,dueDays_cliente TEXT,excede_lineacredito TEXT,U_VIS_AgencyRUC TEXT,U_VIS_AgencyName TEXT,U_VIS_AgencyDir TEXT,domfactura_id TEXT,domembarque_text TEXT,cliente_text TEXT, terminopago_text TEXT,quotation TEXT,dispatchdate TEXT,countsend TEXT,route TEXT, U_VIT_VENMOS TEXT)");
 
             db.execSQL("CREATE TABLE ordenventadetalle (compania_id text ,ordenventa_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT,chk_descuentocontado TEXT)");
             db.execSQL("CREATE TABLE ordenventadetallepromocion (compania_id text ,ordenventa_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT,chk_descuentocontado TEXT )");
@@ -674,11 +676,35 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE cobranzacabecera ADD COLUMN collection_salesperson TEXT");
         }
 
-        if(oldVersion==26&&newVersion==26){
+        if(oldVersion==25&&newVersion==26){
             db.execSQL("ALTER TABLE direccioncliente ADD COLUMN zipcode TEXT");
             db.execSQL("CREATE TABLE ubigeous (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,U_SYP_DEPA TEXT,U_SYP_PROV TEXT,U_SYP_DIST TEXT,U_VIS_Flete TEXT)");
         }
-
+        if(oldVersion==24&&newVersion==26){
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliverydateauto TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collection_salesperson TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN type_description TEXT");
+            db.execSQL("ALTER TABLE cobranzacabecera ADD COLUMN collection_salesperson TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN zipcode TEXT");
+            db.execSQL("CREATE TABLE ubigeous (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,U_SYP_DEPA TEXT,U_SYP_PROV TEXT,U_SYP_DIST TEXT,U_VIS_Flete TEXT)");
+        }
+        if(oldVersion==26&&newVersion==27){
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIT_VENMOS TEXT");
+        }
+        if(oldVersion==25&&newVersion==26){
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN zipcode TEXT");
+            db.execSQL("CREATE TABLE ubigeous (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,U_SYP_DEPA TEXT,U_SYP_PROV TEXT,U_SYP_DIST TEXT,U_VIS_Flete TEXT)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIT_VENMOS TEXT");
+        }
+        if(oldVersion==24&&newVersion==27){
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliverydateauto TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collection_salesperson TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN type_description TEXT");
+            db.execSQL("ALTER TABLE cobranzacabecera ADD COLUMN collection_salesperson TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN zipcode TEXT");
+            db.execSQL("CREATE TABLE ubigeous (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,U_SYP_DEPA TEXT,U_SYP_PROV TEXT,U_SYP_DIST TEXT,U_VIS_Flete TEXT)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIT_VENMOS TEXT");
+        }
     }
 
     public  static void deleteDatabase(Context mContext){

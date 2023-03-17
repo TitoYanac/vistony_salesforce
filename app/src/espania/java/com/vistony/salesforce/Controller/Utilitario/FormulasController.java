@@ -1508,6 +1508,7 @@ public class FormulasController {
         return listaOrdenVentaDetalleEntitycopia;
     }
 
+    /*
     public ArrayList<ListaOrdenVentaDetalleEntity> ActualizaciondeConversionListaOrdenDetallepoListaOrdenDetallePromocion
             (ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity)
     {
@@ -1707,8 +1708,9 @@ public class FormulasController {
 
         Log.e("REOS","FormulasController-ActualizaciondeConversionListaOrdenDetallepoListaOrdenDetallePromocion-FinalizaMetodo");
         return listaOrdenVentaDetalleEntity;
-    }
+    }*/
 
+    /*
     public ArrayList<ListaOrdenVentaDetalleEntity> ActualizaciondeConversionOrdenVentaCabeceraListaOrdenDetallePromocion
             (ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntity)
     {
@@ -1746,7 +1748,7 @@ public class FormulasController {
                     Log.e("REOS","FormulasController-ActualizaciondeConversionListaOrdenDetallepoListaOrdenDetallePromocion-contadodescuento: "+contadodescuento);
                     Log.e("REOS","FormulasController-ActualizaciondeConversionListaOrdenDetallepoListaOrdenDetallePromocion-listaOrdenVentaDetalleEntity.get(a).isOrden_detalle_chk_descuentocontado(): "+listaOrdenVentaDetalleEntity.get(a).isOrden_detalle_chk_descuentocontado());
                     Log.e("REOS","FormulasController-ActualizaciondeConversionListaOrdenDetallepoListaOrdenDetallePromocion-listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_descuentocontado(): "+listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_descuentocontado());
-                    */
+
                     Log.e("REOS","FormulasController-ActualizaciondeConversionOrdenVentaCabeceraListaOrdenDetallePromocion-listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_porcentaje_descuento(): "+listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_porcentaje_descuento());
                     ObjlistaOrdenVentaDetalleEntity=new ListaOrdenVentaDetalleEntity();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_item=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_item();
@@ -1760,13 +1762,13 @@ public class FormulasController {
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_porcentaje_descuento=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_porcentaje_descuento();
                             /*String.valueOf(
                             Integer.parseInt(listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_porcentaje_descuento())+
-                                    Integer.parseInt(contadodescuento));*/
+                                    Integer.parseInt(contadodescuento));
                     Log.e("REOS","FormulasController-ActualizaciondeConversionOrdenVentaCabeceraListaOrdenDetallePromocion-ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_porcentaje_descuento(): "+ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_porcentaje_descuento());
                     //ObjlistaOrdenVentaDetalleEntity.orden_detalle_porcentaje_descuento=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_porcentaje_descuento();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_descuento=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_descuento();
                           /*  CalcularMontoDescuento(
                                     ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_montosubtotal(),
-                                    ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_porcentaje_descuento());*/
+                                    ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_porcentaje_descuento());
                     //listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_descuento();
                     Log.e("REOS","FormulasController-ActualizaciondeConversionOrdenVentaCabeceraListaOrdenDetallePromocion-ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_descuento: "+ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_monto_descuento());
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_igv=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_igv();
@@ -1774,7 +1776,7 @@ public class FormulasController {
                                     ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_montosubtotal(),
                                     ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_monto_descuento(),
                                     SesionEntity.Impuesto
-                            );*/
+                            );
                     //listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_monto_igv();
                     Log.e("REOS","FormulasController-ActualizaciondeConversionOrdenVentaCabeceraListaOrdenDetallePromocion-ObjlistaOrdenVentaDetalleEntity.orden_detalle_monto_igv: "+ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_monto_igv());
                     Log.e("REOS","FormulasController-ActualizaciondeConversionOrdenVentaCabeceraListaOrdenDetallePromocion-SesionEntity.Impuesto: "+SesionEntity.Impuesto);
@@ -1788,10 +1790,10 @@ public class FormulasController {
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_gal = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_gal();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_gal_acumulado = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_gal_acumulado();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotalcondescuento =listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montosubtotalcondescuento();
-                            /*CalcularMontoTotalconDescuento(
+                            CalcularMontoTotalconDescuento(
                                     ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_montosubtotal(),
                                     ObjlistaOrdenVentaDetalleEntity.getOrden_detalle_monto_descuento()
-                            );*/
+                            );
                     //listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montosubtotalcondescuento();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_lista_orden_detalle_promocion = null;
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_descuentocontado = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_descuentocontado();
@@ -1889,7 +1891,7 @@ public class FormulasController {
 
 
         return listaOrdenVentaDetalleEntitycopia;
-    }
+    }*/
 
     public boolean  obtenerPromociondescuentocontado (String listapromocion_id)
     {

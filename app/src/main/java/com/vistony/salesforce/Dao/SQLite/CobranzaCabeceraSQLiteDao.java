@@ -233,7 +233,7 @@ public class CobranzaCabeceraSQLiteDao {
                 //deposito.setChkdepositado(fila.getString(5));
                 //deposito.setChkanulado(fila.getString(6));
                 deposito.setSlpCode(fila.getString(7));
-                if(fila.getString(8).equals(Context.getResources().getString(R.string.menu_deposito)))
+                if(fila.getString(8).equals(Context.getResources().getString(R.string.menu_deposito))||fila.getString(8).equals("Deposito"))
                 {
                     deposito_id="DE";
                 }

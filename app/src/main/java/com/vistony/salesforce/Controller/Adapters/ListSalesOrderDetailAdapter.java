@@ -29,8 +29,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.multidex.BuildConfig;
 
-import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
@@ -122,6 +122,10 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
             holder = (ViewHolder) convertView.getTag();
         }
 
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
         // Lead actual.
         final ListaOrdenVentaDetalleEntity lead = getItem(position);
         holder.layout.removeAllViews();
@@ -135,14 +139,14 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
 
         if(BuildConfig.FLAVOR.equals("marrruecos"))
         {
-            holder.tv_orden_detalle_precio.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(), SesionEntity.Impuesto)));
+            holder.tv_orden_detalle_precio.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(), ObjUsuario.Impuesto)));
         }else {
             holder.tv_orden_detalle_precio.setText(Convert.numberForView2(lead.getOrden_detalle_precio_unitario()));
         }
 
         holder.et_orden_detalle_cantidad.setText(lead.getOrden_detalle_cantidad());
         holder.tv_orden_detalle_galon_unitario.setText(Convert.numberForView2(lead.getOrden_detalle_gal()));
-        holder.tv_orden_detalle_precio_igv.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(), SesionEntity.Impuesto)));
+        holder.tv_orden_detalle_precio_igv.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(), ObjUsuario.Impuesto)));
 
 
 
@@ -1092,7 +1096,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                             holder.tv_orden_detalle_total.setText(Convert.numberForView2 (lead.getOrden_detalle_montosubtotal()));
                         }
                         holder.tv_orden_detalle_galon_acumulado.setText(
-                                Convert.currencyForView(String.valueOf(Float.parseFloat(lead.getOrden_detalle_cantidad()) * Float.parseFloat(lead.getOrden_detalle_gal())))
+                                Convert.numberForView2(String.valueOf(Float.parseFloat(lead.getOrden_detalle_cantidad()) * Float.parseFloat(lead.getOrden_detalle_gal())))
                         );
 
                         for (int i = 0; i < OrdenVentaDetalleView.listadoProductosAgregados.size(); i++) {
@@ -1129,12 +1133,16 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                             }
                         }
                         Log.e("REOS", "ListaOrdenVentaDetalleAdapter.listaPromocionCabecera:" + listaPromocionCabecera.size());
+                        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+                        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
                         if (listaPromocionCabecera.isEmpty()) {
 
                             listaPromocionCabecera = promocionCabeceraSQLiteDao.ObtenerPromocionCabecera(
-                                    SesionEntity.compania_id,
-                                    SesionEntity.fuerzatrabajo_id,
-                                    SesionEntity.usuario_id,
+                                    ObjUsuario.compania_id,
+                                    ObjUsuario.fuerzatrabajo_id,
+                                    ObjUsuario.usuario_id,
                                     lead.getOrden_detalle_producto_id(),
                                     lead.getOrden_detalle_umd(),
                                     lead.getOrden_detalle_cantidad(),
@@ -1801,11 +1809,16 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
 
     public void actualizarlistapromocioncabecera(ListaOrdenVentaDetalleEntity lead)
     {
+
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
         listaPromocionCabecera=promocionCabeceraSQLiteDao.ObtenerPromocionCabeceraUnidad(
 
-                SesionEntity.compania_id,
-                SesionEntity.fuerzatrabajo_id,
-                SesionEntity.usuario_id,
+                ObjUsuario.compania_id,
+                ObjUsuario.fuerzatrabajo_id,
+                ObjUsuario.usuario_id,
                 lead.getOrden_detalle_producto_id(),
                 lead.getOrden_detalle_umd(),
                 lead.getOrden_detalle_cantidad(),
@@ -1817,9 +1830,9 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         if (listaPromocionCabecera.isEmpty()){
 
             listaPromocionCabecera=promocionCabeceraSQLiteDao.ObtenerPromocionCabecera(
-                    SesionEntity.compania_id,
-                    SesionEntity.fuerzatrabajo_id,
-                    SesionEntity.usuario_id,
+                    ObjUsuario.compania_id,
+                    ObjUsuario.fuerzatrabajo_id,
+                    ObjUsuario.usuario_id,
                     lead.getOrden_detalle_producto_id(),
                     lead.getOrden_detalle_umd(),
                     lead.getOrden_detalle_cantidad(),

@@ -34,11 +34,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.DatabaseConfiguration;
+import androidx.room.InvalidationTracker;
+import androidx.room.Room;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
@@ -72,9 +79,14 @@ import java.util.Map;
 
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
 import kotlin.jvm.Throws;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.vistony.salesforce.kotlin.client.ubigeous.Ubigeous;
+import com.vistony.salesforce.kotlin.client.ubigeous.UbigeousDao;
+import com.vistony.salesforce.kotlin.room.RoomDatabase;
 
 public class LoginView extends AppCompatActivity {
     public OmegaCenterIconButton btnlogin;
@@ -243,6 +255,28 @@ public class LoginView extends AppCompatActivity {
         );
 
         getLocation();
+        /*RoomDatabase roomDatabase=new RoomDatabase() {
+            @NonNull
+            @Override
+            protected SupportSQLiteOpenHelper createOpenHelper(@NonNull DatabaseConfiguration databaseConfiguration) {
+                return null;
+            }
+
+            @NonNull
+            @Override
+            protected InvalidationTracker createInvalidationTracker() {
+                return null;
+            }
+
+            @Override
+            public void clearAllTables() {
+
+            }
+        };
+        RoomDatabase.Companion.buildDatabase(getBaseContext());*/
+        //RoomDatabase.Companion.getInstance(this);
+        //Room.databaseBuilder(this, TasksDatabase::class.java, "tasks-db").build();
+
 
 
     }

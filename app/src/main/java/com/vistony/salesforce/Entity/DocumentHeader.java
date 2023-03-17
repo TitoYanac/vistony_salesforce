@@ -44,6 +44,15 @@ public class DocumentHeader {
     private String Route;
     private String U_SYP_PDTREV;
     private String U_SYP_PDTCRE;
+    private String U_VIT_VENMOS;
+
+    public String getU_VIT_VENMOS() {
+        return U_VIT_VENMOS;
+    }
+
+    public void setU_VIT_VENMOS(String u_VIT_VENMOS) {
+        U_VIT_VENMOS = u_VIT_VENMOS;
+    }
 
     public String getU_SYP_PDTREV() {
         return U_SYP_PDTREV;

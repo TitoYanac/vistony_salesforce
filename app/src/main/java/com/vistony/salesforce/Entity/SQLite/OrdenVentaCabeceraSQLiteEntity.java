@@ -51,6 +51,15 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String dispatchdate;
     public String Intent;
     public String Route;
+    public String U_VIT_VENMOS;
+
+    public String getU_VIT_VENMOS() {
+        return U_VIT_VENMOS;
+    }
+
+    public void setU_VIT_VENMOS(String u_VIT_VENMOS) {
+        U_VIT_VENMOS = u_VIT_VENMOS;
+    }
 
     public String getRoute() {
         return Route;

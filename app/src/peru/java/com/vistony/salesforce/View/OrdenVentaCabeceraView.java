@@ -40,6 +40,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -136,7 +137,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     static boolean chk_inicioOrdenVentaCabeceraView=false;
-    static CheckBox chk_descuento_contado;
+    static CheckBox chk_descuento_contado,chk_sale_counter;
     ArrayList<ListaOrdenVentaCabeceraEntity> listaOrdenVentaCabeceraEntities;
     ArrayAdapter<String> comboAdapterdescuento;
     Trace myTrace;
@@ -151,6 +152,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
+    TableRow tr_dsct_cont;
+
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
@@ -457,7 +460,9 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         listaTerminopago=terminoPagoSQLiteDao.ObtenerTerminoPagoporID(cliente_terminopago_id,SesionEntity.compania_id);
         btn_dispatch_date = (ImageButton) v.findViewById(R.id.btn_dispatch_date);
         btn_dispatch_date.setOnClickListener(this);
-
+        tr_dsct_cont=v.findViewById(R.id.tr_dsct_cont);
+        tr_dsct_cont.setVisibility(View.GONE);
+        chk_sale_counter=v.findViewById(R.id.chk_sale_counter);
 
 
         //Pruebas de Fecha de entrega
@@ -1062,6 +1067,14 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             listaOrdenVentaCabeceraEntity.orden_cabecera_U_SYP_STATUS="V";
             listaOrdenVentaCabeceraEntity.orden_cabecera_dispatch_date= parametrofecha;
             listaOrdenVentaCabeceraEntity.orden_cabecera_route=chkruta;
+
+            if (chk_sale_counter.isChecked())
+            {
+                listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIT_VENMOS ="S";
+            }else {
+                listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIT_VENMOS ="N";
+            }
+
 
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);

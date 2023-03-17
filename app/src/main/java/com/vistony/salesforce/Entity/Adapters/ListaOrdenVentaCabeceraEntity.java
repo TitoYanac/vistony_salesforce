@@ -38,6 +38,15 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_U_SYP_STATUS;
     public String orden_cabecera_dispatch_date;
     public String orden_cabecera_route;
+    public String orden_cabecera_U_VIT_VENMOS;
+
+    public String getOrden_cabecera_U_VIT_VENMOS() {
+        return orden_cabecera_U_VIT_VENMOS;
+    }
+
+    public void setOrden_cabecera_U_VIT_VENMOS(String orden_cabecera_U_VIT_VENMOS) {
+        this.orden_cabecera_U_VIT_VENMOS = orden_cabecera_U_VIT_VENMOS;
+    }
 
     public String getOrden_cabecera_route() {
         return orden_cabecera_route;

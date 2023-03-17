@@ -1,4 +1,5 @@
 package com.vistony.salesforce.kotlin.validationaccountclient.ui
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -36,11 +37,23 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.vistony.salesforce.R
+import com.vistony.salesforce.kotlin.client.ubigeous.Ubigeous
+import com.vistony.salesforce.kotlin.client.ubigeous.UbigeousDao
+import com.vistony.salesforce.kotlin.client.ubigeous.UbigeousWorker
+import com.vistony.salesforce.kotlin.client.ubigeous.UbigeousWorker.Companion.KEY_FILENAME
 import com.vistony.salesforce.kotlin.compose.components.HeaderImage
 import com.vistony.salesforce.kotlin.compose.theme.VistonySalesForce_PedidosTheme
+import com.vistony.salesforce.kotlin.room.RoomDatabase
+import com.vistony.salesforce.kotlin.utilities.PLANT_DATA_FILENAME
 import com.vistony.salesforce.kotlin.validationaccountclient.data.ValidationAccountClientModel
 import com.vistony.salesforce.kotlin.validationaccountclient.domain.ValidationAccountClientViewModel
+import kotlinx.coroutines.launch
 
 
 class DialogValidationAccountClient ():
@@ -50,6 +63,7 @@ class DialogValidationAccountClient ():
 //    var activities: Activity = TODO()
 
 
+    @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,6 +80,32 @@ class DialogValidationAccountClient ():
                 VistonySalesForce_PedidosTheme {
                     // A surface container using the 'background' color from the theme
                     Surface {
+                        //RoomDatabase.getInstance(context.applicationContext)
+                        //val database = RoomDatabase.getInstance(context.applicationContext)
+
+                        //val database by lazy { RoomDatabase.getInstance(context.applicationContext) }
+                        val room = Room.databaseBuilder(context.applicationContext, RoomDatabase::class.java, "dbcobranzas1").build();
+                        lifecycleScope.launch{
+                            room.ubigeoousDao().addUbigeous(Ubigeous(
+                                "C001",
+                                        "7",
+                                        "7",
+                                        "10001057",
+                                        "Lima",
+                                        "Lima",
+                                        "Ancon",
+                                        "2"
+                            ))
+                        }
+                        //database.ubigeoousDao.insertUbigeois()
+                        //val ubigeousWorker: UbigeousWorker
+                        /*val request = OneTimeWorkRequestBuilder<UbigeousWorker>()
+                            .setInputData(workDataOf(KEY_FILENAME to PLANT_DATA_FILENAME))
+                            .build()
+                        WorkManager.getInstance(context).enqueue(request)*/
+                        //var roomdatabaseImpl: RoomDatabase_Impl?=null
+                        //roomdatabaseImpl.run {  }
+                        //Room.databaseBuilder(context.applicationContext, RoomDatabase::class.java, "tasks-db").build();
                         DefaultPreview2()
                         //HeaderImage()
                         /*Column(

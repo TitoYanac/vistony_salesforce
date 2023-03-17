@@ -555,4 +555,5 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="collection_salesperson">Cobró Vendedor</string>
     <string name="dialog_start_game">Cobró Vendedor</string>
     <string name="validation_account_client">Validacion Cuenta Cliente</string>
+    <string name="sale_counter">Recojo en Planta</string>
 </resources>

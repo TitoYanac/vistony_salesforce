@@ -406,7 +406,8 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS()
 
             );
         }
@@ -712,6 +713,7 @@ public class FormulasController {
         documentHeader.setRoute(ovCabecera.getRoute());
         documentHeader.setU_SYP_PDTREV("S");
         documentHeader.setU_SYP_PDTCRE("S");
+        documentHeader.setU_VIT_VENMOS(ovCabecera.getU_VIT_VENMOS());
 
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
