@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class InvoicesEntity {
 
     @SerializedName("DocEntry")
@@ -59,6 +61,17 @@ public class InvoicesEntity {
 
     @SerializedName("PymntGroup")
     private String pymntgroup;
+
+    @SerializedName("DocumentDetail")
+    private List<DocumentDetailEntity> DocumentDetail;
+
+    public List<DocumentDetailEntity> getDocumentDetail() {
+        return DocumentDetail;
+    }
+
+    public void setDocumentDetail(List<DocumentDetailEntity> documentDetail) {
+        DocumentDetail = documentDetail;
+    }
 
     public String getIddriver() {
         return iddriver;

@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
@@ -98,7 +99,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
     //ArrayList<ListaConsDepositoEntity> ArraylistaConsDepositoEntity;
     MenuItem vincular,seleccionar_todo;
     static String Recibos_agregados="";
-    private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=2;
+    private final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE=255;
     Induvis induvis;
     boolean estadoseleccionartodo;
 
@@ -274,7 +275,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
         //listaViewCobranzas.setHasFixedSize(true);
         tv_cantidad_consdeposito= (TextView) v.findViewById(R.id.tv_cantidad_consdeposito);
         tv_monto_consdeposito= (TextView) v.findViewById(R.id.tv_monto_consdeposito);
-
+        verifyPermission();
 
         getActivity().setTitle(getActivity().getResources().getString(R.string.pending_deposit));
         return v;
@@ -488,6 +489,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
         return false;
     }
 
+    /*
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
@@ -502,8 +504,9 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
             requestPermissions(new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
         }
 
-    }
+    }*/
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -527,7 +530,7 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
             }
         }
 
-    }
+    }*/
 
     private Dialog alertaSeleccionartodo(String texto, Context context) {
 
@@ -576,6 +579,50 @@ public class ConsDepositoView extends Fragment implements View.OnClickListener,D
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         return  dialog;
+    }
+
+
+    private void verifyPermission() {
+
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        int permsRequestCode = 255;
+
+        String[] perms = {
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_SCAN
+        };
+
+            /*int accessReadPhoneState = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
+            int accessWriteExternalStorage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int accessCamera = checkSelfPermission(Manifest.permission.CAMERA);
+            int accessCoarseLocation = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+            int accessReadExternalStorage = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            int accessBluetoothConnect = checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT);
+            int accessBluetooth = checkSelfPermission(Manifest.permission.BLUETOOTH);
+            int accessBluetoothScan = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN);*/
+
+        if (
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            requestPermissions(perms, permsRequestCode);
+        } else {
+
+        }
     }
 
 

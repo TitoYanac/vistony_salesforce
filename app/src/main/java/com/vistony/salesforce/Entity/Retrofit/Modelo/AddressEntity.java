@@ -38,6 +38,17 @@ public class AddressEntity {
     @SerializedName("DayDelivery")
     private String DeliveryDay;
 
+    @SerializedName("ZipCode")
+    private String ZipCode;
+
+    public String getZipCode() {
+        return ZipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        ZipCode = zipCode;
+    }
+
     public String getDeliveryDay() {
         return DeliveryDay;
     }

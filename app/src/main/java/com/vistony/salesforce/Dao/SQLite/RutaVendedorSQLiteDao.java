@@ -81,6 +81,7 @@ public class RutaVendedorSQLiteDao {
              ,String latitud
              ,String longitud
              ,String addresscode
+            ,String statuscounted
     )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
@@ -127,6 +128,7 @@ public class RutaVendedorSQLiteDao {
             registro.put("latitud", latitud);
             registro.put("longitud", longitud);
             registro.put("addresscode", addresscode);
+            registro.put("statuscounted", statuscounted);
 
             bd.insert("rutavendedor", null, registro);
         }catch (Exception e)
@@ -306,7 +308,9 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setLatitud(fila.getString(36));
             ObjListaClienteCabeceraEntity.setLongitud(fila.getString(37));
             ObjListaClienteCabeceraEntity.setAddresscode(fila.getString(38));
+            ObjListaClienteCabeceraEntity.setStatuscount (fila.getString(39));
             Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getLastpurchase"+ObjListaClienteCabeceraEntity.getLastpurchase());
+            Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getStatuscount"+ObjListaClienteCabeceraEntity.getStatuscount());
             listaClienteCabeceraEntity.add(ObjListaClienteCabeceraEntity);
         }
 

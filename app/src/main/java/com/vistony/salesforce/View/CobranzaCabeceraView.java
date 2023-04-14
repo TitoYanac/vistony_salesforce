@@ -524,6 +524,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
         spntipo.setAdapter(adapter);
     }
 
+    /*
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
@@ -538,8 +539,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                     requestPermissions(new String[] {android.Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
         }
 
-    }
+    }*/
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -560,7 +562,7 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             }
         }
 
-    }
+    }*/
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {

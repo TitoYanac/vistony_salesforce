@@ -41,6 +41,7 @@ public class ListaDireccionClienteDao {
                         , Lista.get(i).getNombrefuerzatrabajo()
                         , Lista.get(i).getFuerzatrabajo_id()
                         , Lista.get(i).getAddresscode()
+                        , Lista.get(i).getZipcode()
                 ));
             }
         }catch (Exception e){

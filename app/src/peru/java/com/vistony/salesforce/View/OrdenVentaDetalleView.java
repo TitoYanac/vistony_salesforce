@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,9 +67,10 @@ public class OrdenVentaDetalleView extends Fragment {
     public static ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabecera=new ArrayList<>();
     static MenuItem guardar_orden_venta,vincular_orden_venta_cabecera;
     static Menu menu_variable;
-    static String listaprecio_id,descuentocontado,terminopago_id;
+    static String listaprecio_id,descuentocontado,terminopago_id,ubigeo_id="0";
     static Context context;
     private ProgressDialog pd;
+    TableRow tr_summary_flete;
 
     public static OrdenVentaDetalleView newInstanceEnviaListaPromocion (Object objeto) {
 
@@ -100,11 +102,13 @@ public class OrdenVentaDetalleView extends Fragment {
             listaprecio_id=arrayObject[0]; //codigocliente
             descuentocontado=compuesto[0];
             terminopago_id=compuesto[1];
+            ubigeo_id=compuesto[2];
 
         }else{
             listaprecio_id=arrayObject[0]; //codigocliente
             descuentocontado="false";
         }
+        Log.e("REOS","OrdenVentaDetalleView-newInstance-ubigeo_id: "+ubigeo_id);
         Log.e("REOS","OrdenVentaDetalleView-newInstance-listaprecio_id: "+listaprecio_id);
         Log.e("REOS","OrdenVentaDetalleView-newInstance-descuentocontado: "+descuentocontado);
         Log.e("REOS","OrdenVentaDetalleView-newInstance-terminopago_id: "+terminopago_id);
@@ -273,9 +277,13 @@ public class OrdenVentaDetalleView extends Fragment {
         tv_orden_venta_detalle_igv = v.findViewById(R.id.tv_orden_venta_detalle_igv);
         tv_orden_venta_detalle_total = v.findViewById(R.id.tv_orden_venta_detalle_total);
         tv_orden_detalle_galones = v.findViewById(R.id.tv_orden_detalle_galones);
+        tr_summary_flete = v.findViewById(R.id.tr_summary_flete);
+
+        tr_summary_flete.setVisibility(View.GONE);
         ClienteAtendido cliente=new ClienteAtendido();
         cliente.setCardCode(listaprecio_id);//contiene CardCode
         cliente.setPymntGroup(terminopago_id);
+        cliente.setUbigeo_ID(ubigeo_id);
 
 
         fab_consulta_productos.setOnClickListener(view -> {

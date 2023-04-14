@@ -407,7 +407,9 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_Flete(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_CompleteOV()
 
             );
         }
@@ -714,7 +716,8 @@ public class FormulasController {
         documentHeader.setU_SYP_PDTREV("S");
         documentHeader.setU_SYP_PDTCRE("S");
         documentHeader.setU_VIT_VENMOS(ovCabecera.getU_VIT_VENMOS());
-
+        documentHeader.setU_VIS_Flete(ovCabecera.getU_VIS_Flete());
+        documentHeader.setU_VIS_CompleteOV(ovCabecera.getU_VIS_CompleteOV());
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
@@ -1130,6 +1133,7 @@ public class FormulasController {
                         ,listaClienteCabeceraEntities.get(i).getLatitud()
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
                         ,listaClienteCabeceraEntities.get(i).getAddresscode()
+                        ,listaClienteCabeceraEntities.get(i).getStatuscount()
                 );
             }
 
@@ -2039,6 +2043,20 @@ public class FormulasController {
 
         Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-resultado-"+subTotalLine.setScale(5,RoundingMode.DOWN).toString());
         return subTotalLine.setScale(5,RoundingMode.DOWN).toString();
+    }
+
+    public String getPriceIncrement(String PrecioUnitario,String Incremento){
+
+        //Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+        //Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+
+        Incremento=(Incremento.equals(""))?"0":Incremento;
+
+        BigDecimal preUnit = new BigDecimal(PrecioUnitario).setScale(3,RoundingMode.HALF_UP);
+        BigDecimal incremento = new BigDecimal(Incremento).divide(new BigDecimal("100")).add(new BigDecimal("1")) ;
+
+        BigDecimal product=preUnit.multiply(incremento);
+        return product.toString();
     }
 
 }

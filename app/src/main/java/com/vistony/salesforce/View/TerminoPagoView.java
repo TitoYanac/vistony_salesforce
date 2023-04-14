@@ -43,7 +43,7 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
     private String mParam2;
     public static OnFragmentInteractionListener mListener;
     View v;
-    String dias_vencimiento;
+    String dias_vencimiento,statuscount;
     ListView listaterminopago;
     ArrayList<TerminoPagoSQLiteEntity> listaTerminoPagoSQLiteEntity;
     TerminoPagoSQLiteEntity terminoPagoSQLiteEntity;
@@ -101,7 +101,14 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
         if (getArguments() != null) {
             ArrayList<TerminoPagoSQLiteEntity> listaTerminopago = new ArrayList<>();
             TerminoPagoSQLiteDao terminoPagoSQLiteDao = new TerminoPagoSQLiteDao(getContext());
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            //mParam1 = getArguments().getString(ARG_PARAM1);
+
+            String[] objectPaymentterms= getArguments().getString(ARG_PARAM1).split("&&");
+            mParam1= objectPaymentterms[0];
+            statuscount= objectPaymentterms[1];
+            Log.e("REOS","TerminoPagoView-onCreate-mParam1"+mParam1);
+            Log.e("REOS","TerminoPagoView-onCreate-statuscount"+statuscount);
+
             listaTerminopago = terminoPagoSQLiteDao.ObtenerTerminoPagoporID(mParam1, SesionEntity.compania_id);
             Log.e("REOS","TerminoPagoView-onCreate-mParam1"+mParam1);
             for (int i = 0; i < listaTerminopago.size(); i++) {
@@ -136,10 +143,16 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
     private void cargarTerminoPagoSqlite() {
         listaTerminoPagoSQLiteEntity = new ArrayList<>();
 //        Log.e("REOS:DiasVencimiento",dias_vencimiento);
-        listaTerminoPagoSQLiteEntity = terminoPagoSQLiteDao.ObtenerTerminoPago(SesionEntity.compania_id, dias_vencimiento);
+        listaTerminoPagoSQLiteEntity = terminoPagoSQLiteDao.ObtenerTerminoPago(SesionEntity.compania_id, dias_vencimiento
+                //,statuscount
+        );
         if (listaTerminoPagoSQLiteEntity.size() != 0)
         {
-            listaTerminoPagoAdapter = new ListaTerminoPagoAdapter(getActivity(), ListaTerminoPagoDao.getInstance().getLeads(listaTerminoPagoSQLiteEntity));
+            listaTerminoPagoAdapter = new ListaTerminoPagoAdapter(
+                    getActivity(),
+                    ListaTerminoPagoDao.getInstance().getLeads(listaTerminoPagoSQLiteEntity),
+                    statuscount
+            );
             listaterminopago.setAdapter(listaTerminoPagoAdapter);
         }else
         {

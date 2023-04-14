@@ -77,6 +77,17 @@ public class ClienteEntity {
     @SerializedName("LastPurchase")
     private String lastpurchase;
 
+    @SerializedName("SinTerminoContado")
+    private String statuscounted;
+
+    public String getStatuscounted() {
+        return statuscounted;
+    }
+
+    public void setStatuscounted(String statuscounted) {
+        this.statuscounted = statuscounted;
+    }
+
     public String getLastpurchase() {
         return lastpurchase;
     }

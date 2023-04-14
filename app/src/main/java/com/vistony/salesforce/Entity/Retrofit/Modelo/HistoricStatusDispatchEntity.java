@@ -69,13 +69,15 @@ public class HistoricStatusDispatchEntity implements Serializable  {
 
     private String drivername;
 
+    private String amount;
+
     public HistoricStatusDispatchEntity(
             String fuerzaTrabajo_ID, String usuario_ID, String tipoDespacho_ID, String tipoDespacho,
             String motivoDespacho_ID, String motivoDespacho, String observacion, String latitud,
             String longitud, String fecha, String hora, String entrega_ID, String cliente_ID,
             String cliente, String entrega,String factura_ID,String factura
             ,String FotoLocal,String FotoGuia,String Chk_Recibido,String messageServerDispatch
-            ,String messageServerTimeDispatch,String drivermobile,String drivername
+            ,String messageServerTimeDispatch,String drivermobile,String drivername,String amount
     ) {
         FuerzaTrabajo_ID = fuerzaTrabajo_ID;
         Usuario_ID = usuario_ID;
@@ -101,11 +103,20 @@ public class HistoricStatusDispatchEntity implements Serializable  {
         this.messageServerTimeDispatch=messageServerTimeDispatch;
         this.drivermobile=drivermobile;
         this.drivername=drivername;
+        this.amount=amount;
 
     }
 
     public HistoricStatusDispatchEntity() {
 
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     public String getDrivername() {

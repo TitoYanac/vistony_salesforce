@@ -92,12 +92,14 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
 
         if(vendedor.getCliente()!=null)
         {
+            Log.e("REOS","ProductoView.onCreateView.vendedor.getCliente().getUbigeo_ID():"+vendedor.getCliente().getUbigeo_ID());
             cargarProductosSqlite(
                     vendedor.getCliente().getCardCode(),
                     vendedor.getCliente().getPymntGroup(),
                     vendedor.getCliente().getChkpricelist(),
                     vendedor.getCliente().getPriceList_id(),
-                    vendedor.getCliente().getPriceList()
+                    vendedor.getCliente().getPriceList(),
+                    vendedor.getCliente().getUbigeo_ID()
             );
         }else {
             Toast.makeText(getContext(),"No se cargaron, correctamente los datos del cliente, reingrese a la app!!!", Toast.LENGTH_LONG).show();
@@ -110,13 +112,17 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
             String terminoPago,
             String chkpricelist,
             String pricelist_id,
-            String pricelist)
+            String pricelist,
+            String ubigeo_id
+
+    )
     {
         Log.e("REOS","ProductoView.cargarProductosSqlite.codigoCliente: "+codigoCliente);
         Log.e("REOS","ProductoView.cargarProductosSqlite.terminoPago:"+terminoPago);
+        Log.e("REOS","ProductoView.cargarProductosSqlite.ubigeo_id:"+ubigeo_id);
 
 
-            ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(codigoCliente,terminoPago);
+            ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(codigoCliente,terminoPago,ubigeo_id,getContext());
 
         if(ListaProductoEntity==null || ListaProductoEntity.size()<0){
             Toast.makeText(getContext(),"Actualiza tus parametros, no hay productos disponibles", Toast.LENGTH_LONG).show();

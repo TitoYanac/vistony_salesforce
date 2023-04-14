@@ -373,7 +373,10 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_MDMT(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_Flete()
             );
         }
 
@@ -1109,7 +1112,7 @@ public class FormulasController {
                         ,listaClienteCabeceraEntities.get(i).getLatitud()
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
                         ,listaClienteCabeceraEntities.get(i).getAddresscode()
-
+                        ,listaClienteCabeceraEntities.get(i).getStatuscount()
                 );
             }
 

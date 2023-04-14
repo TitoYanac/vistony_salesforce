@@ -36,6 +36,15 @@ public class ClienteSQLiteEntity {
     private String lineofbusiness;
     private String lastpurchase;
     private String DeliveryDay;
+    private String statuscounted;
+
+    public String getStatuscounted() {
+        return statuscounted;
+    }
+
+    public void setStatuscounted(String statuscounted) {
+        this.statuscounted = statuscounted;
+    }
 
     public String getDeliveryDay() {
         return DeliveryDay;

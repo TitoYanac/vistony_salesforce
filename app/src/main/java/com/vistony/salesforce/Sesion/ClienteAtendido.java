@@ -6,6 +6,15 @@ public class ClienteAtendido {
     private String Chkpricelist;
     private String PriceList_id;
     private String PriceList;
+    private String Ubigeo_ID;
+
+    public String getUbigeo_ID() {
+        return Ubigeo_ID;
+    }
+
+    public void setUbigeo_ID(String ubigeo_ID) {
+        Ubigeo_ID = ubigeo_ID;
+    }
 
     public String getPymntGroup() {
         return PymntGroup;

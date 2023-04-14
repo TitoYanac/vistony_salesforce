@@ -93,6 +93,11 @@ public class ClienteRepository extends ViewModel {
                             List<InvoicesEntity> listaDocumentos=clienteEntityResponse.getClienteEntity().get(i).getInvoices();
                             ObjCliente.setListInvoice(listaDocumentos);
                         }
+                        /*//DocumentoDetalle
+                        for(int j=0;j<clienteEntityResponse.getClienteEntity().get(i).getInvoices().size();j++)
+                        {
+                            ObjCliente.getListInvoice().get(i).setDocumentDetail(clienteEntityResponse.getClienteEntity().get(i).getInvoices().get(j).getDocumentDetail());
+                        }*/
 
                         //Direcciones
                         if(clienteEntityResponse.getClienteEntity().get(i).getAddress() == null || clienteEntityResponse.getClienteEntity().get(i).getAddress().size()==0){
@@ -123,6 +128,8 @@ public class ClienteRepository extends ViewModel {
                         ObjCliente.setDomfactura_id(clienteEntityResponse.getClienteEntity().get(i).getDomicilioFactura());
                         ObjCliente.setLineofbusiness(clienteEntityResponse.getClienteEntity().get(i).getLineofbusiness());
                         ObjCliente.setLastpurchase (clienteEntityResponse.getClienteEntity().get(i).getLastpurchase());
+                        ObjCliente.setStatuscounted (clienteEntityResponse.getClienteEntity().get(i).getStatuscounted());
+
                         //la funcion addCustomer  debe darse aqui!
                         LCliente.add(ObjCliente);
                     }
@@ -231,6 +238,11 @@ public class ClienteRepository extends ViewModel {
                 listaTemp=clienteSQlite.ObtenerClientesConsulta();
             }
             else if(BuscarClienteView.Flujo.equals("kardexofpayment"))
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo-findClient-kardex:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                listaTemp=clienteSQlite.ObtenerClientesConsulta();
+            }
+            else if(BuscarClienteView.Flujo.equals("customerComplaintView"))
             {
                 Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo-findClient-kardex:"+BuscarClienteView.Flujo+"NoEntroFlujo");
                 listaTemp=clienteSQlite.ObtenerClientesConsulta();

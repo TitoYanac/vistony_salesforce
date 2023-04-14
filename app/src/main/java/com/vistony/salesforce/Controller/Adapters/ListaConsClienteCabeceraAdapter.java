@@ -222,8 +222,10 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             listaClienteCabeceraEntity.setTerminopago (lead.getTerminopago());
             listaClienteCabeceraEntity.setContado (lead.getContado());
             listaClienteCabeceraEntity.setAddresscode( lead.getAddresscode());
+            listaClienteCabeceraEntity.setStatuscount ( lead.getStatuscount());
                     Log.e("REOS","ListaConsClienteCabeceraAdapter.getView.lead.getLineofbussiness(): "+lead.getLineofbussiness());
                     Log.e("REOS","ListaConsClienteCabeceraAdapter.getView.lead.getTerminopago_id()(): "+lead.getTerminopago_id());
+                    Log.e("REOS","ListaConsClienteCabeceraAdapter.getView.lead.getStatuscount()(): "+lead.getStatuscount());
             ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
 
             fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
@@ -259,6 +261,11 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             {
                 Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo-kardex:"+BuscarClienteView.Flujo+"NoEntroFlujo");
                 transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaEnviarValidationAccountClient(ArraylistaClienteCabeceraEntity));
+            }
+            else if(BuscarClienteView.Flujo.equals("customerComplaintView"))
+            {
+                Log.e("REOS","ListaConsClienteCabeceraAdapter.BuscarClienteView.Flujo-customerComplaintView:"+BuscarClienteView.Flujo+"NoEntroFlujo");
+                transaction.add(R.id.content_menu_view, buscarClienteView.newInstanciaSendCustomerComplaint(ArraylistaClienteCabeceraEntity));
             }
             else
                     {

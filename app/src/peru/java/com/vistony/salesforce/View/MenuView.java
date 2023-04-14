@@ -73,7 +73,9 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.kotlin.validationaccountclient.ui.ValidationAccountClient;
+import com.vistony.salesforce.kotlin.compose.ComplaintScreen;
+import com.vistony.salesforce.kotlin.compose.DispatchSheetMapScreen;
+import com.vistony.salesforce.kotlin.compose.ValidationAccountClient;
 
 import java.io.Closeable;
 import java.io.File;
@@ -145,7 +147,9 @@ public class MenuView extends AppCompatActivity
         MenuConsultaCotizacionView.OnFragmentInteractionListener,
         HistoricQuotationView.OnFragmentInteractionListener,
         ContainerDispatchSheetView.OnFragmentInteractionListener,
-        ValidationAccountClient.OnFragmentInteractionListener
+        ValidationAccountClient.OnFragmentInteractionListener,
+        DispatchSheetMapScreen.OnFragmentInteractionListener,
+        CustomerComplaintView.OnFragmentInteractionListener
 
 
 {
@@ -184,6 +188,9 @@ public class MenuView extends AppCompatActivity
     Fragment HojaDespachoFragment;
     Fragment LeadFragment;
     Fragment ValidationAccountClientFragment;
+    Fragment CustomerComplaintFragment;
+    Fragment ClienteDetalleViewFragment;
+
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     private static int TAKE_PICTURE = 1888;
     private final String ruta_fotos = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/misfotos/";
@@ -263,6 +270,8 @@ public class MenuView extends AppCompatActivity
         HojaDespachoFragment = new Fragment();
         LeadFragment = new Fragment();
         ValidationAccountClientFragment = new Fragment();
+        CustomerComplaintFragment = new Fragment();
+        ClienteDetalleViewFragment = new Fragment();
         arraylistConfiguracionentity = new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao = new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -751,9 +760,9 @@ public class MenuView extends AppCompatActivity
                 //fragmentSeleccionado=true;
                 //TAG_FRAGMENT="config_print";
 
-                ///HojaDespachoFragment = new DispatchSheetView();
+                HojaDespachoFragment = new DispatchSheetView();
                 //HojaDespachoFragment = new ContainerDispatchSheetView();
-                HojaDespachoFragment = new ContainerDispatchView();
+                //HojaDespachoFragment = new ContainerDispatchView();
                 fragment = "HojaDespachoView";
                 accion = "inicio";
                 compuesto = fragment + "-" + accion;
@@ -798,9 +807,17 @@ public class MenuView extends AppCompatActivity
                 TAG_FRAGMENT = "config_print";
                 break;
             case R.id.nav_formularios:
-                contentFragment = new MenuFormulariosView();
-                fragmentSeleccionado = true;
-                TAG_FRAGMENT = "config_print";
+                //contentFragment = new MenuFormulariosView();
+                contentFragment = new CustomerComplaintView();
+                //contentFragment = new ComplaintScreen();
+                //fragmentSeleccionado = true;
+                //TAG_FRAGMENT = "config_print";
+                //CobranzaCabeceraFragment = new CobranzaCabeceraView();
+                /*fragment = "CustomerComplaintView";
+                accion = "start";
+                compuesto = fragment + "-" + accion;
+                object = null;
+                onFragmentInteraction(compuesto, object);*/
                 break;
             case R.id.nav_configuracion_general:
                 contentFragment = new MenuConfiguracionView();
@@ -1857,7 +1874,6 @@ public class MenuView extends AppCompatActivity
                 ft.show(KardexOfPaymentFragment);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
-
                 KardexOfPaymentView.newInstanceRecibirLista(Lista);
                 this.setTitle("Kardex de Pago");
             }
@@ -1961,6 +1977,68 @@ public class MenuView extends AppCompatActivity
                 this.setTitle("Validacion Cuenta Cliente");
             }
         }
+        if(tag.equals("CustomerComplaintView"))
+        {
+            if(tag2.equals( "start"))
+            {
+                contentFragment=new CustomerComplaintView();
+                ft.replace(R.id.content_menu_view,CustomerComplaintView.newInstance(Lista),tag2);
+                //ft.add(R.id.content_menu_view, CustomerComplaintView.newInstance(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals( "findClient"))
+            {
+                contentFragment=new CustomerComplaintView();
+                String taCustomerComplaintView="start";
+                CustomerComplaintFragment  =getSupportFragmentManager().findFragmentByTag(taCustomerComplaintView);
+                ft.hide(CustomerComplaintFragment);
+                //ft.add(R.id.content_menu_view,contentFragment,tag2);
+                ft.add(R.id.content_menu_view, BuscarClienteView.newInstanciaHistoricContainerSale(Lista),tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals( "sendClient"))
+            {
+                String tagBuscarClienteView="findClient";
+                String taCustomerComplaintView="start";
+                BuscarClienteFragment=getSupportFragmentManager().findFragmentByTag(tagBuscarClienteView);
+                CustomerComplaintFragment  =getSupportFragmentManager().findFragmentByTag(taCustomerComplaintView);
+                ft.remove(BuscarClienteFragment);
+                ft.show(CustomerComplaintFragment);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                CustomerComplaintView.newInstancesetClient(Lista);
+                this.setTitle("Reclamos");
+            }
+            if(tag2.equals("CustomerComplaintViewcobranza"))
+            {
+                Log.d("REOS", "MenuView-OnFragmentInteraction-CustomerComplaintView-cobranza");
+                String tagCustomerComplaintView="start";
+                CustomerComplaintFragment = getSupportFragmentManager().findFragmentByTag(tagCustomerComplaintView);
+                ft.hide(CustomerComplaintFragment);
+                //tag2="inicioCustomerComplaintView";
+                ft.add(R.id.content_menu_view,ClienteDetalleView.newInstanceReceipCustomerComplaint(Lista,tag2),tag2);
+                //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            if(tag2.equals( "CustomerComplaintViewsendClient"))
+            {
+                String tagClienteDetalleView="CustomerComplaintViewcobranza";
+                String taCustomerComplaintView="start";
+                ClienteDetalleViewFragment=getSupportFragmentManager().findFragmentByTag(tagClienteDetalleView);
+                CustomerComplaintFragment  =getSupportFragmentManager().findFragmentByTag(taCustomerComplaintView);
+                ft.remove(ClienteDetalleViewFragment);
+                ft.show(CustomerComplaintFragment);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+                CustomerComplaintView.newInstanceReceipDocument(Lista);
+                this.setTitle("Reclamos");
+            }
+
+        }
+
 
 
 
@@ -2139,7 +2217,7 @@ public class MenuView extends AppCompatActivity
                         bitmap211 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.fromFile(sourceFile));
 
 
-
+                    String resultado;
                     SesionEntity.imagen = "DEP";
 
                     ImageCameraController imageCameraController22 = new ImageCameraController();
@@ -2210,6 +2288,53 @@ public class MenuView extends AppCompatActivity
                    }
                    Toast.makeText(this, "Leído: " + result.getContents().toString(), Toast.LENGTH_SHORT).show();*/
                    //alertdialogSalesOrderQR(this,decData).show();
+                   break;
+               case 156:
+                   Log.e("jpcm", "ingreso 155 add foto");
+
+                   Uri uriPhoto2 = data.getData();
+
+                   File sourceFile2 = new File(getPathFromGooglePhotosUri(uriPhoto2));
+
+                   //////////////////////////////////////////
+                   Bitmap bitmap3=null;
+                   try {
+                       bitmap3 = MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.fromFile(sourceFile2));
+
+
+                       String resultado;
+                       SesionEntity.imagen = "DEP";
+
+                       ImageCameraController imageCameraController3 = new ImageCameraController();
+                       imageCameraController3.SaveImage (this,bitmap3);
+
+
+                       //////////////////////////////////////////
+
+
+                       /*CobranzaCabeceraView.estado = 1;
+                       CobranzaCabeceraView.etgrupo.setSelection(0);
+                       CobranzaCabeceraView.etgrupo.setEnabled(true);
+
+                       CobranzaCabeceraView.abrir.setEnabled(false);
+                       CobranzaCabeceraView.guardar_deposito.setEnabled(true);
+                       CobranzaCabeceraView.agregar_foto_deposito.setEnabled(false);
+
+                       Drawable drawable3 = CobranzaCabeceraView.menu_variable.findItem(R.id.guardar_deposito).getIcon();
+                       drawable3 = DrawableCompat.wrap(drawable3);
+                       DrawableCompat.setTint(drawable3, getResources().getColor(R.color.white));
+
+                       Drawable drawable4 = CobranzaCabeceraView.menu_variable.findItem(R.id.agregar_foto_deposito).getIcon();
+                       drawable4 = DrawableCompat.wrap(drawable4);
+                       DrawableCompat.setTint(drawable4, getResources().getColor(R.color.Black));*/
+
+                       Toast.makeText(this, "Imagen adjuntada...", Toast.LENGTH_SHORT).show();
+                   } catch (IOException e) {
+                       e.printStackTrace();
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
+
                    break;
                 default:
                     Log.d("jpcm", " entro al default con este requestCode " + requestCode);

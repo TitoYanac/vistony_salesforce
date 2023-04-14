@@ -495,67 +495,71 @@ public class ConfigImpresoraView extends Fragment implements RadioGroup.OnChecke
 
     public void OpenPrinter(String indicador,Context context)
     {
-        int puerto=0;
-        String nombre="",direccion="";
-        boolean modo=false;
-        if (indicador.equals("1"))
-        {
-            puerto=portType;
-            nombre=logicalName;
-            direccion=address;
-            modo=checkBoxAsyncMode.isChecked();
+        try {
 
-        }else if(indicador.equals("0"))
-        {
-            ArrayList<ConfiguracionSQLEntity> arraylistConfiguracionentity;
 
-            ConfiguracionSQLiteDao configuracionSQLiteDao2 =  new ConfiguracionSQLiteDao(context);
-            arraylistConfiguracionentity=configuracionSQLiteDao2.ObtenerConfiguracion();
-            for(int i=0;i<arraylistConfiguracionentity.size();i++)
-            {
-                puerto=Integer.parseInt(arraylistConfiguracionentity.get(i).getTipoimpresora());
-                nombre=arraylistConfiguracionentity.get(i).getModeloimpresora();
-                direccion=(arraylistConfiguracionentity.get(i).getDireccionimpresora());
-                modo=true;
+            int puerto = 0;
+            String nombre = "", direccion = "";
+            boolean modo = false;
+            if (indicador.equals("1")) {
+                puerto = portType;
+                nombre = logicalName;
+                direccion = address;
+                modo = checkBoxAsyncMode.isChecked();
+
+            } else if (indicador.equals("0")) {
+                ArrayList<ConfiguracionSQLEntity> arraylistConfiguracionentity;
+
+                ConfiguracionSQLiteDao configuracionSQLiteDao2 = new ConfiguracionSQLiteDao(context);
+                arraylistConfiguracionentity = configuracionSQLiteDao2.ObtenerConfiguracion();
+                for (int i = 0; i < arraylistConfiguracionentity.size(); i++) {
+                    puerto = Integer.parseInt(arraylistConfiguracionentity.get(i).getTipoimpresora());
+                    nombre = arraylistConfiguracionentity.get(i).getModeloimpresora();
+                    direccion = (arraylistConfiguracionentity.get(i).getDireccionimpresora());
+                    modo = true;
+                }
+
             }
-
-        }
 
        /* if(indicador.equals("1"))
         {
             mHandler.obtainMessage(0).sendToTarget();
         }*/
-        //mHandler.obtainMessage(0).sendToTarget();
-        final int finalPuerto = puerto;
-        final String finalNombre = nombre;
-        final String finalDireccion = direccion;
-        final boolean finalModo = modo;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                if (portType == BXLConfigLoader.DEVICE_BUS_WIFI) {
-                   // address = editTextIPAddress.getText().toString();
-                }
-
-                //SE COMENTO PARA CHILE, YA QUE NO LO USARA
-                try {
-
-
-                    if (MenuView.getPrinterInstance().printerOpen(finalPuerto, finalNombre, finalDireccion, finalModo)) {
-                        //getActivity().finish();
-                        //Toast.makeText(getContext(), "Impresora Vinculada Correctamente ", Toast.LENGTH_SHORT).show();
-                        mHandler.obtainMessage(1, 0, 0, "Impresora Vinculada Correctamente").sendToTarget();
-                    } else {
-                        //Indicador="0";
-                        mHandler.obtainMessage(1, 0, 0, "Fail to printer open!!").sendToTarget();
+            //mHandler.obtainMessage(0).sendToTarget();
+            final int finalPuerto = puerto;
+            final String finalNombre = nombre;
+            final String finalDireccion = direccion;
+            final boolean finalModo = modo;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    if (portType == BXLConfigLoader.DEVICE_BUS_WIFI) {
+                        // address = editTextIPAddress.getText().toString();
                     }
-                }catch (Throwable x){
-                    Log.e("ERROR FATAL IMPRESORA","En la clase"+getClass().getName()+" "+x.getMessage());
+
+                    //SE COMENTO PARA CHILE, YA QUE NO LO USARA
+                    try {
+
+
+                        if (MenuView.getPrinterInstance().printerOpen(finalPuerto, finalNombre, finalDireccion, finalModo)) {
+                            //getActivity().finish();
+                            //Toast.makeText(getContext(), "Impresora Vinculada Correctamente ", Toast.LENGTH_SHORT).show();
+                            mHandler.obtainMessage(1, 0, 0, "Impresora Vinculada Correctamente").sendToTarget();
+                        } else {
+                            //Indicador="0";
+                            mHandler.obtainMessage(1, 0, 0, "Fail to printer open!!").sendToTarget();
+                        }
+                    } catch (Throwable x) {
+                        Log.e("ERROR FATAL IMPRESORA", "En la clase" + getClass().getName() + " " + x.getMessage());
+                    }
+                    ///////////////////////////////
                 }
-                ///////////////////////////////
-            }
-        }).start();
+            }).start();
+        }catch (Exception e)
+        {
+            Toast.makeText(getContext(), "No se pudo vincular  la impresora error: "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

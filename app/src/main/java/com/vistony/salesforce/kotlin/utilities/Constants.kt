@@ -19,5 +19,5 @@ package com.vistony.salesforce.kotlin.utilities
 /**
  * Constants used throughout the app.
  */
-const val DATABASE_NAME = "dbcobranzas"
+const val DATABASE_NAME = "room-db"
 const val PLANT_DATA_FILENAME = "plants.json"

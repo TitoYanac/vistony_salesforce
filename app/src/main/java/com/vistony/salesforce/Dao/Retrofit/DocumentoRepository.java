@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.vistony.salesforce.Dao.SQLite.DocumentDetailSQLite;
 import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
@@ -16,11 +17,15 @@ import java.util.List;
 public class DocumentoRepository extends ViewModel {
     private DocumentoSQLite documentoSQLite;
     private MutableLiveData<ArrayList<DocumentoDeudaSQLiteEntity>> LDDeuda= new MutableLiveData<>();
-
+    private DocumentDetailSQLite documentDetailSQLite;
 
     public void addInvoices(Context context, List<InvoicesEntity> Lista, String companiCode, String customerCode) {
         if(documentoSQLite==null){
             documentoSQLite = new DocumentoSQLite(context);
+        }
+
+        if(documentDetailSQLite==null){
+            documentDetailSQLite = new DocumentDetailSQLite(context);
         }
 
         for (int i = 0; i < Lista.size(); i++) {
@@ -40,6 +45,10 @@ public class DocumentoRepository extends ViewModel {
                     Lista.get(i).getDocEntry(),
                     Lista.get(i).getPymntgroup()
             );
+
+            //documentDetailSQLite.addDocumentsDetail(Lista.get(i).getDocumentDetail());
+
+
         }
     }
 }

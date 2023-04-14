@@ -367,7 +367,7 @@ public class DetailDispatchSheetSQLite {
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
                         "A.saldo,F.typedispatch,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.chkrecibido,'0') as chkupdatedispatch " +
                         ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin " +
-                        ", a.estado_id,g.reasondispatch,a.motivo_id,a.fotoguia,a.fotolocal,c.messageServerDispatch,c.messageServerTimeDispatch,D.drivermobile,D.drivername  " +
+                        ", a.estado_id,g.reasondispatch,a.motivo_id,a.fotoguia,a.fotolocal,c.messageServerDispatch,c.messageServerTimeDispatch,D.drivermobile,D.drivername,A.saldo  " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
                         "A.cliente_id=B.cliente_id " +
@@ -419,6 +419,7 @@ public class DetailDispatchSheetSQLite {
             historicStatusDispatchEntity.setMessageServerTimeDispatch(fila.getString(fila.getColumnIndex("messageServerTimeDispatch")));
             historicStatusDispatchEntity.setDrivermobile(fila.getString(fila.getColumnIndex("drivermobile")));
             historicStatusDispatchEntity.setDrivername(fila.getString(fila.getColumnIndex("drivername")));
+            historicStatusDispatchEntity.setAmount(fila.getString(fila.getColumnIndex("saldo")));
             listaHistoricStatusDispatchEntity.add(historicStatusDispatchEntity);
         }
 
@@ -765,7 +766,7 @@ public class DetailDispatchSheetSQLite {
 
     public ArrayList<HojaDespachoDetalleSQLiteEntity>
     getDetailDispatchSheetforCodeControlMap
-            (String codeControl)
+            (String dateDispatch)
     {
 
         ArrayList<HojaDespachoDetalleSQLiteEntity> listaHojaDespachoSQLiteEntity = new ArrayList<>();
@@ -774,7 +775,7 @@ public class DetailDispatchSheetSQLite {
         Cursor fila = bd.rawQuery(
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
                         "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
-                        ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch,IFNULL(I.latitud,'0') latitud,IFNULL(I.longitud,'0') longitud  " +
+                        ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,IFNULL(H.reasondispatch,'') as reasondispatch,IFNULL(I.latitud,'0') latitud,IFNULL(I.longitud,'0') longitud  " +
                         //", '0' timeini, '0' timefin " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
@@ -804,8 +805,11 @@ public class DetailDispatchSheetSQLite {
                         " LEFT OUTER JOIN direccioncliente I ON " +
                         "A.cliente_id=I.cliente_id AND " +
                         "A.domembarque_id=I.domembarque_id  " +
-                        "  where A.control_id='"+codeControl+"'" +
+                        //"  where A.control_id='"+codeControl+"'" +
+                        " where D.fechahojadespacho='"+dateDispatch+"'" +
+                        //" AND G.typedispatch_id in ('A','V') " +
                         " ORDER BY A.item_id",null);
+                        //" ORDER BY A.item_id",null);
 
         while (fila.moveToNext())
         {

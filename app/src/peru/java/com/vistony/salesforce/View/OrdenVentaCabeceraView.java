@@ -62,6 +62,7 @@ import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaFuerzaTrabajoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UbigeoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.DireccionCliente;
@@ -73,6 +74,7 @@ import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UbigeoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
@@ -103,12 +105,12 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     View v;
     static Button btn_detalle_orden_venta;
     OnFragmentInteractionListener mListener;
-    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta;
+    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta,ubigeo_id="0",statuscount="N";
     static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
     static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id,zona_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;
     static EditText et_comentario;
-    static TextView tv_terminopago,tv_orden_venta_agencia,tv_direccion;
+    static TextView tv_terminopago,tv_orden_venta_agencia,tv_direccion,tv_increment_flete;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
     public static ArrayList<ListaHistoricoOrdenVentaEntity> listaHistoricoOrdenVentaEntity=new ArrayList<>();
     static ImageButton btn_orden_venta_consultar_agencia,btn_consultar_termino_pago,btn_consultar_direccion,btn_dispatch_date;
@@ -137,7 +139,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     static boolean chk_inicioOrdenVentaCabeceraView=false;
-    static CheckBox chk_descuento_contado,chk_sale_counter;
+    static CheckBox chk_descuento_contado,chk_sale_counter,chk_add_flete,chk_ovcomplete;
     ArrayList<ListaOrdenVentaCabeceraEntity> listaOrdenVentaCabeceraEntities;
     ArrayAdapter<String> comboAdapterdescuento;
     Trace myTrace;
@@ -152,7 +154,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
-    TableRow tr_dsct_cont;
+    TableRow tr_dsct_cont,tr_summary_flete;
 
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
@@ -266,6 +268,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Utilitario.disabledImageButtton(btn_consultar_termino_pago,context);
         Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia,context);
         Utilitario.disabledSpinner(spnmoneda);
+
         //Utilitario.disabledImageButtton(btn_dispatch_date);
         //Utilitario.disabledEditText(et_comentario);
         Utilitario.disabledCheckBox(chk_descuento_contado);
@@ -392,9 +395,20 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     cliente_domembarque_id=Listado.get(i).getDomembarque_id();
                     chkruta=Listado.get(i).getChk_ruta();
                     zona_id=Listado.get(i).getZona_id();
+                    ubigeo_id=Listado.get(i).getUbigeo_id();
+                    if(ubigeo_id==null||ubigeo_id==""){
+                        ubigeo_id="0";
+                    }
+                    if(Listado.get(i).getStatuscount()!=null)
+                    {
+                        statuscount=Listado.get(i).getStatuscount();
+                    }
+
+                    Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.ubigeo_id: "+ubigeo_id);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.zona_id: "+zona_id);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.Listado.get(i).getTerminopago_id(): "+Listado.get(i).getTerminopago_id());
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.cliente_terminopago_id: "+cliente_terminopago_id);
+                    Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.statuscount: "+statuscount);
 
                 }
             }else{
@@ -463,7 +477,11 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         tr_dsct_cont=v.findViewById(R.id.tr_dsct_cont);
         tr_dsct_cont.setVisibility(View.GONE);
         chk_sale_counter=v.findViewById(R.id.chk_sale_counter);
-
+        chk_add_flete=v.findViewById(R.id.chk_add_flete);
+        tv_increment_flete=v.findViewById(R.id.tv_increment_flete);
+        tr_summary_flete=v.findViewById(R.id.tr_summary_flete);
+        tr_summary_flete.setVisibility(View.GONE);
+        chk_ovcomplete=v.findViewById(R.id.chk_ovcomplete);
 
         //Pruebas de Fecha de entrega
         if(SesionEntity.deliverydateauto.equals("Y"))
@@ -497,33 +515,49 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         }
 
-        tv_terminopago.setText(cliente_terminopago);
+        //tv_terminopago.setText(cliente_terminopago);
+
+            if(statuscount.equals("Y"))
+            {
+                tv_terminopago.setText("--ELEGIR TERMINO DE PAGO--");
+            }else {
+                tv_terminopago.setText(cliente_terminopago);
+            }
+
+
+
         //tv_moneda.setText(moneda);
 
         btn_detalle_orden_venta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(cliente_terminopago_id.equals("-1")&&!agencia_id.equals("P20102306598"))
+                if(tv_terminopago.getText().toString().equals("--ELEGIR TERMINO DE PAGO--"))
                 {
-                    alertdialogInformative(getContext(),"Advertencia!!!","Motivo: \n Termino de Pago (Contado) no debe ir vinculado con agencia.\n Sugerencia: \n Cambiar a termino de pago (Pago adelantado) si se desea seguir con agencia.").show();
-                }else {
-                    btn_detalle_orden_venta.setEnabled(false);
-                    btn_detalle_orden_venta.setClickable(false);
-                    alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
+                    Toast.makeText(getContext(), "Debe Elegir un termino de pago de lista", Toast.LENGTH_SHORT).show();
+                }else
+                {
+                    if(cliente_terminopago_id.equals("-1")&&!agencia_id.equals("P20102306598"))
+                    {
+                        alertdialogInformative(getContext(),"Advertencia!!!","Motivo: \n Termino de Pago (Contado) no debe ir vinculado con agencia.\n Sugerencia: \n Cambiar a termino de pago (Pago adelantado) si se desea seguir con agencia.").show();
+                    }else {
+                        btn_detalle_orden_venta.setEnabled(false);
+                        btn_detalle_orden_venta.setClickable(false);
+                        alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
+                    }
                 }
-
-
             }
         });
 
         btn_consultar_termino_pago.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e("REOS","OrdenVentaCabeceraView.btn_consultar_termino_pago.Listado.statuscount: "+statuscount);
+                Log.e("REOS","OrdenVentaCabeceraView.btn_consultar_termino_pago.Listado.cliente_terminopago_id: "+cliente_terminopago_id);
                 String Fragment="OrdenVentaCabeceraView";
                 String accion="terminopago";
                 String compuesto=Fragment+"-"+accion;
-                String Objeto=cliente_terminopago_id;
+                String Objeto=cliente_terminopago_id+"&&"+statuscount;
                 mListener.onFragmentInteraction(compuesto,Objeto);
             }
         });
@@ -547,6 +581,24 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 String compuesto=Fragment+"-"+accion;
                 String Objeto=codigocliente;
                 mListener.onFragmentInteraction(compuesto,Objeto);
+            }
+        });
+
+        chk_add_flete.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(chk_add_flete.isChecked()){
+                    Log.e("REOS","OrdenVentaCabeceraView-ubigeo_id:"+ubigeo_id);
+                    UbigeoSQLiteDao ubigeoSQLiteDao=new UbigeoSQLiteDao(getContext());
+                    ArrayList<UbigeoSQLiteEntity> listUbigeoSQLiteEntity=new ArrayList<>();
+                    listUbigeoSQLiteEntity=ubigeoSQLiteDao.ObtenerUbigeoporID(ubigeo_id);
+                    Log.e("REOS","OrdenVentaCabeceraView-listUbigeoSQLiteEntity.size():"+listUbigeoSQLiteEntity.size());
+                    for(int i=0;i<listUbigeoSQLiteEntity.size();i++){
+                        tv_increment_flete.setText(listUbigeoSQLiteEntity.get(i).getU_VIS_Flete());
+                    }
+                }else {
+                    tv_increment_flete.setText("0");
+                }
             }
         });
 
@@ -604,7 +656,39 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             spnmoneda.setEnabled(false);
         }
         hiloObtenerAgencia.execute();
+
+        Utilitario.disabledCheckBox(chk_add_flete);
+        if(StatusIncrementFlete()){
+            chk_add_flete.setChecked(true);
+        }
+
         return v;
+    }
+
+    public boolean StatusIncrementFlete(){
+        boolean status=false;
+        Float flete=0f;
+        Log.e("REOS","OrdenVentaCabeceraView-ubigeo_id:"+ubigeo_id);
+        UbigeoSQLiteDao ubigeoSQLiteDao=new UbigeoSQLiteDao(getContext());
+        ArrayList<UbigeoSQLiteEntity> listUbigeoSQLiteEntity=new ArrayList<>();
+        listUbigeoSQLiteEntity=ubigeoSQLiteDao.ObtenerUbigeoporID(ubigeo_id);
+        Log.e("REOS","OrdenVentaCabeceraView-listUbigeoSQLiteEntity.size():"+listUbigeoSQLiteEntity.size());
+        for(int i=0;i<listUbigeoSQLiteEntity.size();i++){
+            tv_increment_flete.setText(listUbigeoSQLiteEntity.get(i).getU_VIS_Flete());
+            tv_increment_flete.setVisibility(View.GONE);
+            chk_add_flete.setText("INCREMENTO POR FLETE "+listUbigeoSQLiteEntity.get(i).getU_VIS_Flete()+"%");
+            flete=Float.parseFloat(listUbigeoSQLiteEntity.get(i).getU_VIS_Flete());
+        }
+
+        if(flete>0){
+            status=true;
+        }else{
+            status=false;
+        }
+
+
+        return status;
+
     }
 
     public String getDateWorkPathforZone()
@@ -1068,13 +1152,32 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             listaOrdenVentaCabeceraEntity.orden_cabecera_dispatch_date= parametrofecha;
             listaOrdenVentaCabeceraEntity.orden_cabecera_route=chkruta;
 
+            Log.e("REOS","OrdenVentaCabeceraView.RegistrarOrdenVentaBD.chk_sale_counter.isChecked():"+chk_sale_counter.isChecked());
             if (chk_sale_counter.isChecked())
             {
                 listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIT_VENMOS ="S";
             }else {
                 listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIT_VENMOS ="N";
             }
+            Log.e("REOS","OrdenVentaCabeceraView.RegistrarOrdenVentaBD.listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIT_VENMOS:"+listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIT_VENMOS);
 
+            Log.e("REOS","OrdenVentaCabeceraView.RegistrarOrdenVentaBD.chk_add_flete.isChecked():"+chk_add_flete.isChecked());
+            if (chk_add_flete.isChecked())
+            {
+                listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_Flete=tv_increment_flete.getText().toString();
+                //listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_Flete ="S";
+            }else {
+                listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_Flete ="0";
+            }
+            if (chk_ovcomplete.isChecked())
+            {
+                listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_CompleteOV ="S";
+            }else {
+                listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_CompleteOV ="N";
+            }
+
+
+            Log.e("REOS","OrdenVentaCabeceraView.RegistrarOrdenVentaBD.listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_Flete:"+listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_Flete);
 
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);
@@ -1323,14 +1426,18 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             String compuesto=Fragment+"-"+accion;
             cantidaddescuento=String.valueOf(chk_descuento_contado.isChecked());
             ///////////AQui//////////////
+            if(ubigeo_id==null||ubigeo_id==""||ubigeo_id.isEmpty()||ubigeo_id.isBlank()){
+                ubigeo_id="0";
+            }
             String Objeto=
                     //contado+"-"+
-                    cantidaddescuento+"&"+cliente_terminopago_id;
+                    cantidaddescuento+"&"+cliente_terminopago_id+"&"+ubigeo_id;
             //String Objeto=cantidaddescuento+"-"+cliente_terminopago_id;
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-cantidaddescuento: "+cantidaddescuento);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-cliente_terminopago_id: "+cliente_terminopago_id);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-codigocliente: "+codigocliente);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-Objeto: "+Objeto);
+            Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-ubigeo_id: "+ubigeo_id);
             String [] arrayObject={codigocliente,Objeto};
 
             dialog.dismiss();

@@ -9,6 +9,7 @@ public class DireccionCliente {
     public String nombrefuerzatrabajo;
     public String fuerzatrabajo_id;
     public String addresscode;
+    public String zipcode;
 
     public DireccionCliente(
             String cliente_id,
@@ -18,7 +19,8 @@ public class DireccionCliente {
             String zona,
             String nombrefuerzatrabajo,
             String fuerzatrabajo_id,
-            String addresscode
+            String addresscode,
+            String zipcode
     ) {
         this.cliente_id = cliente_id;
         this.domembarque_id = domembarque_id;
@@ -28,9 +30,18 @@ public class DireccionCliente {
         this.nombrefuerzatrabajo = nombrefuerzatrabajo;
         this.fuerzatrabajo_id = fuerzatrabajo_id;
         this.addresscode = addresscode;
+        this.zipcode=zipcode;
     }
 
     public DireccionCliente() {
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
     }
 
     public String getAddresscode() {

@@ -7,10 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaConsultaStockEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UbigeoSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Enum.TipoDeCompra;
 
@@ -69,13 +71,31 @@ public class ListaPrecioDetalleSQLiteDao {
         return 1;
     }
 
-    public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (String cardCode, String terminoPago){
+    public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (
+            String cardCode,
+            String terminoPago,
+            String ubigeo_id,
+            Context context
+
+    ){
 
         arraylistaProductoEntity = new ArrayList<ListaProductoEntity>();
         ListaProductoEntity listaProductoEntity;
         Cursor fila=null;
+        FormulasController formulasController=new FormulasController(context);
 
         try {
+            String flete="";
+            UbigeoSQLiteDao ubigeoSQLiteDao=new UbigeoSQLiteDao(context);
+            ArrayList<UbigeoSQLiteEntity> listUbigeoSQLiteEntity=new ArrayList<>();
+            listUbigeoSQLiteEntity=ubigeoSQLiteDao.ObtenerUbigeoporID(ubigeo_id);
+            for(int i=0;i<listUbigeoSQLiteEntity.size();i++)
+            {
+                flete=listUbigeoSQLiteEntity.get(i).getU_VIS_Flete();
+            }
+            Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ubigeo_id:"+ubigeo_id);
+            Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.flete:"+flete);
+
             SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
             Cursor listaPre=sqlite.rawQuery("SELECT lista_precio,(SELECT contado FROM terminopago WHERE terminopago_id="+terminoPago+" LIMIT 1) AS isCash FROM cliente WHERE cliente_id=? LIMIT 1",new String[]{cardCode});
             String listaArtificio=null,isCash=null;
@@ -105,8 +125,10 @@ public class ListaPrecioDetalleSQLiteDao {
                     listaProductoEntity.setProducto(fila.getString(1));
                     listaProductoEntity.setUmd(fila.getString(2));
                     listaProductoEntity.setStock(fila.getString(3));
-                    listaProductoEntity.setPreciobase(fila.getString(5));
-                    listaProductoEntity.setPrecioigv(fila.getString(6));
+                    //listaProductoEntity.setPreciobase(fila.getString(5));
+                    listaProductoEntity.setPreciobase(formulasController.getPriceIncrement(fila.getString(5),flete) );
+                    //listaProductoEntity.setPrecioigv(fila.getString(6));
+                    listaProductoEntity.setPrecioigv(formulasController.getPriceIncrement(fila.getString(6),flete) );
                     listaProductoEntity.setGal(fila.getString(7));
                     listaProductoEntity.setPorcentaje_dsct(fila.getString(8));
                     arraylistaProductoEntity.add(listaProductoEntity);

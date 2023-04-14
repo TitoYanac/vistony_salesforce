@@ -39,6 +39,24 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_dispatch_date;
     public String orden_cabecera_route;
     public String orden_cabecera_U_VIT_VENMOS;
+    public String orden_cabecera_U_VIS_Flete;
+    public String orden_cabecera_U_VIS_CompleteOV;
+
+    public String getOrden_cabecera_U_VIS_CompleteOV() {
+        return orden_cabecera_U_VIS_CompleteOV;
+    }
+
+    public void setOrden_cabecera_U_VIS_CompleteOV(String orden_cabecera_U_VIS_CompleteOV) {
+        this.orden_cabecera_U_VIS_CompleteOV = orden_cabecera_U_VIS_CompleteOV;
+    }
+
+    public String getOrden_cabecera_U_VIS_Flete() {
+        return orden_cabecera_U_VIS_Flete;
+    }
+
+    public void setOrden_cabecera_U_VIS_Flete(String orden_cabecera_U_VIS_Flete) {
+        this.orden_cabecera_U_VIS_Flete = orden_cabecera_U_VIS_Flete;
+    }
 
     public String getOrden_cabecera_U_VIT_VENMOS() {
         return orden_cabecera_U_VIT_VENMOS;

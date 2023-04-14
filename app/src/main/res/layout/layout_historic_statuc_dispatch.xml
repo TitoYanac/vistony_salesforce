@@ -146,6 +146,35 @@
                     android:textStyle="bold"
                     tools:text="" />
             </TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tr_amount"
+                >
+
+                <TextView
+                    android:id="@+id/lbl_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/amount"
+                    android:textAppearance="?attr/textAppearanceListItem"
+
+                    />
+                <TextView
+                    android:id="@+id/tv_amount2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceListItem" />
+                <TextView
+                    android:id="@+id/tv_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold"
+                    tools:text="" />
+            </TableRow>
         </TableLayout>
 
         <TableLayout

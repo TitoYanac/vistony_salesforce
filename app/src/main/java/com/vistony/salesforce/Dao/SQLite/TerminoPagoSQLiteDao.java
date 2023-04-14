@@ -9,6 +9,7 @@ import android.util.Log;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
 
@@ -60,16 +61,25 @@ public class TerminoPagoSQLiteDao {
         return 1;
     }
 
-    public ArrayList<TerminoPagoSQLiteEntity> ObtenerTerminoPago (String compania_id,String dias_vencimiento)
+    public ArrayList<TerminoPagoSQLiteEntity> ObtenerTerminoPago (String compania_id,String dias_vencimiento
+            //,String statuscount
+    )
     {
         //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
         //SQLiteDatabase bd = admin.getWritableDatabase();
         listaTerminoPagoSQLiteEntity = new ArrayList<TerminoPagoSQLiteEntity>();
         TerminoPagoSQLiteEntity terminoPagoSQLiteEntity;
         abrir();
+        String query="";
+        /*Log.e("REOS","TerminoPagoSQLiteDao-ObtenerTerminoPago-statuscount:"+ statuscount);
+        if(statuscount.equals("Y"))
+        {
+            query = "Select * from terminopago where compania_id= '" + compania_id + "' and   (CAST(dias_vencimiento AS INTEGER)) <= (CAST('" + dias_vencimiento + "' AS INTEGER)) and terminopago not like '%CONTADO%'  ";
 
-        String query="Select * from terminopago where compania_id= '"+compania_id+"' and   (CAST(dias_vencimiento AS INTEGER)) <= (CAST('"+dias_vencimiento+"' AS INTEGER))";
-
+        }else {
+            query = "Select * from terminopago where compania_id= '" + compania_id + "' and   (CAST(dias_vencimiento AS INTEGER)) <= (CAST('" + dias_vencimiento + "' AS INTEGER))";
+        }*/
+        query = "Select * from terminopago where compania_id= '" + compania_id + "' and   (CAST(dias_vencimiento AS INTEGER)) <= (CAST('" + dias_vencimiento + "' AS INTEGER))";
         if(BuildConfig.FLAVOR.equals("paraguay")){
             query="Select * from terminopago";
         }

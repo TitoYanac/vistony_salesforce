@@ -67,6 +67,7 @@ import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.StockWS;
 import com.vistony.salesforce.Dao.Retrofit.TerminoPagoWS;
 import com.vistony.salesforce.Dao.Retrofit.TypeDispatchRepository;
+import com.vistony.salesforce.Dao.Retrofit.UbigeoRepository;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
@@ -196,6 +197,7 @@ ParametrosView extends Fragment {
     private StatusDispatchRepository statusDispatchRepository;
     private QuoteEffectivenessRepository quoteEffectivenessRepository;
     private LeadClienteViewModel leadClienteViewModel;
+    private UbigeoRepository ubigeoRepository;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -292,7 +294,7 @@ ParametrosView extends Fragment {
         statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
         quoteEffectivenessRepository= new ViewModelProvider(getActivity()).get(QuoteEffectivenessRepository.class);
         leadClienteViewModel = new ViewModelProvider(getActivity()).get(LeadClienteViewModel.class);
-
+        ubigeoRepository = new ViewModelProvider(getActivity()).get(UbigeoRepository.class);
         //CARGA DE MAESTROS
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
         switch (BuildConfig.FLAVOR){
@@ -347,6 +349,7 @@ ParametrosView extends Fragment {
                             parametrosSQLite.InsertaParametros("17", this.getResources().getString(R.string.reasons_visit).toUpperCase(), "0", getDateTime());
                             parametrosSQLite.InsertaParametros("21", this.getResources().getString(R.string.colors_head).toUpperCase(), "0", getDateTime());
                             parametrosSQLite.InsertaParametros("22",  this.getResources().getString(R.string.colors_detail).toUpperCase(), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("25",  this.getResources().getString(R.string.ubigeous).toUpperCase(), "0", getDateTime());
                         }
                         /*if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
                             parametrosSQLite.InsertaParametros("18", this.getResources().getString(R.string.price_list), "0", getDateTime());
@@ -369,6 +372,7 @@ ParametrosView extends Fragment {
                         parametrosSQLite.InsertaParametros("17", this.getResources().getString(R.string.reasons_visit).toUpperCase(), "0", getDateTime());
                         parametrosSQLite.InsertaParametros("21", this.getResources().getString(R.string.colors_head).toUpperCase(), "0", getDateTime());
                         parametrosSQLite.InsertaParametros("22",  this.getResources().getString(R.string.colors_detail).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("25",  this.getResources().getString(R.string.ubigeous).toUpperCase(), "0", getDateTime());
                     }
                 }
                 break;
@@ -476,6 +480,10 @@ ParametrosView extends Fragment {
         //Envio de Geolocalizacion sin Foto en Bloque
         leadClienteViewModel.sendGeolocationBlock(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
             Log.e("REOS", "sendGeolocationBlock" + data);
+        });
+
+        ubigeoRepository.geUbigeo (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            Log.e("REOS", "ParametrosView-ubigeoRepository-data: " + data);
         });
         //Enviar Firma Electronica
         //cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {

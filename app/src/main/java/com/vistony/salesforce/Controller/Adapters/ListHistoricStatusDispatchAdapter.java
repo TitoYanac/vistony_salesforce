@@ -28,6 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
+import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -140,6 +142,10 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
             holder.imv_indicator_status = (ImageView) convertView.findViewById(R.id.imv_indicator_status);
             holder.tbr_drivername = (TableRow) convertView.findViewById(R.id.tbr_drivername);
             holder.tbl_drivermobile = (TableLayout) convertView.findViewById(R.id.tbl_drivermobile);
+            holder.tr_amount = (TableRow) convertView.findViewById(R.id.tr_amount);
+            holder.tv_amount = (TextView) convertView.findViewById(R.id.tv_amount);
+
+
 
             //holder.imv_historic_status_dispatch_photo.setBackgroundResource(R.drawable.portail);
             convertView.setTag(holder);
@@ -156,6 +162,14 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         holder.tv_reason_dispatch.setText(lead.getMotivoDespacho());
         holder.tv_drivermobile.setText(lead.getDrivermobile());
         holder.tv_drivername.setText(lead.getDrivername());
+        holder.tv_amount.setText(Convert.currencyForView(lead.getAmount()));
+
+        if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
+        {
+            holder.tr_amount.setVisibility(View.GONE);
+        }
+
+
 
         if(lead.getTipoDespacho_ID().equals("A"))
         {
@@ -397,6 +411,8 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         ImageView imv_indicator_status;
         TableRow tbr_drivername;
         TableLayout tbl_drivermobile;
+        TextView tv_amount;
+        TableRow tr_amount;
 
     }
 

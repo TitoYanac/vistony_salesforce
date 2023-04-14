@@ -45,6 +45,25 @@ public class DocumentHeader {
     private String U_SYP_PDTREV;
     private String U_SYP_PDTCRE;
     private String U_VIT_VENMOS;
+    private String U_VIS_Flete;
+    private String U_VIS_CompleteOV;
+
+
+    public String getU_VIS_CompleteOV() {
+        return U_VIS_CompleteOV;
+    }
+
+    public void setU_VIS_CompleteOV(String u_VIS_CompleteOV) {
+        U_VIS_CompleteOV = u_VIS_CompleteOV;
+    }
+
+    public String getU_VIS_Flete() {
+        return U_VIS_Flete;
+    }
+
+    public void setU_VIS_Flete(String u_VIS_Flete) {
+        U_VIS_Flete = u_VIS_Flete;
+    }
 
     public String getU_VIT_VENMOS() {
         return U_VIT_VENMOS;

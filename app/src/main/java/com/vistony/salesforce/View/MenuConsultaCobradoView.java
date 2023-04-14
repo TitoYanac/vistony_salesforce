@@ -33,7 +33,8 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerInvoiceEnt
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.kotlin.validationaccountclient.ui.DialogValidationAccountClient;
+import com.vistony.salesforce.kotlin.compose.DialogValidationAccountClient;
+
 
 import java.util.ArrayList;
 import java.util.List;

@@ -41,6 +41,7 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
     private String item_id;
     private String addresscode;
     private String chkgeolocation;
+    private String statuscount;
 
     public ListaConsClienteCabeceraEntity(
             String cliente_id, String nombrecliente, String direccion, String saldo, int imvclientecabecera, String moneda, String domembarque_id,
@@ -48,7 +49,7 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
             String zona_id, String compania_id, String ordenvisita, String zona, String telefonofijo, String telefonomovil, String correo, String ubigeo_id,
             String tipocambio, String chk_visita, String chk_pedido, String chk_cobranza, String chk_ruta, String fecharuta,String lastpurchase,String lineofbussiness
             ,String terminopago,String contado,String latitud, String longitud,
-            String control_id,String item_id,String addresscode,String chkgeolocation
+            String control_id,String item_id,String addresscode,String chkgeolocation,String statuscount
     ) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
@@ -88,11 +89,20 @@ public class ListaConsClienteCabeceraEntity implements Serializable {
         this.item_id = item_id;
         this.addresscode = addresscode;
         this.chkgeolocation = chkgeolocation;
+        this.statuscount=statuscount;
 
     }
 
     public ListaConsClienteCabeceraEntity() {
 
+    }
+
+    public String getStatuscount() {
+        return statuscount;
+    }
+
+    public void setStatuscount(String statuscount) {
+        this.statuscount = statuscount;
     }
 
     public String getChkgeolocation() {

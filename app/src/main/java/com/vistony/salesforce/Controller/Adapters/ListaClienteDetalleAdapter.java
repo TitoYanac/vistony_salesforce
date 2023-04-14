@@ -181,7 +181,13 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
 
                 fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.content_menu_view, clienteDetalleView.newInstancia(ArraylistaClienteDetalleEntity));
+                if(ClienteDetalleView.Flujo.equals("CustomerComplaintViewcobranza"))
+                {
+                    transaction.replace(R.id.content_menu_view, clienteDetalleView.newInstanciaSendCustomerComplaint(ArraylistaClienteDetalleEntity));
+                }else {
+                    transaction.replace(R.id.content_menu_view, clienteDetalleView.newInstancia(ArraylistaClienteDetalleEntity));
+                }
+
                // transaction.addToBackStack("param1");
                // transaction.commit();
             }

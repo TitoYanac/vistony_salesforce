@@ -241,7 +241,6 @@ public class CobranzaDetalleView extends Fragment {
         //Log.e("jpcm","Este es NUEVA ISNTANCIA 3 ESTO VA PARA CLIENTE VERIFICADO");
 
         ListenerBackPress.setCurrentFragment("FormDetalleCobranzaCliente");
-
         CobranzaDetalleView fragment = new CobranzaDetalleView();
         ArrayList<String> Listado = new ArrayList<String>();
         Bundle b = new Bundle();
@@ -250,7 +249,6 @@ public class CobranzaDetalleView extends Fragment {
         b.putSerializable(TAG_1, Lista);
         fragment.setArguments(b);
         return fragment;
-
     }
 
     public static CobranzaDetalleView nuevainstancia(Object objeto) {

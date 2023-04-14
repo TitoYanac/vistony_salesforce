@@ -29,7 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.multidex.BuildConfig;
+import com.vistony.salesforce.BuildConfig;
 
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
@@ -49,8 +49,6 @@ import com.vistony.salesforce.View.OrdenVentaDetalleView;
 import java.util.ArrayList;
 import java.util.List;
 
-
-//import io.sentry.BuildConfig;
 import io.sentry.Sentry;
 
 public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDetalleEntity>  {
@@ -149,7 +147,8 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         holder.tv_orden_detalle_precio_igv.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(), ObjUsuario.Impuesto)));
 
 
-
+        Log.e("REOS","ListSalesOrderDetailAdapter.BuildConfig.FLAVOR:"+BuildConfig.FLAVOR.toString());
+        Log.e("REOS","ListSalesOrderDetailAdapter.BuildConfig.lead.getOrden_detalle_oil_tax():"+lead.getOrden_detalle_oil_tax());
         if(BuildConfig.FLAVOR.equals("espania"))
         {
             if(lead.getOrden_detalle_oil_tax().equals("Y"))

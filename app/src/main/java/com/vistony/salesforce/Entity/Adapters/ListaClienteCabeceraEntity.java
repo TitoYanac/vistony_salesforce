@@ -46,6 +46,7 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String control_id;
     private String item_id;
     private String addresscode;
+    private String statuscount;
 
     public ListaClienteCabeceraEntity(
             String cliente_id,
@@ -59,6 +60,7 @@ public class ListaClienteCabeceraEntity implements Serializable {
             ,String control_id
             ,String item_id
             ,String addresscode
+            ,String statuscount
 
     ) {
         this.cliente_id = cliente_id;
@@ -104,6 +106,15 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.control_id = control_id;
         this.item_id = item_id;
         this.addresscode = addresscode;
+        this.statuscount = statuscount;
+    }
+
+    public String getStatuscount() {
+        return statuscount;
+    }
+
+    public void setStatuscount(String statuscount) {
+        this.statuscount = statuscount;
     }
 
     public String getAddresscode() {

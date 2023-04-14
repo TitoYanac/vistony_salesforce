@@ -52,6 +52,24 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String Intent;
     public String Route;
     public String U_VIT_VENMOS;
+    public String U_VIS_Flete;
+    public String U_VIS_CompleteOV;
+
+    public String getU_VIS_CompleteOV() {
+        return U_VIS_CompleteOV;
+    }
+
+    public void setU_VIS_CompleteOV(String u_VIS_CompleteOV) {
+        U_VIS_CompleteOV = u_VIS_CompleteOV;
+    }
+
+    public String getU_VIS_Flete() {
+        return U_VIS_Flete;
+    }
+
+    public void setU_VIS_Flete(String u_VIS_Flete) {
+        U_VIS_Flete = u_VIS_Flete;
+    }
 
     public String getU_VIT_VENMOS() {
         return U_VIT_VENMOS;

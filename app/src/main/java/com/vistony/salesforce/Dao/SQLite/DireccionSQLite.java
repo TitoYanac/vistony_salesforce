@@ -46,7 +46,8 @@ public class DireccionSQLite {
             String latitud,
             String longitud,
             String addresscode,
-            String deliveryday
+            String deliveryday,
+            String zipcode
 
     )
     {
@@ -65,6 +66,7 @@ public class DireccionSQLite {
         registro.put("longitud",longitud);
         registro.put("addresscode",addresscode);
         registro.put("deliveryday",deliveryday);
+        registro.put("zipcode",zipcode);
         sqlite.insert("direccioncliente",null,registro);
         DataBaseManager.getInstance().closeDatabase();
 
@@ -206,7 +208,7 @@ public class DireccionSQLite {
 
         try {
 
-            Cursor fila = sqlite.rawQuery("SELECT DISTINCT cliente_id,domembarque_id,direccion,zona_id,zona,nombrefuerzatrabajo,addresscode FROM direccioncliente WHERE cliente_id=? and addresscode=?", new String[]{cliente_id,addresscode});
+            Cursor fila = sqlite.rawQuery("SELECT DISTINCT cliente_id,domembarque_id,direccion,zona_id,zona,nombrefuerzatrabajo,addresscode,zipcode FROM direccioncliente WHERE cliente_id=? and addresscode=?", new String[]{cliente_id,addresscode});
 
             if (fila.moveToFirst()) {
                 if (fila.moveToFirst()) {
@@ -219,7 +221,7 @@ public class DireccionSQLite {
                         ObjDCliente.setZona(fila.getString(fila.getColumnIndex("zona")));
                         ObjDCliente.setNombrefuerzatrabajo(fila.getString(fila.getColumnIndex("nombrefuerzatrabajo")));
                         ObjDCliente.setAddresscode(fila.getString(fila.getColumnIndex("addresscode")));
-
+                        ObjDCliente.setZipcode (fila.getString(fila.getColumnIndex("zipcode")));
                         LDCliente.add(ObjDCliente);
                     } while (fila.moveToNext());
                 }

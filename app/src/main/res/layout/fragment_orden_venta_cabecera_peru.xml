@@ -235,6 +235,48 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/tr_add_flete"
+                    >
+                    <CheckBox
+                        android:id="@+id/chk_add_flete"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:hint=""
+                        android:text="@string/increment_flete"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                    <TextView
+                        android:id="@+id/tv_increment_flete"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="0"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/tr_ovcomplete"
+                    >
+                    <CheckBox
+                        android:id="@+id/chk_ovcomplete"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:hint=""
+                        android:text="@string/ovcomplete"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     >
                     <TextView
                         android:id="@+id/lbl_agencia"
@@ -421,6 +463,36 @@
 
                     <TextView
                         android:id="@+id/tv_orden_cabecera_subtotal"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:focusable="false"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"
+                        android:textSize="24dp"></TextView>
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tr_summary_flete"
+                    >
+
+                    <TextView
+                        android:id="@+id/lbl_orden_cabecera_increment_flete"
+                        style="@android:style/TextAppearance.Widget.TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:focusable="false"
+                        android:text="@string/flete"
+                        android:textColor="@color/white"
+                        android:textSize="24dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/tv_orden_cabecera_increment_flete"
                         style="@android:style/TextAppearance.Widget.TextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

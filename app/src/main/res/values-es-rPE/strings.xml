@@ -152,4 +152,9 @@
     <string name="lbl_dispatch_failed">Fallidos</string>
     <string name="lbl_dispatch_sucessfull">Exitosos</string>
     <string name="lbl_date_dispatch">Fecha Despacho</string>
+    <string name="generate_complaint">Generar Reclamo</string>
+    <string name="start_video">Iniciar Video</string>
+    <string name="stop_video">Parar Video</string>
+    <string name="video">Video</string>
+    <string name="selection_video">SELECCIONE EL VIDEO</string>
 </resources>

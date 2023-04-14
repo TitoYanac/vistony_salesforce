@@ -51,7 +51,8 @@ public class DireccionRepository extends ViewModel{
                     Lista.get(i).getLatitude(),
                     Lista.get(i).getLongitude(),
                     Lista.get(i).getAddresscode(),
-                    Lista.get(i).getDeliveryDay()
+                    Lista.get(i).getDeliveryDay(),
+                    Lista.get(i).getZipCode()
             );
         }
     }

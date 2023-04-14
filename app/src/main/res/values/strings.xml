@@ -556,4 +556,15 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="dialog_start_game">Cobró Vendedor</string>
     <string name="validation_account_client">Validacion Cuenta Cliente</string>
     <string name="sale_counter">Recojo en Planta</string>
+    <string name="increment_flete">Incremento por Flete</string>
+    <string name="flete">Flete</string>
+    <string name="generate_complaint">Generar Reclamo</string>
+    <string name="add_photo">Agregar Foto</string>
+    <string name="add_video">Agregar Video</string>
+    <string name="add_file">Agregar Archivo</string>
+    <string name="start_video">Iniciar Video</string>
+    <string name="stop_video">Parar Video</string>
+    <string name="video">Video</string>
+    <string name="selection_video">SELECCIONE EL VIDEO</string>
+    <string name="ovcomplete">Entrega Completa</string>
 </resources>

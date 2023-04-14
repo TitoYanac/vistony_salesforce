@@ -341,7 +341,9 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
                     listaClienteCabeceraEntity.setTerminopago(lead.getTerminopago());
                     listaClienteCabeceraEntity.setContado( lead.getContado());
                     listaClienteCabeceraEntity.setAddresscode( lead.getAddresscode());
+                    listaClienteCabeceraEntity.setStatuscount( lead.getStatuscount());
                //ArraylistaClienteCabeceraEntity.add(listaClienteCabeceraEntity);
+                    Log.e("REOS","ListaClienteCabeceraAdapter.holder.relativeListaCabezeraCns.setOnClickListener.lead.getStatuscount()"+lead.getStatuscount());
                     ArraylistaClienteCabeceraEntity.add(lead);
                String Cliente = "";
                Cliente = "CL01";

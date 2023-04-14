@@ -473,9 +473,12 @@ public class OrdenVentaDetalleView extends Fragment {
                     if(usuarioSQLiteEntity.getOiltaxstatus().equals("Y")){
                         for(int i=0;i<listadoProductosAgregados.size();++i)
                         {
-                            if(listadoProductosAgregados.get(i).getOrden_detalle_producto_id().equals("SIGAUS"))
+                            for(int j=0;j<listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size();j++)
                             {
-                               SIGAUS++;
+                                if(listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id().equals("SIGAUS"))
+                                {
+                                    SIGAUS++;
+                                }
                             }
                             if(listadoProductosAgregados.get(i).getOrden_detalle_oil_tax().equals("Y"))
                             {

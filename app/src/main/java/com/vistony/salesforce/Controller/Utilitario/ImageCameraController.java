@@ -64,13 +64,15 @@ public class ImageCameraController {
             Log.e("REOS","ImageCameraController-SaveImage-IOException-e:"+e.toString());
         }
     }*/
-    public void SaveImage(Context context, Bitmap ImageToSave) {
+    public File SaveImage(Context context, Bitmap ImageToSave) {
         TheThis = context;
         String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + NameOfFolder;
         String CurrentDateAndTime = getCurrentDateAndTime();
-        File dir = new File(file_path);
+        //File dir = new File(file_path);
+        File file=null;
         try {
-            File file = crearFichero(SesionEntity.imagen+SesionEntity.compania_id+SesionEntity.fuerzatrabajo_id+CurrentDateAndTime + ".JPG");
+            file = crearFichero(SesionEntity.imagen+SesionEntity.compania_id+SesionEntity.fuerzatrabajo_id+CurrentDateAndTime + ".JPG");
+            Log.e("REOS","ImageCameraController-->SaveImage-->file"+file.toString());
             //File f = crearFichero(recibo+".pdf");
             FileOutputStream fOut = new FileOutputStream(file);
             //El elegir el PNG no obliga a trabajar con filtro, en cambio el JPEG si obliga
@@ -89,6 +91,7 @@ public class ImageCameraController {
         catch(Exception exception) {
             UnableToSave(exception.toString());
         }
+        return file;
     }
 
     public static File crearFichero(String nombreFichero) throws IOException {
@@ -110,6 +113,41 @@ public class ImageCameraController {
         }
 
         File file = new File(dir,Entrega_id+"_"+type+".JPG");
+
+        try {
+            FileOutputStream fOut = new FileOutputStream(file);
+
+            ImageToSave.compress(Bitmap.CompressFormat.JPEG, 10, fOut);
+            fOut.flush();
+            fOut.close();
+            MakeSureFileWasCreatedThenMakeAvabile(file);
+            AbleToSave();
+        }
+
+        catch(FileNotFoundException e) {
+            UnableToSave(e.toString());
+        }
+        catch(IOException ioexception) {
+            UnableToSave(ioexception.toString());
+        }
+        catch(Exception exception) {
+            UnableToSave(exception.toString());
+        }
+
+        return file;
+    }
+
+    public File SaveImage(Context context, Bitmap ImageToSave,String namefile) {
+        TheThis = context;
+        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + NameOfFolder;
+        String CurrentDateAndTime = getCurrentDateAndTime();
+        File dir = new File(file_path);
+
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        File file = new File(dir,namefile+".JPG");
 
         try {
             FileOutputStream fOut = new FileOutputStream(file);

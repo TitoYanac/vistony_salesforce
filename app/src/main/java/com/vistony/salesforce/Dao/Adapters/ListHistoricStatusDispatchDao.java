@@ -56,6 +56,7 @@ public class ListHistoricStatusDispatchDao {
                         ,Lista.get(i).getMessageServerTimeDispatch()
                         ,Lista.get(i).getDrivername()
                         ,Lista.get(i).getDrivermobile()
+                        ,Lista.get(i).getAmount()
                 ));
             }
         }catch (Exception e)

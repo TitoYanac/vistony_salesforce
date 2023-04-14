@@ -79,7 +79,7 @@ public class DispatchSheetSucessful extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
-        getListDetailDispatchSheet(ContainerDispatchSheetView.parametrofecha,context);
+        getListDetailDispatchSheet(ContainerDispatchView.parametrofecha,context);
         return fragment;
     }
 
@@ -103,7 +103,7 @@ public class DispatchSheetSucessful extends Fragment {
         //dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         //date = new Date();
         //parametrofecha =dateFormat.format(date);
-        getListDetailDispatchSheet(ContainerDispatchSheetView.parametrofecha,getContext());
+        getListDetailDispatchSheet(ContainerDispatchView.parametrofecha,getContext());
         return v;
     }
 

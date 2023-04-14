@@ -121,11 +121,9 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, String.valueOf(param1));
         fragment.setArguments(args);
+
         String Fragment="RutaVendedorView";
-
         Log.e("JEPICAMEE","=> newInstanciaMenu");
-
-
         String accion="inicioRutaVendedorView";
         String compuesto=Fragment+"-"+accion;
         if(mListener!=null) {

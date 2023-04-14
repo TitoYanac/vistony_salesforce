@@ -98,7 +98,7 @@ public class MenuAccionView extends Fragment {
     int validar=0;
     private static String TAG_1 = "text";
     View v;
-    private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead,cv_visit_section,cv_dispatch,cv_canvas;
+    private CardView cv_pedido,cv_cobranza,cv_visita,cv_lead,cv_visit_section,cv_dispatch,cv_canvas,cv_customer_complaint;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
 
     static OnFragmentInteractionListener mListener;
@@ -109,7 +109,7 @@ public class MenuAccionView extends Fragment {
     static double latitude, longitude;
     private static final int REQUEST_PERMISSION_LOCATION = 255;
     LocationManager locationManager;
-    static String CardCode,CardName,Address,DomEmbarque_ID,Contado,Control_id,Item_id,AddressCode,chk_ruta;
+    static String CardCode,CardName,Address,DomEmbarque_ID,Contado,Control_id,Item_id,AddressCode,chk_ruta,statuscount;
     AlertDialog alert = null;
     SimpleDateFormat dateFormat;
     Date date;
@@ -164,6 +164,8 @@ public class MenuAccionView extends Fragment {
             Log.e("REOS","MenuAccionView-Lista.get(s).getLongitud()=>"+Lista.get(s).getLongitud());
             Log.e("REOS","MenuAccionView-Lista.get(s).getChkRuta=>"+Lista.get(s).getChk_ruta());
             Log.e("REOS","MenuAccionView-Lista.get(s).getTerminopago_id=>"+Lista.get(s).getTerminopago_id());
+            Log.e("REOS","MenuAccionView-Lista.get(s).getStatuscount()=>"+Lista.get(s).getStatuscount());
+
             CardCode=Lista.get(s).getCliente_id();
             CardName=Lista.get(s).getNombrecliente();
             Address=Lista.get(s).getDireccion();
@@ -178,6 +180,7 @@ public class MenuAccionView extends Fragment {
             {
                 SesionEntity.updateclient="Y";
             }
+            statuscount=(Lista.get(s).getStatuscount());
             chk_ruta=Lista.get(s).getChk_ruta();
         }
 
@@ -264,12 +267,12 @@ public class MenuAccionView extends Fragment {
         cv_canvas=v.findViewById(R.id.cv_canvas);
         imv_cobranza=v.findViewById(R.id.imv_cobranza);
         imv_entrega=v.findViewById(R.id.imv_entrega);
-
+        cv_customer_complaint=v.findViewById(R.id.cv_customer_complaint);
 
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
         cv_canvas.setVisibility(View.GONE);
-
+        //cv_customer_complaint.setVisibility(View.GONE);
 
         cv_canvas.setOnClickListener(v -> {
             /*String Fragment="MenuAccionView";
@@ -408,11 +411,6 @@ public class MenuAccionView extends Fragment {
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
                 SesionEntity.quotation="N";
-            //displayDialogMap();
-            //MapsInitializer.initialize(getActivity());
-
-            //mapView.onCreate(dialog.onSaveInstanceState());
-            //mapView.onResume();
         });
         cv_visit_section.setOnClickListener(v -> {
             alertDialogVisitSection().show();
@@ -434,6 +432,14 @@ public class MenuAccionView extends Fragment {
         {
             getStatusRouteDriver();
         }
+
+        cv_customer_complaint.setOnClickListener(v -> {
+            String Fragment="CustomerComplaintView";
+            String accion="start";
+            String compuesto=Fragment+"-"+accion;
+            mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);
+            SesionEntity.quotation="N";
+        });
 
         return v;
     }
@@ -661,7 +667,7 @@ public class MenuAccionView extends Fragment {
 
         final Dialog dialog = new Dialog(getContext());
         switch (BuildConfig.FLAVOR) {
-            case "bolivia":
+
             case "paraguay":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza_induvis);
                 break;
@@ -671,6 +677,7 @@ public class MenuAccionView extends Fragment {
             case "espania":
             case "marruecos":
             case "ecuador":
+            case "bolivia":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
                 break;
         }

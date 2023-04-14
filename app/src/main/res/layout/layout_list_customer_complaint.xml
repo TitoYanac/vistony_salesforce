@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.CustomerComplaintView">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_comision_historic_sales_analysis_by_route"
+        android:background="@drawable/borde_editext_ov_rojo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_section"
+                style="@android:style/TextAppearance.Widget.TextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:text="Datos del Cliente"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/borde_cuadrado"
+                android:orientation="vertical">
+
+            </LinearLayout>
+            <!--<com.kofigyan.stateprogressbar.StateProgressBar
+                android:id="@+id/StateProgressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:spb_animateToCurrentProgressState="true"
+                app:spb_checkStateCompleted="true"
+                app:spb_currentStateDescriptionColor="#0957C3"
+                app:spb_maxStateNumber="five"
+                app:spb_stateBackgroundColor="#BDBDBD"
+                app:spb_stateDescriptionColor="#808080"
+                app:spb_stateForegroundColor="#0957C3"
+                app:spb_stateNumberBackgroundColor="#808080"
+                app:spb_stateNumberForegroundColor="#eeeeee"
+                />-->
+            <com.baoyachi.stepview.HorizontalStepView
+                android:id="@+id/HorizontalStepView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                />
+        </LinearLayout>
+
+
+
+        <ImageView
+            android:id="@+id/imv_show_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="330dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:srcCompat="@drawable/ic_baseline_expand_more_24_white" />
+
+    </androidx.cardview.widget.CardView>
+
+
+</FrameLayout>

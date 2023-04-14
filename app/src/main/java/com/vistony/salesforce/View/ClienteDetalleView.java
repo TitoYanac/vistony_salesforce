@@ -144,6 +144,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
     //ListenerBackPress.setCurrentFragment("FormListaDeudaCliente");
     private byte[] byteArray;
     MenuItem update_dispatch_reason;
+    static public String Flujo="";
 
     public static ClienteDetalleView newInstance(Object objeto){
         //Log.e("jpcm","regreso here 1 de "+ListenerBackPress.getCurrentFragment());
@@ -157,10 +158,7 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         clienteDetalleView.setArguments(b);
         Listado = Lista;
         Listado.size();
-
-
         return clienteDetalleView;
-
     }
 
     public static Fragment newInstancia (Object param1) {
@@ -188,6 +186,46 @@ public class ClienteDetalleView extends Fragment implements Serializable {
         return fragment;
     }
 
+    public static ClienteDetalleView newInstanceReceipCustomerComplaint(Object objeto,String flujo){
+        //Log.e("jpcm","regreso here 1 de "+ListenerBackPress.getCurrentFragment());
+        ListenerBackPress.setCurrentFragment("FormListClienteDetalleRutaVendedor");
+        ClienteDetalleView clienteDetalleView = new ClienteDetalleView();
+        //ArrayList<String> Listado = new ArrayList<String>();
+        Bundle b = new Bundle();
+        ArrayList<ListaClienteCabeceraEntity> Lista = (ArrayList<ListaClienteCabeceraEntity>) objeto;
+        Flujo=flujo;
+        Lista.size();
+        b.putSerializable(TAG_1,Lista);
+        clienteDetalleView.setArguments(b);
+        Listado = Lista;
+        Listado.size();
+        return clienteDetalleView;
+    }
+
+    public static Fragment newInstanciaSendCustomerComplaint (Object param1) {
+        Log.e("jpcm","regreso here 12 1ra apertura");
+        ClienteDetalleView fragment = new ClienteDetalleView();
+        Bundle args = new Bundle();
+
+        args.putString(ARG_PARAM1, String.valueOf(param1));
+        fragment.setArguments(args);
+
+        String Fragment="CustomerComplaintView";
+        String accion="CustomerComplaintViewsendClient";
+        String compuesto=Fragment+"-"+accion;
+        mListener.onFragmentInteraction(compuesto,param1);
+        /*for(int i=0;i<Listado.size();i++)
+        {
+            nombrecliente=Listado.get(i).getNombrecliente();
+            texto=Listado.get(i).getCliente_id();
+            domebarque=Listado.get(i).getDomembarque_id();
+            zona_id=Listado.get(i).getZona_id();
+            ruccliente=texto;
+        }
+
+        textorecuperado=texto;*/
+        return fragment;
+    }
     public ClienteDetalleView() {
         // Required empty public constructor
     }

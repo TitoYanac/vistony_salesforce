@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Utilitario.AlertDialogController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
@@ -28,7 +29,7 @@ import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ClienteCabeceraView;
 import com.vistony.salesforce.View.DireccionClienteView;
 import com.vistony.salesforce.View.DispatchSheetView;
-import com.vistony.salesforce.kotlin.dispatchsheet.ui.DialogMain;
+import com.vistony.salesforce.kotlin.compose.DialogMain;
 //import com.vistony.salesforce.features.featureone.SomeScreenKt;
 
 import java.util.ArrayList;
@@ -132,7 +133,7 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
             holder.imv_delivery_status = (ImageView) convertView.findViewById(R.id.imv_delivery_status);
             holder.imv_collection_status = (ImageView) convertView.findViewById(R.id.imv_collection_status);
             holder.imv_visit_status = (ImageView) convertView.findViewById(R.id.imv_visit_status);
-
+            holder.fab=(FloatingActionButton) convertView.findViewById(R.id.fab);
             convertView.setTag(holder);
         } else {
             holder = (ListDispatchSheetAdapter.ViewHolder) convertView.getTag();
@@ -144,7 +145,7 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         // Setup.
         holder.tv_cliente.setText(lead.getNombrecliente());
         holder.tv_direccion.setText(lead.getDireccion());
-
+        //holder.fab.setLabel("");
         if(lead.getEstado().equals("ENTREGADO")||lead.getEstado().equals("ANULADO")||lead.getEstado().equals("VOLVER A PROGRAMAR"))
         {
             holder.imv_delivery_status.setImageResource(R.mipmap.entrega_recibida_32);
@@ -305,6 +306,7 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         ImageView imv_delivery_status;
         ImageView imv_collection_status;
         ImageView imv_visit_status;
+        FloatingActionButton fab;
     }
 
     /*

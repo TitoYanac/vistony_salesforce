@@ -3,8 +3,6 @@ package com.vistony.salesforce.View;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.obtenerImei;
 
 import android.Manifest;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +17,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -34,18 +31,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.DatabaseConfiguration;
-import androidx.room.InvalidationTracker;
-import androidx.room.Room;
-import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
@@ -63,7 +53,6 @@ import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ConfiguracionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
-import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.CobranzaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
@@ -71,7 +60,6 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -79,14 +67,8 @@ import java.util.Map;
 
 import io.sentry.Sentry;
 import io.sentry.protocol.User;
-import kotlin.Unit;
-import kotlin.coroutines.Continuation;
-import kotlin.jvm.Throws;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.vistony.salesforce.kotlin.client.ubigeous.Ubigeous;
-import com.vistony.salesforce.kotlin.client.ubigeous.UbigeousDao;
-import com.vistony.salesforce.kotlin.room.RoomDatabase;
 
 public class LoginView extends AppCompatActivity {
     public OmegaCenterIconButton btnlogin;
@@ -145,7 +127,7 @@ public class LoginView extends AppCompatActivity {
         // locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         loginRepository = new ViewModelProvider(this).get(LoginRepository.class);
         Imei = obtenerImei(statusImei, this, loginRepository);
-
+        //Imei="355531114595247";
         if (BuildConfig.FLAVOR.equals("espania") || BuildConfig.FLAVOR.equals("marruecos")) {
 
         } else {
@@ -153,8 +135,8 @@ public class LoginView extends AppCompatActivity {
         }
 
         ObtenerVideo();
-        verifyPermission();
-
+        //verifyPermission();
+        verifyPermission2();
         /*if(BuildConfig.FLAVOR.equals("perurofalab"))
         {
             imv_compania_login.setImageResource(R.mipmap.rofalab304x90_2);
@@ -323,7 +305,11 @@ public class LoginView extends AppCompatActivity {
 
     private void loadConfigurationPrinter() {
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+        if (
+                        ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+        ) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -332,6 +318,8 @@ public class LoginView extends AppCompatActivity {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_PERMISSION_BLUETOOH);
+            requestPermissions(new String[]{Manifest.permission.BLUETOOTH}, REQUEST_PERMISSION_BLUETOOH);
+            requestPermissions(new String[]{Manifest.permission.BLUETOOTH_SCAN}, REQUEST_PERMISSION_BLUETOOH);
             Log.e("REOS", "LoginView-loadConfigurationPrinter.SinPermisobluetooh");
             return;
         }else {
@@ -363,7 +351,10 @@ public class LoginView extends AppCompatActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.CAMERA,
                     Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_SCAN
             };
 
             int accessReadPhoneState = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
@@ -371,14 +362,66 @@ public class LoginView extends AppCompatActivity {
             int accessCamera = checkSelfPermission(Manifest.permission.CAMERA);
             int accessCoarseLocation = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
             int accessReadExternalStorage = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            int accessBluetoothConnect = checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT);
+            int accessBluetooth = checkSelfPermission(Manifest.permission.BLUETOOTH);
+            int accessBluetoothScan = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN);
 
-            if (accessReadPhoneState == PackageManager.PERMISSION_GRANTED && accessWriteExternalStorage == PackageManager.PERMISSION_GRANTED && accessCamera == PackageManager.PERMISSION_GRANTED && accessCoarseLocation == PackageManager.PERMISSION_GRANTED
+            if (accessReadPhoneState == PackageManager.PERMISSION_GRANTED
+                    && accessWriteExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && accessCamera == PackageManager.PERMISSION_GRANTED
+                    && accessCoarseLocation == PackageManager.PERMISSION_GRANTED
                     && accessReadExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && accessBluetoothConnect == PackageManager.PERMISSION_GRANTED
+                    && accessBluetooth == PackageManager.PERMISSION_GRANTED
+                    && accessBluetoothScan == PackageManager.PERMISSION_GRANTED
             ) {
                 //se realiza metodo si es necesario...
             } else {
                 requestPermissions(perms, permsRequestCode);
             }
+        }
+    }
+
+    private void verifyPermission2() {
+
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int permsRequestCode = 255;
+
+            String[] perms = {
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.BLUETOOTH_CONNECT,
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_SCAN
+            };
+
+            /*int accessReadPhoneState = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
+            int accessWriteExternalStorage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int accessCamera = checkSelfPermission(Manifest.permission.CAMERA);
+            int accessCoarseLocation = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+            int accessReadExternalStorage = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            int accessBluetoothConnect = checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT);
+            int accessBluetooth = checkSelfPermission(Manifest.permission.BLUETOOTH);
+            int accessBluetoothScan = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN);*/
+
+        if (
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            requestPermissions(perms, permsRequestCode);
+        } else {
+
         }
     }
 
@@ -598,7 +641,10 @@ public class LoginView extends AppCompatActivity {
         if (BuildConfig.FLAVOR.equals("espania") || BuildConfig.FLAVOR.equals("marruecos")) {
 
         } else {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+                ) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -608,6 +654,8 @@ public class LoginView extends AppCompatActivity {
                     // for ActivityCompat#requestPermissions for more details.
                     Log.e("REOS", "LoginView-onBackPressed.sinPermisobluetooh");
                     requestPermissions(new String[]{Manifest.permission.BLUETOOTH_CONNECT}, REQUEST_PERMISSION_BLUETOOH);
+                    requestPermissions(new String[]{Manifest.permission.BLUETOOTH}, REQUEST_PERMISSION_BLUETOOH);
+                    requestPermissions(new String[]{Manifest.permission.BLUETOOTH_SCAN}, REQUEST_PERMISSION_BLUETOOH);
                     return;
                 }
                 else    {

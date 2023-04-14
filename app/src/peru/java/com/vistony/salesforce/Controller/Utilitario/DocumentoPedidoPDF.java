@@ -61,18 +61,19 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
         }
     }
 
-    public void generarPdf(Context context, ArrayList<OrdenVentaCabeceraSQLiteEntity> ListaOrdenVentaCabecera, ArrayList<OrdenVentaDetallePromocionSQLiteEntity> ListaOrdenVentaDetalle ) {
-        String cliente_id="",nombrecliente="",direccion="",fechaemision="",terminopago="",subtotal="",igv="",descuento="",total="",ordenventa_id="",ordenventa_erp_id="",vendedor="",moneda="";
+    public void generarPdf(Context context, ArrayList<OrdenVentaCabeceraSQLiteEntity> ListaOrdenVentaCabecera,
+                           ArrayList<OrdenVentaDetallePromocionSQLiteEntity> ListaOrdenVentaDetalle
+
+    ) {
+        String cliente_id="",nombrecliente="",direccion="",fechaemision="",terminopago="",subtotal=""
+                ,igv="",descuento="",total="",ordenventa_id="",ordenventa_erp_id="",vendedor=""
+                ,moneda="",flete="";
 
         for(int i=0;i<ListaOrdenVentaCabecera.size();i++){
-
-
             ordenventa_id=ListaOrdenVentaCabecera.get(i).getOrdenventa_id();
             ordenventa_erp_id=ListaOrdenVentaCabecera.get(i).getOrdenventa_ERP_id();
             direccion=ListaOrdenVentaCabecera.get(i).getDomembarque_text();
             cliente_id=ListaOrdenVentaCabecera.get(i).getRucdni();
-
-
             nombrecliente=ListaOrdenVentaCabecera.get(i).getCliente_text();
             terminopago=ListaOrdenVentaCabecera.get(i).getTerminopago_text();
             fechaemision=ListaOrdenVentaCabecera.get(i).getFecharegistro();
@@ -81,6 +82,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             descuento=ListaOrdenVentaCabecera.get(i).getMontodescuento();
             total=ListaOrdenVentaCabecera.get(i).getMontototal();
             moneda=ListaOrdenVentaCabecera.get(i).getMoneda_id();
+            flete=ListaOrdenVentaCabecera.get(i).getU_VIS_Flete();
         }
         // Creamos el documento.
         Rectangle pagina = new Rectangle(
@@ -258,7 +260,14 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
-
+            /*cellgneral = new PdfPCell(new Phrase("% Flete:",font3));
+            cellgneral.disableBorderSide(Rectangle.BOX);
+            cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblgeneral.addCell(cellgneral);
+            cellgneral = new PdfPCell(new Phrase(flete,font3));
+            cellgneral.disableBorderSide(Rectangle.BOX);
+            cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblgeneral.addCell(cellgneral);*/
             documento.add(tblgeneral);
 
 

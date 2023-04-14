@@ -217,8 +217,6 @@ public class KardexOfPaymentView extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
-
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

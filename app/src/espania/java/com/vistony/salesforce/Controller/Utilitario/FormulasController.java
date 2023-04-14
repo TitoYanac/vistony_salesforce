@@ -476,7 +476,9 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_Flete()
 
 
             );
@@ -2128,7 +2130,7 @@ public class FormulasController {
         Log.e("REOS", "FormulasController-addSIGAUS-listSIGAUS.size(): "+listSIGAUS.size());
 
         String producto_id="",producto="",umd="",stock="",preciobase="";
-        Float cantidad=0f;
+        Float cantidad=0f,SIGAUS=0f;
         for(int i=0;i<listSIGAUS.size();i++)
         {
             producto_id=listSIGAUS.get(i).getProducto_id();
@@ -2168,35 +2170,44 @@ public class FormulasController {
             indice=String.valueOf(listSalesOrder.size()+1);
         }
 
-        ObjListaProductosEntity.orden_detalle_item=(indice);
-        ObjListaProductosEntity.orden_detalle_producto_id=producto_id;
-        ObjListaProductosEntity.orden_detalle_producto=producto;
-        ObjListaProductosEntity.orden_detalle_umd=umd;
-        ObjListaProductosEntity.orden_detalle_stock=stock;
-        ObjListaProductosEntity.orden_detalle_precio_unitario=preciobase;
-        ObjListaProductosEntity.orden_detalle_gal="0";
-        ObjListaProductosEntity.orden_detalle_monto_igv="0";
-        //Cambio
-        ObjListaProductosEntity.orden_detalle_cantidad=cantidad.toString();
-        //
-        ObjListaProductosEntity.orden_detalle_monto_descuento="0";
-        ObjListaProductosEntity.orden_detalle_montototallinea="0";
-        ObjListaProductosEntity.orden_detalle_promocion_habilitada="0";
-        ObjListaProductosEntity.orden_detalle_lista_promocion_cabecera=null;
-        ObjListaProductosEntity.orden_detalle_porcentaje_descuento="0";
-        ObjListaProductosEntity.orden_detalle_montosubtotal="0";
-        ObjListaProductosEntity.orden_detalle_gal_acumulado="0";
-        ObjListaProductosEntity.orden_detalle_descuentocontado="0";
-        ObjListaProductosEntity.orden_detalle_terminopago_id="0";
-        ObjListaProductosEntity.orden_detalle_chk_descuentocontado_cabecera= true;
-        ObjListaProductosEntity.orden_detalle_cardcode= "";
-        ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo="";
-        ObjListaProductosEntity.orden_detalle_oil_tax="";
-        ObjListaProductosEntity.orden_detalle_liter="";
-        ObjListaProductosEntity.orden_detalle_montosubtotalcondescuento="0";
+        for(int j=0;j<listSalesOrder.size();j++)
+        {
+            if(listSalesOrder.get(j).getOrden_detalle_producto_id().equals("SIGAUS"))
+            {
+                SIGAUS++;
+            }
+        }
 
-        listSalesOrder.add(ObjListaProductosEntity);
-
+        if(SIGAUS==0)
+        {
+            ObjListaProductosEntity.orden_detalle_item = (indice);
+            ObjListaProductosEntity.orden_detalle_producto_id = producto_id;
+            ObjListaProductosEntity.orden_detalle_producto = producto;
+            ObjListaProductosEntity.orden_detalle_umd = umd;
+            ObjListaProductosEntity.orden_detalle_stock = stock;
+            ObjListaProductosEntity.orden_detalle_precio_unitario = preciobase;
+            ObjListaProductosEntity.orden_detalle_gal = "0";
+            ObjListaProductosEntity.orden_detalle_monto_igv = "0";
+            //Cambio
+            ObjListaProductosEntity.orden_detalle_cantidad = cantidad.toString();
+            //
+            ObjListaProductosEntity.orden_detalle_monto_descuento = "0";
+            ObjListaProductosEntity.orden_detalle_montototallinea = "0";
+            ObjListaProductosEntity.orden_detalle_promocion_habilitada = "0";
+            ObjListaProductosEntity.orden_detalle_lista_promocion_cabecera = null;
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento = "0";
+            ObjListaProductosEntity.orden_detalle_montosubtotal = "0";
+            ObjListaProductosEntity.orden_detalle_gal_acumulado = "0";
+            ObjListaProductosEntity.orden_detalle_descuentocontado = "0";
+            ObjListaProductosEntity.orden_detalle_terminopago_id = "0";
+            ObjListaProductosEntity.orden_detalle_chk_descuentocontado_cabecera = true;
+            ObjListaProductosEntity.orden_detalle_cardcode = "";
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo = "";
+            ObjListaProductosEntity.orden_detalle_oil_tax = "";
+            ObjListaProductosEntity.orden_detalle_liter = "";
+            ObjListaProductosEntity.orden_detalle_montosubtotalcondescuento = "0";
+            listSalesOrder.add(ObjListaProductosEntity);
+        }
         return listSalesOrder;
     }
 

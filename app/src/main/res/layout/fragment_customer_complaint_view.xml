@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".View.CustomerComplaintView">
+
+    <ImageView
+        android:id="@+id/imageViewPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="235dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/portail"
+        android:visibility="visible" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/list_cardview"
+        />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="183dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="80dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="10dp">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txtdocumento"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="6dp"
+                    android:layout_weight="4"
+                    android:background="@color/colorPrimary"
+                    android:text="Datos del Cliente"
+                    android:textAllCaps="true"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/tv_line_client_id"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:layout_marginLeft="5dp"
+                    android:text="ID Cliente"
+                    android:textSize="15dp"
+                    android:textColor="@color/gray" />
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    >
+
+                <com.omega_r.libs.OmegaCenterIconButton
+                    android:id="@+id/btn_getclient"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:drawableLeft="@drawable/ic_baseline_person_add_24_white"
+                    android:background="@drawable/custom_border_button_red"
+                    />
+                    <TextView
+                        android:id="@+id/tv_ruc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:hint="RUC/DNI"
+                        android:gravity="top"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/Black"
+                        />
+
+                </TableRow>
+                </TableLayout>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp"
+
+                    >
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    >
+                <TextView
+                    android:id="@+id/tv_line_client"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Razon Social"
+                    android:textSize="15dp"
+                    android:textColor="@color/gray" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                <TextView
+                    android:id="@+id/tv_cardname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:hint="razonsocial"
+                    android:gravity="top"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/Black"
+                    />
+                </TableRow>
+                </TableLayout>
+                <TextView
+                    android:id="@+id/tv_line_address"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Dirección"
+                    android:textSize="15dp"
+                    android:textColor="@color/gray" />
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:hint="Dirección"
+                    android:gravity="top"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/Black"
+                    />
+                <TextView
+                    android:id="@+id/tv_line_document"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="6dp"
+                    android:layout_weight="4"
+                    android:background="@color/colorPrimary"
+                    android:text="Datos del Documento"
+                    android:textAllCaps="true"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/white" />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    >
+                <com.omega_r.libs.OmegaCenterIconButton
+                    android:id="@+id/btn_getdocument"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:drawableLeft="@drawable/ic_baseline_post_add_24_white"
+                    android:background="@drawable/custom_border_button_red"
+                    />
+                <TextView
+                    android:id="@+id/tv_document"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:hint="Elija documento  a reclamar"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="@color/Black"
+                    />
+                </TableRow>
+                </TableLayout>
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/list_document"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_description_complaint"
+                    style="@android:style/TextAppearance.Widget.TextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="6dp"
+                    android:layout_weight="4"
+                    android:background="@color/colorPrimary"
+                    android:text="Descripcion del reclamo"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:textAlignment="center"
+                    android:textColor="@color/white" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="100"
+                    app:errorEnabled="true">
+
+                    <EditText
+                        android:id="@+id/et_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:ems="10"
+                        android:hint="Fecha"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/gray"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="100"
+                    app:errorEnabled="true">
+
+                    <EditText
+                        android:id="@+id/et_sectorist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:ems="10"
+                        android:hint="Sectorista"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/gray"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="100"
+                    app:errorEnabled="true">
+
+                    <EditText
+                        android:id="@+id/et_salesperson"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:ems="10"
+                        android:hint="Vendedor"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/gray"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+
+                    android:layout_marginRight="5dp">
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.omega_r.libs.OmegaCenterIconButton
+                            android:id="@+id/btn_invoicelegalnumber"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:drawableLeft="@drawable/ic_search_white_24dp"
+                            android:background="@drawable/custom_border_button_red"
+                            />
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="100"
+                            app:errorEnabled="true">
+
+                            <EditText
+                                android:id="@+id/et_invoicelegalnumber"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:ems="10"
+                                android:hint="Documento"
+                                android:inputType="textPersonName"
+                                android:textColor="@color/gray"
+                                android:textSize="20dp"
+                                android:textStyle="bold"
+                                android:text="" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </TableRow>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="100"
+                        app:errorEnabled="true">
+
+                        <EditText
+                            android:id="@+id/et_deliverylegalnumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:ems="10"
+                            android:hint="Guia Remision"
+                            android:inputType="textPersonName"
+                            android:textColor="@color/gray"
+                            android:textSize="20dp"
+                            android:textStyle="bold"
+                            android:text="" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="100"
+                        app:errorEnabled="true">
+
+                        <EditText
+                            android:id="@+id/et_invoicedate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:ems="10"
+                            android:hint="Fecha Factura"
+                            android:inputType="textPersonName"
+                            android:textColor="@color/gray"
+                            android:textSize="20dp"
+                            android:textStyle="bold"
+                            android:text="" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </TableLayout>
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/list_customer_complaint"
+                    />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.cardview.widget.CardView>
+
+    <com.omega_r.libs.OmegaCenterIconButton
+        android:id="@+id/btnSubtmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/custom_border_button_red"
+        android:text="Enviar Reclamo"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
+</FrameLayout>

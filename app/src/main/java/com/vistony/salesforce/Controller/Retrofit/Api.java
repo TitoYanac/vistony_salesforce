@@ -3,17 +3,16 @@ package com.vistony.salesforce.Controller.Retrofit;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CatalogoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.HeaderStatusDispatchEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesOrderTraceabilityEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerInvoiceEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.TypeDispatchEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitaEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.AgenciaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ComisionesEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.CustomerComplaintFormsEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.CustomerComplaintSectionEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DepositList;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DetailDispatchSheetEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursCEntityResponse;
@@ -47,17 +46,16 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuotasPerCustomerInvoice
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuotationEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuoteEffectivenessEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ReasonDispatchEntityResponse;
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.ResumenDiarioEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.RutaFuerzaTrabajoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SignatureEntityResponse;
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.StatusDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.StockEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SummaryofeffectivenessEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.TerminoPagoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.TypeDispatchEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.UbigeoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.WareHousesEntityResponse;
-import com.vistony.salesforce.kotlin.validationaccountclient.data.ValidationAccountClientModelResponse;
+import com.vistony.salesforce.kotlin.data.ValidationAccountClientModelResponse;
 
 import java.util.List;
 
@@ -318,6 +316,15 @@ public interface Api {
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ValidationAccountClient")
     Call<ValidationAccountClientModelResponse> getValidationAccountClient(@Query("SalesRepCode") String SalesRepCode,@Query("Day") String Day);
+
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ubigeos")
+    Call<UbigeoEntityResponse> getUbigeo(@Query("imei") String imei);
+
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Reclamo")
+    Call<CustomerComplaintFormsEntityResponse> getCustomerComplaint(
+            //@Query("Imei") String imei, @Query("CardCode") String CardCode
+    );
+
 
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);
