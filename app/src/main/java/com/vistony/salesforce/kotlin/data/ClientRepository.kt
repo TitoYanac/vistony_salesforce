@@ -50,7 +50,7 @@ class ClientRepository {
                             clientResponse?.getClient()!!.get(i).compania_id= SesionEntity.compania_id
                             for (j in 0..clientResponse?.getClient()?.get(i)?.listAddress?.size!! - 1) {
                                 clientResponse?.getClient()?.get(i)?.listAddress?.get(j)?.companiaid =SesionEntity.compania_id
-                                clientResponse?.getClient()?.get(i)?.listAddress?.get(j)?.clienteId =
+                                clientResponse?.getClient()?.get(i)?.listAddress?.get(j)?.cliente_id =
                                     clientResponse?.getClient()?.get(i)?.cliente_id
                             }
                         }

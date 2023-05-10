@@ -288,7 +288,7 @@ public class Induvis {
         String tituloventa="";
         switch (BuildConfig.FLAVOR){
 
-            case "peru":
+
             case "perurofalab":
             case "espania":
             case "marruecos":
@@ -298,6 +298,7 @@ public class Induvis {
             case ("bolivia"):
             case "paraguay":
             case "chile":
+            case "peru":
                 if(SesionEntity.quotation.equals("Y"))
                  {
                      tituloventa=context.getResources().getString(R.string.quotation);

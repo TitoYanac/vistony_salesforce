@@ -120,7 +120,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         holder.tv_orden_detalle_item.setText(lead.getOrden_detalle_item()+")");
         holder.tv_orden_detalle_producto.setText(lead.getOrden_detalle_producto());
         holder.tv_orden_detalle_umd.setText(lead.getOrden_detalle_producto_id());
-        holder.tv_orden_detalle_stock.setText(Convert.numberForView2 (lead.getOrden_detalle_stock()));
+        holder.tv_orden_detalle_stock.setText(Convert.numberForView2 (lead.getOrden_detalle_stock_almacen()));
         holder.tv_orden_detalle_precio.setText(Convert.currencyForView (lead.getOrden_detalle_precio_unitario()));
         holder.et_orden_detalle_cantidad.setText(lead.getOrden_detalle_cantidad());
         holder.tv_orden_detalle_galon_unitario.setText(Convert.numberForView2(lead.getOrden_detalle_gal()));
@@ -855,7 +855,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
 
                         try{
                             cantidadNum=Double.parseDouble(valor);
-                            stockNum=Double.parseDouble(lead.getOrden_detalle_stock());
+                            stockNum=Double.parseDouble(lead.getOrden_detalle_stock_almacen());
                         }catch(Exception e){
                             e.printStackTrace();
                         }
@@ -1402,7 +1402,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_producto_id = lead.getOrden_detalle_lista_promocion_cabecera().get(a).getProducto_id();
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_producto = lead.getOrden_detalle_lista_promocion_cabecera().get(a).getProducto();
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_umd = lead.getOrden_detalle_lista_promocion_cabecera().get(a).getUmd();
-                    listaOrdenVentaDetallePromocionEntity.orden_detalle_stock = lead.getOrden_detalle_stock();
+                    listaOrdenVentaDetallePromocionEntity.orden_detalle_stock = lead.getOrden_detalle_stock_almacen();
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_cantidad =
                             String.valueOf(Integer.parseInt(lead.getOrden_detalle_lista_promocion_cabecera().get(a).getCantidadcompra()) *
                                     Integer.parseInt(lead.getOrden_detalle_lista_promocion_cabecera().get(a).getCantidadpromocion()));
@@ -1583,7 +1583,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_producto_id = lead.getOrden_detalle_producto_id();
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_producto = lead.getOrden_detalle_producto();
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_umd = lead.getOrden_detalle_umd();
-                    listaOrdenVentaDetallePromocionEntity.orden_detalle_stock = lead.getOrden_detalle_stock();
+                    listaOrdenVentaDetallePromocionEntity.orden_detalle_stock = lead.getOrden_detalle_stock_almacen();
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_cantidad = String.valueOf(cantidadrestantelineaordendetalle);
                     listaOrdenVentaDetallePromocionEntity.orden_detalle_precio_unitario = lead.getOrden_detalle_precio_unitario();
                     Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-Inserta cantidad Restante de la Linea Padre-Ingreso-lead.getOrden_detalle_precio_unitario()"+lead.getOrden_detalle_precio_unitario());
@@ -1681,7 +1681,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                 listaOrdenVentaDetallePromocionEntity.orden_detalle_producto_id = lead.getOrden_detalle_producto_id();
                 listaOrdenVentaDetallePromocionEntity.orden_detalle_producto = lead.getOrden_detalle_producto();
                 listaOrdenVentaDetallePromocionEntity.orden_detalle_umd = lead.getOrden_detalle_umd();
-                listaOrdenVentaDetallePromocionEntity.orden_detalle_stock = lead.getOrden_detalle_stock();
+                listaOrdenVentaDetallePromocionEntity.orden_detalle_stock = lead.getOrden_detalle_stock_almacen();
                 listaOrdenVentaDetallePromocionEntity.orden_detalle_cantidad = lead.getOrden_detalle_cantidad();
                 listaOrdenVentaDetallePromocionEntity.orden_detalle_precio_unitario = lead.getOrden_detalle_precio_unitario();
                 listaOrdenVentaDetallePromocionEntity.orden_detalle_montosubtotal = formulasController.getTotalPerLine

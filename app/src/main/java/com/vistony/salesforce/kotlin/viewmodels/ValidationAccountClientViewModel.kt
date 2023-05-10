@@ -16,12 +16,12 @@ class ValidationAccountClientViewModel: ViewModel() {
     fun getSalesRoute(
         context: Context
     ):
-            ArrayList<String>
+            Array<String>
             //Array<String>
     {
 
-        //var list = arrayOf("Favorites", "Options", "Settings", "Share")
-        val rutaFuerzaTrabajoSQLiteDao: RutaFuerzaTrabajoSQLiteDao? = RutaFuerzaTrabajoSQLiteDao(
+        var list = arrayOf("Favorites", "Options", "Settings", "Share")
+        /*val rutaFuerzaTrabajoSQLiteDao: RutaFuerzaTrabajoSQLiteDao? = RutaFuerzaTrabajoSQLiteDao(
             context)
 
         val items=rutaFuerzaTrabajoSQLiteDao?.ObtenerRutaFuerzaTrabajo()
@@ -38,7 +38,7 @@ class ValidationAccountClientViewModel: ViewModel() {
                 "DialogValidationAccountClient-MyUI-items[i].getEstado(): "+ (items?.get(i)?.getDia()
                     ?: 0)
             )
-        }
+        }*/
 
         return list
 

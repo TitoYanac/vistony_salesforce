@@ -110,7 +110,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
         context=getContext();
         activity=getActivity();
         lifecycleOwner=getActivity();
-        getActivity().setTitle(getActivity().getResources().getString(R.string.traceability_salesorder));
+        getActivity().setTitle(getActivity().getResources().getString(R.string.traceability_sales));
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);

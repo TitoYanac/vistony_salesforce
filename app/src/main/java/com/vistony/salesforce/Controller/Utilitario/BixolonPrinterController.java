@@ -1,8 +1,15 @@
 package com.vistony.salesforce.Controller.Utilitario;
 
+import android.Manifest;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
+
 import com.bxl.config.editor.BXLConfigLoader;
 import java.nio.ByteBuffer;
 import jpos.CashDrawer;
@@ -115,8 +122,10 @@ public class BixolonPrinterController implements ErrorListener, OutputCompleteLi
 
     private int mPortType;
     private String mAddress;
+    private static final int REQUEST_PERMISSION_BLUETOOH = 255;
+    private Activity activity;
 
-    public BixolonPrinterController(Context context) {
+    public BixolonPrinterController(Context context,Activity activity) {
         this.context = context;
 
         posPrinter = new POSPrinter(this.context);
@@ -140,11 +149,78 @@ public class BixolonPrinterController implements ErrorListener, OutputCompleteLi
         String prueba,prueba2;
         prueba="1";
         prueba2=prueba;
+        this.activity=activity;
     }
 
     public boolean printerOpen(int portType, String logicalName, String address, boolean isAsyncMode) {
-        Log.e("REOS","BixolonPrinterController-printerOpen-Inicio");
-        if (setTargetDevice(portType, logicalName, BXLConfigLoader.DEVICE_CATEGORY_POS_PRINTER, address)) {
+
+        if(Integer.parseInt(android.os.Build.VERSION.RELEASE)>=12)
+        {
+            if (
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.e("REOS","BixolonPrinterController-printerOpen-Inicio");
+                activity.requestPermissions(new String[]{Manifest.permission.BLUETOOTH_SCAN}, REQUEST_PERMISSION_BLUETOOH);
+            }else {
+
+                if (setTargetDevice(portType, logicalName, BXLConfigLoader.DEVICE_CATEGORY_POS_PRINTER, address))
+                {
+                    try {
+                        posPrinter.open(logicalName);
+                        posPrinter.claim(5000);
+                        posPrinter.setDeviceEnabled(true);
+                        posPrinter.setAsyncMode(isAsyncMode);
+
+                        mPortType = portType;
+                        mAddress = address;
+                    } catch (JposException e) {
+                        e.printStackTrace();
+                        Log.e("REOS","BixolonPrinterController-printerOpen-JposException-e"+e.toString());
+                        try {
+                            posPrinter.close();
+                        } catch (JposException e1) {
+                            e1.printStackTrace();
+                            Log.e("REOS","BixolonPrinterController-printerOpen-JposException-e1"+e1.toString());
+                        }
+
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+
+            }
+        }else {
+            if (setTargetDevice(portType, logicalName, BXLConfigLoader.DEVICE_CATEGORY_POS_PRINTER, address))
+            {
+                try {
+                    posPrinter.open(logicalName);
+                    posPrinter.claim(5000);
+                    posPrinter.setDeviceEnabled(true);
+                    posPrinter.setAsyncMode(isAsyncMode);
+
+                    mPortType = portType;
+                    mAddress = address;
+                } catch (JposException e) {
+                    e.printStackTrace();
+                    Log.e("REOS","BixolonPrinterController-printerOpen-JposException-e"+e.toString());
+                    try {
+                        posPrinter.close();
+                    } catch (JposException e1) {
+                        e1.printStackTrace();
+                        Log.e("REOS","BixolonPrinterController-printerOpen-JposException-e1"+e1.toString());
+                    }
+
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+
+        /*if (setTargetDevice(portType, logicalName, BXLConfigLoader.DEVICE_CATEGORY_POS_PRINTER, address))
+        {
             try {
                 posPrinter.open(logicalName);
                 posPrinter.claim(5000);
@@ -167,7 +243,7 @@ public class BixolonPrinterController implements ErrorListener, OutputCompleteLi
             }
         } else {
             return false;
-        }
+        }*/
         Log.e("REOS","BixolonPrinterController-printerOpen-FIN");
         return true;
     }

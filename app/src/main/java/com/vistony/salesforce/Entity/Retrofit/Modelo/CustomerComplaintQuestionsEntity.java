@@ -6,6 +6,7 @@ import java.util.List;
 
 public class CustomerComplaintQuestionsEntity {
 
+    @SerializedName("Code")
     public String question_id;
     @SerializedName("Pregunta")
     public String question;

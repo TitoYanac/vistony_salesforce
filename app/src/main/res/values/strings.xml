@@ -299,7 +299,7 @@
     <string name="query_stock">Consulta Stock</string>
     <string name="traceability_salesorder">Trazabilidad Orden Venta</string>
     <string name="salesorder">Orden de Venta</string>
-    <string name="query">Consulta</string>
+    <string name="query">Consultar</string>
     <string name="querying_salesorder">Consultando Orden de Venta</string>
     <string name="mse_not_get_response">No se pudo obtener una respuesta</string>
     <string name="mse_not_scanner_qr">No se pudo escanear el código QR</string>
@@ -359,7 +359,7 @@
     <string name="adresses">Direcciones</string>
     <string name="mse_enable_adresses">Esta Seguro de Habilitar las Direcciones?</string>
     <string name="mse_enable_sucessful">Se habilito correctamente</string>
-    <string name="payment_terms">Termino de Pago</string>
+    <string name="payment_terms">Cond. Venta</string>
     <string name="mse_not_data_available">No hay Data Disponible</string>
     <string name="description">Descripción</string>
     <string name="mse_querying_encore_client">Consultar nuevamente el Cliente</string>
@@ -559,12 +559,16 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="increment_flete">Incremento por Flete</string>
     <string name="flete">Flete</string>
     <string name="generate_complaint">Generar Reclamo</string>
-    <string name="add_photo">Agregar Foto</string>
-    <string name="add_video">Agregar Video</string>
-    <string name="add_file">Agregar Archivo</string>
+    <string name="add_photo">Foto</string>
+    <string name="add_video">Video</string>
+    <string name="add_file">Archivo</string>
     <string name="start_video">Iniciar Video</string>
     <string name="stop_video">Parar Video</string>
     <string name="video">Video</string>
     <string name="selection_video">SELECCIONE EL VIDEO</string>
     <string name="ovcomplete">Entrega Completa</string>
+    <string name="add_attach">Agregar Adjunto</string>
+    <string name="reason_free_transfer">Motivo Transferencia Gratuita</string>
+    <string name="sales">Venta</string>
+    <string name="traceability_sales">Trazabilidad de Venta</string>
 </resources>

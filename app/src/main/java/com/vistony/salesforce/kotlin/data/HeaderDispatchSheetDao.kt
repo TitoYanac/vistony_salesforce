@@ -14,4 +14,7 @@ interface HeaderDispatchSheetDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHeaderDispatchSheet(HeaderDispatchSheet: List<HeaderDispatchSheet>?)
 
+    @Query("DELETE FROM headerdispatchsheet WHERE fechahojadespacho = :fechahojadespacho")
+    fun deleteHeaderDispatchSheet(fechahojadespacho: String)
+
 }

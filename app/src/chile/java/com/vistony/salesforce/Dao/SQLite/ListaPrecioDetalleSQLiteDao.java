@@ -10,20 +10,41 @@ import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaConsultaStockEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.ListaPrecioEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Enum.TipoDeCompra;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListaPrecioDetalleSQLiteDao {
 
     ArrayList<ListaProductoEntity> arraylistaProductoEntity;
     ArrayList<ListaPrecioDetalleSQLiteEntity> ListaPrecioDetalleSQLiteEntity;
     ArrayList<ListaConsultaStockEntity> listaConsultaStockEntity;
-
+    SqliteController sqliteController;
+    SQLiteDatabase bd;
+    /*
     public ListaPrecioDetalleSQLiteDao(Context context){
         DataBaseManager.initializeInstance(new SqliteController(context));
+    }*/
+
+    public ListaPrecioDetalleSQLiteDao(Context context)
+    {
+        sqliteController = new SqliteController(context);
+    }
+
+    public void abrir(){
+        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
+        bd = sqliteController.getWritableDatabase();
+    }
+
+    /** Cierra conexion a la base de datos */
+    public void cerrar()
+    {
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
     }
 
     public int InsertaListaPrecioDetalle (
@@ -394,5 +415,89 @@ public class ListaPrecioDetalleSQLiteDao {
         }
         Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ListaPrecioDetalleSQLiteEntity.SIZE(): "+ListaPrecioDetalleSQLiteEntity.size());
         return ListaPrecioDetalleSQLiteEntity;
+    }
+
+    public int AddListPriceList (List<ListaPrecioEntity> listPrice)
+    {
+        abrir();
+
+        for (int i = 0; i < listPrice.size(); i++) {
+            ContentValues registro = new ContentValues();
+            registro.put("compania_id",SesionEntity.compania_id);
+            registro.put("porcentaje_dsct",listPrice.get(i).getPorcentaje_descuento());
+            registro.put("credito",listPrice.get(i).getCredito());
+            registro.put("contado",listPrice.get(i).getContado());
+            registro.put("producto_id",listPrice.get(i).getProducto_id());
+            registro.put("producto",listPrice.get(i).getProducto());
+            registro.put("umd",listPrice.get(i).getUmd());
+            registro.put("gal",listPrice.get(i).getGal());
+            registro.put("U_VIS_CashDscnt",listPrice.get(i).getCashdscnt());
+            registro.put("Tipo",listPrice.get(i).getTipo());
+            registro.put("stock_almacen",listPrice.get(i).getStock_almacen());
+            registro.put("stock_general",listPrice.get(i).getStock_general());
+            registro.put("units",listPrice.get(i).getUnit());
+            registro.put("MonedaAdicional",listPrice.get(i).getMonedaAdicional());
+            registro.put("MonedaAdicionalContado",listPrice.get(i).getMonedaAdicionalContado());
+            registro.put("MonedaAdicionalCredito",listPrice.get(i).getMonedaAdicionalCredito());
+            bd.insert("listapreciodetalle",null,registro);
+        }
+
+        bd.close();
+        return 1;
+    }
+
+    public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalleporProductoArtificio (String cardCode, String terminoPago, String producto_id){
+
+        arraylistaProductoEntity = new ArrayList<ListaProductoEntity>();
+        ListaProductoEntity listaProductoEntity;
+        Cursor fila=null;
+
+        try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            Cursor listaPre=sqlite.rawQuery("SELECT lista_precio,(SELECT contado FROM terminopago WHERE terminopago_id="+terminoPago+" LIMIT 1) AS isCash FROM cliente WHERE cliente_id=? LIMIT 1",new String[]{cardCode});
+            String listaArtificio=null,isCash=null;
+
+            while(listaPre.moveToNext()){
+                listaArtificio=listaPre.getString(0);
+                isCash=listaPre.getString(1);
+            }
+
+            if(listaArtificio!=null && isCash!=null){
+
+                TipoDeCompra tipoDeCompra=TipoDeCompra.contado;
+                if(isCash.equals("0")){
+                    tipoDeCompra=TipoDeCompra.credito;
+                }
+                SesionEntity.TipoListaPrecio=tipoDeCompra.toString();
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.tipoDeCompra: "+tipoDeCompra);
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.listaArtificio: "+listaArtificio);
+                String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                        "IFNULL(stock_general,0) stock_general,"+tipoDeCompra+","+tipoDeCompra+",gal," +
+                        "porcentaje_dsct FROM listapreciodetalle  WHERE Tipo IN("+listaArtificio+") and producto_id='"+producto_id+"'";
+
+                fila = sqlite.rawQuery(query,null);
+
+                while (fila.moveToNext()) {
+                    listaProductoEntity = new ListaProductoEntity();
+                    listaProductoEntity.setProducto_id(fila.getString(0));
+                    listaProductoEntity.setProducto(fila.getString(1));
+                    listaProductoEntity.setUmd(fila.getString(2));
+                    listaProductoEntity.setStock_almacen(fila.getString(3));
+                    listaProductoEntity.setPreciobase(fila.getString(5));
+                    listaProductoEntity.setPrecioigv(fila.getString(6));
+                    listaProductoEntity.setGal(fila.getString(7));
+                    listaProductoEntity.setPorcentaje_descuento_max (fila.getString(8));
+                    arraylistaProductoEntity.add(listaProductoEntity);
+                }
+            }
+
+        }catch (Exception e){
+            Log.e("ErrorSqlite","=>"+e.getMessage());
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
+        Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.arraylistaProductoEntity: "+arraylistaProductoEntity.size());
+        return arraylistaProductoEntity;
     }
 }

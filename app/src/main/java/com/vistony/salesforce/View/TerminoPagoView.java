@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaTerminoPagoAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaTerminoPagoDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
@@ -43,7 +44,7 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
     private String mParam2;
     public static OnFragmentInteractionListener mListener;
     View v;
-    String dias_vencimiento,statuscount;
+    String dias_vencimiento,statuscount="N";
     ListView listaterminopago;
     ArrayList<TerminoPagoSQLiteEntity> listaTerminoPagoSQLiteEntity;
     TerminoPagoSQLiteEntity terminoPagoSQLiteEntity;
@@ -105,7 +106,14 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
 
             String[] objectPaymentterms= getArguments().getString(ARG_PARAM1).split("&&");
             mParam1= objectPaymentterms[0];
-            statuscount= objectPaymentterms[1];
+
+            if(BuildConfig.FLAVOR.equals("peru"))
+            {
+                statuscount= objectPaymentterms[1];
+            }
+
+
+
             Log.e("REOS","TerminoPagoView-onCreate-mParam1"+mParam1);
             Log.e("REOS","TerminoPagoView-onCreate-statuscount"+statuscount);
 

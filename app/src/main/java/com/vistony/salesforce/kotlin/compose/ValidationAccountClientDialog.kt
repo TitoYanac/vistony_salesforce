@@ -623,8 +623,6 @@ fun PruebaDialog(
 
         Box(modifier = Modifier
             .height(460.dp)
-
-
         )
         {
             Column(
@@ -643,7 +641,6 @@ fun PruebaDialog(
 
                 )
                 {
-                //Column
                     Column()
                     {
                         Spacer(modifier = Modifier.height(30.dp))
@@ -837,58 +834,14 @@ fun PruebaDialog(
                         }
                         Spacer(modifier = Modifier.height(20.dp))
                     }
-                //Column
                 }
             }
-            //////////////Box
             HeaderImage(
                 modifier = Modifier
                     .size(200.dp)
                     .align(Alignment.TopCenter)
-                /*.border(
-                    border = BorderStroke(width = 5.dp, color = Color.White),
-                    shape = CircleShape
-                )*/
+            ,"Geolocation"
             )
-            /*Box(
-                modifier = Modifier
-                    .size(130.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topEndPercent = 50,
-                            bottomStartPercent = 50, topStartPercent = 50, bottomEndPercent = 50
-                        )
-                    )
-                    //.background(Color(0xFF5FA777))
-                    .background(
-                        Color.White
-                    )
-                    .align(Alignment.TopCenter)
-            )
-
-            Image(
-                painter = painterResource(id = R.mipmap.logo),
-                contentDescription = "Google Maps", // decorative
-                contentScale = ContentScale.Crop,
-
-
-                modifier = Modifier
-                    //Set Image size to 40 dp
-                    .size(120.dp)
-                    .align(Alignment.TopCenter)
-                    .padding(0.dp, 20.dp, 0.dp, 0.dp)
-                /*.clip(CircleShape)
-                padding(0.dp,0.dp,0.dp,0.dp)
-                .background(Color.White,
-                    RoundedCornerShape(
-                    topEndPercent = 20,
-                    bottomStartPercent = 20
-                    , topStartPercent = 20
-                    , bottomEndPercent = 20
-                )
-                )*/
-            )*/
-
         }
     }
 }

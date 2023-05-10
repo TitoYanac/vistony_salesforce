@@ -278,6 +278,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         obtenerTituloFormulario();
         context=getContext();
+        SesionEntity.flagquerystock="N";
         induvis=new Induvis();
         hiloObtenerResumenOrdenVenta=new HiloObtenerResumenOrdenVenta();
 

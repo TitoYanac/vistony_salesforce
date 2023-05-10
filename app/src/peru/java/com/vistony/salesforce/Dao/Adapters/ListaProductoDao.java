@@ -46,12 +46,12 @@ public class ListaProductoDao {
                 listaProductoEntity.setProducto_id(Lista.get(i).getProducto_id());
                 listaProductoEntity.setProducto(Lista.get(i).getProducto());
                 listaProductoEntity.setUmd(Lista.get(i).getUmd());
-                listaProductoEntity.setStock(Lista.get(i).getStock());
+                listaProductoEntity.setStock_almacen(Lista.get(i).getStock_almacen());
                 listaProductoEntity.setPreciobase(Lista.get(i).getPreciobase());
                 listaProductoEntity.setPrecioigv(Lista.get(i).getPrecioigv());
                 listaProductoEntity.setGal(Lista.get(i).getGal());
                 listaProductoEntity.setPorcentaje_dsct(Lista.get(i).getPorcentaje_dsct());
-
+                listaProductoEntity.setPorcentaje_descuento_max(Lista.get(i).getPorcentaje_descuento_max());
                 saveLead(listaProductoEntity);
             }
         }catch (Exception e)

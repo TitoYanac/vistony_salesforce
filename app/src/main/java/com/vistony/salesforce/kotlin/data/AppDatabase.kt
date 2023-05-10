@@ -23,7 +23,7 @@ import com.vistony.salesforce.kotlin.utilities.DATABASE_NAME
     ReasonDispatch::class,
     StatusDispatch::class,
     VisitSection::class
-                     ], version = 48,exportSchema = false)
+                     ], version = 52,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,
@@ -39,6 +39,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val clientDao: ClientDao
     abstract val addressDao: AddressDao
     abstract val invoicesDao: InvoicesDao
+    abstract val typeDispatchDao: TypeDispatchDao
+    abstract val reasonDispatchDao: ReasonDispatchDao
+    abstract val visitSectionDao: VisitSectionDao
+
     companion object {
 
         // For Singleton instantiation

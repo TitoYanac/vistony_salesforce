@@ -276,8 +276,7 @@ public interface Api {
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/Type")
     Call<TypeDispatchEntityResponse> getTypeDispatch(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies")
-    Call<ReasonDispatchEntityResponse> getReasonDispatch(@Query("imei") String imei);
+
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricStatusDispatch")
     Call<HistoricStatusDispatchEntityResponse> geHistoricStatusDispatch(@Query("imei") String imei,@Query("date") String date);
@@ -325,7 +324,16 @@ public interface Api {
             //@Query("Imei") String imei, @Query("CardCode") String CardCode
     );
 
+    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Reclamo")
+        //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    Call<CustomerComplaintFormsEntity>sendForms( @Body RequestBody params);
 
+    //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies/Dispatch")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies")
+    Call<ReasonDispatchEntityResponse> getReasonDispatch(@Query("imei") String imei);
+
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies/FreeTransfer")
+    Call<ReasonDispatchEntityResponse> getReasonFreeTransfer(@Query("imei") String imei);
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);
     //@GET

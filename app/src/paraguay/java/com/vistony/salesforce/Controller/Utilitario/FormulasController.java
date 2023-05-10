@@ -15,6 +15,7 @@ import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.CustomerComplaintFormsSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
@@ -31,6 +32,8 @@ import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEnt
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.DocumentLine;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
@@ -50,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -374,7 +378,11 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
-                    "Y"
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_Flete(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_CompleteOV(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_TipTransGrat()
             );
         }
 
@@ -722,7 +730,7 @@ public class FormulasController {
             //Casuistica Bonificacion
             if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100"))
             {
-                //COGSAccountCode="659420";
+                COGSAccountCode="63712";
                 //U_SYP_FECAT_07="31";
                 //taxOnly="Y";
                 //taxCode="EXE_IGV";
@@ -734,7 +742,7 @@ public class FormulasController {
             else if(Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())>0&&
                     Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())<100)
             {
-                //COGSAccountCode="";
+                COGSAccountCode="69121";
                 //U_SYP_FECAT_07="10";
                 //taxOnly="N";
                 //taxCode="IGV";
@@ -1036,7 +1044,7 @@ public class FormulasController {
                 listaOrdenVentaDetalle.orden_detalle_producto_id = ListaSQlite.get(i).getProducto_id();
                 listaOrdenVentaDetalle.orden_detalle_producto = ListaSQlite.get(i).getProducto();
                 listaOrdenVentaDetalle.orden_detalle_umd = ListaSQlite.get(i).getUmd();
-                listaOrdenVentaDetalle.orden_detalle_stock = "";
+                listaOrdenVentaDetalle.orden_detalle_stock_almacen = "";
                 listaOrdenVentaDetalle.orden_detalle_cantidad = ListaSQlite.get(i).getCantidad();
                 listaOrdenVentaDetalle.orden_detalle_precio_unitario = ListaSQlite.get(i).getPreciounitario();
                 listaOrdenVentaDetalle.orden_detalle_montosubtotal = ListaSQlite.get(i).getMontosubtotal();
@@ -1109,8 +1117,10 @@ public class FormulasController {
                         listaClienteCabeceraEntities.get(i).getChkvisitsection(),
                         listaClienteCabeceraEntities.get(i).getTerminopago(),
                         listaClienteCabeceraEntities.get(i).getContado()
-                        ,"",""
+                        ,listaClienteCabeceraEntities.get(i).getLatitud()
+                        ,listaClienteCabeceraEntities.get(i).getLongitud()
                         ,listaClienteCabeceraEntities.get(i).getAddresscode()
+                        ,listaClienteCabeceraEntities.get(i).getStatuscount()
 
                 );
             }
@@ -1384,7 +1394,7 @@ public class FormulasController {
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto_id();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_umd();
-                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock_almacen=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_cantidad();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_precio_unitario();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montosubtotal();
@@ -1562,7 +1572,7 @@ public class FormulasController {
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_producto_id();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_producto();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_umd();
-                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_stock();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_stock_almacen();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_cantidad();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_precio_unitario();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_montosubtotal();
@@ -1662,7 +1672,7 @@ public class FormulasController {
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto_id();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_umd();
-                    ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
+                    ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock_almacen=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_cantidad();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_precio_unitario();
                     ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montosubtotal();
@@ -1743,7 +1753,7 @@ public class FormulasController {
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_producto_id();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_producto();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_umd();
-                ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_stock();
+                ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock_almacen=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_stock_almacen();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_cantidad();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_precio_unitario();
                 ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_montosubtotal();
@@ -1910,5 +1920,33 @@ public class FormulasController {
 
         BigDecimal subTotalLine=preUnit.multiply(cant.multiply(new BigDecimal(0.01)).add(new BigDecimal(1)));
         return subTotalLine.setScale(5,RoundingMode.DOWN).toString();
+    }
+
+    public void AddForms(List<CustomerComplaintSectionEntity> lead)
+    {
+        try {
+            SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
+            SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+            Date date = new Date();
+            CustomerComplaintFormsSQLiteDao customerComplaintFormsSQLiteDao = new CustomerComplaintFormsSQLiteDao(Context);
+            ArrayList<CustomerComplaintFormsEntity> ListCustomerComplaintForms = new ArrayList<>();
+            CustomerComplaintFormsEntity customerComplaintFormsEntity = new CustomerComplaintFormsEntity();
+            customerComplaintFormsEntity.forms = "Reclamo de Cliente";
+            customerComplaintFormsEntity.forms_id = "0";
+            customerComplaintFormsEntity.forms_date = FormatFecha.format(date);
+            customerComplaintFormsEntity.time = dateFormathora.format(date);
+            customerComplaintFormsEntity.salesrepcode = SesionEntity.fuerzatrabajo_id;
+            customerComplaintFormsEntity.user_id = SesionEntity.usuario_id;
+            customerComplaintFormsEntity.setListCustomerComplaintSection(lead);
+            ListCustomerComplaintForms.add(customerComplaintFormsEntity);
+
+            customerComplaintFormsSQLiteDao.addCustomerComplaintForms(ListCustomerComplaintForms);
+
+        }catch (Exception e)
+        {
+            Log.e("REOS", "FormulasController.AddForms.error : " + e.toString());
+        }
+
+
     }
 }

@@ -11,24 +11,44 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaConsultaStockEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.ListaPrecioEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UbigeoSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Enum.TipoDeCompra;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListaPrecioDetalleSQLiteDao {
 
     ArrayList<ListaProductoEntity> arraylistaProductoEntity;
     ArrayList<ListaConsultaStockEntity> listaConsultaStockEntity;
     ArrayList<ListaPrecioDetalleSQLiteEntity> ListaPrecioDetalleSQLiteEntity;
+    SqliteController sqliteController;
+    SQLiteDatabase bd;
 
-    public ListaPrecioDetalleSQLiteDao(Context context){
+    /*public ListaPrecioDetalleSQLiteDao(Context context){
         DataBaseManager.initializeInstance(new SqliteController(context));
+    }*/
+    public ListaPrecioDetalleSQLiteDao(Context context)
+    {
+        sqliteController = new SqliteController(context);
     }
 
-    public int InsertaListaPrecioDetalle (
+    public void abrir(){
+        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
+        bd = sqliteController.getWritableDatabase();
+    }
+
+    /** Cierra conexion a la base de datos */
+    public void cerrar()
+    {
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
+    }
+    /*public int InsertaListaPrecioDetalle (
 
             String compania_id,
             String credito,
@@ -69,13 +89,43 @@ public class ListaPrecioDetalleSQLiteDao {
 
         DataBaseManager.getInstance().closeDatabase();
         return 1;
+    }*/
+
+    public int AddListPriceList (List<ListaPrecioEntity> listPrice)
+    {
+        abrir();
+
+        for (int i = 0; i < listPrice.size(); i++) {
+            ContentValues registro = new ContentValues();
+            registro.put("compania_id",SesionEntity.compania_id);
+            registro.put("porcentaje_dsct",listPrice.get(i).getPorcentaje_descuento());
+            registro.put("credito",listPrice.get(i).getCredito());
+            registro.put("contado",listPrice.get(i).getContado());
+            registro.put("producto_id",listPrice.get(i).getProducto_id());
+            registro.put("producto",listPrice.get(i).getProducto());
+            registro.put("umd",listPrice.get(i).getUmd());
+            registro.put("gal",listPrice.get(i).getGal());
+            registro.put("U_VIS_CashDscnt",listPrice.get(i).getCashdscnt());
+            registro.put("Tipo",listPrice.get(i).getTipo());
+            registro.put("stock_almacen",listPrice.get(i).getStock_almacen());
+            registro.put("stock_general",listPrice.get(i).getStock_general());
+            registro.put("units",listPrice.get(i).getUnit());
+            registro.put("MonedaAdicional",listPrice.get(i).getMonedaAdicional());
+            registro.put("MonedaAdicionalContado",listPrice.get(i).getMonedaAdicionalContado());
+            registro.put("MonedaAdicionalCredito",listPrice.get(i).getMonedaAdicionalCredito());
+            bd.insert("listapreciodetalle",null,registro);
+        }
+
+        bd.close();
+        return 1;
     }
 
     public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (
             String cardCode,
             String terminoPago,
             String ubigeo_id,
-            Context context
+            Context context,
+            String currency_id
 
     ){
 
@@ -95,6 +145,7 @@ public class ListaPrecioDetalleSQLiteDao {
             }
             Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ubigeo_id:"+ubigeo_id);
             Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.flete:"+flete);
+            Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.currency_id:"+currency_id);
 
             SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
             Cursor listaPre=sqlite.rawQuery("SELECT lista_precio,(SELECT contado FROM terminopago WHERE terminopago_id="+terminoPago+" LIMIT 1) AS isCash FROM cliente WHERE cliente_id=? LIMIT 1",new String[]{cardCode});
@@ -113,9 +164,32 @@ public class ListaPrecioDetalleSQLiteDao {
                 }
                 Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.tipoDeCompra: "+tipoDeCompra);
                 Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.listaArtificio: "+listaArtificio);
-                String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
-                        "IFNULL(stock_general,0) stock_general,"+tipoDeCompra+","+tipoDeCompra+",gal," +
-                        "porcentaje_dsct FROM listapreciodetalle  WHERE Tipo IN("+listaArtificio+")";
+
+                String query="";
+                if(currency_id.equals("US$"))
+                {
+                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
+                    String addCurrency;
+                    if(isCash.equals("0")){
+                        addCurrency="MonedaAdicionalCredito";
+                    }else {
+                        addCurrency="MonedaAdicionalContado";
+                    }
+
+                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-addCurrency "+addCurrency);
+
+                    query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                            "IFNULL(stock_general,0) stock_general,"+addCurrency+","+addCurrency+",gal," +
+                            "porcentaje_dsct FROM listapreciodetalle  WHERE Tipo IN("+listaArtificio+") AND "+addCurrency+" NOT IN ('0.00') ";
+                }else
+                {
+                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
+                    query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                            "IFNULL(stock_general,0) stock_general,"+tipoDeCompra+","+tipoDeCompra+",gal," +
+                            "porcentaje_dsct FROM listapreciodetalle  WHERE Tipo IN("+listaArtificio+")";
+                }
+
+
 
                 fila = sqlite.rawQuery(query,null);
 
@@ -124,13 +198,16 @@ public class ListaPrecioDetalleSQLiteDao {
                     listaProductoEntity.setProducto_id(fila.getString(0));
                     listaProductoEntity.setProducto(fila.getString(1));
                     listaProductoEntity.setUmd(fila.getString(2));
-                    listaProductoEntity.setStock(fila.getString(3));
+                    listaProductoEntity.setStock_almacen(fila.getString(3));
                     //listaProductoEntity.setPreciobase(fila.getString(5));
+
                     listaProductoEntity.setPreciobase(formulasController.getPriceIncrement(fila.getString(5),flete) );
+                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-listaProductoEntity.getPreciobase "+listaProductoEntity.getPreciobase());
                     //listaProductoEntity.setPrecioigv(fila.getString(6));
                     listaProductoEntity.setPrecioigv(formulasController.getPriceIncrement(fila.getString(6),flete) );
                     listaProductoEntity.setGal(fila.getString(7));
                     listaProductoEntity.setPorcentaje_dsct(fila.getString(8));
+                    listaProductoEntity.setPorcentaje_descuento_max(fila.getString(8));
                     arraylistaProductoEntity.add(listaProductoEntity);
                 }
             }
@@ -181,7 +258,7 @@ public class ListaPrecioDetalleSQLiteDao {
                     listaProductoEntity.setProducto_id(fila.getString(0));
                     listaProductoEntity.setProducto(fila.getString(1));
                     listaProductoEntity.setUmd(fila.getString(2));
-                    listaProductoEntity.setStock(fila.getString(3));
+                    listaProductoEntity.setStock_almacen(fila.getString(3));
                     listaProductoEntity.setPreciobase(fila.getString(5));
                     listaProductoEntity.setPrecioigv(fila.getString(6));
                     listaProductoEntity.setGal(fila.getString(7));

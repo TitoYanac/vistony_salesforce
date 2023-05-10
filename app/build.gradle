@@ -27,14 +27,11 @@ android {
             applicationId "com.vistony.salesforce"
             minSdkVersion 27
             targetSdkVersion 33
-            //targetSdkVersion 32
             versionCode 1
             versionName "0.0.1"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             multiDexEnabled true
-            ndk {
-                abiFilters "armeabi", "armeabi-v7a", "x86", "mips","x86_64", "arm64-v8a"
-            }
+
             manifestPlaceholders = [appName:"Test Sales Force"]
             buildConfigField('String' , 'BASE_ENVIRONMENT', '".qa/api"')
             signingConfig  signingConfigs.config
@@ -59,6 +56,9 @@ android {
     productFlavors{
 
         india{
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            }
             applicationIdSuffix ".india"
             buildConfigField('String' , 'IMEI_DEFAULT', '"355691112769630"')
             buildConfigField('String' , 'BASE_ENDPOINT', '"/v1.0"')  //revisar para lead
@@ -68,20 +68,26 @@ android {
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"EN"')
         }
         chile{
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            }
             applicationIdSuffix ".chile"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
+            //QA
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.cl.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.cl.qa"')
             //Produccion
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"cl.get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"cl.post"')
-            //Prueba
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.cl"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.cl"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.cl"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.cl"')
             versionName "1.0.3"
             manifestPlaceholders = [country:"Chile"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"CL"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
         ecuador{
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips","x86_64", "arm64-v8a"
+            }
             applicationIdSuffix ".ecuador"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //buildConfigField('String' , 'BASE_EDPOINT', '"/ec"')
@@ -89,32 +95,38 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"ec.post"')
             buildConfigField('String' , 'BASE_ENDPOINT', '"get.ec"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.ec"')
-            versionName "1.0.10"
+            versionName "1.0.11"
             manifestPlaceholders = [country:"Ecuador"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"EC"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
         peru{
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            }
             applicationIdSuffix ".peru"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //QA 2
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa2"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa2"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa2"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa2"')
             //QA Cobro Vendedor
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe.qa2"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.pe.qa2"')
-            versionName "2.2.15"
+            versionName "2.2.16"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
         bolivia{
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            }
             applicationIdSuffix ".bolivia"
 
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
@@ -136,6 +148,9 @@ android {
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
         paraguay{
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            }
             applicationIdSuffix ".paraguay"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //buildConfigField('String' , 'BASE_ENDPOINT', '"/bo"')
@@ -149,6 +164,9 @@ android {
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
         perurofalab{
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            }
             applicationIdSuffix ".perurofalab"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
@@ -164,6 +182,9 @@ android {
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
         espania{
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            }
             applicationIdSuffix ".espania"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             buildConfigField('String' , 'COUNTRY_APP', '"espania"')
@@ -180,6 +201,9 @@ android {
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')
         }
         marruecos{
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
+            }
             applicationIdSuffix ".marruecos"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------
@@ -308,7 +332,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-perf'
     implementation 'com.github.funriser:StepProgress:0.1.0'
     implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.0.0'
-
+    //implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.1.1'
     //Circles Menu
     implementation 'com.github.Hitomis:CircleMenu:v1.1.0'
 
@@ -453,4 +477,12 @@ dependencies {
     //def version = "2.5.0"
     //implementation "com.github.stepstone-tech.jetpack-compose-stepper:stepper:$version"
     //implementation 'com.github.maryamrzdh:compose-stepper:1.0.0-beta01'
+    //implementation 'androidx.compose.ui:ui-vector:1.1.0'
+    //implementation "androidx.compose.ui:ui-core:${compose_version}"
+
+    //systemProp.http.proxyHost='repo.maven.apache.org'
+    //systemProp.http.proxyPort=your.proxy.port
+    //systemProp.http.proxyUser=your.username
+    //systemProp.http.proxyPassword=your.password
+    //implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.1.0'
 }

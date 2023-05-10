@@ -54,6 +54,15 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String U_VIT_VENMOS;
     public String U_VIS_Flete;
     public String U_VIS_CompleteOV;
+    public String U_VIS_TipTransGrat;
+
+    public String getU_VIS_TipTransGrat() {
+        return U_VIS_TipTransGrat;
+    }
+
+    public void setU_VIS_TipTransGrat(String u_VIS_TipTransGrat) {
+        U_VIS_TipTransGrat = u_VIS_TipTransGrat;
+    }
 
     public String getU_VIS_CompleteOV() {
         return U_VIS_CompleteOV;

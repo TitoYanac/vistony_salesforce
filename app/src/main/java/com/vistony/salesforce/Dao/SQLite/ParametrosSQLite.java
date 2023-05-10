@@ -71,8 +71,6 @@ public class ParametrosSQLite {
 
     public ArrayList<ParametrosSQLiteEntity> ObtenerParametros ()
     {
-        //SQLiteController admin = new SQLiteController(getApplicationContext(),"administracion",null,1);
-        //SQLiteDatabase bd = admin.getWritableDatabase();
         listaParametrosSQLiteEntity = new ArrayList<ParametrosSQLiteEntity>();
         ParametrosSQLiteEntity parametrosSQLiteEntity;
         abrir();
@@ -86,12 +84,10 @@ public class ParametrosSQLite {
             parametrosSQLiteEntity.setNombreparametro(fila.getString(1));
             parametrosSQLiteEntity.setCantidadregistros(fila.getString(2));
             parametrosSQLiteEntity.setFechacarga(fila.getString(3));
-            //parametrosSQLiteEntity.setHash(fila.getString(4));
             listaParametrosSQLiteEntity.add(parametrosSQLiteEntity);
         }
 
         bd.close();
-        //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
         return listaParametrosSQLiteEntity;
     }
 
@@ -164,6 +160,22 @@ public class ParametrosSQLite {
 
         bd.close();
 
+        return resultado;
+    }
+
+    public String getDateParemeterforName (String name)
+    {
+        String resultado="";
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select substr(fechacarga, 1, instr(fechacarga, ' ')-1) as date from parametros  where nombreparametro='"+name+"' and cantidadregistros>0 ",null);
+
+        while (fila.moveToNext())
+        {
+            resultado= (fila.getString(0));
+        }
+
+        bd.close();
         return resultado;
     }
 

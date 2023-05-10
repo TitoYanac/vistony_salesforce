@@ -131,7 +131,8 @@ public class ListaTerminoPagoAdapter extends ArrayAdapter<ListaTerminoPagoEntity
                                                     public void onClick(View v) {
                                                         Log.e("REOS","ListaTerminoPagoAdapter-holder.realtive_ruta.setOnClickListener-statuscounted"+statuscounted);
                                                         Log.e("REOS","ListaTerminoPagoAdapter-holder.realtive_ruta.setOnClickListener-lead.getTerminopago()"+lead.getTerminopago());
-                                                        if(statuscounted.equals("Y")&&lead.getTerminopago().equals("CONTADO"))
+                                                        //Cambio deshabilitado 14/04/2023 16:15
+                                                        /*if(statuscounted.equals("Y")&&lead.getTerminopago().equals("CONTADO"))
                                                         {
                                                             alertdialogInformative(getContext(),"Advertencia!!!","Motivo: \n No es posible elegir termino de pago (Contado), porque la ultima factura fue devuelta con motivo - (NO TIENE DINERO).\n Sugerencia: \n Elegir el termino, Pago Adelantado.").show();
                                                             //Toast.makeText(getContext(), "No es posible elegir termino de pago contado, porque la ultima factura fue devuelta por motivo - No tiene Dinero", Toast.LENGTH_SHORT).show();
@@ -147,9 +148,18 @@ public class ListaTerminoPagoAdapter extends ArrayAdapter<ListaTerminoPagoEntity
                                                             FragmentTransaction transaction = fragmentManager.beginTransaction();
                                                             transaction.add(R.id.content_menu_view, terminoPagoView.newInstancia(listaTerminoPagoSQLiteEntity));
 
-                                                        }
+                                                        }*/
+                                                            ArrayList<TerminoPagoSQLiteEntity> listaTerminoPagoSQLiteEntity= new ArrayList<>();
+                                                            TerminoPagoSQLiteEntity terminoPagoSQLiteEntity=new TerminoPagoSQLiteEntity();
+                                                            terminoPagoSQLiteEntity.terminopago = lead.getTerminopago().toString();
+                                                            terminoPagoSQLiteEntity.terminopago_id = lead.getTerminopago_id().toString();
+                                                            terminoPagoSQLiteEntity.contado = lead.getContado();
+                                                            listaTerminoPagoSQLiteEntity.add(terminoPagoSQLiteEntity);
 
-        }
+                                                            fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+                                                            FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                                            transaction.add(R.id.content_menu_view, terminoPagoView.newInstancia(listaTerminoPagoSQLiteEntity));
+            }
                                                 }
 
         );

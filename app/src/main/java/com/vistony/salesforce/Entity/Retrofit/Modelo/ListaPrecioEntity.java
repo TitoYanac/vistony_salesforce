@@ -49,6 +49,39 @@ public class ListaPrecioEntity {
     @SerializedName("SIGAUS")
     private String SIGAUS;
 
+    @SerializedName("MonedaAdicional")
+    private String MonedaAdicional;
+
+    @SerializedName("MonedaAdicionalContado")
+    private String MonedaAdicionalContado;
+
+    @SerializedName("MonedaAdicionalCredito")
+    private String MonedaAdicionalCredito;
+
+    public String getMonedaAdicional() {
+        return MonedaAdicional;
+    }
+
+    public void setMonedaAdicional(String monedaAdicional) {
+        MonedaAdicional = monedaAdicional;
+    }
+
+    public String getMonedaAdicionalContado() {
+        return MonedaAdicionalContado;
+    }
+
+    public void setMonedaAdicionalContado(String monedaAdicionalContado) {
+        MonedaAdicionalContado = monedaAdicionalContado;
+    }
+
+    public String getMonedaAdicionalCredito() {
+        return MonedaAdicionalCredito;
+    }
+
+    public void setMonedaAdicionalCredito(String monedaAdicionalCredito) {
+        MonedaAdicionalCredito = monedaAdicionalCredito;
+    }
+
     public String getOiltax() {
         return oiltax;
     }

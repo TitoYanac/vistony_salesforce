@@ -168,6 +168,8 @@ public class CobranzaDetalleView extends Fragment {
     private ProgressDialog pd;
     ImageView imv_prueba_mostrarfirma;
     TableRow tablerow_e_signature;
+    static Context context;
+    String type_description;
 
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm","Este es NUEVA ISNTANCIA 1");
@@ -356,6 +358,7 @@ public class CobranzaDetalleView extends Fragment {
                         listaClienteDetalleEntity.nrodocumento=Listado.get(j).getNro_documento();
                         listaClienteDetalleEntity.documento_id=Listado.get(j).getDocumento_id();
                         StatusCollectionCheck=Listado.get(j).getCollectioncheck();
+                        type_description=Listado.get(j).getType();
                         Log.e("REOS","CobranzaDetalleView-ListaHistoricoCobranzaEntity-getCollection:"+Listado.get(j).getCollectioncheck());
                         //listaClienteDetalleEntity.fechaemision=Listado.get(j).getFechacobranza();
 
@@ -378,6 +381,7 @@ public class CobranzaDetalleView extends Fragment {
             //listaClienteDetalleAdapterFragment.size();
             setHasOptionsMenu(true);
         }
+        context=getContext();
     }
 
 
@@ -1059,8 +1063,30 @@ public class CobranzaDetalleView extends Fragment {
                                  //no aplica validar qr //peru si
                                  */
 
+                                ArrayList<CobranzaDetalleSQLiteEntity> listCobranzaDetalle=new ArrayList<>();
+                                CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(context);
+                                UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+                                ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+                                String type="";
+                                listCobranzaDetalle=cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
+                                        recibo,
+                                        ObjUsuario.compania_id,
+                                        ObjUsuario.fuerzatrabajo_id
+                                );
+                                if(listCobranzaDetalle.isEmpty())
+                                {
+                                    type=type_description;
+                                }else {
+                                    for(int i=0;i<listCobranzaDetalle.size();i++)
+                                    {
+                                        type=listCobranzaDetalle.get(i).getTypedescription();
+                                    }
+                                }
+                                Log.e("REOS","CobranzaDetalleView-alertaGenerarPDF-type: "+type);
 
-                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual());
+
+                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual(),type);
                                 ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
                                 cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
                                     Log.e("REOS-ParametrosView-depositedPendingCollection","=>"+data);
@@ -1131,7 +1157,7 @@ public class CobranzaDetalleView extends Fragment {
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza)
     {
         int resultado=0,recibows=0;
-        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0",chkruta="",contado="0";
+        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0",chkruta="",contado="0",type="";
         FormulasController formulasController=new FormulasController(getContext());
         Random numAleatorio = new Random();
         int n = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
@@ -1202,6 +1228,26 @@ public class CobranzaDetalleView extends Fragment {
             bancarizado="N";
         }
 
+            if(bancarizado.equals("Y"))
+            {
+                type ="Bancarizado";
+            }
+            else if(SesionEntity.pagodirecto.equals("Y"))
+            {
+                type="Pago Directo";
+            }
+            else if(SesionEntity.pagopos.equals("Y"))
+            {
+                type="Pago POS";
+            }
+            else if(SesionEntity.collection_salesperson.equals("Y"))
+            {
+                type="Cobró Vendedor";
+            }
+            else {
+                type="Cobranza Ordinaria";
+            }
+
         if(tipoCobranza.equals("Cobranza"))
         {
             for (int i = 0; i < Lista.size(); i++) {
@@ -1250,6 +1296,8 @@ public class CobranzaDetalleView extends Fragment {
                         ,""
                         ,"N"
                         ,""
+                        ,SesionEntity.collection_salesperson
+                        ,type
                 );
 
                         if(SesionEntity.perfil_id.equals("CHOFER")){
@@ -1327,6 +1375,8 @@ public class CobranzaDetalleView extends Fragment {
                         ,""
                         ,"N"
                         ,""
+                        ,SesionEntity.collection_salesperson
+                        ,type
                 );
                         if(SesionEntity.perfil_id.equals("CHOFER")){
                         DetailDispatchSheetSQLite detailDispatchSheetSQLite=new DetailDispatchSheetSQLite(getContext());
@@ -1451,7 +1501,8 @@ public class CobranzaDetalleView extends Fragment {
                 "19000101",
                 fecha,
                 SesionEntity.pagodirecto,
-                "Y"
+                "Y",
+                "N"
         );
 
         if(ValidaSQLite==1)
@@ -1727,8 +1778,30 @@ public class CobranzaDetalleView extends Fragment {
                     correlativo=arraylistconfiguracion.get(i).getSecuenciarecibos();
                 }
 
+                ArrayList<CobranzaDetalleSQLiteEntity> listCobranzaDetalle=new ArrayList<>();
+                CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(context);
+                UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+                ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+                String type="";
+                listCobranzaDetalle=cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
+                        recibo,
+                        ObjUsuario.compania_id,
+                        ObjUsuario.fuerzatrabajo_id
+                );
+                if(listCobranzaDetalle.isEmpty())
+                {
+                    type=type_description;
+                }else {
+                    for(int i=0;i<listCobranzaDetalle.size();i++)
+                    {
+                        type=listCobranzaDetalle.get(i).getTypedescription();
+                    }
+                }
+                Log.e("REOS","CobranzaDetalleView-alertaGenerarPDF-type: "+type);
+
                 configuracionSQLiteDao.ActualizaCorrelativo(String.valueOf(Integer.parseInt(correlativo)-1));
-                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual());
+                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual(),type);
                 ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
                 cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
                     Log.e("REOS-ParametrosView-depositedPendingCollection","=>"+data);

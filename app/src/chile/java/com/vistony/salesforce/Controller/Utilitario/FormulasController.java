@@ -14,6 +14,7 @@ import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.CustomerComplaintFormsSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
@@ -30,6 +31,8 @@ import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEnt
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.DocumentLine;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
@@ -49,6 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -229,11 +233,11 @@ public class FormulasController {
         for(int i=0;i<Lista.size();i++){
             Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>>"+Lista.get(i).getOrden_detalle_monto_descuento());
             if(Lista.get(i).getOrden_detalle_porcentaje_descuento()!=null){
-                if(Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())>0&&Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())<100) {
+                //if(Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())>0&&Double.parseDouble(Lista.get(i).getOrden_detalle_porcentaje_descuento())<100) {
                     Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>"+Lista.get(i).getOrden_detalle_porcentaje_descuento());
                     cacculoDsct=cacculoDsct.add(new BigDecimal(Lista.get(i).getOrden_detalle_monto_descuento()));
                     Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>"+Lista.get(i).getOrden_detalle_monto_descuento());
-                }
+               // }
             }
         }
         Log.e("ObtenerCalculoDescuentoOrdenDetallePromocion","=>"+cacculoDsct);
@@ -366,7 +370,11 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_SYP_STATUS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_tipocambio(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_Flete(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_CompleteOV(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_TipTransGrat()
             );
         }
 
@@ -665,6 +673,13 @@ public class FormulasController {
         documentHeader.setBrand(fabricante);
         documentHeader.setOSVersion(AndroidVersion);
         documentHeader.setModel(modelo);
+        documentHeader.setRoute(ovCabecera.getRoute());
+        documentHeader.setU_SYP_PDTREV("S");
+        documentHeader.setU_SYP_PDTCRE("S");
+        documentHeader.setU_VIT_VENMOS(ovCabecera.getU_VIT_VENMOS());
+        documentHeader.setU_VIS_Flete(ovCabecera.getU_VIS_Flete());
+        documentHeader.setU_VIS_CompleteOV(ovCabecera.getU_VIS_CompleteOV());
+        documentHeader.setU_VIS_TipTransGrat(ovCabecera.getU_VIS_TipTransGrat());
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
@@ -1104,6 +1119,7 @@ public class FormulasController {
                         ,listaClienteCabeceraEntities.get(i).getLatitud()
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
                         ,listaClienteCabeceraEntities.get(i).getAddresscode()
+                        ,listaClienteCabeceraEntities.get(i).getStatuscount()
                 );
             }
 
@@ -1905,5 +1921,33 @@ public class FormulasController {
 
         Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-resultado-"+subTotalLine.setScale(5,RoundingMode.DOWN).toString());
         return subTotalLine.setScale(5,RoundingMode.DOWN).toString();
+    }
+
+    public void AddForms(List<CustomerComplaintSectionEntity> lead)
+    {
+        try {
+            SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
+            SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+            Date date = new Date();
+            CustomerComplaintFormsSQLiteDao customerComplaintFormsSQLiteDao = new CustomerComplaintFormsSQLiteDao(Context);
+            ArrayList<CustomerComplaintFormsEntity> ListCustomerComplaintForms = new ArrayList<>();
+            CustomerComplaintFormsEntity customerComplaintFormsEntity = new CustomerComplaintFormsEntity();
+            customerComplaintFormsEntity.forms = "Reclamo de Cliente";
+            customerComplaintFormsEntity.forms_id = "0";
+            customerComplaintFormsEntity.forms_date = FormatFecha.format(date);
+            customerComplaintFormsEntity.time = dateFormathora.format(date);
+            customerComplaintFormsEntity.salesrepcode = SesionEntity.fuerzatrabajo_id;
+            customerComplaintFormsEntity.user_id = SesionEntity.usuario_id;
+            customerComplaintFormsEntity.setListCustomerComplaintSection(lead);
+            ListCustomerComplaintForms.add(customerComplaintFormsEntity);
+
+            customerComplaintFormsSQLiteDao.addCustomerComplaintForms(ListCustomerComplaintForms);
+
+        }catch (Exception e)
+        {
+            Log.e("REOS", "FormulasController.AddForms.error : " + e.toString());
+        }
+
+
     }
 }

@@ -161,6 +161,7 @@ public class CobranzaDetalleView extends Fragment {
     HiloEnviarWSCobranzaCabecera hiloEnviarWSCobranzaCabecera;
     FloatingActionButton fab_invoice_cancelation,fab_edit_signature;
     ImageView imv_prueba_mostrarfirma;
+    String type_description;
 
     public static Fragment newInstanciaComentario(String param1) {
         Log.e("jpcm","Este es NUEVA ISNTANCIA 1");
@@ -351,7 +352,7 @@ public class CobranzaDetalleView extends Fragment {
                         listaClienteDetalleEntity.direccion="0";
                         listaClienteDetalleEntity.nrodocumento=Listado.get(j).getNro_documento();
                         listaClienteDetalleEntity.documento_id=Listado.get(j).getDocumento_id();
-
+                        type_description=Listado.get(j).getType();
                         //listaClienteDetalleEntity.fechaemision=Listado.get(j).getFechacobranza();
 
                         listaClienteDetalleAdapterFragment.add(listaClienteDetalleEntity);
@@ -1066,8 +1067,30 @@ public class CobranzaDetalleView extends Fragment {
 
                                 validarqr.setEnabled(false); //no aplica validar qr //peru si
 
+                                ArrayList<CobranzaDetalleSQLiteEntity> listCobranzaDetalle=new ArrayList<>();
+                                CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao=new CobranzaDetalleSQLiteDao(getContext());
+                                UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+                                UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+                                ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+                                String type="";
+                                listCobranzaDetalle=cobranzaDetalleSQLiteDao.ObtenerCobranzaDetalleporRecibo(
+                                        recibo,
+                                        ObjUsuario.compania_id,
+                                        ObjUsuario.fuerzatrabajo_id
+                                );
+                                if(listCobranzaDetalle.isEmpty())
+                                {
+                                    type=type_description;
+                                }else {
+                                    for(int i=0;i<listCobranzaDetalle.size();i++)
+                                    {
+                                        type=listCobranzaDetalle.get(i).getTypedescription();
+                                    }
+                                }
+                                Log.e("REOS","CobranzaDetalleView-alertaGenerarPDF-type: "+type);
 
-                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual(),"");
+
+                                documentoCobranzaPDF.generarPdf(getContext(), listaClienteDetalleAdapterFragment,SesionEntity.fuerzatrabajo_id,SesionEntity.nombrefuerzadetrabajo,recibo,fecha,obtenerHoraActual(),type);
                                 //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
                                 if (SesionEntity.Print.equals("Y")) {
                                     //MenuView.getPrinterInstance().printPdf(ruta, 500, 0, 0, 0, 20);
@@ -1146,7 +1169,7 @@ public class CobranzaDetalleView extends Fragment {
 
     public int GuardarCobranzaSQLite(ArrayList<ListaClienteDetalleEntity> Lista, String tipoCobranza) {
         int resultado = 0, recibows = 0;
-        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0",chkruta="",contado="0";
+        String tag = "", tag2 = "", cliente_id = "", shipto = "", montocobrado = "", qrvalidado = "N", telefono = "",cardname="",valorcobranza="0",chkruta="",contado="0",type="";
         FormulasController formulasController = new FormulasController(getContext());
         Random numAleatorio = new Random();
         int n = numAleatorio.nextInt(9999 + 1000 + 1) + 1000;
@@ -1203,6 +1226,26 @@ public class CobranzaDetalleView extends Fragment {
                 bancarizado = "Y";
             } else {
                 bancarizado = "N";
+            }
+
+            if(bancarizado.equals("Y"))
+            {
+                type ="Bancarizado";
+            }
+            else if(SesionEntity.pagodirecto.equals("Y"))
+            {
+                type="Pago Directo";
+            }
+            else if(SesionEntity.pagopos.equals("Y"))
+            {
+                type="Pago POS";
+            }
+            else if(SesionEntity.collection_salesperson.equals("Y"))
+            {
+                type="Cobró Vendedor";
+            }
+            else {
+                type="Cobranza Ordinaria";
             }
 
             if (tipoCobranza.equals("Cobranza")) {
@@ -1307,7 +1350,7 @@ public class CobranzaDetalleView extends Fragment {
                             ,""
                             ,""
                             ,""
-                            ,""
+                            ,"N"
                             ,""
                     );
 

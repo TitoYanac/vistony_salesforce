@@ -1,5 +1,6 @@
 package com.vistony.salesforce.kotlin.compose
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -107,6 +108,7 @@ class ValidationAccountClient: Fragment() {
 
 }
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Preview(showBackground = true)
 @Composable
 fun ValidationAccountClientPreview(){

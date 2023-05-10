@@ -2,7 +2,7 @@ package com.vistony.salesforce.kotlin.compose.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFF001BC5)
-val Purple500 = Color(0xFF001BC5)
-val Purple700 = Color(0xFF001BC5)
-val Teal200 = Color(0xFF001BC5)
+val BlueVistony= Color(0 ,94 ,168)
+//val BlueVistony= Color(226, 0, 26)
+val RedVistony = Color(226, 0, 26)
+val WhiteVistony = Color(0xFFFFFFFF)

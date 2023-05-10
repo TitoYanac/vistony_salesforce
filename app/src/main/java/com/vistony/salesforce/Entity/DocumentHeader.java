@@ -47,7 +47,15 @@ public class DocumentHeader {
     private String U_VIT_VENMOS;
     private String U_VIS_Flete;
     private String U_VIS_CompleteOV;
+    private String U_VIS_TipTransGrat;
 
+    public String getU_VIS_TipTransGrat() {
+        return U_VIS_TipTransGrat;
+    }
+
+    public void setU_VIS_TipTransGrat(String u_VIS_TipTransGrat) {
+        U_VIS_TipTransGrat = u_VIS_TipTransGrat;
+    }
 
     public String getU_VIS_CompleteOV() {
         return U_VIS_CompleteOV;

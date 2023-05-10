@@ -49,5 +49,6 @@ public class SesionEntity {
     public static String census ="N";
     public static String collection_salesperson ="N";
     public static String deliverydateauto="N";
+    public static String currency_id="";
 }
 

@@ -34,11 +34,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:textStyle="bold"
                 android:text="@string/code"
                 android:textAppearance="?attr/textAppearanceListItem" />
         </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/lbl_orden_venta_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:text="@string/type"
+                android:textAppearance="?attr/textAppearanceListItem"/>
+
+            <TextView
+                android:id="@+id/tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginLeft="10dp"
+                android:textStyle="bold"
+                android:text="@string/type"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </TableRow>
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -53,6 +74,7 @@
                 android:id="@+id/tv_rucdni"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:textStyle="bold"
                 android:text="@string/ruc"
                 android:textAppearance="?attr/textAppearanceListItem"/>
@@ -72,7 +94,8 @@
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:text="@string/client"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textStyle="bold" />
@@ -94,7 +117,8 @@
             <TextView
                 android:id="@+id/tv_cond_venta"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:text="@string/payment_terms"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textStyle="bold" />
@@ -112,8 +136,9 @@
 
             <TextView
                 android:id="@+id/tv_status_aprob"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:text="@string/status"
                 android:textStyle="bold"
                 android:textAppearance="?attr/textAppearanceListItem"/>
@@ -135,13 +160,14 @@
                 android:id="@+id/tv_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:layout_marginLeft="10dp"
                 android:textStyle="bold"
                 android:text="@string/amount"
                 android:textAppearance="?attr/textAppearanceListItem" />
 
         </TableRow>
     </TableLayout>
+
     <ImageView
         android:id="@+id/imv_historic_orders"
         android:layout_width="30dp"
@@ -238,6 +264,14 @@
 
         />
 
+    <ImageView
+        android:id="@+id/imv_preview"
+        android:layout_width="30dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="165dp"
+        app:srcCompat="@drawable/ic_baseline_preview_24_gray" />
+
     <com.kofigyan.stateprogressbar.StateProgressBar
         android:id="@+id/your_state_progress_bar_id"
         android:layout_width="wrap_content"
@@ -253,6 +287,8 @@
         app:spb_stateForegroundColor="#0957C3"
         app:spb_stateNumberBackgroundColor="#808080"
         app:spb_stateNumberForegroundColor="#eeeeee" />
+
+
 
 
 

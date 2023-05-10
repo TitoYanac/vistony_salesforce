@@ -41,9 +41,11 @@ import com.vistony.salesforce.Entity.SQLite.HojaDespachoCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.kotlin.compose.DispatchSheetFailedScreen;
 import com.vistony.salesforce.kotlin.compose.DispatchSheetMapScreen;
 import com.vistony.salesforce.kotlin.compose.DispatchSheetMapScreenKt;
 import com.vistony.salesforce.kotlin.compose.DispatchSheetPendingScreen;
+import com.vistony.salesforce.kotlin.compose.theme.DispatchSheetSucessfulScreen;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -238,8 +240,9 @@ public class ContainerDispatchSheetView extends Fragment
         pageAdapter.addFRagment(new DispatchSheetPendingScreen(),"PENDIENTES ("+listDetailDispatchSheetPending.size()+")");
         //pageAdapter.addFRagment(new DispatchSheetPendingView(),listDetailDispatchSheetPending.size()+"\nPENDIENTES");
         //pageAdapter.addFRagment(new DispatchSheetPendingScreen(),listDetailDispatchSheetPending.size()+"\nPENDIENTES");
-        pageAdapter.addFRagment(new DispatchSheetSucessful(),"EXITOSOS ("+listDetailDispatchSheetSucesful.size()+")");
-        pageAdapter.addFRagment(new DispatchSheetFailedView(),"FALLIDOS ("+listDetailDispatchSheetFailed.size()+")");
+        pageAdapter.addFRagment(new DispatchSheetSucessfulScreen(),"EXITOSOS ("+listDetailDispatchSheetSucesful.size()+")");
+        //pageAdapter.addFRagment(new DispatchSheetFailedView(),"FALLIDOS ("+listDetailDispatchSheetFailed.size()+")");
+        pageAdapter.addFRagment(new DispatchSheetFailedScreen(),"FALLIDOS ("+listDetailDispatchSheetFailed.size()+")");
 
         viewPager.setAdapter(pageAdapter);
         tabLayout.setupWithViewPager(viewPager);

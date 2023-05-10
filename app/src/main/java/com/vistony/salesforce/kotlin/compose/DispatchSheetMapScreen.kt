@@ -61,6 +61,9 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
     //private lateinit var headerDispatchSheetViewModel: HeaderDispatchSheetViewModel
     private lateinit var headerDispatchSheetViewModel: HeaderDispatchSheetViewModel
     private lateinit var clientViewModel: ClientViewModel
+    private lateinit var detailDispatchSheetViewModel: DetailDispatchSheetViewModel
+    private lateinit var typeDispatchViewModel: TypeDispatchViewModel
+    private lateinit var reasonDispatchViewModel: ReasonDispatchViewModel
 
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreateView(
@@ -126,16 +129,53 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
                             })*/
                             val headerDispatchSheetRepository = HeaderDispatchSheetRepository()
                             val clientRepository = ClientRepository()
+                            val typeDispatchRepository = TypeDispatchRepository()
+                            val reasonDispatchRepository = ReasonDispatchRepository()
                             //viewModel = ViewModelProvider(viewModelStoreOwner, HeaderDispatchSheetViewModel(headerDispatchSheetRepository))[HeaderDispatchSheetViewModel::class.java]
                             //viewModel = ViewModelProvider(viewModelStoreOwner)[HeaderDispatchSheetViewModel::class.java]
                             headerDispatchSheetViewModel = HeaderDispatchSheetViewModel(headerDispatchSheetRepository)
+                            typeDispatchViewModel = TypeDispatchViewModel(typeDispatchRepository)
+                            reasonDispatchViewModel = ReasonDispatchViewModel(reasonDispatchRepository)
+
+                            typeDispatchViewModel.status.observe(lifecycleOwner) { status ->
+                                // actualizar la UI con los datos obtenidos
+                                Log.e(
+                                    "REOS",
+                                    "DispatchSheetMapScreen-typeDispatchViewModel.result.observe.status"+status
+                                )
+                            }
+
+                            typeDispatchViewModel?.getTypeDispatch(
+                                SesionEntity.imei,
+                                appContext,
+                                lifecycleOwner
+                            )
+
+                            reasonDispatchViewModel.status.observe(lifecycleOwner) { status ->
+                                // actualizar la UI con los datos obtenidos
+                                Log.e(
+                                    "REOS",
+                                    "DispatchSheetMapScreen-reasonDispatchViewModel.result.observe.status"+status
+                                )
+                            }
+
+                            reasonDispatchViewModel?.getReasonDispatch(
+                                SesionEntity.imei,
+                                appContext,
+                                lifecycleOwner
+                            )
+
                             headerDispatchSheetViewModel.status.observe(lifecycleOwner) { status ->
                                 // actualizar la UI con los datos obtenidos
                                 Log.e(
                                 "REOS",
                                 "DispatchSheetMapScreen-headerDispatchSheetViewModel.result.observe.status"+status
                                     )
+
+
                             }
+
+
 
                             headerDispatchSheetViewModel?.getStateDispatchSheet(
                                 SesionEntity.imei,
@@ -157,6 +197,8 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
                                 ContainerDispatchView.parametrofecha,
                                 appContext
                             )
+
+
                         }catch (e:Exception){
                             Log.e(
                                 "REOS",

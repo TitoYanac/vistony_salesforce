@@ -203,6 +203,37 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/tr_lbl_reason_free_transfer"
+                    android:visibility="gone"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_reason_free_transfer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="@string/reason_free_transfer"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/tr_spn_reason_free_transfer"
+                    android:visibility="gone"
+                    >
+                    <Spinner
+                        android:id="@+id/spn_reason_freetransfer"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/tr_dsct_cont"
                     >
                     <CheckBox
@@ -442,7 +473,7 @@
                         android:focusable="false"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textAlignment="center"
+                        android:gravity="right"
                         android:textSize="24dp"></TextView>
 
                 </TableRow>
@@ -457,7 +488,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:focusable="false"
-                        android:text="SubTotal:    S/."
+                        android:text="SubTotal"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
 
@@ -470,7 +501,7 @@
                         android:focusable="false"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textAlignment="center"
+                        android:gravity="right"
                         android:textSize="24dp"></TextView>
 
                 </TableRow>
@@ -500,7 +531,7 @@
                         android:focusable="false"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textAlignment="center"
+                        android:gravity="right"
                         android:textSize="24dp"></TextView>
 
                 </TableRow>
@@ -515,7 +546,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:focusable="false"
-                        android:text="Descuento: S/."
+                        android:text="Descuento"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
 
@@ -528,7 +559,7 @@
                         android:focusable="false"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textAlignment="center"
+                        android:gravity="right"
                         android:textSize="24dp"></TextView>
 
                 </TableRow>
@@ -545,7 +576,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:focusable="false"
-                        android:text="IGV:              S/."
+                        android:text="IGV"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
 
@@ -556,7 +587,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
                         android:focusable="false"
-                        android:textAlignment="center"
+                        android:gravity="right"
                         android:text="0"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
@@ -574,7 +605,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:focusable="false"
-                        android:text="Total:           S/."
+                        android:text="Total"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
 
@@ -584,7 +615,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
-                        android:textAlignment="center"
+                        android:gravity="right"
                         android:focusable="false"
                         android:text="0"
                         android:textColor="@color/white"

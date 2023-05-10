@@ -76,7 +76,8 @@ public class OrdenVentaCabeceraSQLite {
             String route,
             String U_VIT_VENMOS,
             String U_VIS_Flete,
-            String U_VIS_CompleteOV
+            String U_VIS_CompleteOV,
+            String U_VIS_TipTransGrat
 
     ){
 
@@ -168,6 +169,7 @@ public class OrdenVentaCabeceraSQLite {
         registro.put("U_VIT_VENMOS",U_VIT_VENMOS);
         registro.put("U_VIS_Flete",U_VIS_Flete);
         registro.put("U_VIS_CompleteOV",U_VIS_CompleteOV);
+        registro.put("U_VIS_TipTransGrat",U_VIS_TipTransGrat);
 
         bd.insert("ordenventacabecera",null,registro);
         bd.close();
@@ -310,7 +312,7 @@ public class OrdenVentaCabeceraSQLite {
                     "usuario_id,enviadoERP,recibidoERP,ordenventa_ERP_id,listaprecio_id,planta_id,fecharegistro,tipocambio,fechatipocambio,rucdni,DocType," +
                     "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito,domembarque_text,cliente_text,terminopago_text,quotation,U_SYP_MDTD," +
                     "U_SYP_MDSD,U_SYP_MDCD,U_SYP_MDMT,U_SYP_STATUS,dispatchdate,countsend,IFNULL(route,'0') AS route," +
-                    " IFNULL(U_VIT_VENMOS,'N') AS U_VIT_VENMOS , IFNULL(U_VIS_Flete,'0') AS U_VIS_Flete , IFNULL(U_VIS_CompleteOV,'N') AS U_VIS_CompleteOV  " +
+                    " IFNULL(U_VIT_VENMOS,'N') AS U_VIT_VENMOS , IFNULL(U_VIS_Flete,'0') AS U_VIS_Flete , IFNULL(U_VIS_CompleteOV,'N') AS U_VIS_CompleteOV,U_VIS_TipTransGrat  " +
                     " FROM ordenventacabecera WHERE ordenventa_id=? LIMIT 1",new String[]{ordenventa_id});
             if (fila.moveToFirst()) {
                 do {
@@ -378,7 +380,7 @@ public class OrdenVentaCabeceraSQLite {
                     ordenVentaCabeceraSQLiteEntity.setU_VIT_VENMOS(fila.getString(fila.getColumnIndex("U_VIT_VENMOS")));
                     ordenVentaCabeceraSQLiteEntity.setU_VIS_Flete(fila.getString(fila.getColumnIndex("U_VIS_Flete")));
                     ordenVentaCabeceraSQLiteEntity.setU_VIS_CompleteOV(fila.getString(fila.getColumnIndex("U_VIS_CompleteOV")));
-
+                    ordenVentaCabeceraSQLiteEntity.setU_VIS_TipTransGrat (fila.getString(fila.getColumnIndex("U_VIS_TipTransGrat")));
 
                     listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
 

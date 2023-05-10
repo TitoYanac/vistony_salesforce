@@ -22,6 +22,7 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Adapters.ListKardexOfPaymentEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesAnalysisByRouteEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.KardexPagoEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 
 public class Convert {
 //    static DecimalFormat format = new DecimalFormat("##.##.###,");
@@ -111,6 +112,13 @@ public class Convert {
                 break;
             case "ecuador":
             case "peru":
+                    if(SesionEntity.currency_id.equals("US$"))
+                    {
+                        resultado= " US$ "+amountRedonded;
+                    }else {
+                        resultado= NumberFormat.getCurrencyInstance(locale).format(amountRedonded);
+                    }
+                    break;
             case "bolivia":
             case "paraguay":
             case "perurofalab":
@@ -173,6 +181,7 @@ public class Convert {
             amount="0";
         }
         Locale locale=null;
+
         BigDecimal amountRedonded=new BigDecimal(amount).setScale(0, RoundingMode.HALF_UP);
         return amountRedonded.toString();
     }

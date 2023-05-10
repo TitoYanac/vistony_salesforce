@@ -58,4 +58,6 @@ var chk_timestatus: String?,
 var fuerzatrabajo: String?,
 var messageServerDispatch: String?,
 var messageServerTimeDispatch: String?
+
+
 )

@@ -155,10 +155,10 @@ public class LeadClienteViewModel extends ViewModel {
         }
 
         Log.e("REOS", "LeadClienteViewModel-sendGeolocationClient-json"+json);
-        if(listLeadAddressEntity!=null && listLeadAddressEntity.size()>0)
+        /*if(listLeadAddressEntity!=null && listLeadAddressEntity.size()>0)
         {
             leadSQLite.UpdateLeadJSON(json, listLeadAddressEntity.get(0).getCardCode());
-        }
+        }*/
         if(json!=null){
             RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
             //Log.e("REOS", "VisitaRepository-sendVisit-sendVisit"+Config.getClient().create(Api.class).sendVisit(jsonRequest).toString());

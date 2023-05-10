@@ -9,9 +9,9 @@ data class Address(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
     var companiaid: String?,
-    var clienteId: String?,
+    var cliente_id: String?,
     @SerializedName("ShipToCode")
-    var domicilioEmbarque: String?,
+    var domembarque_id: String?,
     @SerializedName("Street")
     var direccion: String?,
     @SerializedName("TerritoryID")

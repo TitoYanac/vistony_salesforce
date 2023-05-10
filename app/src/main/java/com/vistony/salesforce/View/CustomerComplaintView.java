@@ -47,7 +47,9 @@ import com.vistony.salesforce.Controller.Adapters.ListCustomerComplaintAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Dao.Retrofit.CustomerComplaintRepository;
+import com.vistony.salesforce.Dao.Retrofit.FormsRepository;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
+import com.vistony.salesforce.Dao.Retrofit.UbigeoRepository;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintQuestionsEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintResponseEntity;
@@ -65,8 +67,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,9 +107,11 @@ public class CustomerComplaintView extends Fragment implements View.OnClickListe
     public static ActivityResultLauncher<Intent> someActivityResultLauncherPhotomake;
     public static ActivityResultLauncher<Intent> someActivityResultLauncherPhotoAttach;
     public static String mCurrentPhotoPathG="",mCurrentPhotoPathL="";
-    static MenuItem send;
+    static MenuItem send,save;
     public static ActivityResultLauncher<Intent> someActivityResultLauncherVideoAttach;
     public static ActivityResultLauncher<Intent> someActivityResultLauncherFileAttach;
+    private FormsRepository formsRepository;
+
 
     public CustomerComplaintView() {
         // Required empty public constructor
@@ -215,10 +222,10 @@ public class CustomerComplaintView extends Fragment implements View.OnClickListe
         list_cardview=v.findViewById(R.id.list_cardview);
         cardView=v.findViewById(R.id.cardView);
         btnSubtmit=v.findViewById(R.id.btnSubtmit);
-
-
         cardView.setVisibility(View.GONE);
         btnSubtmit.setVisibility(View.GONE);
+        formsRepository = new ViewModelProvider(getActivity()).get(FormsRepository.class);
+
 
         btn_getclient.setOnClickListener(v -> {
             String Fragment="CustomerComplaintView";
@@ -300,8 +307,6 @@ public class CustomerComplaintView extends Fragment implements View.OnClickListe
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-
                 });
 
         someActivityResultLauncherVideoAttach= registerForActivityResult(
@@ -741,8 +746,43 @@ public class CustomerComplaintView extends Fragment implements View.OnClickListe
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_customer_complaint, menu);
         send = menu.findItem(R.id.send);
+        save = menu.findItem(R.id.save);
         super.onCreateOptionsMenu(menu, inflater);
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.send:
+                /*listCustomerComplaintAdapter.getCustomerSection();*/
+                formsRepository.getDataSendForms
+                        (getContext()).observe(getActivity(), data -> {
+                    Log.e("REOS","CustomersComplaintView-onOptionsItemSelected-R.id.send.data"+data);
+                });
+                break;
+            case R.id.save:
+                try {
+                    listCustomerComplaintAdapter.getCustomerSection();
+                    Toast.makeText(getContext(),
+                            "Se Guardo Correctamente el Reclamo"
+                            , Toast.LENGTH_SHORT).show();
+                }catch (Exception e)
+                {
+                    Log.e("REOS","CustomersComplaintView-onOptionsItemSelected-R.id.save.error: "+e.toString());
+                }
+                /*formsRepository.getDataSendForms
+                        (getContext()).observe(getActivity(), data -> {
+                    Log.e("REOS","CustomersComplaintView-onOptionsItemSelected-R.id.send.data"+data);
+                });*/
+                break;
+            default:
+                break;
+        }
+
+        return false;
+    }
+
+
 
 }

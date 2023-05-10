@@ -32,7 +32,7 @@ data class DetailDispatchSheet (
     var factura: String? = null,
     @SerializedName("Balance")
     var saldo: String? = null,
-    @SerializedName("Status")
+
     var estado: String? = null,
     @SerializedName("SlpCode")
     var factura_fuerzatrabajo_id: String? = null,
@@ -58,16 +58,15 @@ data class DetailDispatchSheet (
     var ocurrencies: String? = null,
     var latitud: String? = null,
     var longitud: String? = null,
-    @Ignore
-    var chkupdatedispatch: Boolean,
-    @Ignore
-    var chkvisitsectionstart: Boolean,
-    @Ignore
-    var chkvisitsectionend: Boolean,
-    @Ignore
-    var chkcollection: Boolean
-
+    var statusupdatedispatch: String? = "N",
+    var statusvisitstart: String? = "N",
+    var statusvisitend: String? = "N",
+    var statuscollection: String? = "N",
+    var timeini: String? = null,
+    @SerializedName("Status")
+    var timefin: String? = null
 )
+/*
 {
     // Constructor personalizado para Room
     constructor(compania_id: String?,
@@ -100,6 +99,7 @@ data class DetailDispatchSheet (
                 ocurrencies: String?,
                 latitud: String?,
                 longitud: String?
+
     ) : this(
         compania_id,
         fuerzatrabajo_id,
@@ -131,12 +131,13 @@ data class DetailDispatchSheet (
         ocurrencies,
         latitud,
         longitud,
-        false,
-        false,
-        false,
-        false
+        0,
+        0,
+        0,
+        0,
+
     )
-}
+}*/
 /*
 {
     fun constructor(

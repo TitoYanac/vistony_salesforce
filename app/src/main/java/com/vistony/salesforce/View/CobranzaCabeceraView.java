@@ -774,11 +774,12 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             inflater.inflate(R.menu.menu_cobranza_cabecera, menu);
         menu_variable=menu;
+        abrir = menu.findItem(R.id.abrir);
+        guardar_deposito = menu.findItem(R.id.guardar_deposito);
+        agregar_foto_deposito = menu.findItem(R.id.agregar_foto_deposito);
         if(listaConsDepositoAdapterFragment.isEmpty())
         {
-            abrir = menu.findItem(R.id.abrir);
-            guardar_deposito = menu.findItem(R.id.guardar_deposito);
-            agregar_foto_deposito = menu.findItem(R.id.agregar_foto_deposito);
+
             Drawable drawable = menu.findItem(R.id.abrir).getIcon();
             drawable = DrawableCompat.wrap(drawable);
             DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.white));
@@ -800,9 +801,9 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
             {
                 if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer")||BuildConfig.FLAVOR.equals("espania"))
                 {
-                abrir = menu.findItem(R.id.abrir);
-                guardar_deposito = menu.findItem(R.id.guardar_deposito);
-                agregar_foto_deposito = menu.findItem(R.id.agregar_foto_deposito);
+                //abrir = menu.findItem(R.id.abrir);
+                //guardar_deposito = menu.findItem(R.id.guardar_deposito);
+                //agregar_foto_deposito = menu.findItem(R.id.agregar_foto_deposito);
                 Drawable drawable = menu.findItem(R.id.abrir).getIcon();
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable, ContextCompat.getColor(getContext(), R.color.Black));

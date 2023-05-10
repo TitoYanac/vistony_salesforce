@@ -79,7 +79,7 @@ public class OrdenVentaDetalleView extends Fragment {
     static String listaprecio_id,descuentocontado,terminopago_id,checkpricelist,pricelist_id,pricelist;
     static Context context;
     private ProgressDialog pd;
-    HiloUpdateListaPrecios hiloUpdateListaPrecios;
+    //HiloUpdateListaPrecios hiloUpdateListaPrecios;
     TableRow tr_taxoil;
 
 
@@ -170,7 +170,7 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_producto_id = productoAgregado.getProducto_id();
             ObjListaProductosEntity.orden_detalle_producto = productoAgregado.getProducto();
             ObjListaProductosEntity.orden_detalle_umd = productoAgregado.getUmd();
-            ObjListaProductosEntity.orden_detalle_stock = productoAgregado.getStock();
+            ObjListaProductosEntity.orden_detalle_stock_almacen = productoAgregado.getStock();
             ObjListaProductosEntity.orden_detalle_precio_unitario = productoAgregado.getPreciobase();
             ObjListaProductosEntity.orden_detalle_gal = productoAgregado.getGal();
             ObjListaProductosEntity.orden_detalle_monto_igv = "0";
@@ -562,6 +562,7 @@ public class OrdenVentaDetalleView extends Fragment {
         return  dialog;
     }
 
+    /*
     private class HiloUpdateListaPrecios extends AsyncTask<String, Void, Object> {
         List<ListaPrecioDetalleSQLiteEntity> LPDetalle;
         ListaPrecioRepository listaPrecioRepository;
@@ -633,7 +634,7 @@ public class OrdenVentaDetalleView extends Fragment {
             }
             return resultado;
         }
-    }
+    }*/
 
 
 }

@@ -59,7 +59,7 @@ public class ListaOrdenVentaDetalleDao {
                         Lista.get(i).getOrden_detalle_producto_id(),
                         Lista.get(i).getOrden_detalle_producto(),
                         Lista.get(i).getOrden_detalle_umd(),
-                        Lista.get(i).getOrden_detalle_stock(),
+                        Lista.get(i).getOrden_detalle_stock_almacen(),
                         Lista.get(i).getOrden_detalle_cantidad(),
                         Lista.get(i).getOrden_detalle_precio_unitario(),
                         Lista.get(i).getOrden_detalle_montosubtotal(),

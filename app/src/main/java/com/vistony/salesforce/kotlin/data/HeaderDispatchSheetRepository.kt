@@ -130,11 +130,19 @@ class HeaderDispatchSheetRepository(
                                 //Thread.sleep(1000)
                                 val database by lazy { AppDatabase.getInstance(context.applicationContext) }
                                 database?.headerDispatchSheetDao
+                                    ?.deleteHeaderDispatchSheet(
+                                        FechaDespacho
+                                    )
+                                database?.headerDispatchSheetDao
                                     ?.insertHeaderDispatchSheet(
-                                        //headerDispatchSheetResponse?.getDispatchSheetEntity()!!
                                         headerDispatchSheetResponse?.getDispatchSheetEntity()
                                     )
                                 for (i in 0..headerDispatchSheetResponse?.getDispatchSheetEntity()?.size!! - 1) {
+                                    database?.detailDispatchSheetDao
+                                        ?.deleteDetailDispatchSheet(
+                                            headerDispatchSheetResponse?.getDispatchSheetEntity()!!
+                                                .get(i).control_id
+                                        )
                                     database?.detailDispatchSheetDao?.insertDetailDispatchSheet(
                                         headerDispatchSheetResponse?.getDispatchSheetEntity()
                                             ?.get(i)?.details

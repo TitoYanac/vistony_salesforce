@@ -157,4 +157,9 @@
     <string name="stop_video">Parar Video</string>
     <string name="video">Video</string>
     <string name="selection_video">SELECCIONE EL VIDEO</string>
+    <string name="reason_free_transfer">Motivo Transf. Gratuita</string>
+    <string name="payment_terms">Cond. Venta</string>
+    <string name="generate_salesorders">Generar Venta</string>
+    <string name="sales">Venta</string>
+    <string name="traceability_sales">Trazabilidad de Venta</string>
 </resources>

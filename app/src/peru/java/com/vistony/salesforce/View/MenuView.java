@@ -299,7 +299,7 @@ public class MenuView extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-        bxlPrinter = new BixolonPrinterController(this);
+        bxlPrinter = new BixolonPrinterController(this,this);
         tv_fuerzatrabajo_id_navheader = (TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_fuerzatrabajo_id_navheader);
         //findViewById( R.id.tv_fuerzatrabajo_id_navheader);
@@ -692,7 +692,7 @@ public class MenuView extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
+        SesionEntity.currency_id="";
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         contentFragment = null;
@@ -760,9 +760,9 @@ public class MenuView extends AppCompatActivity
                 //fragmentSeleccionado=true;
                 //TAG_FRAGMENT="config_print";
 
-                HojaDespachoFragment = new DispatchSheetView();
+                //HojaDespachoFragment = new DispatchSheetView();
                 //HojaDespachoFragment = new ContainerDispatchSheetView();
-                //HojaDespachoFragment = new ContainerDispatchView();
+                HojaDespachoFragment = new ContainerDispatchView();
                 fragment = "HojaDespachoView";
                 accion = "inicio";
                 compuesto = fragment + "-" + accion;
@@ -807,10 +807,10 @@ public class MenuView extends AppCompatActivity
                 TAG_FRAGMENT = "config_print";
                 break;
             case R.id.nav_formularios:
-                //contentFragment = new MenuFormulariosView();
-                contentFragment = new CustomerComplaintView();
+                contentFragment = new MenuFormulariosView();
+                //contentFragment = new CustomerComplaintView();
                 //contentFragment = new ComplaintScreen();
-                //fragmentSeleccionado = true;
+                fragmentSeleccionado = true;
                 //TAG_FRAGMENT = "config_print";
                 //CobranzaCabeceraFragment = new CobranzaCabeceraView();
                 /*fragment = "CustomerComplaintView";

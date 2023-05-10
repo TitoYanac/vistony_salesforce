@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lowagie.text.List;
+import com.vistony.salesforce.Controller.Adapters.ListSalesOrderDetailAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
@@ -71,7 +72,7 @@ public class OrdenVentaDetalleView extends Fragment {
     static Context context;
     private ProgressDialog pd;
     TableRow tr_taxoil;
-
+    static ListSalesOrderDetailAdapter listSalesOrderDetailAdapter;
     public static OrdenVentaDetalleView newInstanceEnviaListaPromocion (Object objeto) {
 
         ListenerBackPress.setCurrentFragment("OrdenVentaDetalleView");
@@ -167,6 +168,7 @@ public class OrdenVentaDetalleView extends Fragment {
         ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=productoAgregado.getPorcentaje_descuento_max();
         ObjListaProductosEntity.orden_detalle_stock_almacen=productoAgregado.getStock_almacen();
         ObjListaProductosEntity.orden_detalle_stock_general=productoAgregado.getStock_general();
+        ObjListaProductosEntity.orden_detalle_cardcode= listaprecio_id;
 
         listadoProductosAgregados.add(ObjListaProductosEntity);
         //}
@@ -336,9 +338,11 @@ public class OrdenVentaDetalleView extends Fragment {
 
         protected void onPostExecute(Object result){
             getActivity().setTitle("Orden Venta Detalle");
-            listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
+            //listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
+            listSalesOrderDetailAdapter = new ListSalesOrderDetailAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
 
-            lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
+            //lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
+            lv_ordenventadetalle.setAdapter(listSalesOrderDetailAdapter);
             hiloAgregarListaProductos =  new HiloAgregarListaProductos();
 
             ActualizarResumenMontos(tv_orden_venta_detalle_subtotal,tv_orden_venta_detalle_descuento,tv_orden_venta_detalle_igv,tv_orden_venta_detalle_total,tv_orden_detalle_galones);

@@ -284,6 +284,7 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
 
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -298,7 +299,7 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
                        /* while (ContextCompat.checkSelfPermission(this,
                                 Manifest.permission.READ_PHONE_STATE)
                                 != PackageManager.PERMISSION_GRANTED )
-                        {*/
+                        {
                     if ((ContextCompat.checkSelfPermission(getContext(),
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             != PackageManager.PERMISSION_GRANTED))
@@ -316,7 +317,7 @@ public class RutaVendedorView extends Fragment //implements SearchView.OnQueryTe
             }
         }
 
-    }
+    }*/
 
 
 

@@ -7,6 +7,15 @@ public class ClienteAtendido {
     private String PriceList_id;
     private String PriceList;
     private String Ubigeo_ID;
+    private String Currency_ID;
+
+    public String getCurrency_ID() {
+        return Currency_ID;
+    }
+
+    public void setCurrency_ID(String currency_ID) {
+        Currency_ID = currency_ID;
+    }
 
     public String getUbigeo_ID() {
         return Ubigeo_ID;

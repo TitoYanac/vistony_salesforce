@@ -241,7 +241,7 @@ public class MenuView extends AppCompatActivity
         cobranzaRepository = new ViewModelProvider(this).get(CobranzaRepository.class);
         quotasPerCustomerRepository = new ViewModelProvider(this).get(QuotasPerCustomerHeadRepository.class);
         quotasPerCustomerDetailRepository = new ViewModelProvider(this).get(QuotasPerCustomerDetailRepository.class);
-        bxlPrinter = new BixolonPrinterController(this);
+        bxlPrinter = new BixolonPrinterController(this,this);
 
         cobranzaRepository.PendingCollectionQR(this).observe(MenuView.this, data -> {
             Log.e("Jepicame","=>"+data);
@@ -2147,6 +2147,7 @@ public class MenuView extends AppCompatActivity
         onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -2162,7 +2163,7 @@ public class MenuView extends AppCompatActivity
                 }
                 break;
         }
-    }
+    }*/
 
     private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
         @Override

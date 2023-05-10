@@ -41,6 +41,15 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_U_VIT_VENMOS;
     public String orden_cabecera_U_VIS_Flete;
     public String orden_cabecera_U_VIS_CompleteOV;
+    public String orden_cabecera_U_VIS_TipTransGrat;
+
+    public String getOrden_cabecera_U_VIS_TipTransGrat() {
+        return orden_cabecera_U_VIS_TipTransGrat;
+    }
+
+    public void setOrden_cabecera_U_VIS_TipTransGrat(String orden_cabecera_U_VIS_TipTransGrat) {
+        this.orden_cabecera_U_VIS_TipTransGrat = orden_cabecera_U_VIS_TipTransGrat;
+    }
 
     public String getOrden_cabecera_U_VIS_CompleteOV() {
         return orden_cabecera_U_VIS_CompleteOV;

@@ -675,10 +675,6 @@ fun PruebaDialog(
                                                     //startActivity(contextForToast, mapIntent,Bundle())
                                                     contextForToast.startActivity(mapIntent)
                                                 })
-                                        //Clip Image to be shaped as a circle
-                                        //.clip(CircleShape)
-                                        //.border(1.5.dp, MaterialTheme.colors.secondary, CircleShape
-                                        //)
                                     )
 
 
@@ -693,12 +689,7 @@ fun PruebaDialog(
                                     )
                                 }
                             }
-
-
-
                             Spacer(modifier = Modifier.height(20.dp))
-
-
                             Row(
                                 modifier = Modifier
                                     //.fillMaxHeight(1f)
@@ -712,10 +703,8 @@ fun PruebaDialog(
                                     onClick = {
                                         dialogOpen=false
                                         onDismiss()
-
-
                                     }) {
-                                    Text(text = "Aceptar", fontSize = 18.sp, color = Color.White)
+                                    Text(text = "Cerrar", fontSize = 18.sp, color = Color.White)
                                 }
 
                             }
@@ -729,7 +718,8 @@ fun PruebaDialog(
                     modifier = Modifier
                         .size(200.dp)
                         .align(Alignment.TopCenter)
-                        .clickable {}
+                        .clickable {},
+                    "Geolocation"
                         )
 
                 }

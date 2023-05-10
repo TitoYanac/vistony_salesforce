@@ -10,22 +10,45 @@ import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaConsultaStockEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.ListaPrecioEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Enum.TipoDeCompra;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListaPrecioDetalleSQLiteDao {
 
     ArrayList<ListaProductoEntity> arraylistaProductoEntity;
     ArrayList<ListaConsultaStockEntity> listaConsultaStockEntity;
     ArrayList<ListaPrecioDetalleSQLiteEntity> ListaPrecioDetalleSQLiteEntity;
+    SqliteController sqliteController;
+    SQLiteDatabase bd;
 
+    /*
     public ListaPrecioDetalleSQLiteDao(Context context){
         DataBaseManager.initializeInstance(new SqliteController(context));
+    }*/
+
+    public ListaPrecioDetalleSQLiteDao(Context context)
+    {
+        sqliteController = new SqliteController(context);
     }
 
+    public void abrir(){
+        Log.i("SQLite", "Se abre conexion a la base de datos " + sqliteController.getDatabaseName() );
+        bd = sqliteController.getWritableDatabase();
+    }
+
+    /** Cierra conexion a la base de datos */
+    public void cerrar()
+    {
+        Log.i("SQLite", "Se cierra conexion a la base de datos " + sqliteController.getDatabaseName() );
+        sqliteController.close();
+    }
+
+    /*
     public int InsertaListaPrecioDetalle (
             String compania_id,
             String credito,
@@ -64,7 +87,37 @@ public class ListaPrecioDetalleSQLiteDao {
 
         DataBaseManager.getInstance().closeDatabase();
         return 1;
+    }*/
+
+    public int AddListPriceList (List<ListaPrecioEntity> listPrice)
+    {
+        abrir();
+
+        for (int i = 0; i < listPrice.size(); i++) {
+            ContentValues registro = new ContentValues();
+            registro.put("compania_id",SesionEntity.compania_id);
+            registro.put("porcentaje_dsct",listPrice.get(i).getPorcentaje_descuento());
+            registro.put("credito",listPrice.get(i).getCredito());
+            registro.put("contado",listPrice.get(i).getContado());
+            registro.put("producto_id",listPrice.get(i).getProducto_id());
+            registro.put("producto",listPrice.get(i).getProducto());
+            registro.put("umd",listPrice.get(i).getUmd());
+            registro.put("gal",listPrice.get(i).getGal());
+            registro.put("U_VIS_CashDscnt",listPrice.get(i).getCashdscnt());
+            registro.put("Tipo",listPrice.get(i).getTipo());
+            registro.put("stock_almacen",listPrice.get(i).getStock_almacen());
+            registro.put("stock_general",listPrice.get(i).getStock_general());
+            registro.put("units",listPrice.get(i).getUnit());
+            registro.put("MonedaAdicional",listPrice.get(i).getMonedaAdicional());
+            registro.put("MonedaAdicionalContado",listPrice.get(i).getMonedaAdicionalContado());
+            registro.put("MonedaAdicionalCredito",listPrice.get(i).getMonedaAdicionalCredito());
+            bd.insert("listapreciodetalle",null,registro);
+        }
+
+        bd.close();
+        return 1;
     }
+
 
     public ArrayList<ListaProductoEntity> ObtenerListaPrecioDetalle (String cardCode, String terminoPago){
 

@@ -1,23 +1,41 @@
 package com.vistony.salesforce.Dao.Retrofit;
 
+import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
+
 import android.content.Context;
+
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
+import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPrecioDetalleEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
+import com.vistony.salesforce.R;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListaPrecioRepository {
+public class ListaPrecioRepository
+        extends ViewModel
+{
 
-    private ArrayList<ListaPrecioDetalleSQLiteEntity> LPDetalle= new ArrayList<>();
-    private Context context;
+    //private ArrayList<ListaPrecioDetalleSQLiteEntity> LPDetalle= new ArrayList<>();
+    //private Context context;
 
+    private ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao;
+    private ParametrosSQLite parametrosSQLite;
+    private MutableLiveData<String> status= new MutableLiveData<>();
+
+    /*
     public ListaPrecioRepository(final Context context){
         this.context=context;
     }
@@ -61,5 +79,40 @@ public class ListaPrecioRepository {
 
 
         return LPDetalle;
+    }*/
+
+    public MutableLiveData<String> execClarAndAddPriceList(String Imei,Context context){
+
+        Config.getClient().create(Api.class).getListaPrecioDetalle(Imei).enqueue(new Callback<ListaPrecioDetalleEntityResponse>() {
+            @Override
+            public void onResponse(Call<ListaPrecioDetalleEntityResponse> call, Response<ListaPrecioDetalleEntityResponse> response) {
+
+                ListaPrecioDetalleEntityResponse listaPrecioDetalleEntityResponse=response.body();
+
+                if(response.isSuccessful() && listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity()!=null)
+                {
+
+                    listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(context);
+                    parametrosSQLite = new ParametrosSQLite(context);
+
+                    listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
+                    listaPrecioDetalleSQLiteDao.AddListPriceList(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity());
+                    Integer countPriceList=getCountPriceList(context);
+                    parametrosSQLite.ActualizaCantidadRegistros("7", context.getResources().getString(R.string.price_list).toUpperCase(), ""+countPriceList, getDateTime());
+                }
+
+                status.setValue("1");
+            }
+
+            @Override
+            public void onFailure(Call<ListaPrecioDetalleEntityResponse> call, Throwable t) {
+                status.setValue("0");
+            }
+        });
+        return status;
+    }
+
+    private Integer getCountPriceList(Context context){
+        return listaPrecioDetalleSQLiteDao.ObtenerCantidadListaPrecioDetalle();
     }
 }

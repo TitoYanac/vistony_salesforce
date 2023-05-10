@@ -242,7 +242,7 @@ public class MenuView extends AppCompatActivity
         clienteCabeceraView = new ClienteCabeceraView();
         consultarCobranzaView= new ClienteDetalleView();
         parametrosView = new ParametrosView();
-        bxlPrinter = new BixolonPrinterController(this);
+        bxlPrinter = new BixolonPrinterController(this,this);
 
         cobranzaCabeceraView = new CobranzaCabeceraView();
 
@@ -2020,6 +2020,7 @@ public class MenuView extends AppCompatActivity
         onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -2035,7 +2036,7 @@ public class MenuView extends AppCompatActivity
                 }
                 break;
         }
-    }
+    }*/
 
     private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
         @Override

@@ -11,13 +11,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.StrictMode;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,7 +39,6 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaParametrosAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
-import com.vistony.salesforce.Controller.Utilitario.StrictModeController;
 import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.EscColoursCRepository;
@@ -58,10 +54,11 @@ import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.ListaPrecioRepository;
 import com.vistony.salesforce.Dao.Retrofit.ListaPromocionWS;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
-import com.vistony.salesforce.Dao.Retrofit.PromocionCabeceraWS;
-import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleWS;
+import com.vistony.salesforce.Dao.Retrofit.PromocionCabeceraRepository;
+import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleRepository;
 import com.vistony.salesforce.Dao.Retrofit.QuoteEffectivenessRepository;
 import com.vistony.salesforce.Dao.Retrofit.ReasonDispatchRepository;
+import com.vistony.salesforce.Dao.Retrofit.ReasonFreeTransferRepository;
 import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoRepository;
 import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.StockWS;
@@ -198,6 +195,10 @@ ParametrosView extends Fragment {
     private QuoteEffectivenessRepository quoteEffectivenessRepository;
     private LeadClienteViewModel leadClienteViewModel;
     private UbigeoRepository ubigeoRepository;
+    private ListaPrecioRepository listaPrecioRepository;
+    private PromocionCabeceraRepository promocionCabeceraRepository;
+    private PromocionDetalleRepository promocionDetalleRepository;
+    private ReasonFreeTransferRepository reasonFreeTransferRepository;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -295,12 +296,16 @@ ParametrosView extends Fragment {
         quoteEffectivenessRepository= new ViewModelProvider(getActivity()).get(QuoteEffectivenessRepository.class);
         leadClienteViewModel = new ViewModelProvider(getActivity()).get(LeadClienteViewModel.class);
         ubigeoRepository = new ViewModelProvider(getActivity()).get(UbigeoRepository.class);
+        listaPrecioRepository = new ViewModelProvider(getActivity()).get(ListaPrecioRepository.class);
+        promocionCabeceraRepository = new ViewModelProvider(getActivity()).get(PromocionCabeceraRepository.class);
+        promocionDetalleRepository = new ViewModelProvider(getActivity()).get(PromocionDetalleRepository.class);
+        reasonFreeTransferRepository = new ViewModelProvider(getActivity()).get(ReasonFreeTransferRepository.class);
         //CARGA DE MAESTROS
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
         switch (BuildConfig.FLAVOR){
 
             //case "ecuador":
-            case "chile":
+            case "india":
                 if (listaparametrosSQLiteEntity.isEmpty()) {
                     parametrosSQLite.LimpiarParametros();
                     parametrosSQLite.InsertaParametros("1", this.getResources().getString(R.string.clients).toLowerCase() ,"0", getDateTime());
@@ -315,6 +320,7 @@ ParametrosView extends Fragment {
                     parametrosSQLite.InsertaParametros("17", this.getResources().getString(R.string.reasons_visit).toUpperCase(), "0", getDateTime());
                 }
                 break;
+            case "chile":
             case "peru":
             case "bolivia":
             case "paraguay":
@@ -350,6 +356,7 @@ ParametrosView extends Fragment {
                             parametrosSQLite.InsertaParametros("21", this.getResources().getString(R.string.colors_head).toUpperCase(), "0", getDateTime());
                             parametrosSQLite.InsertaParametros("22",  this.getResources().getString(R.string.colors_detail).toUpperCase(), "0", getDateTime());
                             parametrosSQLite.InsertaParametros("25",  this.getResources().getString(R.string.ubigeous).toUpperCase(), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("26",  this.getResources().getString(R.string.reason_free_transfer).toUpperCase(), "0", getDateTime());
                         }
                         /*if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
                             parametrosSQLite.InsertaParametros("18", this.getResources().getString(R.string.price_list), "0", getDateTime());
@@ -373,6 +380,7 @@ ParametrosView extends Fragment {
                         parametrosSQLite.InsertaParametros("21", this.getResources().getString(R.string.colors_head).toUpperCase(), "0", getDateTime());
                         parametrosSQLite.InsertaParametros("22",  this.getResources().getString(R.string.colors_detail).toUpperCase(), "0", getDateTime());
                         parametrosSQLite.InsertaParametros("25",  this.getResources().getString(R.string.ubigeous).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("26",  this.getResources().getString(R.string.reason_free_transfer).toUpperCase(), "0", getDateTime());
                     }
                 }
                 break;
@@ -485,6 +493,50 @@ ParametrosView extends Fragment {
         ubigeoRepository.geUbigeo (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
             Log.e("REOS", "ParametrosView-ubigeoRepository-data: " + data);
         });
+
+        String datepricelist="",datepromotionhead="",datepromotiondetail="";
+        ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getContext());
+        datepricelist=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.price_list).toUpperCase());
+        Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
+        Log.e("REOS", "ParametrosView-onCreate-datepricelist: " + datepricelist);
+        if(!fecha.equals(datepricelist))
+        {
+            listaPrecioRepository.execClarAndAddPriceList(SesionEntity.imei, getContext()).observe(getActivity()
+                    , data -> {
+                        Log.e("REOS", "ParametrosView-listaPrecioRepository-data: " + data);
+                    }
+            );
+        }
+
+        datepromotionhead=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_head).toUpperCase());
+        Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
+        Log.e("REOS", "ParametrosView-onCreate-datepromotionhead: " + datepromotionhead);
+        if(!fecha.equals(datepromotionhead))
+        {
+            promocionCabeceraRepository.exeClearandAddPromotionHead(SesionEntity.imei, getContext()).observe(getActivity()
+                    , data -> {
+                        Log.e("REOS", "ParametrosView-promocionCabeceraRepository-data: " + data);
+                    }
+            );
+        }
+
+        datepromotiondetail=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_detail).toUpperCase());
+        Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
+        Log.e("REOS", "ParametrosView-onCreate-datepromotiondetail: " + datepromotiondetail);
+        if(!fecha.equals(datepromotiondetail))
+        {
+            promocionDetalleRepository.exeClearandAddPromotionDetail(SesionEntity.imei, getContext()).observe(getActivity()
+                    , data -> {
+                        Log.e("REOS", "ParametrosView-promocionDetalleRepository-data: " + data);
+                    }
+            );
+        }
+
+        reasonFreeTransferRepository.getReasonFreeTransfer(SesionEntity.imei,getContext()).observe(getActivity()
+                ,data-> {
+                    Log.e("REOS", "ParametrosView-getReasonFreeTransfer-data: " + data);
+                }
+        );
         //Enviar Firma Electronica
         //cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
         //    Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
@@ -492,9 +544,6 @@ ParametrosView extends Fragment {
 
         if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
         {
-
-
-
             //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
             statusDispatchRepository.statusDispatchSendTime(getContext(),executor.diskIO()).observe(getActivity(), data -> {
@@ -522,6 +571,24 @@ ParametrosView extends Fragment {
             rutaFuerzaTrabajoRepository.getInsertDBWorkPath  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
                 Log.e("Jepicame","=>"+data);
             });
+
+            listaPrecioRepository.execClarAndAddPriceList(SesionEntity.imei, getContext()).observe(getActivity()
+                    , data -> {
+                        Log.e("REOS", "ParametrosView-listaPrecioRepository-data: " + data);
+                    }
+            );
+
+            promocionCabeceraRepository.exeClearandAddPromotionHead(SesionEntity.imei, getContext()).observe(getActivity()
+                            , data -> {
+                                Log.e("REOS", "ParametrosView-promocionCabeceraRepository-data: " + data);
+                            }
+                    );
+
+            promocionDetalleRepository.exeClearandAddPromotionDetail(SesionEntity.imei, getContext()).observe(getActivity()
+                    , data -> {
+                        Log.e("REOS", "ParametrosView-promocionDetalleRepository-data: " + data);
+                    }
+            );
 
             objeto=listaParametrosAdapter.ObtenerListaParametros();
 
@@ -590,12 +657,12 @@ ParametrosView extends Fragment {
                     if (argumento.equals("Todos")) {
 
                         ClienteRepository clienteRepository;
-                        ListaPrecioRepository listaPrecioRepository;
+                        //ListaPrecioRepository listaPrecioRepository;
                         // bancoRepository.getAndInsertBank(SesionEntity.imei,getContext());
                         switch (BuildConfig.FLAVOR){
                             case "india":
                             case "ecuador":
-                            case "chile":
+
                                  clienteRepository = new ClienteRepository(getContext());
                                 LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
@@ -623,14 +690,14 @@ ParametrosView extends Fragment {
                                     parametrosSQLite.ActualizaCantidadRegistros("6", getActivity().getResources().getString(R.string.Agencies).toUpperCase(), String.valueOf(CantAgencia), getDateTime());
                                 }
 
-                                listaPrecioRepository = new ListaPrecioRepository(getContext());
+                                /*listaPrecioRepository = new ListaPrecioRepository(getContext());
                                 LPDetalle = listaPrecioRepository.getListaPrecioDetalleWS(SesionEntity.imei);
 
                                 if (!(LPDetalle.isEmpty())) {
                                     listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
                                     CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
                                     parametrosSQLite.ActualizaCantidadRegistros("7",  getActivity().getResources().getString(R.string.price_list).toUpperCase(), String.valueOf(CantListaPrecioDetalle), getDateTime());
-                                }
+                                }*/
 
                                 /*RutaFuerzaTrabajoRepository rutaFuerzaTrabajoRepository = new RutaFuerzaTrabajoRepository(getContext());
                                 LRutaFuerzaTrabajo = rutaFuerzaTrabajoRepository.getRutaFuerzaTrabajoWS(SesionEntity.imei);
@@ -652,6 +719,7 @@ ParametrosView extends Fragment {
 
                                 break;
                             case "peru":
+                            case "chile":
                             case "perurofalab":
                             case "espania":
                             case "marruecos":
@@ -742,7 +810,7 @@ ParametrosView extends Fragment {
                             parametrosSQLite.ActualizaCantidadRegistros("6", getActivity().getResources().getString(R.string.Agencies).toUpperCase(), String.valueOf(CantAgencia), getDateTime());
                         }
                     }
-                    else if (argumento.equals(getActivity().getResources().getString(R.string.price_list).toUpperCase())) {
+                    /*else if (argumento.equals(getActivity().getResources().getString(R.string.price_list).toUpperCase())) {
                         ListaPrecioRepository listaPrecioRepository = new ListaPrecioRepository(getContext());
                         LPDetalle = listaPrecioRepository.getListaPrecioDetalleWS(SesionEntity.imei);
 
@@ -751,7 +819,7 @@ ParametrosView extends Fragment {
                             CantListaPrecioDetalle = registrarListaPrecioDetalleSQLite(LPDetalle);
                             parametrosSQLite.ActualizaCantidadRegistros("7", getActivity().getResources().getString(R.string.price_list).toUpperCase(), String.valueOf(CantListaPrecioDetalle), getDateTime());
                         }
-                    }
+                    }*/
                     else if (argumento.equals("STOCK")) {
                         StockWS stockWS = new StockWS(getContext());
                         LStock = stockWS.getStockWS(SesionEntity.imei);
@@ -772,8 +840,8 @@ ParametrosView extends Fragment {
                         parametrosSQLite.ActualizaCantidadRegistros("9", getActivity().getResources().getString(R.string.list_promotion).toUpperCase(), String.valueOf(CantListaPromocion), getDateTime());
                     }
                     }
-                    else if (argumento.equals(getActivity().getResources().getString(R.string.promotion_head).toUpperCase())) {
-                        PromocionCabeceraWS promocionCabeceraWS = new PromocionCabeceraWS(getContext());
+                    /*else if (argumento.equals(getActivity().getResources().getString(R.string.promotion_head).toUpperCase())) {
+                        PromocionCabeceraRepository promocionCabeceraWS = new PromocionCabeceraRepository(getContext());
 
                         LPCabecera = promocionCabeceraWS.getPromocionCabeceraWS(SesionEntity.imei);
 
@@ -782,16 +850,16 @@ ParametrosView extends Fragment {
                             CantPromocionCabecera = registrarPromocionCabeceraSQLite(LPCabecera);
                             parametrosSQLite.ActualizaCantidadRegistros("10", getActivity().getResources().getString(R.string.promotion_head).toUpperCase(), String.valueOf(CantPromocionCabecera), getDateTime());
                         }
-                    }
-                    else if (argumento.equals(getActivity().getResources().getString(R.string.promotion_detail).toUpperCase())) {
-                        PromocionDetalleWS promocionDetalleWS = new PromocionDetalleWS(getContext());
+                    }*/
+                    /*else if (argumento.equals(getActivity().getResources().getString(R.string.promotion_detail).toUpperCase())) {
+                        PromocionDetalleRepository promocionDetalleWS = new PromocionDetalleRepository(getContext());
                         LPromocionDetalle = promocionDetalleWS.getPromocionDetalleWS(SesionEntity.imei);
                         if (!(LPromocionDetalle.isEmpty())) {
                             promocionDetalleSQLiteDao.LimpiarTablaPromocionDetalle();
                             CantPromocionDetalle = registrarPromocionDetalleSQLite(LPromocionDetalle);
                             parametrosSQLite.ActualizaCantidadRegistros("11", getActivity().getResources().getString(R.string.promotion_detail).toUpperCase(), String.valueOf(CantPromocionDetalle), getDateTime());
                         }
-                    }
+                    }*/
                     else if (argumento.equals("RUTA FUERZATRABAJO")) {
 
                         Log.e("JPCM","FUERZA DE TRABAJO DESCARGANDO");
@@ -1121,6 +1189,7 @@ ParametrosView extends Fragment {
         return resultado;
     }
 
+    /*
     public int registrarListaPrecioDetalleSQLite(List<ListaPrecioDetalleSQLiteEntity> Lista)
     {
         listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(getContext());
@@ -1153,7 +1222,7 @@ ParametrosView extends Fragment {
             e.printStackTrace();
         }
         return resultado;
-    }
+    }*/
 
     public int registrarStockSQLite(List<StockSQLiteEntity> Lista)
     {
@@ -1207,6 +1276,7 @@ ParametrosView extends Fragment {
         return resultado;
     }
 
+    /*
     public int registrarPromocionCabeceraSQLite(List<PromocionCabeceraSQLiteEntity> Lista)
     {
         promocionCabeceraSQLiteDao = new PromocionCabeceraSQLiteDao(getContext());
@@ -1234,8 +1304,9 @@ ParametrosView extends Fragment {
             System.out.println(e.getMessage());
         }
         return resultado;
-    }
+    }*/
 
+    /*
     public int registrarPromocionDetalleSQLite(List<PromocionDetalleSQLiteEntity> Lista)
     {
         promocionDetalleSQLiteDao = new PromocionDetalleSQLiteDao(getContext());
@@ -1265,7 +1336,7 @@ ParametrosView extends Fragment {
             System.out.println(e.getMessage());
         }
         return resultado;
-    }
+    }*/
 
     /*public int registrarRutaFuerzaTrabajoSQLite(List<RutaFuerzaTrabajoSQLiteEntity> Lista)
     {

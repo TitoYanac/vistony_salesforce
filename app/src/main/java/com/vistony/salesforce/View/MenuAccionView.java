@@ -334,7 +334,7 @@ public class MenuAccionView extends Fragment {
 
             switch (BuildConfig.FLAVOR){
 
-                case "peru":
+
                 case "paraguay":
                 case "perurofalab":
                 case "espania":
@@ -348,7 +348,7 @@ public class MenuAccionView extends Fragment {
                 case "ecuador":
                 case "bolivia":
                 case "chile":
-
+                case "peru":
                     alertatipoventa().show();
                     break;
             }
@@ -413,7 +413,7 @@ public class MenuAccionView extends Fragment {
                 SesionEntity.quotation="N";
         });
         cv_visit_section.setOnClickListener(v -> {
-            alertDialogVisitSection().show();
+            alertDialogVisitSection(getContext()).show();
         });
         cv_dispatch.setOnClickListener(v -> {
             if(cv_dispatch.isFocusable())
@@ -668,9 +668,9 @@ public class MenuAccionView extends Fragment {
         final Dialog dialog = new Dialog(getContext());
         switch (BuildConfig.FLAVOR) {
 
-            case "paraguay":
+            /*case "paraguay":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza_induvis);
-                break;
+                break;*/
             case "peru":
             case "chile":
             case "perurofalab":
@@ -678,6 +678,7 @@ public class MenuAccionView extends Fragment {
             case "marruecos":
             case "ecuador":
             case "bolivia":
+            case "paraguay":
                 dialog.setContentView(R.layout.layout_dialog_tipo_cobranza);
                 break;
         }
@@ -694,7 +695,12 @@ public class MenuAccionView extends Fragment {
 
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
-            cv_collection_salesperson.setVisibility(View.GONE);
+            if(BuildConfig.FLAVOR.equals("paraguay"))
+            {
+                cv_collection_salesperson.setVisibility(View.GONE);
+                cv_cobranza_pago_pos.setVisibility(View.GONE);
+            }
+
         }
         else {
             //cv_collection_check.setVisibility(View.GONE);
@@ -940,9 +946,9 @@ public class MenuAccionView extends Fragment {
     }
     ArrayList<VisitSectionEntity> listVisitSection=new ArrayList<>();
 
-    private Dialog alertDialogVisitSection() {
+    public Dialog alertDialogVisitSection(Context context) {
 
-        final Dialog dialog = new Dialog(getContext());
+        final Dialog dialog = new Dialog(context);
         fechainicio="";timeini="";
         dialog.setContentView(R.layout.layout_dialog_visit_section);
         CheckBox chk_start_visitsection,chk_finish_visitsection;
@@ -963,7 +969,7 @@ public class MenuAccionView extends Fragment {
         image.setImageResource(R.mipmap.logo_circulo);
         VisitSectionEntity visitSectionEntity=new VisitSectionEntity();
 
-        VisitSectionSQLite visitSectionSQLite=new VisitSectionSQLite(getContext());
+        VisitSectionSQLite visitSectionSQLite=new VisitSectionSQLite(context);
         listVisitSection=visitSectionSQLite.getVisitSection(CardCode,DomEmbarque_ID,FormatFecha.format(date),Control_id);
         statusDispatchRepository = new ViewModelProvider(getActivity()).get(StatusDispatchRepository.class);
         for(int i=0;i<listVisitSection.size();i++)

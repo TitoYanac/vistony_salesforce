@@ -1,5 +1,6 @@
 package com.vistony.salesforce.Controller.Utilitario;
 
+import android.app.Activity;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
@@ -15,7 +16,7 @@ public class VideoRecorder{
     private MediaRecorder mMediaRecorder;
     private boolean isRecording = false;
 
-    public boolean startRecording(SurfaceHolder holder, String filePath) {
+    public boolean startRecording(SurfaceHolder holder, String filePath, Activity activity) {
         try {
 
         if (isRecording) {
@@ -26,6 +27,12 @@ public class VideoRecorder{
 
         mMediaRecorder = new MediaRecorder();
         mCamera.unlock();
+            //Obtén la orientación actual del dispositivo
+            //int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+            //int orientation = ORIENTATIONS.get(rotation);
+            //int orientation = 3;
+        //Ajusta la configuración de la cámara
+            //mMediaRecorder.setOrientationHint(orientation);
         mMediaRecorder.setCamera(mCamera);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);

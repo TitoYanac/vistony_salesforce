@@ -89,7 +89,7 @@ public class Utilitario {
     }
 
     public static String getDateTime(){
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date2 = new Date();
         return dateFormat2.format(date2);
     }

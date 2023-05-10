@@ -28,13 +28,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vistony.salesforce.Controller.Adapters.ListSalesOrderDetailAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Adapters.ListaOrdenVentaDetalleDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -67,11 +70,11 @@ public class OrdenVentaDetalleView extends Fragment {
     public static ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabecera=new ArrayList<>();
     static MenuItem guardar_orden_venta,vincular_orden_venta_cabecera;
     static Menu menu_variable;
-    static String listaprecio_id,descuentocontado,terminopago_id,ubigeo_id="0";
+    static String listaprecio_id,descuentocontado,terminopago_id,ubigeo_id="0",currency_id;
     static Context context;
     private ProgressDialog pd;
     TableRow tr_summary_flete;
-
+    static ListSalesOrderDetailAdapter listSalesOrderDetailAdapter;
     public static OrdenVentaDetalleView newInstanceEnviaListaPromocion (Object objeto) {
 
         ListenerBackPress.setCurrentFragment("OrdenVentaDetalleView");
@@ -102,7 +105,7 @@ public class OrdenVentaDetalleView extends Fragment {
             listaprecio_id=arrayObject[0]; //codigocliente
             descuentocontado=compuesto[0];
             terminopago_id=compuesto[1];
-            ubigeo_id=compuesto[2];
+            currency_id=compuesto[2];
 
         }else{
             listaprecio_id=arrayObject[0]; //codigocliente
@@ -156,7 +159,7 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_producto_id=productoAgregado.getProducto_id();
             ObjListaProductosEntity.orden_detalle_producto=productoAgregado.getProducto();
             ObjListaProductosEntity.orden_detalle_umd=productoAgregado.getUmd();
-            ObjListaProductosEntity.orden_detalle_stock_almacen=productoAgregado.getStock();
+            ObjListaProductosEntity.orden_detalle_stock_almacen=productoAgregado.getStock_almacen();
             ObjListaProductosEntity.orden_detalle_precio_unitario=productoAgregado.getPreciobase();
             ObjListaProductosEntity.orden_detalle_gal=productoAgregado.getGal();
             ObjListaProductosEntity.orden_detalle_monto_igv="0";
@@ -172,8 +175,10 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_gal_acumulado="0";
             ObjListaProductosEntity.orden_detalle_descuentocontado="0";
             ObjListaProductosEntity.orden_detalle_terminopago_id=terminopago_id;
+            //ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=productoAgregado.get
             ObjListaProductosEntity.orden_detalle_chk_descuentocontado_cabecera= descuentocontadocabecera;
             ObjListaProductosEntity.orden_detalle_cardcode= listaprecio_id;
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=productoAgregado.getPorcentaje_descuento_max();
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-descuentocontado:"+String.valueOf(descuentocontado));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-terminopago_id:"+String.valueOf(terminopago_id));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-terminopago_id:"+String.valueOf(descuentocontadocabecera));
@@ -257,7 +262,7 @@ public class OrdenVentaDetalleView extends Fragment {
         hiloAgregarListaProductos = new HiloAgregarListaProductos();
         hiloActualizarResumenMontos = new HiloActualizarResumenMontos();
         context=getContext();
-        getActivity().setTitle("Orden De Venta");
+        getActivity().setTitle(Induvis.getTituloVentaString(getContext()));
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -284,7 +289,7 @@ public class OrdenVentaDetalleView extends Fragment {
         cliente.setCardCode(listaprecio_id);//contiene CardCode
         cliente.setPymntGroup(terminopago_id);
         cliente.setUbigeo_ID(ubigeo_id);
-
+        cliente.setCurrency_ID(currency_id);
 
         fab_consulta_productos.setOnClickListener(view -> {
 
@@ -345,12 +350,25 @@ public class OrdenVentaDetalleView extends Fragment {
         }
 
         protected void onPostExecute(Object result){
-            getActivity().setTitle("Orden Venta Detalle");
-            listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
+            getActivity().setTitle(Induvis.getTituloVentaString(getContext())+" Detalle");
 
+            if(SesionEntity.quotation.equals("N"))
+            {
+                listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
+            }
+            else {
+                listSalesOrderDetailAdapter = new ListSalesOrderDetailAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
+            }
             if(lv_ordenventadetalle!=null)
             {
-                lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
+                if(SesionEntity.quotation.equals("N"))
+                {
+                    lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
+                }
+                else {
+                    lv_ordenventadetalle.setAdapter(listSalesOrderDetailAdapter);
+                }
+
                 hiloAgregarListaProductos = new HiloAgregarListaProductos();
 
                 ActualizarResumenMontos(tv_orden_venta_detalle_subtotal, tv_orden_venta_detalle_descuento, tv_orden_venta_detalle_igv, tv_orden_venta_detalle_total, tv_orden_detalle_galones);

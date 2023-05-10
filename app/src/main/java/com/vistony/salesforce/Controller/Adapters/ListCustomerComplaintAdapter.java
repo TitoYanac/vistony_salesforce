@@ -31,6 +31,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -59,7 +60,7 @@ import androidx.fragment.app.DialogFragment;
 import com.baoyachi.stepview.HorizontalStepView;
 import com.baoyachi.stepview.bean.StepBean;
 import com.google.android.material.textfield.TextInputLayout;
-import com.kofigyan.stateprogressbar.StateProgressBar;
+
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
@@ -94,7 +95,9 @@ public class ListCustomerComplaintAdapter extends
     TextView tv_questions,tv_start_video;
     SurfaceView surfaceView;
     LifecycleOwner lifecycleOwner;
-    int x=0;
+    int x=0,y=0;
+    List<CustomerComplaintSectionEntity> objects;
+    String responsespinner="";
     public ListCustomerComplaintAdapter(
             Context context,
             List<CustomerComplaintSectionEntity> objects,
@@ -106,6 +109,24 @@ public class ListCustomerComplaintAdapter extends
         this.context=context;
         this.activity=activity;
         this.lifecycleOwner=lifecycleOwner;
+        this.objects=objects;
+        CustomerComplaintView.RutaFilePhoto.observe(lifecycleOwner, data -> {
+            Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.Cons.RutaFilePhoto.: "+data);
+            //Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.observe.position.: "+position);
+            //Log.e("REOS", "ListCustomerComplaintAdapter-lead.getSection(): " + lead.getSection());
+            AddMedia(this.objects,x,y,data.toString(),"F");
+        });
+        CustomerComplaintView.RutaFileVideo.observe(lifecycleOwner, data -> {
+                Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.observe.RutaFileVideo: "+data);
+                //AddMedia(lead,y,data.toString(),"V");
+            AddMedia(this.objects,x,y,data.toString(),"V");
+            });
+
+            CustomerComplaintView.RutaFileAttach.observe(lifecycleOwner, data -> {
+                Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.observe.RutaFileAttach: "+data);
+                //AddMedia(lead,y,data.toString(),"A");
+                AddMedia(this.objects,x,y,data.toString(),"A");
+            });
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -146,12 +167,13 @@ public class ListCustomerComplaintAdapter extends
                 holder.tv_section.setText(lead.getListCustomerComplaintSection().get(i).getSection());
                 Log.e("REOS", "ListCustomerComplaintAdapter-getView-lead.getListCustomerComplaintSection().get(i).getSection()" + lead.getListCustomerComplaintSection().get(i).getSection());
             }*/
-
+            lead.setSection_id(String.valueOf(position));
             if(holder.content.getChildCount()==0)
             {
                 addViews(holder,lead);
             }
             updateStepView(holder,lead);
+
             /*holder.imv_show_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
@@ -175,25 +197,24 @@ public class ListCustomerComplaintAdapter extends
         ;//设置StepsViewIndicator AttentionIcon
 
             //CustomerComplaintView customerComplaintView=new CustomerComplaintView();
-            CustomerComplaintView.RutaFilePhoto.observe(lifecycleOwner, data -> {
-                Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.RutaFilePhoto: "+data);
-                AddMedia(lead,x,data.toString());
-            });
+            /*CustomerComplaintView.RutaFilePhoto.observe(lifecycleOwner, data -> {
+                Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.observe.RutaFilePhoto.: "+data);
+                Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.observe.position.: "+position);
+                Log.e("REOS", "ListCustomerComplaintAdapter-lead.getSection(): " + lead.getSection());
+                AddMedia(lead,y,data.toString(),"F");
+            });*/
 
-            CustomerComplaintView.RutaFileVideo.observe(lifecycleOwner, data -> {
-                Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.RutaFileVideo: "+data);
-                AddMedia(lead,x,data.toString());
+            /*CustomerComplaintView.RutaFileVideo.observe(lifecycleOwner, data -> {
+                Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.observe.RutaFileVideo: "+data);
+                AddMedia(lead,y,data.toString(),"V");
             });
 
             CustomerComplaintView.RutaFileAttach.observe(lifecycleOwner, data -> {
-                Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.RutaFileAttach: "+data);
-                AddMedia(lead,x,data.toString());
-            });
-           /* ActivityResult result = CustomerComplaintView.someActivityResultLauncherPhotoAttach.getResult();
-            if (result.getResultCode() == Activity.RESULT_OK) {
-                Intent data = result.getData();
-                // Procesar el resultado aquí si es necesario
-            }*/
+                Log.e("REOS","ListCustomerComplaintAdapter.customerComplaintView.observe.RutaFileAttach: "+data);
+                AddMedia(lead,y,data.toString(),"A");
+            });*/
+
+
 
 
         }catch (Exception e){
@@ -253,29 +274,6 @@ public class ListCustomerComplaintAdapter extends
                 else {
                     status = -1;
                 }
-                /*if(lead.getListCustomercomplaintQuestions().get(i).getQuestionAnswered()==null)
-                {
-                    if (lead.getListCustomercomplaintQuestions().get(i).getQuestionAnswered().equals("Y")
-                            || !lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().isEmpty()
-                    ) {
-                        status = 1;
-                    }
-                }*/
-                /*if(lead.getListCustomercomplaintQuestions().get(i).getQuestionAnswered()==null)
-                {
-                    status=-1;
-                }else {
-                    if(
-                            lead.getListCustomercomplaintQuestions().get(i).getQuestionAnswered().equals("Y")
-                            ||!lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().isEmpty()
-                    )
-                    {
-                        status=1;
-                    }
-                    else {
-                        status=-1;
-                    }
-                }*/
 
                 StepBean stepBean = new StepBean("", status);
                 //StepBean stepBean1 = new StepBean("",1);
@@ -313,6 +311,19 @@ public class ListCustomerComplaintAdapter extends
             tv_questions = (TextView) relativeLayout.findViewById(R.id.tv_questions);
             LinearLayout content_questions = (LinearLayout) relativeLayout.findViewById(R.id.content_questions);
             tv_questions.setText(lead.getListCustomercomplaintQuestions().get(i).getQuestion());
+            int q=0;
+            if(lead.getListCustomercomplaintQuestions().get(i).getQuestionAnswered()==null)
+            {
+                tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.gray));
+            }else {
+                if(lead.getListCustomercomplaintQuestions().get(i).getQuestionAnswered().equals("Y"))
+                {
+                    tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
+                }else {
+                    tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.gray));
+                }
+            }
+
             holder.content.addView(relativeLayout);
             lead.getListCustomercomplaintQuestions().get(i).setQuestionNumber(String.valueOf(i));
 
@@ -327,20 +338,22 @@ public class ListCustomerComplaintAdapter extends
                 TextInputLayout ti_response = (TextInputLayout) relativeLayout1.findViewById(R.id.ti_response);
                 RadioGroup rg_response = (RadioGroup) relativeLayout1.findViewById(R.id.rg_response);
                 LinearLayout ll_checkbox=(LinearLayout) relativeLayout1.findViewById(R.id.ll_checkbox);
-                TableLayout tl_add_adjunt=(TableLayout) relativeLayout1.findViewById(R.id.tl_add_adjunt);
-                CardView cv_add_photo=(CardView) relativeLayout1.findViewById(R.id.cv_add_photo);
-                CardView cv_add_video=(CardView) relativeLayout1.findViewById(R.id.cv_add_video);
-                CardView cv_add_file=(CardView) relativeLayout1.findViewById(R.id.cv_add_file);
+                //TableLayout tl_add_adjunt=(TableLayout) relativeLayout1.findViewById(R.id.tl_add);
                 EditText et_response=(EditText) relativeLayout1.findViewById(R.id.et_response);
                 Spinner sp_response=(Spinner) relativeLayout1.findViewById(R.id.sp_response);
-                surfaceView=(SurfaceView) relativeLayout1.findViewById(R.id.surfaceView);
+                //surfaceView=(SurfaceView) relativeLayout1.findViewById(R.id.surfaceView);
                 tv_start_video=(TextView) relativeLayout1.findViewById(R.id.tv_start_video);
                 CheckBox checkBox=new CheckBox(context);
+                TableLayout tl_add_attach=(TableLayout) relativeLayout1.findViewById(R.id.tl_add_attach);
+                CardView cv_add_attach=(CardView) relativeLayout1.findViewById(R.id.cv_add_attach);
+                LinearLayout ll_attach = (LinearLayout) relativeLayout1.findViewById(R.id.ll_attach);
 
                 // Crear una lista de CheckBoxes
 
 
-                x=i;
+
+
+                //x=i;
                 Log.e("REOS", "ListCustomerComplaintAdapter-updateStepView.lead.getListCustomercomplaintQuestions().x:" + x);
                 et_response.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
@@ -370,9 +383,10 @@ public class ListCustomerComplaintAdapter extends
                         tv_response.setVisibility(View.GONE);
                         rg_response.setVisibility(View.GONE);
                         ll_checkbox.setVisibility(View.GONE);
-                        tl_add_adjunt.setVisibility(View.GONE);
+                        //tl_add_adjunt.setVisibility(View.GONE);
                         sp_response.setVisibility(View.GONE);
-                        surfaceView.setVisibility(View.GONE);
+                        //surfaceView.setVisibility(View.GONE);
+                        tl_add_attach.setVisibility(View.GONE);
                     }
                     else if(lead.getListCustomercomplaintQuestions().get(i).getQuestionsEdit().equals("RS")){
 
@@ -380,10 +394,12 @@ public class ListCustomerComplaintAdapter extends
                         {
                             tv_response.setText("Sin datos que mostrar");
                         }else {
+                            lead.getListCustomercomplaintQuestions().get(i).setQuestionAnswered("Y");
                             for(int j=0;j<lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().size();j++)
                             {
                                 tv_response.setText(lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().get(j).getResponse());
                                 tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
+                                lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().get(j).setResponseChoisse("Y");
                             }
                         }
 
@@ -391,9 +407,10 @@ public class ListCustomerComplaintAdapter extends
                         ti_response.setVisibility(View.GONE);
                         rg_response.setVisibility(View.GONE);
                         ll_checkbox.setVisibility(View.GONE);
-                        tl_add_adjunt.setVisibility(View.GONE);
+                        //tl_add_adjunt.setVisibility(View.GONE);
                         sp_response.setVisibility(View.GONE);
-                        surfaceView.setVisibility(View.GONE);
+                        //surfaceView.setVisibility(View.GONE);
+                        tl_add_attach.setVisibility(View.GONE);
                     }
                 }
 
@@ -402,9 +419,9 @@ public class ListCustomerComplaintAdapter extends
                     tv_response.setVisibility(View.GONE);
                     ti_response.setVisibility(View.GONE);
                     ll_checkbox.setVisibility(View.GONE);
-                    tl_add_adjunt.setVisibility(View.GONE);
                     sp_response.setVisibility(View.GONE);
-                    surfaceView.setVisibility(View.GONE);
+                    //surfaceView.setVisibility(View.GONE);
+                    tl_add_attach.setVisibility(View.GONE);
                     for(int j=0;j<lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().size();j++)
                     {
                         lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().get(j).getResponse();
@@ -421,9 +438,10 @@ public class ListCustomerComplaintAdapter extends
                     tv_response.setVisibility(View.GONE);
                     ti_response.setVisibility(View.GONE);
                     rg_response.setVisibility(View.GONE);
-                    tl_add_adjunt.setVisibility(View.GONE);
+                    //tl_add_adjunt.setVisibility(View.GONE);
                     sp_response.setVisibility(View.GONE);
-                    surfaceView.setVisibility(View.GONE);
+                    //surfaceView.setVisibility(View.GONE);
+                    tl_add_attach.setVisibility(View.GONE);
                     List<CheckBox> checkBoxList = new ArrayList<>();
                     for(int j=0;j<lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().size();j++)
                     {
@@ -447,41 +465,94 @@ public class ListCustomerComplaintAdapter extends
                         ll_checkbox.addView(checkBox);
                     }
 
+
+
+                    //x=i;
+                    q=i;
+                    Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.checkBox1.valor de x"+x);
+                    Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.lead.getListCustomercomplaintQuestions().get(i).getQuestionNumber()"+lead.getListCustomercomplaintQuestions().get(i).getQuestionNumber());
                     for (CheckBox checkBox1 : checkBoxList) {
                         checkBox1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Log.e("REOS", "ListCustomerComplaintAdapter-updateStepView.ingresoListaCheckbox");
-                                Log.e("REOS", "ListCustomerComplaintAdapter-updateStepView.Checkbox.getText"+checkBox1.getText());
+                               String response="";
+                                //Log.e("REOS", "ListCustomerComplaintAdapter-getNumberQuestion.i"+i);
+                                Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.ingresoListaCheckbox");
+                                Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.Checkbox.getText"+checkBox1.getText());
+                                Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.valor y: "+y);
                                 int resultado=0;
-                                for(int i=0;i<checkBoxList.size();i++)
+                                for(int l=0;l<checkBoxList.size();l++)
                                 {
-                                    if(checkBoxList.get(i).isChecked())
+                                    if(checkBoxList.get(l).isChecked())
                                     {
+                                        //tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
                                         resultado++;
+                                        //lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse().get(l).setResponseChoisse("Y");
                                     }
+                                    else {
+                                        //lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse().get(l).setResponseChoisse("N");
+                                    }
+
+                                    Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.valor l: "+l);
                                 }
                                 // Manejar el evento de click del CheckBox aquí
                                 if (checkBox1.isChecked()) {
-                                    Log.e("REOS", "ListCustomerComplaintAdapter-updateStepView.checkBox1.isChecked()"+checkBox1.isChecked());
+                                    Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.checkBox1.isChecked()"+checkBox1.isChecked());
+                                    response=checkBox1.getText().toString();
                                     // CheckBox está marcado
                                 } else {
-                                    Log.e("REOS", "ListCustomerComplaintAdapter-updateStepView.checkBox1.isChecked()"+checkBox1.isChecked());
+                                    Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.checkBox1.isChecked()"+checkBox1.isChecked());
                                     // CheckBox no está marcado
                                 }
-                                Log.e("REOS", "ListCustomerComplaintAdapter-updateStepView.checkBox1.resultado"+resultado);
+                                y=getNumberQuestion(objects,response);
+                                Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.checkBox1.resultado"+resultado);
+                                Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.checkBox1.valor x"+x);
 
                                 if(resultado>0)
                                 {
-                                    lead.getListCustomercomplaintQuestions().get(x).setQuestionAnswered("Y");
-                                    tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
+                                    lead.getListCustomercomplaintQuestions().get(y).setQuestionAnswered("Y");
                                     updateStepView(holder,lead);
                                 }else {
-                                    tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.gray));
-                                    lead.getListCustomercomplaintQuestions().get(x).setQuestionAnswered("N");
+                                    lead.getListCustomercomplaintQuestions().get(y).setQuestionAnswered("N");
                                     updateStepView(holder,lead);
                                 }
-                                Log.e("REOS", "ListCustomerComplaintAdapter-updateStepView.checkBox1.lead.getListCustomercomplaintQuestions().get(x).getQuestionAnswered()"+lead.getListCustomercomplaintQuestions().get(x).getQuestionAnswered());
+
+                                if(lead.getListCustomercomplaintQuestions().get(y).getQuestionAnswered().equals("Y"))
+                                {
+                                    tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
+                                }else {
+                                    tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.gray));
+                                }
+
+                                if (checkBox1.isChecked()) {
+                                    Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.checkBox1.isChecked()"+checkBox1.isChecked());
+                                    for(int j=0;j<lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse().size()
+                                            ;j++)
+                                    {
+                                        if(lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse()
+                                                .get(j).getResponse().equals(response)
+                                        ){
+                                            lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse()
+                                                    .get(j).setResponseChoisse("Y");
+                                        }
+                                    }
+                                    // CheckBox está marcado
+                                } else {
+                                    for(int j=0;j<lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse().size()
+                                            ;j++)
+                                    {
+                                        if(lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse()
+                                                .get(j).getResponse().equals(response)
+                                        ){
+                                            lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse()
+                                                    .get(j).setResponseChoisse("N");
+                                        }
+                                    }
+                                    Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.checkBox1.isChecked()"+checkBox1.isChecked());
+                                    // CheckBox no está marcado
+                                }
+
+                                Log.e("REOS", "ListCustomerComplaintAdapter-checkBoxList.checkBox1.lead.getListCustomercomplaintQuestions().get(y).getQuestionAnswered()"+lead.getListCustomercomplaintQuestions().get(y).getQuestionAnswered());
                             }
                         });
                     }
@@ -492,43 +563,139 @@ public class ListCustomerComplaintAdapter extends
                     rg_response.setVisibility(View.GONE);
                     ti_response.setVisibility(View.GONE);
                     ll_checkbox.setVisibility(View.GONE);
-                    tl_add_adjunt.setVisibility(View.GONE);
+                    //tl_add_adjunt.setVisibility(View.GONE);
                     tv_response.setVisibility(View.GONE);
-                    surfaceView.setVisibility(View.GONE);
-
+                    //surfaceView.setVisibility(View.GONE);
+                    tl_add_attach.setVisibility(View.GONE);
                     ArrayList<String> ListResponse= new  ArrayList<String>();
+                    ListResponse.add("--SELECCIONAR--");
                     for(int j=0;j<lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().size();j++)
                     {
+                        lead.getListCustomercomplaintQuestions().get(i).setQuestionAnswered("Y");
                         ListResponse.add(lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().get(j).getResponse()) ;
                         tv_questions.setBackgroundColor(activity.getResources().getColor(R.color.colorPrimary));
                     }
                     ArrayAdapter<String> adapterResponse = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, ListResponse);
                     sp_response.setAdapter(adapterResponse);
                     adapterResponse.notifyDataSetChanged();
+
+
+                    sp_response.setOnItemSelectedListener(
+                            new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                                {
+                                    responsespinner = parent.getItemAtPosition(position).toString();
+                                    y=getNumberQuestion(objects,responsespinner);
+                                    Log.e("REOS", "ListCustomerComplaintAdapter-lead.getType().equals(RL) responsespinner: " + responsespinner);
+                                    Log.e("REOS", "ListCustomerComplaintAdapter-lead.getType().equals(RL) responsespinner-y: " + y);
+                                    for(int j=0;j<lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse().size();j++)
+                                    {
+                                        if(lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse()
+                                                .get(j).getResponse().equals(responsespinner)
+                                        )
+                                        {
+                                            lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse()
+                                                    .get(j).setResponseChoisse("Y");
+                                        }
+                                        else {
+                                            lead.getListCustomercomplaintQuestions().get(y).getListCustomerComplaintResponse()
+                                                    .get(j).setResponseChoisse("N");
+                                        }
+                                    }
+                                }
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+                                }
+                            }
+                    );
                 }
                 else if(lead.getListCustomercomplaintQuestions().get(i).getType().equals("RA"))
                 {
-                    rg_response.setVisibility(View.GONE);
-                    ti_response.setVisibility(View.GONE);
-                    ll_checkbox.setVisibility(View.GONE);
-                    tv_response.setVisibility(View.GONE);
-                    sp_response.setVisibility(View.GONE);
-                    lead.getListCustomercomplaintQuestions().get(i).getQuestionNumber();
-                    cv_add_photo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //alertmenuaddphoto(activity,holder,lead,lead.getListCustomercomplaintQuestions().get(i).getQuestionNumber()).show();
-                        }});
-                    cv_add_video.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            alertmenuaddvideo(activity,holder,lead,x).show();
-                        }});
-                    cv_add_file.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            getAttachFile();
-                        }});
+                    try {
+                        Log.e("REOS", "ListCustomerComplaintAdapter-lead.getType().equals(RA) x: " + x);
+                        rg_response.setVisibility(View.GONE);
+                        ti_response.setVisibility(View.GONE);
+                        ll_checkbox.setVisibility(View.GONE);
+                        tv_response.setVisibility(View.GONE);
+                        sp_response.setVisibility(View.GONE);
+
+                        //y=Integer.parseInt(lead.getListCustomercomplaintQuestions().get(i).getQuestionNumber());
+                        String response = "";
+                        for (int j = 0; j < lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().size(); j++) {
+                            response = lead.getListCustomercomplaintQuestions().get(i).getListCustomerComplaintResponse().get(j).getResponse();
+                            lead.getListCustomercomplaintQuestions().get(i).setQuestionAnswered("Y");
+                        }
+
+                        y=getNumberQuestion(objects,response);
+                        Log.e("REOS", "ListCustomerComplaintAdapter-getType().equals(RA)-response: " + response.toString());
+                        Log.e("REOS", "ListCustomerComplaintAdapter-getType().equals(RA)-response-y: " + y);
+                        //y = i;
+                        x = Integer.parseInt(lead.getSection_id());
+                        Log.e("REOS", "ListCustomerComplaintAdapter-getType().equals(RA)-response-x: " + x);
+                        Log.e("REOS", "ListCustomerComplaintAdapter-lead.getListCustomercomplaintQuestions().get(i).getType().equals(RA) x: " + x);
+                        if (ll_attach.getChildCount() == 0) {
+
+
+                        }
+                        cv_add_attach.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //{
+                                lead.getListCustomercomplaintQuestions().get(y).setQuestionAnswered("Y");
+                                LayoutInflater layoutInflater2 = LayoutInflater.from(getContext());
+                                int id2 = R.layout.layout_list_customer_complaint_response_attach;
+                                RelativeLayout relativeLayout2 = (RelativeLayout) layoutInflater2.inflate(id2, null, false);
+                                CardView cv_add_photo = (CardView) relativeLayout2.findViewById(R.id.cv_add_photo);
+                                CardView cv_add_video = (CardView) relativeLayout2.findViewById(R.id.cv_add_video);
+                                CardView cv_add_file = (CardView) relativeLayout2.findViewById(R.id.cv_add_file);
+                                ll_attach.addView(relativeLayout2);
+
+                                cv_add_photo.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        //alertmenuaddphoto(activity,holder,lead,x).show();
+                                        Log.e("REOS", "ListCustomerComplaintAdapter-cv_add_photo y: " + y);
+                                        lead.getListCustomercomplaintQuestions().get(y).setQuestionAnswered("Y");
+                                        cv_add_video.setVisibility(View.GONE);
+                                        cv_add_file.setVisibility(View.GONE);
+                                        alertmenuaddphoto(activity, holder, lead, y).show();
+                                    }
+                                });
+                                cv_add_video.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Log.e("REOS", "ListCustomerComplaintAdapter-cv_add_video y: " + y);
+                                        lead.getListCustomercomplaintQuestions().get(y).setQuestionAnswered("Y");
+                                        cv_add_photo.setVisibility(View.GONE);
+                                        cv_add_file.setVisibility(View.GONE);
+
+                                        if (started) {
+                                            makevideo(holder, lead, x);
+                                        } else {
+                                            alertmenuaddvideo(activity, holder, lead, y).show();
+                                        }
+
+                                        //alertmenuaddphoto(activity,holder,lead,y).show();
+                                    }
+                                });
+
+                                cv_add_file.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Log.e("REOS", "ListCustomerComplaintAdapter-cv_add_file y: " + y);
+                                        lead.getListCustomercomplaintQuestions().get(y).setQuestionAnswered("Y");
+                                        cv_add_photo.setVisibility(View.GONE);
+                                        cv_add_video.setVisibility(View.GONE);
+                                        getAttachFile();
+                                    }
+                                });
+                            }
+                        });
+                    }catch (Exception e)
+                    {
+                        Log.e("REOS", "ListCustomerComplaintAdapter-lead.getType().equals(RA) error: " + e.toString());
+                    }
                 }
 
                 content_questions.addView(relativeLayout1);
@@ -540,32 +707,6 @@ public class ListCustomerComplaintAdapter extends
         Resources res2 = getContext().getResources(); // need this to fetch the drawable
         Drawable draw = res2.getDrawable( R.drawable.ic_baseline_expand_less_24_white);
         holder.imv_show_more.setImageDrawable(draw);
-    }
-
-    public StateProgressBar.StateNumber getStatusProgressbarMaxStateNumber(int valor)
-    {
-        StateProgressBar.StateNumber stateNumber;
-        switch (valor) {
-            case 1:
-                stateNumber= StateProgressBar.StateNumber.ONE;
-                break;
-            case 2:
-                stateNumber= StateProgressBar.StateNumber.TWO;
-                break;
-            case 3:
-                stateNumber= StateProgressBar.StateNumber.THREE;
-            break;
-            case 4:
-                stateNumber= StateProgressBar.StateNumber.FOUR;
-            break;
-            case 5:
-                stateNumber= StateProgressBar.StateNumber.FIVE;
-            break;
-            default:
-                stateNumber= StateProgressBar.StateNumber.FIVE;
-                break;
-        }
-        return stateNumber;
     }
 
     public static class ViewHolder {
@@ -615,6 +756,9 @@ public class ListCustomerComplaintAdapter extends
                                 , Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         intent.setType("image/*");
+                        //Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                        //intent.setType("image/*");
+                        //intent.setType("image/*, video/*");
                         String resultado="";
                         //activity.startActivityForResult(intent.createChooser(intent, activity.getResources().getString(R.string.selection_image)), 156);
                         CustomerComplaintView.someActivityResultLauncherPhotoAttach.launch(intent);
@@ -648,6 +792,8 @@ public class ListCustomerComplaintAdapter extends
             activity.requestPermissions(perms, permsRequestCode);
         }else{
             try {
+                //Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                //intent.setType("image/*, video/*");
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 // Crea el File
                 File photoFile = null;
@@ -680,6 +826,7 @@ public class ListCustomerComplaintAdapter extends
                             photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.paraguay" , photoFile);
                             break;
                     }
+                    //intent.setType("image/*");
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     //startActivityForResult(intent,20);
                     CustomerComplaintView.someActivityResultLauncherPhotomake.launch(intent);
@@ -691,7 +838,7 @@ public class ListCustomerComplaintAdapter extends
                             /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                                 someActivityResultLauncherGuia.launch(intent);
                             }*/
-                    AddMedia(lead,x,photoFile.toString());
+                    AddMedia(this.objects,x,y,photoFile.toString(),"F");
 
                 }
             } catch (IOException ex) {
@@ -700,22 +847,52 @@ public class ListCustomerComplaintAdapter extends
         }
     }
 
-    public void AddMedia(CustomerComplaintSectionEntity lead,int x,String urlFile)
+    public void AddMedia(
+            //CustomerComplaintSectionEntity lead
+            List<CustomerComplaintSectionEntity> listobject
+            ,int x,int y,String urlFile,String AttachType
+            //,String typeResponse
+    )
     {
-        Integer response=1;
-        if(lead.getListCustomercomplaintQuestions().get(x).getListCustomerComplaintResponse()!=null)
-        {
-            response=lead.getListCustomercomplaintQuestions().get(x).getListCustomerComplaintResponse().size()+1;
-        }
+        Log.e("REOS","ListCustomerComplaintAdapter-AddMedia-x: "+x);
+        Log.e("REOS","ListCustomerComplaintAdapter-AddMedia-urlFile: "+urlFile.toString());
+        Log.e("REOS","ListCustomerComplaintAdapter-AddMedia-AttachType: "+AttachType.toString());
+        Integer response;
+        List<CustomerComplaintResponseEntity> listCustomerComplaintResponseEntity=new ArrayList<>();
         CustomerComplaintResponseEntity customerComplaintResponseEntity=new CustomerComplaintResponseEntity();
-        ArrayList<CustomerComplaintResponseEntity> listCustomerComplaintResponseEntity=new ArrayList<>();
-        customerComplaintResponseEntity.response_id=response.toString();
-        customerComplaintResponseEntity.reponseRouteFile=urlFile.toString();
-        listCustomerComplaintResponseEntity.add(customerComplaintResponseEntity);
-        Log.e("REOS","ListCustomerComplaintAdapter-AddMedia-response_id: "+response.toString());
-        Log.e("REOS","ListCustomerComplaintAdapter-AddMedia-photoFile: "+urlFile.toString());
+        for(int i=0;i<listobject.size();i++)
+        {
+            if(listobject.get(i).getSection_id().equals(String.valueOf(x))){
+                for(int j=0;j<listobject.get(i).getListCustomercomplaintQuestions().size();j++)
+                {
+                    if(listobject.get(i).getListCustomercomplaintQuestions()
+                            .get(j).getQuestionNumber().equals(String.valueOf(y)))
+                    {
+                        if(
+                                //lead.getListCustomercomplaintQuestions().get(x).getListCustomerComplaintResponse()
+                                 listobject.get(i).getListCustomercomplaintQuestions().get(j).getListCustomerComplaintResponse()
+                                !=null)
+                        {
+                            response=listobject.get(i).getListCustomercomplaintQuestions().get(j).getListCustomerComplaintResponse().size()+1;
+                            Log.e("REOS","ListCustomerComplaintAdapter-AddMedia-response: "+response);
+                            listCustomerComplaintResponseEntity=listobject.get(i).getListCustomercomplaintQuestions().get(j).getListCustomerComplaintResponse();
+                        }
+                        else {
+                            response=1;
+                        }
 
-        lead.getListCustomercomplaintQuestions().get(x).setListCustomerComplaintResponse(listCustomerComplaintResponseEntity);
+
+                        customerComplaintResponseEntity.response_id=response.toString();
+                        customerComplaintResponseEntity.reponseRouteFile=urlFile.toString();
+                        customerComplaintResponseEntity.reponseAttachType=AttachType;
+
+                        listCustomerComplaintResponseEntity.add(customerComplaintResponseEntity);
+                        listobject.get(i).getListCustomercomplaintQuestions().get(j).setListCustomerComplaintResponse(listCustomerComplaintResponseEntity);
+                    }
+                }
+            }
+        }
+
     }
 
     public AlertDialog alertmenuaddvideo (
@@ -735,6 +912,7 @@ public class ListCustomerComplaintAdapter extends
                 switch (which) {
                     case 0:
                         //makephoto(holder,lead,x);
+
                         makevideo(holder,lead,x);
                         break;
                     case 1:
@@ -789,13 +967,13 @@ public class ListCustomerComplaintAdapter extends
                 if (started) {
                     started = recorder.stopRecording();
                     tv_start_video.setText(getContext().getResources().getString(R.string.start_video));
-                    AddMedia(lead,x,filePath );
+                    AddMedia(this.objects,x,y,filePath,"V" );
 
                 } else {
                     filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RECIBOS" + "/video.mp4";
                     SurfaceHolder surfaceHolder = surfaceView.getHolder();
 
-                    started = recorder.startRecording(surfaceHolder, filePath);
+                    started = recorder.startRecording(surfaceHolder, filePath,activity);
                     Log.e("REOS", "ListCustomerComplaintAdapter-cv_add_video.setOnClickListener");
                     if (started) {
                         //holder.btnRecord.setText("Stop Recording");
@@ -835,5 +1013,75 @@ public class ListCustomerComplaintAdapter extends
         }
     }
 
+    public void getCustomerSection()
+    {
+        try {
+            FormulasController formulasController = new FormulasController(getContext());
+            formulasController.AddForms(objects);
+        }catch (Exception e)
+        {
+            Log.e("REOS", "ListCustomerComplaintAdapter-getCustomerSection.error: "+e.toString());
+        }
 
+    }
+
+    public int getNumberQuestion(List<CustomerComplaintSectionEntity> objects,String response )
+    {
+        int resultado=0;
+        for(int i=0;i<objects.size();i++)
+        {
+            for(int j=0;j<objects.get(i).getListCustomercomplaintQuestions().size();j++)
+            {
+                if(objects.get(i).getListCustomercomplaintQuestions().get(j)
+                        .getListCustomerComplaintResponse()!=null)
+                {
+                    for(int k=0;k<objects.get(i).getListCustomercomplaintQuestions().get(j)
+                            .getListCustomerComplaintResponse().size();k++)
+                    {
+                        if(objects.get(i).getListCustomercomplaintQuestions().get(j).getListCustomerComplaintResponse()
+                                .get(k).getResponse()
+                                .equals(response)
+                        ){
+                            resultado=Integer.parseInt(objects.get(i).getListCustomercomplaintQuestions().get(j).getQuestionNumber());
+                        }
+                    }
+                }
+
+            }
+        }
+        Log.e("REOS", "ListCustomerComplaintAdapter-getNumberQuestion.resultado: "+resultado);
+        return resultado;
+    }
+
+    public int setStatusQuetions(List<CustomerComplaintSectionEntity> objects,int x,int y,String response,String responseChoisse )
+    {
+        int resultado=0;
+        for(int i=0;i<objects.size();i++)
+        {
+            if(i==x)
+            {
+                for(int j=0;j<objects.get(i).getListCustomercomplaintQuestions().size();j++)
+                {
+                    if(j==y)
+                    {
+                        for(int k=0
+                            ;k<objects.get(i).getListCustomercomplaintQuestions().get(j).getListCustomerComplaintResponse().size()
+                                ;k++)
+                        {
+                            if(objects.get(i).getListCustomercomplaintQuestions().get(j).getListCustomerComplaintResponse()
+                                    .get(k).getResponse().equals(response)
+                            ){
+                                objects.get(i).getListCustomercomplaintQuestions().get(j).getListCustomerComplaintResponse()
+                                        .get(k).setResponseChoisse(responseChoisse);
+
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        Log.e("REOS", "ListCustomerComplaintAdapter-getNumberQuestion.resultado: "+resultado);
+        return resultado;
+    }
 }

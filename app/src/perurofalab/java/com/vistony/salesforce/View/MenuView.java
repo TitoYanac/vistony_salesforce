@@ -285,7 +285,7 @@ public class MenuView extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-        bxlPrinter = new BixolonPrinterController(this);
+        bxlPrinter = new BixolonPrinterController(this,this);
         tv_fuerzatrabajo_id_navheader=(TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_fuerzatrabajo_id_navheader);
         //findViewById( R.id.tv_fuerzatrabajo_id_navheader);

@@ -14,7 +14,7 @@ public class CustomerComplaintSectionEntityResponse {
         this.customerComplaintSectionEntity = customerComplaintSectionEntity;
     }
 
-    public List<CustomerComplaintSectionEntity> getCustomerComplaintSectionEntityResponse() {
+    public List<CustomerComplaintSectionEntity> setCustomerComplaintSectionEntityResponse() {
         return customerComplaintSectionEntity;
     }
 

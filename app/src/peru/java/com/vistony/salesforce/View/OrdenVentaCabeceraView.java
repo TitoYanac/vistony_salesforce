@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -60,6 +61,7 @@ import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ReasonFreeTransferSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaFuerzaTrabajoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UbigeoSQLiteDao;
@@ -69,6 +71,7 @@ import com.vistony.salesforce.Entity.Adapters.DireccionCliente;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.ReasonDispatchEntity;
 import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
@@ -107,7 +110,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     OnFragmentInteractionListener mListener;
     String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta,ubigeo_id="0",statuscount="N";
     static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
-    static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id,zona_id;
+    static String terminopago_id="",terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id,zona_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;
     static EditText et_comentario;
     static TextView tv_terminopago,tv_orden_venta_agencia,tv_direccion,tv_increment_flete;
@@ -128,7 +131,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private DireccionCliente direccionSelecionada;*/
 
     HiloObtenerAgencia hiloObtenerAgencia=new HiloObtenerAgencia();
-    static Spinner sp_cantidaddescuento,spnmoneda;
+    static Spinner sp_cantidaddescuento,spnmoneda,spn_reason_freetransfer;
     private ProgressDialog pd;
     ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabecera;
     ArrayList<OrdenVentaDetalleSQLiteEntity> listaOrdenVentaDetalle;
@@ -154,7 +157,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
-    TableRow tr_dsct_cont,tr_summary_flete;
+    static TableRow tr_dsct_cont,tr_summary_flete,tr_lbl_reason_free_transfer,tr_spn_reason_free_transfer;
 
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
@@ -210,6 +213,15 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             }
         }
         tv_terminopago.setText(terminopago);
+
+        if(terminopago_id.equals("47"))
+        {
+            tr_lbl_reason_free_transfer.setVisibility(View.VISIBLE);
+            tr_spn_reason_free_transfer.setVisibility(View.VISIBLE);
+        }else {
+            tr_lbl_reason_free_transfer.setVisibility(View.GONE);
+            tr_spn_reason_free_transfer.setVisibility(View.GONE);
+        }
         return ordenVentaView;
     }
 
@@ -444,7 +456,15 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         // Inflate the layout for this fragment
 
         setHasOptionsMenu(true);
+
+        /*if(SesionEntity.quotation.equals("N"))
+        {
+            v= inflater.inflate(R.layout.fragment_orden_venta_cabecera_peru, container, false);
+        }else {
+            v= inflater.inflate(R.layout.fragment_orden_venta_cabecera, container, false);
+        }*/
         v= inflater.inflate(R.layout.fragment_orden_venta_cabecera_peru, container, false);
+
         ordenVentaRepository = new ViewModelProvider(getActivity()).get(OrdenVentaRepository.class);
 
 
@@ -482,7 +502,9 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         tr_summary_flete=v.findViewById(R.id.tr_summary_flete);
         tr_summary_flete.setVisibility(View.GONE);
         chk_ovcomplete=v.findViewById(R.id.chk_ovcomplete);
-
+        tr_lbl_reason_free_transfer=v.findViewById(R.id.tr_lbl_reason_free_transfer);
+        tr_spn_reason_free_transfer=v.findViewById(R.id.tr_spn_reason_free_transfer);
+        spn_reason_freetransfer=v.findViewById(R.id.spn_reason_freetransfer);
         //Pruebas de Fecha de entrega
         if(SesionEntity.deliverydateauto.equals("Y"))
         {
@@ -515,18 +537,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         }
 
-        //tv_terminopago.setText(cliente_terminopago);
-
-            if(statuscount.equals("Y"))
-            {
-                tv_terminopago.setText("--ELEGIR TERMINO DE PAGO--");
-            }else {
-                tv_terminopago.setText(cliente_terminopago);
-            }
-
-
-
-        //tv_moneda.setText(moneda);
+        tv_terminopago.setText(cliente_terminopago);
 
         btn_detalle_orden_venta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -543,7 +554,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     }else {
                         btn_detalle_orden_venta.setEnabled(false);
                         btn_detalle_orden_venta.setClickable(false);
-                        alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
+                        alertaCrearOrdenVenta("Esta Seguro de Abrir una "+Induvis.getTituloVentaString(getContext())+" Nueva?").show();
                     }
                 }
             }
@@ -662,8 +673,38 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             chk_add_flete.setChecked(true);
         }
 
+        ArrayList<String> ListResponse= new  ArrayList<String>();
+        ListResponse.add("--SELECCIONAR--");
+        ReasonFreeTransferSQLiteDao reasonFreeTransferSQLiteDao=new ReasonFreeTransferSQLiteDao(getContext());
+        ArrayList<ReasonDispatchEntity> listReasonFreeTransfer=new ArrayList<>();
+        listReasonFreeTransfer=reasonFreeTransferSQLiteDao.getReasonFreeTransfer();
+        for(int i=0;i<listReasonFreeTransfer.size();i++)
+        {
+            ListResponse.add(listReasonFreeTransfer.get(i).getReasondispatch_id()+"-"+listReasonFreeTransfer.get(i).getReasondispatch()) ;
+        }
+        ArrayAdapter<String> adapterResponse = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, ListResponse);
+        spn_reason_freetransfer.setAdapter(adapterResponse);
+        adapterResponse.notifyDataSetChanged();
+
+        spnmoneda.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String monedatotal="",codigomoneda="";
+                        monedatotal=spnmoneda.getSelectedItem().toString();
+                        String[] palabra = monedatotal.split("-");
+                        SesionEntity.currency_id=palabra[0];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                }
+        );
+
         return v;
     }
+
 
     public boolean StatusIncrementFlete(){
         boolean status=false;
@@ -918,19 +959,33 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.guardar_orden_venta:
+                if(spn_reason_freetransfer==null)
+                {
+                    ArrayList<String> ListResponse= new  ArrayList<String>();
+                    ListResponse.add("");
+                    ArrayAdapter<String> adapterResponse = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, ListResponse);
+                    spn_reason_freetransfer.setAdapter(adapterResponse);
+                }
 
-                if(SesionEntity.deliverydateauto.equals("Y")) {
-                    alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+
+                if( terminopago_id.equals("47")
+                    &&(spn_reason_freetransfer.getSelectedItem().toString().equals("--SELECCIONAR--"))
+                )
+                {
+                    alertdialogInformative(getContext(), "ADVERTENCIA", "El termino de pago TRANSFERENCIA GRATUITA, debe ir vinculando a un motivo valido favor de elegir").show();
                 }else {
-                    dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                    date = new Date();
-                    fechacomparativa =dateFormat.format(date);
-                    if(!parametrofecha.equals(fechacomparativa))
-                    {
-                    alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
-                    }else {
+                    if (SesionEntity.deliverydateauto.equals("Y")) {
+                        alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                    } else {
+                        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                        date = new Date();
+                        fechacomparativa = dateFormat.format(date);
+                        if (!parametrofecha.equals(fechacomparativa)) {
+                            alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                        } else {
 
-                        alertdialogInformative(getContext(),"ADVERTENCIA","La Fecha de entrega de la Orden de Venta, debe ser distinta a la fecha actual, se sugiere 2 dias en adelante...").show();
+                            alertdialogInformative(getContext(), "ADVERTENCIA", "La Fecha de entrega de la Orden de Venta, debe ser distinta a la fecha actual, se sugiere 2 dias en adelante...").show();
+                        }
                     }
                 }
                 return false;
@@ -1176,6 +1231,13 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_CompleteOV ="N";
             }
 
+            if(!spn_reason_freetransfer.getSelectedItem().toString().equals("--SELECCIONAR--"))
+            {
+                String U_VIS_TipTransGrat=spn_reason_freetransfer.getSelectedItem().toString();
+                String[] arrayU_VIS_TipTransGrat = U_VIS_TipTransGrat.split("-");
+                listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_TipTransGrat =arrayU_VIS_TipTransGrat[0];
+            }
+
 
             Log.e("REOS","OrdenVentaCabeceraView.RegistrarOrdenVentaBD.listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_Flete:"+listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_Flete);
 
@@ -1279,83 +1341,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         return  dialog;
     }
-    /*
-    public AlertDialog alertaEnviarERP2() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Advertencia")
-                .setMessage("Esta Seguro de Enviar a la Nube la Orden de Venta?")
-                .setPositiveButton("OK",(dialog, which) -> {
-                        String JSON;
-                        Log.e("REOS","OrdenVentaCabeceraView.alertaEnviarERP: "+ordenventa_id);
-
-                        HiloEnviarNubeOV hiloEnviarNubeOV=new HiloEnviarNubeOV();
-                        hiloEnviarNubeOV.execute(parcingJsonOv(ordenventa_id,getContext()));
-
-                    })
-                .setNegativeButton("CANCELAR",(dialog, which) -> {});
-
-        return builder.create();
-    }
-*/
-
-   /* private class HiloEnviarNubeOV extends AsyncTask<String, Void, Object> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando Orden de Venta", true, false);
-        }
-        @Override
-        protected Object doInBackground(String... arg0) {
-            OrdenVentaWSDao ordenVentaWSDao=new OrdenVentaWSDao();
-            String[] resultado=new String[4];
-
-            resultado=ordenVentaWSDao.sendSalesOrder(arg0[0]);
-
-            return resultado;
-        }
-
-        protected void onPostExecute(Object result) {
-
-        }
-    }*/
-
-
-    /*private class HiloObtenerTerminoPago extends AsyncTask<String, Void, Object> {
-
-        @Override
-        protected Object doInBackground(String... arg0) {
-            ArrayList<TerminoPagoSQLiteEntity> listaTerminoPagoSQLiteEntity=new ArrayList<>();
-            try {
-                TerminoPagoSQLiteDao terminoPagoSQLiteDao=new TerminoPagoSQLiteDao(getContext());
-                listaTerminoPagoSQLiteEntity=terminoPagoSQLiteDao.ObtenerTerminoPago(SesionEntity.compania_id,);
-            } catch (Exception e)
-            {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-            }
-            return listaTerminoPagoSQLiteEntity;
-        }
-
-        protected void onPostExecute(Object result)
-        {
-            ArrayList<TerminoPagoSQLiteEntity> Lista= (ArrayList<TerminoPagoSQLiteEntity>) result;
-            for(int i=0;i<Lista.size();i++)
-            {
-                if(Lista.get(i).getTerminopago_id().equals("CONTRAENTREGA"))
-                {
-                    terminopago_id=Lista.get(i).getTerminopago_id();
-                    terminopago=Lista.get(i).getTerminopago();
-                    contado=Lista.get(i).getContado();
-                    tv_terminopago.setText(terminopago);
-                }
-            }
-            getActivity().setTitle("Orden Venta Cabecera");
-
-        }
-    }
-    */
-
     private class HiloObtenerAgencia extends AsyncTask<String, Void, Object> {
 
         @Override
@@ -1413,31 +1398,32 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Button dialogButtonCancel =  dialog.findViewById(R.id.dialogButtonCancel);
 
         dialogButtonOK.setOnClickListener(v -> {
-
-            /*if(sp_cantidaddescuento.getSelectedItem()==null)
-            {
-                cantidaddescuento="0";
-            }else{
-                cantidaddescuento=sp_cantidaddescuento.getSelectedItem().toString();
-            }*/
-
             String Fragment="OrdenVentaCabeceraView";
             String accion="detalle";
             String compuesto=Fragment+"-"+accion;
             cantidaddescuento=String.valueOf(chk_descuento_contado.isChecked());
             ///////////AQui//////////////
+            String monedatotal="",codigomoneda="";
+            monedatotal=spnmoneda.getSelectedItem().toString();
+            String[] palabra = monedatotal.split("-");
+            codigomoneda=palabra[0];
+
             if(ubigeo_id==null||ubigeo_id==""||ubigeo_id.isEmpty()||ubigeo_id.isBlank()){
                 ubigeo_id="0";
             }
+            if(codigomoneda==null||codigomoneda==""||codigomoneda.isEmpty()||codigomoneda.isBlank()){
+                codigomoneda="0";
+            }
             String Objeto=
                     //contado+"-"+
-                    cantidaddescuento+"&"+cliente_terminopago_id+"&"+ubigeo_id;
+                    cantidaddescuento+"&"+cliente_terminopago_id+"&"+codigomoneda;
             //String Objeto=cantidaddescuento+"-"+cliente_terminopago_id;
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-cantidaddescuento: "+cantidaddescuento);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-cliente_terminopago_id: "+cliente_terminopago_id);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-codigocliente: "+codigocliente);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-Objeto: "+Objeto);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-ubigeo_id: "+ubigeo_id);
+            Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-currency_id: "+codigomoneda);
             String [] arrayObject={codigocliente,Objeto};
 
             dialog.dismiss();

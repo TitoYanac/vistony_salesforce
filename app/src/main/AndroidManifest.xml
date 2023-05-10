@@ -65,8 +65,8 @@
             android:exported="false"
             android:label="@string/title_activity_google_maps"
             android:theme="@style/AppTheme.NoActionBar" />-->
-        <!--
-    <application
+
+    <!--<application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:icon="@drawable/splashrofalab"
@@ -78,8 +78,8 @@
         android:requestLegacyExternalStorage="true"
         tools:replace="android:label"
         android:largeHeap="true"
-    >
-        -->
+    >-->
+
         <!--
 <meta-data android:icon="@mipmap/logo_factura"
         android:name="com.google.android.geo.API_KEY"
@@ -123,19 +123,20 @@
             </intent-filter>
         </activity>
 
-        <!--
-        <activity
+
+        <!--<activity
             android:name=".View.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashThemeRofalab"
+            android:exported="true"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        -->
+        </activity>-->
+
         <activity
             android:name=".View.MenuView"
             android:alwaysRetainTaskState="true"

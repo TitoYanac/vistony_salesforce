@@ -9,10 +9,13 @@ import android.util.Log;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionDetalleEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.PromocionDetalleEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PromocionDetalleSQLiteDao {
     SqliteController sqliteController;
@@ -94,45 +97,54 @@ public class PromocionDetalleSQLiteDao {
             String terminopago_id
     )
     {
-        listaPromocionDetalleSQLiteEntity = new ArrayList<PromocionDetalleSQLiteEntity>();
-        PromocionDetalleSQLiteEntity promocionDetalleSQLiteEntity;
-        abrir();
-        Cursor fila = bd.rawQuery(
-                "Select * from promociondetalle  where compania_id= '"+compania_id+"' and lista_promocion_id= '"+lista_promocion_id+"' and promocion_id= '"+promocion_id+"'",null);
+        try
+        {
+            Log.e("REOS", "PromocionDetalleSQLiteDao.ObtenerPromocionDetalle.compania_id: " + compania_id);
+            Log.e("REOS", "PromocionDetalleSQLiteDao.ObtenerPromocionDetalle.lista_promocion_id: " + lista_promocion_id);
+            Log.e("REOS", "PromocionDetalleSQLiteDao.ObtenerPromocionDetalle.promocion_id: " + promocion_id);
+            listaPromocionDetalleSQLiteEntity = new ArrayList<PromocionDetalleSQLiteEntity>();
+            PromocionDetalleSQLiteEntity promocionDetalleSQLiteEntity;
+            abrir();
+            Cursor fila = bd.rawQuery(
+                    "Select * from promociondetalle  where compania_id= '" + compania_id + "' and lista_promocion_id= '" + lista_promocion_id + "' and promocion_id= '" + promocion_id + "'", null);
 
-        while (fila.moveToNext()) {
-            promocionDetalleSQLiteEntity = new PromocionDetalleSQLiteEntity();
-            promocionDetalleSQLiteEntity.setCompania_id(fila.getString(0));
-            promocionDetalleSQLiteEntity.setLista_promocion_id(fila.getString(1));
-            promocionDetalleSQLiteEntity.setPromocion_id(fila.getString(2));
-            promocionDetalleSQLiteEntity.setPromocion_detalle_id(fila.getString(3));
-            promocionDetalleSQLiteEntity.setProducto_id(fila.getString(4));
-            promocionDetalleSQLiteEntity.setProducto(fila.getString(5));
-            promocionDetalleSQLiteEntity.setUmd(fila.getString(6));
-            promocionDetalleSQLiteEntity.setCantidad(fila.getString(7));
-            promocionDetalleSQLiteEntity.setFuerzatrabajo_id(fila.getString(8));
-            promocionDetalleSQLiteEntity.setUsuario_id(fila.getString(9));
+            while (fila.moveToNext()) {
+                promocionDetalleSQLiteEntity = new PromocionDetalleSQLiteEntity();
+                promocionDetalleSQLiteEntity.setCompania_id(fila.getString(0));
+                promocionDetalleSQLiteEntity.setLista_promocion_id(fila.getString(1));
+                promocionDetalleSQLiteEntity.setPromocion_id(fila.getString(2));
+                promocionDetalleSQLiteEntity.setPromocion_detalle_id(fila.getString(3));
+                promocionDetalleSQLiteEntity.setProducto_id(fila.getString(4));
+                promocionDetalleSQLiteEntity.setProducto(fila.getString(5));
+                promocionDetalleSQLiteEntity.setUmd(fila.getString(6));
+                promocionDetalleSQLiteEntity.setCantidad(fila.getString(7));
+                promocionDetalleSQLiteEntity.setFuerzatrabajo_id(fila.getString(8));
+                promocionDetalleSQLiteEntity.setUsuario_id(fila.getString(9));
 
-            ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(context);
-            ArrayList<ListaProductoEntity> listaProductoEntities = new ArrayList<>();
+                ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(context);
+                ArrayList<ListaProductoEntity> listaProductoEntities = new ArrayList<>();
 
             /*listaProductoEntities = listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporProducto(contado, promocionDetalleSQLiteEntity.getProducto_id());
             for (int i = 0; i < listaProductoEntities.size(); i++) {
                 promocionDetalleSQLiteEntity.setPreciobase(String.valueOf(format.format(Float.parseFloat(listaProductoEntities.get(i).getPreciobase()))));
             }*/
-            //listaProductoEntities = listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporProductoArtificio(cardcode,terminopago_id,promocionDetalleSQLiteEntity.getProducto_id());
-            Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalle.listaProductoEntities.size(): "+listaProductoEntities.size());
-            for (int i = 0; i < listaProductoEntities.size(); i++) {
-                Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalle.listaProductoEntities.get(i).getPreciobase(): "+listaProductoEntities.get(i).getPreciobase());
-                promocionDetalleSQLiteEntity.setPreciobase((listaProductoEntities.get(i).getPreciobase()));
-            }
+                listaProductoEntities = listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporProductoArtificio(cardcode,terminopago_id,promocionDetalleSQLiteEntity.getProducto_id());
+                Log.e("REOS", "PromocionDetalleSQLiteDao.ObtenerPromocionDetalle.listaProductoEntities.size(): " + listaProductoEntities.size());
+                for (int i = 0; i < listaProductoEntities.size(); i++) {
+                    Log.e("REOS", "PromocionDetalleSQLiteDao.ObtenerPromocionDetalle.listaProductoEntities.get(i).getPreciobase(): " + listaProductoEntities.get(i).getPreciobase());
+                    promocionDetalleSQLiteEntity.setPreciobase((listaProductoEntities.get(i).getPreciobase()));
+                }
 
-            //promocionDetalleSQLiteEntity.setPreciobase(fila.getString(10));
-            promocionDetalleSQLiteEntity.setChkdescuento(fila.getString(11));
-            promocionDetalleSQLiteEntity.setDescuento(fila.getString(12));
-            listaPromocionDetalleSQLiteEntity.add(promocionDetalleSQLiteEntity);
+                //promocionDetalleSQLiteEntity.setPreciobase(fila.getString(10));
+                promocionDetalleSQLiteEntity.setChkdescuento(fila.getString(11));
+                promocionDetalleSQLiteEntity.setDescuento(fila.getString(12));
+                listaPromocionDetalleSQLiteEntity.add(promocionDetalleSQLiteEntity);
+
+            }
+            bd.close();
+        }catch (Exception e){
+            Log.e("REOS", "PromocionDetalleSQLiteDao.ObtenerPromocionDetalle.error: " + e.toString());
         }
-        bd.close();
         return listaPromocionDetalleSQLiteEntity;
     }
 
@@ -215,5 +227,47 @@ public class PromocionDetalleSQLiteDao {
         }
         bd.close();
         return listaPromocionDetalleSQLiteEntity;
+    }
+
+    public int AddListPromotionDetail (List<PromocionDetalleEntity> promocionDetalleEntity)
+    {
+        abrir();
+
+        for (int i = 0; i < promocionDetalleEntity.size(); i++) {
+            ContentValues registro = new ContentValues();
+            /*registro.put("banco_id",bancos.get(i).getBanco_ID());
+            registro.put("compania_id",SesionEntity.compania_id);
+            registro.put("nombrebanco",bancos.get(i).getNombre_Banco());
+            registro.put("singledeposit",bancos.get(i).getOperacionUnica());
+            registro.put("pagopos",bancos.get(i).getPagoPOS());*/
+            ///////////////////////////////////////////
+            /*registro.put("compania_id", SesionEntity.compania_id);
+            registro.put("lista_promocion_id",promocionCabeceraEntity.get(i).getLista_promocion_id());
+            registro.put("promocion_id",promocionCabeceraEntity.get(i).getPromocion_id());
+            registro.put("producto_id",promocionCabeceraEntity.get(i).getProducto_id());
+            registro.put("producto",promocionCabeceraEntity.get(i).getProducto());
+            registro.put("umd",promocionCabeceraEntity.get(i).getUmd());
+            registro.put("cantidad",promocionCabeceraEntity.get(i).getCantidad());
+            registro.put("fuerzatrabajo_id",SesionEntity.fuerzatrabajo_id);
+            registro.put("usuario_id",SesionEntity.usuario_id);
+            registro.put("total_preciobase","0");*/
+            registro.put("compania_id", SesionEntity.compania_id);
+            registro.put("lista_promocion_id",promocionDetalleEntity.get(i).getLista_promocion_id());
+            registro.put("promocion_id",promocionDetalleEntity.get(i).getPromocion_id());
+            registro.put("promocion_detalle_id",promocionDetalleEntity.get(i).getPromocion_detalle_id());
+            registro.put("producto_id",promocionDetalleEntity.get(i).getProducto_id());
+            registro.put("producto",promocionDetalleEntity.get(i).getProducto());
+            registro.put("umd",promocionDetalleEntity.get(i).getUmd());
+            registro.put("cantidad",promocionDetalleEntity.get(i).getCantidad());
+            registro.put("fuerzatrabajo_id",SesionEntity.fuerzatrabajo_id);
+            registro.put("usuario_id",SesionEntity.usuario_id);
+            registro.put("preciobase","0");
+            registro.put("chkdescuento","N");
+            registro.put("descuento",promocionDetalleEntity.get(i).getDescuento());
+            bd.insert("promociondetalle",null,registro);
+        }
+
+        bd.close();
+        return 1;
     }
 }

@@ -12,6 +12,26 @@ public class CustomerComplaintResponseEntity {
 
     public String reponseRouteFile;
 
+    public String reponseAttachType;
+
+    public String responseChoisse;
+
+    public String getResponseChoisse() {
+        return responseChoisse;
+    }
+
+    public void setResponseChoisse(String responseChoisse) {
+        this.responseChoisse = responseChoisse;
+    }
+
+    public String getReponseAttachType() {
+        return reponseAttachType;
+    }
+
+    public void setReponseAttachType(String reponseAttachType) {
+        this.reponseAttachType = reponseAttachType;
+    }
+
     public String getResponseAttach() {
         return responseAttach;
     }

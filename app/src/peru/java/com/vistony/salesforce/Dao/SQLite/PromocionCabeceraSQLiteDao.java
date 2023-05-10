@@ -8,11 +8,14 @@ import android.util.Log;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.PromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PromocionCabeceraSQLiteDao {
     SqliteController sqliteController;
@@ -38,6 +41,7 @@ public class PromocionCabeceraSQLiteDao {
     }
 
 
+    /*
     public int InsertaPromocionCabecera (
             String compania_id,
             String lista_promocion_id,
@@ -70,6 +74,37 @@ public class PromocionCabeceraSQLiteDao {
         bd.insert("promocioncabecera",null,registro);
         bd.close();
         //Toast.makeText(this,"Ss cargaron los datos del articulo", Toast.LENGTH_SHORT).show();
+        return 1;
+    }*/
+
+    public int AddListPromotionHead (List<PromocionCabeceraEntity> promocionCabeceraEntity)
+    {
+        abrir();
+
+        for (int i = 0; i < promocionCabeceraEntity.size(); i++) {
+            ContentValues registro = new ContentValues();
+            /*registro.put("banco_id",bancos.get(i).getBanco_ID());
+            registro.put("compania_id",SesionEntity.compania_id);
+            registro.put("nombrebanco",bancos.get(i).getNombre_Banco());
+            registro.put("singledeposit",bancos.get(i).getOperacionUnica());
+            registro.put("pagopos",bancos.get(i).getPagoPOS());*/
+            ///////////////////////////////////////////
+            registro.put("compania_id",SesionEntity.compania_id);
+            registro.put("lista_promocion_id",promocionCabeceraEntity.get(i).getLista_promocion_id());
+            registro.put("promocion_id",promocionCabeceraEntity.get(i).getPromocion_id());
+            registro.put("producto_id",promocionCabeceraEntity.get(i).getProducto_id());
+            registro.put("producto",promocionCabeceraEntity.get(i).getProducto());
+            registro.put("umd",promocionCabeceraEntity.get(i).getUmd());
+            registro.put("cantidad",promocionCabeceraEntity.get(i).getCantidad());
+            registro.put("fuerzatrabajo_id",SesionEntity.fuerzatrabajo_id);
+            registro.put("usuario_id",SesionEntity.usuario_id);
+            registro.put("total_preciobase","0");
+            registro.put("descuento",promocionCabeceraEntity.get(i).getDescuento());
+
+            bd.insert("promocioncabecera",null,registro);
+        }
+
+        bd.close();
         return 1;
     }
 

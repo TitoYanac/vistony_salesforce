@@ -304,16 +304,19 @@ public class DocumentoCobranzaPDF extends AppCompatActivity {
             Log.e("REOS", "DocumentCobranzaPDF.generarPdf.BuildConfig.FLAVOR.:" + BuildConfig.FLAVOR);
             if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
             {
-                cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.type_collection), font4));
-                cell.disableBorderSide(Rectangle.BOX);
-                cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-                tbl.addCell(cell);
-                Log.e("REOS", "DocumentCobranzaPDF.generarPdf.type:" + type);
+                if(!BuildConfig.FLAVOR.equals("paraguay"))
+                {
+                    cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.type_collection), font4));
+                    cell.disableBorderSide(Rectangle.BOX);
+                    cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    tbl.addCell(cell);
+                    Log.e("REOS", "DocumentCobranzaPDF.generarPdf.type:" + type);
 
-                cell = new PdfPCell(new Phrase(type, font4));
-                cell.disableBorderSide(Rectangle.BOX);
-                cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                tbl.addCell(cell);
+                    cell = new PdfPCell(new Phrase(type, font4));
+                    cell.disableBorderSide(Rectangle.BOX);
+                    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    tbl.addCell(cell);
+                }
             }
 
             cell = new PdfPCell(new Phrase(context.getResources().getString(R.string.documents),font4));

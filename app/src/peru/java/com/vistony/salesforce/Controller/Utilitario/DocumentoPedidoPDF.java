@@ -185,9 +185,9 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblcliente.addCell(cellTable);
-            cellTable = new PdfPCell(new Phrase("************************************GENERAL*************************************",font3));
+            cellTable = new PdfPCell(new Phrase("***************************"+Induvis.getTituloVentaString(context).toUpperCase()+"*****************************",font3));
             cellTable.disableBorderSide(Rectangle.BOX);
-            cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cellTable.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblcliente.addCell(cellTable);
             documento.add(tblcliente);
 
@@ -282,7 +282,8 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             documento.add(tblDetalle);
 
             //float[] columnWidths = {1.5f, 6f, 1.5f,2f,2f,2f};
-            float[] columnWidths = {1f,2.5f, 9f,1.5f,1.5f,2f};
+            //float[] columnWidths = {1f,2.5f, 9f,1.5f,1.5f,2f};
+            float[] columnWidths = {1f, 9f,1.5f,3f,3f};
             PdfPTable tblLineas = new PdfPTable(columnWidths);
             tblLineas.setWidthPercentage(100);
             PdfPCell cellLineasDetalle = null;
@@ -290,10 +291,10 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblLineas.addCell(cellLineasDetalle);
-            cellLineasDetalle = new PdfPCell(new Phrase("Código",font3));
+            /*cellLineasDetalle = new PdfPCell(new Phrase("Código",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tblLineas.addCell(cellLineasDetalle);
+            tblLineas.addCell(cellLineasDetalle);*/
             cellLineasDetalle = new PdfPCell(new Phrase("Producto",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -302,10 +303,6 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblLineas.addCell(cellLineasDetalle);
-            /*cellLineasDetalle = new PdfPCell(new Phrase("P.Unit",font3));
-            cellLineasDetalle.disableBorderSide(Rectangle.BOX);
-            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tblLineas.addCell(cellLineasDetalle);;*/
             cellLineasDetalle = new PdfPCell(new Phrase("% Desc",font3));
             cellLineasDetalle.disableBorderSide(Rectangle.BOX);
             cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -321,11 +318,12 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblLineas.addCell(cellLineasDetalle);
-                cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getProducto_id(),font3));
+                /*cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getProducto_id(),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
-                tblLineas.addCell(cellLineasDetalle);
+                tblLineas.addCell(cellLineasDetalle);*/
                 cellLineasDetalle = new PdfPCell(new Phrase(
+                        ListaOrdenVentaDetalle.get(l).getProducto_id()+" "+
                         ListaOrdenVentaDetalle.get(l).getProducto(),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -342,7 +340,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tblLineas.addCell(cellLineasDetalle);
-                cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getMontototallinea(),font3));
+                cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
                 tblLineas.addCell(cellLineasDetalle);
