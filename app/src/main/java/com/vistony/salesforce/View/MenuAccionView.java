@@ -695,7 +695,7 @@ public class MenuAccionView extends Fragment {
 
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
-            if(BuildConfig.FLAVOR.equals("paraguay"))
+            if(BuildConfig.FLAVOR.equals("paraguay")||BuildConfig.FLAVOR.equals("chile"))
             {
                 cv_collection_salesperson.setVisibility(View.GONE);
                 cv_cobranza_pago_pos.setVisibility(View.GONE);

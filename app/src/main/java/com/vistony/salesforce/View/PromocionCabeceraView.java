@@ -23,11 +23,13 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaPromocionCabeceraAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaPromocionCabeceraDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -65,6 +67,8 @@ public class PromocionCabeceraView extends Fragment {
     PromocionCabeceraView promocionCabeceraView;
     static FrameLayout listapromocioncabecera;
     static ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntities=new ArrayList<>();
+    FloatingActionButton fab_add_promotionhead;
+    String cantidad="",currency="",cardcode="",terminopago_id="",producto_id="",producto="";
 
     public PromocionCabeceraView() {
         // Required empty public constructor
@@ -239,8 +243,27 @@ public class PromocionCabeceraView extends Fragment {
         tv_cantidad_promocion=(TextView) v.findViewById(R.id.tv_cantidad_promocion);
         tv_cantidad_pendiente=(TextView) v.findViewById(R.id.tv_cantidad_pendiente);
         listapromocioncabecera = (FrameLayout) v.findViewById(R.id.listapromocioncabecera);
+        fab_add_promotionhead=v.findViewById(R.id.fab_add_promotionhead);
         ObtenerResumen();
         lv_listapromociones = (ListView) v.findViewById(R.id.lv_listapromociones);
+        fab_add_promotionhead.setOnClickListener(view -> {
+
+            ListaPromocionCabeceraEntity objListaPromocionCabecera = new ListaPromocionCabeceraEntity();
+            objListaPromocionCabecera.setLista_promocion_id("0000");
+            objListaPromocionCabecera.setPromocion_id("0000");
+            objListaPromocionCabecera.setDescuento("0");
+            objListaPromocionCabecera.setCantidadcompra(cantidad);
+            objListaPromocionCabecera.setCurrency_id(currency);
+            objListaPromocionCabecera.setCardcode(cardcode);
+            objListaPromocionCabecera.setTerminopago_id(terminopago_id);
+            objListaPromocionCabecera.setCantidadpromocion("0");
+            objListaPromocionCabecera.setProducto(producto);
+            objListaPromocionCabecera.setProducto_id(producto_id);
+            objListaPromocionCabecera.setListaPromocionDetalleEntities(new ArrayList<PromocionDetalleSQLiteEntity>());
+            Listado.add(objListaPromocionCabecera);
+
+            hiloObtenerPromocionCabecera.execute();
+        });
 
         hiloObtenerPromocionCabecera.execute();
         return v;
@@ -252,36 +275,20 @@ public class PromocionCabeceraView extends Fragment {
 
     private void ObtenerResumen()
     {
-        String cantidad="";
+
         for(int i=0;i<listaOrdenVentaDetalleEntities.size();i++)
         {
             cantidad=listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cantidad();
+            currency=listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_currency();
+            cardcode=listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_cardcode();
+            terminopago_id=listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_terminopago_id();
+            producto=listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_producto();
+            producto_id=listaOrdenVentaDetalleEntities.get(i).getOrden_detalle_producto_id();
         }
         tv_cantidad_disponible.setText(cantidad);
         tv_cantidad_pendiente.setText(cantidad);
         tv_cantidad_promocion.setText("0");
     }
-
-    /*
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        Log.e("jpcm","se regresoooo EERTTT");
-        ListenerBackPress.setCurrentFragment("FormListaDeudaCliente");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        ListenerBackPress.setCurrentFragment("ConfigSistemaView");
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }*/
 
     @Override
     public void onDetach() {
@@ -370,11 +377,22 @@ public class PromocionCabeceraView extends Fragment {
                 }
                 else if(SesionEntity.flagquerystock.equals("Y"))
                 {
-                    String Fragment = "ConsultaStockView";
-                    String accion = "mostrarConsultaStock";
-                    String compuesto = Fragment + "-" + accion;
-                    String Objeto="";
-                    mListener.onFragmentInteraction(compuesto, Objeto);
+                    if(SesionEntity.flagquerystockPromotion.equals("Y"))
+                    {
+                        String Fragment = "HistoricPromotionView";
+                        String accion = "mostrarConsultaStock";
+                        String compuesto = Fragment + "-" + accion;
+                        String Objeto="";
+                        mListener.onFragmentInteraction(compuesto, Objeto);
+
+                    }else {
+                        String Fragment = "ConsultaStockView";
+                        String accion = "mostrarConsultaStock";
+                        String compuesto = Fragment + "-" + accion;
+                        String Objeto="";
+                        mListener.onFragmentInteraction(compuesto, Objeto);
+                    }
+
                 }
                 return false;
             case R.id.deshacer:

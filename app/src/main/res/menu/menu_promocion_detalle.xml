@@ -2,6 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/add_promocion_detalle_percent"
+        android:icon="@drawable/ic_baseline_percent_24_white"
+        android:title="@string/add"
+        app:showAsAction="ifRoom"
+        android:enabled="true"
+        />
+    <item
         android:id="@+id/vincular_promocion_detalle_editar"
         android:icon="@drawable/ic_baseline_send_24_white"
         android:title="@string/send"

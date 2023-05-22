@@ -84,8 +84,11 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Orden de Venta"
-                                android:textStyle="bold" />
+                                android:text="@string/salesorder_promotional_mesh"
+                                android:textStyle="bold"
+                                android:gravity="center"
+
+                                />
 
 
                         </LinearLayout>
@@ -128,9 +131,10 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-
-                                android:text="@string/quotation"
-                                android:textStyle="bold" />
+                                android:text="@string/quotation_exception_promotional_mesh"
+                                android:textStyle="bold"
+                                android:gravity="center"
+                                />
 
 
                         </LinearLayout>

@@ -214,11 +214,11 @@
 
             <com.omega_r.libs.OmegaCenterIconButton
                 android:id="@+id/imbcomentariorecibo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:background="@android:color/transparent"
-                android:drawableLeft="@drawable/ic_insert_comment_black_24dp"
+                android:drawableTop="@drawable/ic_insert_comment_black_24dp"
                 android:text="@string/comentary"
                 android:textSize="13dp" />
         </LinearLayout>

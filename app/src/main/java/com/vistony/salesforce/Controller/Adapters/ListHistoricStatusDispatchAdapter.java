@@ -144,6 +144,7 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
             holder.tbl_drivermobile = (TableLayout) convertView.findViewById(R.id.tbl_drivermobile);
             holder.tr_amount = (TableRow) convertView.findViewById(R.id.tr_amount);
             holder.tv_amount = (TextView) convertView.findViewById(R.id.tv_amount);
+            holder.lbl_referral_guide = (TextView) convertView.findViewById(R.id.lbl_referral_guide);
 
 
 
@@ -157,7 +158,15 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         final HistoricStatusDispatchEntity lead = getItem(position);
 
         holder.tv_client.setText(lead.getCliente());
-        holder.tv_referral_guide.setText(lead.getEntrega());
+        if(BuildConfig.FLAVOR.equals("chile"))
+        {
+            holder.lbl_referral_guide.setText(R.string.invoice);
+            holder.tv_referral_guide.setText(lead.getFactura());
+        }else {
+            holder.lbl_referral_guide.setText(R.string.delivery);
+            holder.tv_referral_guide.setText(lead.getEntrega());
+        }
+        //holder.tv_referral_guide.setText(lead.getEntrega());
         holder.tv_type_dispatch.setText(lead.getTipoDespacho());
         holder.tv_reason_dispatch.setText(lead.getMotivoDespacho());
         holder.tv_drivermobile.setText(lead.getDrivermobile());
@@ -413,6 +422,7 @@ public class ListHistoricStatusDispatchAdapter extends ArrayAdapter<HistoricStat
         TableLayout tbl_drivermobile;
         TextView tv_amount;
         TableRow tr_amount;
+        TextView lbl_referral_guide;
 
     }
 

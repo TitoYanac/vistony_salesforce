@@ -23,7 +23,7 @@ import com.vistony.salesforce.kotlin.utilities.DATABASE_NAME
     ReasonDispatch::class,
     StatusDispatch::class,
     VisitSection::class
-                     ], version = 52,exportSchema = false)
+                     ], version = 54,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,

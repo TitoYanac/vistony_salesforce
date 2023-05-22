@@ -117,12 +117,13 @@ public class MenuConsultasView extends Fragment {
         switch (BuildConfig.FLAVOR) {
 
 
-            case "chile":
+
 
             case "marruecos":
                 cv_dispatch.setVisibility(View.GONE);
                 break;
             case "peru":
+            case "chile":
             case "ecuador":
             case "perurofalab":
             case "espania":

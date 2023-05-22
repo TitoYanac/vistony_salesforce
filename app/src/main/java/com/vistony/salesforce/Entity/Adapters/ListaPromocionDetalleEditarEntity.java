@@ -8,8 +8,13 @@ public class ListaPromocionDetalleEditarEntity {
     public String cantidad;
     public String cantidad_editada;
     public boolean estadoitems;
+    public boolean statusEdit;
 
-    public ListaPromocionDetalleEditarEntity(String id, String producto_id, String producto, String umd, String cantidad, String cantidad_editada, boolean estadoitems) {
+    public ListaPromocionDetalleEditarEntity(
+            String id, String producto_id, String producto, String umd, String cantidad,
+            String cantidad_editada, boolean estadoitems
+
+    ) {
         this.id = id;
         this.producto_id = producto_id;
         this.producto = producto;
@@ -17,6 +22,14 @@ public class ListaPromocionDetalleEditarEntity {
         this.cantidad = cantidad;
         this.cantidad_editada = cantidad_editada;
         this.estadoitems = estadoitems;
+    }
+
+    public boolean isStatusEdit() {
+        return statusEdit;
+    }
+
+    public void setStatusEdit(boolean statusEdit) {
+        this.statusEdit = statusEdit;
     }
 
     public boolean isEstadoitems() {

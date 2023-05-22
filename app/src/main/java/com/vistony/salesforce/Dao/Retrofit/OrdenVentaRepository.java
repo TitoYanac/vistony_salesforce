@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
@@ -122,7 +123,7 @@ public class OrdenVentaRepository extends ViewModel {
                                             respuesta.getDocNum(),
                                             respuesta.getMessage()
                                     );
-                                    responseData.add("La orden de venta "+respuesta.getSalesOrderID()+", pasara por un flujo de aprobación");
+                                    responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+respuesta.getSalesOrderID()+", pasara por un flujo de aprobación");
                                 }else{//pasa por flujo automatico
                                     ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
                                             respuesta.getSalesOrderID(),
@@ -131,7 +132,7 @@ public class OrdenVentaRepository extends ViewModel {
                                             respuesta.getMessage()
                                     );
 
-                                    responseData.add("La orden de venta "+respuesta.getDocNum()+", fue aceptado en SAP");
+                                    responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+respuesta.getDocNum()+", fue aceptado en SAP");
                                 }
                             }else{//tiene error
                                 ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
@@ -140,7 +141,7 @@ public class OrdenVentaRepository extends ViewModel {
                                         respuesta.getDocNum(),
                                         respuesta.getMessage()
                                 );
-                                responseData.add("La orden de venta "+respuesta.getSalesOrderID()+", tiene un error");
+                                responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+respuesta.getSalesOrderID()+", tiene un error");
                             }
                         }
 
@@ -153,7 +154,7 @@ public class OrdenVentaRepository extends ViewModel {
                 @Override
                 public void onFailure(Call<SalesOrderEntityResponse> call, Throwable t) {
                     //callback.onResponseErrorSap(t.getMessage());
-                    callback.onResponseErrorSap("En estos momentos no tiene Acceso a Internet. Se reenviara su Orden de Venta en el Proximo inicio de Sesion");
+                    callback.onResponseErrorSap("En estos momentos no tiene Acceso a Internet. Se reenviara su Documento de Venta en el Proximo inicio de Sesion");
                     call.cancel();
                 }
             });

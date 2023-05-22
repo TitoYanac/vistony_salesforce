@@ -217,7 +217,18 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         listaProductoEntity.setGal(lead.getGal());
         listaProductoEntity.setPorcentaje_dsct(lead.getPorcentaje_dsct());
         listaProductoEntity.setPorcentaje_descuento_max(lead.getPorcentaje_descuento_max());
-        ProductoView.newInstancia(listaProductoEntity);
+        if(ProductoView.type.equals("PromocionDetalle"))
+        {
+            ProductoView.sendPromotionDetail(listaProductoEntity);
+        }
+        else if(ProductoView.type.equals("PromocionDetalleadd"))
+        {
+            ProductoView.sendPromotionDetailAdd(listaProductoEntity);
+        }
+        else {
+            ProductoView.newInstancia(listaProductoEntity);
+        }
+
     }
 
 

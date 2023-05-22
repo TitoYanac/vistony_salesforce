@@ -32,6 +32,7 @@ import com.vistony.salesforce.Controller.Adapters.ListSalesOrderDetailAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Adapters.ListaOrdenVentaDetalleDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
@@ -250,7 +251,7 @@ public class OrdenVentaDetalleView extends Fragment {
         hiloAgregarListaProductos = new HiloAgregarListaProductos();
         hiloActualizarResumenMontos = new HiloActualizarResumenMontos();
         context=getContext();
-        getActivity().setTitle("Orden De Venta");
+        getActivity().setTitle(Induvis.getTituloVentaString(getContext())+" "+getContext().getResources().getString(R.string.detail));
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -337,7 +338,7 @@ public class OrdenVentaDetalleView extends Fragment {
         }
 
         protected void onPostExecute(Object result){
-            getActivity().setTitle("Orden Venta Detalle");
+            getActivity().setTitle(Induvis.getTituloVentaString(getContext())+" "+getContext().getResources().getString(R.string.detail));
             //listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
             listSalesOrderDetailAdapter = new ListSalesOrderDetailAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
 

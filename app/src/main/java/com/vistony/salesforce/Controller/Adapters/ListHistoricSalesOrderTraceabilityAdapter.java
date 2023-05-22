@@ -193,6 +193,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
             holder.imv_historic_delivery.setVisibility(View.GONE);
             holder.imv_historic_pend_rev.setVisibility(View.GONE);
+            holder.imv_preview.setVisibility(View.GONE);
             Convert.setMarginsView(holder.imv_historic_orders,120, 400, 200, 145);
             Convert.setMarginsView(holder.imv_historic_order_aprob,450, 400, 200, 145);
             Convert.setMarginsView(holder.imv_historic_invoices,780, 400, 0, 145);

@@ -138,9 +138,9 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblcliente.addCell(cellTable);
-            cellTable = new PdfPCell(new Phrase("*******************************"+Induvis.getTituloVentaString(context)+"*********************************",font3));
+            cellTable = new PdfPCell(new Phrase("***************************"+Induvis.getTituloVentaString(context).toUpperCase()+"*****************************",font3));
             cellTable.disableBorderSide(Rectangle.BOX);
-            cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cellTable.setHorizontalAlignment(Element.ALIGN_CENTER);
             tblcliente.addCell(cellTable);
             documento.add(tblcliente);
 
@@ -356,7 +356,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tblResu.addCell(cellResu);
 
-            cellResu = new PdfPCell(new Phrase("TOTAL ORDEN VENTA:",font3));
+            cellResu = new PdfPCell(new Phrase("TOTAL:",font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblResu.addCell(cellResu);

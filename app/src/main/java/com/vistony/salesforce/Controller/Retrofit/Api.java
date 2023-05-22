@@ -76,53 +76,54 @@ import retrofit2.http.Url;
 
 public interface Api {
     //@Headers("Content-Type: application/json")
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Users")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Users")
     Call<LoginEntityResponse> getUsers(@Query("imei") String imei);
 
-    @GET //EndPoint de acuerdo al FLAVOR
+    @GET
+        //EndPoint de acuerdo al FLAVOR
     Call<VersionEntity> getVs(@Url String url);
 
     //@Streaming
-    @GET(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/version")
+    @GET(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/version")
     Call<ResponseBody> getNewApk(@Query("v") String version);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Banks")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Banks")
     Call<BancoEntityResponse> getBanco(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/customers")
-    Call<ClienteEntityResponse> getCliente (@Query("imei") String imei);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/customers")
+    Call<ClienteEntityResponse> getCliente(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/customers")
-    Call<ClienteEntityResponse> getClienteInformation (@Query("imei") String imei,@Query("cliente") String cliente);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/customers")
+    Call<ClienteEntityResponse> getClienteInformation(@Query("imei") String imei, @Query("cliente") String cliente);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/Customer")
-    //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
-    Call<ClienteEntityResponse> getClientDelivery (@Query("imei") String imei,@Query("fecha") String fecha);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Dispatch/Customer")
+        //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
+    Call<ClienteEntityResponse> getClientDelivery(@Query("imei") String imei, @Query("fecha") String fecha);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/WorkPath")
-    Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo (@Query("imei") String imei);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/WorkPath")
+    Call<RutaFuerzaTrabajoEntityResponse> getRutaFuerzaTrabajo(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/pricelist")
-    Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle (@Query("imei") String imei);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/pricelist")
+    Call<ListaPrecioDetalleEntityResponse> getListaPrecioDetalle(@Query("imei") String imei);
 
-    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/SalesOrder")
+    @POST(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/SalesOrder")
     Call<SalesOrderEntityResponse> sendOrder(@Body RequestBody params);
 
-    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections")
-    //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
-    Call<CobranzaDetalleEntity> sendCollection( @Body RequestBody params);
+    @POST(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Collections")
+        //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    Call<CobranzaDetalleEntity> sendCollection(@Body RequestBody params);
 
     //@POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/Valid")
-        //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
     //Call<CobranzaDetalleEntity> sendCollectionCountSend ( @Body RequestBody params);
 
     //@PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections")
-    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollection(@Path("codeSap") String codeSap, @Body RequestBody params);
     //Call<CobranzaDetalleEntity> updateCollection(@Body RequestBody params);
 
-    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
-    //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Collections/{codeSap}")
+        //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
     Call<CobranzaDetalleEntity> updateCollectionQR(@Path("codeSap") String codeSap, @Body RequestBody params);
 
     @Multipart
@@ -132,204 +133,204 @@ public interface Api {
     @GET
     Call<List<CatalogoEntity>> getCatalog(@Url String pathUrl);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/agencies")
-    Call<AgenciaEntityResponse> getAgencia (@Query("imei") String imei);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/agencies")
+    Call<AgenciaEntityResponse> getAgencia(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/PaymentTerms")
-    Call<TerminoPagoEntityResponse> getTerminoPago (@Query("imei") String imei);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/PaymentTerms")
+    Call<TerminoPagoEntityResponse> getTerminoPago(@Query("imei") String imei);
 
-    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Visit")
-    //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Visit")
-    Call<VisitaEntity> sendVisit (@Header("Token") String content_type, @Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
+    @POST(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Visit")
+        //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Visit")
+    Call<VisitaEntity> sendVisit(@Header("Token") String content_type, @Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/SalesOrder")
-    Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta (@Query("imei") String imei,@Query("fecha") String fecha);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/SalesOrder")
+    Call<HistoricoOrdenVentaEntityResponse> getHistoricoOrdenVenta(@Query("imei") String imei, @Query("fecha") String fecha);
 
-    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
-    //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
-    Call<DepositList> sendDeposit (@Body RequestBody params);
+    @POST(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Deposits")
+        //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
+    Call<DepositList> sendDeposit(@Body RequestBody params);
 
 
     //@PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits/{codeSap}")
-    @PATCH(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Deposits")
     //Call<DepositList> updateDeposit(@Path("codeSap") String codeSap, @Body RequestBody params);
     Call<DepositList> updateDeposit(@Body RequestBody params);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Deposits")
-    Call<HistoricoDepositoEntityResponse> getHistoricoDeposito (@Query("imei") String imei,@Query("fecIni") String fecIni,@Query("fecFin") String fecFin);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Deposits")
+    Call<HistoricoDepositoEntityResponse> getHistoricoDeposito(@Query("imei") String imei, @Query("fecIni") String fecIni, @Query("fecFin") String fecFin);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Date")
-    Call<HistoricoCobranzaEntityResponse> getHistoricoCobranza(@Query("imei") String imei,@Query("fecha") String fecha);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Collections/Date")
+    Call<HistoricoCobranzaEntityResponse> getHistoricoCobranza(@Query("imei") String imei, @Query("fecha") String fecha);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Status2")
-    Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaPDSupervisor(@Query("imei") String imei,@Query("status") String TipoFecha,@Query("user") String user);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Collections/Status2")
+    Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaPDSupervisor(@Query("imei") String imei, @Query("status") String TipoFecha, @Query("user") String user);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Status")
-    Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaPD(@Query("imei") String imei,@Query("status") String TipoFecha);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Collections/Status")
+    Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaPD(@Query("imei") String imei, @Query("status") String TipoFecha);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/Deposit")
-    Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaDE(@Query("imei") String imei,@Query("deposit") String Deposito);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Collections/Deposit")
+    Call<HistoricoCobranzaEntityResponse> getHistoricoCobranzaDE(@Query("imei") String imei, @Query("deposit") String Deposito);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/PromotionType")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/PromotionType")
     Call<ListaPromocionEntityResponse> getListaPromocion(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/PromotionHeader")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/PromotionHeader")
     Call<PromocionCabeceraEntityResponse> getPromomocionCabecera(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/PromotionDetail")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/PromotionDetail")
     Call<PromocionDetalleEntityResponse> getPromomocionDetalle(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ReasonVisit")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/ReasonVisit")
     Call<MotivoVisitaEntityResponse> getReasonVisits(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Kardex")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Kardex")
     Call<KardexPagoEntityResponse> getKardexPago(@Query("CardCode") String Cardcode);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/PriceListHead")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/PriceListHead")
     Call<PriceListEntityResponse> getPriceList(@Query("imei") String imei);
 
 
-    @PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
+    @PATCH(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Dispatch")
         //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Visit")
-    Call<HeaderStatusDispatchEntityResponse> sendStatusDispatch (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
+    Call<HeaderStatusDispatchEntityResponse> sendStatusDispatch(@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricalSales/Variable")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/HistoricalSales/Variable")
     Call<HistoricContainerSalesEntityResponse> getDailySummary(
             @Query("imei") String imei,
             @Query("fecini") String fecini,
             @Query("fecfin") String fecfin
-            );
+    );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricalSales/Type")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/HistoricalSales/Type")
     Call<HistoricContainerSalesEntityResponse> getHistoricContainerSales(
             @Query("imei") String imei,
             @Query("type") String type,
             @Query("cardCode") String cardcode,
             @Query("fecini") String fecini,
             @Query("fecfin") String fecfin
-            );
+    );
 
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Quota")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Quota")
     Call<QuotasPerCustomerEntityHeadResponse> getQuotasPerCustomerHead(
             @Query("CardCode") String CardCode,
             @Query("SlpCode") String SlpCode
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Quota/Detail")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Quota/Detail")
     Call<QuotasPerCustomerDetailEntityResponse> getQuotasPerCustomerDetail(
             @Query("CardCode") String CardCode,
             @Query("SlpCode") String SlpCode
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Quota/Invoice")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Quota/Invoice")
     Call<QuotasPerCustomerInvoiceEntityResponse> getQuotasPerCustomerInvoice(
             @Query("SlpCode") String SlpCode,
             @Query("CardCode") String CardCode
 
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Invoices") //Pruebas Mockups Pedidos
-    Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Query("imei") String Imei,
-                                                               @Query("fecha") String FechaFactura);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Invoices")
+        //Pruebas Mockups Pedidos
+    Call<HistoricoFacturasEntityResponse> getHistoricoFactura(@Query("imei") String Imei,
+                                                              @Query("fecha") String FechaFactura);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Commissions")
-    Call<ComisionesEntityResponse> getComisiones (@Query("imei") String Imei,
-                                                  @Query("Year") String Year,
-                                                  @Query("Month") String Month
-            );
-
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Colors")
-    Call<EscColoursCEntityResponse> getScColoursC (@Query("imei") String Imei
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Commissions")
+    Call<ComisionesEntityResponse> getComisiones(@Query("imei") String Imei,
+                                                 @Query("Year") String Year,
+                                                 @Query("Month") String Month
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ScaColoursD")
-    Call<EscColoursDEntityResponse> getScColoursD (@Query("imei") String Imei
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Colors")
+    Call<EscColoursCEntityResponse> getScColoursC(@Query("imei") String Imei
+    );
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/ScaColoursD")
+    Call<EscColoursDEntityResponse> getScColoursD(@Query("imei") String Imei
     );
 
     //@GET("/AppVistonySalesTest/ServicioApp.svc/Obtener_DespachoC/{Imei},{Compania_ID},{FuerzaTrabajo_ID},{FechaDespacho}") //Maestro de Hoja de Despacho Cabecera
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/List")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Dispatch/List")
     //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch")
-    Call<HeaderDispatchSheetEntityResponse> getHeaderDispatchSheet (
+    Call<HeaderDispatchSheetEntityResponse> getHeaderDispatchSheet(
             @Query("imei") String Imei
-            ,@Query("fecha") String FechaDespacho
+            , @Query("fecha") String FechaDespacho
 
     );
 
     //@GET("/AppVistonySalesTest/ServicioApp.svc/Obtener_DespachoD/{Imei},{Compania_ID},{FuerzaTrabajo_ID},{FechaDespacho}") //Maestro de Hoja de Despacho Cabecera
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/DetailDispatchSheet")
-    Call<DetailDispatchSheetEntityResponse> getDetailDispatchSheet (
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/DetailDispatchSheet")
+    Call<DetailDispatchSheetEntityResponse> getDetailDispatchSheet(
             @Query("Imei") String Imei
-            ,@Query("FechaDespacho") String FechaDespacho
+            , @Query("FechaDespacho") String FechaDespacho
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/WareHouses")
-    Call<WareHousesEntityResponse> getWareHouses(@Query("imei") String imei,@Query("ItemCode") String ItemCode);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/WareHouses")
+    Call<WareHousesEntityResponse> getWareHouses(@Query("imei") String imei, @Query("ItemCode") String ItemCode);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Effectiveness")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Effectiveness")
     Call<SummaryofeffectivenessEntityResponse> getSummaryofEffectiveness(
             @Query("imei") String imei,
             @Query("startDate") String fecini,
             @Query("endDate") String fecfin
     );
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/Type")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Dispatch/Type")
     Call<TypeDispatchEntityResponse> getTypeDispatch(@Query("imei") String imei);
 
 
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/HistoricStatusDispatch")
+    Call<HistoricStatusDispatchEntityResponse> geHistoricStatusDispatch(@Query("imei") String imei, @Query("date") String date);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/HistoricStatusDispatch")
-    Call<HistoricStatusDispatchEntityResponse> geHistoricStatusDispatch(@Query("imei") String imei,@Query("date") String date);
-
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Traceabilities")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Traceabilities")
     Call<HistoricSalesOrderTraceabilityEntityResponse> geHistoricSalesOrderTraceability(@Query("imei") String imei, @Query("fecha") String date);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/AnalysisRoute")
-    Call<HistoricSalesAnalysisByRouteEntityResponse> geHistoricSalesAnalysisByRoute (@Query("imei") String imei, @Query("dia") String date);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/AnalysisRoute")
+    Call<HistoricSalesAnalysisByRouteEntityResponse> geHistoricSalesAnalysisByRoute(@Query("imei") String imei, @Query("dia") String date);
 
-    @POST ("https://reclamos.vistonyapp.com/upload/image")
+    @POST("https://reclamos.vistonyapp.com/upload/image")
     Call<Void> postPrueba(@Body RequestBody params);
 
-    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/signature/{codeSap}")
+    @POST(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Collections/signature/{codeSap}")
         //@PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections/{codeSap}")
-    Call<SignatureEntityResponse> updateCollectionSignature(@Path("codeSap") String codeSap,@Body RequestBody params);
+    Call<SignatureEntityResponse> updateCollectionSignature(@Path("codeSap") String codeSap, @Body RequestBody params);
 
-    @POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Quotation")
-    Call<QuotationEntityResponse> geHistoricQuotation (@Body RequestBody params);
+    @POST(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Quotation")
+    Call<QuotationEntityResponse> geHistoricQuotation(@Body RequestBody params);
 
-    @POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Quotation/({docEntry})/CreateSalesOrder")
-    Call<SalesOrderEntityResponse> sendQuotation (@Path("docEntry") int docEntry,@Body RequestBody params);
+    @POST(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Quotation/({docEntry})/CreateSalesOrder")
+    Call<SalesOrderEntityResponse> sendQuotation(@Path("docEntry") int docEntry, @Body RequestBody params);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Effectiveness/Quote")
-    Call<QuoteEffectivenessEntityResponse> getQuoteEffectiveness (@Query("imei") String imei);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Effectiveness/Quote")
+    Call<QuoteEffectivenessEntityResponse> getQuoteEffectiveness(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Dispatch/List")
-    Call<HeaderDispatchSheetEntityResponse> getHeaderDispatchSheetSalesPerson (
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Dispatch/List")
+    Call<HeaderDispatchSheetEntityResponse> getHeaderDispatchSheetSalesPerson(
             @Query("imei") String Imei
-            ,@Query("fecha") String FechaDespacho
-            ,@Query("flag") String Seller
+            , @Query("fecha") String FechaDespacho
+            , @Query("flag") String Seller
     );
 
-    @PATCH(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Customers/Address")
-    Call<LeadAddressEntityResponse> sendLeadAddress (@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
+    @PATCH(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Customers/Address")
+    Call<LeadAddressEntityResponse> sendLeadAddress(@Body RequestBody params/*@FieldMap HashMap<String, String> params*/);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/ValidationAccountClient")
-    Call<ValidationAccountClientModelResponse> getValidationAccountClient(@Query("SalesRepCode") String SalesRepCode,@Query("Day") String Day);
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/ValidationAccountClient")
+    Call<ValidationAccountClientModelResponse> getValidationAccountClient(@Query("SalesRepCode") String SalesRepCode, @Query("Day") String Day);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ubigeos")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Ubigeos")
     Call<UbigeoEntityResponse> getUbigeo(@Query("imei") String imei);
 
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Reclamo")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Reclamo")
     Call<CustomerComplaintFormsEntityResponse> getCustomerComplaint(
             //@Query("Imei") String imei, @Query("CardCode") String CardCode
     );
 
-    @POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Reclamo")
+    @POST(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Reclamo")
         //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
-    Call<CustomerComplaintFormsEntity>sendForms( @Body RequestBody params);
+    Call<CustomerComplaintFormsEntity> sendForms(@Body RequestBody params);
 
-    //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies/Dispatch")
-    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies")
+    @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies/Dispatch")
+    //@GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies")
     Call<ReasonDispatchEntityResponse> getReasonDispatch(@Query("imei") String imei);
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies/FreeTransfer")

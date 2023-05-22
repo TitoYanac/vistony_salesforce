@@ -16,6 +16,7 @@ public class PromocionDetalleSQLiteEntity implements Serializable {
     public String preciobase;
     public String chkdescuento;
     public String descuento;
+    public boolean statusEdit;
 
     public PromocionDetalleSQLiteEntity(String compania_id, String lista_promocion_id, String promocion_id, String promocion_detalle_id, String producto_id, String producto, String umd, String cantidad, String fuerzatrabajo_id, String usuario_id, String preciobase, String chkdescuento, String descuento) {
         this.compania_id = compania_id;
@@ -34,6 +35,14 @@ public class PromocionDetalleSQLiteEntity implements Serializable {
     }
 
     public PromocionDetalleSQLiteEntity() {
+    }
+
+    public boolean isStatusEdit() {
+        return statusEdit;
+    }
+
+    public void setStatusEdit(boolean statusEdit) {
+        this.statusEdit = statusEdit;
     }
 
     public String getChkdescuento() {

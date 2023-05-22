@@ -52,7 +52,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
     private String mParam1;
     private String mParam2;
     View v;
-    CardView cv_ordenventafecha,cv_resumen_diario,cv_consulta_stock,cv_seguimiento;
+    CardView cv_ordenventafecha,cv_resumen_diario,cv_consulta_stock,cv_seguimiento,cv_historic_promotion;
     TextView tv_fecha_resumen_diario;
     ImageButton imb_consultar_fecha_resumen_diario;
     Date date,datesap;
@@ -105,6 +105,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
         cv_resumen_diario=v.findViewById(R.id.cv_resumen_diario);
         cv_consulta_stock=v.findViewById(R.id.cv_consulta_stock);
         cv_seguimiento=v.findViewById(R.id.cv_seguimiento);
+        cv_historic_promotion=v.findViewById(R.id.cv_historic_promotion);
 
         resumenDiarioRepository = new ViewModelProvider(getActivity()).get(ResumenDiarioRepository.class);
         summaryofeffectivenessRepository = new ViewModelProvider(getActivity()).get(SummaryofeffectivenessRepository.class);
@@ -143,6 +144,15 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
             public void onClick(View v) {
                 String Fragment="MenuConsultasPedidosView";
                 String accion="seguimiento";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,"");
+            }
+        });
+        cv_historic_promotion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Fragment="MenuConsultasPedidosView";
+                String accion="historic_promotion";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,"");
             }

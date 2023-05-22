@@ -148,6 +148,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         holder.tv_orden_detalle_precio_igv.setText(Convert.numberForView2 (formulasController.ObtenerCalculoPrecioImpuesto(lead.getOrden_detalle_precio_unitario(), ObjUsuario.Impuesto)));
 
 
+
         Log.e("REOS","ListSalesOrderDetailAdapter.BuildConfig.FLAVOR:"+BuildConfig.FLAVOR.toString());
         Log.e("REOS","ListSalesOrderDetailAdapter.BuildConfig.lead.getOrden_detalle_oil_tax():"+lead.getOrden_detalle_oil_tax());
         if(BuildConfig.FLAVOR.equals("espania"))
@@ -178,8 +179,14 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         else{
             holder.tr_sigaus.setVisibility(View.GONE);
         }
+        if((BuildConfig.FLAVOR.equals("chile")&&SesionEntity.quotation.equals("Y"))){
+            holder.imv_consultar_promocion_cabecera.setVisibility(View.INVISIBLE);
+            holder.imv_consultar_promocion_cabecera.setEnabled(false);
+            holder.imv_consultar_promocion_cabecera.setClickable(false);
+        }
 
-        if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos")||BuildConfig.FLAVOR.equals("ecuador"))
+        if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos")||BuildConfig.FLAVOR.equals("ecuador")
+                ||(BuildConfig.FLAVOR.equals("chile")&&!SesionEntity.quotation.equals("Y")))
         {
             Resources res = getContext().getResources(); // need this to fetch the drawable
             Drawable borde_editext_orden_venta_detalle_inhabilitado = res.getDrawable( R.drawable.borde_editext_ov_gris);
@@ -1032,7 +1039,8 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                                     lead.getOrden_detalle_cantidad(),
                                     SesionEntity.contado,
                                     lead.getOrden_detalle_terminopago_id(),
-                                    lead.getOrden_detalle_cardcode()
+                                    lead.getOrden_detalle_cardcode(),
+                                    lead.getOrden_detalle_currency()
                             );
                             Log.e("REOS", "ListSalesOrderDetailAdapter.listaPromocionCabecera:" + listaPromocionCabecera.size());
                             Log.e("REOS", "ListSalesOrderDetailAdapter.lead.getOrden_detalle_terminopago_id()listaPromocionCabecera:" + lead.getOrden_detalle_terminopago_id());
@@ -1079,6 +1087,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                 switch (BuildConfig.FLAVOR){
                     case "ecuador":
                     case "peru":
+                    case "chile":
                         GeneratePromotion(lead);
                         break;
                     default:
@@ -1141,6 +1150,16 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         {
             Log.e("REOS","ListSalesOrderDetailAdapter.holder.editDspPorcentaje.setEnabled(true)-Linea:"+lead.getOrden_detalle_item());
             itemChecked[position] = false;
+        }
+
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            holder.chk_descuento_contado.setChecked(false);
+            Resources res2 = getContext().getResources(); // need this to fetch the drawable
+            Drawable draw = res2.getDrawable( R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+            holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+            holder.imv_consultar_promocion_cabecera.setEnabled(true);
+            holder.et_porcentaje_descuento_contado.setText("0");
         }
         Log.e("REOS","ListSalesOrderDetailAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_montototallinea():"+lead.getOrden_detalle_montototallinea());
         Log.e("REOS","ListSalesOrderDetailAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_monto_descuento():"+lead.getOrden_detalle_monto_descuento());
@@ -1247,6 +1266,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         Object [] listaobjetos=new Object[2];
         //OrdenVentaDetalleView.listaPromocionCabecera=new ArrayList<>();
         actualizarlistapromocioncabecera(lead);
+        Log.e("REOS","ListSalesOrderDetailAdapter-GeneratePromotion-OrdenVentaDetalleView.listaPromocionCabecera.size():"+OrdenVentaDetalleView.listaPromocionCabecera.size());
         listaobjetos[0]=OrdenVentaDetalleView.listaPromocionCabecera;
         listaobjetos[1]=listaOrdenVentaDetalleEntities;
         transaction.replace(R.id.content_menu_view, ordenVentaDetalleView.newInstanceEnviaListaPromocion(listaobjetos));
@@ -1408,7 +1428,8 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                     Log.e("REOS", "ListSalesOrderDetailAdapter-ActualizaListaOrdenDetallePromocion-Fin Registro Linea Padre");
                     //Inserta Lineas de Detalle
                     for (int b = 0; b < lead.getOrden_detalle_lista_promocion_cabecera().get(a).getListaPromocionDetalleEntities().size(); b++) {
-                        if (!lead.getOrden_detalle_lista_promocion_cabecera().get(a).getListaPromocionDetalleEntities().get(b).getProducto_id().equals("DESCUENTO")) {
+                        if (!lead.getOrden_detalle_lista_promocion_cabecera().get(a).getListaPromocionDetalleEntities().get(b).getProducto_id().equals("%" +
+                                "")) {
                             Log.e("REOS", "ListSalesOrderDetailAdapter-ActualizaListaOrdenDetallePromocion-Inicia Linea DESCUENTO");
                             Log.e("REOS", "ListSalesOrderDetailAdapter-ActualizaListaOrdenDetallePromocion-chk_descuentocontadoaplicado" + String.valueOf(chk_descuentocontadoaplicado));
                             //Log.e("REOS", "ListSalesOrderDetailAdapter-ActualizaListaOrdenDetallePromocion-lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado()" + String.valueOf(lead.getOrden_detalle_lista_orden_detalle_promocion().get(a).isOrden_detalle_chk_descuentocontado_aplicado()));
@@ -1671,6 +1692,8 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         {
             Log.e("REOS","ListSalesOrderDetailAdapter-ActualizaListaOrdenDetallePromocion-Lead-conChkdescuentoaplicado");
         }
+
+
         Log.e("REOS","ListSalesOrderDetailAdapter-Finaliza-ActualizaListaOrdenDetallePromocion");
     }
 
@@ -1705,7 +1728,8 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                     lead.getOrden_detalle_cantidad(),
                     SesionEntity.contado,
                     lead.getOrden_detalle_terminopago_id(),
-                    lead.getOrden_detalle_cardcode()
+                    lead.getOrden_detalle_cardcode(),
+                    lead.getOrden_detalle_currency()
             );
 
         }

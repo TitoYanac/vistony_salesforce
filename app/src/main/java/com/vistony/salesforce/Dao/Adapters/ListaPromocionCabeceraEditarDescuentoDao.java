@@ -36,8 +36,10 @@ public class ListaPromocionCabeceraEditarDescuentoDao {
             {
                 saveLead(new ListaPromocionDetalleEditarEntity(
                         String.valueOf(i+1)
-                        ,"Descuento"
-                        ,"% DESCUENTO"
+                        //,"Descuento"
+                        //,"% DESCUENTO"
+                        ,"%"
+                        ,"DESCUENTO"
                         ,"%"
                         ,Lista.get(i).getDescuento()
                         ,Lista.get(i).getDescuento()

@@ -420,6 +420,7 @@ public class DetailDispatchSheetSQLite {
             historicStatusDispatchEntity.setDrivermobile(fila.getString(fila.getColumnIndex("drivermobile")));
             historicStatusDispatchEntity.setDrivername(fila.getString(fila.getColumnIndex("drivername")));
             historicStatusDispatchEntity.setAmount(fila.getString(fila.getColumnIndex("saldo")));
+            historicStatusDispatchEntity.setFactura(fila.getString(fila.getColumnIndex("factura")));
             listaHistoricStatusDispatchEntity.add(historicStatusDispatchEntity);
         }
 

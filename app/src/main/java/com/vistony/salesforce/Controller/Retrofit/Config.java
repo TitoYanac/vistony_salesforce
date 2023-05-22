@@ -26,7 +26,7 @@ public class Config {
 
         String baseUrl=null;
         switch (BuildConfig.FLAVOR) {
-            case "chile":
+            //case "chile"://Produccion
             case "ecuador":
                 case "peru":
                 //Produccion
@@ -35,8 +35,8 @@ public class Config {
             case "marruecos":
                 baseUrl = "https://salesforce.vistony.pe";
                 break;
+            case "chile"://QA
             case "perurofalab":
-                //Pruebas ultima milla bolivia
             case "bolivia":
             case "paraguay":
                 //QA Peru
@@ -123,7 +123,7 @@ public class Config {
 
         String baseUrl=null;
         switch (BuildConfig.FLAVOR) {
-            case "chile":
+            //case "chile"://Produccion
             case "peru":
                 //Produccion
             case "ecuador":
@@ -132,7 +132,7 @@ public class Config {
                 baseUrl = "https://salesforce.vistony.pe";
                 break;
             case "perurofalab":
-                //Pruebas ultima milla bolivia
+            case "chile"://QA
             case "bolivia":
             case "paraguay":
                 //QA Peru
@@ -229,13 +229,14 @@ public class Config {
             baseUrl = "http://salesforce.vistony.com";
         }*/
         switch (BuildConfig.FLAVOR) {
-            case "chile":
+            //case "chile"://Produccion
             case "peru":
             case "ecuador":
             case "espania":
             case "marruecos":
                 baseUrl = "https://salesforce.vistony.pe";
                 break;
+            case "chile"://QA
             case "perurofalab":
             case "bolivia":
             case "paraguay":

@@ -152,4 +152,6 @@
     <string name="lbl_dispatch_failed">Fallidos</string>
     <string name="lbl_dispatch_sucessfull">Exitosos</string>
     <string name="lbl_date_dispatch">Fecha Despacho</string>
+    <string name="salesorder_promotional_mesh">Orden Venta \n (Malla Promocional)</string>
+    <string name="quotation_exception_promotional_mesh">Cotización \n (Excepción Malla Promocional)</string>
 </resources>

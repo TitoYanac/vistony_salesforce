@@ -500,4 +500,46 @@ public class ListaPrecioDetalleSQLiteDao {
         Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.arraylistaProductoEntity: "+arraylistaProductoEntity.size());
         return arraylistaProductoEntity;
     }
+
+    public ArrayList<ListaPrecioDetalleSQLiteEntity> ObtenerListaPrecioPorProducto (Context context, String producto_id){
+
+        ListaPrecioDetalleSQLiteEntity = new ArrayList<ListaPrecioDetalleSQLiteEntity>();
+        ListaPrecioDetalleSQLiteEntity listaPrecioDetalleSQLiteEntity=new ListaPrecioDetalleSQLiteEntity();
+        Cursor fila=null;
+
+        try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                    "IFNULL(stock_general,0) stock_general,contado,credito,gal,units " +
+                    " FROM listapreciodetalle " +
+                    "where producto_id='"+producto_id+"' "+
+                    "GROUP BY producto_id,producto,umd,stock_almacen,stock_general,contado,credito,gal,units";
+
+            fila = sqlite.rawQuery(query,null);
+
+            while (fila.moveToNext()) {
+                listaPrecioDetalleSQLiteEntity = new ListaPrecioDetalleSQLiteEntity();
+                listaPrecioDetalleSQLiteEntity.setProducto_id (fila.getString(0));
+                listaPrecioDetalleSQLiteEntity.setProducto(fila.getString(1));
+                listaPrecioDetalleSQLiteEntity.setUmd(fila.getString(2));
+                listaPrecioDetalleSQLiteEntity.setStock_almacen(fila.getString(3));
+                listaPrecioDetalleSQLiteEntity.setStock_general(fila.getString(4));
+                listaPrecioDetalleSQLiteEntity.setContado(fila.getString(5));
+                listaPrecioDetalleSQLiteEntity.setCredito(fila.getString(6));
+                listaPrecioDetalleSQLiteEntity.setGal(fila.getString(7));
+                listaPrecioDetalleSQLiteEntity.setUnit(fila.getString(8));
+                ListaPrecioDetalleSQLiteEntity.add(listaPrecioDetalleSQLiteEntity);
+            }
+
+
+        }catch (Exception e){
+            Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.e"+e.getMessage());
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
+        Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ListaPrecioDetalleSQLiteEntity.SIZE(): "+ListaPrecioDetalleSQLiteEntity.size());
+        return ListaPrecioDetalleSQLiteEntity;
+    }
+
 }

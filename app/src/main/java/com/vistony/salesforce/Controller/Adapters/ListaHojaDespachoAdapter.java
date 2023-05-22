@@ -150,7 +150,7 @@ public class ListaHojaDespachoAdapter extends ArrayAdapter<ListaHojaDespachoEnti
         holder.tv_ocurrencies.setText(lead.getOcurrencia());
         ArraylistaClienteCabeceraEntity=new ArrayList<>();
 
-        if(BuildConfig.FLAVOR.equals("bolivia"))
+        if(BuildConfig.FLAVOR.equals("bolivia")||BuildConfig.FLAVOR.equals("chile"))
         {
             holder.tr_entrega.setVisibility(View.GONE);
         }

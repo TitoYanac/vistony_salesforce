@@ -287,8 +287,6 @@ public class Induvis {
     public static String getTituloVentaString(Context context){
         String tituloventa="";
         switch (BuildConfig.FLAVOR){
-
-
             case "perurofalab":
             case "espania":
             case "marruecos":

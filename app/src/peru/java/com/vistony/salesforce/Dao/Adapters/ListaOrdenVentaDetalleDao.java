@@ -82,7 +82,8 @@ public class ListaOrdenVentaDetalleDao {
                         Lista.get(i).getOrden_detalle_porcentaje_descuento_maximo(),
                         Lista.get(i).getOrden_detalle_oil_tax(),
                         Lista.get(i).getOrden_detalle_liter(),
-                        Lista.get(i).getOrden_detalle_SIGAUS()
+                        Lista.get(i).getOrden_detalle_SIGAUS(),
+                        Lista.get(i).getOrden_detalle_currency()
                 ));
             }
         }catch (Exception e)

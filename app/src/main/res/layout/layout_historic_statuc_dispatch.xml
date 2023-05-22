@@ -11,6 +11,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="8dp"
     android:id="@+id/relativeListStatusDispatch">
+
     <TextView
         android:id="@+id/tv_client"
         android:layout_width="400dp"

@@ -95,27 +95,6 @@ public class PromocionCabeceraEditarDescuentoView extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(String tag,Object dato);
     }
-
-    /*
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        Log.e("jpcm","se regresoooo EERTTT");
-        ListenerBackPress.setCurrentFragment("FormListaDeudaCliente");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        ListenerBackPress.setCurrentFragment("ConfigSistemaView");
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }*/
     @Override
     public void onDetach() {
         super.onDetach();

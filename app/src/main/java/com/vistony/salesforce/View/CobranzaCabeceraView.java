@@ -355,6 +355,13 @@ public class CobranzaCabeceraView extends Fragment implements View.OnClickListen
                 imb_consultar_codigo_control.setVisibility(View.GONE);
             }
         }
+
+        if(BuildConfig.FLAVOR.equals("chile"))
+        {
+            chk_check.setVisibility(View.GONE);
+            chk_collection_salesperson.setVisibility(View.GONE);
+            chkbancarizado.setEnabled(false);
+        }
         String [] valores = null;
         /*if(BuildConfig.FLAVOR.equals("chile"))
         {

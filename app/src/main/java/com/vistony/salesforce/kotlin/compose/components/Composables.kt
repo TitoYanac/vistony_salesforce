@@ -30,10 +30,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
+import com.vistony.salesforce.Controller.Adapters.StatusDispatchDialog
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.R
+import com.vistony.salesforce.View.MenuAccionView
 import com.vistony.salesforce.kotlin.compose.DialogMain
 import com.vistony.salesforce.kotlin.compose.theme.BlueVistony
 import com.vistony.salesforce.kotlin.data.*
@@ -269,7 +275,8 @@ fun CardDispatch(
                 HorizontalStepView(steps = steps, stepsStatus = stepsStatus, numberStatus = numberStatus
                     ,context,
                     InfoDialog = { openDialog.value = true },
-                    InfoDialogEnd = { openDialogend.value = true }
+                    InfoDialogEnd = { openDialogend.value = true },
+                    list
                 )
                 if (openDialog.value)
                 {
@@ -294,7 +301,9 @@ fun CardDispatch(
                             openDialogend.value = false
                             //false
                         },
-                        list
+                        list,
+                        context,
+                        lifecycleOwner
                     )
                 }
 
@@ -423,7 +432,8 @@ fun HorizontalStepView(
     numberStatus: Array<String>,
     context: Context,
     InfoDialog: (status:String) -> Unit,
-    InfoDialogEnd: (status:String) -> Unit
+    InfoDialogEnd: (status:String) -> Unit,
+    list: DetailDispatchSheet
 ) {
 
     Box() {
@@ -495,7 +505,25 @@ fun HorizontalStepView(
                                 if (step.first.equals("Entrada")) {
                                     InfoDialog(step.first.toString())
                                 } else if (step.first.equals("Despacho")) {
-
+                                    Log.e(
+                                        "REOS",
+                                        "Composables-CardDispatch-stepsStatus.onclick.Despacho.inicio"
+                                    )
+                                    val dialogFragment: DialogFragment = StatusDispatchDialog(
+                                        list.cliente_id,
+                                        list.nombrecliente,
+                                        list.control_id.toString(),
+                                        list.item_id.toString(),
+                                        list.domembarque_id
+                                    )
+                                    dialogFragment.show(
+                                        (context as FragmentActivity).supportFragmentManager,
+                                        "un dialogo"
+                                    )
+                                    Log.e(
+                                        "REOS",
+                                        "Composables-CardDispatch-stepsStatus.onclick.Despacho.fin"
+                                    )
                                 } else if (step.first.equals("Cobranza")) {
 
                                 } else if (step.first.equals("Salida")) {
@@ -687,28 +715,141 @@ fun InfoDialog(
                         Row(){
                             Button(
                                 onClick = {
-                                    var visitSectionViewModel: VisitSectionViewModel
-                                    val visitSectionRepository = VisitSectionRepository()
-                                    visitSectionViewModel = VisitSectionViewModel(visitSectionRepository)
-                                    val FormatFecha =
-                                        SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-                                    val date = Date()
-                                    visitSectionViewModel?.getVisitSection(
-                                        SesionEntity.imei,
-                                        context,
-                                        lifecycleOwner,
-                                        list.cliente_id.toString(),
-                                        list.domembarque_id.toString(),
-                                        FormatFecha.format(date),
-                                        list.control_id.toString()
+
+
+                                    val geoLocalizacion = Geolocation(context)
+
+                                    geoLocalizacion.obtenerUbicacionActual(
+                                        onSuccess = { location ->
+                                            var latitude:String=""
+                                            var longitude:String=""
+                                            latitude=location.latitude.toString()
+                                            longitude=location.longitude.toString()
+                                            var visitSectionViewModel: VisitSectionViewModel
+                                            val visitSectionRepository = VisitSectionRepository()
+                                            visitSectionViewModel = VisitSectionViewModel(visitSectionRepository)
+                                            val dateFormathora =
+                                                SimpleDateFormat("HHmmss", Locale.getDefault())
+                                            val FormatFecha =
+                                                SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+                                            val date = Date()
+                                            visitSectionViewModel?.getVisitSection(
+                                                SesionEntity.imei,
+                                                context,
+                                                lifecycleOwner,
+                                                list.cliente_id.toString(),
+                                                list.domembarque_id.toString(),
+                                                FormatFecha.format(date),
+                                                list.control_id.toString()
+                                            )
+                                            visitSectionViewModel.list.observe(lifecycleOwner) { data ->
+                                                // actualizar la UI con los datos obtenidos
+                                                Log.e(
+                                                    "REOS",
+                                                    "Composables-InfoDialog.visitSectionViewModel.observe.data.size"+data.size
+                                                )
+
+                                                if(data.isEmpty())
+                                                {
+
+                                                    if(location.latitude==0.0&&location.longitude==0.0)
+                                                    {
+                                                        Log.e(
+                                                            "REOS",
+                                                            "Composables-InfoDialog.geoLocalizacion.entroif"
+                                                        )
+                                                    }else{
+                                                        Log.e(
+                                                            "REOS",
+                                                            "Composables-InfoDialog.geoLocalizacion.noentroif"
+                                                        )
+                                                        try {
+                                                            var listVisitSection: MutableList<VisitSection> =
+                                                                mutableListOf()
+
+                                                            var ObjUsuario = UsuarioSQLiteEntity()
+                                                            val usuarioSQLite: UsuarioSQLite =
+                                                                UsuarioSQLite(context)
+                                                            ObjUsuario =
+                                                                usuarioSQLite.ObtenerUsuarioSesion()
+                                                            var visitSection: VisitSection? = VisitSection(
+                                                                //ObtenerFechaHoraCadena().toInt(),
+                                                                0,
+                                                                ObjUsuario.compania_id,
+                                                                ObjUsuario.fuerzatrabajo_id,
+                                                                ObjUsuario.usuario_id,
+                                                                list.cliente_id.toString(),
+                                                                list.domembarque_id.toString(),
+                                                                latitude,
+                                                                longitude,
+                                                                FormatFecha.format(date),
+                                                                dateFormathora.format(date),
+                                                                "0",
+                                                                "0",
+                                                                "0",
+                                                                "0",
+                                                                "0",
+                                                                list.control_id.toString(),
+                                                                list.nombrecliente.toString(),
+                                                                list.item_id.toString(),
+                                                                list.entrega.toString()
+                                                            )
+                                                            if (visitSection != null) {
+                                                                listVisitSection?.add(visitSection)
+                                                            }
+
+                                                            Log.e(
+                                                                "REOS",
+                                                                "Composables-InfoDialog.visitSectionViewModel.visitSection" + visitSection
+                                                            )
+                                                            visitSectionViewModel?.addVisitSection(
+                                                                listVisitSection,
+                                                                lifecycleOwner,
+                                                                context,
+                                                            )
+                                                            visitSectionViewModel.status.observe(
+                                                                lifecycleOwner
+                                                            ) { data ->
+                                                                // actualizar la UI con los datos obtenidos
+                                                                Log.e(
+                                                                    "REOS",
+                                                                    "Composables-InfoDialog.visitSectionViewModel.observe.statusadd.size" + data.toString()
+                                                                )
+                                                            }
+                                                        }catch (e: Exception)
+                                                        {
+                                                            Log.e(
+                                                                "REOS",
+                                                                "Composables-InfoDialog-error" + e.toString()
+                                                            )
+                                                        }
+
+                                                    }
+
+                                                }else {
+                                                    Log.e(
+                                                        "REOS",
+                                                        "Composables-InfoDialog.geoLocalizacion.lalistatraedata"
+                                                    )
+                                                }
+                                            }
+                                            Log.e(
+                                                "REOS",
+                                                "Composables-InfoDialog.geoLocalizacion.latitude"+latitude
+                                            )
+                                            Log.e(
+                                                "REOS",
+                                                "Composables-InfoDialog.geoLocalizacion.longitude"+longitude
+                                            )
+
+                                        },
+                                        onFailure = {
+                                            // No se pudo obtener la ubicación actual del usuario
+                                        }
                                     )
-                                    visitSectionViewModel.status.observe(lifecycleOwner) { data ->
-                                        // actualizar la UI con los datos obtenidos
-                                        Log.e(
-                                            "REOS",
-                                            "Composables-InfoDialog.actualizar.observe.data.size"+data.size
-                                        )
-                                    }
+
+
+
                                 },
                                 modifier = Modifier
                                     .weight(1f)
@@ -783,7 +924,9 @@ fun InfoDialogEnd(
     title: String?="Message",
     desc: String?="Your Message",
     onDismiss: () -> Unit,
-    list: DetailDispatchSheet
+    list: DetailDispatchSheet,
+    context: Context,
+    lifecycleOwner:  LifecycleOwner
 ) {
     Dialog(
         onDismissRequest = onDismiss
@@ -836,7 +979,233 @@ fun InfoDialogEnd(
                         Spacer(modifier = Modifier.height(24.dp))
                         Row(){
                             Button(
+                                onClick = {
+
+
+                                    val geoLocalizacion = Geolocation(context)
+
+                                    geoLocalizacion.obtenerUbicacionActual(
+                                        onSuccess = { location ->
+                                            var latitude:String=""
+                                            var longitude:String=""
+                                            latitude=location.latitude.toString()
+                                            longitude=location.longitude.toString()
+                                            var visitSectionViewModel: VisitSectionViewModel
+                                            val visitSectionRepository = VisitSectionRepository()
+                                            visitSectionViewModel = VisitSectionViewModel(visitSectionRepository)
+                                            val dateFormathora =
+                                                SimpleDateFormat("HHmmss", Locale.getDefault())
+                                            val FormatFecha =
+                                                SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+                                            val date = Date()
+                                            visitSectionViewModel?.getVisitSection(
+                                                SesionEntity.imei,
+                                                context,
+                                                lifecycleOwner,
+                                                list.cliente_id.toString(),
+                                                list.domembarque_id.toString(),
+                                                FormatFecha.format(date),
+                                                list.control_id.toString()
+                                            )
+                                            visitSectionViewModel.list.observe(lifecycleOwner) { data ->
+                                                // actualizar la UI con los datos obtenidos
+                                                Log.e(
+                                                    "REOS",
+                                                    "Composables-InfoDialogEnd.visitSectionViewModel.observe.data.size"+data.size
+                                                )
+
+                                                if(!data.isEmpty())
+                                                {
+                                                    if(location.latitude!=0.0&&location.longitude!=0.0)
+                                                    {
+                                                        Log.e(
+                                                            "REOS",
+                                                            "Composables-InfoDialogEnd.visitSectionViewModel.location.latitude"+location.latitude
+                                                        )
+                                                        Log.e(
+                                                            "REOS",
+                                                            "Composables-InfoDialogEnd.visitSectionViewModel.location.longitude"+location.longitude
+                                                        )
+
+                                                        data.forEachIndexed { index, step ->
+                                                            data.get(index).datefin=FormatFecha.format(date)
+                                                            data.get(index).timefin=dateFormathora.format(date)
+                                                            data.get(index).latitudfin=latitude
+                                                            data.get(index).longitudfin=longitude
+                                                        }
+
+                                                        /*for (i in 0..data.size) {
+                                                            data.get(i).datefin=FormatFecha.format(date)
+                                                            data.get(i).timefin=dateFormathora.format(date)
+                                                            data.get(i).latitudfin=latitude
+                                                            data.get(i).longitudfin=longitude
+                                                        }*/
+
+                                                        visitSectionViewModel?.updateVisitSection(
+                                                            data,
+                                                            lifecycleOwner,
+                                                            context,
+                                                        )
+
+                                                        visitSectionViewModel.status.observe(
+                                                            lifecycleOwner
+                                                        ) { data ->
+                                                            // actualizar la UI con los datos obtenidos
+                                                            Log.e(
+                                                                "REOS",
+                                                                "Composables-InfoDialogEnd.visitSectionViewModel.observe.statusadd.size" + data.toString()
+                                                            )
+                                                        }
+
+
+                                                    }else{
+
+
+                                                    }
+
+                                                }else {
+                                                    Log.e(
+                                                        "REOS",
+                                                        "Composables-InfoDialog.geoLocalizacion.lalistatraedata"
+                                                    )
+                                                }
+                                            }
+                                        },
+                                        onFailure = {
+                                            // No se pudo obtener la ubicación actual del usuario
+                                        }
+                                    )
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(5.dp))
+                            ) {
+                                Text(
+                                    text = "Aceptar",
+                                    color = Color.White
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Button(
                                 onClick = onDismiss,
+                                //colors = ButtonDefaults.buttonColors(Colors = MaterialTheme.colors.primary),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(5.dp))
+                            ) {
+                                Text(
+                                    text = "Cerrar",
+                                    color = Color.White
+                                )
+                            }
+                        }
+
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .size(130.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            topEndPercent = 50,
+                            bottomStartPercent = 50, topStartPercent = 50, bottomEndPercent = 50
+                        )
+                    )
+                    //.background(Color(0xFF5FA777))
+                    .background(
+                        Color.White
+                    )
+                    .align(Alignment.TopCenter)
+            )
+
+            Image(
+                painter = painterResource(id = R.mipmap.logo),
+                contentDescription = "Google Maps", // decorative
+                contentScale = ContentScale.Crop,
+
+
+                modifier = Modifier
+                    //Set Image size to 40 dp
+                    .size(120.dp)
+                    .align(Alignment.TopCenter)
+                    .padding(0.dp, 20.dp, 0.dp, 0.dp)
+            )
+            /*HeaderImage(
+                modifier = Modifier
+                    .size(100.dp)
+                    .align(Alignment.TopCenter),
+                        "Question"
+
+                )*/
+
+        }
+    }
+}
+
+
+
+@Composable
+fun InfoDialogCollection(
+    title: String?="Message",
+    desc: String?="Your Message",
+    onDismiss: () -> Unit,
+    context: Context,
+    lifecycleOwner:  LifecycleOwner
+) {
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+
+        Box(
+            modifier = Modifier
+                .height(300.dp)
+        ) {
+            Column(
+                modifier = Modifier
+            ) {
+                Spacer(modifier = Modifier.height(90.dp))
+                Box(
+                    modifier = Modifier
+                        .height(490.dp)
+                        .background(
+                            //color = MaterialTheme.colorScheme.onPrimary,
+                            color = MaterialTheme.colors.onPrimary,
+                            shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
+                        )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        Text(
+                            text = title!!.toUpperCase(),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(top = 10.dp)
+                                .fillMaxWidth(),
+                            color = Color.Black,
+                            style = MaterialTheme.typography.subtitle2,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+
+                        Text(
+                            text = desc!!,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(top = 10.dp, start = 25.dp, end = 25.dp)
+                                .fillMaxWidth(),
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Row(){
+                            Button(
+                                onClick = {
+                                },
                                 modifier = Modifier
                                     .weight(1f)
                                     .clip(RoundedCornerShape(5.dp))

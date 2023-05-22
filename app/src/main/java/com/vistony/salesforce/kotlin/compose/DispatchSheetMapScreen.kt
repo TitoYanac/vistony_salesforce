@@ -20,8 +20,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
@@ -34,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
@@ -51,7 +55,12 @@ import com.vistony.salesforce.View.ContainerDispatchView
 import com.vistony.salesforce.kotlin.compose.theme.VistonySalesForce_PedidosTheme
 import kotlinx.coroutines.launch
 import androidx.lifecycle.lifecycleScope
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity
 import com.vistony.salesforce.kotlin.data.*
+import com.vistony.salesforce.kotlin.utilities.Geolocation
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
     ,OnMapReadyCallback
@@ -451,8 +460,223 @@ fun StartGoogleMaps()
                         )
                     )),
                 ) { marker ->
+                    /*val appContext = LocalContext.current
+                    val lifecycleOwner = LocalContext.current as LifecycleOwner
 
+                    val openDialog = remember { mutableStateOf(false) }
+                    if (openDialog.value)
+                    {
+                        InfoDialog(
+                            title = "Importante",
+                            desc = "Desea iniciar la visita al cliente?",
+                            onDismiss = {
+                                openDialog.value = false
+                                //false
+                            },
+                            appContext,
+                            lifecycleOwner
+                        )
+                    }*/
                     Box(
+                        modifier = Modifier
+                            //.height(300.dp)
+                            //.fillMaxHeight()
+                            .width(300.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                        ) {
+                            Spacer(modifier = Modifier.height(90.dp))
+                            Box(
+                                modifier = Modifier
+                                    //.height(490.dp)
+                                    .background(
+                                        //color = MaterialTheme.colorScheme.onPrimary,
+                                        color = MaterialTheme.colors.onPrimary,
+                                        shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
+                                    )
+                            ) {
+                                Column(
+                                    modifier = Modifier.padding(16.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Spacer(modifier = Modifier.height(24.dp))
+                                    Text(
+                                        text = lista[i].getNombrecliente(),
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            //.padding(top = 10.dp)
+                                            .fillMaxWidth(),
+                                        style = TextStyle(
+                                            color = Color.Black,
+                                            fontSize = 18.sp,
+                                            fontWeight = FontWeight.Black
+                                        )
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    //.........................Text : description
+                                    Text(
+                                        text = lista[i].getDomembarque_id()+" "+lista[i].getDireccion(),
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier
+                                            .padding(top = 10.dp)
+                                            .fillMaxWidth(),
+                                        style = TextStyle(
+                                            color = Color.Gray,
+                                            fontSize = 12.sp,
+                                            fontWeight = FontWeight.Black
+                                        )
+                                    )
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                    Column(modifier = Modifier.padding(10.dp,0.dp,10.dp,0.dp)) {
+                                        Row {
+                                            Box(modifier = Modifier.weight(1f)) {
+                                                Text(
+                                                    text = "Código",
+                                                    //color = MaterialTheme.colors.secondaryVariant,
+                                                    color = Color.Gray,
+                                                    fontSize = 13.sp
+                                                    ,
+                                                    style = MaterialTheme.typography.body1
+                                                )
+                                            }
+                                            Box(modifier = Modifier.weight(3f)) {
+                                                Text(
+                                                    text = lista[i].getControl_id(),
+                                                    //color = MaterialTheme.colors.secondaryVariant,
+                                                    color = Color.Black,
+                                                    style = MaterialTheme.typography.subtitle2,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            }
+                                        }
+                                        Row {
+                                            Box(modifier = Modifier.weight(1f)) {
+                                                Text(
+                                                    text = "Item",
+                                                    //color = MaterialTheme.colors.secondaryVariant,
+                                                    color = Color.Gray,
+                                                    fontSize = 13.sp
+                                                    ,
+                                                    style = MaterialTheme.typography.body1
+                                                )
+                                            }
+                                            Box(modifier = Modifier.weight(3f)) {
+                                                Text(
+                                                    text = lista[i].getItem_id(),
+                                                    //color = MaterialTheme.colors.secondaryVariant,
+                                                    color = Color.Black,
+                                                    style = MaterialTheme.typography.subtitle2,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            }
+                                        }
+                                        Row {
+                                            Box(modifier = Modifier.weight(1f)) {
+                                                Text(
+                                                    text = "Estado",
+                                                    //color = MaterialTheme.colors.secondaryVariant,
+                                                    color = Color.Gray,
+                                                    fontSize = 13.sp
+                                                    ,
+                                                    style = MaterialTheme.typography.body1
+                                                )
+                                            }
+                                            Box(modifier = Modifier.weight(3f)) {
+                                                Text(
+                                                    text = lista[i].getEstado(),
+                                                    //color = MaterialTheme.colors.secondaryVariant,
+                                                    color = Color.Black,
+                                                    style = MaterialTheme.typography.subtitle2,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            }
+                                        }
+                                        if(lista[i].getEstado().equals("ANULADO")||lista[i].getEstado().equals("VOLVER A PROGRAMAR"))
+                                        {
+                                            Row {
+                                                Box(modifier = Modifier.weight(1f)) {
+                                                    Text(
+                                                        text = "Motivo",
+                                                        //color = MaterialTheme.colors.secondaryVariant,
+                                                        color = Color.Gray,
+                                                        fontSize = 13.sp
+                                                        ,
+                                                        style = MaterialTheme.typography.body1
+                                                    )
+                                                }
+                                                Box(modifier = Modifier.weight(3f)) {
+                                                    Text(
+                                                        text = lista[i].getOcurrencies(),
+                                                        //color = MaterialTheme.colors.secondaryVariant,
+                                                        color = Color.Black,
+                                                        style = MaterialTheme.typography.subtitle2,
+                                                        fontWeight = FontWeight.Bold
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Row(){
+                                        Button(
+                                            onClick = {
+                                            },
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .clip(RoundedCornerShape(5.dp))
+                                        ) {
+                                            Text(
+                                                text = "Aceptar",
+                                                color = Color.White
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.width(8.dp))
+                                    }
+
+                                }
+                            }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(130.dp)
+                                .clip(
+                                    RoundedCornerShape(
+                                        topEndPercent = 50,
+                                        bottomStartPercent = 50,
+                                        topStartPercent = 50,
+                                        bottomEndPercent = 50
+                                    )
+                                )
+                                //.background(Color(0xFF5FA777))
+                                .background(
+                                    Color.White
+                                )
+                                .align(Alignment.TopCenter)
+                        )
+
+                        Image(
+                            painter = painterResource(id = R.mipmap.logo),
+                            contentDescription = "Google Maps", // decorative
+                            contentScale = ContentScale.Crop,
+
+
+                            modifier = Modifier
+                                //Set Image size to 40 dp
+                                .size(120.dp)
+                                .align(Alignment.TopCenter)
+                                .padding(0.dp, 20.dp, 0.dp, 0.dp)
+                        )
+                        /*HeaderImage(
+                            modifier = Modifier
+                                .size(100.dp)
+                                .align(Alignment.TopCenter),
+                                    "Question"
+
+                            )*/
+
+                    }
+                    /*Box(
                         modifier = Modifier
                             .background(
                                 color = MaterialTheme.colors.background,
@@ -560,7 +784,7 @@ fun StartGoogleMaps()
                             )
                         }
 
-                    }
+                    }*/
 
                 }
 
@@ -918,6 +1142,133 @@ fun DrawPinMarker(
 }
 
 
+@Composable
+fun InfoDialog(
+    title: String?="Message",
+    desc: String?="Your Message",
+    onDismiss: () -> Unit,
+    context: Context,
+    lifecycleOwner:  LifecycleOwner
+) {
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+
+        Box(
+            modifier = Modifier
+                .height(300.dp)
+        ) {
+            Column(
+                modifier = Modifier
+            ) {
+                Spacer(modifier = Modifier.height(90.dp))
+                Box(
+                    modifier = Modifier
+                        .height(490.dp)
+                        .background(
+                            //color = MaterialTheme.colorScheme.onPrimary,
+                            color = MaterialTheme.colors.onPrimary,
+                            shape = RoundedCornerShape(25.dp, 10.dp, 25.dp, 10.dp)
+                        )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        Text(
+                            text = title!!.toUpperCase(),
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(top = 10.dp)
+                                .fillMaxWidth(),
+                            color = Color.Black,
+                            style = MaterialTheme.typography.subtitle2,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+
+
+                        Text(
+                            text = desc!!,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .padding(top = 10.dp, start = 25.dp, end = 25.dp)
+                                .fillMaxWidth(),
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Row(){
+                            Button(
+                                onClick = {
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(5.dp))
+                            ) {
+                                Text(
+                                    text = "Aceptar",
+                                    color = Color.White
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Button(
+                                onClick = onDismiss,
+                                //colors = ButtonDefaults.buttonColors(Colors = MaterialTheme.colors.primary),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .clip(RoundedCornerShape(5.dp))
+                            ) {
+                                Text(
+                                    text = "Cerrar",
+                                    color = Color.White
+                                )
+                            }
+                        }
+
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .size(130.dp)
+                    .clip(
+                        RoundedCornerShape(
+                            topEndPercent = 50,
+                            bottomStartPercent = 50, topStartPercent = 50, bottomEndPercent = 50
+                        )
+                    )
+                    //.background(Color(0xFF5FA777))
+                    .background(
+                        Color.White
+                    )
+                    .align(Alignment.TopCenter)
+            )
+
+            Image(
+                painter = painterResource(id = R.mipmap.logo),
+                contentDescription = "Google Maps", // decorative
+                contentScale = ContentScale.Crop,
+
+
+                modifier = Modifier
+                    //Set Image size to 40 dp
+                    .size(120.dp)
+                    .align(Alignment.TopCenter)
+                    .padding(0.dp, 20.dp, 0.dp, 0.dp)
+            )
+            /*HeaderImage(
+                modifier = Modifier
+                    .size(100.dp)
+                    .align(Alignment.TopCenter),
+                        "Question"
+
+                )*/
+
+        }
+    }
+}
 
 
 

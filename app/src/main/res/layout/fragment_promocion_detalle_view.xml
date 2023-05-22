@@ -8,10 +8,32 @@
     tools:context=".View.ParametrosView">
     <!-- TODO: Update blank fragment layout -->
 
+
+    <TextView
+        android:id="@+id/txtdocumento"
+        style="@android:style/TextAppearance.Widget.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:background="@color/colorPrimary"
+        android:text="Editar Promoción"
+        android:textAllCaps="true"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
         android:id="@+id/list_promocion_detalle"
         />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_promotiondetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_add_black_24dp"
+        app:backgroundTint="@color/Rojo_Vistony" />
 
 </FrameLayout>

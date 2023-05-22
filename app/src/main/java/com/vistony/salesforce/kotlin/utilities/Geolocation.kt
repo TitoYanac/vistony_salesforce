@@ -18,7 +18,7 @@ class Geolocation(private val context: Context)
     fun obtenerUbicacionActual(onSuccess: (Location) -> Unit, onFailure: () -> Unit) {
         // Comprobar si se han otorgado los permisos necesarios
         try {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 onFailure()
                 return
             }

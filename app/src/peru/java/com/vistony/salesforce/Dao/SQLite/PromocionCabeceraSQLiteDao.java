@@ -125,7 +125,8 @@ public class PromocionCabeceraSQLiteDao {
             String cantidad,
             String contado,
             String terminopago_id,
-            String cardcode
+            String cardcode,
+            String currency
 
     )
     {
@@ -168,8 +169,8 @@ public class PromocionCabeceraSQLiteDao {
                 promocionDetalleSQLiteEntity.setCompania_id(SesionEntity.compania_id);
                 promocionDetalleSQLiteEntity.setLista_promocion_id(listaPromocionCabeceraEntity.getLista_promocion_id());
                 promocionDetalleSQLiteEntity.setPromocion_detalle_id(String.valueOf((listaPromocionDetalleEntities.size())+1));
-                promocionDetalleSQLiteEntity.setProducto_id("DESCUENTO");
-                promocionDetalleSQLiteEntity.setProducto("% DESCUENTO");
+                promocionDetalleSQLiteEntity.setProducto_id("%");
+                promocionDetalleSQLiteEntity.setProducto("DESCUENTO");
                 promocionDetalleSQLiteEntity.setUmd("%");
                 promocionDetalleSQLiteEntity.setCantidad(listaPromocionCabeceraEntity.getDescuento());
                 promocionDetalleSQLiteEntity.setFuerzatrabajo_id(SesionEntity.fuerzatrabajo_id);
@@ -195,6 +196,10 @@ public class PromocionCabeceraSQLiteDao {
             }
 
             Log.e("REOS","PromocionCabeceraSQLiteDao: "+listaPromocionDetalleEntities.size());
+            listaPromocionCabeceraEntity.setCardcode(cardcode);
+            listaPromocionCabeceraEntity.setTerminopago_id(terminopago_id);
+            listaPromocionCabeceraEntity.setUbigeo_id(currency);
+            listaPromocionCabeceraEntity.setCurrency_id(currency);
             listaPromocionCabeceraEntity.setListaPromocionDetalleEntities(listaPromocionDetalleEntities);
             listaPromocionCabeceraSQLiteEntity.add(listaPromocionCabeceraEntity);
         }
@@ -256,8 +261,8 @@ public class PromocionCabeceraSQLiteDao {
                 promocionDetalleSQLiteEntity.setCompania_id(SesionEntity.compania_id);
                 promocionDetalleSQLiteEntity.setLista_promocion_id(listaPromocionCabeceraEntity.getLista_promocion_id());
                 promocionDetalleSQLiteEntity.setPromocion_detalle_id(String.valueOf((listaPromocionDetalleEntities.size())+1));
-                promocionDetalleSQLiteEntity.setProducto_id("DESCUENTO");
-                promocionDetalleSQLiteEntity.setProducto("% DESCUENTO");
+                promocionDetalleSQLiteEntity.setProducto_id("%");
+                promocionDetalleSQLiteEntity.setProducto("DESCUENTO");
                 promocionDetalleSQLiteEntity.setUmd("%");
                 promocionDetalleSQLiteEntity.setCantidad(listaPromocionCabeceraEntity.getDescuento());
                 promocionDetalleSQLiteEntity.setFuerzatrabajo_id(SesionEntity.fuerzatrabajo_id);
@@ -422,8 +427,81 @@ public class PromocionCabeceraSQLiteDao {
                 promocionDetalleSQLiteEntity.setCompania_id(SesionEntity.compania_id);
                 promocionDetalleSQLiteEntity.setLista_promocion_id(listaPromocionCabeceraEntity.getLista_promocion_id());
                 promocionDetalleSQLiteEntity.setPromocion_detalle_id(String.valueOf((listaPromocionDetalleEntities.size())+1));
-                promocionDetalleSQLiteEntity.setProducto_id("DESCUENTO");
-                promocionDetalleSQLiteEntity.setProducto("% DESCUENTO");
+                promocionDetalleSQLiteEntity.setProducto_id("%");
+                promocionDetalleSQLiteEntity.setProducto("DESCUENTO");
+                promocionDetalleSQLiteEntity.setUmd("%");
+                promocionDetalleSQLiteEntity.setCantidad(listaPromocionCabeceraEntity.getDescuento());
+                promocionDetalleSQLiteEntity.setFuerzatrabajo_id(SesionEntity.fuerzatrabajo_id);
+                promocionDetalleSQLiteEntity.setUsuario_id(SesionEntity.usuario_id);
+                promocionDetalleSQLiteEntity.setPreciobase("0");
+                promocionDetalleSQLiteEntity.setChkdescuento("0");
+                promocionDetalleSQLiteEntity.setDescuento("0");
+
+                listaPromocionDetalleEntities.add(promocionDetalleSQLiteEntity);
+
+            }else
+            {
+                listaPromocionDetalleEntities=promocionDetalleSQLiteDao.ObtenerPromocionDetalleConsultaStock(
+                        SesionEntity.compania_id,
+                        listaPromocionCabeceraEntity.getLista_promocion_id(),
+                        listaPromocionCabeceraEntity.getPromocion_id()
+                );
+            }
+
+            Log.e("REOS","PromocionCabeceraSQLiteDao: "+listaPromocionDetalleEntities.size());
+            listaPromocionCabeceraEntity.setListaPromocionDetalleEntities(listaPromocionDetalleEntities);
+            listaPromocionCabeceraSQLiteEntity.add(listaPromocionCabeceraEntity);
+        }
+        bd.close();
+        return listaPromocionCabeceraSQLiteEntity;
+    }
+
+
+    public ArrayList<ListaPromocionCabeceraEntity> getListPromotionVigent (
+    )
+    {
+        ArrayList<ListaPromocionCabeceraEntity>  listaPromocionCabeceraSQLiteEntity = new ArrayList<>();
+        ListaPromocionCabeceraEntity listaPromocionCabeceraEntity;
+        ArrayList<PromocionDetalleSQLiteEntity> listaPromocionDetalleEntities=new ArrayList<>();
+        PromocionDetalleSQLiteDao promocionDetalleSQLiteDao=new PromocionDetalleSQLiteDao(context);
+        abrir();
+        Cursor fila = bd.rawQuery(
+                " Select *,    (SELECT COUNT(*) FROM promocioncabecera AS X " +
+                        "    LEFT JOIN listapromocion AS Y ON X.lista_promocion_id = Y.lista_promocion_id " +
+                        "    WHERE Y.lista_promocion_id = B.lista_promocion_id and  X.producto_id = A.producto_id " +
+                        "    AND (X.producto_id < A.producto_id OR (X.producto_id = A.producto_id AND X.cantidad < CAST(A.cantidad AS INTEGER)))) + 1 AS numerador from promocioncabecera A "+
+                " LEFT JOIN listapromocion B ON" +
+                " A.lista_promocion_id=B.lista_promocion_id" +
+                " order by B.lista_promocion_id,A.producto_id,CAST(cantidad AS INTEGER) "
+                ,null);
+
+        while (fila.moveToNext())
+        {
+            listaPromocionCabeceraEntity= new ListaPromocionCabeceraEntity();
+            listaPromocionCabeceraEntity.setLista_promocion_id(fila.getString(1));
+            listaPromocionCabeceraEntity.setPromocion_id(fila.getString(2));
+            listaPromocionCabeceraEntity.setProducto_id(fila.getString(3));
+            listaPromocionCabeceraEntity.setProducto(fila.getString(4));
+            listaPromocionCabeceraEntity.setUmd(fila.getString(5));
+            listaPromocionCabeceraEntity.setCantidadcompra(fila.getString(6));
+            Log.e("REOS","PromocionCabeceraSQLiteDao-ObtenerPromocionCabeceraConsultaStock-listaPromocionCabeceraEntity.getCantidadCompra: "+listaPromocionCabeceraEntity.getCantidadcompra());
+            listaPromocionCabeceraEntity.setPreciobase(fila.getString(9));
+            listaPromocionCabeceraEntity.setDescuento(fila.getString(10));
+            listaPromocionCabeceraEntity.setLista_promocion(fila.getString(13));
+            listaPromocionCabeceraEntity.setCount(fila.getString(15));
+            if(Integer.parseInt(listaPromocionCabeceraEntity.getDescuento())>0 ){
+                listaPromocionDetalleEntities=promocionDetalleSQLiteDao.ObtenerPromocionDetalleConsultaStock(
+                        SesionEntity.compania_id,
+                        listaPromocionCabeceraEntity.getLista_promocion_id(),
+                        listaPromocionCabeceraEntity.getPromocion_id()
+                );
+
+                PromocionDetalleSQLiteEntity promocionDetalleSQLiteEntity= new PromocionDetalleSQLiteEntity();
+                promocionDetalleSQLiteEntity.setCompania_id(SesionEntity.compania_id);
+                promocionDetalleSQLiteEntity.setLista_promocion_id(listaPromocionCabeceraEntity.getLista_promocion_id());
+                promocionDetalleSQLiteEntity.setPromocion_detalle_id(String.valueOf((listaPromocionDetalleEntities.size())+1));
+                promocionDetalleSQLiteEntity.setProducto_id("%");
+                promocionDetalleSQLiteEntity.setProducto("DESCUENTO");
                 promocionDetalleSQLiteEntity.setUmd("%");
                 promocionDetalleSQLiteEntity.setCantidad(listaPromocionCabeceraEntity.getDescuento());
                 promocionDetalleSQLiteEntity.setFuerzatrabajo_id(SesionEntity.fuerzatrabajo_id);

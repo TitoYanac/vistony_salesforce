@@ -683,6 +683,7 @@ public class FormulasController {
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
+        /*
         if(ovCabecera.getExcede_lineacredito().equals("1")&&!SesionEntity.contado.equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
             //documentHeader.setApCredit("Y");
             documentHeader.setDraft(Induvis.getStatusDraft());
@@ -697,7 +698,7 @@ public class FormulasController {
             //documentHeader.setComments(documentHeader.getComments()+" Regla: Documento con fecha vencimiento mayor 5 dias");
         }else{
 
-        }
+        }*/
 
         /*ecuador no tiene modelado aprovaciones por descuento*/
         /*if(Integer.parseInt(ovCabecera.getDueDays())>5){ //SE AGREGO UN DESCUENTO FUERA DE LO PERMITIDO
@@ -707,13 +708,14 @@ public class FormulasController {
 
         }*/
 
+        /*
         if(documentHeader.getPaymentGroupCode().equals(ClienteSQlite.getPaymentGroupCode(documentHeader.getCardCode()))){
 
         }else{
             //documentHeader.setApTPag("Y");
             documentHeader.setDraft(Induvis.getStatusDraft());
             //documentHeader.setComments(documentHeader.getComments()+" Regla: Cambio de Termino de Pago");
-        }
+        }*/
 
 
 
@@ -727,9 +729,10 @@ public class FormulasController {
             String COGSAccountCode=SesionEntity.cogsacct,U_SYP_FECAT_07="",taxOnly="N",taxCode=SesionEntity.Impuesto_ID,U_VIST_CTAINGDCTO=SesionEntity.u_vist_ctaingdcto,montolineatotal="";
 
             //Casuistica Bonificacion
-            if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100"))
+            if(Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())==100
+            )
             {
-                //COGSAccountCode="659420";
+                COGSAccountCode="50-20-03-01-09";
                 //U_SYP_FECAT_07="31";
                 //taxOnly="Y";
                 //taxCode="EXE_IGV";
@@ -741,7 +744,7 @@ public class FormulasController {
             else if(Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())>0&&
                     Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())<100)
             {
-                //COGSAccountCode="";
+                COGSAccountCode="50-10-01-01-01";
                 //U_SYP_FECAT_07="10";
                 //taxOnly="N";
                 //taxCode="IGV";
@@ -764,7 +767,7 @@ public class FormulasController {
             else
             {
                 //U_SYP_FECAT_07="10";
-                //COGSAccountCode="";
+                COGSAccountCode="50-10-01-01-01";
                 //taxOnly="N";
                 //taxCode="IGV";
                 //U_VIST_CTAINGDCTO="";
@@ -799,24 +802,26 @@ public class FormulasController {
         }
 
         Log.e("REOS","FormulasController.GenerayConvierteaJSONOV.ContadorLineasConDescuento:" + String.valueOf(ContadorLineasConDescuento));
-        if(ContadorLineasConDescuento>0){ //SE AGREGO UN DESCUENTO FUERA DE LO PERMITIDO
+        /*if(ContadorLineasConDescuento>0){ //SE AGREGO UN DESCUENTO FUERA DE LO PERMITIDO
             //documentHeader.setApPrcnt("Y");
             documentHeader.setDraft(Induvis.getStatusDraft());
             //documentHeader.setComments(documentHeader.getComments()+" Regla: Descuento en Linea");
         }else{
             //documentHeader.setApPrcnt("N");
-        }
+        }*/
 
         documentHeader.setApCredit("N");
         documentHeader.setApDues("N");
         documentHeader.setApPrcnt("N");
         documentHeader.setApTPag("N");
 
-        if(SesionEntity.quotation.equals("Y"))
+        /*if(SesionEntity.quotation.equals("Y"))
         {
             documentHeader.setDraft("N");
-        }
-
+        }else {
+            documentHeader.setDraft("Y");
+        }*/
+        documentHeader.setDraft("Y");
         documentHeader.setDocumentLines(listadoDocumentLines);
 
         cadenaJSON=gson.toJson(documentHeader);
@@ -1947,7 +1952,27 @@ public class FormulasController {
         {
             Log.e("REOS", "FormulasController.AddForms.error : " + e.toString());
         }
+    }
 
+    public String CalcularMontoTotalPromocionconDescuentoyBono(String MontoTotalLineaSinDescuento,String MontoDescuento,String Bono ){
+        BigDecimal temp1=new BigDecimal(MontoTotalLineaSinDescuento);
 
+        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).subtract(new BigDecimal(Bono).setScale(3, RoundingMode.HALF_UP));
+
+        return repta.toString();
+    }
+
+    public  String getPriceReferencePack(String PrecioPackconDescuento,String QuantityPackPromotion){
+        String efectividad="";
+        Log.e("REOS","FormulasController.getAmountRouteeffectiveness.PrecioPackconDescuento:" + PrecioPackconDescuento);
+        Log.e("REOS","FormulasController.getAmountRouteeffectiveness.QuantityPackPromotion:" + QuantityPackPromotion);
+        double resultado;
+        BigDecimal precioPackconDescuento = new BigDecimal(PrecioPackconDescuento);
+        BigDecimal quantityPackPromotion = new BigDecimal(QuantityPackPromotion);
+        BigDecimal repta=precioPackconDescuento.divide(quantityPackPromotion);
+        //resultado=(Double.parseDouble(PrecioPackconDescuento)/Double.parseDouble(QuantityPackPromotion));
+       // Log.e("REOS","FormulasController.getAmountRouteeffectiveness.resultado:" + resultado);
+        //return String.valueOf(format.format(resultado));
+        return repta.toString();
     }
 }

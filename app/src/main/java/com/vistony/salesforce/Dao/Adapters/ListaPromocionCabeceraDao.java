@@ -55,6 +55,10 @@ public class ListaPromocionCabeceraDao {
                         ,Lista.get(i).getListaPromocionDetalleEntities()
                         ,Lista.get(i).getProducto_id()
                         ,Lista.get(i).getDescuento()
+                        ,Lista.get(i).getCardcode()
+                        ,Lista.get(i).getTerminopago_id()
+                        ,Lista.get(i).getUbigeo_id()
+                        ,Lista.get(i).getCurrency_id()
                 ));
             }
         }catch (Exception e)

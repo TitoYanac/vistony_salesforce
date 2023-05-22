@@ -149,7 +149,8 @@ public class MenuView extends AppCompatActivity
         ContainerDispatchSheetView.OnFragmentInteractionListener,
         ValidationAccountClient.OnFragmentInteractionListener,
         DispatchSheetMapScreen.OnFragmentInteractionListener,
-        CustomerComplaintView.OnFragmentInteractionListener
+        CustomerComplaintView.OnFragmentInteractionListener,
+        HistoricPromotionView.OnFragmentInteractionListener
 
 
 {
@@ -190,6 +191,7 @@ public class MenuView extends AppCompatActivity
     Fragment ValidationAccountClientFragment;
     Fragment CustomerComplaintFragment;
     Fragment ClienteDetalleViewFragment;
+    Fragment HistoricPromotionFragment;
 
     static QuotasPerCustomerHeadRepository quotasPerCustomerRepository;
     private static int TAKE_PICTURE = 1888;
@@ -272,6 +274,8 @@ public class MenuView extends AppCompatActivity
         ValidationAccountClientFragment = new Fragment();
         CustomerComplaintFragment = new Fragment();
         ClienteDetalleViewFragment = new Fragment();
+        HistoricPromotionFragment = new Fragment();
+
         arraylistConfiguracionentity = new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao = new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -1686,6 +1690,14 @@ public class MenuView extends AppCompatActivity
                 ft.commit();
 
             }
+            if(tag2.equals("historic_promotion"))
+            {
+                contentFragment=new HistoricPromotionView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+
+            }
         }
         if(tag.equals("MenuConsultasFacturasView"))
         {
@@ -2039,7 +2051,80 @@ public class MenuView extends AppCompatActivity
 
         }
 
+        if(tag.equals("PromocionDetalleView"))
+        {
+            if(tag2.equals( "producto"))
+            {
+                String tagpromociondetalle="promociondetalleeditar";
+                PromocionDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagpromociondetalle);
+                ft.hide(PromocionDetalleFragment);
+                ft.add(R.id.content_menu_view, ProductoView.receipPromotionDetail(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            if(tag2.equals( "sendPromotionDetail"))
+            {
+                String tagpromociondetalle="promociondetalleeditar";
+                String tagproducto="producto";
+                Fragment ProductoViewFragment=new Fragment();
+                PromocionDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagpromociondetalle);
+                ProductoViewFragment=getSupportFragmentManager().findFragmentByTag(tagproducto);
+                ft.show(PromocionDetalleFragment);
+                ft.remove(ProductoViewFragment);
+                //ft.add(R.id.content_menu_view, PromocionDetalleView.newInstanceAgregarProducto(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+                PromocionDetalleView.newInstanceAgregarProducto(Lista);
+            }
+            if(tag2.equals( "producto_add"))
+            {
+                String tagpromociondetalle="promociondetalleeditar";
 
+                PromocionDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagpromociondetalle);
+                ft.hide(PromocionDetalleFragment);
+                ft.add(R.id.content_menu_view, ProductoView.receipPromotionDetailadd(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            if(tag2.equals( "sendPromotionDetailadd"))
+            {
+                String tagpromociondetalle="promociondetalleeditar";
+                String tagproducto="producto_add";
+                Fragment ProductoViewFragment=new Fragment();
+                PromocionDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagpromociondetalle);
+                ProductoViewFragment=getSupportFragmentManager().findFragmentByTag(tagproducto);
+                ft.show(PromocionDetalleFragment);
+                ft.remove(ProductoViewFragment);
+                //ft.add(R.id.content_menu_view, PromocionDetalleView.newInstanceAgregarProducto(Lista),tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+                PromocionDetalleView.AddProductPromotionDetail(Lista);
+            }
+
+
+        }
+        if(tag.equals("HistoricPromotionView")){
+            if(tag2.equals( "listadopromocion"))
+            {
+                String tag3="historic_promotion";
+                HistoricPromotionFragment = getSupportFragmentManager().findFragmentByTag(tag3);
+                ft.hide(HistoricPromotionFragment);
+                ft.add(R.id.content_menu_view, ListadoPromocionView.newInstanceRecibePromocionConsultaStock(Lista), tag2);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+            else if(tag2.equals( "mostrarConsultaStock"))
+            {
+                Induvis.setTituloContenedor("Promociones Vigentes",this);
+                String tag3="historic_promotion",tag4="promociondetalle";
+                PromocionCabeceraFragment = getSupportFragmentManager().findFragmentByTag(tag4);
+                HistoricPromotionFragment = getSupportFragmentManager().findFragmentByTag(tag3);
+                ft.remove(PromocionCabeceraFragment);
+                ft.show(HistoricPromotionFragment);
+                ft.addToBackStack("po1p");
+                ft.commit();
+            }
+        }
 
 
     }

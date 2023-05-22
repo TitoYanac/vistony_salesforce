@@ -136,7 +136,7 @@ public class CobranzaDetalleView extends Fragment {
     static public ImageView imvprueba;
     CheckBox chkpagoadelantado,chk_bancarizado,chk_pago_directo,chk_pago_pos,chk_collectioncheck,chk_E_signature;
     MenuItem generarpdf,validarqr,guardar,edit_signature;
-    TextView tv_recibo;
+    TextView tv_recibo,tv_pago_pos;
     public static CheckBox chk_validacionqr;
     ListaClienteDetalleEntity listaClienteDetalleEntity;
     ClienteSQlite clienteSQlite;
@@ -411,17 +411,22 @@ public class CobranzaDetalleView extends Fragment {
         CircleMenu circleMenu = v.findViewById(R.id.circleMenu);
         fab_edit_signature =  (FloatingActionButton) v.findViewById(R.id.fab_edit_signature);
         imv_prueba_mostrarfirma =  (ImageView) v.findViewById(R.id.imv_prueba_mostrarfirma);
+        tv_pago_pos = (TextView) v.findViewById(R.id.tv_pago_pos);
+
         circleMenu.setVisibility(View.GONE);
         imv_prueba_mostrarfirma.setVisibility(View.GONE);
         fab_edit_signature.setVisibility(View.GONE);
         tablerow_e_signature.setVisibility(View.GONE);
         chk_bancarizado.setEnabled(false);
         fab_invoice_cancelation.setVisibility(View.GONE);
+        chk_pago_pos.setVisibility(View.GONE);
+        tv_pago_pos.setVisibility(View.GONE);
 
         switch (BuildConfig.FLAVOR){
             case "chile":
                 et_cobrado_edit.setInputType(InputType.TYPE_CLASS_NUMBER);
                 et_cobrado_edit.setHint ("0");
+                //chk_pago_pos.setVisibility(View.GONE);
                 break;
         }
 
@@ -437,7 +442,7 @@ public class CobranzaDetalleView extends Fragment {
         });
 
 
-        imbcomentariorecibo= (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
+        //imbcomentariorecibo= (OmegaCenterIconButton) v.findViewById(R.id.imbcomentariorecibo);
         imbcomentariorecibo.setOnClickListener(new View.OnClickListener() {
                                                    @Override
                                                    public void onClick(View view) {
@@ -1234,7 +1239,7 @@ public class CobranzaDetalleView extends Fragment {
             }
             else if(SesionEntity.pagodirecto.equals("Y"))
             {
-                type="Pago Directo";
+                type= getContext().getResources ().getString(R.string.Direct_Depost);
             }
             else if(SesionEntity.pagopos.equals("Y"))
             {

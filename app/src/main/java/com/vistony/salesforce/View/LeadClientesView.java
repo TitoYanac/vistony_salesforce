@@ -273,7 +273,9 @@ public class LeadClientesView extends Fragment {
 
 
         }
-        else if(BuildConfig.FLAVOR.equals("ecuador")||BuildConfig.FLAVOR.equals("marruecos"))
+        else if(BuildConfig.FLAVOR.equals("ecuador")||BuildConfig.FLAVOR.equals("marruecos")||
+                BuildConfig.FLAVOR.equals("chile")
+        )
         {
             ti_commercial_name.setVisibility(View.GONE);
             //ti_textphone.setVisibility(View.GONE);
@@ -291,6 +293,7 @@ public class LeadClientesView extends Fragment {
             ti_textphone.setEnabled(false);
             editTextEmail.setEnabled(false);
             btnUpload.setText(getActivity().getResources().getString(R.string.accept).toUpperCase());
+            ti_textcellphone.setVisibility(View.GONE);
         }
         editTextCardCode.setText(rucdni);
         editTextCardName.setText(nombrecliente);
@@ -413,7 +416,7 @@ public class LeadClientesView extends Fragment {
 
             }
             else if(BuildConfig.FLAVOR.equals("ecuador")||BuildConfig.FLAVOR.equals("espania")
-                    ||BuildConfig.FLAVOR.equals("marruecos"))
+                    ||BuildConfig.FLAVOR.equals("marruecos")||BuildConfig.FLAVOR.equals("chile"))
             {
                 String Fragment="RutaVendedorView";
                 String accion="inicioRutaVendedorViewLead";
@@ -460,7 +463,7 @@ public class LeadClientesView extends Fragment {
                     getActivity().setTitle("Consultar Cliente");
 
                 } else if (type.equals("leadUpdateClientCensus")) {
-                    if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos"))
+                    if(BuildConfig.FLAVOR.equals("espania")||BuildConfig.FLAVOR.equals("marruecos")||BuildConfig.FLAVOR.equals("chile"))
                     {
                         getActivity().setTitle(getActivity().getResources().getString(R.string.data_client));
                     }else {

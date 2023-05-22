@@ -146,7 +146,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
         holder.tv_gal.setText(lead.getGal());
         holder.lbl_enable_warehouses.setVisibility(View.INVISIBLE);
         holder.imv_enable_warehouses.setVisibility(View.INVISIBLE);
-        if(BuildConfig.FLAVOR.equals("chile"))
+        /*if(BuildConfig.FLAVOR.equals("chile"))
         {
             holder.tv_price_cash.setVisibility(View.GONE);
             holder.tv_price_credit.setVisibility(View.GONE);
@@ -177,7 +177,7 @@ public class ListaConsultaStockAdapter extends ArrayAdapter<ListaConsultaStockEn
                 }
             }
 
-        }
+        }*/
 
         if(lead.isPromotionenable())
         {

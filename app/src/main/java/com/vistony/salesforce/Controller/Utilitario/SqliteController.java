@@ -833,6 +833,32 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicionalCredito TEXT");
         }
 
+        if(oldVersion==24&&newVersion==35){
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliverydateauto TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN collection_salesperson TEXT");
+            db.execSQL("ALTER TABLE cobranzadetalle ADD COLUMN type_description TEXT");
+            db.execSQL("ALTER TABLE cobranzacabecera ADD COLUMN collection_salesperson TEXT");
+            db.execSQL("ALTER TABLE direccioncliente ADD COLUMN zipcode TEXT");
+            db.execSQL("CREATE TABLE ubigeous (compania_id text,fuerzatrabajo_id text,usuario_id text,code TEXT,U_SYP_DEPA TEXT,U_SYP_PROV TEXT,U_SYP_DIST TEXT,U_VIS_Flete TEXT)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIT_VENMOS TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_Flete TEXT");
+            db.execSQL("ALTER TABLE cliente ADD COLUMN statuscounted TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN statuscounted TEXT");
+            db.execSQL("CREATE TABLE documentdetail (compania_id text,fuerzatrabajo_id text,usuario_id text,DocEntry TEXT,LineNum TEXT,ItemCode TEXT,Dscription TEXT,Quantity TEXT,LineTotal TEXT,WhsCode TEXT,LineStatus TEXT,TaxCode TEXT,DiscPrcnt TEXT,TaxOnly TEXT)");
+            db.execSQL("CREATE TABLE questionshead (compania_id text,fuerzatrabajo_id text,usuario_id text,Code TEXT,U_Tipo TEXT,U_Pregunta TEXT,U_Estado TEXT)");
+            db.execSQL("CREATE TABLE questionsdetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code TEXT,LineId TEXT,U_Estado TEXT,U_Orden TEXT,U_Respuesta TEXT)");
+            db.execSQL("CREATE TABLE form (formcode text,formname text,entrycode text,cardcode TEXT,shiptocode TEXT,docentry TEXT,date TEXT,salesrepcode TEXT,userid TEXT,time TEXT,chk_send TEXT,chk_receive TEXT,msg_server TEXT)");
+            db.execSQL("CREATE TABLE formsection (formcode text,sectioncode text,sectionname text,entrycode TEXT)");
+            db.execSQL("CREATE TABLE formquestion (sectioncode text,questioncode text,questionname text,entrycode TEXT, codedepence TEXT)");
+            db.execSQL("CREATE TABLE formresponse (questioncode text,responsecode text,responsename text,typeresponse TEXT, fileattach TEXT)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_CompleteOV TEXT");
+            db.execSQL("CREATE TABLE reasonfreetransfer (compania_id text,fuerzatrabajo_id text,usuario_id text,Value TEXT, Dscription TEXT)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_TipTransGrat TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicional TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicionalContado TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicionalCredito TEXT");
+        }
+
 
     }
 

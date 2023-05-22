@@ -45,12 +45,14 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
     public static OnFragmentInteractionListener mListener;
     static Vendedor vendedor;
     private SearchView mSearchView;
+    public static String type="";
 
     public ProductoView() {
         // Required empty public constructor
     }
 
     public static ProductoView newInstance(Object objeto) {
+        type="";
         vendedor=(Vendedor) objeto;
         ListenerBackPress.setCurrentFragment("ProductoView");
         ProductoView productoView = new ProductoView();
@@ -64,12 +66,55 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
         ProductoView productoView = new ProductoView();
         Bundle b = new Bundle();
         productoView.setArguments(b);
-
         String Fragment="ProductoView";
         String accion="inicio";
         String compuesto=Fragment+"-"+accion;
         mListener.onFragmentInteraction(compuesto,objeto);
+        return productoView;
+    }
 
+    public static ProductoView sendPromotionDetail(ListaProductoEntity objeto) {
+        ListenerBackPress.setCurrentFragment("ProductoView");
+        ProductoView productoView = new ProductoView();
+        Bundle b = new Bundle();
+        productoView.setArguments(b);
+        String Fragment="PromocionDetalleView";
+        String accion="sendPromotionDetail";
+        String compuesto=Fragment+"-"+accion;
+        mListener.onFragmentInteraction(compuesto,objeto);
+        return productoView;
+    }
+
+
+    public static ProductoView receipPromotionDetail(Object objeto) {
+        type="PromocionDetalle";
+        vendedor=(Vendedor) objeto;
+        ListenerBackPress.setCurrentFragment("ProductoView");
+        ProductoView productoView = new ProductoView();
+        Bundle b = new Bundle();
+        productoView.setArguments(b);
+        return productoView;
+    }
+
+    public static ProductoView receipPromotionDetailadd(Object objeto) {
+        type="PromocionDetalleadd";
+        vendedor=(Vendedor) objeto;
+        ListenerBackPress.setCurrentFragment("ProductoView");
+        ProductoView productoView = new ProductoView();
+        Bundle b = new Bundle();
+        productoView.setArguments(b);
+        return productoView;
+    }
+
+    public static ProductoView sendPromotionDetailAdd(ListaProductoEntity objeto) {
+        ListenerBackPress.setCurrentFragment("ProductoView");
+        ProductoView productoView = new ProductoView();
+        Bundle b = new Bundle();
+        productoView.setArguments(b);
+        String Fragment="PromocionDetalleView";
+        String accion="sendPromotionDetailadd";
+        String compuesto=Fragment+"-"+accion;
+        mListener.onFragmentInteraction(compuesto,objeto);
         return productoView;
     }
 

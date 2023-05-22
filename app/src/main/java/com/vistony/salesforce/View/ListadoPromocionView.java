@@ -47,7 +47,7 @@ public class ListadoPromocionView extends Fragment {
     HiloObtenerListadoPromocion hiloObtenerListadoPromocion;
     ListaListadoPromocionAdapter listaListadoPromocionAdapter;
     static ArrayList<ListaPromocionCabeceraEntity> Listado= new ArrayList();
-    ArrayList<ListaPromocionSQLiteEntity> listaListadoPromocionSQLiteEntity=new ArrayList<>();
+    static ArrayList<ListaPromocionSQLiteEntity> listaListadoPromocionSQLiteEntity=new ArrayList<>();
     static ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities= new ArrayList<>();
 
     public ListadoPromocionView() {
@@ -67,6 +67,15 @@ public class ListadoPromocionView extends Fragment {
         Object[] listaobjetos=new Object[2];
         listaobjetos=(Object[]) objeto;
         ArrayList<PromocionCabeceraSQLiteEntity> Lista = (ArrayList<PromocionCabeceraSQLiteEntity>) listaobjetos[0];
+        if (Lista.isEmpty())
+        {
+            ListaPromocionSQLiteEntity listaPromocionSQLiteEntity2= new ListaPromocionSQLiteEntity();
+            listaPromocionSQLiteEntity2.setLista_promocion_id("0000");
+            listaPromocionSQLiteEntity2.setLista_promocion("LISTA PROMOCIONAL EXCEPCION");
+            listaPromocionSQLiteEntity2.setCompania_id("C001");
+            listaPromocionSQLiteEntity2.setU_vis_cashdscnt("0");
+            listaListadoPromocionSQLiteEntity.add(listaPromocionSQLiteEntity2);
+        }
         Log.e("REOS", "ListadoPromocionView:Lista.size(): " + Lista.size());
         listaOrdenVentaDetalleEntities= (ArrayList<ListaOrdenVentaDetalleEntity>) listaobjetos[1];
         Log.e("REOS", "ListadoPromocionView:listaOrdenVentaDetalleEntities.size(): " + listaOrdenVentaDetalleEntities.size());
@@ -147,6 +156,7 @@ public class ListadoPromocionView extends Fragment {
         getActivity().setTitle(getActivity().getResources().getString(R.string.list_promotion));
         hiloObtenerListadoPromocion = new HiloObtenerListadoPromocion();
         if (getArguments() != null) {
+
             Listado = (ArrayList<ListaPromocionCabeceraEntity>)getArguments().getSerializable(TAG_1);
             if(!(Listado==null))
             {
@@ -164,6 +174,11 @@ public class ListadoPromocionView extends Fragment {
                 }
                 Log.e("REOS", "ListadoPromocionView:listaPromocionSQLiteEntity.size(): " + listaListadoPromocionSQLiteEntity.size());
             }
+            else {
+                Log.e("REOS", "ListadoPromocionView-Listado==null: ");
+            }
+        }else {
+            Log.e("REOS", "ListadoPromocionView-getArguments() == null(): ");
         }
     }
 

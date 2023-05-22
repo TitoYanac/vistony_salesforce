@@ -493,7 +493,7 @@ public class OrdenVentaCabeceraView extends Fragment  implements View.OnClickLis
                 {
                     btn_detalle_orden_venta.setEnabled(false);
                     btn_detalle_orden_venta.setClickable(false);
-                    alertaCrearOrdenVenta("Esta Seguro de Abrir una Orden Nueva?").show();
+                    alertaCrearOrdenVenta("Esta Seguro de Abrir una "+Induvis.getTituloVentaString(getContext())+" Nueva?").show();
                 }
                 else
                 {
@@ -800,10 +800,10 @@ public class OrdenVentaCabeceraView extends Fragment  implements View.OnClickLis
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.guardar_orden_venta:
-                alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                alertaGuardarOrdenVenta("Esta Seguro de Guardar la "+Induvis.getTituloVentaString(getContext())+" ?").show();
                 return false;
             case R.id.enviar_erp:
-                alertaEnviarERP("Esta Seguro de Enviar a la Nube la Orden de Venta?").show();
+                alertaEnviarERP("Esta Seguro de Enviar a la Nube la "+Induvis.getTituloVentaString(getContext())+" ?").show();
                 return true;
             case R.id.generarpdf:
                 alertaGenerarPDF("Esta Seguro de Generar el Archivo PDF?").show();
@@ -832,7 +832,7 @@ public class OrdenVentaCabeceraView extends Fragment  implements View.OnClickLis
 
         dialogButtonOK.setOnClickListener(v -> {
             RegistrarOrdenVentaBD ();
-            Toast.makeText(getContext(), "Se Guardo Correctamente la Orden de Venta", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Se Guardo Correctamente la "+Induvis.getTituloVentaString(getContext()) , Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
         dialogButtonCancel.setOnClickListener(v -> dialog.dismiss());
@@ -1085,7 +1085,7 @@ public class OrdenVentaCabeceraView extends Fragment  implements View.OnClickLis
         dialogButtonOK.setOnClickListener(v -> {
 
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando Orden de Venta", true, false);
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando " +Induvis.getTituloVentaString(getContext()) , true, false);
             OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite=new OrdenVentaCabeceraSQLite(getContext());
             ordenVentaCabeceraSQLite.UpdateStatusOVenviada(ordenventa_id);
             ordenVentaRepository.sendSalesOrder(ordenventa_id,getContext()).observe(getActivity(), data->{

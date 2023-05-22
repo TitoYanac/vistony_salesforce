@@ -1,5 +1,6 @@
 package com.vistony.salesforce.Controller.Adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,7 @@ public class ListaListadoPromocionAdapter extends ArrayAdapter<ListaListadoPromo
                                                                }catch (Exception e)
                                                                {
                                                                    e.printStackTrace();
+                                                                   Log.e("REOS", "ListaListadoPromocionAdapter.holder.relativeListaListadoPromocion.error: " + e.toString());
                                                                }
                                                                }
                                                        }

@@ -75,19 +75,20 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
             holder = new ListaPromocionCabeceraAdapter.ViewHolder();
             // holder.lbl_documento = (TextView) convertView.findViewById(R.id.lbl_documento);
-            holder.tv_promocion_id = (TextView) convertView.findViewById(R.id.tv_promocion_id);
+            //holder.tv_promocion_id = (TextView) convertView.findViewById(R.id.tv_promocion_id);
             holder.tv_promocion_producto = (TextView) convertView.findViewById(R.id.tv_promocion_producto);
-            holder.tv_umd = (TextView) convertView.findViewById(R.id.tv_umd);
+            //holder.tv_umd = (TextView) convertView.findViewById(R.id.tv_umd);
             holder.tv_cantidadcompra = (TextView) convertView.findViewById(R.id.tv_cantidadcompra);
             holder.tv_cant_promocion = (TextView) convertView.findViewById(R.id.tv_cant_promocion);
-            holder.tv_porcentajedescuentocabecera = (TextView) convertView.findViewById(R.id.tv_porcentajedescuentocabecera);
+            //holder.tv_porcentajedescuentocabecera = (TextView) convertView.findViewById(R.id.tv_porcentajedescuentocabecera);
             //holder.lv_promocion_detalle = (ListView) convertView.findViewById(R.id.lv_promocion_detalle);
             holder.imv_incrementar = (ImageView) convertView.findViewById(R.id.imv_incrementar);
             holder.imv_decrementar = (ImageView) convertView.findViewById(R.id.imv_decrementar);
             holder.imv_editar_promocion_detalle = (ImageView) convertView.findViewById(R.id.imv_editar_promocion_detalle);
-            holder.imv_editar_promocion_cabecera_descuento = (ImageView) convertView.findViewById(R.id.imv_editar_promocion_cabecera_descuento);
+            //holder.imv_editar_promocion_cabecera_descuento = (ImageView) convertView.findViewById(R.id.imv_editar_promocion_cabecera_descuento);
             holder.relativeListaPromocionCabecera =convertView.findViewById(R.id.relativeListaPromocionCabecera);
             holder.contentpromociondetalle=(ViewGroup) convertView.findViewById(R.id.contentpromociondetalle);
+            holder.lbl_valorizacion=(TextView) convertView.findViewById(R.id.lbl_valorizacion);
 
             holder.imv_valorizar = (ImageView) convertView.findViewById(R.id.imv_valorizar);
 
@@ -100,12 +101,12 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         final ListaPromocionCabeceraEntity lead = getItem(position);
 
         // Setup.
-        holder.tv_promocion_id.setText(lead.getPromocion_id());
+        //holder.tv_promocion_id.setText(lead.getPromocion_id());
         holder.tv_promocion_producto.setText(lead.getProducto());
-        holder.tv_umd.setText(lead.getUmd());
+        //holder.tv_umd.setText(lead.getUmd());
         holder.tv_cantidadcompra.setText(lead.getCantidadcompra());
         holder.tv_cant_promocion.setText(lead.getCantidadpromocion());
-        holder.tv_porcentajedescuentocabecera.setText(lead.getDescuento());
+//        holder.tv_porcentajedescuentocabecera.setText(lead.getDescuento());
         String contado="",credito="";
         ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
         listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
@@ -124,6 +125,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
             holder.imv_incrementar.setVisibility(View.GONE);
             holder.imv_decrementar.setVisibility(View.GONE);
             holder.imv_editar_promocion_detalle.setVisibility(View.GONE);
+            holder.lbl_valorizacion.setVisibility(View.GONE);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.e: "+contado);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.contado: "+contado);
             Log.e("REOS","ListaPromocionCabeceraAdapter.getView.credito: "+credito);
@@ -155,15 +157,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.add(R.id.content_menu_view, promocionCabeceraView.newEditarDetallePromocion(lead));
             }});
-        holder.imv_editar_promocion_cabecera_descuento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                PromocionCabeceraView promocionCabeceraView=new PromocionCabeceraView();
-                fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.add(R.id.content_menu_view, promocionCabeceraView.newEditarDetallePromocionDescuento(lead));
-            }});
 
         holder.imv_incrementar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -468,6 +462,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         TextView tv_price_credit_pack;
         ImageView imv_valorizar;
         ViewGroup contentpromociondetalle;
+        TextView lbl_valorizacion;
     }
 
     public Dialog DialogoObtenerPromocionValorizada(ListaPromocionCabeceraEntity lead) {

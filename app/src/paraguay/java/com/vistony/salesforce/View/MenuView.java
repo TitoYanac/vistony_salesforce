@@ -2215,4 +2215,11 @@ public class MenuView extends AppCompatActivity
         Log.e("REOS","MenuView-getPrinterInstance-Inicio");
         return bxlPrinter;
     }
+
+    @Override
+    public void onRestart() {
+        Log.e("REOS","MenuView-onRestart");
+        super.onRestart();
+        Induvis.refreshGlobalVariables(this);
+    }
 }

@@ -18,12 +18,23 @@ public class ListaPromocionCabeceraEntity implements Serializable {
     public ArrayList<PromocionDetalleSQLiteEntity> listaPromocionDetalleEntities;
     public String producto_id;
     public String descuento;
+    public String cardcode;
+    public String terminopago_id;
+    public String ubigeo_id;
+    public String currency_id;
+    public String lista_promocion;
+    public String count;
 
     public ListaPromocionCabeceraEntity() {
 
     }
 
-    public ListaPromocionCabeceraEntity(String lista_promocion_id, String promocion_id, String producto, String umd, String cantidadcompra, String cantidadpromocion, boolean estadoitems, String preciobase, ArrayList<PromocionDetalleSQLiteEntity> listaPromocionDetalleEntities, String producto_id, String descuento) {
+    public ListaPromocionCabeceraEntity(
+            String lista_promocion_id, String promocion_id, String producto, String umd, String cantidadcompra, String cantidadpromocion,
+            boolean estadoitems, String preciobase, ArrayList<PromocionDetalleSQLiteEntity> listaPromocionDetalleEntities, String producto_id,
+            String descuento, String cardcode, String terminopago_id, String ubigeo_id, String currency_id
+
+    ) {
         this.lista_promocion_id = lista_promocion_id;
         this.promocion_id = promocion_id;
         this.producto = producto;
@@ -35,6 +46,58 @@ public class ListaPromocionCabeceraEntity implements Serializable {
         this.listaPromocionDetalleEntities = listaPromocionDetalleEntities;
         this.producto_id = producto_id;
         this.descuento = descuento;
+        this.cardcode = cardcode;
+        this.terminopago_id = terminopago_id;
+        this.ubigeo_id = ubigeo_id;
+        this.currency_id = currency_id;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public String getLista_promocion() {
+        return lista_promocion;
+    }
+
+    public void setLista_promocion(String lista_promocion) {
+        this.lista_promocion = lista_promocion;
+    }
+
+    public String getCardcode() {
+        return cardcode;
+    }
+
+    public void setCardcode(String cardcode) {
+        this.cardcode = cardcode;
+    }
+
+    public String getTerminopago_id() {
+        return terminopago_id;
+    }
+
+    public void setTerminopago_id(String terminopago_id) {
+        this.terminopago_id = terminopago_id;
+    }
+
+    public String getUbigeo_id() {
+        return ubigeo_id;
+    }
+
+    public void setUbigeo_id(String ubigeo_id) {
+        this.ubigeo_id = ubigeo_id;
+    }
+
+    public String getCurrency_id() {
+        return currency_id;
+    }
+
+    public void setCurrency_id(String currency_id) {
+        this.currency_id = currency_id;
     }
 
     public String getDescuento() {

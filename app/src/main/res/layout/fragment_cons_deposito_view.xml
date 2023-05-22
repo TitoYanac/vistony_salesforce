@@ -49,7 +49,7 @@
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
                     android:layout_weight="4"
-                    android:text="@string/lbl_btn_get"
+                    android:text="CONSULTAR"
                     android:textColor="@color/white"
                     android:drawableLeft="@drawable/ic_search_white_24dp"
                     android:background="@drawable/custom_border_button_red"

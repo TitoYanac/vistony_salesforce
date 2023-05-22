@@ -51,7 +51,7 @@
     <string name="Promotion_Summary">Resumen Promoción</string>
     <string name="Selected_Promotion">Promoción Seleccionada:</string>
     <string name="Pending_Promotion">Promoción Pendiente:</string>
-    <string name="Promotion_Detail">DETALLE DE PROMOCIÓN:</string>
+    <string name="Promotion_Detail">Detalle de Promoción</string>
     <string name="Direct_Depost">Depósito Directo</string>
     <string name="Find_Deposit">Consulta Depósito</string>
     <string name="lbl_update_parameters">Actualizar Parámetros</string>
@@ -157,9 +157,10 @@
     <string name="stop_video">Parar Video</string>
     <string name="video">Video</string>
     <string name="selection_video">SELECCIONE EL VIDEO</string>
-    <string name="reason_free_transfer">Motivo Transf. Gratuita</string>
+    <string name="reason_free_transfer">Mot. Transf. Gratuita</string>
     <string name="payment_terms">Cond. Venta</string>
     <string name="generate_salesorders">Generar Venta</string>
     <string name="sales">Venta</string>
     <string name="traceability_sales">Trazabilidad de Venta</string>
+    <string name="promotions_vigents">Promociones Vigentes</string>
 </resources>

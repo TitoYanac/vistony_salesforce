@@ -179,6 +179,8 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_chk_descuentocontado_cabecera= descuentocontadocabecera;
             ObjListaProductosEntity.orden_detalle_cardcode= listaprecio_id;
             ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=productoAgregado.getPorcentaje_descuento_max();
+            ObjListaProductosEntity.orden_detalle_currency=currency_id;
+        Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-currency_id:"+currency_id);
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-descuentocontado:"+String.valueOf(descuentocontado));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-terminopago_id:"+String.valueOf(terminopago_id));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-terminopago_id:"+String.valueOf(descuentocontadocabecera));

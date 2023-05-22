@@ -50,5 +50,6 @@ public class SesionEntity {
     public static String collection_salesperson ="N";
     public static String deliverydateauto="N";
     public static String currency_id="";
+    public static String flagquerystockPromotion ="N";
 }
 
