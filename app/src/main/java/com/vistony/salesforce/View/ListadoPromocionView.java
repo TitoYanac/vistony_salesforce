@@ -62,6 +62,7 @@ public class ListadoPromocionView extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static ListadoPromocionView newInstance(Object objeto) {
+        listaListadoPromocionSQLiteEntity=new ArrayList<>();
         ListadoPromocionView fragment = new ListadoPromocionView();
         Bundle b = new Bundle();
         Object[] listaobjetos=new Object[2];
@@ -115,6 +116,7 @@ public class ListadoPromocionView extends Fragment {
                 listaPromocionCabeceraEntity.cantidadpromocion="0";
                 listaPromocionCabeceraEntity.preciobase=Listado.get(j).getPreciobase();
                 listaPromocionCabeceraEntity.descuento=Listado.get(j).getDescuento();
+                listaPromocionCabeceraEntity.count=Listado.get(j).getCount();
                 listaPromocionCabeceraEntity.setListaPromocionDetalleEntities(Listado.get(j).getListaPromocionDetalleEntities());
                 arrayListPromocionCabeceraSQliteEntityFiltrado.add(listaPromocionCabeceraEntity);
 

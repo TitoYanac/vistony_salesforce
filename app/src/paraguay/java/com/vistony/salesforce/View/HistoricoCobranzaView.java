@@ -231,6 +231,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
 
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -256,7 +257,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
             }
         }
 
-    }
+    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

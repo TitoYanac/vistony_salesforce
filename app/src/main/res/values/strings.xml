@@ -283,7 +283,9 @@
     <string name="mse_mistake_response_server">Error en la respuesta del servidor...</string>
     <string name="validation_receips">Validando Recibos</string>
     <string name="mse_system_no_identification_country">El Sistema no pudo identificar su pais y lenguaje configurado</string>
-    <string name="unauthorized_equipment">Equipo No Autorizado, comunicarse a Helpdesk@vistony.com</string>
+    <string name="unauthorized_equipment">Equipo no autorizado, para mas información comuniquese con su supervisor</string>
+    <string name="mse_user_inactive">Usuario inactivo, para mas información comuniquese con su supervisor</string>
+    <string name="user_inactive">Usuario inactivo</string>
     <string name="mse_unlinked_user">El usuario seleccionado no esta vinculado, seleccione otro usuario</string>
     <string name="unlinked_user">Usuario desvinculado</string>
     <string name="update_mobile_app">Actualiza la App movil</string>
@@ -572,6 +574,13 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="sales">Venta</string>
     <string name="traceability_sales">Trazabilidad de Venta</string>
     <string name="salesorder_promotional_mesh">Orden Venta \n (Malla Promocional)</string>
-    <string name="quotation_exception_promotional_mesh">Cotizacion \n (Excepción Malla Promocional)</string>
+    <string name="quotation_exception_promotional_mesh">Cotizacion \n(Propuesta de Venta)\n(Excepción Malla Promocional)</string>
     <string name="promotions_vigents">Promociones Vigentes</string>
+    <string name="Quotation">Cotización</string>
+    <string name="guion">-</string>
+    <string name="delete">Eliminar</string>
+    <string name="update">Editar</string>
+    <string name="worth">Valor</string>
+    <string name="update_product">Editar\nProducto</string>
+    <string name="additionaldiscount">Descuento\nAdicional?</string>
 </resources>

@@ -247,4 +247,72 @@ public class PromocionDetalleSQLiteDao {
         bd.close();
         return listaPromocionDetalleSQLiteEntity;
     }
+
+    public String ObtenerPromocionDetalleSumContado (
+            String compania_id,
+            String lista_promocion_id,
+            String promocion_id
+    )
+    {
+        Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado.compania_id: "+compania_id);
+        Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado.lista_promocion_id: "+lista_promocion_id);
+        Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado.promocion_id: "+promocion_id);
+        String resultado="";
+        abrir();
+        try
+        {
+            Cursor fila = bd.rawQuery(
+                    "SELECT IFNULL(SUM(TABLA_A.contado),0) as contado from " +
+                            "(Select (B.contado*A.cantidad) as contado from promociondetalle A " +
+                            "inner join (SELECT producto_id,contado FROM listapreciodetalle GROUP BY producto_id,contado) B ON " +
+                            " A.producto_id=B.producto_id " +
+                            "where A.compania_id= '" + compania_id + "' and A.lista_promocion_id= '" + lista_promocion_id + "' " +
+                            "and A.promocion_id= '" + promocion_id + "') AS TABLA_A      ", null);
+
+            while (fila.moveToNext()) {
+                resultado = (fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado.e: "+e.toString());
+        }
+        bd.close();
+        Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado.resultado: "+resultado);
+        return resultado;
+    }
+
+    public String ObtenerPromocionDetalleSumCredito (
+            String compania_id,
+            String lista_promocion_id,
+            String promocion_id
+    )
+    {
+        String resultado="";
+        Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito.compania_id: "+compania_id);
+        Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito.lista_promocion_id: "+lista_promocion_id);
+        Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito.promocion_id: "+promocion_id);
+        abrir();
+        try
+        {
+            Cursor fila = bd.rawQuery(
+                    " SELECT IFNULL(SUM(TABLA_A.credito),0) as credito from " +
+                            " (Select (B.credito*A.cantidad) AS credito from promociondetalle A " +
+                            "inner join (SELECT producto_id,credito FROM listapreciodetalle GROUP BY producto_id,credito) B ON " +
+                            " A.producto_id=B.producto_id " +
+                            "where A.compania_id= '" + compania_id + "' and A.lista_promocion_id= '" + lista_promocion_id + "' " +
+                            "and A.promocion_id= '" + promocion_id + "') AS TABLA_A      ", null);
+
+            while (fila.moveToNext())
+            {
+                resultado = (fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+            Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito.e: "+e.toString());
+        }
+        bd.close();
+        Log.e("REOS","PromocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito.resultado: "+resultado);
+        return resultado;
+    }
+
 }

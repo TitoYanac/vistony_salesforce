@@ -114,6 +114,7 @@ public class ListaClienteDetalleDao {
             listaClienteDetalleEntity.docentry=Lista.get(i).getDocumento_entry();
             listaClienteDetalleEntity.chkruta=chkruta;
             listaClienteDetalleEntity.pymntgroup=Lista.get(i).getPymntgroup();
+            listaClienteDetalleEntity.additionaldiscount=Lista.get(i).getAdditionaldiscount();
             listaClienteDetalleEntities.add(listaClienteDetalleEntity);
         }
         }catch (Exception e)

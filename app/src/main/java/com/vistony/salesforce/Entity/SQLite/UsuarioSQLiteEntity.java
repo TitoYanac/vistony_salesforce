@@ -40,7 +40,42 @@ public class UsuarioSQLiteEntity {
     public String oiltaxdesc;
     public String oiltaxvalue;
     public String deliverydateauto;
+    public String deliveryrefusedmoney;
+    public String status;
+    public String sendvisits;
+    public String sendvalidations;
 
+    public String getSendvalidations() {
+        return sendvalidations;
+    }
+
+    public void setSendvalidations(String sendvalidations) {
+        this.sendvalidations = sendvalidations;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSendvisits() {
+        return sendvisits;
+    }
+
+    public void setSendvisits(String sendvisits) {
+        this.sendvisits = sendvisits;
+    }
+
+    public String getDeliveryrefusedmoney() {
+        return deliveryrefusedmoney;
+    }
+
+    public void setDeliveryrefusedmoney(String deliveryrefusedmoney) {
+        this.deliveryrefusedmoney = deliveryrefusedmoney;
+    }
 
     public String getDeliverydateauto() {
         return deliverydateauto;

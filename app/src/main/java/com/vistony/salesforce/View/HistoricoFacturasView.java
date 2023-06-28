@@ -61,9 +61,9 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
     private SearchView mSearchView;
     HiloObtenerHistoricoFacturas hiloObtenerHistoricoFacturas;
     ListaHistoricoFacturasAdapter listaHistoricoFacturasAdapter;
-    SimpleDateFormat dateFormat;
-    Date date;
-    String fecha;
+    SimpleDateFormat dateFormat,dateFormatSAP;
+    Date date,dateSAP;
+    String fecha,fechaSAP;
 
     public HistoricoFacturasView() {
         // Required empty public constructor
@@ -105,9 +105,12 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
         listviewhistoricofacturas=v.findViewById(R.id.listviewhistoricofacturas);
         imb_calendario_historico_facturas.setOnClickListener(this);
         btnconsultarfechafacturas.setOnClickListener(this);
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        dateFormatSAP = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
+        dateSAP = new Date();
         fecha =dateFormat.format(date);
+        fechaSAP = dateFormatSAP.format(dateSAP);
         tv_fecha_historico_facturas.setText(fecha);
 
         return v;
@@ -162,7 +165,8 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
         {
             dia='0'+dia;
         }
-        tv_fecha_historico_facturas.setText(year + "-" + mes + "-" + dia);
+        fechaSAP=year+mes+dia;
+        tv_fecha_historico_facturas.setText(dia + "/" + mes + "/" + year);
     }
 
     private void setupSearchView()
@@ -206,7 +210,7 @@ public class HistoricoFacturasView extends Fragment implements View.OnClickListe
                         SesionEntity.imei,
                         SesionEntity.compania_id,
                         SesionEntity.fuerzatrabajo_id,
-                        tv_fecha_historico_facturas.getText().toString()
+                        fechaSAP
                 );
                 Log.e("REOS", "HistoricoFacturas-HiloObtenerHistoricoFacturas-listaHistoricoFacturasEntities.size()" + listaHistoricoFacturasEntities.size());
             } catch (Exception e)

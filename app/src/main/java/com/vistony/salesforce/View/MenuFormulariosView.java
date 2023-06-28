@@ -74,11 +74,11 @@ public class MenuFormulariosView extends Fragment {
         cv_agregarcliente=v.findViewById(R.id.cv_agregarcliente);
         cv_reclamocliente=v.findViewById(R.id.cv_reclamocliente);
 
-        if(!BuildConfig.FLAVOR.equals("peru"))
+        /*if(!BuildConfig.FLAVOR.equals("peru"))
         {
             cv_reclamocliente.setVisibility(View.GONE);
-        }
-
+        }*/
+        cv_reclamocliente.setVisibility(View.GONE);
         cv_catalogos.setOnClickListener(v -> {
             String Fragment="MenuFormulariosView";
             String accion="catalogos";

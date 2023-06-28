@@ -1,10 +1,15 @@
 package com.vistony.salesforce.Entity.SQLite;
 
+import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+
+import java.util.ArrayList;
+
 public class ListaPromocionSQLiteEntity {
     public String compania_id;
     public String lista_promocion_id;
     public String lista_promocion;
     public String u_vis_cashdscnt;
+    public ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntity;
 
 
     public ListaPromocionSQLiteEntity(String compania_id, String lista_promocion_id, String lista_promocion, String u_vis_cashdscnt) {
@@ -15,6 +20,14 @@ public class ListaPromocionSQLiteEntity {
     }
 
     public ListaPromocionSQLiteEntity() {
+    }
+
+    public ArrayList<ListaPromocionCabeceraEntity> getListaPromocionCabeceraEntity() {
+        return listaPromocionCabeceraEntity;
+    }
+
+    public void setListaPromocionCabeceraEntity(ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntity) {
+        this.listaPromocionCabeceraEntity = listaPromocionCabeceraEntity;
     }
 
     public String getU_vis_cashdscnt() {

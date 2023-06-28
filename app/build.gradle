@@ -109,19 +109,16 @@ android {
             }
             applicationIdSuffix ".peru"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
-            //QA -------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            //QA -------Aprobaciones
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //QA 2
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa2"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa2"')
-            //QA Cobro Vendedor
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe.qa2"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.pe.qa2"')
-            versionName "2.2.16"
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe_V2"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            versionName "2.2.20"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')

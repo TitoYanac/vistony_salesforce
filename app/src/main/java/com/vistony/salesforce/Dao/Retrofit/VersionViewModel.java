@@ -43,7 +43,7 @@ public class VersionViewModel {
         }*/
         switch (BuildConfig.FLAVOR) {
             case "chile":
-            case "peru":
+            //case "peru":
                 //Produccion
             case "ecuador":
             case "espania":
@@ -56,6 +56,9 @@ public class VersionViewModel {
             case "paraguay":
             //case "peru":
                 baseUrl = "https://app.vistony.pe";
+                break;
+            case "peru":
+                baseUrl = "http://190.12.79.132:8083";
                 break;
             default:
                 baseUrl = "http://salesforce.vistony.com";

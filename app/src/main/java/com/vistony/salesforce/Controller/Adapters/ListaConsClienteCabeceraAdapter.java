@@ -223,6 +223,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
             listaClienteCabeceraEntity.setContado (lead.getContado());
             listaClienteCabeceraEntity.setAddresscode( lead.getAddresscode());
             listaClienteCabeceraEntity.setStatuscount ( lead.getStatuscount());
+            listaClienteCabeceraEntity.setCustomerwhitelist(lead.getCustomerwhitelist());
                     Log.e("REOS","ListaConsClienteCabeceraAdapter.getView.lead.getLineofbussiness(): "+lead.getLineofbussiness());
                     Log.e("REOS","ListaConsClienteCabeceraAdapter.getView.lead.getTerminopago_id()(): "+lead.getTerminopago_id());
                     Log.e("REOS","ListaConsClienteCabeceraAdapter.getView.lead.getStatuscount()(): "+lead.getStatuscount());

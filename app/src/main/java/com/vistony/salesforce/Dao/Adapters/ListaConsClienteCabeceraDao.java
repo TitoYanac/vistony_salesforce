@@ -72,6 +72,7 @@ public class ListaConsClienteCabeceraDao {
                         ,Lista.get(i).getAddresscode()
                         ,Lista.get(i).getChkgeolocation()
                         ,Lista.get(i).getStatuscount()
+                        ,Lista.get(i).getCustomerwhitelist()
                 ));
                 Log.e("REOS","ListaConsClienteCabeceraDao.getLeads.Lista.get(i).getLineofbussiness(): "+Lista.get(i).getLineofbussiness());
             }

@@ -977,7 +977,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                                     lead.getOrden_detalle_cantidad(),
                                     SesionEntity.contado,
                                     lead.getOrden_detalle_terminopago_id(),
-                                    lead.getOrden_detalle_cardcode()
+                                    lead.getOrden_detalle_cardcode(),
+                                    lead.getOrden_detalle_currency()
                             );
                             Log.e("REOS","ListaOrdenVentaDetalleAdapter.listaPromocionCabecera:"+listaPromocionCabecera.size());
                             Log.e("REOS","ListaOrdenVentaDetalleAdapter.lead.getOrden_detalle_terminopago_id()listaPromocionCabecera:"+lead.getOrden_detalle_terminopago_id());
@@ -1794,7 +1795,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     lead.getOrden_detalle_cantidad(),
                     SesionEntity.contado,
                     lead.getOrden_detalle_terminopago_id(),
-                    lead.getOrden_detalle_cardcode()
+                    lead.getOrden_detalle_cardcode(),
+                    lead.getOrden_detalle_currency()
             );
 
         }

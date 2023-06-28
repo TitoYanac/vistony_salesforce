@@ -48,7 +48,6 @@
                     android:background="@drawable/custom_border_button_red"
                     android:text="@string/query"
                     android:textColor="@color/white"
-                    android:drawableLeft="@drawable/ic_search_white_24dp"
                     />
                 <ImageButton
                     android:id="@+id/imb_consultar_QR"

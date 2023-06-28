@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,30 +42,32 @@ import com.vistony.salesforce.View.PromocionCabeceraView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCabeceraEntity>  {
-    public static List<ListaPromocionCabeceraEntity> ArraylistaPromocionCabeceraEntity = new ArrayList<ListaPromocionCabeceraEntity>();;
+public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCabeceraEntity> {
+    public static List<ListaPromocionCabeceraEntity> ArraylistaPromocionCabeceraEntity = new ArrayList<ListaPromocionCabeceraEntity>();
+    ;
     ListaParametrosEntity listaParametrosEntity;
     private Context context;
     ListaPromocionDetalleAdapter listaPromocionDetalleAdapter;
     private FragmentManager fragmentManager;
     PromocionCabeceraView promocionCabeceraView;
-    ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntities=new ArrayList<>();
+    ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntities = new ArrayList<>();
     PromocionDetalleSQLiteDao promocionDetalleSQLiteDao;
     ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao;
     FormulasController formulasController;
+
     public ListaPromocionCabeceraAdapter(Context context, List<ListaPromocionCabeceraEntity> objects) {
 
         super(context, 0, objects);
-        ArraylistaPromocionCabeceraEntity=objects;
-        this.context=context;
+        ArraylistaPromocionCabeceraEntity = objects;
+        this.context = context;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        promocionDetalleSQLiteDao=new PromocionDetalleSQLiteDao(getContext());
+        promocionDetalleSQLiteDao = new PromocionDetalleSQLiteDao(getContext());
         listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(getContext());
-        formulasController=new FormulasController(getContext());
+        formulasController = new FormulasController(getContext());
         final ListaPromocionCabeceraAdapter.ViewHolder holder;
         // ¿Ya se infló este view?
         if (null == convertView) {
@@ -86,11 +90,14 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
             holder.imv_decrementar = (ImageView) convertView.findViewById(R.id.imv_decrementar);
             holder.imv_editar_promocion_detalle = (ImageView) convertView.findViewById(R.id.imv_editar_promocion_detalle);
             //holder.imv_editar_promocion_cabecera_descuento = (ImageView) convertView.findViewById(R.id.imv_editar_promocion_cabecera_descuento);
-            holder.relativeListaPromocionCabecera =convertView.findViewById(R.id.relativeListaPromocionCabecera);
-            holder.contentpromociondetalle=(ViewGroup) convertView.findViewById(R.id.contentpromociondetalle);
-            holder.lbl_valorizacion=(TextView) convertView.findViewById(R.id.lbl_valorizacion);
-
+            holder.relativeListaPromocionCabecera = convertView.findViewById(R.id.relativeListaPromocionCabecera);
+            holder.contentpromociondetalle = (ViewGroup) convertView.findViewById(R.id.contentpromociondetalle);
+            holder.lbl_valorizacion = (TextView) convertView.findViewById(R.id.lbl_valorizacion);
             holder.imv_valorizar = (ImageView) convertView.findViewById(R.id.imv_valorizar);
+            holder.lbl_update_promocion_detalle = (TextView) convertView.findViewById(R.id.lbl_update_promocion_detalle);
+            holder.lbl_register_data = (TextView) convertView.findViewById(R.id.lbl_register_data);
+            holder.lbl_pack = (TextView) convertView.findViewById(R.id.lbl_pack);
+
 
             convertView.setTag(holder);
         } else {
@@ -99,340 +106,348 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
         // Lead actual.
         final ListaPromocionCabeceraEntity lead = getItem(position);
-
+        holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+        holder.imv_editar_promocion_detalle.setEnabled(false);
         // Setup.
         //holder.tv_promocion_id.setText(lead.getPromocion_id());
         holder.tv_promocion_producto.setText(lead.getProducto());
         //holder.tv_umd.setText(lead.getUmd());
         holder.tv_cantidadcompra.setText(lead.getCantidadcompra());
         holder.tv_cant_promocion.setText(lead.getCantidadpromocion());
+        SpannableString mitextoU = new SpannableString("PACK DE " + lead.getCantidadcompra());
+        mitextoU.setSpan(new UnderlineSpan(), 0, mitextoU.length(), 0);
+        holder.lbl_pack.setText(mitextoU);
 //        holder.tv_porcentajedescuentocabecera.setText(lead.getDescuento());
-        String contado="",credito="";
-        ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
-        listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
+        String contado = "", credito = "";
+        ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities = new ArrayList<>();
+        listaPrecioDetalleSQLiteEntities = listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
                 getContext(),
                 lead.producto_id
         );
-        for(int i=0;i<listaPrecioDetalleSQLiteEntities.size();i++)
-        {
-            contado=listaPrecioDetalleSQLiteEntities.get(i).getContado();
-            credito=listaPrecioDetalleSQLiteEntities.get(i).getCredito();
+        for (int i = 0; i < listaPrecioDetalleSQLiteEntities.size(); i++) {
+            contado = listaPrecioDetalleSQLiteEntities.get(i).getContado();
+            credito = listaPrecioDetalleSQLiteEntities.get(i).getCredito();
         }
 
-        if(SesionEntity.flagquerystock.equals("Y"))
-        {
+        if (SesionEntity.flagquerystock.equals("Y")) {
             holder.tv_cant_promocion.setVisibility(View.GONE);
             holder.imv_incrementar.setVisibility(View.GONE);
             holder.imv_decrementar.setVisibility(View.GONE);
             holder.imv_editar_promocion_detalle.setVisibility(View.GONE);
             holder.lbl_valorizacion.setVisibility(View.GONE);
-            Log.e("REOS","ListaPromocionCabeceraAdapter.getView.e: "+contado);
-            Log.e("REOS","ListaPromocionCabeceraAdapter.getView.contado: "+contado);
-            Log.e("REOS","ListaPromocionCabeceraAdapter.getView.credito: "+credito);
-            Log.e("REOS","ListaPromocionCabeceraAdapter.getView.formulasController.applyDiscountPercentageForLine): "+formulasController.applyDiscountPercentageForLine(
+            holder.lbl_update_promocion_detalle.setVisibility(View.GONE);
+            //Log.e("REOS", "ListaPromocionCabeceraAdapter.getView.e: " + contado);
+            //Log.e("REOS", "ListaPromocionCabeceraAdapter.getView.contado: " + contado);
+            //Log.e("REOS", "ListaPromocionCabeceraAdapter.getView.credito: " + credito);
+            /*Log.e("REOS", "ListaPromocionCabeceraAdapter.getView.formulasController.applyDiscountPercentageForLine): " + formulasController.applyDiscountPercentageForLine(
                     formulasController.getTotalPerLine(
-                            contado,lead.getCantidadcompra()
-                    ),lead.getDescuento()
-            ));
-            Log.e("REOS","ListaPromocionCabeceraAdapter.getView.formulasController.applyDiscountPercentageForLine): "+formulasController.applyDiscountPercentageForLine(
+                            contado, lead.getCantidadcompra()
+                    ), lead.getDescuento()
+            ));*/
+            /*Log.e("REOS", "ListaPromocionCabeceraAdapter.getView.formulasController.applyDiscountPercentageForLine): " + formulasController.applyDiscountPercentageForLine(
                     formulasController.getTotalPerLine(
-                            credito,lead.getCantidadcompra()
-                    ),lead.getDescuento()
-            ));
+                            credito, lead.getCantidadcompra()
+                    ), lead.getDescuento()
+            ));*/
         }
 
         holder.imv_valorizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogoObtenerPromocionValorizada(lead).show();
-            }});
+            }
+        });
 
         //lead.setListaPromocionDetalleEntities(listaPromocionDetalleSQLiteEntity);
         holder.imv_editar_promocion_detalle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                PromocionCabeceraView promocionCabeceraView=new PromocionCabeceraView();
+                /*PromocionCabeceraView promocionCabeceraView=new PromocionCabeceraView();
                 fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.add(R.id.content_menu_view, promocionCabeceraView.newEditarDetallePromocion(lead));
-            }});
+                transaction.add(R.id.content_menu_view, promocionCabeceraView.newEditarDetallePromocion(lead));*/
+                DialogValidUpdateDetailPromotion(lead).show();
+            }
+        });
 
 
         holder.imv_incrementar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Evalua Si las Acciones en ImageView estan Habilitadas
-                Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.ArraylistaPromocionCabeceraEntit.get(position).isEstadoitems(): "+ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems());
+                //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_incrementar.ArraylistaPromocionCabeceraEntit.get(position).isEstadoitems(): " + ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems());
                 //if(ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems())
                 //{
-                    //Declara variable de Caja de Texto influenciada por los botones + y -
-                    int valorCaja = 0;
-                    String cantidadPromocion;
-                    //Incrementa en 1 el Valor de Caja y lo multiplica por la cantidad en la Cabecera de Promocion
-                    valorCaja =Integer.parseInt(lead.cantidadcompra);
-                    //Evalua si la Cantidad Pendiente en el Fragment PromocionCabeceraView - la cantidad en el valorCaja es = a 0
-                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
-                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.valorCaja: "+valorCaja);
-                    if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) - valorCaja == 0) {
-                        int x=0;
+                //Declara variable de Caja de Texto influenciada por los botones + y -
+                int valorCaja = 0;
+                String cantidadPromocion;
+                //Incrementa en 1 el Valor de Caja y lo multiplica por la cantidad en la Cabecera de Promocion
+                valorCaja = Integer.parseInt(lead.cantidadcompra);
+                //Evalua si la Cantidad Pendiente en el Fragment PromocionCabeceraView - la cantidad en el valorCaja es = a 0
+                //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_incrementar.tv_cantidad_pendiente.getText(): " + PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_incrementar.valorCaja: " + valorCaja);
+                if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) - valorCaja == 0) {
+                    int x = 0;
+                    //Inserta sobre la Caja de Texto la Cantidad Actual + 1
+                    cantidadPromocion = String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) + 1);
+                    holder.tv_cant_promocion.setText(cantidadPromocion);
+                    lead.setCantidadpromocion(cantidadPromocion);
+                    //Declara FragmentManager
+                    fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                    //Declara Transaction
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
+                    transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceIncrementar(String.valueOf(valorCaja),cantidadPromocion, lead.getDescuento()));
+                    //Solicita a Promocion Cabecera View Activas Botons de Menu
+                    transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceActivarVincular(String.valueOf(valorCaja)));
+                    //Envia Lista de Promociones
+                    //listaPromocionCabeceraEntities.clear();
+                    if (!listaPromocionCabeceraEntities.isEmpty()) {
+                        for (int j = 0; j < listaPromocionCabeceraEntities.size(); j++) {
+                            if (listaPromocionCabeceraEntities.get(j).getCantidadcompra().equals(lead.cantidadcompra)) {
+                                listaPromocionCabeceraEntities.get(j).setCantidadpromocion(lead.getCantidadpromocion());
+                                x++;
+                            }
+                        }
+                        if (x == 0) {
+                            listaPromocionCabeceraEntities.add(lead);
+                        }
+                    } else {
+                        listaPromocionCabeceraEntities.add(lead);
+                    }
+                    //Log.e("REOS", "ListaPromocionCabeceraAdapter:listaPromocionCabeceraEntities: " + listaPromocionCabeceraEntities.size());
+                    transaction.add(R.id.content_menu_view, promocionCabeceraView.UpdatePromotionHead(listaPromocionCabeceraEntities));
+
+                    //Solicita cargar las ImageView esten desHabilitadas
+                    for (int j = 0; j < ArraylistaPromocionCabeceraEntity.size(); j++) {
+                        ArraylistaPromocionCabeceraEntity.get(j).setEstadoitems(false);
+                    }
+
+                    if (!holder.tv_cant_promocion.getText().equals("0")) {
+                        holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                        holder.imv_editar_promocion_detalle.setEnabled(false);
+                    } else {
+                        holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_24);
+                        holder.imv_editar_promocion_detalle.setEnabled(true);
+                    }
+
+
+                } else {
+                    //Evalua Si la cantidad Pendiente en PromocionCabeceraView es mayor al Valor Caja
+                    if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja) {
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_incrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.SI: ");
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): " + PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.valorCaja: " + valorCaja);
+                        int x = 0;
                         //Inserta sobre la Caja de Texto la Cantidad Actual + 1
-                        cantidadPromocion=String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) + 1);
+                        cantidadPromocion = String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) + 1);
                         holder.tv_cant_promocion.setText(cantidadPromocion);
                         lead.setCantidadpromocion(cantidadPromocion);
-                        //Declara FragmentManager
-                        fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
                         //Declara Transaction
+                        fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                        //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
-                        transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceIncrementar(String.valueOf(valorCaja)));
-                        //Solicita a Promocion Cabecera View Activas Botons de Menu
+                        transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceIncrementar(String.valueOf(valorCaja),cantidadPromocion, lead.getDescuento()));
                         transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceActivarVincular(String.valueOf(valorCaja)));
-                        //Envia Lista de Promociones
-                        //listaPromocionCabeceraEntities.clear();
-                        if(!listaPromocionCabeceraEntities.isEmpty()){
-                            for(int j=0;j<listaPromocionCabeceraEntities.size();j++)
-                            {
-                                if(listaPromocionCabeceraEntities.get(j).getCantidadcompra().equals(lead.cantidadcompra)){
+                        if (!listaPromocionCabeceraEntities.isEmpty()) {
+                            for (int j = 0; j < listaPromocionCabeceraEntities.size(); j++) {
+                                if (listaPromocionCabeceraEntities.get(j).getCantidadcompra().equals(lead.cantidadcompra)) {
                                     listaPromocionCabeceraEntities.get(j).setCantidadpromocion(lead.getCantidadpromocion());
                                     x++;
                                 }
                             }
-                            if(x==0)
-                            {
+                            if (x == 0) {
                                 listaPromocionCabeceraEntities.add(lead);
                             }
-                        }else
-                        {
+                        } else {
                             listaPromocionCabeceraEntities.add(lead);
                         }
-                        Log.e("REOS", "ListaPromocionCabeceraAdapter:listaPromocionCabeceraEntities: " + listaPromocionCabeceraEntities.size());
-                        transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceObtenerListaPromocion(listaPromocionCabeceraEntities));
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter:listaPromocionCabeceraEntities: " + listaPromocionCabeceraEntities.size());
+                        transaction.add(R.id.content_menu_view, promocionCabeceraView.UpdatePromotionHead(listaPromocionCabeceraEntities));
 
-                        //Solicita cargar las ImageView esten desHabilitadas
-                        for(int j=0;j<ArraylistaPromocionCabeceraEntity.size();j++)
-                        {
-                            ArraylistaPromocionCabeceraEntity.get(j).setEstadoitems(false);
-                        }
-
-                        if(!holder.tv_cant_promocion.getText().equals("0"))
-                        {
+                        if (!holder.tv_cant_promocion.getText().equals("0")) {
                             holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
                             holder.imv_editar_promocion_detalle.setEnabled(false);
-                        }
-                        else
-                        {
+                        } else {
                             holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_24);
                             holder.imv_editar_promocion_detalle.setEnabled(true);
                         }
 
-
                     } else {
-                        //Evalua Si la cantidad Pendiente en PromocionCabeceraView es mayor al Valor Caja
-                        if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja) {
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.SI: ");
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.valorCaja: "+valorCaja);
-                            int x=0;
-                            //Inserta sobre la Caja de Texto la Cantidad Actual + 1
-                            cantidadPromocion=String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) + 1);
-                            holder.tv_cant_promocion.setText(cantidadPromocion);
-                            lead.setCantidadpromocion(cantidadPromocion);
-                            //Declara Transaction
-                            fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                            //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
-                            FragmentTransaction transaction = fragmentManager.beginTransaction();
-                            //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
-                            transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceIncrementar(String.valueOf(valorCaja)));
-                            transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceActivarVincular(String.valueOf(valorCaja)));
-                            if(!listaPromocionCabeceraEntities.isEmpty()){
-                                for(int j=0;j<listaPromocionCabeceraEntities.size();j++)
-                                {
-                                    if(listaPromocionCabeceraEntities.get(j).getCantidadcompra().equals(lead.cantidadcompra)){
-                                        listaPromocionCabeceraEntities.get(j).setCantidadpromocion(lead.getCantidadpromocion());
-                                        x++;
-                                    }
-                                }
-                                if(x==0)
-                                {
-                                    listaPromocionCabeceraEntities.add(lead);
-                                }
-                            }else
-                            {
-                                listaPromocionCabeceraEntities.add(lead);
-                            }
-                            Log.e("REOS", "ListaPromocionCabeceraAdapter:listaPromocionCabeceraEntities: " + listaPromocionCabeceraEntities.size());
-                            transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceObtenerListaPromocion(listaPromocionCabeceraEntities));
-
-                            if(!holder.tv_cant_promocion.getText().equals("0"))
-                            {
-                                holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
-                                holder.imv_editar_promocion_detalle.setEnabled(false);
-                            }
-                            else
-                            {
-                                holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_24);
-                                holder.imv_editar_promocion_detalle.setEnabled(true);
-                            }
-
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_incrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.NO: ");
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): " + PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.valorCaja: " + valorCaja);
+                        Toast.makeText(getContext(), "Cantidad no permitida", Toast.LENGTH_SHORT).show();
+                        if (!holder.tv_cant_promocion.getText().equals("0")) {
+                            holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                            holder.imv_editar_promocion_detalle.setEnabled(false);
                         } else {
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.NO: ");
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_incrementar.antescantnopermitidad.valorCaja: "+valorCaja);
-                            Toast.makeText(getContext(), "Cantidad No Permitida", Toast.LENGTH_SHORT).show();
-                            if(!holder.tv_cant_promocion.getText().equals("0"))
-                            {
-                                holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
-                                holder.imv_editar_promocion_detalle.setEnabled(false);
-                            }
-                            else
-                            {
-                                holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_24);
-                                holder.imv_editar_promocion_detalle.setEnabled(true);
-                            }
+                            holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_24);
+                            holder.imv_editar_promocion_detalle.setEnabled(true);
                         }
                     }
+                }
                 //}
-            }});
+            }
+        });
 
         holder.imv_decrementar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Evalua Si las Acciones en ImageView estan Habilitadas
-                Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.ArraylistaPromocionCabeceraEntit.get(position).isEstadoitems(): "+ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems());
+                Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.ArraylistaPromocionCabeceraEntit.get(position).isEstadoitems(): " + ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems());
                 //if(ArraylistaPromocionCabeceraEntity.get(position).isEstadoitems())
                 //{
-                    //Declara variable de Caja de Texto influenciada por los botones + y -
-                    int valorCaja = 0;
-                    String cantidadPromocion;
-                    //Incrementa en 1 el Valor de Caja y lo multiplica por la cantidad en la Cabecera de Promocion
-                    valorCaja =Integer.parseInt(lead.cantidadcompra);
-                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
-                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.valorCaja: "+valorCaja);
-                    Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.holder.tv_cant_promocion.getText(): "+holder.tv_cant_promocion.getText());
-                    //Evalua si la Cantidad Pendiente en el Fragment PromocionCabeceraView - la cantidad en el valorCaja es = a 0
-                    //if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) - valorCaja == 0) {
-                        if (Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - valorCaja > 0) {
-                        //Inserta sobre la Caja de Texto la Cantidad Actual - 1
-                        cantidadPromocion=String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - 1);
+                //Declara variable de Caja de Texto influenciada por los botones + y -
+                int valorCaja = 0;
+                String cantidadPromocion;
+                //Incrementa en 1 el Valor de Caja y lo multiplica por la cantidad en la Cabecera de Promocion
+                valorCaja = Integer.parseInt(lead.cantidadcompra);
+                //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.tv_cantidad_pendiente.getText(): " + PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.valorCaja: " + valorCaja);
+                //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.holder.tv_cant_promocion.getText(): " + holder.tv_cant_promocion.getText());
+                //Evalua si la Cantidad Pendiente en el Fragment PromocionCabeceraView - la cantidad en el valorCaja es = a 0
+                //if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) - valorCaja == 0) {
+                if (Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - valorCaja > 0) {
+                    //Inserta sobre la Caja de Texto la Cantidad Actual - 1
+                    cantidadPromocion = String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - 1);
+                    holder.tv_cant_promocion.setText(cantidadPromocion);
+                    lead.setCantidadpromocion(cantidadPromocion);
+                    //holder.tv_cant_promocion.setText(String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - 1));
+                    //Declara FragmentManager
+                    fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                    //Declara Transaction
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
+                    transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceDecrementar(String.valueOf(valorCaja),cantidadPromocion, lead.getDescuento()));
+                    //Solicita a Promocion Cabecera View Activas Botons de Menu
+                    transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceActivarVincular(String.valueOf(valorCaja)));
+                    //Envia Lista de Promociones
+                    if (!listaPromocionCabeceraEntities.isEmpty()) {
+                        for (int j = 0; j < listaPromocionCabeceraEntities.size(); j++) {
+                            if (listaPromocionCabeceraEntities.get(j).getCantidadcompra().equals(lead.cantidadcompra)) {
+                                listaPromocionCabeceraEntities.get(j).setCantidadpromocion(lead.getCantidadpromocion());
+                            }
+                        }
+                    } else {
+                        listaPromocionCabeceraEntities.add(lead);
+                    }
+                    transaction.add(R.id.content_menu_view, promocionCabeceraView.UpdatePromotionHead(listaPromocionCabeceraEntities));
+                    //Solicita cargar las ImageView esten desHabilitadas
+
+                    for (int j = 0; j < ArraylistaPromocionCabeceraEntity.size(); j++) {
+                        ArraylistaPromocionCabeceraEntity.get(j).setEstadoitems(false);
+                    }
+
+                    if (!holder.tv_cant_promocion.getText().equals("0")) {
+                        holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                        holder.imv_editar_promocion_detalle.setEnabled(false);
+                    } else {
+                        holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_24);
+                        holder.imv_editar_promocion_detalle.setEnabled(true);
+                    }
+
+                } else {
+                    //Evalua Si la cantidad Pendiente en PromocionCabeceraView es mayor al Valor Caja
+                    //if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja) {
+                    if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_promocion.getText().toString()) - valorCaja >= 0) {
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.SI: ");
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): " + PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.valorCaja: " + valorCaja);
+                        //Inserta sobre la Caja de Texto la Cantidad Actual + 1
+                        cantidadPromocion = String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - 1);
                         holder.tv_cant_promocion.setText(cantidadPromocion);
                         lead.setCantidadpromocion(cantidadPromocion);
-                        //holder.tv_cant_promocion.setText(String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - 1));
-                        //Declara FragmentManager
-                        fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
                         //Declara Transaction
+                        fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+                        //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
-                        transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceDecrementar(String.valueOf(valorCaja)));
-                        //Solicita a Promocion Cabecera View Activas Botons de Menu
-                        transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceActivarVincular(String.valueOf(valorCaja)));
-                        //Envia Lista de Promociones
-                        if(!listaPromocionCabeceraEntities.isEmpty()){
-                            for(int j=0;j<listaPromocionCabeceraEntities.size();j++)
-                            {
-                                if(listaPromocionCabeceraEntities.get(j).getCantidadcompra().equals(lead.cantidadcompra)){
+                        transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceDecrementar(String.valueOf(valorCaja),cantidadPromocion, lead.getDescuento()));
+                        if (!listaPromocionCabeceraEntities.isEmpty()) {
+                            for (int j = 0; j < listaPromocionCabeceraEntities.size(); j++) {
+                                if (listaPromocionCabeceraEntities.get(j).getCantidadcompra().equals(lead.cantidadcompra)) {
                                     listaPromocionCabeceraEntities.get(j).setCantidadpromocion(lead.getCantidadpromocion());
                                 }
+                                if (listaPromocionCabeceraEntities.get(j).getCantidadpromocion().equals("0")) {
+                                    listaPromocionCabeceraEntities.remove(j);
+                                }
                             }
-                        }else
-                        {
+                        } else {
                             listaPromocionCabeceraEntities.add(lead);
                         }
-                        transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceObtenerListaPromocion(listaPromocionCabeceraEntities));
-                        //Solicita cargar las ImageView esten desHabilitadas
 
-                        for(int j=0;j<ArraylistaPromocionCabeceraEntity.size();j++)
-                        {
-                            ArraylistaPromocionCabeceraEntity.get(j).setEstadoitems(false);
-                        }
-
-                        if(!holder.tv_cant_promocion.getText().equals("0"))
-                        {
-                            holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
-                            holder.imv_editar_promocion_detalle.setEnabled(false);
-                        }
-                        else
-                        {
-                            holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_24);
-                            holder.imv_editar_promocion_detalle.setEnabled(true);
-                        }
 
                     } else {
-                        //Evalua Si la cantidad Pendiente en PromocionCabeceraView es mayor al Valor Caja
-                        //if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja) {
-                        if (Integer.parseInt(PromocionCabeceraView.tv_cantidad_promocion.getText().toString()) - valorCaja >= 0) {
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.SI: ");
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.valorCaja: "+valorCaja);
-                            //Inserta sobre la Caja de Texto la Cantidad Actual + 1
-                            cantidadPromocion=String.valueOf(Integer.parseInt(holder.tv_cant_promocion.getText().toString()) - 1);
-                            holder.tv_cant_promocion.setText(cantidadPromocion);
-                            lead.setCantidadpromocion(cantidadPromocion);
-                            //Declara Transaction
-                            fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-                            //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
-                            FragmentTransaction transaction = fragmentManager.beginTransaction();
-                            //Solicita a Promocion Cabecera View Incrementar el Valor en el Resumen
-                            transaction.add(R.id.content_menu_view, promocionCabeceraView.newInstanceDecrementar(String.valueOf(valorCaja)));
-                            if(!listaPromocionCabeceraEntities.isEmpty()){
-                                for(int j=0;j<listaPromocionCabeceraEntities.size();j++)
-                                {
-                                    if(listaPromocionCabeceraEntities.get(j).getCantidadcompra().equals(lead.cantidadcompra)){
-                                        listaPromocionCabeceraEntities.get(j).setCantidadpromocion(lead.getCantidadpromocion());
-                                    }
-                                    if(listaPromocionCabeceraEntities.get(j).getCantidadpromocion().equals("0"))
-                                    {
-                                        listaPromocionCabeceraEntities.remove(j);
-                                    }
-                                }
-                            }else
-                            {
-                                listaPromocionCabeceraEntities.add(lead);
-                            }
-
-
-
-                        } else {
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.SI: ");
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): "+PromocionCabeceraView.tv_cantidad_pendiente.getText());
-                            Log.e("REOS","ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.valorCaja: "+valorCaja);
-                            Toast.makeText(getContext(), "Cantidad No Permitida", Toast.LENGTH_SHORT).show();
-                        }
-
-                        if(!holder.tv_cant_promocion.getText().equals("0"))
-                        {
-                            holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
-                            holder.imv_editar_promocion_detalle.setEnabled(false);
-                        }
-                        else
-                        {
-                            holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_24);
-                            holder.imv_editar_promocion_detalle.setEnabled(true);
-                        }
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.Integer.parseInt(PromocionCabeceraView.tv_cantidad_pendiente.getText().toString()) > valorCaja.SI: ");
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.tv_cantidad_pendiente.getText(): " + PromocionCabeceraView.tv_cantidad_pendiente.getText());
+                        //Log.e("REOS", "ListaPromocionCabeceraAdapter-imv_decrementar.antescantnopermitidad.valorCaja: " + valorCaja);
+                        Toast.makeText(getContext(), "Cantidad No Permitida", Toast.LENGTH_SHORT).show();
                     }
+
+                    if (!holder.tv_cant_promocion.getText().equals("0")) {
+                        holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                        holder.imv_editar_promocion_detalle.setEnabled(false);
+                    } else {
+                        holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_24);
+                        holder.imv_editar_promocion_detalle.setEnabled(true);
+                    }
+                }
                 //}
-            }});
+            }
+        });
 
-        if((!(lead.listaPromocionDetalleEntities.isEmpty()))&&holder.contentpromociondetalle.getChildCount()==0)
-        {
+        if (
+                (!(lead.listaPromocionDetalleEntities.isEmpty())) &&
+                        holder.contentpromociondetalle.getChildCount() == 0) {
 
-            for(int i=0;i<lead.listaPromocionDetalleEntities.size();i++)
-            {
+            for (int i = 0; i < lead.listaPromocionDetalleEntities.size(); i++) {
                 LayoutInflater layoutInflater = LayoutInflater.from(getContext());
                 int id = R.layout.layout_lista_promocion_detalle;
                 RelativeLayout relativeLayout = (RelativeLayout) layoutInflater.inflate(id, null, false);
-                TextView tv_id_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_id_promocion_detalle);
+                //TextView tv_id_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_id_promocion_detalle);
                 TextView tv_producto_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_producto_promocion_detalle);
-                TextView tv_cant_producto_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_cant_producto_promocion_detalle);
-                TextView tv_cant_producto_promocion_umd = (TextView) relativeLayout.findViewById(R.id.tv_cant_producto_promocion_umd);
+                holder.lbl_register_data.setVisibility(View.GONE);
+                //TextView lbl_register_data=(TextView) relativeLayout.findViewById(R.id.lbl_register_data);
+                //lbl_register_data.setVisibility(View.GONE);
+                //TextView tv_cant_producto_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_cant_producto_promocion_detalle);
+                //TextView tv_cant_producto_promocion_umd = (TextView) relativeLayout.findViewById(R.id.tv_cant_producto_promocion_umd);
+                //tv_id_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getPromocion_detalle_id());
+                if (lead.listaPromocionDetalleEntities.get(i).getProducto_id().equals("%")) {
+                    tv_producto_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getCantidad() + " " + lead.listaPromocionDetalleEntities.get(i).getProducto_id() + " " + lead.listaPromocionDetalleEntities.get(i).getProducto());
+                } else {
+                    tv_producto_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getCantidad() + " " + lead.listaPromocionDetalleEntities.get(i).getProducto());
+                }
+
+                //tv_producto_promocion_detalle.setText(lead.getCantidadcompra());
+                //tv_cant_producto_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getCantidad());
+                //tv_cant_producto_promocion_umd.setText(lead.listaPromocionDetalleEntities.get(i).getUmd());
+                holder.contentpromociondetalle.addView(relativeLayout);
+            }
+        } else {
+            holder.contentpromociondetalle.removeAllViews();
+            for (int i = 0; i < lead.listaPromocionDetalleEntities.size(); i++) {
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+                int id = R.layout.layout_lista_promocion_detalle;
+                RelativeLayout relativeLayout = (RelativeLayout) layoutInflater.inflate(id, null, false);
+                //TextView tv_id_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_id_promocion_detalle);
+                TextView tv_producto_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_producto_promocion_detalle);
+                holder.lbl_register_data.setVisibility(View.GONE);
+                //TextView lbl_register_data=(TextView) relativeLayout.findViewById(R.id.lbl_register_data);
+                //lbl_register_data.setVisibility(View.GONE);
+                //TextView tv_cant_producto_promocion_detalle = (TextView) relativeLayout.findViewById(R.id.tv_cant_producto_promocion_detalle);
+                //TextView tv_cant_producto_promocion_umd = (TextView) relativeLayout.findViewById(R.id.tv_cant_producto_promocion_umd);
 
                 //tv_orden_venta_detalle_lista_promocion_id.setText(lead.getOrden_detalle_lista_promocion_cabecera().get(i).getLista_promocion_id());
 
-                tv_id_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getPromocion_detalle_id());
-                tv_producto_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getProducto());
+                // tv_id_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getPromocion_detalle_id());
+                //tv_producto_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getProducto());
+                tv_producto_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getCantidad() + " " + lead.listaPromocionDetalleEntities.get(i).getProducto());
                 //tv_producto_promocion_detalle.setText(lead.getCantidadcompra());
-                tv_cant_producto_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getCantidad());
-                tv_cant_producto_promocion_umd.setText(lead.listaPromocionDetalleEntities.get(i).getUmd());
+                //tv_cant_producto_promocion_detalle.setText(lead.listaPromocionDetalleEntities.get(i).getCantidad());
+                //tv_cant_producto_promocion_umd.setText(lead.listaPromocionDetalleEntities.get(i).getUmd());
                 holder.contentpromociondetalle.addView(relativeLayout);
             }
         }
@@ -440,7 +455,6 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
 
     }
-
 
 
     static class ViewHolder {
@@ -463,6 +477,9 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         ImageView imv_valorizar;
         ViewGroup contentpromociondetalle;
         TextView lbl_valorizacion;
+        TextView lbl_update_promocion_detalle;
+        TextView lbl_register_data;
+        TextView lbl_pack;
     }
 
     public Dialog DialogoObtenerPromocionValorizada(ListaPromocionCabeceraEntity lead) {
@@ -470,47 +487,43 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         dialog.setContentView(R.layout.layout_dialog_lista_promocion_valorizada);
         TextView textTitle = dialog.findViewById(R.id.tv_titulo);
         textTitle.setText("IMPORTANTE!!!");
-        final TextView tv_pack_contado,tv_pack_credito,tv_descuento_pack_contado,tv_descuento_pack_credito
-                ,tv_bono_pack_contado,tv_bono_pack_credito,tv_total_pack_contado,tv_total_pack_credito,
-                tv_precio_referencial_pack_contado,tv_precio_referencial_pack_credito,tv_precio_contado,tv_precio_credito
-                ,tv_precio_referencial_pack_contado_unit,tv_precio_referencial_pack_credito_unit
-                ;
+        final TextView tv_pack_contado, tv_pack_credito, tv_descuento_pack_contado, tv_descuento_pack_credito, tv_bono_pack_contado, tv_bono_pack_credito, tv_total_pack_contado, tv_total_pack_credito,
+                tv_precio_referencial_pack_contado, tv_precio_referencial_pack_credito, tv_precio_contado, tv_precio_credito, tv_precio_referencial_pack_contado_unit, tv_precio_referencial_pack_credito_unit;
 
-        tv_pack_contado= dialog.findViewById(R.id.tv_pack_contado);
-        tv_pack_credito= dialog.findViewById(R.id.tv_pack_credito);
-        tv_descuento_pack_contado= dialog.findViewById(R.id.tv_descuento_pack_contado);
-        tv_descuento_pack_credito= dialog.findViewById(R.id.tv_descuento_pack_credito);
-        tv_bono_pack_contado= dialog.findViewById(R.id.tv_bono_pack_contado);
-        tv_bono_pack_credito= dialog.findViewById(R.id.tv_bono_pack_credito);
-        tv_total_pack_contado= dialog.findViewById(R.id.tv_total_pack_contado);
-        tv_total_pack_credito= dialog.findViewById(R.id.tv_total_pack_credito);
-        tv_precio_referencial_pack_contado= dialog.findViewById(R.id.tv_precio_referencial_pack_contado);
-        tv_precio_referencial_pack_credito= dialog.findViewById(R.id.tv_precio_referencial_pack_credito);
-        tv_precio_contado= dialog.findViewById(R.id.tv_precio_contado);
-        tv_precio_credito= dialog.findViewById(R.id.tv_precio_credito);
-        tv_precio_referencial_pack_contado_unit= dialog.findViewById(R.id.tv_precio_referencial_pack_contado_unit);
-        tv_precio_referencial_pack_credito_unit= dialog.findViewById(R.id.tv_precio_referencial_pack_credito_unit);
-        String contado="",credito="",units="";
-        ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
-        listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
+        tv_pack_contado = dialog.findViewById(R.id.tv_pack_contado);
+        tv_pack_credito = dialog.findViewById(R.id.tv_pack_credito);
+        tv_descuento_pack_contado = dialog.findViewById(R.id.tv_descuento_pack_contado);
+        tv_descuento_pack_credito = dialog.findViewById(R.id.tv_descuento_pack_credito);
+        tv_bono_pack_contado = dialog.findViewById(R.id.tv_bono_pack_contado);
+        tv_bono_pack_credito = dialog.findViewById(R.id.tv_bono_pack_credito);
+        tv_total_pack_contado = dialog.findViewById(R.id.tv_total_pack_contado);
+        tv_total_pack_credito = dialog.findViewById(R.id.tv_total_pack_credito);
+        tv_precio_referencial_pack_contado = dialog.findViewById(R.id.tv_precio_referencial_pack_contado);
+        tv_precio_referencial_pack_credito = dialog.findViewById(R.id.tv_precio_referencial_pack_credito);
+        tv_precio_contado = dialog.findViewById(R.id.tv_precio_contado);
+        tv_precio_credito = dialog.findViewById(R.id.tv_precio_credito);
+        tv_precio_referencial_pack_contado_unit = dialog.findViewById(R.id.tv_precio_referencial_pack_contado_unit);
+        tv_precio_referencial_pack_credito_unit = dialog.findViewById(R.id.tv_precio_referencial_pack_credito_unit);
+        String contado = "", credito = "", units = "";
+        ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities = new ArrayList<>();
+        listaPrecioDetalleSQLiteEntities = listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
                 getContext(),
                 lead.producto_id
         );
-        for(int i=0;i<listaPrecioDetalleSQLiteEntities.size();i++)
-        {
-            contado=listaPrecioDetalleSQLiteEntities.get(i).getContado();
-            credito=listaPrecioDetalleSQLiteEntities.get(i).getCredito();
-            units=listaPrecioDetalleSQLiteEntities.get(i).getUnit();
+        for (int i = 0; i < listaPrecioDetalleSQLiteEntities.size(); i++) {
+            contado = listaPrecioDetalleSQLiteEntities.get(i).getContado();
+            credito = listaPrecioDetalleSQLiteEntities.get(i).getCredito();
+            units = listaPrecioDetalleSQLiteEntities.get(i).getUnit();
         }
 
         tv_precio_contado.setText(Convert.currencyForView(contado));
         tv_precio_credito.setText(Convert.currencyForView(credito));
 
         tv_pack_contado.setText(Convert.currencyForView(formulasController.getTotalPerLine(
-                contado,lead.getCantidadcompra()
+                contado, lead.getCantidadcompra()
         )));
         tv_pack_credito.setText(Convert.currencyForView(formulasController.getTotalPerLine(
-                credito,lead.getCantidadcompra()
+                credito, lead.getCantidadcompra()
         )));
 
         tv_bono_pack_contado.setText(Convert.currencyForView(
@@ -524,28 +537,28 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                         lead.getLista_promocion_id(),
                         lead.getPromocion_id())));
         tv_descuento_pack_contado.setText(Convert.currencyForView(String.valueOf(
-                Double.parseDouble (formulasController.applyDiscountPercentageForLine(
+                Double.parseDouble(formulasController.applyDiscountPercentageForLine(
                         formulasController.getTotalPerLine(
-                                contado,lead.getCantidadcompra()
-                        ),lead.getDescuento()
-                ))*-1)
+                                contado, lead.getCantidadcompra()
+                        ), lead.getDescuento()
+                )) * -1)
         ));
         tv_descuento_pack_credito.setText(Convert.currencyForView(String.valueOf(
-                Double.parseDouble (formulasController.applyDiscountPercentageForLine(
+                Double.parseDouble(formulasController.applyDiscountPercentageForLine(
                         formulasController.getTotalPerLine(
-                                credito,lead.getCantidadcompra()
-                        ),lead.getDescuento()
-                ))*-1)
+                                credito, lead.getCantidadcompra()
+                        ), lead.getDescuento()
+                )) * -1)
         ));
         tv_total_pack_contado.setText(Convert.currencyForView(
                 formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
                         formulasController.getTotalPerLine(
-                                contado,lead.getCantidadcompra()
+                                contado, lead.getCantidadcompra()
                         ),
                         formulasController.applyDiscountPercentageForLine(
                                 formulasController.getTotalPerLine(
-                                        contado,lead.getCantidadcompra()
-                                ),lead.getDescuento()
+                                        contado, lead.getCantidadcompra()
+                                ), lead.getDescuento()
                         ),
                         "0"
                 )
@@ -553,12 +566,12 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         tv_total_pack_credito.setText(Convert.currencyForView(
                 formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
                         formulasController.getTotalPerLine(
-                                credito,lead.getCantidadcompra()
+                                credito, lead.getCantidadcompra()
                         ),
                         formulasController.applyDiscountPercentageForLine(
                                 formulasController.getTotalPerLine(
-                                        credito,lead.getCantidadcompra()
-                                ),lead.getDescuento()
+                                        credito, lead.getCantidadcompra()
+                                ), lead.getDescuento()
                         ),
                         "0"
                 )
@@ -567,12 +580,12 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                 formulasController.getPriceReferencePack(
                         formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
                                 formulasController.getTotalPerLine(
-                                        contado,lead.getCantidadcompra()
+                                        contado, lead.getCantidadcompra()
                                 ),
                                 formulasController.applyDiscountPercentageForLine(
                                         formulasController.getTotalPerLine(
-                                                contado,lead.getCantidadcompra()
-                                        ),lead.getDescuento()
+                                                contado, lead.getCantidadcompra()
+                                        ), lead.getDescuento()
                                 ),
                                 promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
                                         SesionEntity.compania_id,
@@ -586,12 +599,12 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                 formulasController.getPriceReferencePack(
                         formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
                                 formulasController.getTotalPerLine(
-                                        credito,lead.getCantidadcompra()
+                                        credito, lead.getCantidadcompra()
                                 ),
                                 formulasController.applyDiscountPercentageForLine(
                                         formulasController.getTotalPerLine(
-                                                credito,lead.getCantidadcompra()
-                                        ),lead.getDescuento()
+                                                credito, lead.getCantidadcompra()
+                                        ), lead.getDescuento()
                                 ),
                                 promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
                                         SesionEntity.compania_id,
@@ -603,19 +616,17 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         ));
 
 
-
-
         tv_precio_referencial_pack_contado_unit.setText(Convert.currencyForView(
                 formulasController.getPriceReferencePack(
                         formulasController.getPriceReferencePack(
                                 formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
                                         formulasController.getTotalPerLine(
-                                                contado,lead.getCantidadcompra()
+                                                contado, lead.getCantidadcompra()
                                         ),
                                         formulasController.applyDiscountPercentageForLine(
                                                 formulasController.getTotalPerLine(
-                                                        contado,lead.getCantidadcompra()
-                                                ),lead.getDescuento()
+                                                        contado, lead.getCantidadcompra()
+                                                ), lead.getDescuento()
                                         ),
                                         promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
                                                 SesionEntity.compania_id,
@@ -632,12 +643,12 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                         formulasController.getPriceReferencePack(
                                 formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
                                         formulasController.getTotalPerLine(
-                                                credito,lead.getCantidadcompra()
+                                                credito, lead.getCantidadcompra()
                                         ),
                                         formulasController.applyDiscountPercentageForLine(
                                                 formulasController.getTotalPerLine(
-                                                        credito,lead.getCantidadcompra()
-                                                ),lead.getDescuento()
+                                                        credito, lead.getCantidadcompra()
+                                                ), lead.getDescuento()
                                         ),
                                         promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
                                                 SesionEntity.compania_id,
@@ -664,7 +675,42 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
             dialog.dismiss();
 
         });
-        return  dialog;
+
+        return dialog;
     }
 
+    public Dialog DialogValidUpdateDetailPromotion(ListaPromocionCabeceraEntity lead) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_alert_dialog_orden_venta_detalle);
+        TextView textTitle = dialog.findViewById(R.id.text_orden_venta_detalle);
+        textTitle.setText("ADVERTENCIA");
+        final TextView textMsj = dialog.findViewById(R.id.textViewMsj_orden_venta_detalle);
+        textMsj.setText("Seguro de modificar el Pack de Promocion?");
+        ImageView image = (ImageView) dialog.findViewById(R.id.image_orden_venta_detalle);
+
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK_orden_venta_detalle);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel_orden_venta_detalle);
+        dialogButton.setText("ACEPTAR");
+        dialogButtonCancel.setText("CANCELAR");
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialogButton.setOnClickListener(v -> {
+            PromocionCabeceraView promocionCabeceraView = new PromocionCabeceraView();
+            fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.content_menu_view, promocionCabeceraView.newEditarDetallePromocion(lead));
+            dialog.dismiss();
+        });
+
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        return dialog;
+    }
 }
+

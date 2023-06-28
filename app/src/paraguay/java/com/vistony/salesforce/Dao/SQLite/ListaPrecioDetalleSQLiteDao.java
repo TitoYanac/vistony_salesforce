@@ -556,4 +556,94 @@ public class ListaPrecioDetalleSQLiteDao {
         return ListaPrecioDetalleSQLiteEntity;
     }
 
+    public ArrayList<ListaConsultaStockEntity> getQueryStockPromotion (Context context){
+
+        listaConsultaStockEntity = new ArrayList<ListaConsultaStockEntity>();
+        ListaConsultaStockEntity consultaStockEntity;
+        PromocionCabeceraSQLiteDao promocionCabeceraSQLiteDao=new PromocionCabeceraSQLiteDao(context);
+        Cursor fila=null;
+
+        try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            String query="SELECT A.producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                    "IFNULL(stock_general,0) stock_general,contado,credito,gal,B.producto_id " +
+                    " FROM listapreciodetalle A " +
+                    " LEFT JOIN (SELECT producto_id FROM promocioncabecera GROUP BY producto_id ) B ON " +
+                    " A.producto_id=B.producto_id " +
+                    " WHERE B.producto_id is not NULL " +
+                    "GROUP BY A.producto_id,producto,umd,stock_almacen,stock_general,contado,credito,gal,B.producto_id";
+
+            fila = sqlite.rawQuery(query,null);
+
+            while (fila.moveToNext()) {
+                consultaStockEntity = new ListaConsultaStockEntity();
+                consultaStockEntity.setProducto_id (fila.getString(0));
+                consultaStockEntity.setProducto(fila.getString(1));
+                consultaStockEntity.setUmd(fila.getString(2));
+                consultaStockEntity.setStock(fila.getString(3));
+                consultaStockEntity.setPreciocontadoigv(fila.getString(5));
+                consultaStockEntity.setPreciocreditoigv(fila.getString(6));
+                consultaStockEntity.setGal(fila.getString(7));
+                consultaStockEntity.setPromotionenable(promocionCabeceraSQLiteDao.ObtenerEstadoPromocionConsultaStock(
+                        SesionEntity.compania_id,
+                        SesionEntity.fuerzatrabajo_id,
+                        SesionEntity.usuario_id,
+                        consultaStockEntity.getProducto_id(),
+                        consultaStockEntity.getUmd()
+                ));
+                listaConsultaStockEntity.add(consultaStockEntity);
+            }
+            fila.close();
+
+        }catch (Exception e){
+            Log.e("ErrorSqlite","=>"+e.getMessage());
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
+        //Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.arraylistaProductoEntity: "+arraylistaProductoEntity.size());
+        return listaConsultaStockEntity;
+    }
+
+    public ArrayList<ListaPrecioDetalleSQLiteEntity> ObtenerListaPrecioPorProducto (Context context, String producto_id){
+
+        ListaPrecioDetalleSQLiteEntity = new ArrayList<ListaPrecioDetalleSQLiteEntity>();
+        ListaPrecioDetalleSQLiteEntity listaPrecioDetalleSQLiteEntity=new ListaPrecioDetalleSQLiteEntity();
+        Cursor fila=null;
+
+        try {
+            SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
+            String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                    "IFNULL(stock_general,0) stock_general,contado,credito,gal,units " +
+                    " FROM listapreciodetalle " +
+                    "where producto_id='"+producto_id+"' "+
+                    "GROUP BY producto_id,producto,umd,stock_almacen,stock_general,contado,credito,gal,units";
+
+            fila = sqlite.rawQuery(query,null);
+
+            while (fila.moveToNext()) {
+                listaPrecioDetalleSQLiteEntity = new ListaPrecioDetalleSQLiteEntity();
+                listaPrecioDetalleSQLiteEntity.setProducto_id (fila.getString(0));
+                listaPrecioDetalleSQLiteEntity.setProducto(fila.getString(1));
+                listaPrecioDetalleSQLiteEntity.setUmd(fila.getString(2));
+                listaPrecioDetalleSQLiteEntity.setStock_almacen(fila.getString(3));
+                listaPrecioDetalleSQLiteEntity.setStock_general(fila.getString(4));
+                listaPrecioDetalleSQLiteEntity.setContado(fila.getString(5));
+                listaPrecioDetalleSQLiteEntity.setCredito(fila.getString(6));
+                listaPrecioDetalleSQLiteEntity.setGal(fila.getString(7));
+                listaPrecioDetalleSQLiteEntity.setUnit(fila.getString(8));
+                ListaPrecioDetalleSQLiteEntity.add(listaPrecioDetalleSQLiteEntity);
+            }
+
+
+        }catch (Exception e){
+            Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.e"+e.getMessage());
+            e.printStackTrace();
+        }finally {
+            DataBaseManager.getInstance().closeDatabase();
+        }
+        Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ListaPrecioDetalleSQLiteEntity.SIZE(): "+ListaPrecioDetalleSQLiteEntity.size());
+        return ListaPrecioDetalleSQLiteEntity;
+    }
+
 }

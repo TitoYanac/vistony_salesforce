@@ -65,7 +65,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                            ArrayList<OrdenVentaDetallePromocionSQLiteEntity> ListaOrdenVentaDetalle
 
     ) {
-        String cliente_id="",nombrecliente="",direccion="",fechaemision="",terminopago="",subtotal=""
+        String cliente_id="",nombrecliente="",direccion="",fecharegistro="",terminopago="",subtotal=""
                 ,igv="",descuento="",total="",ordenventa_id="",ordenventa_erp_id="",vendedor=""
                 ,moneda="",flete="";
 
@@ -76,7 +76,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cliente_id=ListaOrdenVentaCabecera.get(i).getRucdni();
             nombrecliente=ListaOrdenVentaCabecera.get(i).getCliente_text();
             terminopago=ListaOrdenVentaCabecera.get(i).getTerminopago_text();
-            fechaemision=ListaOrdenVentaCabecera.get(i).getFecharegistro();
+            fecharegistro=ListaOrdenVentaCabecera.get(i).getFecharegistro();
             subtotal=ListaOrdenVentaCabecera.get(i).getMontosubtotal();
             igv=ListaOrdenVentaCabecera.get(i).getMontoimpuesto();
             descuento=ListaOrdenVentaCabecera.get(i).getMontodescuento();
@@ -84,6 +84,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             moneda=ListaOrdenVentaCabecera.get(i).getMoneda_id();
             flete=ListaOrdenVentaCabecera.get(i).getU_VIS_Flete();
         }
+
         // Creamos el documento.
         Rectangle pagina = new Rectangle(
                 36, 36,
@@ -231,7 +232,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
-            cellgneral = new PdfPCell(new Phrase(fechaemision,font3 ));
+            cellgneral = new PdfPCell(new Phrase(fecharegistro,font3 ));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
@@ -336,7 +337,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblLineas.addCell(cellLineasDetalle);*/
-                cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getPorcentajedescuento(),font3));
+                cellLineasDetalle = new PdfPCell(new Phrase(Convert.numberForViewDecimals(ListaOrdenVentaDetalle.get(l).getPorcentajedescuento(),2),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tblLineas.addCell(cellLineasDetalle);
@@ -367,7 +368,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
 
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             String encData="",Data="";
-            Data=ordenventa_id+"&&&"+fechaemision+"&&&"+nombrecliente+"&&&"+total+"&&&"+SesionEntity.fuerzatrabajo_id+" "+SesionEntity.nombrefuerzadetrabajo;
+            Data=ordenventa_id+"&&&"+fecharegistro+"&&&"+nombrecliente+"&&&"+total+"&&&"+SesionEntity.fuerzatrabajo_id+" "+SesionEntity.nombrefuerzadetrabajo;
             try {
                 Log.e("REOS","DocumentoCobranzaPDF-generarPdf-EntroalTryCifrado");
                 encData= CifradoController.encrypt("Vistony2019*".getBytes("UTF-16LE"), Data.getBytes("UTF-16LE"));

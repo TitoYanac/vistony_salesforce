@@ -23,6 +23,7 @@ import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Controller.Utilitario.ResumenDiarioPDF;
 import com.vistony.salesforce.Dao.Adapters.ListaConsultaStockDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaConsultaStockEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -192,10 +193,10 @@ public class HistoricPromotionView extends Fragment  implements SearchView.OnQue
             case R.id.generate_pdf:
                 pd = new ProgressDialog(getActivity());
                 pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait)    , getActivity().getResources().getString(R.string.querying_dates), true, false);
-                PromocionCabeceraSQLiteDao promocionCabeceraSQLiteDao=new PromocionCabeceraSQLiteDao(getContext());
+                ListaPromocionSQLiteDao listaPromocionSQLiteDao=new ListaPromocionSQLiteDao(getContext());
 
                 HistoricPromotionPDF historicPromotionPDF=new HistoricPromotionPDF();
-                historicPromotionPDF.generarPdf(getContext(),promocionCabeceraSQLiteDao.getListPromotionVigent());
+                historicPromotionPDF.generarPdf(getContext(),listaPromocionSQLiteDao.getListPromotionVigents());
                 pd.dismiss();
                 return true;
             default:

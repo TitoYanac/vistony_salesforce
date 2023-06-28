@@ -610,26 +610,31 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
 
             //holder.your_state_progress_bar_id=null;
             holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
-            //String[] descriptionData = {"Orden\nVenta","Pend.\nRevision", "Aprobacion\nOrden", "Factura", "Entrega\nMercaderia"};
+            String[] descriptionData = {"Orden\nVenta","Pend.\nRevision", "Aprobacion\nOrden", "Factura", "Entrega\nMercaderia"};
             //String[] descriptionData=null;
             Log.e("REOS", "ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:" + statusDispatch);
-            String[] cadena= lead.getComentarioaprobacion().split("-");
+            /*String[] cadena= lead.getComentarioaprobacion().split("-");
             String object= cadena[0].trim();
             String status= cadena[1].trim();
             holder.tv_status_aprob.setText(status);
             Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.object:"+object.toString());
             Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.status:"+status.toString());
             holder.imv_historic_pend_rev.setVisibility(View.GONE);
-            holder.imv_historic_order_aprob.setVisibility(View.GONE);
-            Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
-            Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
+            holder.imv_historic_order_aprob.setVisibility(View.GONE);*/
+            //Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
+            //Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
+            holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+            holder.imv_preview.setVisibility(View.GONE);
+            holder.imv_historic_orders.setVisibility(View.GONE);
+            Convert.setMarginsView(holder.imv_historic_pend_rev, 80, 450, 200, 145);
+            Convert.setMarginsView(holder.imv_historic_order_aprob, 330, 450, 200, 145);
             Convert.setMarginsView(holder.imv_historic_invoices, 580, 450, 200, 145);
             Convert.setMarginsView(holder.imv_historic_delivery, 830, 450, 0, 145);
 
 
 
-
-            if ((object.equals("Borrador Orden de Venta")||object.equals("Orden de Venta"))&&lead.getInvoices()==null)
+            ///BORRADOR - COTIZACION
+            /*if ((object.equals("Borrador Orden de Venta")||object.equals("Orden de Venta"))&&lead.getInvoices()==null)
             {
                 //holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.THREE);
                 if(object.equals("Borrador Orden de Venta"))
@@ -647,7 +652,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_invoices, 580, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_delivery, 830, 450, 0, 145);
-                */
+
 
 
                 holder.your_state_progress_bar_id.setAllStatesCompleted(false);
@@ -685,7 +690,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_invoices, 580, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_delivery, 830, 450, 0, 145);
-                */
+
                 holder.your_state_progress_bar_id.setAllStatesCompleted(false);
                 holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
                 holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
@@ -762,8 +767,9 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
 
 
                 Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Facturado y Proceso Despacho y Entregado");
-            }
-            /*Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:"+statusDispatch);
+            }*/
+            //////////////////////////////////////////////
+            Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:"+statusDispatch);
             if(lead.getInvoices()==null&&lead.getComentarioaprobacion().equals("Cancelado"))
             {
                 holder.your_state_progress_bar_id.setAllStatesCompleted(false);
@@ -897,20 +903,18 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 holder.tv_date_orders.setText(Induvis.getDateShort(date));
                 for(int i=0;i<lead.getInvoices().size();i++)
                 {
-
                     holder.tv_date_delivery.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechadespacho()));
                     holder.tv_date_invoice.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechaEmision()));
                 }
 
 
                 Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Facturado y Proceso Despacho y Entregado");
-            }*/
+            }
         }
 
 
 
-        //String[] descriptionData = {"Orden\nVenta", "Aprobacion\nOrden", "Facturacion", "Entrega\nMercaderia"};
-        //holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+
 
 
 

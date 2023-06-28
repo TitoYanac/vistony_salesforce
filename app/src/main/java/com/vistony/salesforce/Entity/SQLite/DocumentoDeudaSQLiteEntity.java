@@ -15,8 +15,13 @@ public class DocumentoDeudaSQLiteEntity {
     public String saldo;
     public String saldo_sin_procesar;
     public String pymntgroup;
+    public String additionaldiscount;
 
-    public DocumentoDeudaSQLiteEntity(String documento_id,String documento_entry, String compania_id, String cliente_id, String domembarque_id, String nrofactura, String fuerzatrabajo_id, String fechaemision, String fechavencimiento, String moneda, String importefactura, String saldo, String saldo_sin_procesar,String pymntgroup) {
+    public DocumentoDeudaSQLiteEntity(
+            String documento_id,String documento_entry, String compania_id, String cliente_id,
+            String domembarque_id, String nrofactura, String fuerzatrabajo_id, String fechaemision,
+            String fechavencimiento, String moneda, String importefactura, String saldo,
+            String saldo_sin_procesar,String pymntgroup,String additionaldiscount) {
         this.documento_id = documento_id;
         this.documento_entry = documento_entry;
         this.compania_id = compania_id;
@@ -31,11 +36,20 @@ public class DocumentoDeudaSQLiteEntity {
         this.saldo = saldo;
         this.saldo_sin_procesar = saldo_sin_procesar;
         this.pymntgroup = pymntgroup;
+        this.additionaldiscount = additionaldiscount;
 
     }
 
     public DocumentoDeudaSQLiteEntity()
     {
+    }
+
+    public String getAdditionaldiscount() {
+        return additionaldiscount;
+    }
+
+    public void setAdditionaldiscount(String additionaldiscount) {
+        this.additionaldiscount = additionaldiscount;
     }
 
     public String getPymntgroup() {

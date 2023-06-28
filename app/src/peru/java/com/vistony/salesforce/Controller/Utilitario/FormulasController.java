@@ -725,7 +725,7 @@ public class FormulasController {
         documentHeader.setU_VIS_CompleteOV(ovCabecera.getU_VIS_CompleteOV());
         documentHeader.setU_VIS_TipTransGrat(ovCabecera.getU_VIS_TipTransGrat());
 
-        documentHeader.setDraft("Y");
+        //documentHeader.setDraft("Y");
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
@@ -861,6 +861,7 @@ public class FormulasController {
         catch (Exception ex)
         {
             System.out.println(ex);
+            Log.e("REOS","FormulasController-Convertirfechahoraafechanumerica-ex:"+ex);
         }
         return fechacadena;
     }
@@ -1145,6 +1146,10 @@ public class FormulasController {
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
                         ,listaClienteCabeceraEntities.get(i).getAddresscode()
                         ,listaClienteCabeceraEntities.get(i).getStatuscount()
+                        ,listaClienteCabeceraEntities.get(i).getAmountQuotation()
+                        ,listaClienteCabeceraEntities.get(i).getChk_quotation()
+                        ,listaClienteCabeceraEntities.get(i).getTypeVisit()
+                        ,listaClienteCabeceraEntities.get(i).getCustomerwhitelist()
                 );
             }
 
@@ -1204,6 +1209,15 @@ public class FormulasController {
                         monto
                 );
                 break;
+            case "12":
+                rutaVendedorSQLiteDao.UpdateQuotationRutaVendedor(
+                        visita.getCardCode(),
+                        visita.getAddress(),
+                        ObjUsuario.compania_id,
+                        String.valueOf(FormatFecha.format(date)),
+                        monto
+                );
+                break;
             default:
                 rutaVendedorSQLiteDao.ActualizaVisitaRutaVendedor(
                         visita.getCardCode(),
@@ -1217,9 +1231,13 @@ public class FormulasController {
         /*********************************/
         /********************************* REENVIO DE VISITAS *********************************/
         /*********************************/
-        visitaRepository.visitResend(context).observe((LifecycleOwner) context, data -> {
-            Log.e("Jepicame", "=>" + data);
-        });
+        if(SesionEntity.sendvisits.equals("Y"))
+        {
+            visitaRepository.visitResend(context).observe((LifecycleOwner) context, data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+        }
+
 
 
         /*********************************/

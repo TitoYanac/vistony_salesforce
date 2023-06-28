@@ -6,9 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.PromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
@@ -123,7 +126,8 @@ public class PromocionCabeceraSQLiteDao {
             String cantidad,
             String contado,
             String terminopago_id,
-            String cardcode
+            String cardcode,
+            String currency
 
     )
     {
@@ -446,5 +450,139 @@ public class PromocionCabeceraSQLiteDao {
         fila.close();
         bd.close();
         return estado;
+    }
+
+    public ArrayList<ListaPromocionCabeceraEntity> getListPromotionVigent (
+    )
+    {
+        ArrayList<ListaPromocionCabeceraEntity>  listaPromocionCabeceraSQLiteEntity = new ArrayList<>();
+        ListaPromocionCabeceraEntity listaPromocionCabeceraEntity;
+        ArrayList<PromocionDetalleSQLiteEntity> listaPromocionDetalleEntities=new ArrayList<>();
+        PromocionDetalleSQLiteDao promocionDetalleSQLiteDao=new PromocionDetalleSQLiteDao(context);
+        FormulasController formulasController=new FormulasController(context);
+        abrir();
+        Cursor fila = bd.rawQuery(
+                " Select *,    (SELECT COUNT(*) FROM promocioncabecera AS X " +
+                        "    LEFT JOIN listapromocion AS Y ON X.lista_promocion_id = Y.lista_promocion_id " +
+                        "    WHERE Y.lista_promocion_id = B.lista_promocion_id and  X.producto_id = A.producto_id " +
+                        "    AND (X.producto_id < A.producto_id OR (X.producto_id = A.producto_id AND X.cantidad < CAST(A.cantidad AS INTEGER)))) + 1 AS numerador, " +
+                        " (SELECT COUNT(*) FROM promocioncabecera AS X " +
+                        "   LEFT JOIN listapromocion AS Y ON X.lista_promocion_id = Y.lista_promocion_id " +
+                        "   WHERE Y.lista_promocion_id = B.lista_promocion_id and  X.producto_id = A.producto_id " +
+                        "  )  AS numerador2   " +
+                        "from promocioncabecera A "+
+                        " LEFT JOIN listapromocion B ON" +
+                        " A.lista_promocion_id=B.lista_promocion_id" +
+                        " order by B.lista_promocion_id,A.producto_id,CAST(cantidad AS INTEGER) "
+                ,null);
+
+        while (fila.moveToNext())
+        {
+            listaPromocionCabeceraEntity= new ListaPromocionCabeceraEntity();
+            listaPromocionCabeceraEntity.setLista_promocion_id(fila.getString(1));
+            listaPromocionCabeceraEntity.setPromocion_id(fila.getString(2));
+            listaPromocionCabeceraEntity.setProducto_id(fila.getString(3));
+            listaPromocionCabeceraEntity.setProducto(fila.getString(4));
+            listaPromocionCabeceraEntity.setUmd(fila.getString(5));
+            listaPromocionCabeceraEntity.setCantidadcompra(fila.getString(6));
+            Log.e("REOS","PromocionCabeceraSQLiteDao-ObtenerPromocionCabeceraConsultaStock-listaPromocionCabeceraEntity.getCantidadCompra: "+listaPromocionCabeceraEntity.getCantidadcompra());
+
+            listaPromocionCabeceraEntity.setDescuento(fila.getString(10));
+            listaPromocionCabeceraEntity.setLista_promocion(fila.getString(13));
+            listaPromocionCabeceraEntity.setCount(fila.getString(15));
+            listaPromocionCabeceraEntity.setCountfinish(fila.getString(16));
+            if(Integer.parseInt(listaPromocionCabeceraEntity.getDescuento())>0 ){
+                listaPromocionDetalleEntities=promocionDetalleSQLiteDao.ObtenerPromocionDetalleConsultaStock(
+                        SesionEntity.compania_id,
+                        listaPromocionCabeceraEntity.getLista_promocion_id(),
+                        listaPromocionCabeceraEntity.getPromocion_id()
+                );
+
+                PromocionDetalleSQLiteEntity promocionDetalleSQLiteEntity= new PromocionDetalleSQLiteEntity();
+                promocionDetalleSQLiteEntity.setCompania_id(SesionEntity.compania_id);
+                promocionDetalleSQLiteEntity.setLista_promocion_id(listaPromocionCabeceraEntity.getLista_promocion_id());
+                promocionDetalleSQLiteEntity.setPromocion_detalle_id(String.valueOf((listaPromocionDetalleEntities.size())+1));
+                promocionDetalleSQLiteEntity.setProducto_id("%");
+                promocionDetalleSQLiteEntity.setProducto("DESCUENTO");
+                promocionDetalleSQLiteEntity.setUmd("%");
+                promocionDetalleSQLiteEntity.setCantidad(listaPromocionCabeceraEntity.getDescuento());
+                promocionDetalleSQLiteEntity.setFuerzatrabajo_id(SesionEntity.fuerzatrabajo_id);
+                promocionDetalleSQLiteEntity.setUsuario_id(SesionEntity.usuario_id);
+                promocionDetalleSQLiteEntity.setPreciobase("0");
+                promocionDetalleSQLiteEntity.setChkdescuento("0");
+                promocionDetalleSQLiteEntity.setDescuento("0");
+
+                listaPromocionDetalleEntities.add(promocionDetalleSQLiteEntity);
+
+            }else
+            {
+                listaPromocionDetalleEntities=promocionDetalleSQLiteDao.ObtenerPromocionDetalleConsultaStock(
+                        SesionEntity.compania_id,
+                        listaPromocionCabeceraEntity.getLista_promocion_id(),
+                        listaPromocionCabeceraEntity.getPromocion_id()
+                );
+            }
+            ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
+            ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(context);
+            String contado="",credito="",units="";
+            listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
+                    context,
+                    fila.getString(3)
+            );
+            for(int i=0;i<listaPrecioDetalleSQLiteEntities.size();i++)
+            {
+                contado=listaPrecioDetalleSQLiteEntities.get(i).getContado();
+                credito=listaPrecioDetalleSQLiteEntities.get(i).getCredito();
+                units=listaPrecioDetalleSQLiteEntities.get(i).getUnit();
+            }
+
+            listaPromocionCabeceraEntity.setPreciobase("["+ Convert.currencyForView(contado)+"/"+Convert.currencyForView(credito)+"]");
+
+            listaPromocionCabeceraEntity.setPricepromotionalcash(
+                    formulasController.getPriceReferencePack(
+                            formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                                    formulasController.getTotalPerLine(
+                                            contado,fila.getString(6)
+                                    ),
+                                    formulasController.applyDiscountPercentageForLine(
+                                            formulasController.getTotalPerLine(
+                                                    contado,fila.getString(6)
+                                            ),fila.getString(10)
+                                    ),
+                                    promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumContado(
+                                            SesionEntity.compania_id,
+                                            fila.getString(1),
+                                            fila.getString(2))
+                            ),
+                            fila.getString(6)
+                    )
+            );
+            listaPromocionCabeceraEntity.setPricepromotionalcredit(
+                    formulasController.getPriceReferencePack(
+                            formulasController.CalcularMontoTotalPromocionconDescuentoyBono(
+                                    formulasController.getTotalPerLine(
+                                            credito,fila.getString(6)
+                                    ),
+                                    formulasController.applyDiscountPercentageForLine(
+                                            formulasController.getTotalPerLine(
+                                                    credito,fila.getString(6)
+                                            ),fila.getString(10)
+                                    ),
+                                    promocionDetalleSQLiteDao.ObtenerPromocionDetalleSumCredito(
+                                            SesionEntity.compania_id,
+                                            fila.getString(1),
+                                            fila.getString(2))
+                            ),
+                            fila.getString(6)
+                    )
+            );
+
+
+            Log.e("REOS","PromocionCabeceraSQLiteDao: "+listaPromocionDetalleEntities.size());
+            listaPromocionCabeceraEntity.setListaPromocionDetalleEntities(listaPromocionDetalleEntities);
+            listaPromocionCabeceraSQLiteEntity.add(listaPromocionCabeceraEntity);
+        }
+        bd.close();
+        return listaPromocionCabeceraSQLiteEntity;
     }
 }

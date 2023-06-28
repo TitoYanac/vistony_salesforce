@@ -113,7 +113,7 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateFormatsap = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
@@ -235,12 +235,12 @@ public class HistoricoDepositoView extends Fragment implements View.OnClickListe
 
         if(calendario.equals("fechainidep"))
         {
-            tv_fechainidep.setText(year + "-" + mes + "-" + dia);
+            tv_fechainidep.setText(dia + "/" + mes + "/" + year);
             fechainisap=year+mes+dia;
         }
         else if(calendario.equals("fechafindep"))
         {
-            tv_fechafindep.setText(year + "-" + mes + "-" + dia);
+            tv_fechafindep.setText(dia + "/" + mes + "/" + year);
             fechafinsap=year+mes+dia;
         }
 

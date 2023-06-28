@@ -1,6 +1,7 @@
 package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
@@ -13,7 +14,7 @@ import java.util.List;
 public class ListaPromocionCabeceraDao {
     Context context;
     public static ListaPromocionCabeceraDao repository = new ListaPromocionCabeceraDao();
-    public HashMap<String, ListaPromocionCabeceraEntity> leads = new HashMap<>();
+    public HashMap<Integer, ListaPromocionCabeceraEntity> leads = new HashMap<>();
     public ClienteDetalleView clienteDetalleView;
     public DocumentoDeudaSQLiteEntity documentoDeudaSQLiteEntity;
 
@@ -30,7 +31,9 @@ public class ListaPromocionCabeceraDao {
 
     private void saveLead(ListaPromocionCabeceraEntity lead) {
         leads.put(
-                lead.getPromocion_id()
+                //Integer.parseInt(lead.getCount())
+                Integer.parseInt(lead.getCount())
+                //lead.getPromocion_id()
                 //lead.getCantidadcompra()
                 , lead);
     }
@@ -43,6 +46,9 @@ public class ListaPromocionCabeceraDao {
         try {
             for( int i=0;i<Lista.size();i++)
             {
+                Log.e("REOS","ListaPromocionCabeceraDao.getLeads.Lista.get(i).getCantidadcompra(): "+Lista.get(i).getCantidadcompra());
+                Log.e("REOS","ListaPromocionCabeceraDao.getLeads.Lista.get(i).getCantidadpromocion(): "+Lista.get(i).getCantidadpromocion());
+                Log.e("REOS","ListaPromocionCabeceraDao.getLeads.Lista.get(i).getCount(): "+Lista.get(i).getCount());
                 saveLead(new ListaPromocionCabeceraEntity(
                         Lista.get(i).getLista_promocion_id()
                         ,Lista.get(i).getPromocion_id()
@@ -59,6 +65,9 @@ public class ListaPromocionCabeceraDao {
                         ,Lista.get(i).getTerminopago_id()
                         ,Lista.get(i).getUbigeo_id()
                         ,Lista.get(i).getCurrency_id()
+                        ,Lista.get(i).getPricepromotionalcash()
+                        ,Lista.get(i).getPricepromotionalcredit()
+                        ,Lista.get(i).getCount()
                 ));
             }
         }catch (Exception e)

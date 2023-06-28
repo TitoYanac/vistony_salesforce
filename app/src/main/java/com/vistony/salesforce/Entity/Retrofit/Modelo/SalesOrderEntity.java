@@ -19,6 +19,39 @@ public class SalesOrderEntity {
     @SerializedName("ErrorCode")
     private String errorCode;
 
+    @SerializedName("CardCode")
+    private String cardCode;
+
+    @SerializedName("DocDate")
+    private String docDate;
+
+    @SerializedName("SlpCode")
+    private String slpCode;
+
+    public String getCardCode() {
+        return cardCode;
+    }
+
+    public void setCardCode(String cardCode) {
+        this.cardCode = cardCode;
+    }
+
+    public String getDocDate() {
+        return docDate;
+    }
+
+    public void setDocDate(String docDate) {
+        this.docDate = docDate;
+    }
+
+    public String getSlpCode() {
+        return slpCode;
+    }
+
+    public void setSlpCode(String slpCode) {
+        this.slpCode = slpCode;
+    }
+
     public String getErrorCode() {
         return errorCode;
     }

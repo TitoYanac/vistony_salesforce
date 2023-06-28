@@ -1,9 +1,14 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.vistony.salesforce.kotlin.compose.components
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.*
@@ -18,11 +23,13 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,20 +41,27 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.vistony.salesforce.Controller.Adapters.StatusDispatchDialog
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.R
-import com.vistony.salesforce.View.MenuAccionView
 import com.vistony.salesforce.kotlin.compose.DialogMain
 import com.vistony.salesforce.kotlin.compose.theme.BlueVistony
 import com.vistony.salesforce.kotlin.data.*
 import com.vistony.salesforce.kotlin.utilities.Geolocation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ScreenDispatch(
     listDispatch: List<DetailDispatchSheet>,
@@ -55,22 +69,83 @@ fun ScreenDispatch(
     lifecycleOwner:  LifecycleOwner
     )
 {
-    LazyColumn{
-        items(listDispatch){ objDistpatch ->
-            CardDispatch(objDistpatch,context,lifecycleOwner)
+    var modal = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden, confirmStateChange = {false})
+    val scope = rememberCoroutineScope()
+
+    var currentBottomSheet: BottomSheetScreen? by remember { mutableStateOf(null) }
+    val closeSheet: () -> Unit = { scope.launch { modal.hide() }}
+
+
+    ModalBottomSheetLayout(
+        sheetState = modal,
+        sheetContent = {
+            Box(modifier = Modifier.defaultMinSize(minHeight = 1.dp)) {
+                currentBottomSheet?.let { currentSheet ->
+                    SheetLayout(currentSheet, closeSheet,showIconClose=true)
+                }
+            }
+        }
+    ) {
+        LazyColumn{
+            items(listDispatch){ objDistpatch ->
+                Log.e(
+                    "REOS",
+                    "Composables-ScreenDispatch-objDistpatch.cliente_id:"+objDistpatch.cliente_id.toString()
+                )
+                val openSheet: (BottomSheetScreen) -> Unit = {
+                    scope.launch {
+                        currentBottomSheet = it
+                        modal.animateTo(ModalBottomSheetValue.Expanded)
+                    }
+                }
+                val appContext = LocalContext.current
+                val lifecycleOwner = LocalContext.current as LifecycleOwner
+                val invoicesRepository:InvoicesRepository= InvoicesRepository()
+
+                val invoiceViewModel: InvoicesViewModel= viewModel(
+                    factory = InvoicesViewModel.InvoiceModelFactory(
+                        SesionEntity.imei,
+                        context,
+                        lifecycleOwner,
+                        objDistpatch.cliente_id,
+                        invoicesRepository
+                    )
+                )
+
+                CardDispatch(
+                    objDistpatch,context,lifecycleOwner,
+                    formProcessCollection =   {
+                        //bottomSheetVisible = true
+                        invoiceViewModel.getInvoices(objDistpatch.cliente_id)
+                        openSheet(
+                            BottomSheetScreen.collectionDetailBottom(
+                                objDistpatch.nombrecliente.toString()
+                                /*SesionEntity.imei,
+                                appContext,
+                                lifecycleOwner,
+                                invoicesRepository*/
+                                ,invoiceViewModel
+                            )
+                        )
+                    }
+                )
+            }
         }
     }
 }
 
-
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun CardDispatch(
     list: DetailDispatchSheet,
     context: Context ,
-    lifecycleOwner:  LifecycleOwner
-
+    lifecycleOwner:  LifecycleOwner,
+    //formProcessCollection:() -> Unit
+    formProcessCollection : (cliente_id: String) -> Unit
 ){
+
     Card(
         elevation = 10.dp,
         //onClick = { },
@@ -150,7 +225,7 @@ fun CardDispatch(
                     }
                     Box(modifier = Modifier.weight(3f)) {
                         Text(
-                            text = list.nombrecliente.toString(),
+                            text =list.nombrecliente.toString(),
                             //color = MaterialTheme.colors.secondaryVariant,
                             color = Color.Black,
                             style = MaterialTheme.typography.subtitle2,
@@ -226,7 +301,6 @@ fun CardDispatch(
                     list.statusupdatedispatch,
                     list.statuscollection,
                     list.statusvisitend
-
                 )
 
                 val numberStatus = arrayOf(
@@ -235,48 +309,15 @@ fun CardDispatch(
                     "3",
                     "4"
                 )
-
-                Log.e(
-                    "REOS",
-                    "Composables-CardDispatch-list.comentariodespacho" + list.comentariodespacho
-                )
-                Log.e(
-                    "REOS",
-                    "Composables-CardDispatch-list.item_id" + list.item_id
-                )
-                Log.e(
-                    "REOS",
-                    "Composables-CardDispatch-statuscollection." + list.statuscollection
-                )
-                Log.e(
-                    "REOS",
-                    "Composables-CardDispatch-statusvisitstart." + list.statusvisitstart
-                )
-                Log.e(
-                    "REOS",
-                    "Composables-CardDispatch-statusvisitend." + list.statusvisitend
-                )
-                Log.e(
-                    "REOS",
-                    "Composables-CardDispatch-statusupdatedispatch." + list.statusupdatedispatch
-                )
-
-                /*PruebaDialog(
-                    title = "Turn on Location Service",
-                    desc = "Explore the world without getting lost and keep the track of your location.",
-                    onDismiss = {
-                        //infoDialog.value = false
-                        false
-                    },
-                    true
-                )*/
                 val openDialog = remember { mutableStateOf(false) }
                 val openDialogend = remember { mutableStateOf(false) }
+
                 HorizontalStepView(steps = steps, stepsStatus = stepsStatus, numberStatus = numberStatus
                     ,context,
                     InfoDialog = { openDialog.value = true },
                     InfoDialogEnd = { openDialogend.value = true },
                     list
+                , formProcessCollection = { clienteId -> formProcessCollection(clienteId) }
                 )
                 if (openDialog.value)
                 {
@@ -306,46 +347,6 @@ fun CardDispatch(
                         lifecycleOwner
                     )
                 }
-
-
-                /*if (openDialog.value) {
-                    showDialog(
-                        openDialog = openDialog.value,
-                        onDialogDismiss = { openDialog.value = false }
-                    )
-                }*/
-
-                /*PruebaDialog(
-                    title = "Turn on Location Service",
-                    desc = "Explore the world without getting lost and keep the track of your location.",
-                    onDismiss = {
-                        //infoDialog.value = false
-                        true
-                    })*/
-                /*if(list.estado.equals("ANULADO")||list.estado_id.equals("VOLVER A PROGRAMAR"))
-                {
-                    Row {
-                        Box(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = "Motivo",
-                                //color = MaterialTheme.colors.secondaryVariant,
-                                color = Color.Gray,
-                                fontSize = 13.sp,
-                                style = MaterialTheme.typography.body1
-                            )
-                        }
-                        Box(modifier = Modifier.weight(3f)) {
-                            Text(
-                                text = list.motivo.toString(),
-                                //color = MaterialTheme.colors.secondaryVariant,
-                                color = Color.Black,
-                                style = MaterialTheme.typography.subtitle2,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }*/
-
             }
         }
     }
@@ -389,11 +390,6 @@ fun ExpandableCard(
                 enter = expandIn(),
                 exit = shrinkOut()
             ) {
-
-                /*Text(
-                    "Content",
-                    modifier = Modifier.padding(16.dp)
-                )*/
                 Column()
                 {
                     listelementsinvoice.forEachIndexed { index, step ->
@@ -425,6 +421,9 @@ fun ExpandableCard(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class
+)
 @Composable
 fun HorizontalStepView(
     steps: List<Pair<String, ImageVector>>,
@@ -433,10 +432,20 @@ fun HorizontalStepView(
     context: Context,
     InfoDialog: (status:String) -> Unit,
     InfoDialogEnd: (status:String) -> Unit,
-    list: DetailDispatchSheet
+    list: DetailDispatchSheet,
+    formProcessCollection: (cliente_id:String) -> Unit
 ) {
 
-    Box() {
+    val scope = rememberCoroutineScope()
+    var currentBottomSheet: BottomSheetScreen? by remember { mutableStateOf(null) }
+    val modal = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden, confirmStateChange = {false})
+    val appContext:Context = LocalContext.current
+    val lifecycleOwner = LocalContext.current as LifecycleOwner
+    var ObjUsuario = UsuarioSQLiteEntity()
+    val usuarioSQLite = UsuarioSQLite(appContext)
+    ObjUsuario = usuarioSQLite.ObtenerUsuarioSesion()
+
+    Box {
         var statusvisitstart:String=""
         var statusupdatedispatch:String=""
         var statuscollection:String=""
@@ -473,6 +482,7 @@ fun HorizontalStepView(
         else if(statusvisitstart.equals("Y")&&statusupdatedispatch.equals("Y")&&
             statuscollection.equals("N")&&statusvisitend.equals("Y"))
             progress=1.00f
+
         LinearProgressIndicator(
             progress = progress
             ,
@@ -481,58 +491,51 @@ fun HorizontalStepView(
             //progress = 0.3f,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(40.dp, 55.dp, 45.dp, 0.dp)
+                .padding(40.dp, 70.dp, 45.dp, 0.dp)
         )
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp, 10.dp, 10.dp, 0.dp)
-    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp, 10.dp, 10.dp, 0.dp)
+        ) {
 
             steps.forEachIndexed { index, step ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.weight(1f)
                 ) {
-                    Icon(
-                        imageVector = step.second,
-                        contentDescription = null,
-                        modifier =
-                        Modifier
-                            .size(30.dp)
-                            .clickable {
-                                if (step.first.equals("Entrada")) {
-                                    InfoDialog(step.first.toString())
-                                } else if (step.first.equals("Despacho")) {
-                                    Log.e(
-                                        "REOS",
-                                        "Composables-CardDispatch-stepsStatus.onclick.Despacho.inicio"
-                                    )
-                                    val dialogFragment: DialogFragment = StatusDispatchDialog(
-                                        list.cliente_id,
-                                        list.nombrecliente,
-                                        list.control_id.toString(),
-                                        list.item_id.toString(),
-                                        list.domembarque_id
-                                    )
-                                    dialogFragment.show(
-                                        (context as FragmentActivity).supportFragmentManager,
-                                        "un dialogo"
-                                    )
-                                    Log.e(
-                                        "REOS",
-                                        "Composables-CardDispatch-stepsStatus.onclick.Despacho.fin"
-                                    )
-                                } else if (step.first.equals("Cobranza")) {
+                    val showDialog = remember { mutableStateOf(false) }
+                    IconButton(
+                        onClick = {
+                            showDialog.value = true
+                        },
 
-                                } else if (step.first.equals("Salida")) {
-                                    InfoDialogEnd(step.first.toString())
-                                }
-                            },
-                        tint = if (stepsStatus.get(index) == "Y") BlueVistony else Color.Gray,
+                        ){
+                        Icon(
+                            imageVector = step.second,
+                            contentDescription = null,
+                            modifier =
+                            Modifier
+                                .size(30.dp),
+                            tint = if (stepsStatus.get(index) == "Y") BlueVistony else Color.Gray,
+                        )
+                    }
+                    if (showDialog.value)
+                    {
+                        StatusIcons(
+                            step.first,
+                            InfoDialog,
+                            InfoDialogEnd,
+                            list,
+                            context,
+                            //formProcessCollection = formProcessCollection(list.cliente_id)
+                            { clienteId -> formProcessCollection(clienteId) }
+                            //{formProcessCollection(index, list)}
+                        )
+                        showDialog.value = false
 
-                    )
+                    }
                     Spacer(modifier = Modifier.width(10.dp))
                     Box {
                         Box(
@@ -545,14 +548,6 @@ fun HorizontalStepView(
                                 )
                                 .align(Alignment.Center)
                         ) {
-                            Log.e(
-                                "REOS",
-                                "Composables-CardDispatch-stepsStatus.size." + stepsStatus.size
-                            )
-                            Log.e(
-                                "REOS",
-                                "Composables-CardDispatch-index." + index
-                            )
                             if (stepsStatus.get(index) == "Y")
                                 Icon(
                                     imageVector = ImageVector.vectorResource(R.drawable.ic_check),
@@ -585,74 +580,71 @@ fun HorizontalStepView(
     }
 }
 
+/*
 @Composable
-private fun  DialogInformative() {
+fun showLinearProgressIndicator(progress:Float){
+    LinearProgressIndicator(
+        progress = progress
+        ,
+        color = BlueVistony,
+        backgroundColor = Color.Gray, // el color de fondo siempre será gris
+        //progress = 0.3f,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(40.dp, 75.dp, 45.dp, 0.dp)
+    )
+}*/
 
-    var dialogOpen by remember {
-        mutableStateOf(false)
-    }
-
-    if (dialogOpen) {
-        Dialog(onDismissRequest = {
-            dialogOpen = false
-        }) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                shape = RoundedCornerShape(size = 10.dp)
-            ) {
-                Column(modifier = Modifier.padding(all = 16.dp)) {
-                    Text(text = "Your Dialog UI Here")
-                }
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalFoundationApi::class
+)
+@Composable
+fun StatusIcons(
+    icons:String,
+    InfoDialog: (status:String) -> Unit,
+    InfoDialogEnd: (status:String) -> Unit,
+    list: DetailDispatchSheet,
+    context: Context,
+    formProcessCollection:(cliente_id:String) -> Unit
+)
+{
+    Log.e(
+        "REOS",
+        "Composables-StatusIcons-Ingreso"
+    )
+    when (icons) {
+        "Entrada" -> {
+            InfoDialog("Entrada")
+        }
+        "Despacho" -> {
+            val dialogFragment: DialogFragment = StatusDispatchDialog(
+                list.cliente_id,
+                list.nombrecliente,
+                list.control_id.toString(),
+                list.item_id.toString(),
+                list.domembarque_id
+            )
+            dialogFragment.show(
+                (context as FragmentActivity).supportFragmentManager,
+                "un dialogo"
+            )
+        }
+        "Cobranza" -> {
+            Log.e(
+                "REOS",
+                "Composables-StatusIcons-Cobranza"
+            )
+            formProcessCollection(list.cliente_id)
             }
+        "Salida" -> {
+            InfoDialogEnd("Salida")
         }
     }
-
-    Button(onClick = { dialogOpen = true }) {
-        Text(text = "OPEN")
-    }
+    Log.e(
+        "REOS",
+        "Composables-StatusIcons-Final"
+    )
 }
-
-
-@Composable
-fun showDialog(
-    openDialog: Boolean,
-    onDialogDismiss: () -> Unit) {
-    if (openDialog) {
-
-        AlertDialog(
-
-            onDismissRequest = onDialogDismiss,
-            title = {
-
-
-                    Text(text = "Título del diálogo")
-
-
-                    },
-            text = { Text(text = "Mensaje del diálogo") },
-            confirmButton = {
-                Button(onClick = onDialogDismiss) {
-                    Text(text = "Aceptar")
-                }
-            },
-            dismissButton = {
-                Button(onClick = onDialogDismiss) {
-                    Text(text = "Cerrar")
-                }
-            }
-        )
-        /*HeaderImage(
-            modifier = Modifier
-                .size(200.dp)
-                //.align(Alignment.TopCenter)
-                .clickable {},
-            "Question"
-        )*/
-    }
-}
-
 
 @Composable
 fun InfoDialog(
@@ -1099,7 +1091,6 @@ fun InfoDialogEnd(
                                 )
                             }
                         }
-
                     }
                 }
             }
@@ -1261,14 +1252,6 @@ fun InfoDialogCollection(
                     .align(Alignment.TopCenter)
                     .padding(0.dp, 20.dp, 0.dp, 0.dp)
             )
-            /*HeaderImage(
-                modifier = Modifier
-                    .size(100.dp)
-                    .align(Alignment.TopCenter),
-                        "Question"
-
-                )*/
-
         }
     }
 }

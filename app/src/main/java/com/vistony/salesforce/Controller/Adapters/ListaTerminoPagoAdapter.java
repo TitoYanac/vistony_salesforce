@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.vistony.salesforce.Entity.Adapters.ListaTerminoPagoEntity;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.TerminoPagoView;
 
@@ -36,11 +37,12 @@ public class ListaTerminoPagoAdapter extends ArrayAdapter<ListaTerminoPagoEntity
     private FragmentManager fragmentManager;
     public TerminoPagoView terminoPagoView;
     private List<ListaTerminoPagoEntity> Listanombres =null;
-    private String statuscounted;
+    private String statuscounted,customerwhitelist;
     public ListaTerminoPagoAdapter(
             Context context,
             List<ListaTerminoPagoEntity> objects,
-            String statuscounted
+            String statuscounted,
+            String customerwhitelist
 
     ) {
         super(context, 0, objects);
@@ -50,6 +52,7 @@ public class ListaTerminoPagoAdapter extends ArrayAdapter<ListaTerminoPagoEntity
         this.arrayList.addAll(objects);
         this.Listanombres= objects;
         this.statuscounted=statuscounted;
+        this.customerwhitelist=customerwhitelist;
     }
 
 
@@ -132,35 +135,39 @@ public class ListaTerminoPagoAdapter extends ArrayAdapter<ListaTerminoPagoEntity
                                                         Log.e("REOS","ListaTerminoPagoAdapter-holder.realtive_ruta.setOnClickListener-statuscounted"+statuscounted);
                                                         Log.e("REOS","ListaTerminoPagoAdapter-holder.realtive_ruta.setOnClickListener-lead.getTerminopago()"+lead.getTerminopago());
                                                         //Cambio deshabilitado 14/04/2023 16:15
-                                                        /*if(statuscounted.equals("Y")&&lead.getTerminopago().equals("CONTADO"))
+                                                        if(SesionEntity.deliveryrefusedmoney.equals("Y")&&!customerwhitelist.equals("Y"))
                                                         {
-                                                            alertdialogInformative(getContext(),"Advertencia!!!","Motivo: \n No es posible elegir termino de pago (Contado), porque la ultima factura fue devuelta con motivo - (NO TIENE DINERO).\n Sugerencia: \n Elegir el termino, Pago Adelantado.").show();
-                                                            //Toast.makeText(getContext(), "No es posible elegir termino de pago contado, porque la ultima factura fue devuelta por motivo - No tiene Dinero", Toast.LENGTH_SHORT).show();
-                                                        }else {
-                                                            ArrayList<TerminoPagoSQLiteEntity> listaTerminoPagoSQLiteEntity= new ArrayList<>();
-                                                            TerminoPagoSQLiteEntity terminoPagoSQLiteEntity=new TerminoPagoSQLiteEntity();
-                                                            terminoPagoSQLiteEntity.terminopago = lead.getTerminopago().toString();
-                                                            terminoPagoSQLiteEntity.terminopago_id = lead.getTerminopago_id().toString();
-                                                            terminoPagoSQLiteEntity.contado = lead.getContado();
-                                                            listaTerminoPagoSQLiteEntity.add(terminoPagoSQLiteEntity);
+                                                            if(statuscounted.equals("Y")&&lead.getTerminopago().equals("CONTADO"))
+                                                            {
+                                                                alertdialogInformative(getContext(),"Advertencia!!!","No es posible elegir termino de pago (Contado), porque 2 facturas de los ultimos 3 meses fueron devueltas con motivo - (NO TIENE DINERO).\n Sugerencia: \n Elegir el termino de pago, (Pago Adelantado).").show();
+                                                                //Toast.makeText(getContext(), "No es posible elegir termino de pago contado, porque la ultima factura fue devuelta por motivo - No tiene Dinero", Toast.LENGTH_SHORT).show();
+                                                            }else {
+                                                                ArrayList<TerminoPagoSQLiteEntity> listaTerminoPagoSQLiteEntity= new ArrayList<>();
+                                                                TerminoPagoSQLiteEntity terminoPagoSQLiteEntity=new TerminoPagoSQLiteEntity();
+                                                                terminoPagoSQLiteEntity.terminopago = lead.getTerminopago().toString();
+                                                                terminoPagoSQLiteEntity.terminopago_id = lead.getTerminopago_id().toString();
+                                                                terminoPagoSQLiteEntity.contado = lead.getContado();
+                                                                listaTerminoPagoSQLiteEntity.add(terminoPagoSQLiteEntity);
 
-                                                            fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
-                                                            FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                                            transaction.add(R.id.content_menu_view, terminoPagoView.newInstancia(listaTerminoPagoSQLiteEntity));
+                                                                fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+                                                                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                                                transaction.add(R.id.content_menu_view, terminoPagoView.newInstancia(listaTerminoPagoSQLiteEntity));
+                                                            }
+                                                        }else
+                                                        {
+                                                                ArrayList<TerminoPagoSQLiteEntity> listaTerminoPagoSQLiteEntity= new ArrayList<>();
+                                                                TerminoPagoSQLiteEntity terminoPagoSQLiteEntity=new TerminoPagoSQLiteEntity();
+                                                                terminoPagoSQLiteEntity.terminopago = lead.getTerminopago().toString();
+                                                                terminoPagoSQLiteEntity.terminopago_id = lead.getTerminopago_id().toString();
+                                                                terminoPagoSQLiteEntity.contado = lead.getContado();
+                                                                listaTerminoPagoSQLiteEntity.add(terminoPagoSQLiteEntity);
 
-                                                        }*/
-                                                            ArrayList<TerminoPagoSQLiteEntity> listaTerminoPagoSQLiteEntity= new ArrayList<>();
-                                                            TerminoPagoSQLiteEntity terminoPagoSQLiteEntity=new TerminoPagoSQLiteEntity();
-                                                            terminoPagoSQLiteEntity.terminopago = lead.getTerminopago().toString();
-                                                            terminoPagoSQLiteEntity.terminopago_id = lead.getTerminopago_id().toString();
-                                                            terminoPagoSQLiteEntity.contado = lead.getContado();
-                                                            listaTerminoPagoSQLiteEntity.add(terminoPagoSQLiteEntity);
-
-                                                            fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
-                                                            FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                                            transaction.add(R.id.content_menu_view, terminoPagoView.newInstancia(listaTerminoPagoSQLiteEntity));
-            }
+                                                                fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
+                                                                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                                                transaction.add(R.id.content_menu_view, terminoPagoView.newInstancia(listaTerminoPagoSQLiteEntity));
+                                                        }
                                                 }
+        }
 
         );
         return convertView;

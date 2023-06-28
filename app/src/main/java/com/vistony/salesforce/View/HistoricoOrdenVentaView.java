@@ -94,9 +94,9 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
     private SearchView mSearchView;
     HiloObtenerHistoricoOrdenVenta hiloObtenerHistoricoOrdenVenta;
     ListaHistoricoOrdenVentaAdapter listaHistoricoOrdenVentaAdapter;
-    SimpleDateFormat dateFormat;
-    Date date;
-    String fecha;
+    SimpleDateFormat dateFormat,dateFormatSAP;
+    Date date,dateSAP;
+    String fecha,fechaSAP;
     private static OnFragmentInteractionListener mListener;
     private ProgressDialog pd;
     private static final int REQUEST_CODE_QR_SCAN = 101;
@@ -159,8 +159,11 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
         listviewhistoricoordenventa=(ListView) v.findViewById(R.id.listviewhistoricoordenventa);
         imb_calendario_historico_orden_venta.setOnClickListener(this);
         btnconsultarfecha.setOnClickListener(this);
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        dateFormatSAP = new SimpleDateFormat("yyyyMMdd",Locale.getDefault());
         date = new Date();
+        dateSAP = new Date();
+        fechaSAP = dateFormatSAP.format(dateSAP);
         fecha =dateFormat.format(date);
         tv_fecha_historico_orden_venta.setText(fecha);
         hiloObtenerHistoricoOrdenVenta =  new HiloObtenerHistoricoOrdenVenta();
@@ -268,7 +271,8 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
             dia='0'+dia;
         }
 
-        tv_fecha_historico_orden_venta.setText(year + "-" + mes + "-" + dia);
+        fechaSAP=year+mes+dia;
+        tv_fecha_historico_orden_venta.setText(dia + "/" + mes + "/" + year);
     }
 
     private void setupSearchView()
@@ -315,7 +319,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                 FormulasController formulasController=new FormulasController(getContext());
 
                 //Consulta Webservice Historico Orden Venta
-                listaHistoricoOrdenVentaEntities=historicoOrdenVentaWS.getHistoricoOrdenVenta( SesionEntity.imei,tv_fecha_historico_orden_venta.getText().toString());
+                listaHistoricoOrdenVentaEntities=historicoOrdenVentaWS.getHistoricoOrdenVenta( SesionEntity.imei,fechaSAP);
 
                 //Registra en listadepuracion1
                     for (int g = 0; g < listaHistoricoOrdenVentaEntities.size(); g++) {
@@ -324,8 +328,8 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                     }
 
                 //Consulta SQLite Orden Venta Cabecera
-                    listaOrdenVentaSQLite = ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporFecha(formulasController.ObtenerFechaCadena(
-                            tv_fecha_historico_orden_venta.getText().toString()),
+                    listaOrdenVentaSQLite = ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporFecha(
+                            fechaSAP,
                             SesionEntity.fuerzatrabajo_id,
                             SesionEntity.compania_id
                     );

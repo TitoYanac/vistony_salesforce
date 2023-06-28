@@ -72,9 +72,44 @@ public class UserEntity {
     @SerializedName("Census")
     private String census;
 
+    @NonNull
+    @SerializedName("Status")
+    private String status;
 
+    @NonNull
+    @SerializedName("SendVisits")
+    private String sendvisits;
 
+    @NonNull
+    @SerializedName("SendValidations")
+    private String sendvalidations;
 
+    @NonNull
+    public String getSendvalidations() {
+        return sendvalidations;
+    }
+
+    public void setSendvalidations(@NonNull String sendvalidations) {
+        this.sendvalidations = sendvalidations;
+    }
+
+    @NonNull
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(@NonNull String status) {
+        this.status = status;
+    }
+
+    @NonNull
+    public String getSendvisits() {
+        return sendvisits;
+    }
+
+    public void setSendvisits(@NonNull String sendvisits) {
+        this.sendvisits = sendvisits;
+    }
 
     @NonNull
     public String getCensus() {

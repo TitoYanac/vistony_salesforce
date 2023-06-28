@@ -2,29 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:minHeight="?attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:id="@+id/relativeListaProducto"
     >
-
-
-
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:orientation="vertical">
     <TableLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
     <TableRow
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         >
-        <TextView
+        <!--<TextView
             android:id="@+id/tv_id_promocion_detalle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,7 +50,15 @@
             android:layout_marginStart="10dp"
             android:text="@string/umd"
             android:textAppearance="?attr/textAppearanceListItem"
-            />
+            />-->
+        <TextView
+            android:id="@+id/lbl_producto_promocion_detalle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/guion"
+            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceListItem" />
         <TextView
             android:id="@+id/tv_producto_promocion_detalle"
             android:layout_width="wrap_content"

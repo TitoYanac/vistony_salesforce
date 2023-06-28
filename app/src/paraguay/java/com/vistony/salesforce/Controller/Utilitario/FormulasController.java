@@ -1121,6 +1121,9 @@ public class FormulasController {
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
                         ,listaClienteCabeceraEntities.get(i).getAddresscode()
                         ,listaClienteCabeceraEntities.get(i).getStatuscount()
+                        ,listaClienteCabeceraEntities.get(i).getAmountQuotation()
+                        ,listaClienteCabeceraEntities.get(i).getChk_quotation()
+                        ,listaClienteCabeceraEntities.get(i).getTypeVisit()
 
                 );
             }
@@ -1946,7 +1949,22 @@ public class FormulasController {
         {
             Log.e("REOS", "FormulasController.AddForms.error : " + e.toString());
         }
-
-
     }
+
+    public  String getPriceReferencePack(String PrecioPackconDescuento,String QuantityPackPromotion){
+        BigDecimal precioPackconDescuento=new BigDecimal(PrecioPackconDescuento);
+
+        BigDecimal repta=precioPackconDescuento.divide(new BigDecimal(QuantityPackPromotion)).setScale(2,RoundingMode.HALF_UP);
+
+        return repta.toString();
+    }
+
+    public String CalcularMontoTotalPromocionconDescuentoyBono(String MontoTotalLineaSinDescuento,String MontoDescuento,String Bono ){
+        BigDecimal temp1=new BigDecimal(MontoTotalLineaSinDescuento);
+
+        BigDecimal repta=temp1.subtract(new BigDecimal(MontoDescuento)).subtract(new BigDecimal(Bono).setScale(3, RoundingMode.HALF_UP));
+
+        return repta.toString();
+    }
+
 }

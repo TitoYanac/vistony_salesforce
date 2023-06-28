@@ -83,6 +83,11 @@ public class UsuarioSQLite {
                 registro.put("quotation", vendedor.get(i).getQuotation());
                 registro.put("census", vendedor.get(i).getCensus());
                 registro.put("deliverydateauto", vendedor.get(i).getSettings().get(0).getDeliverydateauto());
+                registro.put("deliveryrefusedmoney", vendedor.get(i).getSettings().get(0).getDeliveryRefusedMoney());
+                registro.put("status", vendedor.get(i).getStatus());
+                registro.put("sendvisits", vendedor.get(i).getSendvisits());
+                registro.put("sendvalidations", vendedor.get(i).getSendvalidations());
+
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.rate: " + vendedor.get(i).getRate());
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.vendedor.get(i).getNombreusuario(): " + vendedor.get(i).getNombreusuario());
                 bd.insert("usuario", null, registro);
@@ -202,6 +207,10 @@ public class UsuarioSQLite {
                     usuarioSQLiteEntity.setMigratequotation (fila.getString(fila.getColumnIndex("quotation")));
                     usuarioSQLiteEntity.setCensus (fila.getString(fila.getColumnIndex("census")));
                     usuarioSQLiteEntity.setDeliverydateauto (fila.getString(fila.getColumnIndex("deliverydateauto")));
+                    usuarioSQLiteEntity.setDeliveryrefusedmoney (fila.getString(fila.getColumnIndex("deliveryrefusedmoney")));
+                    usuarioSQLiteEntity.setStatus (fila.getString(fila.getColumnIndex("status")));
+                    usuarioSQLiteEntity.setSendvisits (fila.getString(fila.getColumnIndex("sendvisits")));
+                    usuarioSQLiteEntity.setSendvalidations (fila.getString(fila.getColumnIndex("sendvalidations")));
 
                 } while (fila.moveToNext());
             }

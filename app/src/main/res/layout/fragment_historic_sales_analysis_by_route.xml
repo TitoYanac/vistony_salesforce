@@ -50,7 +50,6 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:background="@drawable/custom_border_button_red"
-                    android:drawableLeft="@drawable/ic_search_white_24dp"
                     android:text="@string/lbl_btn_get"
                     android:textColor="@color/white" />
             </TableRow>

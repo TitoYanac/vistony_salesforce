@@ -97,7 +97,7 @@ public class Convert {
                 break;
         }
 
-        Log.e("REOS","Convert-currencyForView-amountRedonded-Antes"+amountRedonded.toString());
+        //Log.e("REOS","Convert-currencyForView-amountRedonded-Antes"+amountRedonded.toString());
         switch (BuildConfig.FLAVOR){
             case "chile":
                 NumberFormat nf = NumberFormat.getCurrencyInstance(locale);
@@ -131,7 +131,7 @@ public class Convert {
 
                 break;
         }
-        Log.e("REOS","Convert-currencyForView-amountRedonded-Despues"+amountRedonded.toString());
+        //Log.e("REOS","Convert-currencyForView-amountRedonded-Despues"+amountRedonded.toString());
         return resultado;
     }
 
@@ -203,6 +203,7 @@ public class Convert {
         BigDecimal amountRedonded=new BigDecimal(amount).setScale(decimals, RoundingMode.HALF_UP);
         return amountRedonded.toString();
     }
+
     public static List<ListKardexOfPaymentEntity> getConvertListKardexOfPayment(List<KardexPagoEntity> ListKardexPagoEntity)
     {
         List<ListKardexOfPaymentEntity> ListKardexOfPaymentEntity=new ArrayList<>();

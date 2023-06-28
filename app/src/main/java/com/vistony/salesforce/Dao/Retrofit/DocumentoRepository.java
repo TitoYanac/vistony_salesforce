@@ -43,7 +43,8 @@ public class DocumentoRepository extends ViewModel {
                     Lista.get(i).getSaldo(),
                     Lista.get(i).getSaldoSinProcesar(),
                     Lista.get(i).getDocEntry(),
-                    Lista.get(i).getPymntgroup()
+                    Lista.get(i).getPymntgroup(),
+                    Lista.get(i).getAdditionaldiscount()
             );
 
             //documentDetailSQLite.addDocumentsDetail(Lista.get(i).getDocumentDetail());

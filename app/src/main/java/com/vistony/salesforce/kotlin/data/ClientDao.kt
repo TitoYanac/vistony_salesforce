@@ -13,4 +13,7 @@ interface ClientDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertClient(client: List<Client>?)
+
+    @Query("DELETE FROM cliente")
+    fun deleteClient()
 }

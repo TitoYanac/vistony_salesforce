@@ -37,6 +37,15 @@ public class ClienteSQLiteEntity {
     private String lastpurchase;
     private String DeliveryDay;
     private String statuscounted;
+    private String customerwhitelist;
+
+    public String getCustomerwhitelist() {
+        return customerwhitelist;
+    }
+
+    public void setCustomerwhitelist(String customerwhitelist) {
+        this.customerwhitelist = customerwhitelist;
+    }
 
     public String getStatuscounted() {
         return statuscounted;

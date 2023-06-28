@@ -977,7 +977,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     Log.e("REOS", "ListaOrdenVentaAdapter-ActualizaListaOrdenDetallePromocion-Fin Registro Linea Padre");
                     //Inserta Lineas de Detalle
                     for (int b = 0; b < lead.getOrden_detalle_lista_promocion_cabecera().get(a).getListaPromocionDetalleEntities().size(); b++) {
-                        if (!lead.getOrden_detalle_lista_promocion_cabecera().get(a).getListaPromocionDetalleEntities().get(b).getProducto_id().equals("DESCUENTO")) {
+                        if (!lead.getOrden_detalle_lista_promocion_cabecera().get(a).getListaPromocionDetalleEntities().get(b).getProducto_id().equals("%")) {
                             //orden_detalle_promocion_item++;
                             listaOrdenVentaDetallePromocionEntity = new ListaOrdenVentaDetallePromocionEntity();
                             listaOrdenVentaDetallePromocionEntity.orden_detalle_item = lead.getOrden_detalle_item();

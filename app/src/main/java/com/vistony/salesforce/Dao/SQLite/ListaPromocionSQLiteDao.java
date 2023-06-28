@@ -15,10 +15,12 @@ public class ListaPromocionSQLiteDao {
     SqliteController sqliteController;
     SQLiteDatabase bd;
     ArrayList<ListaPromocionSQLiteEntity> listaPromocionSQLiteEntity;
+    Context context;
 
     public ListaPromocionSQLiteDao(Context context)
     {
         sqliteController = new SqliteController(context);
+        this.context=context;
     }
 
     public void abrir(){
@@ -112,4 +114,31 @@ public class ListaPromocionSQLiteDao {
 
         return resultado;
     }
+
+    public ArrayList<ListaPromocionSQLiteEntity>  getListPromotionVigents()
+    {
+        ArrayList<ListaPromocionSQLiteEntity> listaPromocionSQLiteEntity = new ArrayList<>();
+        ListaPromocionSQLiteEntity ObjListaPromocionSQLiteEntity= new ListaPromocionSQLiteEntity();
+        PromocionCabeceraSQLiteDao promocionCabeceraSQLiteDao=new PromocionCabeceraSQLiteDao(context);
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select A.lista_promocion_id,B.lista_promocion from promocioncabecera A " +
+                    "left join listapromocion B ON " +
+                    "A.lista_promocion_id = B.lista_promocion_id " +
+                    "GROUP BY A.lista_promocion_id,B.lista_promocion ",null);
+
+        while (fila.moveToNext())
+        {
+            ObjListaPromocionSQLiteEntity= new ListaPromocionSQLiteEntity();
+            ObjListaPromocionSQLiteEntity.setLista_promocion_id(fila.getString(0));
+            ObjListaPromocionSQLiteEntity.setLista_promocion(fila.getString(1));
+            ObjListaPromocionSQLiteEntity.setListaPromocionCabeceraEntity(promocionCabeceraSQLiteDao.gePromotionVigent(fila.getString(0)));
+            listaPromocionSQLiteEntity.add(ObjListaPromocionSQLiteEntity);
+
+        }
+        bd.close();
+        //return listaPromocionSQLiteEntity;
+        return listaPromocionSQLiteEntity;
+    }
+
 }

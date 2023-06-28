@@ -138,7 +138,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
         lv_historic_status_dispatch=(ListView) v.findViewById(R.id.lv_historic_status_dispatch);
         headerDispatchSheetRepository= new ViewModelProvider(getActivity()).get(HeaderDispatchSheetRepository.class);
 
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateFormat2 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         date2 = new Date();
@@ -200,7 +200,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
             dia='0'+dia;
         }
         parametrofecha=year+mes+dia;
-        tv_date_historic_status_dispatch.setText(year + "-" + mes + "-" + dia);
+        tv_date_historic_status_dispatch.setText(dia + "/" + mes + "/" + year);
     }
 
 
@@ -249,7 +249,7 @@ public class HistoricStatusDispatchView extends Fragment  implements View.OnClic
             ClienteRepository clienteRepository = new ClienteRepository(context);
             ParametrosSQLite parametrosSQLite=new ParametrosSQLite(activity);
             List<ClienteSQLiteEntity> LclientesqlSQLiteEntity;
-            LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei ,tv_date_historic_status_dispatch.getText().toString());
+            LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei ,parametrofecha);
             Log.e("REOS","HojaDespachoView.getMastersDelivery-LclientesqlSQLiteEntity:"+LclientesqlSQLiteEntity.size());
             if (!(LclientesqlSQLiteEntity.isEmpty())) {
                 CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);

@@ -13,4 +13,7 @@ interface AddressDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAddress(address: List<Address>?)
+
+    @Query("DELETE FROM  direccioncliente")
+    fun deleteAddress()
 }

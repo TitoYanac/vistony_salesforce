@@ -286,7 +286,8 @@
         app:spb_stateDescriptionColor="#808080"
         app:spb_stateForegroundColor="#0957C3"
         app:spb_stateNumberBackgroundColor="#808080"
-        app:spb_stateNumberForegroundColor="#eeeeee" />
+        app:spb_stateNumberForegroundColor="#eeeeee"
+        />
 
 
 

@@ -60,6 +60,7 @@ public class ClienteSQlite {
             registro.put("LastPurchase",Lista.get(i).getLastpurchase());
             registro.put("correo",Lista.get(i).getCorreo());
             registro.put("statuscounted",Lista.get(i).getStatuscounted());
+            registro.put("customerwhitelist",Lista.get(i).getCustomerwhitelist());
             sqlite.insert("cliente",null,registro);
         }
 
@@ -271,7 +272,7 @@ public class ClienteSQlite {
                     "Select " +
                             "a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
                             "a.telefonomovil,a.correo,zipcode AS ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lista_precio" +
-                            ",a.domfactura_id,a.lastpurchase,a.lineofbusiness,g.terminopago,g.contado,d.latitud,d.longitud,d.addresscode,(case when d.latitud='0' or d.latitud is null then '0' else '1' end) as geolocalizado,IFNULL(a.statuscounted,'N') as statuscount  FROM cliente a " +
+                            ",a.domfactura_id,a.lastpurchase,a.lineofbusiness,g.terminopago,g.contado,d.latitud,d.longitud,d.addresscode,(case when d.latitud='0' or d.latitud is null then '0' else '1' end) as geolocalizado,IFNULL(a.statuscounted,'N') as statuscount,a.customerwhitelist  FROM cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,SUM(saldo) saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
                             " and a.cliente_id=b.cliente_id " +
@@ -280,7 +281,7 @@ public class ClienteSQlite {
                             " LEFT JOIN  terminopago g ON" +
                             "  g.terminopago_id=a.terminopago_id " +
                             "where a.cliente_id not in (Select cliente_id from rutavendedor where fecharuta='"+fecha+"') "  +
-                            " GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,a.domfactura_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.lista_precio,a.lineofbusiness",null);
+                            " GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,a.domfactura_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.lista_precio,a.lineofbusiness,a.customerwhitelist",null);
 
             while (fila.moveToNext())
             {
@@ -319,6 +320,7 @@ public class ClienteSQlite {
                 clienteentity.setAddresscode(fila.getString(30));
                 clienteentity.setChkgeolocation(fila.getString(31));
                 clienteentity.setStatuscount (fila.getString(32));
+                clienteentity.setCustomerwhitelist (fila.getString(33));
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }
         }catch (Exception e){
@@ -430,7 +432,7 @@ public class ClienteSQlite {
                     "SELECT DISTINCT a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,d.direccion,d.zona_id,a.ordenvisita,a.zona," +
                             "a.rucdni,IFNULL(a.moneda,0),a.telefonofijo,a.telefonomovil,a.correo,zipcode as ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio," +
                             "a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.linea_credito_usado,a.lastpurchase,IFNULL(SUM(e.saldo),0) as saldonocontados,(case when d.latitud='0' or d.latitud is null then '0' else '1' end) as geolocalizado" +
-                            ",(case when f.latitudini is not null and f.latitudini is not null then '1' else '0' end) as duracionvisita,g.terminopago,g.contado,d.latitud,d.longitud,d.addresscode,IFNULL(a.statuscounted,'N') AS statuscounted from cliente a" +
+                            ",(case when f.latitudini is not null and f.latitudini is not null then '1' else '0' end) as duracionvisita,g.terminopago,g.contado,d.latitud,d.longitud,d.addresscode,IFNULL(a.statuscounted,'N') AS statuscounted,a.customerwhitelist from cliente a" +
                             " LEFT JOIN (Select compania_id,cliente_id,saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id and a.cliente_id=b.cliente_id " +
                             "INNER JOIN (SELECT compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud,addresscode,zipcode FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud,addresscode,zipcode) d ON a.compania_id=d.compania_id " +
@@ -446,7 +448,7 @@ public class ClienteSQlite {
                             " strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))" +
                             "AND estado='ACTIVO') GROUP BY a.cliente_id," +
                             "a.compania_id,a.nombrecliente,d.domembarque_id,d.direccion,d.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id," +
-                            "a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,d.latitud,d.longitud;",null);
+                            "a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,d.latitud,d.longitud,a.customerwhitelist;",null);
 
             while (fila.moveToNext())
             {
@@ -483,6 +485,7 @@ public class ClienteSQlite {
                 clienteentity.setLongitud(fila.getString(29));
                 clienteentity.setAddresscode(fila.getString(30));
                 clienteentity.setStatuscount (fila.getString(31));
+                clienteentity.setCustomerwhitelist (fila.getString(32));
                 Log.e("REOS","ClienteSQlite-ObtenerClientePorZonaCompleto-clienteentity.getSaldoSincontados: "+clienteentity.getSaldosincontados());
                 arraylistaClienteSQLiteEntity.add(clienteentity);
             }
@@ -512,13 +515,13 @@ public class ClienteSQlite {
                     "Select " +
                             "a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
                             "a.telefonomovil,a.correo,zipcode AS ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lista_precio" +
-                            ",a.domfactura_id,a.lastpurchase,a.lineofbusiness,a.statuscounted FROM cliente a " +
+                            ",a.domfactura_id,a.lastpurchase,a.lineofbusiness,a.statuscounted,a.customerwhitelist FROM cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,SUM(saldo) saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +
                             " a.compania_id=b.compania_id " +
                             "and a.cliente_id=b.cliente_id "  +
                             "LEFT JOIN (SELECT compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud,addresscode,zipcode FROM direccioncliente GROUP BY compania_id,cliente_id,zona_id,domembarque_id,direccion,latitud,longitud,addresscode,zipcode) d ON a.compania_id=d.compania_id " +
                             "and a.cliente_id=d.cliente_id " +
-                            "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.domfactura_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.lastpurchase,a.lineofbusiness ",null);
+                            "GROUP BY a.cliente_id,a.compania_id,a.nombrecliente,a.domembarque_id,a.domfactura_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,a.moneda,a.telefonofijo,a.telefonomovil,a.correo,a.ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,a.lastpurchase,a.lineofbusiness,a.customerwhitelist ",null);
 
             while (fila.moveToNext())
             {
@@ -551,6 +554,7 @@ public class ClienteSQlite {
                 clienteentity.setLastpurchase(fila.getString(24));
                 clienteentity.setLineofbussiness(fila.getString(25));
                 clienteentity.setStatuscount (fila.getString(26));
+                clienteentity.setCustomerwhitelist (fila.getString(27));
                 Log.e("REOS","ClienteSQLite.ObtenerDatosCliente.clienteentity.getLineofbussiness: "+clienteentity.getLineofbussiness());
                 arraylistaClienteSQLiteEntity.add(clienteentity);
 

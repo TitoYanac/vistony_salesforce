@@ -63,6 +63,32 @@ public class SummaryofeffectivenessEntity {
     public String coverageeffectiveness;
 
     @NonNull
+    @SerializedName("Quotation")
+    public String countquotation;
+
+    @NonNull
+    @SerializedName("AmountQuotation")
+    public String amountquotation;
+
+    @NonNull
+    public String getCountquotation() {
+        return countquotation;
+    }
+
+    public void setCountquotation(@NonNull String countquotation) {
+        this.countquotation = countquotation;
+    }
+
+    @NonNull
+    public String getAmountquotation() {
+        return amountquotation;
+    }
+
+    public void setAmountquotation(@NonNull String amountquotation) {
+        this.amountquotation = amountquotation;
+    }
+
+    @NonNull
     public String getVisitseffectiveness() {
         return visitseffectiveness;
     }

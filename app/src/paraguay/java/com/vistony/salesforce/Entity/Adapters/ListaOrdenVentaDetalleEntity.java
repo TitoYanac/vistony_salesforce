@@ -32,6 +32,7 @@ public class ListaOrdenVentaDetalleEntity implements Serializable  {
     public String orden_detalle_oil_tax;
     public String orden_detalle_liter;
     public String orden_detalle_SIGAUS;
+    public String orden_detalle_currency;
 
     public ListaOrdenVentaDetalleEntity(String orden_detalle_item, String orden_detalle_producto_id, String orden_detalle_producto, String orden_detalle_umd, String orden_detalle_stock_almacen, String orden_detalle_cantidad, String orden_detalle_precio_unitario, String orden_detalle_montosubtotal, String orden_detalle_porcentaje_descuento, String orden_detalle_porcentaje_descuento_maximo, String orden_detalle_monto_descuento, String orden_detalle_monto_igv, String orden_detalle_montototallinea, ArrayList<ListaPromocionCabeceraEntity> orden_detalle_lista_promocion_cabecera, String orden_detalle_promocion_habilitada, String orden_detalle_gal, String orden_detalle_gal_acumulado, String orden_detalle_montosubtotalcondescuento, ArrayList<ListaOrdenVentaDetallePromocionEntity> orden_detalle_lista_orden_detalle_promocion, String orden_detalle_descuentocontado, boolean orden_detalle_chk_descuentocontado, String orden_detalle_terminopago_id, boolean orden_detalle_chk_descuentocontado_aplicado
             , boolean orden_detalle_chk_descuentocontado_cabecera
@@ -39,6 +40,7 @@ public class ListaOrdenVentaDetalleEntity implements Serializable  {
             , String orden_detalle_oil_tax
             , String orden_detalle_liter
             , String orden_detalle_SIGAUS
+            , String orden_detalle_currency
     ) {
         this.orden_detalle_item = orden_detalle_item;
         this.orden_detalle_producto_id = orden_detalle_producto_id;
@@ -68,12 +70,20 @@ public class ListaOrdenVentaDetalleEntity implements Serializable  {
         this.orden_detalle_oil_tax = orden_detalle_oil_tax;
         this.orden_detalle_liter = orden_detalle_liter;
         this.orden_detalle_SIGAUS = orden_detalle_SIGAUS;
-
+        this.orden_detalle_currency = orden_detalle_currency;
 
     }
 
     public ListaOrdenVentaDetalleEntity() {
 
+    }
+
+    public String getOrden_detalle_currency() {
+        return orden_detalle_currency;
+    }
+
+    public void setOrden_detalle_currency(String orden_detalle_currency) {
+        this.orden_detalle_currency = orden_detalle_currency;
     }
 
     public String getOrden_detalle_oil_tax() {

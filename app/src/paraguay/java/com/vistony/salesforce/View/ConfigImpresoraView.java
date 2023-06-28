@@ -558,6 +558,7 @@ public class ConfigImpresoraView extends Fragment implements RadioGroup.OnChecke
         }).start();
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -568,7 +569,7 @@ public class ConfigImpresoraView extends Fragment implements RadioGroup.OnChecke
                 }
                 break;
         }
-    }
+    }*/
 
     public final Handler mHandler = new Handler(new Handler.Callback() {
         @SuppressWarnings("unchecked")

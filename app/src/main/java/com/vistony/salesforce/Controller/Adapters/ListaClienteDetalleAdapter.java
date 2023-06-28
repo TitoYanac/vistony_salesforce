@@ -15,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.vistony.salesforce.BuildConfig;
@@ -25,6 +27,7 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import com.vistony.salesforce.View.ClienteDetalleView;
@@ -76,11 +79,13 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
             holder.tv_fecha_vencimiento = convertView.findViewById(R.id.tv_fecha_vencimiento);
             holder.tv_importe =  convertView.findViewById(R.id.tv_importe);
             holder.tv_saldo =  convertView.findViewById(R.id.tv_saldo);
-            holder.imv_clientedetalle =  convertView.findViewById(R.id.imv_cliente_detalle);
             holder.tv_moneda_cliente_detalle =convertView.findViewById(R.id.tv_moneda_cliente_detalle);
             holder.tv_terminopago_cliente_detalle =convertView.findViewById(R.id.tv_terminopago_cliente_detalle);
-
+            holder.imv_flag_additionaldiscount = convertView.findViewById(R.id.imv_flag_additionaldiscount);
+            holder.tv_additionaldiscount= convertView.findViewById(R.id.tv_additionaldiscount);
             holder.xd =convertView.findViewById(R.id.layoutXD);
+            holder.tl_additionaldiscount =convertView.findViewById(R.id.tl_additionaldiscount);
+
 
             convertView.setTag(holder);
 
@@ -127,6 +132,27 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
         holder.tv_saldo.setText(Convert.currencyForView(lead.getSaldo()));
         holder.tv_moneda_cliente_detalle.setText(lead.getMoneda());
         holder.tv_terminopago_cliente_detalle.setText(lead.getPymntgroup());
+
+        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+        {
+            holder.tl_additionaldiscount.setVisibility(View.GONE);
+        }
+
+        if(lead.getAdditionaldiscount()==null)
+        {
+            holder.imv_flag_additionaldiscount.setColorFilter(ContextCompat.getColor(getContext(),R.color.red));
+            holder.tv_additionaldiscount.setText("NO");
+        }else {
+            if(lead.getAdditionaldiscount().equals("Y"))
+            {
+                holder.tv_additionaldiscount.setText("SI");
+                holder.imv_flag_additionaldiscount.setColorFilter(ContextCompat.getColor(getContext(),R.color.green));
+            }else {
+                holder.tv_additionaldiscount.setText("NO");
+                holder.imv_flag_additionaldiscount.setColorFilter(ContextCompat.getColor(getContext(),R.color.red));
+            }
+        }
+
         holder.xd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,20 +224,17 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
 
 
     static class ViewHolder {
-        //TextView lbl_documento;
         TextView tv_documento;
-        //TextView lbl_fecha_emision;
         TextView tv_fecha_emision;
-       // TextView lbl_fecha_vencimiento;
         TextView tv_fecha_vencimiento;
-       // TextView lbl_importe;
         TextView tv_importe;
-       // TextView lbl_saldo;
         TextView tv_saldo;
         TextView tv_moneda_cliente_detalle;
-        ImageView imv_clientedetalle;
         TextView tv_terminopago_cliente_detalle;
+        ImageView imv_flag_additionaldiscount;
+        TextView tv_additionaldiscount;
         RelativeLayout xd;
+        TableLayout tl_additionaldiscount;
     }
 
 

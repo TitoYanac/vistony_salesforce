@@ -115,7 +115,6 @@ public class DetailDispatchSheetSQLite {
                 "Select  A.compania_id,A.fuerzatrabajo_id,A.usuario_id,A.control_id,A.item_id,A.cliente_id,A.domembarque_id,A.direccion,A.factura_id,A.entrega_id,A.entrega,A.factura," +
                         "A.saldo,A.estado,A.fuerzatrabajo_factura_id,A.fuerzatrabajo_factura,A.terminopago_id,A.terminopago,A.peso,A.comentariodespacho,B.nombrecliente,IFNULL(c.compania_id,'') as chkupdatedispatch " +
                         ", IFNULL(E.timeini,'0') timeini, IFNULL(E.timefin,'0') timefin,IFNULL(F.documento_id,'')   chk_collection,G.typedispatch,H.reasondispatch " +
-                        //", '0' timeini, '0' timefin " +
                         "from detaildispatchsheet A" +
                         " left outer join cliente B ON  " +
                         "A.cliente_id=B.cliente_id " +

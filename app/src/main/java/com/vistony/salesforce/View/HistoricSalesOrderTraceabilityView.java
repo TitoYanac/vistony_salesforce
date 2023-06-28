@@ -132,13 +132,13 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
         imb_calendario_historic_salesorder_traceability.setOnClickListener(this);
         btn_get_historic_salesorder_traceability.setOnClickListener(this);
         historicSalesOrderTraceabilityRepository= new ViewModelProvider(getActivity()).get(HistoricSalesOrderTraceabilityRepository.class);
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateFormat2 = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
         fecha2=dateFormat2.format(date);
         tv_fecha_historic_salesorder_traceability.setText(fecha);
-        parametrofecha=fecha;
+        parametrofecha=fecha2;
         return v;
     }
 
@@ -189,7 +189,7 @@ public class HistoricSalesOrderTraceabilityView extends Fragment implements View
         }
         parametrofecha=year + "-" + mes + "-" + dia;
         fecha2=year + "" + mes + "" + dia;
-        tv_fecha_historic_salesorder_traceability.setText(year + "-" + mes + "-" + dia);
+        tv_fecha_historic_salesorder_traceability.setText(dia + "/" + mes + "/" + year);
     }
 
     private void setupSearchView()

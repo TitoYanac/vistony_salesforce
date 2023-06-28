@@ -272,7 +272,7 @@ public class MenuAccionView extends Fragment {
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
         cv_canvas.setVisibility(View.GONE);
-        //cv_customer_complaint.setVisibility(View.GONE);
+        cv_customer_complaint.setVisibility(View.GONE);
 
         cv_canvas.setOnClickListener(v -> {
             /*String Fragment="MenuAccionView";
@@ -339,6 +339,7 @@ public class MenuAccionView extends Fragment {
                 case "perurofalab":
                 case "espania":
                 case "marruecos":
+                case "peru":
                     String Fragment="MenuAccionView";
                     String accion="pedido";
                     String compuesto=Fragment+"-"+accion;
@@ -348,7 +349,8 @@ public class MenuAccionView extends Fragment {
                 case "ecuador":
                 case "bolivia":
                 case "chile":
-                case "peru":
+                    //Aprobaciones
+                //case "peru":
                     alertatipoventa().show();
                     break;
             }

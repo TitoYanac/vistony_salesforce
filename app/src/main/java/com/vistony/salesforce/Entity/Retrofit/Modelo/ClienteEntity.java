@@ -80,6 +80,17 @@ public class ClienteEntity {
     @SerializedName("SinTerminoContado")
     private String statuscounted;
 
+    @SerializedName("CustomerWhiteList")
+    private String customerwhitelist;
+
+    public String getCustomerwhitelist() {
+        return customerwhitelist;
+    }
+
+    public void setCustomerwhitelist(String customerwhitelist) {
+        this.customerwhitelist = customerwhitelist;
+    }
+
     public String getStatuscounted() {
         return statuscounted;
     }

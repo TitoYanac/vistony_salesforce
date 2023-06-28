@@ -44,7 +44,7 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
     private String mParam2;
     public static OnFragmentInteractionListener mListener;
     View v;
-    String dias_vencimiento,statuscount="N";
+    String dias_vencimiento,statuscount="N",customerwhitelist="N";
     ListView listaterminopago;
     ArrayList<TerminoPagoSQLiteEntity> listaTerminoPagoSQLiteEntity;
     TerminoPagoSQLiteEntity terminoPagoSQLiteEntity;
@@ -110,12 +110,14 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
             if(BuildConfig.FLAVOR.equals("peru"))
             {
                 statuscount= objectPaymentterms[1];
+                customerwhitelist= objectPaymentterms[2];
             }
 
 
 
             Log.e("REOS","TerminoPagoView-onCreate-mParam1"+mParam1);
             Log.e("REOS","TerminoPagoView-onCreate-statuscount"+statuscount);
+            Log.e("REOS","TerminoPagoView-onCreate-customerwhitelist"+customerwhitelist);
 
             listaTerminopago = terminoPagoSQLiteDao.ObtenerTerminoPagoporID(mParam1, SesionEntity.compania_id);
             Log.e("REOS","TerminoPagoView-onCreate-mParam1"+mParam1);
@@ -159,7 +161,9 @@ public class TerminoPagoView extends Fragment implements SearchView.OnQueryTextL
             listaTerminoPagoAdapter = new ListaTerminoPagoAdapter(
                     getActivity(),
                     ListaTerminoPagoDao.getInstance().getLeads(listaTerminoPagoSQLiteEntity),
-                    statuscount
+                    statuscount,
+                    customerwhitelist
+
             );
             listaterminopago.setAdapter(listaTerminoPagoAdapter);
         }else

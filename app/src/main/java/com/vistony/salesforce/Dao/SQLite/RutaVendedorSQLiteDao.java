@@ -82,6 +82,10 @@ public class RutaVendedorSQLiteDao {
              ,String longitud
              ,String addresscode
             ,String statuscounted
+             ,String typevisit
+             ,String quotationamount
+             ,String chk_quotation
+            ,String customerwhitelist
     )
     {
         //SQLiteController admin = new SQLiteController(get,"administracion",null,1);
@@ -129,6 +133,10 @@ public class RutaVendedorSQLiteDao {
             registro.put("longitud", longitud);
             registro.put("addresscode", addresscode);
             registro.put("statuscounted", statuscounted);
+            registro.put("typevisit", typevisit);
+            registro.put("quotationamount", quotationamount);
+            registro.put("chk_quotation", chk_quotation);
+            registro.put("customerwhitelist", customerwhitelist);
 
             bd.insert("rutavendedor", null, registro);
         }catch (Exception e)
@@ -309,8 +317,10 @@ public class RutaVendedorSQLiteDao {
             ObjListaClienteCabeceraEntity.setLongitud(fila.getString(37));
             ObjListaClienteCabeceraEntity.setAddresscode(fila.getString(38));
             ObjListaClienteCabeceraEntity.setStatuscount (fila.getString(39));
+            ObjListaClienteCabeceraEntity.setCustomerwhitelist (fila.getString(43));
             Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getLastpurchase"+ObjListaClienteCabeceraEntity.getLastpurchase());
             Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getStatuscount"+ObjListaClienteCabeceraEntity.getStatuscount());
+            Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getCustomerwhitelist"+ObjListaClienteCabeceraEntity.getCustomerwhitelist());
             listaClienteCabeceraEntity.add(ObjListaClienteCabeceraEntity);
         }
 
@@ -471,7 +481,6 @@ public class RutaVendedorSQLiteDao {
             String compania_id,
             String fecharuta,
             String collectionamount
-
     )
     {
         int resultado=0;
@@ -632,6 +641,92 @@ public class RutaVendedorSQLiteDao {
             // TODO: handle exception
             System.out.println(e.getMessage());
             resultado=0;
+        }
+        return resultado;
+    }
+
+    public int UpdateQuotationRutaVendedor (
+            String cliente_id,
+            String domembarque_id,
+            String compania_id,
+            String fecharuta,
+            String quotationAmount
+    )
+    {
+        int resultado=0;
+        float monto=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(SUM(quotationamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and compania_id='"+compania_id+"' and cliente_id='"+cliente_id+"' and domembarque_id='"+domembarque_id+"'   " ,null);
+            while (fila.moveToNext())
+            {
+                monto= Float.parseFloat (fila.getString(0));
+            }
+
+            ContentValues registro = new ContentValues();
+            registro.put("chk_quotation","1");
+            registro.put("chk_visita","1");
+            registro.put("quotationamount",String.valueOf(monto+Float.parseFloat(quotationAmount)));
+            bd = sqliteController.getWritableDatabase();
+            resultado = bd.update("rutavendedor",registro,"cliente_id='"+cliente_id+"'"+" and compania_id='"+compania_id+"' " +
+                    "and  domembarque_id='"+domembarque_id+"' " +
+                    "and fecharuta='"+fecharuta+"' " ,null);
+            bd.close();
+        }catch (Exception e)
+        {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+            resultado=0;
+        }
+        return resultado;
+    }
+
+    public int getQuantityQuotationRoute
+    (String fecharuta,String chkruta)
+    {
+        int resultado=0;
+
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(count(Cliente_id),0) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and chk_quotation='1'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+
+            }
+        }catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+        bd.close();
+        return resultado;
+    }
+
+    public float getAmountQuotationRoute (
+            String compania_id,
+            String fecharuta,
+            String chkruta
+
+    )
+    {
+        float resultado=0;
+        abrir();
+        try {
+            Cursor fila = bd.rawQuery(
+                    "Select IFNULL(SUM(quotationamount),0) from rutavendedor where fecharuta='"+fecharuta+"' and chk_ruta='"+chkruta+"' and chk_quotation='1' and compania_id='"+compania_id+"'" ,null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Float.parseFloat (fila.getString(0));
+
+            }
+        }catch (Exception e)
+        {
+            Log.e("REOS","RutaVendedorSQLiteDao-getAmountQuotationRoute-e"+e.toString());
+            System.out.println(e.getMessage());
         }
         return resultado;
     }

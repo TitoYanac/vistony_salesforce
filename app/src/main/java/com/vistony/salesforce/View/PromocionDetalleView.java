@@ -23,6 +23,7 @@ import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.Sesion.ClienteAtendido;
@@ -49,7 +50,7 @@ public class PromocionDetalleView extends Fragment {
     ListaPromocionDetalleEditarAdapter listaPromocionDetalleEditarAdapter;
     static OnFragmentInteractionListener mListener;
     static public ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntity;
-    static public ArrayList<ListaPromocionCabeceraEntity> copiaeditablelistaPromocionCabeceraEntity;
+    //static public ArrayList<ListaPromocionCabeceraEntity> copiaeditablelistaPromocionCabeceraEntity;
     ListView list_promocion_detalle_editar;
     static HiloObtenerPromocionDetalle hiloObtenerPromocionDetalle;
     MenuItem vincular_promocion_detalle_editar,add_promocion_detalle_percent;
@@ -179,7 +180,7 @@ public class PromocionDetalleView extends Fragment {
             if(!((ArrayList<ListaPromocionCabeceraEntity>)getArguments().getSerializable(TAG_PromocionDetalle)==null))
             {
                 listaPromocionCabeceraEntity = (ArrayList<ListaPromocionCabeceraEntity>)getArguments().getSerializable(TAG_PromocionDetalle);
-                copiaeditablelistaPromocionCabeceraEntity = (ArrayList<ListaPromocionCabeceraEntity>)getArguments().getSerializable(TAG_PromocionDetalle);
+                //copiaeditablelistaPromocionCabeceraEntity = (ArrayList<ListaPromocionCabeceraEntity>)getArguments().getSerializable(TAG_PromocionDetalle);
             }
         }
     }
@@ -191,6 +192,11 @@ public class PromocionDetalleView extends Fragment {
         v= inflater.inflate(R.layout.fragment_promocion_detalle_view, container, false);
         list_promocion_detalle_editar=v.findViewById(R.id.list_promocion_detalle);
         fab_add_promotiondetail=v.findViewById(R.id.fab_add_promotiondetail);
+
+        if(SesionEntity.quotation.equals("N"))
+        {
+            fab_add_promotiondetail.setVisibility(View.GONE);
+        }
 
         fab_add_promotiondetail.setOnClickListener(view -> {
             String Fragment="PromocionDetalleView";
@@ -259,6 +265,13 @@ public class PromocionDetalleView extends Fragment {
         inflater.inflate(R.menu.menu_promocion_detalle, menu);
         vincular_promocion_detalle_editar = menu.findItem(R.id.vincular_promocion_detalle_editar);
         add_promocion_detalle_percent = menu.findItem(R.id.add_promocion_detalle_percent);
+
+        if(SesionEntity.quotation.equals("N"))
+        {
+            add_promocion_detalle_percent.setVisible(false);
+            add_promocion_detalle_percent.setEnabled(false);
+        }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -269,7 +282,8 @@ public class PromocionDetalleView extends Fragment {
                 String Fragment="PromocionDetalleView";
                 String accion="editar";
                 String compuesto=Fragment+"-"+accion;
-                mListener.onFragmentInteraction(compuesto,ObtenerListaPromocionDetalle());
+                //mListener.onFragmentInteraction(compuesto,ObtenerListaPromocionDetalle());
+                mListener.onFragmentInteraction(compuesto,listaPromocionCabeceraEntity);
                 return false;
             case R.id.add_promocion_detalle_percent:
                 Log.e("REOS","PromocionDetalleView-onOptionsItemSelected-add-ingreso:");
@@ -283,6 +297,7 @@ public class PromocionDetalleView extends Fragment {
         return false;
     }
 
+    /*
     public ArrayList<ListaPromocionCabeceraEntity> ObtenerListaPromocionDetalle()
     {
 
@@ -304,7 +319,7 @@ public class PromocionDetalleView extends Fragment {
 
         }
         return  listaPromocionCabeceraEntity;
-    }
+    }*/
 
     public boolean addPercentDescount()
     {
@@ -326,7 +341,10 @@ public class PromocionDetalleView extends Fragment {
             promocionDetalleSQLiteEntity.setCantidad("1");
             promocionDetalleSQLiteEntity.setDescuento("1");
             promocionDetalleSQLiteEntity.setChkdescuento("0");
-            for (int i = 0; i < listaPromocionCabeceraEntity.size(); i++) {
+            for (int i = 0; i < listaPromocionCabeceraEntity.size(); i++)
+            {
+                listaPromocionCabeceraEntity.get(i).setDescuento("1");
+                //listaPromocionCabeceraEntity.get(i).setPromocion_id(listaPromocionCabeceraEntity.get(i).getPromocion_id()+"_M");
                 listaPromocionCabeceraEntity.get(i).getListaPromocionDetalleEntities().add(promocionDetalleSQLiteEntity);
             }
 

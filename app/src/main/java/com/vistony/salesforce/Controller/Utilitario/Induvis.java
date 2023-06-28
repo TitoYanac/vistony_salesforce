@@ -92,8 +92,8 @@ public class Induvis {
 
     public static String getDate(String flavor,String dateBD){
         String dateView="",year,month,day;
-        Log.e("REOS","Induvis-getDate-flavor:"+flavor);
-        Log.e("REOS","Induvis-getDate-dateBD:"+dateBD);
+        //Log.e("REOS","Induvis-getDate-flavor:"+flavor);
+        //Log.e("REOS","Induvis-getDate-dateBD:"+dateBD);
         try {
         switch (flavor){
             case "bolivia":
@@ -108,15 +108,15 @@ public class Induvis {
                 year=dateBD.substring(0,4);
                 month=dateBD.substring(4,6);
                 day=dateBD.substring(6,8);
-                dateView=year+"-"+month+"-"+day;
-
+                //dateView=year+"-"+month+"-"+day;
+                dateView=day+"/"+month+"/"+year;
                 break;
         }
         }catch (Exception e)
         {
             Log.e("REOS","Induvis-getDate-e:"+e);
         }
-        Log.e("REOS","Induvis-getDate-dateView:"+dateView);
+        //Log.e("REOS","Induvis-getDate-dateView:"+dateView);
         return dateView;
     }
 
@@ -460,7 +460,7 @@ public class Induvis {
     public long getDiferenceDays(String Date) throws ParseException {
 
         LocalDate myDate = LocalDate.parse(Date);
-
+        Log.e("REOS","Induvis.getDiferenceDays.myDate: "+myDate);
         LocalDate currentDate = LocalDate.now();
 
        long numberOFDays = DAYS.between(myDate, currentDate);
@@ -471,7 +471,7 @@ public class Induvis {
 
     static public void refreshGlobalVariables(Context context)
     {
-        Log.e("REOS","Induvis-refreshGlobalVariables-");
+        Log.e("REOS","Induvis-refreshGlobalVariables");
         SesionEntity Sesion= new SesionEntity();
         UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
         UsuarioSQLiteEntity userEntity=usuarioSQLite.ObtenerUsuarioSesion();
@@ -566,6 +566,7 @@ public class Induvis {
     static SimpleDateFormat dateFormat;
     static Date datefecha;
     static String fecha;
+
     public static String ConvertdatefordateSAP(String date){
         String dateSAP="";
         dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
@@ -584,9 +585,37 @@ public class Induvis {
                 dateSAP= fecha;
             }
         }
-
         return dateSAP;
-
     }
 
+    public static String ConvertDateSAPaDate(String dateSAP){
+        String dateUser="",year="",month="",day="";
+        if(dateSAP!=null) {
+            if (dateSAP.length() == 8) {
+                year=dateSAP.substring(0,4);
+                month=dateSAP.substring(4,6);
+                day=dateSAP.substring(6,8);
+                dateUser=year+"-"+month+"-"+day;
+            }
+        }
+        return dateUser;
+    }
+
+
+    public static String getDateFormataDateUser(String dateFormat){
+        String dateUser="",year,month,day;
+        Log.e("REOS","Induvis-getDate-dateFormat:"+dateFormat);
+        try {
+            String[] sourcedate = dateFormat.split("-");
+            String año = sourcedate[0];
+            String mes = sourcedate[1];
+            String dia = sourcedate[2];
+            dateUser = dia+"/"+mes+"/"+año;
+        }catch (Exception e)
+        {
+            Log.e("REOS","Induvis-getDate-e:"+e);
+        }
+        Log.e("REOS","Induvis-getDate-dateUser:"+dateUser);
+        return dateUser;
+    }
 }

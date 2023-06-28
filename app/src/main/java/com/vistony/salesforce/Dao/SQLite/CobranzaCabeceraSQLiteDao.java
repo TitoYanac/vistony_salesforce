@@ -218,7 +218,7 @@ public class CobranzaCabeceraSQLiteDao {
         try {
             abrir();
             Cursor fila = bd.rawQuery(
-                    "Select * from cobranzacabecera where (chkwsrecibido= 'N' or chkwsrecibido= '0')  and compania_id=? and usuario_id=? AND (fechadeposito>='20220427' OR fechadeposito>='2022-04-27')   " +
+                    "Select * from cobranzacabecera where (chkwsrecibido= 'N' or chkwsrecibido= '0')  and compania_id=? and usuario_id=? AND (fechadeposito>='20230601' OR fechadeposito>='2023-06-01')   " +
                             "",new String[]{compania_id,usuario_id});
 
             while (fila.moveToNext())
@@ -622,7 +622,7 @@ public class CobranzaCabeceraSQLiteDao {
         try {
             abrir();
             Cursor fila = bd.rawQuery(
-                    "Select * from cobranzacabecera where (chkwsrecibido= 'N' or chkwsrecibido= '0')  and compania_id=? and usuario_id=? AND (fechadeposito>='20220407' OR fechadeposito>='2022-04-07')   " +
+                    "Select * from cobranzacabecera where (chkwsrecibido= 'N' or chkwsrecibido= '0')  and compania_id=? and usuario_id=? AND (fechadeposito>='20230601' OR fechadeposito>='2023-06-01')   " +
                             "",new String[]{compania_id,usuario_id});
 
             while (fila.moveToNext())

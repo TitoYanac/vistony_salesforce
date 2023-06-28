@@ -24,6 +24,9 @@ public class ListaPromocionCabeceraEntity implements Serializable {
     public String currency_id;
     public String lista_promocion;
     public String count;
+    public String pricepromotionalcash;
+    public String countfinish;
+    public String pricepromotionalcredit;
 
     public ListaPromocionCabeceraEntity() {
 
@@ -33,6 +36,7 @@ public class ListaPromocionCabeceraEntity implements Serializable {
             String lista_promocion_id, String promocion_id, String producto, String umd, String cantidadcompra, String cantidadpromocion,
             boolean estadoitems, String preciobase, ArrayList<PromocionDetalleSQLiteEntity> listaPromocionDetalleEntities, String producto_id,
             String descuento, String cardcode, String terminopago_id, String ubigeo_id, String currency_id
+            ,String pricepromotionalcash,String pricepromotionalcredit,String count
 
     ) {
         this.lista_promocion_id = lista_promocion_id;
@@ -50,6 +54,34 @@ public class ListaPromocionCabeceraEntity implements Serializable {
         this.terminopago_id = terminopago_id;
         this.ubigeo_id = ubigeo_id;
         this.currency_id = currency_id;
+        this.pricepromotionalcash = pricepromotionalcash;
+        this.pricepromotionalcredit = pricepromotionalcredit;
+        this.count=count;
+
+    }
+
+    public String getPricepromotionalcash() {
+        return pricepromotionalcash;
+    }
+
+    public void setPricepromotionalcash(String pricepromotionalcash) {
+        this.pricepromotionalcash = pricepromotionalcash;
+    }
+
+    public String getPricepromotionalcredit() {
+        return pricepromotionalcredit;
+    }
+
+    public void setPricepromotionalcredit(String pricepromotionalcredit) {
+        this.pricepromotionalcredit = pricepromotionalcredit;
+    }
+
+    public String getCountfinish() {
+        return countfinish;
+    }
+
+    public void setCountfinish(String countfinish) {
+        this.countfinish = countfinish;
     }
 
     public String getCount() {

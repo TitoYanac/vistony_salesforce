@@ -78,6 +78,7 @@ import com.vistony.salesforce.Dao.Adapters.ListaParametrosDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.MotivoVisitaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionDetalleSQLiteDao;
@@ -99,6 +100,7 @@ import com.vistony.salesforce.Entity.SQLite.HojaDespachoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.MotivoVisitaSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ParametrosSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
@@ -106,6 +108,7 @@ import com.vistony.salesforce.Entity.SQLite.RutaFuerzaTrabajoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaVendedorSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.StockSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -386,186 +389,200 @@ ParametrosView extends Fragment {
                 break;
         }
         AppExecutors executor=new AppExecutors();
-        /////////////////////Sincronizar Recibos Pendientes de Depositar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.SynchronizedepositedPendingCollection(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
 
-        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.UndepositedPendingCollection(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
+        if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
+        {
 
-        /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO - Con Conteo de Envio\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        //cobranzaRepository.UndepositedPendingCollectionCountSend(getContext()).observe(getActivity(), data -> {
-        //    Log.e("Jepicame","=>"+data);
-        //});
-
-
-        ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
-            Log.e("REOS-ParametrosView-depositedPendingCollection","=>"+data);
-        });
-        ///////////////////////////// ENVIAR PEDIDOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        ordenVentaRepository.salesOrderResend(getContext()).observe(getActivity(), data -> {
-            Log.e("REOS-ParametrosView-salesOrderResend", "=>" + data);
-        });
-        ///////////////////////////// ENVIAR VISITAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        visitaRepository.visitResend(getContext()).observe(getActivity(), data -> {
-            Log.e("REOS-ParametrosView-visitResend", "=>" + data);
-        });
-        ///////////////////////////// ENVIAR DEPOSITOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
-            Log.e("REOS-ParametrosView-depositResend", "=>" + data);
-        });
-
-        ///////////////////////////// ENVIAR COBRANZAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        //cobranzaRepository.depositResend(getContext()).observe(getActivity(), data -> {
-        //    Log.e("Jepicame","=>"+data);
-        //});
-
-        ///////////////////////////// BACKUP SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        if(FLAG_BACKUP.equals("")){
-            backupRepository.sendSqlite(getContext()).observe(getActivity(), data -> {
+        }else {
+            /////////////////////Sincronizar Recibos Pendientes de Depositar\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            cobranzaRepository.SynchronizedepositedPendingCollection(getContext()).observe(getActivity(), data -> {
                 Log.e("Jepicame","=>"+data);
             });
-        }
-        ////////////////////////SINCRONIZACION ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.Synchronizevoidedreceipts(getContext(),SesionEntity.imei).observe(getActivity(), data -> {
-            Log.e("REOS-ParametrosView-Synchronizevoidedreceipts-","=>"+data);
-        });
-        ///////////////////////////// BANCO SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        bancoRepository.getAndInsertBank(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("REOS-ParametrosView-getAndInsertBank-","=>"+data);
-        });
 
-        ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        depositoRepository.UpdatedepositStatus(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
-        });
-        ////////////////////////ENVIAR RECIBOS DESVINCULADOS DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        cobranzaRepository.ReceiptDetachedDeposit(getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
+            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            cobranzaRepository.UndepositedPendingCollection(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame","=>"+data);
+            });
 
-        /*///////////////////////////// PRICE LIST \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        priceListRepository.getAddAllPriceList(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });*/
+            ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
+            cobranzaRepository.depositedPendingCollection(getContext()).observe(getActivity(), data -> {
+                Log.e("REOS-ParametrosView-depositedPendingCollection","=>"+data);
+            });
 
-        ///////////////////////////COLORES/////////////////////////////////////////////////
-        escColoursCRepository.getEscColours(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
-
-        ///////////////////////////COLORES/////////////////////////////////////////////////
-        typeDispatchRepository.geTypeDispatch  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
-
-
-        ///////////////////////////Cuota de Efectividad/////////////////////////////////////////////////
-        quoteEffectivenessRepository.getQuoteEffectiveness  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame","=>"+data);
-        });
-
-        ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
-        reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
-        });
-        /*if(!BuildConfig.FLAVOR.equals("bolivia") ){
-        ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
-        reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
-            Log.e("Jepicame", "=>" + data);
-        });
-        }*/
-
-        //Envio de Geolocalizacion con Foto
-        leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
-            Log.e("REOS", "sendGeolocationClient" + data);
-        });
-
-        //Envio de Geolocalizacion sin Foto en Bloque
-        leadClienteViewModel.sendGeolocationBlock(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
-            Log.e("REOS", "sendGeolocationBlock" + data);
-        });
-
-        ubigeoRepository.geUbigeo (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("REOS", "ParametrosView-ubigeoRepository-data: " + data);
-        });
-
-        String datepricelist="",datepromotionhead="",datepromotiondetail="";
-        ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getContext());
-        datepricelist=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.price_list).toUpperCase());
-        Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
-        Log.e("REOS", "ParametrosView-onCreate-datepricelist: " + datepricelist);
-        if(!fecha.equals(datepricelist))
-        {
-            listaPrecioRepository.execClarAndAddPriceList(SesionEntity.imei, getContext()).observe(getActivity()
-                    , data -> {
-                        Log.e("REOS", "ParametrosView-listaPrecioRepository-data: " + data);
-                    }
-            );
-        }
-
-        datepromotionhead=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_head).toUpperCase());
-        Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
-        Log.e("REOS", "ParametrosView-onCreate-datepromotionhead: " + datepromotionhead);
-        if(!fecha.equals(datepromotionhead))
-        {
-            promocionCabeceraRepository.exeClearandAddPromotionHead(SesionEntity.imei, getContext()).observe(getActivity()
-                    , data -> {
-                        Log.e("REOS", "ParametrosView-promocionCabeceraRepository-data: " + data);
-                    }
-            );
-        }
-
-        datepromotiondetail=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_detail).toUpperCase());
-        Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
-        Log.e("REOS", "ParametrosView-onCreate-datepromotiondetail: " + datepromotiondetail);
-        if(!fecha.equals(datepromotiondetail))
-        {
-            promocionDetalleRepository.exeClearandAddPromotionDetail(SesionEntity.imei, getContext()).observe(getActivity()
-                    , data -> {
-                        Log.e("REOS", "ParametrosView-promocionDetalleRepository-data: " + data);
-                    }
-            );
-        }
-
-        reasonFreeTransferRepository.getReasonFreeTransfer(SesionEntity.imei,getContext()).observe(getActivity()
-                ,data-> {
-                    Log.e("REOS", "ParametrosView-getReasonFreeTransfer-data: " + data);
+            //Se desactivo para identificar el motivo de reinicio 14/06/2023 14:22
+            //Validar Pedidos
+            if(SesionEntity.sendvalidations.equals("Y"))
+            {
+                OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite = new OrdenVentaCabeceraSQLite(getContext());
+                ArrayList<OrdenVentaCabeceraSQLiteEntity> listSalesOrders = new ArrayList<>();
+                listSalesOrders = ordenVentaCabeceraSQLite.getSalesOrderPendingSAP();
+                UsuarioSQLite usuarioSQLite = new UsuarioSQLite(getContext());
+                UsuarioSQLiteEntity usuarioSQLiteEntity = new UsuarioSQLiteEntity();
+                usuarioSQLiteEntity = usuarioSQLite.ObtenerUsuarioSesion();
+                for (int i = 0; i < listSalesOrders.size(); i++) {
+                    ordenVentaRepository.validateSalesOrder(
+                            listSalesOrders.get(i).getCliente_id(),
+                            FormulasController.Convertirfechahoraafechanumerica(listSalesOrders.get(i).getFecharegistro()),
+                            listSalesOrders.get(i).getOrdenventa_id(),
+                            usuarioSQLiteEntity.fuerzatrabajo_id,
+                            getContext()
+                    ).observe(getActivity(), data -> {
+                        Log.e("REOS", "ParametrosView-validateSalesOrder-data: " + data);
+                    });
                 }
-        );
-        //Enviar Firma Electronica
-        //cobranzaRepository.PendingCollectionSignatureList(getContext()).observe(getActivity(), data -> {
-        //    Log.e("REOS", "CobranzaDetalleView-getAlertEditSignature-PendingCollectionSignatureList-data" + data);
-        //});
+           }else {
 
-        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
-        {
-            //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
-            statusDispatchRepository.statusDispatchSendTime(getContext(),executor.diskIO()).observe(getActivity(), data -> {
-                Log.e("REOS", "statusDispatchRepository-->statusDispatchSendTime-->resultdata" + data);
+            }
+            ///////////////////////////// ENVIAR VISITAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            if(SesionEntity.sendvisits.equals("Y"))
+            {
+                visitaRepository.visitResend(getContext()).observe(getActivity(), data -> {
+                    Log.e("REOS-ParametrosView-visitResend", "=>" + data);
+                });
+            }
+
+            ///////////////////////////// ENVIAR DEPOSITOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            depositoRepository.depositResend(getContext()).observe(getActivity(), data -> {
+                Log.e("REOS-ParametrosView-depositResend", "=>" + data);
             });
 
-            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
-            statusDispatchRepository.statusDispatchSendPhoto(getContext(),executor.diskIO()).observe(getActivity(), data -> {
-                Log.e("REOS", "statusDispatchRepository-->statusDispatchSendPhoto-->resultdata" + data);
+            ///////////////////////////// ENVIAR COBRANZAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            //cobranzaRepository.depositResend(getContext()).observe(getActivity(), data -> {
+            //    Log.e("Jepicame","=>"+data);
+            //});
+
+            ///////////////////////////// BACKUP SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            if(FLAG_BACKUP.equals("")){
+                backupRepository.sendSqlite(getContext()).observe(getActivity(), data -> {
+                    Log.e("Jepicame","=>"+data);
+                });
+            }
+            ////////////////////////SINCRONIZACION ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            cobranzaRepository.Synchronizevoidedreceipts(getContext(),SesionEntity.imei).observe(getActivity(), data -> {
+                Log.e("REOS-ParametrosView-Synchronizevoidedreceipts-","=>"+data);
+            });
+            ///////////////////////////// BANCO SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            bancoRepository.getAndInsertBank(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("REOS-ParametrosView-getAndInsertBank-","=>"+data);
             });
 
-            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
-            statusDispatchRepository.statusDispatchListSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
-                Log.e("REOS", "statusDispatchRepository-->statusDispatchListSend-->resultdata" + data);
+            ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            depositoRepository.UpdatedepositStatus(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+            ////////////////////////ENVIAR RECIBOS DESVINCULADOS DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            cobranzaRepository.ReceiptDetachedDeposit(getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame","=>"+data);
             });
 
+            ///////////////////////////COLORES/////////////////////////////////////////////////
+            escColoursCRepository.getEscColours(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame","=>"+data);
+            });
+
+            ///////////////////////////COLORES/////////////////////////////////////////////////
+            typeDispatchRepository.geTypeDispatch  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame","=>"+data);
+            });
+
+            ///////////////////////////Cuota de Efectividad/////////////////////////////////////////////////
+            quoteEffectivenessRepository.getQuoteEffectiveness  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame","=>"+data);
+            });
+
+            ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
+            reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
+                Log.e("Jepicame", "=>" + data);
+            });
+
+            //Envio de Geolocalizacion con Foto
+            leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
+                Log.e("REOS", "sendGeolocationClient" + data);
+            });
+
+            //Envio de Geolocalizacion sin Foto en Bloque
+            leadClienteViewModel.sendGeolocationBlock(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
+                Log.e("REOS", "sendGeolocationBlock" + data);
+            });
+
+            ubigeoRepository.geUbigeo (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("REOS", "ParametrosView-ubigeoRepository-data: " + data);
+            });
+
+            String datepricelist="",datepromotionhead="",datepromotiondetail="";
+            ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getContext());
+            datepricelist=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.price_list).toUpperCase());
+            Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
+            Log.e("REOS", "ParametrosView-onCreate-datepricelist: " + datepricelist);
+            if(!fecha.equals(datepricelist))
+            {
+                listaPrecioRepository.execClarAndAddPriceList(SesionEntity.imei, getContext()).observe(getActivity()
+                        , data -> {
+                            Log.e("REOS", "ParametrosView-listaPrecioRepository-data: " + data);
+                        }
+                );
+            }
+
+            datepromotionhead=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_head).toUpperCase());
+            Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
+            Log.e("REOS", "ParametrosView-onCreate-datepromotionhead: " + datepromotionhead);
+            if(!fecha.equals(datepromotionhead))
+            {
+                promocionCabeceraRepository.exeClearandAddPromotionHead(SesionEntity.imei, getContext()).observe(getActivity()
+                        , data -> {
+                            Log.e("REOS", "ParametrosView-promocionCabeceraRepository-data: " + data);
+                        }
+                );
+            }
+
+            datepromotiondetail=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_detail).toUpperCase());
+            Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
+            Log.e("REOS", "ParametrosView-onCreate-datepromotiondetail: " + datepromotiondetail);
+            if(!fecha.equals(datepromotiondetail))
+            {
+                promocionDetalleRepository.exeClearandAddPromotionDetail(SesionEntity.imei, getContext()).observe(getActivity()
+                        , data -> {
+                            Log.e("REOS", "ParametrosView-promocionDetalleRepository-data: " + data);
+                        }
+                );
+            }
+
+            reasonFreeTransferRepository.getReasonFreeTransfer(SesionEntity.imei,getContext()).observe(getActivity()
+                    ,data-> {
+                        Log.e("REOS", "ParametrosView-getReasonFreeTransfer-data: " + data);
+                    }
+            );
+
+            if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+            {
+                //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+                statusDispatchRepository.statusDispatchSendTime(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("REOS", "statusDispatchRepository-->statusDispatchSendTime-->resultdata" + data);
+                });
+
+                /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+                statusDispatchRepository.statusDispatchSendPhoto(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("REOS", "statusDispatchRepository-->statusDispatchSendPhoto-->resultdata" + data);
+                });
+
+                /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                //statusDispatchRepository.statusDispatchSend(getContext()).observe(getActivity(), data -> {
+                statusDispatchRepository.statusDispatchListSend(getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("REOS", "statusDispatchRepository-->statusDispatchListSend-->resultdata" + data);
+                });
+
+            }
         }
+
 
         fabdescargarparametros.setOnClickListener(view -> {
             Object objeto=null,object2=null;
+            ///////////////////////////// ENVIAR PEDIDOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            ordenVentaRepository.salesOrderResend(getContext()).observe(getActivity(), data -> {
+                Log.e("REOS-ParametrosView-salesOrderResend", "=>" + data);
+            });
 
             ///////////////////////////Ruta de Trabajo/////////////////////////////////////////////////
             rutaFuerzaTrabajoRepository.getInsertDBWorkPath  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
@@ -614,12 +631,14 @@ ParametrosView extends Fragment {
             fabdescargarparametros.setEnabled(false);
         }
 
-        if(!BuildConfig.FLAVOR.equals("india")){ //la india por el app de lead no carga parametros
-            obtenerWSParametros.execute("Todos");
-        }
+        if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
+        {
 
-        //listaParametrosAdapter = new ListaParametrosAdapter(getActivity(), ListaParametrosDao.getInstance().getLeads(listaparametrosSQLiteEntity,false));
-        //listviewparametro.setAdapter(listaParametrosAdapter);
+        }else {
+            if (!BuildConfig.FLAVOR.equals("india")) { //la india por el app de lead no carga parametros
+                obtenerWSParametros.execute("Todos");
+            }
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()){
@@ -632,6 +651,9 @@ ParametrosView extends Fragment {
                 startActivity(intent);
             }
         }
+
+
+
         return v;
     }
 
@@ -641,6 +663,7 @@ ParametrosView extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             pd = new ProgressDialog(getActivity());
             pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.download_parameters), true, false);
         }
@@ -725,13 +748,13 @@ ParametrosView extends Fragment {
                             case "marruecos":
                                 if(!SesionEntity.perfil_id.equals("CHOFER"))
                                 {
-                                 clienteRepository = new ClienteRepository(getContext());
-                                LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
+                                     clienteRepository = new ClienteRepository(getContext());
+                                    LclientesqlSQLiteEntity = clienteRepository.getCustomers(SesionEntity.imei,"");
 
-                                if (!LclientesqlSQLiteEntity.isEmpty()) {
-                                    CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
-                                    parametrosSQLite.ActualizaCantidadRegistros("1",  getActivity().getResources().getString(R.string.clients).toUpperCase(),String.valueOf(CantClientes), getDateTime());
-                                }
+                                    if (!LclientesqlSQLiteEntity.isEmpty()) {
+                                        CantClientes = registrarClienteSQLite(LclientesqlSQLiteEntity);
+                                        parametrosSQLite.ActualizaCantidadRegistros("1",  getActivity().getResources().getString(R.string.clients).toUpperCase(),String.valueOf(CantClientes), getDateTime());
+                                    }
                                 }
 
                                 break;

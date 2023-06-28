@@ -1,6 +1,7 @@
 package com.vistony.salesforce.Dao.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.vistony.salesforce.Entity.Adapters.ListaListadoPromocionEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
@@ -42,6 +43,8 @@ public class ListaListadoPromocionDao {
         try {
             for( int i=0;i<Lista.size();i++)
             {
+                Log.e("REOS","ListaListadoPromocionDao-getLeads-Lista.get(i).getLista_promocion_id()"+Lista.get(i).getLista_promocion_id());
+                Log.e("REOS","ListaListadoPromocionDao-getLeads-Lista.get(i).getLista_promocion()"+Lista.get(i).getLista_promocion());
                 saveLead(new ListaListadoPromocionEntity(
                         Lista.get(i).getLista_promocion_id()
                         , Lista.get(i).getLista_promocion()

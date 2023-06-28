@@ -34,7 +34,8 @@ public class DocumentoSQLite {
             String saldo,
             String saldo_sin_procesar,
             String doc_entry,
-            String pymntgroup
+            String pymntgroup,
+            String additionaldiscount
     )
     {
 
@@ -55,6 +56,7 @@ public class DocumentoSQLite {
         registro.put("saldo_sin_procesar",saldo_sin_procesar);
         registro.put("doc_entry",doc_entry);
         registro.put("pymntgroup",pymntgroup);
+        registro.put("additionaldiscount",additionaldiscount);
 
         sqlite.insert("documentodeuda",null,registro);
 
@@ -88,6 +90,7 @@ public class DocumentoSQLite {
                 documentoDeudaSQLiteEntity.setSaldo_sin_procesar(fila.getString(fila.getColumnIndex("saldo_sin_procesar")));
                 documentoDeudaSQLiteEntity.setDocumento_entry(fila.getString(fila.getColumnIndex("doc_entry")));
                 documentoDeudaSQLiteEntity.setPymntgroup(fila.getString(fila.getColumnIndex("pymntgroup")));
+                documentoDeudaSQLiteEntity.setAdditionaldiscount (fila.getString(fila.getColumnIndex("additionaldiscount")));
                 listaDDeudaentity.add(documentoDeudaSQLiteEntity);
             }
 

@@ -22,7 +22,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 35;
+    private static final int VERSION = 38;
 
 
     public SqliteController(Context context){
@@ -54,17 +54,17 @@ public class SqliteController extends SQLiteOpenHelper {
         db.execSQL("create table parametros (parametro_id text,nombreparametro text, cantidadregistros text, fechacarga text)");
         db.execSQL("create table configuracion (papel text,tamanio text, totalrecibos text, secuenciarecibos text,modeloimpresora text, direccionimpresora text,tipoimpresora text,vinculaimpresora text )");
         db.execSQL("create table usuario (compania_id text,fuerzatrabajo_id text ,nombrecompania text, nombrefuerzatrabajo text,nombreusuario text,usuario_id text,recibo text, chksesion text, online text,perfil text,chkbloqueopago text,listaPrecios_id_1 text,listaPrecios_id_2 text,planta text,almacen_id text,CogsAcct text,U_VIST_CTAINGDCTO text,DocumentsOwner text,U_VIST_SUCUSU text,CentroCosto text,UnidadNegocio text,LineaProduccion text,Impuesto_ID text,Impuesto text,U_VIS_CashDscnt text,Language text,Country text,flag_stock TEXT,flag_backup TEXT,imei TEXT,rate TEXT,print TEXT,activecurrency TEXT,quotation TEXT,census TEXT" +
-                ",oiltaxstatus TEXT, deliverydateauto TEXT)");
+                ",oiltaxstatus TEXT, deliverydateauto TEXT, deliveryrefusedmoney TEXT,status TEXT,sendvisits TEXT,sendvalidations TEXT)");
 
         //Cobranzas
         //Maestros
-        db.execSQL("CREATE TABLE cliente (cliente_id text,domembarque_id text ,compania_id text, nombrecliente text,direccion text,zona_id text,ordenvisita text,zona text,rucdni text,moneda text,telefonofijo text,telefonomovil text,correo text,ubigeo_id text,impuesto_id text,impuesto text,tipocambio text,categoria TEXT,linea_credito TEXT,linea_credito_usado TEXT,terminopago_id TEXT,lista_precio TEXT,DueDays TEXT,domfactura_id TEXT,lineofbusiness TEXT,lastpurchase TEXT,statuscounted TEXT)");
+        db.execSQL("CREATE TABLE cliente (cliente_id text,domembarque_id text ,compania_id text, nombrecliente text,direccion text,zona_id text,ordenvisita text,zona text,rucdni text,moneda text,telefonofijo text,telefonomovil text,correo text,ubigeo_id text,impuesto_id text,impuesto text,tipocambio text,categoria TEXT,linea_credito TEXT,linea_credito_usado TEXT,terminopago_id TEXT,lista_precio TEXT,DueDays TEXT,domfactura_id TEXT,lineofbusiness TEXT,lastpurchase TEXT,statuscounted TEXT,customerwhitelist TEXT)");
         db.execSQL("CREATE TABLE banco (banco_id text , compania_id text,nombrebanco text,singledeposit text,pagopos text)");
         db.execSQL("CREATE TABLE compania (compania_id text , nombrecompania text)");
-        db.execSQL("CREATE TABLE documentodeuda (documento_id text ,domembarque_id text, compania_id text,cliente_id text,fuerzatrabajo_id text,fechaemision text,fechavencimiento text,nrofactura text,moneda text,importefactura text,saldo text,saldo_sin_procesar text,doc_entry TEXT,pymntgroup TEXT)");
+        db.execSQL("CREATE TABLE documentodeuda (documento_id text ,domembarque_id text, compania_id text,cliente_id text,fuerzatrabajo_id text,fechaemision text,fechavencimiento text,nrofactura text,moneda text,importefactura text,saldo text,saldo_sin_procesar text,doc_entry TEXT,pymntgroup TEXT,additionaldiscount TEXT)");
         db.execSQL("CREATE TABLE fuerzatrabajo (fuerzatrabajo_id text , compania_id text,nombrefuerzatrabajo text)");
         db.execSQL("CREATE TABLE rutavendedor (cliente_id text,domembarque_id text ,compania_id text, nombrecliente text,direccion text,zona_id text,ordenvisita text,zona text,rucdni text,moneda text,telefonofijo text,telefonomovil text,correo text,ubigeo_id text,impuesto_id text,impuesto text,tipocambio text,categoria TEXT,linea_credito TEXT,terminopago_id TEXT, chk_visita TEXT,chk_pedido TEXT,chk_cobranza TEXT,chk_ruta TEXT,fecharuta TEXT,saldomn text,slpCode TEXT,userCode TEXT,salesorderamount TEXT,collectionamount TEXT,lastpurchase TEXT,saldosincontado TEXT,chkgeolocation TEXT,chkvisitsection TEXT" +
-                ",terminopago TEXT,contado TEXT,latitud TEXT,longitud TEXT,addresscode TEXT,statuscounted TEXT)");
+                ",terminopago TEXT,contado TEXT,latitud TEXT,longitud TEXT,addresscode TEXT,statuscounted TEXT,typevisit TEXT, quotationamount TEXT,chk_quotation TEXT,customerwhitelist TEXT)");
 
         //Transaccional
         db.execSQL("CREATE TABLE cobranzacabecera (cobranza_id text , usuario_id text,banco_id text,compania_id text,totalmontocobrado text,chkdepositado text,chkanulado text,fuerzatrabajo_id text ,tipoingreso text,chkbancarizado text,fechadiferido text, chkwsrecibido text, fechadeposito text,comentarioanulado  text,chkwsanulado text,chkupdate text,chkwsupdate text,pagodirecto text,pagopos text,sap_code TEXT,mensajeWS TEXT,countsend TEXT,collection_salesperson TEXT)");
@@ -859,6 +859,45 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicionalCredito TEXT");
         }
 
+        if(oldVersion==35&&newVersion==36)
+        {
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN typevisit TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN quotationamount TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chk_quotation TEXT");
+        }
+
+        if(oldVersion==36&&newVersion==37)
+        {
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliveryrefusedmoney TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN status TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN sendvisits TEXT");
+            db.execSQL("ALTER TABLE cliente ADD COLUMN customerwhitelist TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN customerwhitelist TEXT");
+            db.execSQL("ALTER TABLE documentodeuda ADD COLUMN additionaldiscount TEXT");
+
+        }
+
+        if(oldVersion==34&&newVersion==37)
+        {
+            db.execSQL("CREATE TABLE reasonfreetransfer (compania_id text,fuerzatrabajo_id text,usuario_id text,Value TEXT, Dscription TEXT)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_TipTransGrat TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicional TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicionalContado TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicionalCredito TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN typevisit TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN quotationamount TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chk_quotation TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliveryrefusedmoney TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN status TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN sendvisits TEXT");
+            db.execSQL("ALTER TABLE cliente ADD COLUMN customerwhitelist TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN customerwhitelist TEXT");
+            db.execSQL("ALTER TABLE documentodeuda ADD COLUMN additionaldiscount TEXT");
+        }
+        if(oldVersion==37&&newVersion==38)
+        {
+            db.execSQL("ALTER TABLE usuario ADD COLUMN sendvalidations TEXT");
+        }
 
     }
 

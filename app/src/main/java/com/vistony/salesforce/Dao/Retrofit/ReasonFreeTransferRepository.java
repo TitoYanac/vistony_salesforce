@@ -31,7 +31,10 @@ public class ReasonFreeTransferRepository  extends ViewModel {
             public void onResponse(Call<ReasonDispatchEntityResponse> call, Response<ReasonDispatchEntityResponse> response) {
 
                 ReasonDispatchEntityResponse reasonDispatchEntityResponse=response.body();
-                if(response.isSuccessful() && Objects.requireNonNull(reasonDispatchEntityResponse).getReasonDispatchEntities().size()>0){
+                if(response.isSuccessful() &&
+                        //Objects.requireNonNull(reasonDispatchEntityResponse).getReasonDispatchEntities().size()>0
+                        response.body()!=null
+                ){
                     reasonFreeTransferSQLiteDao = new ReasonFreeTransferSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
 

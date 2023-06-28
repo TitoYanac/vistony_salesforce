@@ -102,7 +102,13 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         hiloObtenerComisiones=new HiloObtenerComisiones();
-        hiloObtenerComisiones.execute();
+        if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
+        {
+
+        }else
+        {
+            hiloObtenerComisiones.execute();
+        }
         return fragment;
     }
 
@@ -323,24 +329,13 @@ public class ComisionesView extends Fragment implements View.OnClickListener {
         }
         @Override
         protected Object doInBackground(String... arg0) {
-            /*dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            date = new Date();
-            fecha = dateFormat.format(date);
 
-            ComisionesWS comisionesWS=new ComisionesWS(ContenedorComisionesView.context);
-            ArrayList<ComisionesSQLiteEntity> listaComisionesSQLiteEntity=new ArrayList<>();
-            String[] arrayfecha = fecha.toString().split("-");
-            String dia,mes,ano;
-            ano=arrayfecha[0];
-            mes=arrayfecha[1];
-            dia=arrayfecha[2];
-            tv_ano.setText(ano);
-            tv_periodo.setText(mes);*/
             ComisionesWS comisionesWS=new ComisionesWS(ContenedorComisionesView.context);
             ArrayList<ComisionesSQLiteEntity> listaComisionesSQLiteEntity=new ArrayList<>();
             ObtenerFecha();
 
             try {
+
                 listaComisionesSQLiteEntity=comisionesWS.getComisiones(
                         SesionEntity.imei,
                         SesionEntity.compania_id,

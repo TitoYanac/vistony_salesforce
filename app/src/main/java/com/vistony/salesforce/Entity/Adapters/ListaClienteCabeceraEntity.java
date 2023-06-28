@@ -47,6 +47,10 @@ public class ListaClienteCabeceraEntity implements Serializable {
     private String item_id;
     private String addresscode;
     private String statuscount;
+    private String amountQuotation;
+    private String chk_quotation;
+    private String typeVisit;
+    private String customerwhitelist;
 
     public ListaClienteCabeceraEntity(
             String cliente_id,
@@ -61,6 +65,10 @@ public class ListaClienteCabeceraEntity implements Serializable {
             ,String item_id
             ,String addresscode
             ,String statuscount
+            ,String amountQuotation
+            ,String chk_quotation
+            ,String typeVisit
+            ,String customerwhitelist
 
     ) {
         this.cliente_id = cliente_id;
@@ -107,6 +115,44 @@ public class ListaClienteCabeceraEntity implements Serializable {
         this.item_id = item_id;
         this.addresscode = addresscode;
         this.statuscount = statuscount;
+        this.amountQuotation = amountQuotation;
+        this.chk_quotation = chk_quotation;
+        this.typeVisit = typeVisit;
+        this.customerwhitelist=customerwhitelist;
+
+
+    }
+
+    public String getCustomerwhitelist() {
+        return customerwhitelist;
+    }
+
+    public void setCustomerwhitelist(String customerwhitelist) {
+        this.customerwhitelist = customerwhitelist;
+    }
+
+    public String getTypeVisit() {
+        return typeVisit;
+    }
+
+    public void setTypeVisit(String typeVisit) {
+        this.typeVisit = typeVisit;
+    }
+
+    public String getAmountQuotation() {
+        return amountQuotation;
+    }
+
+    public void setAmountQuotation(String amountQuotation) {
+        this.amountQuotation = amountQuotation;
+    }
+
+    public String getChk_quotation() {
+        return chk_quotation;
+    }
+
+    public void setChk_quotation(String chk_quotation) {
+        this.chk_quotation = chk_quotation;
     }
 
     public String getStatuscount() {

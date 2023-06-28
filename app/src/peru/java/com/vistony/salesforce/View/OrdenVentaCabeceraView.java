@@ -108,7 +108,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     View v;
     static Button btn_detalle_orden_venta;
     OnFragmentInteractionListener mListener;
-    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta,ubigeo_id="0",statuscount="N";
+    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta,ubigeo_id="0",statuscount="N",customerwhitelist="N";
     static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
     static String terminopago_id="",terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id,zona_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;
@@ -415,7 +415,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     {
                         statuscount=Listado.get(i).getStatuscount();
                     }
-
+                    customerwhitelist=Listado.get(i).getCustomerwhitelist();
+                    Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.customerwhitelist: "+customerwhitelist);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.ubigeo_id: "+ubigeo_id);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.zona_id: "+zona_id);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.Listado.get(i).getTerminopago_id(): "+Listado.get(i).getTerminopago_id());
@@ -506,9 +507,10 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         tr_spn_reason_free_transfer=v.findViewById(R.id.tr_spn_reason_free_transfer);
         spn_reason_freetransfer=v.findViewById(R.id.spn_reason_freetransfer);
         //Pruebas de Fecha de entrega
+
         if(SesionEntity.deliverydateauto.equals("Y"))
         {
-            tv_dispatch_date.setText(getDateWorkPathforZone());
+            tv_dispatch_date.setText(Induvis.getDateFormataDateUser(getDateWorkPathforZone()));
             Utilitario.disabledImageButtton(btn_dispatch_date, getContext());
         }
         else {
@@ -537,7 +539,19 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         }
 
-        tv_terminopago.setText(cliente_terminopago);
+        if(SesionEntity.deliveryrefusedmoney.equals("Y"))
+        {
+            if(statuscount.equals("Y")&&!customerwhitelist.equals("Y"))
+            {
+                tv_terminopago.setText("--ELEGIR TERMINO DE PAGO--");
+            }
+            else {
+                tv_terminopago.setText(cliente_terminopago);
+            }
+        }else {
+            tv_terminopago.setText(cliente_terminopago);
+        }
+
 
         btn_detalle_orden_venta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -568,7 +582,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 String Fragment="OrdenVentaCabeceraView";
                 String accion="terminopago";
                 String compuesto=Fragment+"-"+accion;
-                String Objeto=cliente_terminopago_id+"&&"+statuscount;
+                String Objeto=cliente_terminopago_id+"&&"+statuscount+"&&"+customerwhitelist;
                 mListener.onFragmentInteraction(compuesto,Objeto);
             }
         });
@@ -1145,8 +1159,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         String[] palabra = monedatotal.split("-");
         codigomoneda=palabra[0];
         descripcionmoneda=palabra[1];
-        SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date = new Date();
 
         for(int i=0;i<Listado.size();i++)
         {
@@ -1244,7 +1256,13 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             VisitaSQLiteEntity visita=new VisitaSQLiteEntity();
             visita.setCardCode(codigocliente);
             visita.setAddress(cliente_domembarque_id);
-            visita.setType("01");
+
+            if(SesionEntity.quotation.equals("Y"))
+            {
+                visita.setType("12");
+            }else {
+                visita.setType("01");
+            }
             visita.setObservation("Se genero el pedido "+listaOrdenVentaCabeceraEntity.getOrden_cabecera_id()+" para la dirección "+Listado.get(i).getDireccion());
             visita.setLatitude(""+latitude);
             visita.setLongitude(""+longitude);
@@ -1306,7 +1324,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         dialogButtonOK.setOnClickListener(v -> {
 
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando Orden de Venta", true, false);
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando "+Induvis.getTituloVentaString(context), true, false);
             OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite=new OrdenVentaCabeceraSQLite(getContext());
             ordenVentaCabeceraSQLite.UpdateStatusOVenviada(ordenventa_id);
             ordenVentaRepository.sendSalesOrder(ordenventa_id,getContext()).observe(getActivity(), data->{
@@ -1376,7 +1394,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             {
                 tv_orden_venta_agencia.setText(historicoordenventa_agencia);
             }
-
+            hiloObtenerAgencia=new HiloObtenerAgencia();
         }
     }
 
@@ -1502,7 +1520,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             dia='0'+dia;
         }
         parametrofecha=year+mes+dia;
-        tv_dispatch_date.setText(year + "-" + mes + "-" + dia);
+        tv_dispatch_date.setText(dia + "/" + mes + "/" + year);
     }
 
     static private Dialog alertdialogInformative(Context context, String titulo, String message) {

@@ -301,8 +301,8 @@ public class RutaFuerzaTrabajoSQLiteDao {
                 frecuenciastring=String.valueOf(Integer.valueOf(frecuenciastring)+1) ;
             }
             frecuenciastring="'+"+ frecuenciastring+" day'";
-
-            fechainicioruta= Induvis.getDate(BuildConfig.FLAVOR,fechainicioruta);
+            Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-fechainicioruta"+fechainicioruta);
+            fechainicioruta= Induvis.ConvertDateSAPaDate(fechainicioruta);
             fechainicioruta="'"+fechainicioruta+"'";
 
             Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-fechainicioruta"+fechainicioruta);

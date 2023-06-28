@@ -22,8 +22,10 @@ import com.vistony.salesforce.kotlin.utilities.DATABASE_NAME
     TypeDispatch::class,
     ReasonDispatch::class,
     StatusDispatch::class,
-    VisitSection::class
-                     ], version = 54,exportSchema = false)
+    VisitSection::class,
+    //CollectionDetail::class
+
+                     ], version = 58,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,
@@ -42,6 +44,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val typeDispatchDao: TypeDispatchDao
     abstract val reasonDispatchDao: ReasonDispatchDao
     abstract val visitSectionDao: VisitSectionDao
+    abstract val collectionDetailDao: CollectionDetailDao
 
     companion object {
 

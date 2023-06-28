@@ -154,22 +154,27 @@ public class LoginView extends AppCompatActivity {
         //Toast.makeText(this,  BuildConfig.COUNTRY_DEFAULT, Toast.LENGTH_LONG).show();
         //Toast.makeText(this,  BuildConfig.LANGUAGE_DEFAULT, Toast.LENGTH_LONG).show();
         //Toast.makeText(this,  this.getResources().getString(R.string.sinInfo), Toast.LENGTH_LONG).show();
-        loginRepository.getAndLoadUsers(Imei, this).observe(LoginView.this, data -> {
-            if (data == null) {
-                Toast.makeText(this, this.getResources().getString(R.string.Error_and_network), Toast.LENGTH_LONG).show();
-            } else if (data.isEmpty()) {
-                btnlogin.setEnabled(false);
-                btnlogin.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_border_button_onclick));
-                btnlogin.setText(this.getResources().getString(R.string.sinInfo));
-                btnlogin.setClickable(false);
+        //if(Imei==null||Imei.equals(""))
+        //{
 
-                Toast.makeText(this, this.getResources().getString(R.string.locale_information_none), Toast.LENGTH_LONG).show();
-            } else {
-                ArrayAdapter<String> adapterProfile = new ArrayAdapter<String>(this, R.layout.layout_custom_spinner, data);
-                spnperfil.setAdapter(adapterProfile);
-                adapterProfile.notifyDataSetChanged();
-            }
-        });
+        //}else {
+            loginRepository.getAndLoadUsers(Imei, this).observe(LoginView.this, data -> {
+                if (data == null) {
+                    Toast.makeText(this, this.getResources().getString(R.string.Error_and_network), Toast.LENGTH_LONG).show();
+                } else if (data.isEmpty()) {
+                    btnlogin.setEnabled(false);
+                    btnlogin.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_border_button_onclick));
+                    btnlogin.setText(this.getResources().getString(R.string.sinInfo));
+                    btnlogin.setClickable(false);
+
+                    Toast.makeText(this, this.getResources().getString(R.string.locale_information_none), Toast.LENGTH_LONG).show();
+                } else {
+                    ArrayAdapter<String> adapterProfile = new ArrayAdapter<String>(this, R.layout.layout_custom_spinner, data);
+                    spnperfil.setAdapter(adapterProfile);
+                    adapterProfile.notifyDataSetChanged();
+                }
+            });
+        //}
 
         /****Mejora**
          if ( !locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
@@ -439,33 +444,6 @@ public class LoginView extends AppCompatActivity {
     }
 
     public void btnLogin(View v) {
-
-        /*TelephonyManager tMgr = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        String mPhoneNumber="";
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this,
-                        Manifest.permission.READ_PHONE_NUMBERS)
-                        != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            mPhoneNumber = tMgr.getLine1Number();
-        }
-        AccountManager am = AccountManager.get(this);
-        Account[] accounts = am.getAccounts();
-
-        ArrayList googleAccounts = new ArrayList();
-        String phoneNumber="";
-        for (Account ac : accounts) {
-            String acname = ac.name;
-            String actype = ac.type;
-
-            System.out.println("Accounts : " + acname + ", " + actype);
-            if(actype.equals("com.whatsapp")){
-                phoneNumber = ac.name;
-            }
-        }
-        Log.e("REOS", "LoginView-btnLogin-phoneNumber:" + phoneNumber);
-        Log.e("REOS", "LoginView-btnLogin-mPhoneNumber:" + mPhoneNumber);*/
         btnlogin.setEnabled(false);
         btnlogin.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_border_button_onclick));
         btnlogin.setText(this.getResources().getString(R.string.Ingresando));
@@ -475,8 +453,6 @@ public class LoginView extends AppCompatActivity {
         UsuarioSQLiteEntity userEntity = loginRepository.loginUser(Companiatext, vendedortext);
 
         if (userEntity != null) {
-
-
             Sesion.compania_id = userEntity.getCompania_id();
             Sesion.fuerzatrabajo_id = userEntity.getFuerzatrabajo_id();
             Sesion.nombrecompania = userEntity.getNombrecompania();
@@ -516,6 +492,10 @@ public class LoginView extends AppCompatActivity {
                 Sesion.census = userEntity.getCensus();
             }
             Sesion.deliverydateauto= userEntity.getDeliverydateauto();
+            Sesion.deliveryrefusedmoney = userEntity.getDeliveryrefusedmoney();
+            Sesion.status = userEntity.getStatus();
+            Sesion.sendvisits = userEntity.getSendvisits();
+            Sesion.sendvalidations = userEntity.getSendvalidations();
 
             Log.e("REOS", "LoginView.Sesion.rate: " + Sesion.rate);
             Log.e("REOS", "LoginView.Sesion.U_VIS_CashDscnt: " + Sesion.U_VIS_CashDscnt);
@@ -530,29 +510,28 @@ public class LoginView extends AppCompatActivity {
                 Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
             }
 
-
-            /*String dato="",dato1="",dato2="";
-            String [] forzadoerror=dato.split("-");
-            dato1=forzadoerror[0];
-            dato2=forzadoerror[1];*/
-
-
             if (country == null && language == null) {
                 Toast.makeText(this, this.getResources().getString(R.string.mse_system_no_identification_country), Toast.LENGTH_LONG).show();
                 btnlogin.setEnabled(true);
-
                 btnlogin.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_border_button_red));
                 btnlogin.setText(getResources().getString(R.string.BotonPrincipalLogin));
                 btnlogin.setClickable(true);
             } else {
-
-                SharedPreferences.Editor editor = statusImei.edit();
-                editor.putString("country", userEntity.getCountry());
-                editor.putString("language", userEntity.getLenguage());
-                editor.apply();
-
-
-                verificationVersion();
+                if(SesionEntity.status.equals("Y"))
+                {
+                    SharedPreferences.Editor editor = statusImei.edit();
+                    editor.putString("country", userEntity.getCountry());
+                    editor.putString("language", userEntity.getLenguage());
+                    editor.apply();
+                    verificationVersion();
+                }
+                else {
+                    Toast.makeText(this, this.getResources().getString(R.string.mse_user_inactive), Toast.LENGTH_LONG).show();
+                    btnlogin.setEnabled(false);
+                    btnlogin.setBackground(ContextCompat.getDrawable(this, R.drawable.custom_border_button_grey));
+                    btnlogin.setText(getResources().getString(R.string.user_inactive));
+                    btnlogin.setClickable(false);
+                }
             }
         } else {
             Toast.makeText(this, this.getResources().getString(R.string.unauthorized_equipment), Toast.LENGTH_SHORT).show();

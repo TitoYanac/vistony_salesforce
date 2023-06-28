@@ -67,17 +67,17 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
             holder = new ListaPromocionCabeceraAdapter.ViewHolder();
             // holder.lbl_documento = (TextView) convertView.findViewById(R.id.lbl_documento);
-            holder.tv_promocion_id = (TextView) convertView.findViewById(R.id.tv_promocion_id);
+            //holder.tv_promocion_id = (TextView) convertView.findViewById(R.id.tv_promocion_id);
             holder.tv_promocion_producto = (TextView) convertView.findViewById(R.id.tv_promocion_producto);
             holder.tv_umd = (TextView) convertView.findViewById(R.id.tv_umd);
             holder.tv_cantidadcompra = (TextView) convertView.findViewById(R.id.tv_cantidadcompra);
             holder.tv_cant_promocion = (TextView) convertView.findViewById(R.id.tv_cant_promocion);
-            holder.tv_porcentajedescuentocabecera = (TextView) convertView.findViewById(R.id.tv_porcentajedescuentocabecera);
+            //holder.tv_porcentajedescuentocabecera = (TextView) convertView.findViewById(R.id.tv_porcentajedescuentocabecera);
             //holder.lv_promocion_detalle = (ListView) convertView.findViewById(R.id.lv_promocion_detalle);
             holder.imv_incrementar = (ImageView) convertView.findViewById(R.id.imv_incrementar);
             holder.imv_decrementar = (ImageView) convertView.findViewById(R.id.imv_decrementar);
             holder.imv_editar_promocion_detalle = (ImageView) convertView.findViewById(R.id.imv_editar_promocion_detalle);
-            holder.imv_editar_promocion_cabecera_descuento = (ImageView) convertView.findViewById(R.id.imv_editar_promocion_cabecera_descuento);
+            //holder.imv_editar_promocion_cabecera_descuento = (ImageView) convertView.findViewById(R.id.imv_editar_promocion_cabecera_descuento);
             holder.relativeListaPromocionCabecera =convertView.findViewById(R.id.relativeListaPromocionCabecera);
             holder.contentpromociondetalle=(ViewGroup) convertView.findViewById(R.id.contentpromociondetalle);
             holder.imv_valorizar = (ImageView) convertView.findViewById(R.id.imv_valorizar);
@@ -91,12 +91,12 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         final ListaPromocionCabeceraEntity lead = getItem(position);
 
         // Setup.
-        holder.tv_promocion_id.setText(lead.getPromocion_id());
+        //holder.tv_promocion_id.setText(lead.getPromocion_id());
         holder.tv_promocion_producto.setText(lead.getProducto());
         holder.tv_umd.setText(lead.getUmd());
         holder.tv_cantidadcompra.setText(lead.getCantidadcompra());
         holder.tv_cant_promocion.setText(lead.getCantidadpromocion());
-        holder.tv_porcentajedescuentocabecera.setText(lead.getDescuento());
+        //holder.tv_porcentajedescuentocabecera.setText(lead.getDescuento());
         switch (BuildConfig.FLAVOR){
             case "bolivia":
             case "ecuador":
@@ -119,7 +119,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.add(R.id.content_menu_view, promocionCabeceraView.newEditarDetallePromocion(lead));
             }});
-        holder.imv_editar_promocion_cabecera_descuento.setOnClickListener(new View.OnClickListener() {
+        /*holder.imv_editar_promocion_cabecera_descuento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -127,7 +127,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
                 fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.add(R.id.content_menu_view, promocionCabeceraView.newEditarDetallePromocionDescuento(lead));
-            }});
+            }});*/
 
         holder.imv_incrementar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,16 +388,16 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
 
     static class ViewHolder {
-        TextView tv_promocion_id;
+        //TextView tv_promocion_id;
         TextView tv_promocion_producto;
         TextView tv_umd;
         TextView tv_cantidadcompra;
         TextView tv_cant_promocion;
-        TextView tv_porcentajedescuentocabecera;
+        //TextView tv_porcentajedescuentocabecera;
         ImageView imv_incrementar;
         ImageView imv_decrementar;
         ImageView imv_editar_promocion_detalle;
-        ImageView imv_editar_promocion_cabecera_descuento;
+        //ImageView imv_editar_promocion_cabecera_descuento;
         RelativeLayout relativeListaPromocionCabecera;
         ImageView imv_valorizar;
         TextView lbl_valorizacion;

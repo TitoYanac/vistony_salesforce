@@ -21,12 +21,17 @@ public class ListaClienteDetalleEntity  implements Serializable {
     public String docentry;
     public String chkruta;
     public String pymntgroup;
+    public String additionaldiscount;
 
     public ListaClienteDetalleEntity() {
 
     }
 
-    public ListaClienteDetalleEntity(String cliente_id, String nombrecliente, String domembarque, String direccion, String documento_id, String nrodocumento, String fechaemision, String fechavencimiento, String importe, String saldo, String cobrado, String nuevo_saldo, int imvclientedetalle, String moneda, String zona_id, String docentry,String chkruta,String pymntgroup) {
+    public ListaClienteDetalleEntity(
+            String cliente_id, String nombrecliente, String domembarque, String direccion, String documento_id,
+            String nrodocumento, String fechaemision, String fechavencimiento, String importe, String saldo,
+            String cobrado, String nuevo_saldo, int imvclientedetalle, String moneda, String zona_id,
+            String docentry,String chkruta,String pymntgroup,String additionaldiscount) {
         this.cliente_id = cliente_id;
         this.nombrecliente = nombrecliente;
         this.domembarque = domembarque;
@@ -45,6 +50,15 @@ public class ListaClienteDetalleEntity  implements Serializable {
         this.docentry = docentry;
         this.chkruta = chkruta;
         this.pymntgroup = pymntgroup;
+        this.additionaldiscount = additionaldiscount;
+    }
+
+    public String getAdditionaldiscount() {
+        return additionaldiscount;
+    }
+
+    public void setAdditionaldiscount(String additionaldiscount) {
+        this.additionaldiscount = additionaldiscount;
     }
 
     public String getPymntgroup() {

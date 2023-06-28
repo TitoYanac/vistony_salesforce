@@ -65,6 +65,17 @@ public class InvoicesEntity {
     @SerializedName("DocumentDetail")
     private List<DocumentDetailEntity> DocumentDetail;
 
+    @SerializedName("Additionaldiscount")
+    private String additionaldiscount;
+
+    public String getAdditionaldiscount() {
+        return additionaldiscount;
+    }
+
+    public void setAdditionaldiscount(String additionaldiscount) {
+        this.additionaldiscount = additionaldiscount;
+    }
+
     public List<DocumentDetailEntity> getDocumentDetail() {
         return DocumentDetail;
     }

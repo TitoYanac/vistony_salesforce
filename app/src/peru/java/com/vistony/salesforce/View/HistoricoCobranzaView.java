@@ -407,7 +407,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
                 break;
             case R.id.btn_consultar_fecha_hisorico_cobranza:
                 Log.e("jpcm","Execute historico");
-                String parametrofecha="";
+                //String parametrofecha="";
 
                 getActivity().runOnUiThread(new Runnable() {
 
@@ -482,7 +482,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
                         }
                         else if (tipofecha.equals("COBRANZA"))
                         {
-                            fecha=tv_fecha_historico_cobranza.getText().toString();
+                            fecha=parametrofecha;
                         }
                     }
 
@@ -490,7 +490,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
                 else
                 {
                     Log.e("REOS","HistoricoCobranzaView-ListadoEmpty");
-                    fecha = tv_fecha_historico_cobranza.getText().toString();
+                    fecha = parametrofecha;
 
                 }
 
@@ -695,7 +695,7 @@ public class HistoricoCobranzaView extends Fragment implements View.OnClickListe
             dia='0'+dia;
         }
         parametrofecha=year+mes+dia;
-        tv_fecha_historico_cobranza.setText(year + "-" + mes + "-" + dia);
+        tv_fecha_historico_cobranza.setText(dia + "/" + mes + "/" + year);
     }
 
 

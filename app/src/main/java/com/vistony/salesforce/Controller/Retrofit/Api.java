@@ -5,6 +5,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.CatalogoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitaEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.AgenciaEntityResponse;
@@ -335,6 +336,14 @@ public interface Api {
 
     @GET(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Ocurrencies/FreeTransfer")
     Call<ReasonDispatchEntityResponse> getReasonFreeTransfer(@Query("imei") String imei);
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/SalesOrder/Validate")
+    Call<SalesOrderEntity> getSalesOrderValidate(
+            @Query("CardCode") String CardCode,
+            @Query("DocDate") String DocDate,
+            @Query("SalesOrderID") String SalesOrderID,
+            @Query("slpCode") String slpCode
+    );
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);
     //@GET

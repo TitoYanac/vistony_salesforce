@@ -28,7 +28,7 @@ public class Config {
         switch (BuildConfig.FLAVOR) {
             //case "chile"://Produccion
             case "ecuador":
-                case "peru":
+            //    case "peru":
                 //Produccion
                 //case "bolivia":
             case "espania":
@@ -43,6 +43,9 @@ public class Config {
             //case "peru":
                 baseUrl = "https://app.vistony.pe";
                 break;
+            case "peru":
+                baseUrl = "http://190.12.79.132:8083";
+            break;
             default:
                 baseUrl = "http://salesforce.vistony.com";
                 break;
@@ -124,7 +127,7 @@ public class Config {
         String baseUrl=null;
         switch (BuildConfig.FLAVOR) {
             //case "chile"://Produccion
-            case "peru":
+            //case "peru":
                 //Produccion
             case "ecuador":
             case "espania":
@@ -139,7 +142,9 @@ public class Config {
             //case "peru":
                 baseUrl = "https://app.vistony.pe";
                 break;
-
+            case "peru":
+                baseUrl = "http://190.12.79.132:8083";
+                break;
             default:
                 baseUrl = "http://salesforce.vistony.com";
                 break;
@@ -230,7 +235,7 @@ public class Config {
         }*/
         switch (BuildConfig.FLAVOR) {
             //case "chile"://Produccion
-            case "peru":
+           //case "peru":
             case "ecuador":
             case "espania":
             case "marruecos":
@@ -242,6 +247,9 @@ public class Config {
             case "paraguay":
             //case "peru":
                 baseUrl = "https://app.vistony.pe";
+                break;
+            case "peru":
+                baseUrl = "http://190.12.79.132:8083";
                 break;
             default:
                 baseUrl = "http://salesforce.vistony.com";

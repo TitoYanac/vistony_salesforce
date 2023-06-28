@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaPromocionCabeceraAdapter;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaPromocionCabeceraDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
@@ -152,36 +153,90 @@ public class PromocionCabeceraView extends Fragment {
         return fragment;
     }
 
-    public static PromocionCabeceraView newInstanceIncrementar(String objeto) {
+    public static PromocionCabeceraView newInstanceIncrementar(
+            String cantidadVenta,String CantidadPromocional,String descuento
+    ) {
         PromocionCabeceraView fragment = new PromocionCabeceraView();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         String solicitado=tv_cantidad_promocion.getText().toString();
-        solicitado=String.valueOf(Integer.parseInt(solicitado)+Integer.parseInt(objeto));
-        String pendiente= String.valueOf(Integer.parseInt(tv_cantidad_pendiente.getText().toString()) -Integer.parseInt(objeto));
+        solicitado=String.valueOf(Integer.parseInt(solicitado)+Integer.parseInt(cantidadVenta));
+        String pendiente= String.valueOf(Integer.parseInt(tv_cantidad_pendiente.getText().toString()) -Integer.parseInt(cantidadVenta));
+
+        Log.e("REOS", "PromocionCabeceraView-newInstanceIncrementar-cantidadVenta:" + cantidadVenta);
+        Log.e("REOS", "PromocionCabeceraView-newInstanceIncrementar-CantidadPromocional:" + CantidadPromocional);
+        Log.e("REOS", "PromocionCabeceraView-newInstanceIncrementar-descuento:" + descuento);
+        /*for(int i=0;i<Listado.size();i++)
+        {
+            if(Listado.get(i).getCantidadcompra().equals(cantidadVenta))
+            {
+
+                Listado.get(i).setDescuento(descuento);
+                Listado.get(i).setCantidadpromocion(CantidadPromocional);
+            }
+        }
+
+        for(int i=0;i<listaPromocionCabeceraEntities.size();i++)
+        {
+            if(listaPromocionCabeceraEntities.get(i).getCantidadcompra().equals(cantidadVenta))
+            {
+
+                listaPromocionCabeceraEntities.get(i).setDescuento(descuento);
+                listaPromocionCabeceraEntities.get(i).setCantidadpromocion(CantidadPromocional);
+            }
+        }*/
+
         tv_cantidad_promocion.setText(solicitado);
         tv_cantidad_pendiente.setText(pendiente);
         return fragment;
     }
-    public static PromocionCabeceraView newInstanceDecrementar(String objeto) {
+    public static PromocionCabeceraView newInstanceDecrementar(
+            String cantidadVenta,String CantidadPromocional,String descuento
+    ) {
         PromocionCabeceraView fragment = new PromocionCabeceraView();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        Log.e("REOS", "PromocionCabeceraView-newInstanceDecrementar-cantidadVenta:" + cantidadVenta);
+        Log.e("REOS", "PromocionCabeceraView-newInstanceDecrementar-CantidadPromocional:" + CantidadPromocional);
+        Log.e("REOS", "PromocionCabeceraView-newInstanceDecrementar-descuento:" + descuento);
+        /*for(int i=0;i<Listado.size();i++)
+        {
+            if(Listado.get(i).getCantidadcompra().equals(cantidadVenta))
+            {
+                Listado.get(i).setDescuento(descuento);
+                Listado.get(i).setCantidadpromocion(CantidadPromocional);
+            }
+        }
+        for(int i=0;i<listaPromocionCabeceraEntities.size();i++)
+        {
+            if(listaPromocionCabeceraEntities.get(i).getCantidadcompra().equals(cantidadVenta))
+            {
+
+                listaPromocionCabeceraEntities.get(i).setDescuento(descuento);
+                listaPromocionCabeceraEntities.get(i).setCantidadpromocion(CantidadPromocional);
+            }
+        }*/
         String solicitado=tv_cantidad_promocion.getText().toString();
-        solicitado=String.valueOf(Integer.parseInt(solicitado)-Integer.parseInt(objeto));
-        String pendiente= String.valueOf(Integer.parseInt(tv_cantidad_pendiente.getText().toString()) +Integer.parseInt(objeto));
+        solicitado=String.valueOf(Integer.parseInt(solicitado)-Integer.parseInt(cantidadVenta));
+        String pendiente= String.valueOf(Integer.parseInt(tv_cantidad_pendiente.getText().toString()) +Integer.parseInt(cantidadVenta));
         tv_cantidad_promocion.setText(solicitado);
         tv_cantidad_pendiente.setText(pendiente);
         return fragment;
     }
 
-    public static PromocionCabeceraView newInstanceObtenerListaPromocion (Object objeto) {
+    public static PromocionCabeceraView UpdatePromotionHead (Object objeto) {
         Log.e("jpcm", "regreso here 1 de " + ListenerBackPress.getCurrentFragment());
         PromocionCabeceraView listadoPromocionView = new PromocionCabeceraView();
         Bundle b = new Bundle();
         listadoPromocionView.setArguments(b);
+        Log.e("REOS", "PromocionCabeceraView:UpdatePromotionHead.listaPromocionCabeceraEntities.size()-antes " + listaPromocionCabeceraEntities.size());
         listaPromocionCabeceraEntities= (ArrayList<ListaPromocionCabeceraEntity>)  objeto;
-        Log.e("REOS", "PromocionCabeceraView:listaPromocionCabeceraEntities: " + listaPromocionCabeceraEntities.size());
+        Log.e("REOS", "PromocionCabeceraView:UpdatePromotionHead.listaPromocionCabeceraEntities.size()-despues " + listaPromocionCabeceraEntities.size());
+
+        for(int i=0;i<listaPromocionCabeceraEntities.size();i++)
+        {
+            Log.e("REOS", "PromocionCabeceraView-UpdatePromotionHead.listaPromocionCabeceraEntities.get(i).getCantidadcompra());: " + listaPromocionCabeceraEntities.get(i).getCantidadcompra());
+        }
         return listadoPromocionView;
     }
 
@@ -190,26 +245,32 @@ public class PromocionCabeceraView extends Fragment {
         ArrayList<ListaPromocionCabeceraEntity> listadoPromocionCabeceraEntity=(ArrayList<ListaPromocionCabeceraEntity>)  objeto;
         Log.e("REOS","PromocionCabeceraView:Listado:"+Listado.size());
         Log.e("REOS","PromocionCabeceraView:listadoPromocionCabeceraEntity:"+listadoPromocionCabeceraEntity.size());
-
-        for(int i=0;i<listadoPromocionCabeceraEntity.size();i++)
+        String promocion_id="",descuento="";
+        ArrayList<PromocionDetalleSQLiteEntity> listPromocionDetalleSQLite=new ArrayList<>();
+        for(int j=0;j<listadoPromocionCabeceraEntity.size();j++)
         {
-            for(int j=0;j<Listado.size();j++)
+            promocion_id=listadoPromocionCabeceraEntity.get(j).getPromocion_id();
+            descuento=listadoPromocionCabeceraEntity.get(j).getDescuento();
+            listPromocionDetalleSQLite=listadoPromocionCabeceraEntity.get(j).getListaPromocionDetalleEntities();
+        }
+        for(int i=0;i<Listado.size();i++)
+        {
+            if(Listado.get(i).getPromocion_id().equals(promocion_id))
             {
-
-                if(listadoPromocionCabeceraEntity.get(i).getPromocion_id().equals(Listado.get(j).getPromocion_id()))
+                Listado.get(i).setDescuento(descuento);
+                if(SesionEntity.quotation.equals("Y"))
+                {
+                    Listado.get(i).setPromocion_id(promocion_id+"_M");
+                }
+                Listado.get(i).setListaPromocionDetalleEntities(listPromocionDetalleSQLite);
+            }
+                /*if(listadoPromocionCabeceraEntity.get(i).getPromocion_id().equals(Listado.get(j).getPromocion_id()))
                 {
                     Listado.get(j).setDescuento(listadoPromocionCabeceraEntity.get(i).getDescuento());
                     Listado.get(j).setListaPromocionDetalleEntities(listadoPromocionCabeceraEntity.get(i).getListaPromocionDetalleEntities());
-                    /*for(int g=0;g<Listado.get(j).getListaPromocionDetalleEntities().size();g++)
-                    {
-                        Listado.get(j).setListaPromocionDetalleEntities(listadoPromocionCabeceraEntity.get(i).getListaPromocionDetalleEntities());
-                        /*Listado.get(j).getListaPromocionDetalleEntities().get(g).setCantidad(
-                                listadoPromocionCabeceraEntity.get(i).getListaPromocionDetalleEntities().get(g).getCantidad()
-                        );*/
-                    //}
-                }
-            }
+                }*/
         }
+
 
         hiloObtenerPromocionCabecera.execute();
         //listaPromocionCabeceraEntities= (ArrayList<ListaPromocionCabeceraEntity>)  objeto;
@@ -246,11 +307,12 @@ public class PromocionCabeceraView extends Fragment {
         fab_add_promotionhead=v.findViewById(R.id.fab_add_promotionhead);
         ObtenerResumen();
         lv_listapromociones = (ListView) v.findViewById(R.id.lv_listapromociones);
+        FormulasController formulasController=new FormulasController(getContext());
+        fab_add_promotionhead.setVisibility(View.GONE);
         fab_add_promotionhead.setOnClickListener(view -> {
-
             ListaPromocionCabeceraEntity objListaPromocionCabecera = new ListaPromocionCabeceraEntity();
             objListaPromocionCabecera.setLista_promocion_id("0000");
-            objListaPromocionCabecera.setPromocion_id("0000");
+            objListaPromocionCabecera.setPromocion_id(formulasController.ObtenerFechaHoraCadena());
             objListaPromocionCabecera.setDescuento("0");
             objListaPromocionCabecera.setCantidadcompra(cantidad);
             objListaPromocionCabecera.setCurrency_id(currency);
@@ -259,6 +321,7 @@ public class PromocionCabeceraView extends Fragment {
             objListaPromocionCabecera.setCantidadpromocion("0");
             objListaPromocionCabecera.setProducto(producto);
             objListaPromocionCabecera.setProducto_id(producto_id);
+            objListaPromocionCabecera.setCount(String.valueOf(Listado.size()));
             objListaPromocionCabecera.setListaPromocionDetalleEntities(new ArrayList<PromocionDetalleSQLiteEntity>());
             Listado.add(objListaPromocionCabecera);
 

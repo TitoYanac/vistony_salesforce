@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class Invoices(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
+    var cliente_id: String?,
     @SerializedName("DocEntry")
     var docEntry: String?,
     @SerializedName("DocNum")
@@ -43,5 +44,7 @@ data class Invoices(
     @SerializedName("Ocurrency")
     var U_SYP_DT_OCUR: String?,
     @SerializedName("PymntGroup")
-    var pymntgroup: String?
+    var pymntgroup: String?,
+    var isSelected: Boolean = false
+
 )

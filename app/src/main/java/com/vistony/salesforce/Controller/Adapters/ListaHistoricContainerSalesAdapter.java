@@ -112,27 +112,14 @@ public class ListaHistoricContainerSalesAdapter extends ArrayAdapter<ListaHistor
 
         if(tipo.equals("SKU"))
         {
-            /*String fecha,año,mes,dia;
-            String[] sourcefechacuota= lead.getAnio().split(" ");
-            fecha= sourcefechacuota[0];
-            String[] sourcefechadesordenada= fecha.split("/");
-            año=sourcefechadesordenada[2];
-            mes=sourcefechadesordenada[0];
-            dia=sourcefechadesordenada[1];
-
-            if(mes.length()==1)
-            {
-                mes='0'+mes;
-            }
-            if(dia.length()==1)
-            {
-                dia='0'+dia;
-            }*/
             holder.tv_periodo.setText(Induvis.getDate(BuildConfig.FLAVOR,lead.getAnio()));
             Induvis induvis=new Induvis();
             Long day=0L;
             try {
-                day=induvis.getDiferenceDays(Induvis.getDate(BuildConfig.FLAVOR,lead.getAnio()));
+                Log.e("REOS","ListaHistoricContainerSalesAdapter.lead.getAnio(): "+lead.getAnio());
+                Log.e("REOS","ListaHistoricContainerSalesAdapter.Induvis.getDate(BuildConfig.FLAVOR,lead.getAnio()): "+Induvis.getDate(BuildConfig.FLAVOR,lead.getAnio()));
+                Log.e("REOS","ListaHistoricContainerSalesAdapter.Induvis.ConvertDateSAPaDate(lead.getAnio()): "+Induvis.ConvertDateSAPaDate(lead.getAnio()));
+                day=induvis.getDiferenceDays(Induvis.ConvertDateSAPaDate(lead.getAnio()));
             }catch (Exception e){
                 Log.e("REOS","ListaHistoricContainerSalesAdapter.e"+e.toString());
             }

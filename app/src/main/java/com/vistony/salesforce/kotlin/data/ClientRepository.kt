@@ -57,37 +57,49 @@ class ClientRepository {
 
                         val executor: ExecutorService = Executors.newFixedThreadPool(1)
                         executor.execute {
+                            val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+                            database?.clientDao?.deleteClient()
+                            database?.addressDao?.deleteAddress()
+                            database?.invoicesDao?.deleteInvoices()
+
                         for (i in 0..clientResponse?.getClient()?.size!! - 1) {
 
                                 println("Tarea $i en ejecución en ${Thread.currentThread().name}")
                                 //Thread.sleep(1000)
-                                val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+
+
                                 database?.clientDao
                                     ?.insertClient(
                                         //headerDispatchSheetResponse?.getDispatchSheetEntity()!!
                                         //headerDispatchSheetResponse?.getDispatchSheetEntity()
                                         clientResponse?.getClient()
                                     )
-                                for (i in 0..clientResponse?.getClient()?.size!! - 1) {
-                                    if(clientResponse?.getClient()
-                                            ?.get(i)?.listAddress!=null)
-                                    {
-                                        database?.addressDao?.insertAddress(
-                                            clientResponse?.getClient()
-                                                ?.get(i)?.listAddress
-                                        )
-                                    }
 
-                                    if(clientResponse?.getClient()
+                                if(clientResponse?.getClient()
+                                        ?.get(i)?.listAddress!=null)
+                                {
+                                    database?.addressDao?.insertAddress(
+                                        clientResponse?.getClient()
+                                            ?.get(i)?.listAddress
+                                    )
+                                }
+
+                                if(clientResponse?.getClient()
                                             ?.get(i)?.listInvoice!=null)
                                     {
+                                        for(j in 0..clientResponse?.getClient()
+                                            ?.get(i)?.listInvoice?.size!! - 1)
+                                        {
+                                            clientResponse?.getClient()
+                                                ?.get(i)?.listInvoice?.get(j)?.cliente_id=
+                                                clientResponse?.getClient()?.get(i)?.cliente_id
+                                        }
+
                                         database?.invoicesDao?.insertInvoices(
                                             clientResponse?.getClient()
                                                 ?.get(i)?.listInvoice
                                         )
                                     }
-                                }
-
                                 println("Tarea $i completada")
                             }
 

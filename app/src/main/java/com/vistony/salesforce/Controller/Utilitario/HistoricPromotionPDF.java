@@ -39,6 +39,7 @@ import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuoteEffectivenessEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SummaryofeffectivenessEntity;
+import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
@@ -79,7 +80,7 @@ public class HistoricPromotionPDF extends AppCompatActivity {
         }
     }
 
-    public void generarPdf(Context context, List<ListaPromocionCabeceraEntity> listPromotion) {
+    public void generarPdf(Context context, ArrayList<ListaPromocionSQLiteEntity> listPromotion) {
         // Creamos el documento.
         /*Rectangle pagina = new Rectangle(
                 36, 36,
@@ -89,7 +90,7 @@ public class HistoricPromotionPDF extends AppCompatActivity {
                 , 1120
                 //PageSize.ARCH_A
         );*/
-        Rectangle pagina = new Rectangle(
+        /*Rectangle pagina = new Rectangle(
                 36, 36,
                 //559
                 //650
@@ -99,10 +100,10 @@ public class HistoricPromotionPDF extends AppCompatActivity {
                 //, 650
                 ,595
                 //PageSize.ARCH_A
-        );
-        /*Rectangle pagina = new Rectangle(
-                PageSize.A4
         );*/
+        Rectangle pagina = new Rectangle(
+                PageSize.A4
+        );
         Log.e("REOS","HistoricPromotionPDF.generarPdf.pagina.getBottom();:" + pagina.getBottom());
         Log.e("REOS","HistoricPromotionPDF.generarPdf.pagina.getTop();:" + pagina.getTop());
         Log.e("REOS","HistoricPromotionPDF.generarPdf.pagina.getRight();:" + pagina.getRight());
@@ -132,14 +133,14 @@ public class HistoricPromotionPDF extends AppCompatActivity {
 
             Font font = FontFactory.getFont(FontFactory.HELVETICA, 28,
                     Font.BOLD, Color.black);
-            Font font2 = FontFactory.getFont(FontFactory.HELVETICA, 20,
+            Font font2 = FontFactory.getFont(FontFactory.HELVETICA, 12,
                     Font.BOLD, Color.black);
 
-            Font font3 = FontFactory.getFont(FontFactory.HELVETICA, 12,
+            Font font3 = FontFactory.getFont(FontFactory.HELVETICA, 6,
                     Font.NORMAL, Color.black);
             Font font4 = FontFactory.getFont(FontFactory.HELVETICA, 32,
                     Font.BOLD, Color.black);
-            Font font5 = FontFactory.getFont(FontFactory.HELVETICA, 16,
+            Font font5 = FontFactory.getFont(FontFactory.HELVETICA, 6,
                     Font.BOLD, Color.black);
             Font font6 = FontFactory.getFont(FontFactory.HELVETICA, 16,
                     Font.BOLD, Color.black);
@@ -154,6 +155,7 @@ public class HistoricPromotionPDF extends AppCompatActivity {
             UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
             ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
 
+            /*
             ArrayList<String> ObjList=new ArrayList<>();
             ArrayList<String> promotionObj=new ArrayList<>();
 
@@ -196,8 +198,9 @@ public class HistoricPromotionPDF extends AppCompatActivity {
             for(int i=0;i<listPromotion.size();i++)
             {
                 ObjListProduct.add(listPromotion.get(i).getProducto_id() + " " + listPromotion.get(i).getProducto());
-            }
+            }*/
 
+            /*
             for(int j=0;j<ObjListProduct.size();j++)
             {
                 if(!promotionProductObj.isEmpty())
@@ -224,13 +227,13 @@ public class HistoricPromotionPDF extends AppCompatActivity {
             {
                 //ObjArrayListaCorrelativo[j].toString();
                 Log.e("REOS","HistoricPromotionPDF.generarPdf.promotionProductObj:" + promotionProductObj.get(j));
-            }
+            }*/
 
 
             //set image company
             switch (ObjUsuario.compania_id) {
                 case "01":
-                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_vistony);
                     break;
                 case "C011":
                     bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_bluker_negro);
@@ -239,11 +242,11 @@ public class HistoricPromotionPDF extends AppCompatActivity {
                     bitmap = BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo_rofalab_negro2);
                     break;
                 default:
-                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_negro_vistony);
+                    bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.logo_vistony);
                     break;
             }
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100 ,stream);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 20 ,stream);
             Image imagen = Image.getInstance(stream.toByteArray());
             imagen.setAlignment(Element.ALIGN_CENTER);
             documento.add(imagen);
@@ -252,7 +255,7 @@ public class HistoricPromotionPDF extends AppCompatActivity {
             tbldireccion.setWidthPercentage(100);
             PdfPCell cellTable = null;
             Log.d("REOS","HistoricPromotionPDF.generarPdf.BuildConfig.FLAVOR:" + BuildConfig.FLAVOR);
-            cellTable=new PdfPCell(new Phrase(Induvis.getInformation(BuildConfig.FLAVOR),font3));
+            cellTable=new PdfPCell(new Phrase(Induvis.getInformation(BuildConfig.FLAVOR),font2));
             Log.d("REOS","HistoricPromotionPDF.generarPdf.Induvis.getInformation(BuildConfig.FLAVOR):" + Induvis.getInformation(BuildConfig.FLAVOR));
             cellTable.disableBorderSide(Rectangle.BOX);
             cellTable.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -266,7 +269,7 @@ public class HistoricPromotionPDF extends AppCompatActivity {
 
 
 
-            for(int g=0;g<promotionObj.size();g++)
+            for(int g=0;g<listPromotion.size();g++)
             {
                 if(g>0)
                 {
@@ -275,22 +278,31 @@ public class HistoricPromotionPDF extends AppCompatActivity {
                 PdfPTable tblListPromotion = new PdfPTable(1);
                 tblListPromotion.setWidthPercentage(100);
                 PdfPCell celltblListPromotiona = null;
-                celltblListPromotiona=new PdfPCell(new Phrase(promotionObj.get(g).toString(),font2));
+                celltblListPromotiona=new PdfPCell(new Phrase(listPromotion.get(g).getLista_promocion(),font2));
                 //celltblListPromotiona.disableBorderSide(Rectangle.BOX);
                 celltblListPromotiona.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tblListPromotion.addCell(celltblListPromotiona);
                 documento.add(tblListPromotion);
 
-                float[] columnWidths = {7.5f, 2.5f,7.5f,2.5f};
+                float[] columnWidths = {6.0f,1.5f, 1.5f, 1.5f,6.0f,1.5f};
                 PdfPTable tablePromotionHeadTittle = new PdfPTable(columnWidths);
                 tablePromotionHeadTittle.setWidthPercentage(100);
                 PdfPCell cellTablePromotionHeadTittle = null;
                 Log.d("REOS","HistoricPromotionPDF.generarPdf.BuildConfig.FLAVOR:" + BuildConfig.FLAVOR);
-                cellTablePromotionHeadTittle=new PdfPCell(new Phrase("Producto\nVenta".toUpperCase(),font5));
+                cellTablePromotionHeadTittle=new PdfPCell(new Phrase("Producto\nVenta\n[Contado/Credito]".toUpperCase(),font5));
                 //cellTablePromotionHeadTittle.disableBorderSide(Rectangle.BOX);
                 cellTablePromotionHeadTittle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablePromotionHeadTittle.addCell(cellTablePromotionHeadTittle);
                 cellTablePromotionHeadTittle=new PdfPCell(new Phrase("Cantidad\nVenta".toUpperCase(),font5));
+                //cellTablePromotionHeadTittle.disableBorderSide(Rectangle.BOX);
+                cellTablePromotionHeadTittle.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablePromotionHeadTittle.addCell(cellTablePromotionHeadTittle);
+
+                cellTablePromotionHeadTittle=new PdfPCell(new Phrase("Precio\nPromoción\nContado".toUpperCase(),font5));
+                //cellTablePromotionHeadTittle.disableBorderSide(Rectangle.BOX);
+                cellTablePromotionHeadTittle.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tablePromotionHeadTittle.addCell(cellTablePromotionHeadTittle);
+                cellTablePromotionHeadTittle=new PdfPCell(new Phrase("Precio\nPromoción\nCredito".toUpperCase(),font5));
                 //cellTablePromotionHeadTittle.disableBorderSide(Rectangle.BOX);
                 cellTablePromotionHeadTittle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablePromotionHeadTittle.addCell(cellTablePromotionHeadTittle);
@@ -303,19 +315,27 @@ public class HistoricPromotionPDF extends AppCompatActivity {
                 cellTablePromotionHeadTittle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tablePromotionHeadTittle.addCell(cellTablePromotionHeadTittle);
                 documento.add(tablePromotionHeadTittle);
-                for (int i = 0; i < listPromotion.size(); i++) {
+                for (int i = 0; i < listPromotion.get(g).getListaPromocionCabeceraEntity().size(); i++) {
 
-                    if(promotionObj.get(g).equals(listPromotion.get(i).getLista_promocion())) {
+                    //if(promotionObj.get(g).equals(listPromotion.get(i).getLista_promocion()))
+                    //{
 
-                        float[] columnWidths1 = {7.5f, 2.5f,7.5f,2.5f};
+                        float[] columnWidths1 = {6.0f,1.5f, 1.5f, 1.5f,6.0f,1.5f};
                         PdfPTable tablePromotionHead = new PdfPTable(columnWidths1);
                         tablePromotionHead.setWidthPercentage(100);
                         PdfPCell cellTablePromotionHead = null;
                         cellTablePromotionHead = null;
                         Log.d("REOS", "HistoricPromotionPDF.generarPdf.BuildConfig.FLAVOR:" + BuildConfig.FLAVOR);
-                        if(listPromotion.get(i).getCount().equals("1"))
+                        int descuento=0;
+                        for (int j = 0; j < listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().size(); j++) {
+                            if(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getProducto().equals("DESCUENTO"))
+                            {
+                                descuento++;
+                            }
+                        }
+                        if(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCount().equals("1"))
                         {
-                            cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(i).getProducto_id() + " " + listPromotion.get(i).getProducto(), font3));
+                            cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getProducto_id() + " " + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getProducto() +" "+ listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getPreciobase(), font3));
                             cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
                             cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_LEFT);
                             tablePromotionHead.addCell(cellTablePromotionHead);
@@ -323,47 +343,162 @@ public class HistoricPromotionPDF extends AppCompatActivity {
                         else{
                             cellTablePromotionHead = new PdfPCell(new Phrase("", font3));
                             cellTablePromotionHead.disableBorderSide(Rectangle.TOP);
-                            cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+
+
+                            if(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCount().equals(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCountfinish()))
+                            {
+                                if(descuento>0)
+                                {
+                                    cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                }else{
+
+                                }
+
+                            }else {
+                                cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                            }
+
                             cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_LEFT);
                             tablePromotionHead.addCell(cellTablePromotionHead);
                         }
 
-                        cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(i).getCantidadcompra(), font3));
-                        //cellTablePromotionHead.disableBorderSide(Rectangle.BOX);
+                        cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCantidadcompra(), font3));
+                        //cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                        //cellTablePromotionHead.disableBorderSide(Rectangle.TOP);
+                        if(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCount().equals(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCountfinish()))
+                        {
+                            if(descuento>0)
+                            {
+
+                                cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                            }else{
+
+                            }
+
+                        }else {
+
+                            cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                        }
                         cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_CENTER);
                         tablePromotionHead.addCell(cellTablePromotionHead);
+                        cellTablePromotionHead = new PdfPCell(new Phrase(
+                                Convert.currencyForView(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getPricepromotionalcash()), font3));
+                        //cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                        if(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCount().equals(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCountfinish()))
+                        {
+                            if(descuento>0)
+                            {
+                                cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                            }else{
 
-                        for (int j = 0; j < listPromotion.get(i).getListaPromocionDetalleEntities().size(); j++) {
+                            }
+
+                        }else {
+                            cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                        }
+                        cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        tablePromotionHead.addCell(cellTablePromotionHead);
+                        cellTablePromotionHead = new PdfPCell(new Phrase(
+                                Convert.currencyForView(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getPricepromotionalcredit()), font3));
+                        //cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                        if(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCount().equals(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCountfinish()))
+                        {
+                            if(descuento>0)
+                            {
+                                cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                            }else{
+
+                            }
+
+                        }else {
+                            cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                        }
+                        cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        tablePromotionHead.addCell(cellTablePromotionHead);
+
+                        for (int j = 0; j < listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().size(); j++) {
                             if(j==0){
-                                    cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(i).getListaPromocionDetalleEntities().get(j).getProducto_id() + " " + listPromotion.get(i).getListaPromocionDetalleEntities().get(j).getProducto(), font3));
+                                    cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getProducto_id() + " " + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getProducto(), font3));
                                     //cellTablePromotionHead.disableBorderSide(Rectangle.BOX);
                                     cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_LEFT);
                                     tablePromotionHead.addCell(cellTablePromotionHead);
-                                    cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(i).getListaPromocionDetalleEntities().get(j).getCantidad(), font3));
+                                    cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getCantidad(), font3));
                                     //cellTablePromotionHead.disableBorderSide(Rectangle.BOX);
                                     cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_CENTER);
                                     tablePromotionHead.addCell(cellTablePromotionHead);
                             }else {
                                 cellTablePromotionHead = new PdfPCell(new Phrase("", font3));
-                                cellTablePromotionHead.disableBorderSide(Rectangle.BOX);
+                                cellTablePromotionHead.disableBorderSide(Rectangle.TOP);
+                                cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                tablePromotionHead.addCell(cellTablePromotionHead);
+
+                                cellTablePromotionHead = new PdfPCell(new Phrase("", font3));
+                                cellTablePromotionHead.disableBorderSide(Rectangle.TOP);
+                                cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                /*if(listPromotion.get(i).getCount().equals(listPromotion.get(i).getCountfinish()))
+                                {
+                                    /*cellTablePromotionHead.disableBorderSide(Rectangle.TOP);
+                                    cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                    if(listPromotion.get(i).getListaPromocionDetalleEntities().get(j).getProducto().equals("DESCUENTO"))
+                                    {
+                                        cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                    }else {
+
+                                    }
+                                }else {
+
+                                    cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                }*/
                                 cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_CENTER);
                                 tablePromotionHead.addCell(cellTablePromotionHead);
                                 cellTablePromotionHead = new PdfPCell(new Phrase("", font3));
-                                cellTablePromotionHead.disableBorderSide(Rectangle.BOX);
+                                cellTablePromotionHead.disableBorderSide(Rectangle.TOP);
+                                cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                Log.d("REOS", "HistoricPromotionPDF.generarPdf.listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getProducto_id() + \" \" + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getProducto()" + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getProducto_id() + " " + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getProducto());
+
+                                Log.d("REOS", "HistoricPromotionPDF.generarPdf.listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getProducto_id() + \" \" + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getProducto()" + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getProducto_id() + " " + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getProducto());
+                                Log.d("REOS", "HistoricPromotionPDF.generarPdf.listPromotion.get(i).getCount():" + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCount());
+                                Log.d("REOS", "HistoricPromotionPDF.generarPdf.listPromotion.get(i).getCountfinish():" + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getCountfinish());
+                                /*if(listPromotion.get(i).getCount().equals(listPromotion.get(i).getCountfinish()))
+                                {
+                                    if(listPromotion.get(i).getListaPromocionDetalleEntities().get(j).getProducto().equals("DESCUENTO"))
+                                    {
+                                        cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                    }else {
+
+                                    }
+
+                                }else {
+                                    cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                }*/
+                                //cellTablePromotionHead.disableBorderSide(Rectangle.TOP);
                                 cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_CENTER);
                                 tablePromotionHead.addCell(cellTablePromotionHead);
-                                cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(i).getListaPromocionDetalleEntities().get(j).getProducto_id() + " " + listPromotion.get(i).getListaPromocionDetalleEntities().get(j).getProducto(), font3));
+                                cellTablePromotionHead = new PdfPCell(new Phrase("", font3));
+                                cellTablePromotionHead.disableBorderSide(Rectangle.TOP);
+                                cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                /*if(listPromotion.get(i).getCount().equals(listPromotion.get(i).getCountfinish()))
+                                {
+
+                                }else {
+                                    cellTablePromotionHead.disableBorderSide(Rectangle.BOTTOM);
+                                }*/
+                                //cellTablePromotionHead.disableBorderSide(Rectangle.TOP);
+                                cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_CENTER);
+                                tablePromotionHead.addCell(cellTablePromotionHead);
+                                cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getProducto_id() + " " + listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getProducto(), font3));
                                 //cellTablePromotionHead.disableBorderSide(Rectangle.BOX);
                                 cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_LEFT);
                                 tablePromotionHead.addCell(cellTablePromotionHead);
-                                cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(i).getListaPromocionDetalleEntities().get(j).getCantidad(), font3));
+                                cellTablePromotionHead = new PdfPCell(new Phrase(listPromotion.get(g).getListaPromocionCabeceraEntity().get(i).getListaPromocionDetalleEntities().get(j).getCantidad(), font3));
                                 //14cellTablePromotionHead.disableBorderSide(Rectangle.BOX);
                                 cellTablePromotionHead.setHorizontalAlignment(Element.ALIGN_CENTER);
                                 tablePromotionHead.addCell(cellTablePromotionHead);
                             }
                         }
                         documento.add(tablePromotionHead);
-                    }
+                    //}
                 }
 
             }

@@ -3,6 +3,7 @@ package com.vistony.salesforce.Dao.Retrofit;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -11,6 +12,7 @@ import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
 
@@ -29,7 +31,7 @@ public class OrdenVentaRepository extends ViewModel {
     public MutableLiveData<String> sendSalesOrder(final String orderId, final Context context) {
         MutableLiveData<String> temp=new MutableLiveData<String>();
 
-        sendSalesOrder(orderId,context, new SalesOrderCallback(){
+        sendSalesOrder(orderId,context, new SalesOrderCallback() {
             @Override
             public void onResponseSap(ArrayList<String> data) {
                 if(data==null && data.size()==0){
@@ -77,7 +79,9 @@ public class OrdenVentaRepository extends ViewModel {
         return formulasController.GenerayConvierteaJSONOV(ordenventa_id,context)+",";
     }
 
-    private void sendSalesOrder(final String idSalesOrder, final Context context,final SalesOrderCallback callback){
+    private void sendSalesOrder(
+            final String idSalesOrder, final Context context, final SalesOrderCallback callback
+            ){
 
         String json="";
         if(ordenVentaCabeceraSQLite==null){
@@ -103,14 +107,16 @@ public class OrdenVentaRepository extends ViewModel {
         }else{
             json = "{ \"SalesOrders\":[" + json + "]}";
             Log.e("REOS","OrdenVentaRepository-sendSalesOrder-json"+json);
+            //Log.e("REOS","OrdenVentaRepository-sendSalesOrder-idSalesOrder"+idSalesOrder);
+            //ordenVentaCabeceraSQLite.UpdateOVJSON(idSalesOrder,json);
+            //UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+            //usuarioSQLite.ActualizaRecibo(json);
             RequestBody jsonConvert = RequestBody.create(json,MediaType.parse("application/json; charset=utf-8"));
 
             Config.getClient().create(Api.class).sendOrder(jsonConvert).enqueue(new Callback<SalesOrderEntityResponse>() {
                 @Override
                 public void onResponse(Call<SalesOrderEntityResponse> call, Response<SalesOrderEntityResponse> response) {
-
                     SalesOrderEntityResponse salesOrderEntityResponse=response.body();
-
                     if(response.isSuccessful() && salesOrderEntityResponse!=null){
                         ArrayList<String> responseData=new ArrayList<>();
                         //responseData.add("Sin datos");
@@ -131,16 +137,17 @@ public class OrdenVentaRepository extends ViewModel {
                                             respuesta.getDocNum(),
                                             respuesta.getMessage()
                                     );
-
                                     responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+respuesta.getDocNum()+", fue aceptado en SAP");
                                 }
                             }else{//tiene error
+
                                 ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
                                         respuesta.getSalesOrderID(),
                                         "0",
                                         respuesta.getDocNum(),
                                         respuesta.getMessage()
                                 );
+
                                 responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+respuesta.getSalesOrderID()+", tiene un error");
                             }
                         }
@@ -156,14 +163,133 @@ public class OrdenVentaRepository extends ViewModel {
                     //callback.onResponseErrorSap(t.getMessage());
                     callback.onResponseErrorSap("En estos momentos no tiene Acceso a Internet. Se reenviara su Documento de Venta en el Proximo inicio de Sesion");
                     call.cancel();
+
                 }
             });
         }
 
     }
+
+    public MutableLiveData<String> validateSalesOrder(
+            final String CardCode,
+            final String DocDate,
+            final String SalesOrderID,
+            final String slpCode,
+            final Context context) {
+        MutableLiveData<String> temp=new MutableLiveData<String>();
+
+        getvalidateSalesOrder(
+                CardCode,
+                DocDate,
+                SalesOrderID,
+                slpCode,
+                context,
+                new SalesOrderCallback(){
+            @Override
+            public void onResponseSap(ArrayList<String> data) {
+                if(data==null && data.size()==0){
+                    Log.e("REOS", "OrdenVentaRepository-validateSalesOrder-data-No hay ordenes de venta pendientes de enviar" );
+                    temp.setValue("No hay ordenes de venta pendientes de enviar");
+                }else{
+                    temp.setValue(data.get(0));
+                }
+            }
+            @Override
+            public void onResponseErrorSap(String response) {
+                temp.setValue(response);
+            }
+        });
+
+        return temp;
+    }
+
+    private void getvalidateSalesOrder(
+            final String CardCode,
+            final String DocDate,
+            final String SalesOrderID,
+            final String slpCode,
+            final Context context,final SalesOrderCallback callback){
+
+        if(ordenVentaCabeceraSQLite==null){
+            ordenVentaCabeceraSQLite =new OrdenVentaCabeceraSQLite(context);
+        }
+
+            Config.getClient().create(Api.class).getSalesOrderValidate(
+            CardCode,
+            DocDate,
+            SalesOrderID,
+            slpCode
+            ).enqueue(new Callback<SalesOrderEntity>() {
+                @Override
+                public void onResponse(Call<SalesOrderEntity> call, Response<SalesOrderEntity> response) {
+                    SalesOrderEntity salesOrderEntity=response.body();
+                    Log.e("REOS","OrdenVentaRepository-getvalidateSalesOrder-response"+response.toString());
+                    Log.e("REOS","OrdenVentaRepository-getvalidateSalesOrder-call"+call.toString());
+                    if(response.isSuccessful() && salesOrderEntity!=null){
+                        ArrayList<String> responseData=new ArrayList<>();
+                        //responseData.add("Sin datos");
+                        //for (SalesOrderEntity respuesta:salesOrderEntity.) {
+                        if(salesOrderEntity.getErrorCode()!=null)
+                        {
+                            if(salesOrderEntity.getErrorCode().equals("0")){//se envio
+                                if(salesOrderEntity.getDocEntry()==null && salesOrderEntity.getDocNum()==null){//pasa por flujo de aprobacion
+                                    ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
+                                            salesOrderEntity.getSalesOrderID(),
+                                            "1",
+                                            salesOrderEntity.getDocNum(),
+                                            salesOrderEntity.getMessage()
+                                    );
+
+                                    responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+salesOrderEntity.getSalesOrderID()+", pasara por un flujo de aprobación");
+                                }else{//pasa por flujo automatico
+                                    ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
+                                            salesOrderEntity.getSalesOrderID(),
+                                            "1",
+                                            salesOrderEntity.getDocNum(),
+                                            salesOrderEntity.getMessage()
+                                    );
+
+                                    responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+salesOrderEntity.getDocNum()+", fue aceptado en SAP");
+                                }
+                            }else{//tiene error
+                                ordenVentaCabeceraSQLite.ActualizaResultadoOVenviada(
+                                        salesOrderEntity.getSalesOrderID(),
+                                        "0",
+                                        salesOrderEntity.getDocNum(),
+                                        salesOrderEntity.getMessage()
+                                );
+                                responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+salesOrderEntity.getSalesOrderID()+", tiene un error");
+                            }
+                        }
+                        else {
+                            responseData.add("La "+ Induvis.getTituloVentaString(context)+" no existe en SAP");
+                        }
+
+                        callback.onResponseSap(responseData);
+                    }else{
+                        callback.onResponseErrorSap("Error "+response.code()+", "+response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SalesOrderEntity> call, Throwable t) {
+                    //callback.onResponseErrorSap(t.getMessage());
+                    callback.onResponseErrorSap("En estos momentos no tiene Acceso a Internet. Se reenviara su Documento de Venta en el Proximo inicio de Sesion");
+                    call.cancel();
+
+                }
+            });
+       // }
+
+    }
+
+
 }
 
 interface SalesOrderCallback {
     void onResponseSap(ArrayList<String> response);
     void onResponseErrorSap(String response);
 }
+
+
+

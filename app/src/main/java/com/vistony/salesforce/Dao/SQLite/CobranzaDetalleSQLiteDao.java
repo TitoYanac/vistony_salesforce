@@ -652,9 +652,6 @@ public class CobranzaDetalleSQLiteDao {
                 recibo = Integer.parseInt(fila.getString(0));
 
             }
-
-
-
             bd.close();
         }catch (Exception e)
         {

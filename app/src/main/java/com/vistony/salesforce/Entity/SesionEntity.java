@@ -51,5 +51,10 @@ public class SesionEntity {
     public static String deliverydateauto="N";
     public static String currency_id="";
     public static String flagquerystockPromotion ="N";
+    public static String deliveryrefusedmoney ="N";
+    public static String status ="";
+    public static String sendvisits ="";
+    public static String sendvalidations ="";
+
 }
 

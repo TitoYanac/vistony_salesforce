@@ -98,7 +98,13 @@ public class PronosticoComisionesView extends Fragment implements View.OnClickLi
         Bundle args = new Bundle();
         fragment.setArguments(args);
         hiloObtenerComisiones=new HiloObtenerComisiones();
-        hiloObtenerComisiones.execute();
+        if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
+        {
+
+        }else
+        {
+            hiloObtenerComisiones.execute();
+        }
         return fragment;
     }
 

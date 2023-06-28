@@ -714,51 +714,6 @@ public class MenuView extends AppCompatActivity
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
         switch (id) {
-            /*case R.id.nav_clientes:
-                item.setEnabled(false);
-
-                if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                    AsyncTask<Void, Void, Void> retorno=new Preguntar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null);
-                }
-                // Handle the camera action
-                validarblockpay="";
-                validar=0;
-                dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                date = new Date();
-                fecha =dateFormat.format(date);
-                //fecha="2019-08-04";
-                usuarioSQLiteDao=new UsuarioSQLiteDao(this);
-                listausuariosqliteentity = new ArrayList<>();
-                listausuariosqliteentity=usuarioSQLiteDao.ObtenerUsuarioBlockPay();
-
-                for(int i=0;i<listausuariosqliteentity.size();i++)
-                {
-                    validarblockpay=listausuariosqliteentity.get(i).getChkbloqueopago();
-                }
-                if(validarblockpay==null)
-                {
-                    validarblockpay="0";
-                }
-
-                validar=cobranzaDetalleSQLiteDao.VerificaRecibosPendientesDeposito(SesionEntity.compania_id,SesionEntity.fuerzatrabajo_id,fecha);
-
-                if(validar>0)
-                {
-                   alertarecibospendientes().show();
-                }
-
-                else
-                {
-                    SesionEntity.pagodirecto="0";
-                    contentFragment=new ClienteCabeceraView();
-                    fragment="ClienteCabeceraView";
-                    accion="nuevoinicioClienteCabeceraView";
-                    compuesto=fragment+"-"+accion;
-                    ListenerBackPress.setTemporaIdentityFragment("cliente");
-                    onFragmentInteraction(compuesto,object);
-                }
-
-                break;*/
             case R.id.nav_hoja_despacho:
                 //contentFragment=new DispatchSheetView();
                 //fragmentSeleccionado=true;
@@ -2359,7 +2314,7 @@ public class MenuView extends AppCompatActivity
                        } catch (Exception e) {
                            e.printStackTrace();
                        }
-                           Toast.makeText(this, "Leído: " + data.toString(), Toast.LENGTH_SHORT).show();
+                           //Toast.makeText(this, "Leído: " + data.toString(), Toast.LENGTH_SHORT).show();
                            //alertdialogSalesOrderQR(this,decData).show();
                        }
                    }
@@ -2614,6 +2569,7 @@ public class MenuView extends AppCompatActivity
     public void onResume() {
         Log.e("REOS","MenuView-onResume");
         super.onResume();
+        Induvis.refreshGlobalVariables(this);
         registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
         {

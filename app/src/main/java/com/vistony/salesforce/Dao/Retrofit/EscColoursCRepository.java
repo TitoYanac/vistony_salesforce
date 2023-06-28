@@ -36,7 +36,7 @@ public class EscColoursCRepository extends ViewModel {
                 Log.e("REOS","EscColoursCRepository-getEscColours-call"+call.toString());
                 EscColoursCEntityResponse escColoursCEntityResponse=response.body();
                 Log.e("REOS","EscColoursCRepository-getEscColours-call"+response.toString());
-                if(response.isSuccessful() && escColoursCEntityResponse.getEscColoursEntity() .size()>0){
+                if(response.isSuccessful()){
 
                     escColoursCSQLiteDao = new EscColoursCSQLiteDao(context);
                     escColoursDSQLiteDao = new EscColoursDSQLiteDao(context);

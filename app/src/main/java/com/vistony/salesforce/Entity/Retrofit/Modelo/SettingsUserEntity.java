@@ -64,6 +64,19 @@ public class SettingsUserEntity {
     private String deliverydateauto;
 
     @NonNull
+    @SerializedName("DeliveryRefusedMoney")
+    private String deliveryRefusedMoney;
+
+    @NonNull
+    public String getDeliveryRefusedMoney() {
+        return deliveryRefusedMoney;
+    }
+
+    public void setDeliveryRefusedMoney(@NonNull String deliveryRefusedMoney) {
+        this.deliveryRefusedMoney = deliveryRefusedMoney;
+    }
+
+    @NonNull
     public String getDeliverydateauto() {
         return deliverydateauto;
     }

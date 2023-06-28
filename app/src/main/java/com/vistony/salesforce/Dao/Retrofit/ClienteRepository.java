@@ -129,7 +129,7 @@ public class ClienteRepository extends ViewModel {
                         ObjCliente.setLineofbusiness(clienteEntityResponse.getClienteEntity().get(i).getLineofbusiness());
                         ObjCliente.setLastpurchase (clienteEntityResponse.getClienteEntity().get(i).getLastpurchase());
                         ObjCliente.setStatuscounted (clienteEntityResponse.getClienteEntity().get(i).getStatuscounted());
-
+                        ObjCliente.setCustomerwhitelist (clienteEntityResponse.getClienteEntity().get(i).getCustomerwhitelist());
                         //la funcion addCustomer  debe darse aqui!
                         LCliente.add(ObjCliente);
                     }

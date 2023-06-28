@@ -27,13 +27,16 @@ import com.vistony.salesforce.Controller.Utilitario.ResumenDiarioPDF;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.Retrofit.ResumenDiarioRepository;
 import com.vistony.salesforce.Dao.Retrofit.SummaryofeffectivenessRepository;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -106,9 +109,9 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
         cv_consulta_stock=v.findViewById(R.id.cv_consulta_stock);
         cv_seguimiento=v.findViewById(R.id.cv_seguimiento);
         cv_historic_promotion=v.findViewById(R.id.cv_historic_promotion);
-
         resumenDiarioRepository = new ViewModelProvider(getActivity()).get(ResumenDiarioRepository.class);
         summaryofeffectivenessRepository = new ViewModelProvider(getActivity()).get(SummaryofeffectivenessRepository.class);
+        cv_historic_promotion.setVisibility(View.GONE);
 
         cv_ordenventafecha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +198,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
         imb_consultar_fecha_resumen_diario = dialog.findViewById(R.id.imb_consultar_fecha_resumen_diario);
         imb_consultar_fecha_resumen_diario.setOnClickListener(this);
         //obtenerSQLiteHojaDespachoCabecera=new ObtenerSQLiteHojaDespachoCabecera();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateFormatsap = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
         date = new Date();
         datesap = new Date();
@@ -213,14 +216,23 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
             public void onClick(View v) {
                 pd = new ProgressDialog(getActivity());
                 pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait)    , getActivity().getResources().getString(R.string.querying_dates), true, false);
+                List<HistoricContainerSalesEntity> historicContainerSalesEntityList=new ArrayList<>();
+
+
                 ///////////////////////////// ENVIAR DEPOSITOS ANULADOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
                 resumenDiarioRepository.getResumenDiario(SesionEntity.compania_id ,SesionEntity.imei,fechasap,getContext(),fechasap).observe(getActivity(), data1 -> {
-                    summaryofeffectivenessRepository.getSummaryofEffectiveness(SesionEntity.imei,fechasap,fechasap).observe(getActivity(), data2 -> {
+
+                    /*summaryofeffectivenessRepository.getSummaryofEffectiveness(SesionEntity.imei,fechasap,fechasap).observe(getActivity(), data2 -> {
                         ResumenDiarioPDF resumenDiarioPDF = new ResumenDiarioPDF();
                         resumenDiarioPDF.generarPdf(getContext(), data1, fechasap,data2);
                         pd.dismiss();
-                    });
+                    });*/
+                    ResumenDiarioPDF resumenDiarioPDF = new ResumenDiarioPDF();
+                    resumenDiarioPDF.generarPdf(getContext(), data1, fechasap,null);
+                    pd.dismiss();
                 });
+
+
 
 
             }
@@ -250,7 +262,7 @@ public class MenuConsultaPedidosView extends Fragment  implements View.OnClickLi
         {
             dia='0'+dia;
         }
-        tv_fecha_resumen_diario.setText(year + "-" + mes + "-" + dia);
+        tv_fecha_resumen_diario.setText(dia + "/" + mes + "/" + year);
         fechasap=year + "" + mes + "" + dia;
     }
 
