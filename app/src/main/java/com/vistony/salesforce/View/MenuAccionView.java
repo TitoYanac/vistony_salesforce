@@ -339,7 +339,7 @@ public class MenuAccionView extends Fragment {
                 case "perurofalab":
                 case "espania":
                 case "marruecos":
-                case "peru":
+                //case "peru":
                     String Fragment="MenuAccionView";
                     String accion="pedido";
                     String compuesto=Fragment+"-"+accion;
@@ -350,7 +350,7 @@ public class MenuAccionView extends Fragment {
                 case "bolivia":
                 case "chile":
                     //Aprobaciones
-                //case "peru":
+                case "peru":
                     alertatipoventa().show();
                     break;
             }

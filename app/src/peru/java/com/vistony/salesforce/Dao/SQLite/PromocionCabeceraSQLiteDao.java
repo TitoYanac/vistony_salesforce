@@ -102,6 +102,8 @@ public class PromocionCabeceraSQLiteDao {
             registro.put("fuerzatrabajo_id",SesionEntity.fuerzatrabajo_id);
             registro.put("usuario_id",SesionEntity.usuario_id);
             registro.put("total_preciobase","0");
+            registro.put("cantidad_maxima",promocionCabeceraEntity.get(i).getCantidad_maxima());
+            registro.put("tipo_malla",promocionCabeceraEntity.get(i).getTipo_malla());
             registro.put("descuento",promocionCabeceraEntity.get(i).getDescuento());
 
             bd.insert("promocioncabecera",null,registro);
@@ -598,4 +600,25 @@ public class PromocionCabeceraSQLiteDao {
         bd.close();
         return listaPromocionCabeceraSQLiteEntity;
     }
+
+
+    public int getPromotionHeaderException (
+            String producto_id,
+            String cantidad
+    )
+    {
+        int resultado=0;
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select COUNT(producto_id)  from promocioncabecera " +
+                        "where producto_id='" + producto_id + "' AND cantidad>='" + cantidad + "' AND cantidad_maxima<='" + cantidad + "' and tipo_malla='E' ",null);
+
+        while (fila.moveToNext())
+        {
+            resultado= Integer.parseInt(fila.getString(0));
+        }
+        bd.close();
+        return resultado;
+    }
+
 }

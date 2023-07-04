@@ -496,8 +496,6 @@ fun PruebaDialog(
             Box(
                 modifier = Modifier
                     .height(460.dp)
-
-
             )
             {
                 Column(
@@ -728,9 +726,11 @@ fun PruebaDialog(
 }
 
 @Composable
-fun MyUI() {
+fun MyUI(
+    onDismiss: () -> Unit
+) {
 
-    var dialogOpen by remember {
+    /*var dialogOpen by remember {
         mutableStateOf(false)
     }
 
@@ -749,9 +749,18 @@ fun MyUI() {
                 }
             }
         }
-    }
+    }*/
+    Dialog(
+        onDismissRequest = onDismiss
+    ) {
+        Text(
+            text = "Google Maps",
+            //modifier = Modifier.align(CenterHorizontally),
+            style = TextStyle(
+                color = Color.Black,
+                fontSize = 18.sp,
 
-    Button(onClick = { dialogOpen = true }) {
-        Text(text = "OPEN")
+                )
+        )
     }
 }

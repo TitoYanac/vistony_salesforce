@@ -106,8 +106,8 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
         // Lead actual.
         final ListaPromocionCabeceraEntity lead = getItem(position);
-        holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
-        holder.imv_editar_promocion_detalle.setEnabled(false);
+        /*holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+        holder.imv_editar_promocion_detalle.setEnabled(false);*/
         // Setup.
         //holder.tv_promocion_id.setText(lead.getPromocion_id());
         holder.tv_promocion_producto.setText(lead.getProducto());

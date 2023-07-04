@@ -27,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaPromocionCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaPromocionCabeceraDao;
+import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
@@ -308,7 +309,7 @@ public class PromocionCabeceraView extends Fragment {
         ObtenerResumen();
         lv_listapromociones = (ListView) v.findViewById(R.id.lv_listapromociones);
         FormulasController formulasController=new FormulasController(getContext());
-        fab_add_promotionhead.setVisibility(View.GONE);
+        //fab_add_promotionhead.setVisibility(View.GONE);
         fab_add_promotionhead.setOnClickListener(view -> {
             ListaPromocionCabeceraEntity objListaPromocionCabecera = new ListaPromocionCabeceraEntity();
             objListaPromocionCabecera.setLista_promocion_id("0000");
@@ -428,15 +429,30 @@ public class PromocionCabeceraView extends Fragment {
             case R.id.vincular:
                 if(SesionEntity.flagquerystock.equals("N"))
                 {
-                    String Fragment = "PromocionCabeceraView";
-                    String accion = "listapromocioncabecera";
-                    String compuesto = Fragment + "-" + accion;
-                    Object[] listaobjetos = new Object[2];
-                    listaobjetos[0] = listaPromocionCabeceraEntities;
-                    Log.e("REOS", "PromocionCabeceraView:listaPromocionCabeceraEntities.size()" + listaPromocionCabeceraEntities.size());
-                    listaobjetos[1] = listaOrdenVentaDetalleEntities;
-                    Log.e("REOS", "PromocionCabeceraView:listaOrdenVentaDetalleEntities.size()" + listaOrdenVentaDetalleEntities.size());
-                    mListener.onFragmentInteraction(compuesto, listaobjetos);
+                    if(SesionEntity.quotation.equals("Y"))
+                    {
+                        for(int i=0;i<listaPromocionCabeceraEntities.size();i++)
+                        {
+                            int resultado=0;
+                            PromocionCabeceraSQLiteDao promocionCabeceraSQLiteDao=new PromocionCabeceraSQLiteDao(getContext());
+                            resultado=promocionCabeceraSQLiteDao.getPromotionHeaderException(
+                                    listaPromocionCabeceraEntities.get(i).producto_id,
+                                    listaPromocionCabeceraEntities.get(i).getCantidadcompra());
+                            Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-vincular-resultado:" + resultado);
+                        }
+
+                    }else
+                    {
+                        String Fragment = "PromocionCabeceraView";
+                        String accion = "listapromocioncabecera";
+                        String compuesto = Fragment + "-" + accion;
+                        Object[] listaobjetos = new Object[2];
+                        listaobjetos[0] = listaPromocionCabeceraEntities;
+                        Log.e("REOS", "PromocionCabeceraView:listaPromocionCabeceraEntities.size()" + listaPromocionCabeceraEntities.size());
+                        listaobjetos[1] = listaOrdenVentaDetalleEntities;
+                        Log.e("REOS", "PromocionCabeceraView:listaOrdenVentaDetalleEntities.size()" + listaOrdenVentaDetalleEntities.size());
+                        mListener.onFragmentInteraction(compuesto, listaobjetos);
+                    }
                 }
                 else if(SesionEntity.flagquerystock.equals("Y"))
                 {

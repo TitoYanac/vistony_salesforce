@@ -38,6 +38,32 @@ public class PromocionCabeceraEntity {
     private String descuento;
 
     @NonNull
+    @SerializedName("Cantidad_Maxima")
+    private String cantidad_maxima;
+
+    @NonNull
+    @SerializedName("Tipo_Malla")
+    private String tipo_malla;
+
+    @NonNull
+    public String getCantidad_maxima() {
+        return cantidad_maxima;
+    }
+
+    public void setCantidad_maxima(@NonNull String cantidad_maxima) {
+        this.cantidad_maxima = cantidad_maxima;
+    }
+
+    @NonNull
+    public String getTipo_malla() {
+        return tipo_malla;
+    }
+
+    public void setTipo_malla(@NonNull String tipo_malla) {
+        this.tipo_malla = tipo_malla;
+    }
+
+    @NonNull
     public String getDescuento() {
         return descuento;
     }

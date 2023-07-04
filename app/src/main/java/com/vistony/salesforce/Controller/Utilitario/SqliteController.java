@@ -22,7 +22,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 38;
+    private static final int VERSION = 39;
 
 
     public SqliteController(Context context){
@@ -80,7 +80,7 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE terminopago (compania_id text,terminopago_id TEXT,terminopago TEXT,contado TEXT,dias_vencimiento TEXT)");
             db.execSQL("CREATE TABLE agencia (compania_id text,agencia_id TEXT ,agencia TEXT, ubigeo_id TEXT, ruc TEXT, direccion TEXT)");
             db.execSQL("CREATE TABLE listapromocion (compania_id text,lista_promocion_id TEXT ,lista_promocion TEXT,U_VIS_CashDscnt text)");
-            db.execSQL("CREATE TABLE promocioncabecera (compania_id text ,lista_promocion_id text ,promocion_id TEXT,producto_id TEXT,producto TEXT,umd TEXT,cantidad TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,total_preciobase TEXT,descuento TEXT)");
+            db.execSQL("CREATE TABLE promocioncabecera (compania_id text ,lista_promocion_id text ,promocion_id TEXT,producto_id TEXT,producto TEXT,umd TEXT,cantidad TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,total_preciobase TEXT,descuento TEXT,cantidad_maxima TEXT,tipo_malla TEXT )");
             db.execSQL("CREATE TABLE promociondetalle (compania_id text ,lista_promocion_id text ,promocion_id TEXT,promocion_detalle_id TEXT,producto_id TEXT,producto TEXT,umd TEXT,cantidad TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,preciobase TEXT,chkdescuento TEXT,descuento TEXT)");
             db.execSQL("CREATE TABLE listapreciodetalle (compania_id text ,contado TEXT,credito TEXT,producto_id TEXT,producto TEXT,umd TEXT,gal TEXT ,U_VIS_CashDscnt text,Tipo TEXT,porcentaje_dsct TEXT,stock_almacen TEXT,stock_general TEXT,units TEXT" +
                     ", oiltax TEXT, liter TEXT, SIGAUS TEXT,MonedaAdicional TEXT,MonedaAdicionalContado TEXT,MonedaAdicionalCredito TEXT )");
@@ -898,7 +898,11 @@ public class SqliteController extends SQLiteOpenHelper {
         {
             db.execSQL("ALTER TABLE usuario ADD COLUMN sendvalidations TEXT");
         }
-
+        if(oldVersion==38&&newVersion==39)
+        {
+            db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN cantidad_maxima TEXT");
+            db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN tipo_malla TEXT");
+        }
     }
 
     public  static void deleteDatabase(Context mContext){

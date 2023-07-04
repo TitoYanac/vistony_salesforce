@@ -411,8 +411,8 @@ ParametrosView extends Fragment {
 
             //Se desactivo para identificar el motivo de reinicio 14/06/2023 14:22
             //Validar Pedidos
-            if(SesionEntity.sendvalidations.equals("Y"))
-            {
+            //if(SesionEntity.sendvalidations.equals("Y"))
+            //{
                 OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite = new OrdenVentaCabeceraSQLite(getContext());
                 ArrayList<OrdenVentaCabeceraSQLiteEntity> listSalesOrders = new ArrayList<>();
                 listSalesOrders = ordenVentaCabeceraSQLite.getSalesOrderPendingSAP();
@@ -430,9 +430,9 @@ ParametrosView extends Fragment {
                         Log.e("REOS", "ParametrosView-validateSalesOrder-data: " + data);
                     });
                 }
-           }else {
+           //}else {
 
-            }
+            //}
             ///////////////////////////// ENVIAR VISITAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             if(SesionEntity.sendvisits.equals("Y"))
             {

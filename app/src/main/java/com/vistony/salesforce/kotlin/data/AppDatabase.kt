@@ -25,7 +25,7 @@ import com.vistony.salesforce.kotlin.utilities.DATABASE_NAME
     VisitSection::class,
     //CollectionDetail::class
 
-                     ], version = 58,exportSchema = false)
+                     ], version = 62,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,

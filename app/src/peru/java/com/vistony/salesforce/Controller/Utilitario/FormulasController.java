@@ -2023,14 +2023,6 @@ public class FormulasController {
                         //"www.vistony.com/intranet/hash="+encHash+ "\n" +
                         "Codigo Validacion SMS:"+codeSMS+""
                 ;
-                ;
-               /* SmsManager sm = SmsManager.getDefault();
-                ArrayList<String> parts =sm.divideMessage(LONG_TEXT);
-                int numParts = parts.size();
-                ArrayList<PendingIntent> sentIntents = new ArrayList<PendingIntent>();
-                ArrayList<PendingIntent> deliveryIntents = new ArrayList<PendingIntent>();
-                for (int i = 0; i < numParts; i++)
-                { sentIntents.add(PendingIntent.getBroadcast(getContext(), 0, mSendIntent, 0)); deliveryIntents.add(PendingIntent.getBroadcast(getContext(), 0, mDeliveryIntent, 0)); } sm.sendMultiPartTextMessage(mDestAddr,null, parts, sentIntents, deliveryIntents)*/
             }
         }catch (Exception e)
         {
