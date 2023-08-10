@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.Controller.Adapters.ListaPromocionDetalleEditarAdapter;
@@ -56,6 +57,7 @@ public class PromocionDetalleView extends Fragment {
     MenuItem vincular_promocion_detalle_editar,add_promocion_detalle_percent;
     static String cardcode,terminopago_id,currency_id;
     FloatingActionButton fab_add_promotiondetail;
+    TextView txtdocumento;
 
     public PromocionDetalleView() {
         // Required empty public constructor
@@ -174,7 +176,13 @@ public class PromocionDetalleView extends Fragment {
         listaPromocionCabeceraEntity=new ArrayList<>();
         hiloObtenerPromocionDetalle=new HiloObtenerPromocionDetalle();
         setHasOptionsMenu(true);
-        getActivity().setTitle("Detalle de Promoción");
+        //getActivity().setTitle("Detalle de Promoción");
+        if(SesionEntity.quotation.equals("Y"))
+        {
+            getActivity().setTitle(getActivity().getResources().getString(R.string.exception_request));
+        }else {
+            getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
+        }
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             if(!((ArrayList<ListaPromocionCabeceraEntity>)getArguments().getSerializable(TAG_PromocionDetalle)==null))
@@ -192,6 +200,13 @@ public class PromocionDetalleView extends Fragment {
         v= inflater.inflate(R.layout.fragment_promocion_detalle_view, container, false);
         list_promocion_detalle_editar=v.findViewById(R.id.list_promocion_detalle);
         fab_add_promotiondetail=v.findViewById(R.id.fab_add_promotiondetail);
+        txtdocumento=v.findViewById(R.id.txtdocumento);
+        if(SesionEntity.quotation.equals("Y"))
+        {
+            txtdocumento.setText("EDITAR SOLICITUD EXCEPCIÓN");
+        }else {
+            txtdocumento.setText("EDITAR PROMOCIÓN");
+        }
 
         if(SesionEntity.quotation.equals("N"))
         {

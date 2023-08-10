@@ -272,7 +272,7 @@ public class MenuAccionView extends Fragment {
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
         cv_canvas.setVisibility(View.GONE);
-        cv_customer_complaint.setVisibility(View.GONE);
+        //cv_customer_complaint.setVisibility(View.GONE);
 
         cv_canvas.setOnClickListener(v -> {
             /*String Fragment="MenuAccionView";
@@ -351,7 +351,7 @@ public class MenuAccionView extends Fragment {
                 case "chile":
                     //Aprobaciones
                 case "peru":
-                    alertatipoventa().show();
+                    alertatipoventa(getContext()).show();
                     break;
             }
         });
@@ -907,7 +907,7 @@ public class MenuAccionView extends Fragment {
         return  dialog;
     }
 
-    private Dialog alertatipoventa() {
+    private Dialog alertatipoventa(Context context) {
 
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.layout_dialog_tipo_venta);
@@ -915,10 +915,25 @@ public class MenuAccionView extends Fragment {
         cv_tipo_cotizacion=dialog.findViewById(R.id.cv_tipo_cotizacion);
         cv_tipo_ordenventa=dialog.findViewById(R.id.cv_tipo_ordenventa);
         TextView textTitle = dialog.findViewById(R.id.text);
+        TextView tv_lbl_quotation= dialog.findViewById(R.id.tv_lbl_quotation);
         textTitle.setText(getActivity().getResources().getString(R.string.mse_choise_salesorder));
         ImageView image = (ImageView) dialog.findViewById(R.id.image);
         Drawable background = image.getBackground();
         image.setImageResource(R.mipmap.logo_circulo);
+
+        UsuarioSQLiteEntity ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+            {
+                tv_lbl_quotation.setText(getActivity().getResources().getString(R.string.quotation));
+            }
+        }
+
+
         cv_tipo_cotizacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

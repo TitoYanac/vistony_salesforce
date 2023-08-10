@@ -55,6 +55,15 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String U_VIS_Flete;
     public String U_VIS_CompleteOV;
     public String U_VIS_TipTransGrat;
+    public String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getU_VIS_TipTransGrat() {
         return U_VIS_TipTransGrat;

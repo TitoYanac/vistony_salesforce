@@ -49,7 +49,7 @@
     <string name="EnablePrint">Habilitar Impresora</string>
     <string name="LineUsed">Linea Utilizada</string>
     <string name="LineCredit">Línea de Crédito</string>
-    <string name="quotation">Cotización</string>
+    <string name="quotation">Oferta de ventas</string>
     <string name="lbl_orderhed_payterms">TÉRMINO DE PAGO</string>
     <string name="lbl_code">Código</string>
     <string name="lbl_gallon">Gallon</string>
@@ -291,15 +291,15 @@
     <string name="update_mobile_app">Actualiza la App movil</string>
     <string name="mse_necessary_connecting_internet">Es necesario conectarse a internet para actualizar esta version de la App</string>
     <string name="menu_query">Menu Consulta</string>
-    <string name="query_salesorder">Consulta Orden de Venta</string>
+    <string name="query_salesorder">Consulta de Venta</string>
     <string name="query_collection">Consulta Cobranza</string>
     <string name="query_deposit">Consulta Deposito</string>
     <string name="query_invoices">Consulta Facturas</string>
-    <string name="menu_query_salesorder">Menu Consulta Orden Venta</string>
-    <string name="query_salesorder_date">Orden Venta por Fecha</string>
+    <string name="menu_query_salesorder">Menu Consulta Venta</string>
+    <string name="query_salesorder_date">Venta por Fecha</string>
     <string name="query_summary_diary">Resumen Diario</string>
     <string name="query_stock">Consulta Stock</string>
-    <string name="traceability_salesorder">Trazabilidad Orden Venta</string>
+    <string name="traceability_salesorder">Trazabilidad Venta</string>
     <string name="salesorder">Orden de Venta</string>
     <string name="query">Consultar</string>
     <string name="querying_salesorder">Consultando Orden de Venta</string>
@@ -574,13 +574,15 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="sales">Venta</string>
     <string name="traceability_sales">Trazabilidad de Venta</string>
     <string name="salesorder_promotional_mesh">Orden Venta \n (Malla Promocional)</string>
-    <string name="quotation_exception_promotional_mesh">Cotizacion \n(Propuesta de Venta)\n(Excepción Malla Promocional)</string>
+    <string name="quotation_exception_promotional_mesh">Cotizacion \n(Propuesta de Venta)\n(Excepción Malla)</string>
     <string name="promotions_vigents">Promociones Vigentes</string>
-    <string name="Quotation">Cotización</string>
+    <string name="Quotation">Oferta de Ventas</string>
     <string name="guion">-</string>
     <string name="delete">Eliminar</string>
     <string name="update">Editar</string>
     <string name="worth">Valor</string>
     <string name="update_product">Editar\nProducto</string>
     <string name="additionaldiscount">Descuento\nAdicional?</string>
+    <string name="exception_request">Solicitud Excepción</string>
+    <string name="query_sales">Consulta Orden Venta/Oferta Ventas</string>
 </resources>

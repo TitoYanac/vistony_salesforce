@@ -10,8 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -34,6 +37,9 @@ public class MenuConsultasView extends Fragment {
     private CardView cv_ordenventa,cv_documentofacturado,cv_consulta_cobrado,cv_consulta_deposito,cv_consulta_stock,cv_consulta_orden_venta_estado,cv_dispatch,cv_quotation;
     View v;
     OnFragmentInteractionListener mListener;
+    TextView tv_lbl_query_sales;
+    UsuarioSQLiteEntity ObjUsuario;
+
     public MenuConsultasView() {
         // Required empty public constructor
     }
@@ -59,6 +65,9 @@ public class MenuConsultasView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
         getActivity().setTitle(getActivity().getResources().getString(R.string.menu_query));
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -95,8 +104,16 @@ public class MenuConsultasView extends Fragment {
         cv_consulta_deposito=v.findViewById(R.id.cv_consulta_deposito);
         cv_dispatch=v.findViewById(R.id.cv_dispatch);
         cv_quotation=v.findViewById(R.id.cv_quotation);
+        tv_lbl_query_sales=v.findViewById(R.id.tv_lbl_query_sales);
 
 
+        /*if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+            {
+                tv_lbl_query_sales.setText(getActivity().getResources().getString(R.string.query_sales));
+            }
+        }*/
         //cv_dispatch.setVisibility(View.GONE);
         if(SesionEntity.migratequotation.equals("N"))
         {
@@ -115,10 +132,6 @@ public class MenuConsultasView extends Fragment {
         }
 
         switch (BuildConfig.FLAVOR) {
-
-
-
-
             case "marruecos":
                 cv_dispatch.setVisibility(View.GONE);
                 break;

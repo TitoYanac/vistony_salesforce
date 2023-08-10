@@ -68,6 +68,19 @@ public class SettingsUserEntity {
     private String deliveryRefusedMoney;
 
     @NonNull
+    @SerializedName("U_VIS_ManagementType")
+    private String U_VIS_ManagementType;
+
+    @NonNull
+    public String getU_VIS_ManagementType() {
+        return U_VIS_ManagementType;
+    }
+
+    public void setU_VIS_ManagementType(@NonNull String u_VIS_ManagementType) {
+        U_VIS_ManagementType = u_VIS_ManagementType;
+    }
+
+    @NonNull
     public String getDeliveryRefusedMoney() {
         return deliveryRefusedMoney;
     }

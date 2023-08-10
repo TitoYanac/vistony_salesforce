@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.vistony.salesforce.kotlin.api.RetrofitApi
 import com.vistony.salesforce.kotlin.api.RetrofitConfig
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +17,10 @@ class ReasonDispatchRepository {
     private val _status = MutableLiveData<String>()
     val status: MutableLiveData<String> = _status
 
-    suspend fun getReasonDispatch(Imei:String,context: Context)
+    private val _result_get = MutableStateFlow(ResponseReasonDispatch())
+    val result_get: StateFlow<ResponseReasonDispatch> get() = _result_get
+
+    suspend fun addReasonDispatch(Imei:String,context: Context)
     {
         Log.e(
             "REOS",
@@ -121,7 +126,42 @@ class ReasonDispatchRepository {
                 "ReasonDispatchRepository-getReasonDispatch-error: " + e.toString()
             )
         }
+    }
 
+    fun getReasonDispatch(
+        context: Context,
+    )
+    {
+        try {
+            val executor: ExecutorService = Executors.newFixedThreadPool(1)
+            for (i in 1..1) {
+                executor.execute {
+                    println("Tarea $i en ejecución en ${Thread.currentThread().name}")
+                    //Thread.sleep(1000)
+                    val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+
+                    val data=database?.reasonDispatchDao
+                        ?.getReasonDispatch()
+                    _result_get.value=ResponseReasonDispatch(Status = "Y",data = data)
+                    Log.e(
+                        "REOS",
+                        "TypeDispatchRepository-getTypeDispatch-data: " + data
+                    )
+                    Log.e(
+                        "REOS",
+                        "TypeDispatchRepository-getTypeDispatch-_result_get.value.data: " + _result_get.value.data
+                    )
+                    println("Tarea $i completada")
+                }
+            }
+            executor.shutdown()
+        }
+        catch (e: Exception) {
+            Log.e(
+                "REOS",
+                "TypeDispatchRepository-getTypeDispatch-error: " + e.toString()
+            )
+        }
     }
 
 }

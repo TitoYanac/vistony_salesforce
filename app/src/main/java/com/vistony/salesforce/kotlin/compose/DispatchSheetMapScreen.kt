@@ -143,8 +143,8 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
                             //viewModel = ViewModelProvider(viewModelStoreOwner, HeaderDispatchSheetViewModel(headerDispatchSheetRepository))[HeaderDispatchSheetViewModel::class.java]
                             //viewModel = ViewModelProvider(viewModelStoreOwner)[HeaderDispatchSheetViewModel::class.java]
                             headerDispatchSheetViewModel = HeaderDispatchSheetViewModel(headerDispatchSheetRepository)
-                            typeDispatchViewModel = TypeDispatchViewModel(typeDispatchRepository)
-                            reasonDispatchViewModel = ReasonDispatchViewModel(reasonDispatchRepository)
+                            typeDispatchViewModel = TypeDispatchViewModel(SesionEntity.imei,appContext,typeDispatchRepository)
+                            reasonDispatchViewModel = ReasonDispatchViewModel(reasonDispatchRepository,appContext)
 
                             typeDispatchViewModel.status.observe(lifecycleOwner) { status ->
                                 // actualizar la UI con los datos obtenidos
@@ -154,7 +154,7 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
                                 )
                             }
 
-                            typeDispatchViewModel?.getTypeDispatch(
+                            typeDispatchViewModel?.addTypeDispatch(
                                 SesionEntity.imei,
                                 appContext,
                                 lifecycleOwner
@@ -168,7 +168,7 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
                                 )
                             }
 
-                            reasonDispatchViewModel?.getReasonDispatch(
+                            reasonDispatchViewModel?.addReasonDispatch(
                                 SesionEntity.imei,
                                 appContext,
                                 lifecycleOwner
@@ -369,10 +369,10 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
 */
     override fun onMapReady(p0: GoogleMap) {
         TODO("Not yet implemented")
-        Log.e(
+        /*Log.e(
             "REOS",
             "GooleMaps-onMapReady-ingreso"
-        )
+        )*/
     }
 
     interface OnFragmentInteractionListener {
@@ -437,10 +437,10 @@ fun StartGoogleMaps()
         var lista=DetailDispatchSheetSQLite(appContext)
                 .getDetailDispatchSheetforCodeControlMap(ContainerDispatchView.parametrofecha)
 
-            Log.e(
+            /*Log.e(
                 "REOS",
                 "GooleMaps-StartGoogleMaps-lista.size"+lista.size
-            )
+            )*/
             for ( i in 0..lista.size-1)
             {
                 val marker = com.google.android.gms.maps.model.LatLng(
@@ -798,7 +798,7 @@ fun StartGoogleMaps()
                     iconResourceId = R.drawable.ic_baseline_place_24
                 )*/
                 val icono=null
-                Log.e(
+                /*Log.e(
                     "REOS",
                     "GooleMaps-StartGoogleMaps-lista[i].getEstado(): "+lista[i].getEstado()
                 )
@@ -807,7 +807,7 @@ fun StartGoogleMaps()
                 Log.e(
                     "REOS",
                     "GooleMaps-StartGoogleMaps-icono: "+icono
-                )
+                )*/
                 when (lista[i].getEstado()){
                     "ENTREGADO" -> {
                         /*Marker(position = marker,
@@ -906,18 +906,18 @@ fun StartGoogleMaps()
                         )))
                 )*/
 
-                Log.e(
+                /*Log.e(
                     "REOS",
                     "GooleMaps-StartGoogleMaps-i: "+i
-                )
+                )*/
                 /*Log.e(
                     "REOS",
                     "GooleMaps-StartGoogleMaps-PRUEBA: "+"[$i, ${lista[i].latitud}]"
                 )*/
-                Log.e(
+                /*Log.e(
                     "REOS",
                     "GooleMaps-StartGoogleMaps-PRUEBA1: "+"[$i, ${lista[i].getLatitud()}]"
-                )
+                )*/
                 println("[$i, ${lista[i].latitud}]")
                 println("[$i, ${lista[i].getLatitud()}]")
                 /*Log.e(

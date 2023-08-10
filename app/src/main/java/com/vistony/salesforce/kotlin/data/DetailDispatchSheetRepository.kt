@@ -20,10 +20,10 @@ class DetailDispatchSheetRepository {
     {
         try {
             val executor: ExecutorService = Executors.newFixedThreadPool(1)
-            Log.e(
+            /*Log.e(
                 "REOS",
                 "DetailDispatchSheetRepository-getStateDispatchSheet-FechaDespacho: " + FechaDespacho
-            )
+            )*/
             for (i in 1..1) {
                 executor.execute {
                     println("Tarea $i en ejecución en ${Thread.currentThread().name}")

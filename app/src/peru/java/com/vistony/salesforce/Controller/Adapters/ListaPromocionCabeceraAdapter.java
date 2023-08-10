@@ -32,9 +32,11 @@ import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaParametrosEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.PromocionCabeceraView;
@@ -54,12 +56,16 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
     PromocionDetalleSQLiteDao promocionDetalleSQLiteDao;
     ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao;
     FormulasController formulasController;
+    static UsuarioSQLiteEntity ObjUsuario;
 
     public ListaPromocionCabeceraAdapter(Context context, List<ListaPromocionCabeceraEntity> objects) {
 
         super(context, 0, objects);
         ArraylistaPromocionCabeceraEntity = objects;
         this.context = context;
+        ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
     }
 
     @Override
@@ -106,8 +112,28 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
         // Lead actual.
         final ListaPromocionCabeceraEntity lead = getItem(position);
-        /*holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
-        holder.imv_editar_promocion_detalle.setEnabled(false);*/
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            if(SesionEntity.quotation.equals("Y"))
+            {
+                if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+                {
+
+                }else {
+                    holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                    holder.imv_editar_promocion_detalle.setEnabled(false);
+                }
+            }else {
+                holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                holder.imv_editar_promocion_detalle.setEnabled(false);
+            }
+
+        }else {
+            holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+            holder.imv_editar_promocion_detalle.setEnabled(false);
+        }
+
+
         // Setup.
         //holder.tv_promocion_id.setText(lead.getPromocion_id());
         holder.tv_promocion_producto.setText(lead.getProducto());
@@ -119,6 +145,13 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         holder.lbl_pack.setText(mitextoU);
 //        holder.tv_porcentajedescuentocabecera.setText(lead.getDescuento());
         String contado = "", credito = "";
+
+        if(SesionEntity.quotation.equals("Y"))
+        {
+            holder.lbl_register_data.setText("Debe agregar el detalle de la solicitud de Excepción, pulsando el icono del lapiz.");
+        }else{
+            holder.lbl_register_data.setText("Debe agregar el detalle de la promoción, pulsando el icono del lapiz.");
+        }
         ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities = new ArrayList<>();
         listaPrecioDetalleSQLiteEntities = listaPrecioDetalleSQLiteDao.ObtenerListaPrecioPorProducto(
                 getContext(),
@@ -685,7 +718,14 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         TextView textTitle = dialog.findViewById(R.id.text_orden_venta_detalle);
         textTitle.setText("ADVERTENCIA");
         final TextView textMsj = dialog.findViewById(R.id.textViewMsj_orden_venta_detalle);
-        textMsj.setText("Seguro de modificar el Pack de Promocion?");
+
+        if(SesionEntity.quotation.equals("Y"))
+        {
+            textMsj.setText("Seguro de modificar el pack de solicitud de excepción?");
+        }else {
+            textMsj.setText("Seguro de modificar el pack de promoción?");
+        }
+
         ImageView image = (ImageView) dialog.findViewById(R.id.image_orden_venta_detalle);
 
         image.setImageResource(R.mipmap.logo_circulo);

@@ -22,16 +22,21 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaPromocionCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaPromocionCabeceraDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.PromocionDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -71,6 +76,7 @@ public class PromocionCabeceraView extends Fragment {
     static ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabeceraEntities=new ArrayList<>();
     FloatingActionButton fab_add_promotionhead;
     String cantidad="",currency="",cardcode="",terminopago_id="",producto_id="",producto="";
+    static UsuarioSQLiteEntity ObjUsuario;
 
     public PromocionCabeceraView() {
         // Required empty public constructor
@@ -261,7 +267,7 @@ public class PromocionCabeceraView extends Fragment {
                 Listado.get(i).setDescuento(descuento);
                 if(SesionEntity.quotation.equals("Y"))
                 {
-                    Listado.get(i).setPromocion_id(promocion_id+"_M");
+                    //Listado.get(i).setPromocion_id(promocion_id+"_M");
                 }
                 Listado.get(i).setListaPromocionDetalleEntities(listPromocionDetalleSQLite);
             }
@@ -284,7 +290,28 @@ public class PromocionCabeceraView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
+        ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            if(SesionEntity.quotation.equals("Y"))
+            {
+                if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+                {
+                    getActivity().setTitle(getActivity().getResources().getString(R.string.exception_request));
+                }else {
+                    getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
+                }
+            }else {
+                getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
+            }
+        }else {
+            getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
+        }
+
+
         context=getContext();
         hiloObtenerPromocionCabecera= new HiloObtenerPromocionCabecera();
         if (getArguments() != null) {
@@ -309,7 +336,23 @@ public class PromocionCabeceraView extends Fragment {
         ObtenerResumen();
         lv_listapromociones = (ListView) v.findViewById(R.id.lv_listapromociones);
         FormulasController formulasController=new FormulasController(getContext());
-        //fab_add_promotionhead.setVisibility(View.GONE);
+
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            if(SesionEntity.quotation.equals("Y"))
+            {
+                if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+                {
+                    fab_add_promotionhead.setVisibility(View.GONE);
+                }
+            }else {
+                fab_add_promotionhead.setVisibility(View.GONE);
+            }
+        }else {
+            fab_add_promotionhead.setVisibility(View.GONE);
+        }
+
+
         fab_add_promotionhead.setOnClickListener(view -> {
             ListaPromocionCabeceraEntity objListaPromocionCabecera = new ListaPromocionCabeceraEntity();
             objListaPromocionCabecera.setLista_promocion_id("0000");
@@ -325,7 +368,6 @@ public class PromocionCabeceraView extends Fragment {
             objListaPromocionCabecera.setCount(String.valueOf(Listado.size()));
             objListaPromocionCabecera.setListaPromocionDetalleEntities(new ArrayList<PromocionDetalleSQLiteEntity>());
             Listado.add(objListaPromocionCabecera);
-
             hiloObtenerPromocionCabecera.execute();
         });
 
@@ -427,18 +469,93 @@ public class PromocionCabeceraView extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.vincular:
+                String lista_promocion_id="";
+                for(int l=0;l<listaPromocionCabeceraEntities.size();l++)
+                {
+                    lista_promocion_id=listaPromocionCabeceraEntities.get(l).getLista_promocion_id();
+                }
+
                 if(SesionEntity.flagquerystock.equals("N"))
                 {
                     if(SesionEntity.quotation.equals("Y"))
                     {
-                        for(int i=0;i<listaPromocionCabeceraEntities.size();i++)
+                        if (lista_promocion_id.equals("0000"))
                         {
-                            int resultado=0;
-                            PromocionCabeceraSQLiteDao promocionCabeceraSQLiteDao=new PromocionCabeceraSQLiteDao(getContext());
-                            resultado=promocionCabeceraSQLiteDao.getPromotionHeaderException(
-                                    listaPromocionCabeceraEntities.get(i).producto_id,
-                                    listaPromocionCabeceraEntities.get(i).getCantidadcompra());
-                            Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-vincular-resultado:" + resultado);
+                            int nocumple = 0;
+                            String promocion_id = "",descuento="";
+                            for (int i = 0; i < listaPromocionCabeceraEntities.size(); i++) {
+                                PromocionCabeceraSQLiteDao promocionCabeceraSQLiteDao = new PromocionCabeceraSQLiteDao(getContext());
+                                promocion_id = promocionCabeceraSQLiteDao.getPromotionHeaderException(
+                                        listaPromocionCabeceraEntities.get(i).producto_id,
+                                        listaPromocionCabeceraEntities.get(i).getCantidadcompra());
+
+                                /*descuento = promocionCabeceraSQLiteDao.getPromotionHeaderExceptionDescount(
+                                        listaPromocionCabeceraEntities.get(i).producto_id,
+                                        listaPromocionCabeceraEntities.get(i).getCantidadcompra());
+                                Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-descuento-descuento:" + descuento);
+                                Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-descuento-listaPromocionCabeceraEntities.get(i).getDescuento():" + listaPromocionCabeceraEntities.get(i).getDescuento());
+                                Log.e("REOS", "dentro del if-PromocionCabeceraView-onOptionsItemSelected-nocumple:" + nocumple);
+                                if(Integer.parseInt(listaPromocionCabeceraEntities.get(i).getDescuento())>Integer.parseInt(descuento))
+                                {
+                                    Log.e("REOS", "dentro del if-PromocionCabeceraView-onOptionsItemSelected-descuento:" + descuento);
+                                    Log.e("REOS", "dentro del if-PromocionCabeceraView-onOptionsItemSelected-listaPromocionCabeceraEntities.get(i).getDescuento():" + listaPromocionCabeceraEntities.get(i).getDescuento());
+                                    nocumple++;
+                                }*/
+
+
+                                if (promocion_id != null && !promocion_id.equals("")) {
+                                    for (int j = 0; j < listaPromocionCabeceraEntities.get(i).getListaPromocionDetalleEntities().size(); j++) {
+                                        int resultadodetail = 0;
+                                        PromocionDetalleSQLiteDao promocionDetalleSQLiteDao = new PromocionDetalleSQLiteDao(getContext());
+                                        Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-listaPromocionCabeceraEntities.get(i).getListaPromocionDetalleEntities().getOrden_detalle_producto_id():" + listaPromocionCabeceraEntities.get(i).getListaPromocionDetalleEntities().get(j).getProducto_id());
+                                        Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-listaPromocionCabeceraEntities.get(i).getListaPromocionDetalleEntities().getOrden_detalle_cantidad():" + listaPromocionCabeceraEntities.get(i).getListaPromocionDetalleEntities().get(j).getCantidad());
+                                        Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-promocion_id:" + promocion_id);
+                                        resultadodetail = promocionDetalleSQLiteDao.getPromotionDetailException(
+                                                promocion_id,
+                                                listaPromocionCabeceraEntities.get(i).getListaPromocionDetalleEntities().get(j).getCantidad(),
+                                                listaPromocionCabeceraEntities.get(i).getListaPromocionDetalleEntities().get(j).getProducto_id()
+                                        );
+                                        if (resultadodetail == 0) {
+                                            nocumple++;
+                                        }
+
+                                        Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-resultadodetail:" + resultadodetail);
+                                    }
+                                } else {
+                                    nocumple++;
+                                    //Toast.makeText(getContext(), "No Paso 1era Validacion de Cabecera", Toast.LENGTH_LONG).show();
+                                }
+                                //Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-vincular-resultado:" + resultado);
+                            }
+                            if (nocumple > 0) {
+                                Toast.makeText(getContext(), "No cumple con las reglas de excepción", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getContext(), "Si cumple con las reglas de excepcion!!!!", Toast.LENGTH_LONG).show();
+                                for(int i=0;i<listaPromocionCabeceraEntities.size();i++)
+                                {
+                                    listaPromocionCabeceraEntities.get(i).setPromocion_id(promocion_id);
+                                }
+
+                                String Fragment = "PromocionCabeceraView";
+                                String accion = "listapromocioncabecera";
+                                String compuesto = Fragment + "-" + accion;
+                                Object[] listaobjetos = new Object[2];
+                                listaobjetos[0] = listaPromocionCabeceraEntities;
+                                Log.e("REOS", "PromocionCabeceraView:listaPromocionCabeceraEntities.size()" + listaPromocionCabeceraEntities.size());
+                                listaobjetos[1] = listaOrdenVentaDetalleEntities;
+                                Log.e("REOS", "PromocionCabeceraView:listaOrdenVentaDetalleEntities.size()" + listaOrdenVentaDetalleEntities.size());
+                                mListener.onFragmentInteraction(compuesto, listaobjetos);
+                            }
+                        }else {
+                            String Fragment = "PromocionCabeceraView";
+                            String accion = "listapromocioncabecera";
+                            String compuesto = Fragment + "-" + accion;
+                            Object[] listaobjetos = new Object[2];
+                            listaobjetos[0] = listaPromocionCabeceraEntities;
+                            Log.e("REOS", "PromocionCabeceraView:listaPromocionCabeceraEntities.size()" + listaPromocionCabeceraEntities.size());
+                            listaobjetos[1] = listaOrdenVentaDetalleEntities;
+                            Log.e("REOS", "PromocionCabeceraView:listaOrdenVentaDetalleEntities.size()" + listaOrdenVentaDetalleEntities.size());
+                            mListener.onFragmentInteraction(compuesto, listaobjetos);
                         }
 
                     }else

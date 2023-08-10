@@ -50,7 +50,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -226,7 +228,6 @@ public class MenuView extends AppCompatActivity
     private TextView textViewStatus;
     String path;
     private CobranzaRepository cobranzaRepository;
-
     private String recibovalidado = "";
     private ConnectivityManager manager;
     private static BixolonPrinterController bxlPrinter = null;
@@ -234,6 +235,8 @@ public class MenuView extends AppCompatActivity
     HistoricContainerSalesRepository historicContainerSalesRepository;
     TableRow tablerowzona;
     public static Activity activity;
+    public static ViewModelStoreOwner viewModelStoreOwner;
+    public static LifecycleOwner lifecycleOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,7 +278,6 @@ public class MenuView extends AppCompatActivity
         CustomerComplaintFragment = new Fragment();
         ClienteDetalleViewFragment = new Fragment();
         HistoricPromotionFragment = new Fragment();
-
         arraylistConfiguracionentity = new ArrayList<ConfiguracionSQLEntity>();
         configuracionSQLiteDao = new ConfiguracionSQLiteDao(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -297,9 +299,7 @@ public class MenuView extends AppCompatActivity
         clienteCabeceraView = new ClienteCabeceraView();
         consultarCobranzaView = new ClienteDetalleView();
         parametrosView = new ParametrosView();
-
         cobranzaCabeceraView = new CobranzaCabeceraView();
-
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
@@ -320,6 +320,9 @@ public class MenuView extends AppCompatActivity
         listaConfiguracionEntity = new ArrayList<ConfiguracionSQLEntity>();
         listaConfiguracionEntity = configuracionSQLiteDao.ObtenerCorrelativoConfiguracion();
         tablerowzona = navigationView.getHeaderView(0).findViewById(R.id.tablerowzona);
+        viewModelStoreOwner=this;
+        lifecycleOwner=this;
+
 
 
         if (SesionEntity.perfil_id.equals("CHOFER") || SesionEntity.perfil_id.equals("Chofer")) {
@@ -835,7 +838,6 @@ public class MenuView extends AppCompatActivity
 
         dialogButton.setOnClickListener(v -> {
             dialog.dismiss();
-
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
@@ -852,12 +854,17 @@ public class MenuView extends AppCompatActivity
                     }else {
                         //bluetoothAdapter.enable();
                     }
-
                 }
-            System.exit(0);
+                //this.dispose()  ; // Libera los recursos asociados con la ventana
+                //System.exit(0); // Termina la aplicación1 de forma segura
+                //moveTaskToBack(true);
+                finish();
+                //super.onBackPressed();
         });
 
-        dialogButtonExit.setOnClickListener(v -> dialog.dismiss());
+        dialogButtonExit.setOnClickListener(v ->
+                dialog.dismiss()
+        );
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1274,7 +1281,7 @@ public class MenuView extends AppCompatActivity
                 case "listadopromocion":
                     OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
                     ft.hide(OrdenVentaDetalleFragment);
-                    ft.add(R.id.content_menu_view, ListadoPromocionView.newInstance(Lista),tag2);
+                    ft.add(R.id.content_menu_view, ListadoPromocionView.newInstance(Lista,getApplicationContext()),tag2);
                     //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                     ft.addToBackStack("po1p");
                     ft.commit();
@@ -2540,6 +2547,7 @@ public class MenuView extends AppCompatActivity
         onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -2555,7 +2563,7 @@ public class MenuView extends AppCompatActivity
                 }
                 break;
         }
-    }
+    }*/
 
     private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
         @Override
@@ -2582,7 +2590,7 @@ public class MenuView extends AppCompatActivity
     @Override
     public void onPause() {
         Log.e("REOS","MenuView-onPause");
-        unregisterReceiver(networkStateReceiver);
+        //unregisterReceiver(networkStateReceiver);
         super.onPause();
     }
 
@@ -2606,5 +2614,12 @@ public class MenuView extends AppCompatActivity
         Log.e("REOS","MenuView-onRestart");
         super.onRestart();
         Induvis.refreshGlobalVariables(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.e("REOS","MenuView-onDestroy");
+        //unregisterReceiver(networkStateReceiver);
+        super.onDestroy();
     }
 }

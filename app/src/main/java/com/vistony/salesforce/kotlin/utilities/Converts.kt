@@ -1,9 +1,22 @@
 package com.vistony.salesforce.kotlin.utilities
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
 import com.vistony.salesforce.Controller.Utilitario.FormulasController
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 
 fun getDateCurrent(): String? {
     val format = "yyyyMMdd"
@@ -57,3 +70,34 @@ private fun getRandomNumberString(maxLeght: Int): String? {
     // this will convert any number sequence into 6 character.
     return String.format("%02d", number)
 }
+
+@Composable
+fun ResourceToImageBitmap(resourceId: Int): ImageBitmap {
+    val context = LocalContext.current
+
+    val vectorDrawable = VectorDrawableCompat.create(context.resources, resourceId, null)
+    val bitmap = Bitmap.createBitmap(
+        vectorDrawable?.intrinsicWidth ?: 0,
+        vectorDrawable?.intrinsicHeight ?: 0,
+        Bitmap.Config.ARGB_8888
+    )
+    val canvas = Canvas(bitmap)
+    vectorDrawable?.setBounds(0, 0, canvas.width, canvas.height)
+    vectorDrawable?.draw(canvas)
+
+    return bitmap.asImageBitmap()
+}
+
+fun convertResourceToBitmap(context: Context, resourceId: Int): Bitmap? {
+    val vectorDrawable = VectorDrawableCompat.create(context.resources, resourceId, null)
+    val bitmap = Bitmap.createBitmap(
+        vectorDrawable?.intrinsicWidth ?: 0,
+        vectorDrawable?.intrinsicHeight ?: 0,
+        Bitmap.Config.ARGB_8888
+    )
+    val canvas = Canvas(bitmap)
+    vectorDrawable?.setBounds(0, 0, canvas.width, canvas.height)
+    vectorDrawable?.draw(canvas)
+    return bitmap
+}
+

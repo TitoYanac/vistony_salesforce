@@ -114,7 +114,8 @@ public class Convert {
             case "peru":
                     if(SesionEntity.currency_id.equals("US$"))
                     {
-                        resultado= " US$ "+amountRedonded;
+                        //resultado= " US$ "+amountRedonded;
+                        resultado= " US$ "+new BigDecimal(amount).setScale(2, RoundingMode.HALF_DOWN).toString();
                     }else {
                         resultado= NumberFormat.getCurrencyInstance(locale).format(amountRedonded);
                     }

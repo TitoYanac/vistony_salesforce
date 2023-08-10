@@ -25,11 +25,11 @@ import retrofit2.Response;
 public class HistoricSalesOrderTraceabilityRepository   extends ViewModel {
     private BancoSQLite bancoSQLite;
     private ParametrosSQLite parametrosSQLite;
-    private MutableLiveData<List<HistoricSalesOrderTraceabilityEntity>> status= new MutableLiveData<>();
+    private MutableLiveData<List<HistoricSalesOrderTraceabilityEntity>> status;
 
 
     public MutableLiveData<List<HistoricSalesOrderTraceabilityEntity>> getHistoricSalesOrderTraceabilityRepository(String Imei, String Date){
-
+        status= new MutableLiveData<>();
         Config.getClient().create(Api.class).geHistoricSalesOrderTraceability(Imei,Date).enqueue(new Callback<HistoricSalesOrderTraceabilityEntityResponse>() {
             @Override
             public void onResponse(Call<HistoricSalesOrderTraceabilityEntityResponse> call, Response<HistoricSalesOrderTraceabilityEntityResponse> response) {

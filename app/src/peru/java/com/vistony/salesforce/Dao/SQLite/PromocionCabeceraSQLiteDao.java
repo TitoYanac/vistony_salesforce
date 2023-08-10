@@ -142,7 +142,7 @@ public class PromocionCabeceraSQLiteDao {
         abrir();
         Cursor fila = bd.rawQuery(
                 "Select *,ROW_NUMBER()OVER (ORDER BY lista_promocion_id, producto_id, CAST(cantidad AS INTEGER)) AS numerador from promocioncabecera where compania_id='" + compania_id + "' and fuerzatrabajo_id='" + fuerzatrabajo_id + "' and usuario_id='" + usuario_id + "' " +
-                        "and producto_id='" + producto_id + "' and umd='" + umd + "' and CAST(cantidad as INTEGER)<='" + cantidad + "' order by cantidad desc ",null);
+                        "and producto_id='" + producto_id + "' and umd='" + umd + "' and CAST(cantidad as INTEGER)<='" + cantidad + "' AND tipo_malla='P' order by cantidad desc ",null);
 
         while (fila.moveToNext())
         {
@@ -166,8 +166,6 @@ public class PromocionCabeceraSQLiteDao {
                         context,
                         cardcode,
                         terminopago_id
-
-
                 );
 
                 PromocionDetalleSQLiteEntity promocionDetalleSQLiteEntity= new PromocionDetalleSQLiteEntity();
@@ -196,7 +194,6 @@ public class PromocionCabeceraSQLiteDao {
                         context,
                         cardcode,
                         terminopago_id
-
                 );
             }
 
@@ -233,7 +230,7 @@ public class PromocionCabeceraSQLiteDao {
         abrir();
         Cursor fila = bd.rawQuery(
                 "Select *,ROW_NUMBER()OVER (ORDER BY lista_promocion_id, producto_id, CAST(cantidad AS INTEGER)) AS numerador from promocioncabecera where compania_id='" + compania_id + "' and fuerzatrabajo_id='" + fuerzatrabajo_id + "' and usuario_id='" + usuario_id + "' " +
-                        "and producto_id='" + producto_id + "' and umd='" + umd + "' and CAST(cantidad as INTEGER)='" + cantidad + "'",null);
+                        "and producto_id='" + producto_id + "' and umd='" + umd + "' and CAST(cantidad as INTEGER)='" + cantidad + "' AND tipo_malla='P' ",null);
 
         while (fila.moveToNext())
         {
@@ -602,23 +599,48 @@ public class PromocionCabeceraSQLiteDao {
     }
 
 
-    public int getPromotionHeaderException (
+    public String getPromotionHeaderException (
             String producto_id,
             String cantidad
     )
     {
-        int resultado=0;
+        String promocion_id="";
         abrir();
+        Log.e("REOS","PromocionCabeceraSQLiteDao-getPromotionHeaderException-producto_id: "+producto_id);
+        Log.e("REOS","PromocionCabeceraSQLiteDao-getPromotionHeaderException-cantidad: "+cantidad);
+
         Cursor fila = bd.rawQuery(
-                "Select COUNT(producto_id)  from promocioncabecera " +
-                        "where producto_id='" + producto_id + "' AND cantidad>='" + cantidad + "' AND cantidad_maxima<='" + cantidad + "' and tipo_malla='E' ",null);
+                "Select promocion_id  from promocioncabecera " +
+                        "where producto_id='" + producto_id + "' AND cantidad<='" + cantidad + "' AND cantidad_maxima>='" + cantidad + "' and tipo_malla='E' ",null);
 
         while (fila.moveToNext())
         {
-            resultado= Integer.parseInt(fila.getString(0));
+            promocion_id= (fila.getString(0));
         }
         bd.close();
-        return resultado;
+        return promocion_id;
+    }
+
+    public String getPromotionHeaderExceptionDescount (
+            String producto_id,
+            String cantidad
+    )
+    {
+        String descuento="";
+        abrir();
+        Log.e("REOS","PromocionCabeceraSQLiteDao-getPromotionHeaderException-producto_id: "+producto_id);
+        Log.e("REOS","PromocionCabeceraSQLiteDao-getPromotionHeaderException-cantidad: "+cantidad);
+
+        Cursor fila = bd.rawQuery(
+                "Select IFNULL(descuento,'0') from promocioncabecera " +
+                        "where producto_id='" + producto_id + "' AND cantidad<='" + cantidad + "' AND cantidad_maxima>='" + cantidad + "' and tipo_malla='E' ",null);
+
+        while (fila.moveToNext())
+        {
+            descuento= (fila.getString(0));
+        }
+        bd.close();
+        return descuento;
     }
 
 }

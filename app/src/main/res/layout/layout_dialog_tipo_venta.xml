@@ -129,6 +129,7 @@
                                 android:src="@drawable/ic_baseline_request_quote_24" />
 
                             <TextView
+                                android:id="@+id/tv_lbl_quotation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/quotation_exception_promotional_mesh"

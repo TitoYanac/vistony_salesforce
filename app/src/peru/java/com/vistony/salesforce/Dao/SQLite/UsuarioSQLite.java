@@ -87,7 +87,8 @@ public class UsuarioSQLite {
                 registro.put("status", vendedor.get(i).getStatus());
                 registro.put("sendvisits", vendedor.get(i).getSendvisits());
                 registro.put("sendvalidations", vendedor.get(i).getSendvalidations());
-
+                registro.put("U_VIS_ManagementType", vendedor.get(i).getSettings().get(0).getU_VIS_ManagementType());
+                //registro.put("U_VIS_ManagementType", "B2B");
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.rate: " + vendedor.get(i).getRate());
                 Log.e("REOS", "UsuarioSQLite.InsertaUsuario.vendedor.get(i).getNombreusuario(): " + vendedor.get(i).getNombreusuario());
                 bd.insert("usuario", null, registro);
@@ -211,6 +212,7 @@ public class UsuarioSQLite {
                     usuarioSQLiteEntity.setStatus (fila.getString(fila.getColumnIndex("status")));
                     usuarioSQLiteEntity.setSendvisits (fila.getString(fila.getColumnIndex("sendvisits")));
                     usuarioSQLiteEntity.setSendvalidations (fila.getString(fila.getColumnIndex("sendvalidations")));
+                    usuarioSQLiteEntity.setU_VIS_ManagementType (fila.getString(fila.getColumnIndex("U_VIS_ManagementType")));
 
                 } while (fila.moveToNext());
             }

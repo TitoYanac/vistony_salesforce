@@ -278,15 +278,6 @@ public class StatusDispatchDialog extends DialogFragment {
                         //imageViewPhoto2.setImageBitmap(imgBitmap2);
                         Convert.resizeImage(imageViewPhoto2,imgBitmap2,getActivity());
                     }
-                    /*byte[] byteArray,byteArray2;
-                    byteArray=imageCameraController.getImageSDtoByte(getContext(),fileguia.toString());
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                    imageViewPhoto2.setImageBitmap(bitmap);*/
-                    /*BitmapFactory.decodeByteArray()
-                    getImageSDtoByte.
-                    imageViewPhoto2.setImageBitmap(
-                            //decodeSampledBitmapFromResource(getResources(), R.id.myimage, 100, 100));
-                            decodeSampledBitmapFromResource(getResources(), imgBitmap2, 100, 100));*/
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -706,7 +697,6 @@ public class StatusDispatchDialog extends DialogFragment {
         //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = entrega_id+"_"+type;
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
         File image = File.createTempFile(imageFileName,".jpg",storageDir);
         if(type.equals("G"))
         {

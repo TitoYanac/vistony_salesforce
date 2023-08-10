@@ -5,6 +5,8 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.vistony.salesforce.kotlin.api.RetrofitApi
 import com.vistony.salesforce.kotlin.api.RetrofitConfig
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,6 +20,8 @@ class VisitSectionRepository {
     private val _status = MutableLiveData<String>()
     val status: MutableLiveData<String> = _status
 
+    private val _result_send_API = MutableStateFlow(ResponseCollectionDetail())
+    val result_send_API: StateFlow<ResponseCollectionDetail> get() = _result_send_API
 
     suspend fun getVisitSection(
         Imei:String,
@@ -135,4 +139,6 @@ class VisitSectionRepository {
             )
         }
     }
+
+
 }

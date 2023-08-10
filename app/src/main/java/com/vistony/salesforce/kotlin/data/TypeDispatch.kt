@@ -18,3 +18,9 @@ data class TypeDispatch(
     @SerializedName("Flag")
     var statusupdate: String?
 )
+
+data class ResponseTypeDispatch(
+    var Status:String="",
+    @SerializedName("DispatchTypes")
+    var data: List<TypeDispatch>? = emptyList(),
+)

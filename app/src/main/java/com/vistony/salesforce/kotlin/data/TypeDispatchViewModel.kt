@@ -2,19 +2,48 @@ package com.vistony.salesforce.kotlin.data
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class TypeDispatchViewModel (
-    private val typeDispatchRepository: TypeDispatchRepository
+    private var Imei:String,
+    private var context: Context,
+    private val typeDispatchRepository: TypeDispatchRepository,
+
 ) : ViewModel()  {
     private val _status = MutableLiveData<String>()
     val status: MutableLiveData<String> = _status
 
-    fun getTypeDispatch(Imei:String, context: Context, lifecycleOwner: LifecycleOwner)
+    private val _result_get = MutableStateFlow(ResponseTypeDispatch())
+    val result_get: StateFlow<ResponseTypeDispatch> get() = _result_get
+
+    class TypeDispatchViewModelFactory(
+        private var Imei:String,
+        private var context: Context,
+        private val typeDispatchRepository: TypeDispatchRepository
+    ): ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return TypeDispatchViewModel(
+                Imei,context,typeDispatchRepository
+            ) as T
+        }
+    }
+
+    init{
+        //getInvoices()
+        viewModelScope.launch {
+            // Observar cambios en invoicesRepository.invoices
+            typeDispatchRepository.result_get.collect { newResult ->
+                // Actualizar el valor de _invoices cuando haya cambios
+                _result_get.value = newResult
+            }
+        }
+    }
+
+    fun addTypeDispatch(Imei:String, context: Context, lifecycleOwner: LifecycleOwner)
     {
         Log.e(
             "REOS",
@@ -25,7 +54,7 @@ class TypeDispatchViewModel (
                 "REOS",
                 "TypeDispatchViewModel-getTypeDispatch-Imei"+Imei
             )
-            typeDispatchRepository.getTypeDispatch(Imei,context)
+            typeDispatchRepository.addTypeDispatch(Imei,context)
         }
 
 
@@ -42,6 +71,17 @@ class TypeDispatchViewModel (
             "REOS",
             "TypeDispatchViewModel-getTypeDispatch-_status"+_status.getValue()
         )
+    }
+
+    fun getTypeDispatch(
+        context: Context
+    )
+    {
+        viewModelScope.launch {
+            typeDispatchRepository.getTypeDispatch(
+                context
+            )
+        }
     }
 
 }

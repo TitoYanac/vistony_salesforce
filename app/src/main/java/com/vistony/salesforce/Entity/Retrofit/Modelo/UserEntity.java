@@ -84,6 +84,8 @@ public class UserEntity {
     @SerializedName("SendValidations")
     private String sendvalidations;
 
+
+
     @NonNull
     public String getSendvalidations() {
         return sendvalidations;

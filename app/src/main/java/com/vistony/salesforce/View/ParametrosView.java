@@ -2,6 +2,8 @@ package com.vistony.salesforce.View;
 
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 import static com.vistony.salesforce.Entity.SesionEntity.FLAG_BACKUP;
+import static com.vistony.salesforce.kotlin.utilities.NotificationKt.areNotificationsEnabled;
+import static com.vistony.salesforce.kotlin.utilities.NotificationKt.showNotificationDisabledDialog;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -112,6 +114,8 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.kotlin.utilities.ServiceNotificationApp;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -411,8 +415,8 @@ ParametrosView extends Fragment {
 
             //Se desactivo para identificar el motivo de reinicio 14/06/2023 14:22
             //Validar Pedidos
-            //if(SesionEntity.sendvalidations.equals("Y"))
-            //{
+            if(SesionEntity.sendvalidations.equals("Y"))
+            {
                 OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite = new OrdenVentaCabeceraSQLite(getContext());
                 ArrayList<OrdenVentaCabeceraSQLiteEntity> listSalesOrders = new ArrayList<>();
                 listSalesOrders = ordenVentaCabeceraSQLite.getSalesOrderPendingSAP();
@@ -430,9 +434,9 @@ ParametrosView extends Fragment {
                         Log.e("REOS", "ParametrosView-validateSalesOrder-data: " + data);
                     });
                 }
-           //}else {
+           }else {
 
-            //}
+            }
             ///////////////////////////// ENVIAR VISITAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             if(SesionEntity.sendvisits.equals("Y"))
             {
@@ -652,7 +656,42 @@ ParametrosView extends Fragment {
             }
         }
 
+        if(!SesionEntity.perfil_id.equals("chofer"))
+        {
+            Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.isServiceRunning: "+ServiceNotificationApp.isServiceRunning);
 
+            if(!ServiceNotificationApp.isServiceRunning)
+            {
+
+                //Inicio de Servicio y Envio de Notificacion
+                if (areNotificationsEnabled(getContext())) {
+                    // Las notificaciones están habilitadas
+                    try {
+                        //Intent intent = new Intent(this, MenuView.class);
+                        Intent intent = new Intent(getContext(), ServiceNotificationApp.class);
+                        //Log.e("REOS", "Composables-StatusIcons-contexto: "+context1)
+                        //Log.e("REOS", "Composables-StatusIcons-intent: "+intent)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            //Log.e("REOS", "Composables-StatusIcons-startForegroundService")
+                            ContextCompat.startForegroundService(getActivity(), intent);
+                        } else {
+                            //Log.e("REOS", "Composables-StatusIcons-startService ")
+                            //ServiceNotificationApp serviceNotificationApp=new ServiceNotificationApp();
+                            //serviceNotificationApp.startService(intent);
+                            ContextCompat.startForegroundService(getActivity(), intent);
+                        }
+                    }catch (Exception e){
+                        Log.e("REOS", "Composables-StatusIcons-error: "+e.toString());
+                    }
+                } else {
+                    // Las notificaciones están deshabilitadas
+                    showNotificationDisabledDialog(getContext());
+                }
+                Toast.makeText(getContext(), "El servicio de notificaciones, esta en proceso de inicio.", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(getContext(), "El servicio ya se encuentra activo, no es necesario volverlo a iniciar.", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         return v;
     }

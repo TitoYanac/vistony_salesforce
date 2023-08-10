@@ -483,7 +483,7 @@ public class CustomerComplaintView extends Fragment implements View.OnClickListe
         try {
             //pd = new ProgressDialog(context);
             //pd = ProgressDialog.show(context, context.getResources().getString(R.string.please_wait), context.getResources().getString(R.string.querying_dates), true, false);
-            /*ArrayList<CustomerComplaintFormsEntity> listCustomerComplaintFormsEntity = new ArrayList<>();
+            ArrayList<CustomerComplaintFormsEntity> listCustomerComplaintFormsEntity = new ArrayList<>();
             CustomerComplaintFormsEntity objListCustomerComplaintFormsEntity = new CustomerComplaintFormsEntity();
             objListCustomerComplaintFormsEntity.setForms("MODULO DE RECLAMOS");
             List<CustomerComplaintSectionEntity> ArrayListCustomerComplaintSectionEntity = new ArrayList<>();
@@ -532,7 +532,7 @@ public class CustomerComplaintView extends Fragment implements View.OnClickListe
 
             ///////////////////////////////////////////////////////////////
             //ArrayListCustomerComplaintSectionEntity = new ArrayList<>();
-            /*listCustomerComplaintSectionEntity = new CustomerComplaintSectionEntity();
+            listCustomerComplaintSectionEntity = new CustomerComplaintSectionEntity();
             listCustomerComplaintSectionEntity.setSection("Sustento y Descripción del Reclamo");
             listCustomerComplaintQuestionsEntity=new CustomerComplaintQuestionsEntity();
             arrayListCustomerComplaintQuestionsEntity=new ArrayList<>();
@@ -654,8 +654,8 @@ public class CustomerComplaintView extends Fragment implements View.OnClickListe
             /////////////////////////////////////////////////////////////////////////////////////
             listCustomerComplaintFormsEntity.add(objListCustomerComplaintFormsEntity);
             Log.e("REOS","CustomerComplaintView-getListCustomerComplaint.listCustomerComplaintFormsEntity.size() "+listCustomerComplaintFormsEntity.size());
-            */
-            pd = new ProgressDialog(getActivity());
+
+            /*pd = new ProgressDialog(getActivity());
             pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.querying_dates), true, false);
                 customerComplaintRepository.getCustomerComplaint().observe(lifecycleOwner, data -> {
                 Convert convert=new Convert();
@@ -678,17 +678,18 @@ public class CustomerComplaintView extends Fragment implements View.OnClickListe
                     //alertdialogInformative(context,activity.getResources().getString(R.string.important),activity.getResources().getString(R.string.mse_not_data_available)).show();
                 }
                 pd.dismiss();
-            });
+            });*/
 
-            /*listCustomerComplaintAdapter = new ListCustomerComplaintAdapter
+            listCustomerComplaintAdapter = new ListCustomerComplaintAdapter
                     (
                             getContext(),
                             //data.getListCustomerComplaintSection(),
-                            //getActivity()
+
                             listCustomerComplaintFormsEntity.get(0).getListCustomerComplaintSection(),
+                            getActivity(),
                             getActivity()
                     );
-            list_cardview.setAdapter(listCustomerComplaintAdapter);*/
+            list_cardview.setAdapter(listCustomerComplaintAdapter);
         /*listKardexOfPaymentAdapter
                 =new ListKardexOfPaymentAdapter(
                 activity,

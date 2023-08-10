@@ -32,14 +32,14 @@ class HeaderDispatchSheetRepository(
     {
         //_status.value =dispatchRepository.getDispatch(Imei, FechaDespacho)!!
         // _dispatch.value = result
-        Log.e(
+       /* Log.e(
             "REOS",
             "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-Imei"+Imei
         )
         Log.e(
             "REOS",
             "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-FechaDespacho"+FechaDespacho
-        )
+        )*/
         try {
             val retrofitConfig: RetrofitConfig? = RetrofitConfig()
             val service = retrofitConfig?.getClientLog()?.create(
@@ -47,10 +47,10 @@ class HeaderDispatchSheetRepository(
                 ::class.java
             )
 
-            Log.e(
+            /*Log.e(
                 "REOS",
                 "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-service" + service.toString()
-            )
+            )*/
             service?.getHeaderDispatchSheet(
                 Imei, FechaDespacho
             )?.enqueue(object : Callback<DispatchSheetResponse?> {
@@ -59,7 +59,7 @@ class HeaderDispatchSheetRepository(
                     call: Call<DispatchSheetResponse?>,
                     response: Response<DispatchSheetResponse?>
                 ) {
-                    Log.e(
+                    /*Log.e(
                         "REOS",
                         "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-call$call"
                     )
@@ -67,18 +67,18 @@ class HeaderDispatchSheetRepository(
                     Log.e(
                         "REOS",
                         "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-response$response"
-                    )
+                    )*/
 
-                        Log.e(
+                       /* Log.e(
                             "REOS",
                             "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-response.isSuccessful"
-                        )
+                        )*/
                         val headerDispatchSheetResponse = response.body()
                         //headerDispatchSheetResponse?.getDispatchSheetEntity()?.size
-                        Log.e(
+                        /*Log.e(
                             "REOS",
                             "HeaderDispatchSheetRepositorykt?.getStateDispatchSheet()?.size" + headerDispatchSheetResponse?.getDispatchSheetEntity()?.size
-                        )
+                        )*/
 
                     if (response.isSuccessful&&headerDispatchSheetResponse?.getDispatchSheetEntity()?.size!!>0) {
                         val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
@@ -86,11 +86,11 @@ class HeaderDispatchSheetRepository(
                         for (i in 0..headerDispatchSheetResponse?.getDispatchSheetEntity()?.size!! - 1) {
                             headerDispatchSheetResponse?.getDispatchSheetEntity()!!
                                 .get(i).control_id
-                            Log.e(
+                            /*Log.e(
                                 "REOS",
                                 "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-headerDispatchSheetResponse?.getDispatchSheetEntity()?.get(i).docEntry" + headerDispatchSheetResponse?.getDispatchSheetEntity()!!
                                     .get(i).control_id
-                            )
+                            )*/
                             headerDispatchSheetResponse?.getDispatchSheetEntity()!!
                                 .get(i).compania_id=SesionEntity.compania_id
                             headerDispatchSheetResponse?.getDispatchSheetEntity()!!
@@ -103,12 +103,12 @@ class HeaderDispatchSheetRepository(
                                 .get(i).Datetimeregister=sdf.format(calendario.getTime())
                             for (j in 0..headerDispatchSheetResponse?.getDispatchSheetEntity()
                                 ?.get(i)?.details?.size!! - 1) {
-                                Log.e(
+                                /*Log.e(
                                     "REOS",
                                     "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-headerDispatchSheetResponse?.getDispatchSheetEntity()?.get(i)?.details!!.get(j).invoiceNum" +
                                             headerDispatchSheetResponse?.getDispatchSheetEntity()
                                                 ?.get(i)?.details!!.get(j).factura_id
-                                )
+                                )*/
                                 headerDispatchSheetResponse?.getDispatchSheetEntity()
                                     ?.get(i)?.details?.get(j)?.control_id=headerDispatchSheetResponse?.getDispatchSheetEntity()!!
                                     .get(i).control_id
@@ -174,35 +174,35 @@ class HeaderDispatchSheetRepository(
                         }.start()*/
 
 
-                        Log.e(
+                        /*Log.e(
                             "REOS",
                             "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-response.isSuccessful.status" + _status.getValue()
-                        )
+                        )*/
                     } else {
-                        Log.e(
+                        /*Log.e(
                             "REOS",
                             "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-response.isSuccessful"
-                        )
+                        )*/
                         _status.setValue("0")
-                        Log.e(
+                        /*Log.e(
                             "REOS",
                             "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-response.isSuccessful.not.status" + _status.getValue()
-                        )
+                        )*/
                     }
-                    Log.e(
+                    /*Log.e(
                         "REOS",
                         "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-response.noentroenif.status" + _status.getValue()
-                    )
+                    )*/
 
                 }
 
                 override fun onFailure(call: Call<DispatchSheetResponse?>, t: Throwable) {
                     _status.setValue("0")
 
-                    Log.e(
+                    /*Log.e(
                         "REOS",
                         "HeaderDispatchSheetRepositorykt-getStateDispatchSheet-error$t"
-                    )
+                    )*/
                 }
             })
 

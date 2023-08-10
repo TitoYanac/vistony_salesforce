@@ -8,8 +8,8 @@ import androidx.room.Query
 
 @Dao
 interface TypeDispatchDao {
-    @Query("SELECT * FROM typedispatch")
-    fun getTypeDispatch(): LiveData<List<TypeDispatch>>
+    @Query("SELECT * FROM typedispatch where statusupdate = 'Y' ")
+    fun getTypeDispatch(): List<TypeDispatch>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun inserTypeDispatch(invoices: List<TypeDispatch>?)

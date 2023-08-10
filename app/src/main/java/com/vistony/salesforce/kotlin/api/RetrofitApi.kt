@@ -1,14 +1,11 @@
 package com.vistony.salesforce.kotlin.api
 
 import com.vistony.salesforce.BuildConfig
-import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.HeaderStatusDispatchEntityResponse
 import com.vistony.salesforce.kotlin.data.*
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface RetrofitApi {
 
@@ -30,9 +27,12 @@ interface RetrofitApi {
     @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Dispatch/Type")
     fun getTypeDispatch(@Query("imei") imei: String?): Call<TypeDispatchResponse?>?
 
-    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Ocurrencies")
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Ocurrencies/Dispatch")
     fun getReasonDispatch(@Query("imei") imei: String?): Call<ReasonDispatchResponse?>?
 
     @POST(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Collections")
     fun sendCollection(@Body params: RequestBody?): Call<ResponseCollectionDetail>
+
+    @PATCH(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Dispatch")
+    fun sendStatusDispatch(@Body params: RequestBody?): Call<ResponseSendAPIStatusDispatch?>?
 }

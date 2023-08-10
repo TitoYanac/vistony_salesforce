@@ -1,0 +1,71 @@
+package com.vistony.salesforce.kotlin.compose.components
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import com.vistony.salesforce.kotlin.compose.theme.BlueVistony
+import com.vistony.salesforce.R
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun EditextCommentary(
+    status: Boolean,
+    ResultStatus: (status:Boolean) -> Unit
+){
+    var text by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val maxCharacters = 254 // Establece el límite máximo de caracteres
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.padding(10.dp).fillMaxWidth()
+    ) {
+        OutlinedTextField(
+            enabled= true,
+            singleLine=false,
+            value = text,
+            onValueChange =
+            {
+                if (it.length <= maxCharacters)
+                {
+                    text = it
+                }
+            },
+            placeholder = {
+                Text(text = "Ingrese comentario")
+            },
+            label = { Text("Comentario") },
+            trailingIcon = { Icon(painter = painterResource(id = R.drawable.ic_insert_comment_black_24dp), contentDescription = null, tint = BlueVistony) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text,imeAction = ImeAction.Go ),
+            keyboardActions = KeyboardActions(
+                onGo = {
+                    keyboardController?.hide()
+                    ResultStatus(status.not())
+                       },
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = "${text.length}/$maxCharacters",
+            style = MaterialTheme.typography.caption,
+            color = if (text.length > maxCharacters) Color.Red else Color.Black,
+            modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp,0.dp)
+        )
+    }
+}

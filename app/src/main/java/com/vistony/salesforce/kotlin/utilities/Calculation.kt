@@ -300,62 +300,46 @@ fun getSumNumbersReceip(
     return rpta.setScale(0, RoundingMode.HALF_UP).toString()
 }
 
-/*
+
 fun convertirCadenaEnvioSMS(
     /*Lista: ArrayList<ListaClienteDetalleEntity>,
     fuerzatrabajo_id: String,
     nombrefuerzatrabajo: String,
     recibo: String,
     fecharecibo: String?*/
-    collectionDetail: CollectionDetail
+    collectionDetail: CollectionDetail?
 ): String? {
-    val encRecibo = ""
-    val encCardCode = ""
-    var CardCode = ""
-    var hash = ""
-    var encHash: String? = ""
-    var codeSMS = ""
-    val cobranzaDetalleSQLiteDao = CobranzaDetalleSQLiteDao(Context)
-    var lista = ArrayList<CobranzaDetalleSQLiteEntity>()
     var CadenaSMS = ""
     try {
-        for (i in Lista.indices) {
+        //for (i in Lista.indices) {
             //CadenaSMS="GlaGlaGla2";
             CadenaSMS = """VISTONY
-         R.U.C N 20102306598 Mz. B1 Lt. 1 - Parque Industrial de Ancon -
+        R.U.C N 20102306598 Mz. B1 Lt. 1 - Parque Industrial de Ancon -
         Acompia Central: (01) 5521325 E-mail: ventas@vistony.com Web:
         www.vistony.com
         ${collectionDetail?.CardCode}
         ${collectionDetail?.CardName}
         *********************DATOS COBRADOR*******************
-        ${collectionDetail.SlpCode} ${collectionDetail.SlpName}
+        ${collectionDetail?.SlpCode} ${collectionDetail?.SlpName}
         *********************DATOS DOCUMENTO******************
-        Fecha:     ${Induvis.getDate(BuildConfig.FLAVOR, collectionDetail.IncomeDate)}
-        Recibo:     ${collectionDetail.Receip}
-        Documento:     ${collectionDetail.LegalNumber}
-        Importe :     """ + Convert.currencyForView(
-                collectionDetail.DocTotal
-                    ) + "\n" +
-                            "Saldo :.      " + Convert.currencyForView(
-                collectionDetail.Balance
-                    ) + "\n" +
-                            "Cobrado :.     " + Convert.currencyForView(
-                collectionDetail.AmountCharged
-                    ) + "\n" +
-                            "Nuevo Saldo:.     " + Convert.currencyForView(
-                collectionDetail.NewBalance
-                    ) + "\n" +  //"www.vistony.com/intranet/hash="+encHash+ "\n" +
-                            "Codigo Validacion SMS:" + collectionDetail.CodeSMS + ""
-                }
+        Fecha:     ${Induvis.getDate(BuildConfig.FLAVOR, collectionDetail?.IncomeDate)}
+        Recibo:     ${collectionDetail?.Receip}
+        Documento:     ${collectionDetail?.LegalNumber}
+        Importe :     """ + Convert.currencyForView(collectionDetail?.DocTotal) + "\n" +
+        "Saldo :      " + Convert.currencyForView(collectionDetail?.Balance) + "\n" +
+        "Cobrado :     " + Convert.currencyForView(collectionDetail?.AmountCharged) + "\n" +
+        "Nuevo Saldo:     " + Convert.currencyForView(collectionDetail?.NewBalance) + "\n" +  //"www.vistony.com/intranet/hash="+encHash+ "\n" +
+        "Codigo Validacion SMS:" + collectionDetail?.CodeSMS + ""
+        //   }
             } catch (e: java.lang.Exception) {
                 Log.e("REOS", "formulascontroller-convertirCadenaEnvioSMS-error-$e")
             }
     Log.e("REOS", "formulascontroller-convertirCadenaEnvioSMS-CadenaSMS-$CadenaSMS")
     return CadenaSMS
 }
-*/
-/*
-fun sendSMS(telefono: String?,context: Context,activity: Activity) {
+
+
+fun sendSMS(telefono: String?,context: Context,activity: Activity,collectionDetail: CollectionDetail?) {
 
     if (ActivityCompat.checkSelfPermission(
             context,
@@ -368,13 +352,14 @@ fun sendSMS(telefono: String?,context: Context,activity: Activity) {
     try {
         //SmsManager sms = SmsManager.getDefault();
         val parts = smsManager.divideMessage(
-            formulasController.convertirCadenaEnvioSMS(
+            /*formulasController.convertirCadenaEnvioSMS(
                 listaClienteDetalleAdapterFragment,
                 SesionEntity.fuerzatrabajo_id,
                 SesionEntity.nombrefuerzadetrabajo,
                 CobranzaDetalleView.recibo,
                 fecha
-            )
+            )*/
+            convertirCadenaEnvioSMS(collectionDetail)
         )
         //sms.sendMultipartTextMessage(phoneNumber, null, parts, null, null);
         smsManager.sendMultipartTextMessage(
@@ -385,11 +370,10 @@ fun sendSMS(telefono: String?,context: Context,activity: Activity) {
             null,
             null
         )
-        Toast.makeText(getContext(), "Mensaje de Texto Enviado Correctamente", Toast.LENGTH_SHORT)
+        Toast.makeText(context, "Mensaje de Texto Enviado Correctamente", Toast.LENGTH_SHORT)
             .show()
-        alertdialogInformative(getContext()).show()
+        //alertdialogInformative(getContext()).show()
     } catch (e: java.lang.Exception) {
         Log.e("REOS", "CobranzaDetalleView-alertaEnviarSMS-Erroe-$e")
     }
 }
-*/

@@ -703,7 +703,7 @@ public class FormulasController {
         documentHeader.setU_VIS_AgencyName(ovCabecera.getU_VIS_AgencyName());
         documentHeader.setU_VIS_AgencyDir(ovCabecera.getU_VIS_AgencyDir());
         documentHeader.setAppVersion(Utilitario.getVersion(context));
-        documentHeader.setQuotation(ovCabecera.getQuotation());
+
         documentHeader.setTaxDate(Convertirfechahoraafechanumerica(ovCabecera.getFecharegistro()));
         documentHeader.setDocRate(ovCabecera.getTipocambio());
         documentHeader.setU_SYP_MDMT(U_SYP_MDMT);
@@ -725,7 +725,16 @@ public class FormulasController {
         documentHeader.setU_VIS_CompleteOV(ovCabecera.getU_VIS_CompleteOV());
         documentHeader.setU_VIS_TipTransGrat(ovCabecera.getU_VIS_TipTransGrat());
 
-        //documentHeader.setDraft("Y");
+        documentHeader.setQuotation(ovCabecera.getQuotation());
+
+        if(ovCabecera.getQuotation().equals("Y"))
+        {
+            documentHeader.setDraft("Y");
+        }else {
+            documentHeader.setDraft("N");
+        }
+
+
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 

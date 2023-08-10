@@ -2,20 +2,48 @@ package com.vistony.salesforce.kotlin.data
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class ReasonDispatchViewModel  (
-    private val reasonDispatchRepository: ReasonDispatchRepository
+    private val reasonDispatchRepository: ReasonDispatchRepository,
+    private val context: Context,
+
 ) : ViewModel()
 {
     private val _status = MutableLiveData<String>()
     val status: MutableLiveData<String> = _status
 
-    fun getReasonDispatch(Imei:String, context: Context, lifecycleOwner: LifecycleOwner)
+    private val _result_get = MutableStateFlow(ResponseReasonDispatch())
+    val result_get: StateFlow<ResponseReasonDispatch> get() = _result_get
+
+    class ReasonDispatchViewModelFactory(
+        private val reasonDispatchRepository: ReasonDispatchRepository,
+        private var context: Context
+    ): ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return ReasonDispatchViewModel(
+                reasonDispatchRepository,
+                context
+            ) as T
+        }
+    }
+
+    init{
+        //getInvoices()
+        viewModelScope.launch {
+            // Observar cambios en invoicesRepository.invoices
+            reasonDispatchRepository.result_get.collect { newResultGet ->
+                // Actualizar el valor de _invoices cuando haya cambios
+                _result_get.value = newResultGet
+            }
+        }
+    }
+
+    fun addReasonDispatch(Imei:String, context: Context, lifecycleOwner: LifecycleOwner)
     {
         Log.e(
             "REOS",
@@ -26,10 +54,8 @@ class ReasonDispatchViewModel  (
                 "REOS",
                 "ReasonDispatchViewModel-getReasonDispatch-Imei"+Imei
             )
-            reasonDispatchRepository.getReasonDispatch (Imei,context)
+            reasonDispatchRepository.addReasonDispatch (Imei,context)
         }
-
-
         reasonDispatchRepository.status.observe(lifecycleOwner) { status ->
             // actualizar la UI con los datos obtenidos
             Log.e(
@@ -43,5 +69,12 @@ class ReasonDispatchViewModel  (
             "REOS",
             "ReasonDispatchViewModel-getReasonDispatch-_status"+_status.getValue()
         )
+    }
+
+    fun getReasonDispatch()
+    {
+        viewModelScope.launch {
+            reasonDispatchRepository.getReasonDispatch (context)
+        }
     }
 }

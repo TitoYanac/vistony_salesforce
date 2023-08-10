@@ -352,7 +352,7 @@ public class OrdenVentaDetalleView extends Fragment {
         }
 
         protected void onPostExecute(Object result){
-            getActivity().setTitle(Induvis.getTituloVentaString(getContext())+" Detalle");
+            getActivity().setTitle(Induvis.getTituloVentaString(getContext())+" detalle");
 
             if(SesionEntity.quotation.equals("N"))
             {

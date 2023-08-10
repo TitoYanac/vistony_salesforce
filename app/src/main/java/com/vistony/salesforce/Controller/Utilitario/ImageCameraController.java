@@ -235,6 +235,7 @@ public class ImageCameraController {
 
         return encoded;
     }
+
     public static byte[] convertBitmapToByteArray(Bitmap bitmap){
         ByteBuffer byteBuffer = ByteBuffer.allocate(bitmap.getByteCount());
         bitmap.copyPixelsToBuffer(byteBuffer);

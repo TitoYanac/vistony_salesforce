@@ -39,6 +39,7 @@ public class QuotationRepository  extends ViewModel {
 
             json = "{ \"Fecha\":\"" + Day + "\",\"Imei\":\""+Imei+"\" }";
         }
+        Log.e("REOS","QuotationRepository.getHistoricQuotation.json: " + json.toString());
         RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
         Config.getClient().create(Api.class).geHistoricQuotation(jsonRequest).enqueue(new Callback<QuotationEntityResponse>() {
             @Override
@@ -80,7 +81,7 @@ public class QuotationRepository  extends ViewModel {
         if(Imei!=null && DocEntry!=null){
             json = "{ \"OsVersion\":\"" + AndroidVersion + "\",\"AppVersion\":\""+ Utilitario.getVersion(context)+"\" ,\"ModelDevice\":\""+modelo+"\",\"Brand\":\""+fabricante+"\"}";
         }
-
+        Log.e("REOS","QuotationRepository.sendQuotation.json: " + json);
         RequestBody jsonRequest = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
         int docentry=Integer.parseInt(DocEntry);
         Config.getClient().create(Api.class).sendQuotation(docentry,jsonRequest).enqueue(new Callback<SalesOrderEntityResponse>() {

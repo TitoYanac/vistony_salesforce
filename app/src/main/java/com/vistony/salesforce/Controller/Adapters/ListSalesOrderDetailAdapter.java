@@ -63,13 +63,15 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
     ListaOrdenVentaDetalleListaPromocionAdapter listaOrdenVentaDetalleListaPromocionAdapter;
     FormulasController formulasController=new FormulasController(getContext());
     boolean[] itemChecked;
-    //DecimalFormat format = new DecimalFormat("#0.00");
-    //DecimalFormat formatInteger = new DecimalFormat("#0");
+    UsuarioSQLiteEntity ObjUsuario;
     public ListSalesOrderDetailAdapter(android.content.Context context, List<ListaOrdenVentaDetalleEntity> objects) {
         super(context, 0, objects);
         Context=context;
         inflater = LayoutInflater.from(Context);
         this.itemChecked=new boolean[objects.size()];
+        ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
     }
 
     @Override
@@ -258,6 +260,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
 
 
 
+        /*
         if(lead.isOrden_detalle_chk_descuentocontado())
         {
             holder.chk_descuento_contado.setChecked(true);
@@ -272,25 +275,53 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         }
         else
         {
+
             Resources res = getContext().getResources(); // need this to fetch the drawable
             Drawable borde_editext_orden_venta_detalle_inhabilitado = res.getDrawable( R.drawable.borde_editext_ov_gris);
             //Drawable borde_editext_orden_venta_detalle_inhabilitado=(Drawable) R.drawable.borde_editext_orden_venta_detalle_inhabilitado;
             holder.et_porcentaje_descuento_contado.setBackground(borde_editext_orden_venta_detalle_inhabilitado);
             holder.et_porcentaje_descuento_contado.setTextColor(Color.parseColor("#808080"));
             holder.et_porcentaje_descuento_contado.setEnabled(false);
-
             holder.chk_descuento_contado.setChecked(false);
-            Resources res2 = getContext().getResources(); // need this to fetch the drawable
-            Drawable draw = res2.getDrawable( R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
-            holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
-            holder.imv_consultar_promocion_cabecera.setEnabled(true);
-            holder.et_porcentaje_descuento_contado.setText("0");
-        }
+
+            if(BuildConfig.FLAVOR.equals("peru"))
+            {
+                if(SesionEntity.quotation.equals("Y"))
+                {
+                    if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+                    {
+
+                    }else {
+                        Resources res2 = getContext().getResources(); // need this to fetch the drawable
+                        Drawable draw = res2.getDrawable( R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+                        holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                        holder.imv_consultar_promocion_cabecera.setEnabled(true);
+                        holder.et_porcentaje_descuento_contado.setText("0");
+                    }
+
+                }else {
+                    Resources res2 = getContext().getResources(); // need this to fetch the drawable
+                    Drawable draw = res2.getDrawable( R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+                    holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                    holder.imv_consultar_promocion_cabecera.setEnabled(true);
+                    holder.et_porcentaje_descuento_contado.setText("0");
+                }
+            }else {
+                Resources res2 = getContext().getResources(); // need this to fetch the drawable
+                Drawable draw = res2.getDrawable( R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+                holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                holder.imv_consultar_promocion_cabecera.setEnabled(true);
+                holder.et_porcentaje_descuento_contado.setText("0");
+
+            }
+
+
+        }*/
         Log.e("REOS","ListSalesOrderDetailAdapter:lead.getOrden_detalle_cantidad():" + lead.getOrden_detalle_cantidad());
         Log.e("REOS","ListSalesOrderDetailAdapter:lead.getOrden_detalle_descuentocontado():" + lead.getOrden_detalle_descuentocontado());
 
 
-
+        /*
         holder.chk_descuento_contado.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -404,7 +435,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                     holder.chk_descuento_contado.setChecked(false);
                     //holder.et_porcentaje_descuento_contado.setText("0");
                 }
-                ///**/holder.tv_orden_detalle_total.setText(Convert.numberForView2 (lead.getOrden_detalle_montosubtotal()));
+
                 if(BuildConfig.FLAVOR.equals("ecuador")||BuildConfig.FLAVOR.equals("chile"))
                 {
                     holder.tv_orden_detalle_total.setText(Convert.currencyForView(getTotaLine(lead.getOrden_detalle_montosubtotal(), lead.getOrden_detalle_porcentaje_descuento(), Induvis.getImpuestoString())));
@@ -455,7 +486,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
 
 
             }
-        });
+        });*/
 
         holder.editDspPorcentaje.setOnEditorActionListener((v, actionId, event) -> {
 
@@ -482,7 +513,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                     }
 
                     Double descountCountry=0.0;
-                    if(BuildConfig.FLAVOR.equals("ecuador"))
+                    if(BuildConfig.FLAVOR.equals("ecuador")||BuildConfig.FLAVOR.equals("peru"))
                     {
                         descountCountry=99.9;
                     }
@@ -571,6 +602,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
             return procesado;
         });
 
+        /*
         holder.et_porcentaje_descuento_contado.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -728,7 +760,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                 }
                 return procesado;
             }
-        });
+        });*/
 
 
         if(lead.getOrden_detalle_cantidad().isEmpty())
@@ -747,6 +779,8 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         Log.e("REOS","ListSalesOrderDetailAdapter.lead.getOrden_detalle_terminopago_id(): "+lead.getOrden_detalle_terminopago_id());
         Log.e("REOS","ListSalesOrderDetailAdapter.holder.chk_descuento_contado.isChecked(): "+holder.chk_descuento_contado.isChecked());
         //Log.e("REOS","ListSalesOrderDetailAdapter.holder.editDspPorcentaje.getText(): "+holder.editDspPorcentaje.getText());
+        Log.e("REOS","ListSalesOrderDetailAdapter.SesionEntity.quotation: "+SesionEntity.quotation);
+        Log.e("REOS","ListSalesOrderDetailAdapter.U_VIS_ManagementType: "+ObjUsuario.getU_VIS_ManagementType());
         if(lead.getOrden_detalle_promocion_habilitada().equals("0") ||holder.chk_descuento_contado.isChecked()||Double.parseDouble(lead.getOrden_detalle_porcentaje_descuento())>=100)
         {
             Resources res = getContext().getResources(); // need this to fetch the drawable
@@ -756,12 +790,28 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
         }
         else
         {
-            Resources res1 = getContext().getResources(); // need this to fetch the drawable
-            Drawable borde_editext_orden_venta_detalle_inhabilitado = res1.getDrawable( R.drawable.borde_editext_ov_gris);
-            Resources res = getContext().getResources(); // need this to fetch the drawable
-            Drawable draw = res.getDrawable( R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
-            holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
-            holder.imv_consultar_promocion_cabecera.setEnabled(true);
+            if(SesionEntity.quotation.equals("Y"))
+            {
+                if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+                {
+                    Log.e("REOS","ListSalesOrderDetailAdapter.oncreate.entroif.quotation(Y).U_VIS_ManagementType: "+ObjUsuario.getU_VIS_ManagementType());
+                }else {
+                    Resources res1 = getContext().getResources(); // need this to fetch the drawable
+                    Drawable borde_editext_orden_venta_detalle_inhabilitado = res1.getDrawable( R.drawable.borde_editext_ov_gris);
+                    Resources res = getContext().getResources(); // need this to fetch the drawable
+                    Drawable draw = res.getDrawable( R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+                    holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                    holder.imv_consultar_promocion_cabecera.setEnabled(true);
+                }
+            }else {
+                Resources res1 = getContext().getResources(); // need this to fetch the drawable
+                Drawable borde_editext_orden_venta_detalle_inhabilitado = res1.getDrawable( R.drawable.borde_editext_ov_gris);
+                Resources res = getContext().getResources(); // need this to fetch the drawable
+                Drawable draw = res.getDrawable( R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+                holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                holder.imv_consultar_promocion_cabecera.setEnabled(true);
+            }
+
         }
         if(!(lead.getOrden_detalle_lista_promocion_cabecera()==null))
         {
@@ -772,8 +822,8 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                 calculodescuento=formulasController.CalcularPorcentajeDescuentoPorLinea(
                         lead.getOrden_detalle_lista_promocion_cabecera(),
                         lead.getOrden_detalle_porcentaje_descuento()
-
                 );
+
             }else {
                 calculodescuento=formulasController.CalcularPorcentajeDescuentoPorLinea(
                         lead.getOrden_detalle_lista_promocion_cabecera(),
@@ -1048,12 +1098,32 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
                         }
                         actualizarlistapromocioncabecera(lead);
                         if (!listaPromocionCabecera.isEmpty()) {
-                            Resources res = getContext().getResources(); // need this to fetch the drawable
-                            Drawable draw = res.getDrawable(R.drawable.ic_baseline_card_giftcard_blue_24);
-                            holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
-                            holder.imv_consultar_promocion_cabecera.setEnabled(true);
-                            lead.setOrden_detalle_promocion_habilitada("1");
-
+                            if(BuildConfig.FLAVOR.equals("peru"))
+                            {
+                                if(SesionEntity.quotation.equals("Y"))
+                                {
+                                    if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+                                    {
+                                        Resources res = getContext().getResources(); // need this to fetch the drawable
+                                        Drawable draw = res.getDrawable(R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+                                        holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                                        holder.imv_consultar_promocion_cabecera.setEnabled(true);
+                                        lead.setOrden_detalle_promocion_habilitada("1");
+                                    }
+                                }else {
+                                    Resources res = getContext().getResources(); // need this to fetch the drawable
+                                    Drawable draw = res.getDrawable(R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+                                    holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                                    holder.imv_consultar_promocion_cabecera.setEnabled(true);
+                                    lead.setOrden_detalle_promocion_habilitada("1");
+                                }
+                            }else {
+                                Resources res = getContext().getResources(); // need this to fetch the drawable
+                                Drawable draw = res.getDrawable(R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+                                holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                                holder.imv_consultar_promocion_cabecera.setEnabled(true);
+                                lead.setOrden_detalle_promocion_habilitada("1");
+                            }
                         } else {
                             Resources res = getContext().getResources(); // need this to fetch the drawable
                             Drawable draw = res.getDrawable(R.drawable.ic_baseline_card_giftcard_24);
@@ -1154,12 +1224,16 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
 
         if(BuildConfig.FLAVOR.equals("peru"))
         {
-            holder.chk_descuento_contado.setChecked(false);
-            Resources res2 = getContext().getResources(); // need this to fetch the drawable
-            Drawable draw = res2.getDrawable( R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
-            holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
-            holder.imv_consultar_promocion_cabecera.setEnabled(true);
-            holder.et_porcentaje_descuento_contado.setText("0");
+            if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+            {
+                holder.chk_descuento_contado.setChecked(false);
+                Resources res2 = getContext().getResources(); // need this to fetch the drawable
+                Drawable draw = res2.getDrawable(R.drawable.ic_baseline_card_giftcard_rojo_vistony_24);
+                holder.imv_consultar_promocion_cabecera.setImageDrawable(draw);
+                holder.imv_consultar_promocion_cabecera.setEnabled(true);
+                holder.et_porcentaje_descuento_contado.setText("0");
+            }
+
         }
         Log.e("REOS","ListSalesOrderDetailAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_montototallinea():"+lead.getOrden_detalle_montototallinea());
         Log.e("REOS","ListSalesOrderDetailAdapter.tv_orden_detalle_total_igv-lead.getOrden_detalle_monto_descuento():"+lead.getOrden_detalle_monto_descuento());

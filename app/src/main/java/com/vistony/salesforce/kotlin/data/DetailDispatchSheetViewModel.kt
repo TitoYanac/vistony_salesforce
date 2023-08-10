@@ -23,35 +23,35 @@ class DetailDispatchSheetViewModel
 
     )
     {
-        Log.e(
+       /* Log.e(
             "REOS",
             "DetailDispatchSheetViewModel-getStateDetailDispatchSheet-fun"
-        )
+        )*/
         viewModelScope.launch {
-            Log.e(
+            /*Log.e(
                 "REOS",
                 "DetailDispatchSheetViewModel-getStateDetailDispatchSheet-Imei"+Imei
             )
             Log.e(
                 "REOS",
                 "DetailDispatchSheetViewModel-getStateDetailDispatchSheet-FechaDespacho"+FechaDespacho
-            )
+            )*/
             detailDispatchSheetRepository.getStateDispatchSheet(Imei,FechaDespacho,context,type)
         }
 
 
         detailDispatchSheetRepository.status.observe(lifecycleOwner) { data ->
             // actualizar la UI con los datos obtenidos
-            Log.e(
+            /*Log.e(
                 "REOS",
                 "DetailDispatchSheetViewModel-getStateDetailDispatchSheet.result.observe.data.size"+data.size
-            )
+            )*/
             _status.setValue(data)
 
         }
-        Log.e(
+        /*Log.e(
             "REOS",
             "DetailDispatchSheetViewModel-getStateDetailDispatchSheet-_status"+_status.getValue()
-        )
+        )*/
     }
 }

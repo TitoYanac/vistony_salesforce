@@ -12,14 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListaListadoPromocionAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaListadoPromocionDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaListadoPromocionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -49,6 +52,7 @@ public class ListadoPromocionView extends Fragment {
     static ArrayList<ListaPromocionCabeceraEntity> Listado= new ArrayList();
     static ArrayList<ListaPromocionSQLiteEntity> listaListadoPromocionSQLiteEntity=new ArrayList<>();
     static ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities= new ArrayList<>();
+    static UsuarioSQLiteEntity ObjUsuario;
 
     public ListadoPromocionView() {
         // Required empty public constructor
@@ -61,22 +65,33 @@ public class ListadoPromocionView extends Fragment {
      * @return A new instance of fragment PromocionView.
      */
     // TODO: Rename and change types and number of parameters
-    public static ListadoPromocionView newInstance(Object objeto) {
+    public static ListadoPromocionView newInstance(Object objeto,Context context) {
         listaListadoPromocionSQLiteEntity=new ArrayList<>();
         ListadoPromocionView fragment = new ListadoPromocionView();
         Bundle b = new Bundle();
+        ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
         Object[] listaobjetos=new Object[2];
         listaobjetos=(Object[]) objeto;
         ArrayList<PromocionCabeceraSQLiteEntity> Lista = (ArrayList<PromocionCabeceraSQLiteEntity>) listaobjetos[0];
-        if (Lista.isEmpty())
+        if(BuildConfig.FLAVOR.equals("peru"))
         {
-            ListaPromocionSQLiteEntity listaPromocionSQLiteEntity2= new ListaPromocionSQLiteEntity();
-            listaPromocionSQLiteEntity2.setLista_promocion_id("0000");
-            listaPromocionSQLiteEntity2.setLista_promocion("LISTA PROMOCIONAL EXCEPCION");
-            listaPromocionSQLiteEntity2.setCompania_id("C001");
-            listaPromocionSQLiteEntity2.setU_vis_cashdscnt("0");
-            listaListadoPromocionSQLiteEntity.add(listaPromocionSQLiteEntity2);
+            if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+            {
+                if (Lista.isEmpty())
+                {
+                    ListaPromocionSQLiteEntity listaPromocionSQLiteEntity2= new ListaPromocionSQLiteEntity();
+                    listaPromocionSQLiteEntity2.setLista_promocion_id("0000");
+                    listaPromocionSQLiteEntity2.setLista_promocion("LISTA PROMOCIONAL EXCEPCION");
+                    listaPromocionSQLiteEntity2.setCompania_id("C001");
+                    listaPromocionSQLiteEntity2.setU_vis_cashdscnt("0");
+                    listaListadoPromocionSQLiteEntity.add(listaPromocionSQLiteEntity2);
+                }
+            }
         }
+
         Log.e("REOS", "ListadoPromocionView:Lista.size(): " + Lista.size());
         listaOrdenVentaDetalleEntities= (ArrayList<ListaOrdenVentaDetalleEntity>) listaobjetos[1];
         Log.e("REOS", "ListadoPromocionView:listaOrdenVentaDetalleEntities.size(): " + listaOrdenVentaDetalleEntities.size());
@@ -155,7 +170,24 @@ public class ListadoPromocionView extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(getActivity().getResources().getString(R.string.list_promotion));
+        //getActivity().setTitle(getActivity().getResources().getString(R.string.list_promotion));
+        if(SesionEntity.quotation.equals("Y"))
+        {
+            if(BuildConfig.FLAVOR.equals("peru"))
+            {
+                if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+                {
+                    getActivity().setTitle(getActivity().getResources().getString(R.string.exception_request));
+                }else {
+                    getActivity().setTitle(getActivity().getResources().getString(R.string.list_promotion));
+                }
+            }else {
+                getActivity().setTitle(getActivity().getResources().getString(R.string.list_promotion));
+            }
+
+        }else {
+            getActivity().setTitle(getActivity().getResources().getString(R.string.list_promotion));
+        }
         hiloObtenerListadoPromocion = new HiloObtenerListadoPromocion();
         if (getArguments() != null) {
 

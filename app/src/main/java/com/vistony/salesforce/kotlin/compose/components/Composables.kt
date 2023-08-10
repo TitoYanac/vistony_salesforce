@@ -2,16 +2,18 @@
 
 package com.vistony.salesforce.kotlin.compose.components
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.shrinkOut
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -37,29 +39,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.vistony.salesforce.Controller.Adapters.StatusDispatchDialog
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.R
+import com.vistony.salesforce.View.MenuView
 import com.vistony.salesforce.kotlin.compose.DialogMain
 import com.vistony.salesforce.kotlin.compose.theme.BlueVistony
 import com.vistony.salesforce.kotlin.data.*
 import com.vistony.salesforce.kotlin.utilities.Geolocation
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+var contexto: Context = MenuView.context
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -71,10 +67,30 @@ fun ScreenDispatch(
 {
     var modal = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden, confirmStateChange = {false})
     val scope = rememberCoroutineScope()
-
     var currentBottomSheet: BottomSheetScreen? by remember { mutableStateOf(null) }
     val closeSheet: () -> Unit = { scope.launch { modal.hide() }}
+    val openDialogShowImage:MutableState<Boolean?> = remember { mutableStateOf(false) }
+    val bitMapMutable:MutableState<Bitmap?> = remember { mutableStateOf(null) }
 
+    Log.e(
+        "REOS",
+        "Composables-ScreenDispatch-openDialogShowImage.value: "+openDialogShowImage.value
+    )
+    Log.e(
+        "REOS",
+        "Composables-ScreenDispatch-bitMapMutable.value:"+bitMapMutable.value
+    )
+    if(openDialogShowImage.value!!)
+    {
+        DialogShowImage(
+                "Imagen",
+        "Prueba",
+        onDismiss = {
+            openDialogShowImage.value = false
+        },
+        bitMap_ =bitMapMutable
+        )
+    }
 
     ModalBottomSheetLayout(
         sheetState = modal,
@@ -120,11 +136,17 @@ fun ScreenDispatch(
                         openSheet(
                             BottomSheetScreen.collectionDetailBottom(
                                 objDistpatch.nombrecliente.toString()
-                                /*SesionEntity.imei,
-                                appContext,
-                                lifecycleOwner,
-                                invoicesRepository*/
                                 ,invoiceViewModel
+                            )
+                        )
+                    },
+                    formProcessStatusDispatch ={
+                        openSheet(
+                            BottomSheetScreen.processStatusDispatch(
+                                objDistpatch,
+                                bitMapMutable,
+                            openDialogShowImage,
+                                context
                             )
                         )
                     }
@@ -143,7 +165,8 @@ fun CardDispatch(
     context: Context ,
     lifecycleOwner:  LifecycleOwner,
     //formProcessCollection:() -> Unit
-    formProcessCollection : (cliente_id: String) -> Unit
+    formProcessCollection : (cliente_id: String) -> Unit,
+    formProcessStatusDispatch: (list: DetailDispatchSheet) -> Unit,
 ){
 
     Card(
@@ -318,6 +341,7 @@ fun CardDispatch(
                     InfoDialogEnd = { openDialogend.value = true },
                     list
                 , formProcessCollection = { clienteId -> formProcessCollection(clienteId) }
+                , formProcessStatusDispatch={list -> formProcessStatusDispatch(list)}
                 )
                 if (openDialog.value)
                 {
@@ -433,7 +457,8 @@ fun HorizontalStepView(
     InfoDialog: (status:String) -> Unit,
     InfoDialogEnd: (status:String) -> Unit,
     list: DetailDispatchSheet,
-    formProcessCollection: (cliente_id:String) -> Unit
+    formProcessCollection: (cliente_id:String) -> Unit,
+    formProcessStatusDispatch: (list: DetailDispatchSheet) -> Unit,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -532,6 +557,7 @@ fun HorizontalStepView(
                             //formProcessCollection = formProcessCollection(list.cliente_id)
                             { clienteId -> formProcessCollection(clienteId) }
                             //{formProcessCollection(index, list)}
+                        , {list -> formProcessStatusDispatch(list)}
                         )
                         showDialog.value = false
 
@@ -604,10 +630,13 @@ fun StatusIcons(
     InfoDialog: (status:String) -> Unit,
     InfoDialogEnd: (status:String) -> Unit,
     list: DetailDispatchSheet,
-    context: Context,
-    formProcessCollection:(cliente_id:String) -> Unit
+    context1: Context,
+    formProcessCollection:(cliente_id:String) -> Unit,
+    formProcessStatusDispatch:(detailDispatchSheet:DetailDispatchSheet) -> Unit,
 )
 {
+    var activity1 = LocalContext.current as Activity
+    contexto  = context1
     Log.e(
         "REOS",
         "Composables-StatusIcons-Ingreso"
@@ -617,7 +646,7 @@ fun StatusIcons(
             InfoDialog("Entrada")
         }
         "Despacho" -> {
-            val dialogFragment: DialogFragment = StatusDispatchDialog(
+            /*val dialogFragment: DialogFragment = StatusDispatchDialog(
                 list.cliente_id,
                 list.nombrecliente,
                 list.control_id.toString(),
@@ -627,7 +656,39 @@ fun StatusIcons(
             dialogFragment.show(
                 (context as FragmentActivity).supportFragmentManager,
                 "un dialogo"
-            )
+            )*/
+            formProcessStatusDispatch(list)
+            //showNotification(context)
+            //Inicio de Servicio y Envio de Notificacion
+            /*try {
+                val intent = Intent(context1, ServiceNotificationApp::class.java)
+                Log.e("REOS", "Composables-StatusIcons-contexto: "+context1)
+                Log.e("REOS", "Composables-StatusIcons-intent: "+intent)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    Log.e("REOS", "Composables-StatusIcons-startForegroundService")
+                    ContextCompat.startForegroundService(activity1, intent)
+                } else {
+                    Log.e("REOS", "Composables-StatusIcons-startService ")
+                    var serviceNotificationApp:ServiceNotificationApp=ServiceNotificationApp()
+                    serviceNotificationApp.startService(intent)
+                }
+            }catch (e:Exception){
+                Log.e("REOS", "Composables-StatusIcons-error: "+e.toString())
+            }*/
+            ///////////////////////////////////////////
+
+            /*
+            LaunchedEffect(Unit) {
+                if (areNotificationsEnabled(context)) {
+                    showNotification(context)
+                    // Las notificaciones están habilitadas
+                } else {
+                    openNotificationSettings(context)
+                    // Las notificaciones están deshabilitadas
+                }
+                //openNotificationSettings(context)
+                //showNotification(context)
+            }*/
         }
         "Cobranza" -> {
             Log.e(
@@ -920,6 +981,15 @@ fun InfoDialogEnd(
     context: Context,
     lifecycleOwner:  LifecycleOwner
 ) {
+    var statusDispatchRepository:StatusDispatchRepository= StatusDispatchRepository()
+
+    val statusDispatchViewModel: StatusDispatchViewModel = viewModel(
+        factory = StatusDispatchViewModel.StatusDispatchViewModelFactory(
+            statusDispatchRepository,
+            context
+        )
+    )
+
     Dialog(
         onDismissRequest = onDismiss
     ) {
@@ -1047,6 +1117,45 @@ fun InfoDialogEnd(
                                                                 "REOS",
                                                                 "Composables-InfoDialogEnd.visitSectionViewModel.observe.statusadd.size" + data.toString()
                                                             )
+                                                        }
+
+                                                        if (SesionEntity.perfil_id == "CHOFER" || SesionEntity.perfil_id == "chofer") {
+                                                            data.forEachIndexed { index, step ->
+                                                                statusDispatchViewModel.updateStatusDispatch(
+                                                                    data.get(index).timeini,
+                                                                    data.get(index).timefin,
+                                                                    data.get(index).latitudini,
+                                                                    data.get(index).longitudini,
+                                                                    list.domembarque_id,
+                                                                    list.cliente_id
+                                                                )
+                                                                /*data.get(index).datefin=FormatFecha.format(date)
+                                                                data.get(index).timefin=dateFormathora.format(date)
+                                                                data.get(index).latitudfin=latitude
+                                                                data.get(index).longitudfin=longitude*/
+                                                            }
+
+                                                            /*statusDispatchSQLite.UpdateTimeStatusDispatch(
+                                                                MenuAccionView.CardCode,
+                                                                MenuAccionView.DomEmbarque_ID,
+                                                                timeini,
+                                                                dateFormathora.format(date),
+                                                                Latitudini,
+                                                                Longitudini
+                                                            )
+                                                            val executor = AppExecutors()
+                                                            /////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                                                            //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+                                                            statusDispatchRepository.statusDispatchSendTime(
+                                                                getContext(),
+                                                                executor.diskIO()
+                                                            ).observe(getActivity(),
+                                                                androidx.lifecycle.Observer { data: String ->
+                                                                    Log.e(
+                                                                        "REOS",
+                                                                        "statusDispatchRepository-->statusDispatchSend-->resultdata$data"
+                                                                    )
+                                                                })*/
                                                         }
 
 

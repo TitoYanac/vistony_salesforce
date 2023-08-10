@@ -52,9 +52,11 @@ import com.vistony.salesforce.Dao.Adapters.ListaHistoricoOrdenVentaDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoOrdenVentaWS;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
@@ -101,6 +103,9 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
     private ProgressDialog pd;
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private ActivityResultLauncher<Intent> someActivityResultLauncher;
+    TextView txtdocumento;
+    UsuarioSQLiteEntity ObjUsuario;
+
     public HistoricoOrdenVentaView() {
         // Required empty public constructor
     }
@@ -168,6 +173,18 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
         tv_fecha_historico_orden_venta.setText(fecha);
         hiloObtenerHistoricoOrdenVenta =  new HiloObtenerHistoricoOrdenVenta();
         hiloObtenerHistoricoOrdenVenta.execute();
+        txtdocumento=v.findViewById(R.id.txtdocumento);
+        ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
+        if(BuildConfig.FLAVOR.equals("peru"))
+        {
+            if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+            {
+                txtdocumento.setText(getActivity().getResources().getString(R.string.sales));
+            }
+        }
 
         imb_consultar_QR.setOnClickListener(new View.OnClickListener() {
             @Override

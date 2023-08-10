@@ -18,3 +18,9 @@ data class ReasonDispatch(
     var fuerzatrabajo_id: String?,
     var usuario_id: String?
 )
+
+data class ResponseReasonDispatch(
+    var Status:String="",
+    @SerializedName("Ocurrencies")
+    var data: List<ReasonDispatch>? = emptyList(),
+)

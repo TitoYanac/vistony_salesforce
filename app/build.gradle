@@ -110,14 +110,17 @@ android {
             applicationIdSuffix ".peru"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------Aprobaciones
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //QA 2
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe_V2"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            //Pruebas Autorizaciones B2B -->Produccion
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
             versionName "2.2.20"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
@@ -271,6 +274,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.activity:activity-compose:1.3.1'
     implementation 'androidx.sqlite:sqlite:2.1.0'
+    implementation 'androidx.camera:camera-lifecycle:1.2.3'
 
 
     testImplementation 'junit:junit:4.13.2'
@@ -485,4 +489,10 @@ dependencies {
     //systemProp.http.proxyUser=your.username
     //systemProp.http.proxyPassword=your.password
     //implementation 'com.kofigyan.stateprogressbar:stateprogressbar:1.1.0'
+    //Camera Android X
+    implementation "androidx.camera:camera-core:1.1.0"
+    implementation "androidx.camera:camera-camera2:1.1.0"
+    //Camara?
+    implementation 'androidx.activity:activity-ktx:1.4.0'
+
 }

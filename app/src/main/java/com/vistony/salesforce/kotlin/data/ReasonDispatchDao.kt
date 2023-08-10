@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface ReasonDispatchDao {
     @Query("SELECT * FROM reasondispatch")
-    fun getReasonDispatch(): LiveData<List<ReasonDispatch>>
+    fun getReasonDispatch(): List<ReasonDispatch>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun inserReasonDispatch(reasondispatch: List<ReasonDispatch>?)

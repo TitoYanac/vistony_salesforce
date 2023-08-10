@@ -334,4 +334,28 @@ public class PromocionDetalleSQLiteDao {
         return resultado;
     }
 
+    public int getPromotionDetailException (
+    String promocion_id,
+    String cantidad,
+    String producto_id
+    )
+    {
+        int resultado=0;
+        Log.e("REOS","PromocionDetalleSQLiteDao.getPromotionDetailException.promocion_id: "+promocion_id);
+        Log.e("REOS","PromocionDetalleSQLiteDao.getPromotionDetailException.cantidad: "+cantidad);
+        Log.e("REOS","PromocionDetalleSQLiteDao.getPromotionDetailException.producto_id: "+producto_id);
+
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select COUNT(producto_id) from promociondetalle  where promocion_id= '"+promocion_id+"' and producto_id= '"+producto_id+"' and cantidad>='"+cantidad+"'",null);
+
+        while (fila.moveToNext())
+        {
+            resultado = Integer.parseInt(fila.getString(0));
+        }
+        bd.close();
+
+        return resultado;
+    }
+
 }

@@ -127,6 +127,7 @@ class VisitSectionViewModel(
         }
 
 
+
         visitSectionRepository.status.observe(lifecycleOwner) { status ->
             // actualizar la UI con los datos obtenidos
             Log.e(

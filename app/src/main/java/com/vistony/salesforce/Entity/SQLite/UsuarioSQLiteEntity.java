@@ -44,6 +44,15 @@ public class UsuarioSQLiteEntity {
     public String status;
     public String sendvisits;
     public String sendvalidations;
+    public String U_VIS_ManagementType;
+
+    public String getU_VIS_ManagementType() {
+        return U_VIS_ManagementType;
+    }
+
+    public void setU_VIS_ManagementType(String u_VIS_ManagementType) {
+        U_VIS_ManagementType = u_VIS_ManagementType;
+    }
 
     public String getSendvalidations() {
         return sendvalidations;

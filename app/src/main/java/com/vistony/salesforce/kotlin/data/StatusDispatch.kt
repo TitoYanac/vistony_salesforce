@@ -1,5 +1,6 @@
 package com.vistony.salesforce.kotlin.data
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -23,10 +24,9 @@ var factura_id: String?,
 @SerializedName("entrega_id")
 var entrega_id: String?,
 @SerializedName("chkrecibido")
-var chkrecibido: String?,
+var chk_statusPhotoServerDispatch: String?,
 @SerializedName("Comments")
 var Comments: String?,
-var foto: String?,
 var fecha_registro: String?,
 var hora_registro: String?,
 var PhotoDocument: String?,
@@ -56,8 +56,29 @@ var checkouttime: String?,
 var chk_timestatus: String?,
 @SerializedName("UserName")
 var fuerzatrabajo: String?,
+var chk_statusServerDispatch:String?,
 var messageServerDispatch: String?,
-var messageServerTimeDispatch: String?
+var messageServerTimeDispatch: String?,
+var domembarque_id: String,
+var DeliveryNotes: String,
+var ReturnReasonText: String,
+)
+
+data class ResponseStatusDispatch(
+    var Status:String="",
+    @SerializedName("Dispatch")
+    val data: List<StatusDispatch>? = emptyList(),
+)
 
 
+data class SendAPIStatusDispatch(
+    var DocEntry: String="",
+    @SerializedName("Details")
+    var Details: List<StatusDispatch>? = emptyList(),
+)
+
+data class ResponseSendAPIStatusDispatch(
+    var Status:String="",
+    @SerializedName("Dispatch")
+    val data: List<SendAPIStatusDispatch>? = emptyList(),
 )

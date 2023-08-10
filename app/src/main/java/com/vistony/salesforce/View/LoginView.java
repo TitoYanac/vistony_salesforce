@@ -297,7 +297,6 @@ public class LoginView extends AppCompatActivity {
 
         }
     }
-
     private void getCrash() {
         Induvis.getCrashLytics();
     }
@@ -505,6 +504,7 @@ public class LoginView extends AppCompatActivity {
 
             Log.e("REOS", "LoginView-SesionEntity.Print" + Sesion.Print);
             try {
+                //Crashlitycs
                 getCrash();
             }catch (Exception e){
                 Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
