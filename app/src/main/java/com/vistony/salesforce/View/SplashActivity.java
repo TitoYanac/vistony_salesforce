@@ -6,9 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.vistony.salesforce.BuildConfig;
-import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
-import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 

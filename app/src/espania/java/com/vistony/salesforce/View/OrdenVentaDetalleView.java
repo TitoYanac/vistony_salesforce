@@ -30,7 +30,6 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.ListSalesOrderDetailAdapter;
-import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaOrdenVentaDetalleDao;
@@ -38,6 +37,7 @@ import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
 import com.vistony.salesforce.ListenerBackPress;
@@ -71,7 +71,7 @@ public class OrdenVentaDetalleView extends Fragment {
     public static ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabecera=new ArrayList<>();
     static MenuItem guardar_orden_venta,vincular_orden_venta_cabecera;
     static Menu menu_variable;
-    static String listaprecio_id,descuentocontado,terminopago_id;
+    static String listaprecio_id,descuentocontado,terminopago_id,ubigeo_id="0",currency_id,discount_percent_bl;
     static Context context;
     private ProgressDialog pd;
     TableRow tr_taxoil;
@@ -92,7 +92,7 @@ public class OrdenVentaDetalleView extends Fragment {
     public static OrdenVentaDetalleView newInstance(Object objeto){
 
 
-        String [] arrayObject= (String[]) objeto;
+        /*String [] arrayObject= (String[]) objeto;
 
         for(int i=0;i<arrayObject.length;i++){
             Log.e("JEPICAME","=>"+arrayObject[i]);
@@ -110,11 +110,19 @@ public class OrdenVentaDetalleView extends Fragment {
         }else{
             listaprecio_id=arrayObject[0]; //codigocliente
             descuentocontado="false";
-        }
+        }*/
+        DocumentHeader documentHeader= (DocumentHeader) objeto;
+        listaprecio_id=documentHeader.getCardCode(); //codigocliente
+        descuentocontado=documentHeader.getDiscountCash();
+        terminopago_id=documentHeader.getPaymentGroupCode();
+        currency_id=documentHeader.getDocCurrency();
+        discount_percent_bl= documentHeader.getDiscountPercent_BL();
+        ubigeo_id=documentHeader.getUbigeoCode();
+
         Log.e("REOS","OrdenVentaDetalleView-newInstance-listaprecio_id: "+listaprecio_id);
         Log.e("REOS","OrdenVentaDetalleView-newInstance-descuentocontado: "+descuentocontado);
         Log.e("REOS","OrdenVentaDetalleView-newInstance-terminopago_id: "+terminopago_id);
-
+        Log.e("REOS","OrdenVentaDetalleView-newInstance-currency_id: "+currency_id);
         ListenerBackPress.setCurrentFragment("OrdenVentaDetalleView");
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
         Bundle b = new Bundle();
@@ -158,7 +166,8 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_producto_id=productoAgregado.getProducto_id();
             ObjListaProductosEntity.orden_detalle_producto=productoAgregado.getProducto();
             ObjListaProductosEntity.orden_detalle_umd=productoAgregado.getUmd();
-            ObjListaProductosEntity.orden_detalle_stock=productoAgregado.getStock();
+            //ObjListaProductosEntity.orden_detalle_stock=productoAgregado.getStock();
+            ObjListaProductosEntity.orden_detalle_stock_almacen=productoAgregado.getStock_almacen();
             ObjListaProductosEntity.orden_detalle_precio_unitario=productoAgregado.getPreciobase();
             ObjListaProductosEntity.orden_detalle_gal=productoAgregado.getGal();
             ObjListaProductosEntity.orden_detalle_monto_igv="0";
@@ -287,9 +296,9 @@ public class OrdenVentaDetalleView extends Fragment {
         tv_orden_venta_detalle_igv = v.findViewById(R.id.tv_orden_venta_detalle_igv);
         tv_orden_venta_detalle_total = v.findViewById(R.id.tv_orden_venta_detalle_total);
         tv_orden_detalle_galones = v.findViewById(R.id.tv_orden_detalle_galones);
-        ClienteAtendido cliente=new ClienteAtendido();
+        /*ClienteAtendido cliente=new ClienteAtendido();
         cliente.setCardCode(listaprecio_id);//contiene CardCode
-        cliente.setPymntGroup(terminopago_id);
+        cliente.setPymntGroup(terminopago_id);*/
         tr_taxoil=v.findViewById(R.id.tr_taxoil);
         UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
         UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
@@ -309,8 +318,18 @@ public class OrdenVentaDetalleView extends Fragment {
             String Fragment="OrdenVentaDetalleView";
             String accion="producto";
             String compuesto=Fragment+"-"+accion;
+
+            /*Vendedor vendedor=new Vendedor();
+            vendedor.setCliente(cliente);*/
+            ClienteAtendido cliente=new ClienteAtendido();
+            cliente.setCardCode(listaprecio_id);//contiene CardCode
+            cliente.setPymntGroup(terminopago_id);
+            cliente.setUbigeo_ID(ubigeo_id);
+            cliente.setCurrency_ID(currency_id);
+
             Vendedor vendedor=new Vendedor();
             vendedor.setCliente(cliente);
+
             mListener.onFragmentInteraction(compuesto,vendedor);
         });
 
@@ -466,8 +485,8 @@ public class OrdenVentaDetalleView extends Fragment {
 
                 UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
                 UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
-                if(BuildConfig.FLAVOR.equals("espania"))
-                {
+                /*if(BuildConfig.FLAVOR.equals("espania"))
+                {*/
                     int SIGAUS=0,OilTax=0;
                     usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
                     if(usuarioSQLiteEntity.getOiltaxstatus().equals("Y")){
@@ -498,18 +517,15 @@ public class OrdenVentaDetalleView extends Fragment {
                                 //calculateSIGAUS();
                                 alertAddSIGAUS().show();
                             }
-
                         }
 
                     }else {
                         DialogoOrdenVentaDetalle().show();
                     }
-                }
+                /*}
                 else {
                     DialogoOrdenVentaDetalle().show();
-                }
-
-
+                }*/
 
                 return false;
             default:

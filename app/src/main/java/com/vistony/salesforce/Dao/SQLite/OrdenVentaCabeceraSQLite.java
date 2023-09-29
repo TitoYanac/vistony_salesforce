@@ -77,7 +77,11 @@ public class OrdenVentaCabeceraSQLite {
             String U_VIT_VENMOS,
             String U_VIS_Flete,
             String U_VIS_CompleteOV,
-            String U_VIS_TipTransGrat
+            String U_VIS_TipTransGrat,
+            String U_VIS_DiscountPercent,
+            String U_VIS_ReasonDiscountPercent,
+            String U_VIS_MOTAPLDESC,
+            String U_VIST_SUCUSU
 
     ){
 
@@ -170,7 +174,10 @@ public class OrdenVentaCabeceraSQLite {
         registro.put("U_VIS_Flete",U_VIS_Flete);
         registro.put("U_VIS_CompleteOV",U_VIS_CompleteOV);
         registro.put("U_VIS_TipTransGrat",U_VIS_TipTransGrat);
-
+        registro.put("U_VIS_DiscountPercent",U_VIS_DiscountPercent);
+        registro.put("U_VIS_ReasonDiscountPercent",U_VIS_ReasonDiscountPercent);
+        registro.put("U_VIS_MOTAPLDESC",U_VIS_MOTAPLDESC);
+        registro.put("U_VIST_SUCUSU",U_VIST_SUCUSU);
 
         bd.insert("ordenventacabecera",null,registro);
         bd.close();
@@ -316,7 +323,7 @@ public class OrdenVentaCabeceraSQLite {
                     "usuario_id,enviadoERP,recibidoERP,ordenventa_ERP_id,listaprecio_id,planta_id,fecharegistro,tipocambio,fechatipocambio,rucdni,DocType," +
                     "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito,domembarque_text,cliente_text,terminopago_text,quotation,U_SYP_MDTD," +
                     "U_SYP_MDSD,U_SYP_MDCD,U_SYP_MDMT,U_SYP_STATUS,dispatchdate,countsend,IFNULL(route,'0') AS route," +
-                    " IFNULL(U_VIT_VENMOS,'N') AS U_VIT_VENMOS , IFNULL(U_VIS_Flete,'0') AS U_VIS_Flete , IFNULL(U_VIS_CompleteOV,'N') AS U_VIS_CompleteOV,U_VIS_TipTransGrat  " +
+                    " IFNULL(U_VIT_VENMOS,'N') AS U_VIT_VENMOS , IFNULL(U_VIS_Flete,'0') AS U_VIS_Flete , IFNULL(U_VIS_CompleteOV,'N') AS U_VIS_CompleteOV,U_VIS_TipTransGrat,IFNULL(U_VIS_DiscountPercent,'0') AS U_VIS_DiscountPercent ,IFNULL(U_VIS_ReasonDiscountPercent,'') AS U_VIS_ReasonDiscountPercent,IFNULL(U_VIS_MOTAPLDESC,'-') AS  U_VIS_MOTAPLDESC,IFNULL(U_VIST_SUCUSU,'') as U_VIST_SUCUSU " +
                     " FROM ordenventacabecera WHERE ordenventa_id=? LIMIT 1",new String[]{ordenventa_id});
             if (fila.moveToFirst()) {
                 do {
@@ -385,7 +392,10 @@ public class OrdenVentaCabeceraSQLite {
                     ordenVentaCabeceraSQLiteEntity.setU_VIS_Flete(fila.getString(fila.getColumnIndex("U_VIS_Flete")));
                     ordenVentaCabeceraSQLiteEntity.setU_VIS_CompleteOV(fila.getString(fila.getColumnIndex("U_VIS_CompleteOV")));
                     ordenVentaCabeceraSQLiteEntity.setU_VIS_TipTransGrat (fila.getString(fila.getColumnIndex("U_VIS_TipTransGrat")));
-
+                    ordenVentaCabeceraSQLiteEntity.setU_VIS_DiscountPercent (fila.getString(fila.getColumnIndex("U_VIS_DiscountPercent")));
+                    ordenVentaCabeceraSQLiteEntity.setU_VIS_ReasonDiscountPercent (fila.getString(fila.getColumnIndex("U_VIS_ReasonDiscountPercent")));
+                    ordenVentaCabeceraSQLiteEntity.setU_VIS_MOTAPLDESC (fila.getString(fila.getColumnIndex("U_VIS_MOTAPLDESC")));
+                    ordenVentaCabeceraSQLiteEntity.setU_VIST_SUCUSU (fila.getString(fila.getColumnIndex("U_VIST_SUCUSU")));
                     listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
 
                     UpdateCountSend(fila.getString(fila.getColumnIndex("ordenventa_id")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));

@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import android.util.Log;
@@ -14,20 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.vistony.salesforce.Controller.Adapters.PageAdapter;
-import com.vistony.salesforce.Dao.SQLite.HeaderDispatchSheetSQLite;
-import com.vistony.salesforce.Entity.SQLite.HojaDespachoCabeceraSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.kotlin.compose.DispatchSheetMapScreen;
-import com.vistony.salesforce.kotlin.data.HeaderDispatchSheetViewModel;
+import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetMapScreen;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;

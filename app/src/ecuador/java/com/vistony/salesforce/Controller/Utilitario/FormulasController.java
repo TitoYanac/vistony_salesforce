@@ -1,7 +1,5 @@
 package com.vistony.salesforce.Controller.Utilitario;
 
-import static com.vistony.salesforce.Controller.Utilitario.Induvis.format;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -15,7 +13,8 @@ import com.google.gson.Gson;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
-import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.BusinessLayerSalesDetailDetailDao;
+import com.vistony.salesforce.Dao.SQLite.CustomerComplaintFormsSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
@@ -32,6 +31,9 @@ import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEnt
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.DocumentLine;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.BusinessLayerSalesDetailDetailEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
@@ -51,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -373,7 +376,10 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_Flete(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_CompleteOV()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_CompleteOV(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_TipTransGrat(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_discount_percent(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_discount_percent_reason()
             );
         }
 
@@ -385,7 +391,7 @@ public class FormulasController {
             ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
             ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
 
-            listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id());
+            listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id(), SesionEntity.TipoListaPrecio);
 
             for(int g=0;g<listaPrecioDetalleSQLiteEntities.size();g++){
                 producto=listaPrecioDetalleSQLiteEntities.get(g).getProducto();
@@ -671,11 +677,12 @@ public class FormulasController {
         documentHeader.setBrand(fabricante);
         documentHeader.setOSVersion(AndroidVersion);
         documentHeader.setModel(modelo);
+        documentHeader.setU_VIST_SUCUSU(SesionEntity.U_VIST_SUCUSU);
 
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
 
-        if(ovCabecera.getExcede_lineacredito().equals("1")&&!SesionEntity.contado.equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
+        /*if(ovCabecera.getExcede_lineacredito().equals("1")&&!SesionEntity.contado.equals("1")){ //NO CUMPLE CON LA VALIDACIÓN DE EXCEDIO LA LINEA DE CREDITO
             //documentHeader.setApCredit("Y");
             documentHeader.setDraft(Induvis.getStatusDraft());
             //documentHeader.setComments(documentHeader.getComments()+" Regla: Excede Linea de Credito");
@@ -689,7 +696,7 @@ public class FormulasController {
            //documentHeader.setComments(documentHeader.getComments()+" Regla: Documento con fecha vencimiento mayor 5 dias");
        }else{
 
-        }
+        }*/
 
         /*ecuador no tiene modelado aprovaciones por descuento*/
         /*if(Integer.parseInt(ovCabecera.getDueDays())>5){ //SE AGREGO UN DESCUENTO FUERA DE LO PERMITIDO
@@ -699,13 +706,13 @@ public class FormulasController {
 
         }*/
 
-        if(documentHeader.getPaymentGroupCode().equals(ClienteSQlite.getPaymentGroupCode(documentHeader.getCardCode()))){
+        /*if(documentHeader.getPaymentGroupCode().equals(ClienteSQlite.getPaymentGroupCode(documentHeader.getCardCode()))){
 
        }else{
             //documentHeader.setApTPag("Y");
             documentHeader.setDraft(Induvis.getStatusDraft());
             //documentHeader.setComments(documentHeader.getComments()+" Regla: Cambio de Termino de Pago");
-        }
+        }*/
 
 
 
@@ -716,7 +723,27 @@ public class FormulasController {
 
         listaordenVentaDetalleSQLiteEntity=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
         for(int j=0;j<listaordenVentaDetalleSQLiteEntity.size();j++){
-            String COGSAccountCode=SesionEntity.cogsacct,U_SYP_FECAT_07="",taxOnly="N",taxCode=SesionEntity.Impuesto_ID,U_VIST_CTAINGDCTO=SesionEntity.u_vist_ctaingdcto,montolineatotal="",discountpercent="";
+            String COGSAccountCode=SesionEntity.cogsacct,U_SYP_FECAT_07="",taxOnly="N",taxCode=SesionEntity.Impuesto_ID,U_VIST_CTAINGDCTO=SesionEntity.u_vist_ctaingdcto,montolineatotal="",discountpercent="",AcctCode="";
+            //Asignacion Dinamica de cuenta contable de promociones
+            ArrayList<BusinessLayerSalesDetailDetailEntity> listBusinessLayerSalesDetailDetailEntity=new ArrayList<>();
+            BusinessLayerSalesDetailDetailDao businessLayerSalesDetailDetailDao=new BusinessLayerSalesDetailDetailDao(context);
+
+            if(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id().equals("ECOVALOR"))
+            {
+                listBusinessLayerSalesDetailDetailEntity=businessLayerSalesDetailDetailDao.getBusinessLayerSalesDetailDetailType("1","7","ECOVALOR");
+            }else {
+                listBusinessLayerSalesDetailDetailEntity=businessLayerSalesDetailDetailDao.getBusinessLayerSalesDetailDetailPercent("1",listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
+            }
+
+            for(int g=0;g<listBusinessLayerSalesDetailDetailEntity.size();g++)
+            {
+                if(listBusinessLayerSalesDetailDetailEntity.get(g).getField().equals("COGSAccountCode"))
+                {
+                    //AcctCode=listBusinessLayerSalesDetailDetailEntity.get(g).getVariable();
+                    COGSAccountCode=listBusinessLayerSalesDetailDetailEntity.get(g).getVariable();
+                }
+            }
+
 
             //Casuistica Bonificacion
             if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100"))
@@ -779,7 +806,7 @@ public class FormulasController {
             else {
                 documentLine.setDiscountPercent(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
             }*/
-            documentLine.setDiscountPercent(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
+            //documentLine.setDiscountPercent(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
             documentLine.setDscription(ObtenerProductoDescripcion(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id(),context));
             documentLine.setItemCode(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id());
             documentLine.setPrice(listaordenVentaDetalleSQLiteEntity.get(j).getPreciounitario());
@@ -788,7 +815,7 @@ public class FormulasController {
             documentLine.setTaxOnly(taxOnly);
             documentLine.setWarehouseCode(listaordenVentaDetalleSQLiteEntity.get(j).getAlmacen_id());
             documentLine.setLineTotal(montolineatotal);
-            documentLine.setAcctCode("");
+            documentLine.setAcctCode(AcctCode);
             documentLine.setU_SYP_FECAT07(U_SYP_FECAT_07);
             documentLine.setU_VIS_PromID(listaordenVentaDetalleSQLiteEntity.get(j).getPromocion_id());
             documentLine.setU_VIS_PromLineID(listaordenVentaDetalleSQLiteEntity.get(j).getLineareferencia());
@@ -803,11 +830,12 @@ public class FormulasController {
         documentHeader.setApDues("N");
         documentHeader.setApPrcnt("N");
         documentHeader.setApTPag("N");
+        documentHeader.setDraft("Y");
 
-        if(SesionEntity.quotation.equals("Y"))
+        /*if(SesionEntity.quotation.equals("Y"))
         {
             documentHeader.setDraft("N");
-        }
+        }*/
 
         documentHeader.setDocumentLines(listadoDocumentLines);
 
@@ -837,7 +865,7 @@ public class FormulasController {
         String producto="";
         ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(context);
         ArrayList<ListaPrecioDetalleSQLiteEntity> arraylistapreciodetalleentity=new ArrayList<>();
-        arraylistapreciodetalleentity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(producto_id);
+        arraylistapreciodetalleentity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(producto_id,SesionEntity.TipoListaPrecio);
         for(int i=0;i<arraylistapreciodetalleentity.size();i++)
         {
             producto=arraylistapreciodetalleentity.get(i).getProducto();
@@ -1112,6 +1140,10 @@ public class FormulasController {
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
                         ,listaClienteCabeceraEntities.get(i).getAddresscode()
                         ,listaClienteCabeceraEntities.get(i).getStatuscount()
+                        ,listaClienteCabeceraEntities.get(i).getAmountQuotation()
+                        ,listaClienteCabeceraEntities.get(i).getChk_quotation()
+                        ,listaClienteCabeceraEntities.get(i).getTypeVisit()
+                        ,listaClienteCabeceraEntities.get(i).getCustomerwhitelist()
                 );
             }
 
@@ -1838,7 +1870,7 @@ public class FormulasController {
         boolean resultado=false;
         ArrayList<ListaPrecioDetalleSQLiteEntity> arrayListListaPrecioDetalleSQLiteEntity=new ArrayList<>();
         ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
-        arrayListListaPrecioDetalleSQLiteEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listapromocion_id);
+        arrayListListaPrecioDetalleSQLiteEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listapromocion_id, SesionEntity.TipoListaPrecio);
 
         for(int i=0;i<arrayListListaPrecioDetalleSQLiteEntity.size();i++)
         {
@@ -2004,4 +2036,136 @@ public class FormulasController {
         return cacculoDsct.setScale(2, RoundingMode.HALF_UP).toString();
     }
 
+    public void AddForms(List<CustomerComplaintSectionEntity> lead)
+    {
+        try {
+            SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
+            SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+            Date date = new Date();
+            CustomerComplaintFormsSQLiteDao customerComplaintFormsSQLiteDao = new CustomerComplaintFormsSQLiteDao(Context);
+            ArrayList<CustomerComplaintFormsEntity> ListCustomerComplaintForms = new ArrayList<>();
+            CustomerComplaintFormsEntity customerComplaintFormsEntity = new CustomerComplaintFormsEntity();
+            customerComplaintFormsEntity.forms = "Reclamo de Cliente";
+            customerComplaintFormsEntity.forms_id = "0";
+            customerComplaintFormsEntity.forms_date = FormatFecha.format(date);
+            customerComplaintFormsEntity.time = dateFormathora.format(date);
+            customerComplaintFormsEntity.salesrepcode = SesionEntity.fuerzatrabajo_id;
+            customerComplaintFormsEntity.user_id = SesionEntity.usuario_id;
+            customerComplaintFormsEntity.setListCustomerComplaintSection(lead);
+            ListCustomerComplaintForms.add(customerComplaintFormsEntity);
+
+            customerComplaintFormsSQLiteDao.addCustomerComplaintForms(ListCustomerComplaintForms);
+
+        }catch (Exception e)
+        {
+            Log.e("REOS", "FormulasController.AddForms.error : " + e.toString());
+        }
+    }
+
+    public String getPriceIncrement(String PrecioUnitario, String Incremento) {
+
+        //Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+        //Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+
+        Incremento = (Incremento.equals("")) ? "0" : Incremento;
+
+        BigDecimal preUnit = new BigDecimal(PrecioUnitario).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal incremento = new BigDecimal(Incremento).divide(new BigDecimal("100")).add(new BigDecimal("1"));
+
+        BigDecimal product = preUnit.multiply(incremento);
+        return product.toString();
+    }
+
+    public ArrayList<ListaOrdenVentaDetalleEntity> addSIGAUS
+            (ArrayList<ListaOrdenVentaDetalleEntity> listSalesOrder
+             //,ArrayList<ListaOrdenVentaDetalleEntity> listadoProductosAgregados
+            )
+    {
+        ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
+        ArrayList<ListaPrecioDetalleSQLiteEntity> listSIGAUS=new ArrayList<>();
+        listSIGAUS=listaPrecioDetalleSQLiteDao.getProductSIGAUS();
+        Log.e("REOS", "FormulasController-addSIGAUS-listSIGAUS.size(): "+listSIGAUS.size());
+
+        String producto_id="",producto="",umd="",stock="",preciobase="";
+        Float cantidad=0f,SIGAUS=0f;
+        for(int i=0;i<listSIGAUS.size();i++)
+        {
+            producto_id=listSIGAUS.get(i).getProducto_id();
+            producto=listSIGAUS.get(i).getProducto();
+            umd=listSIGAUS.get(i).getUmd();
+            stock=listSIGAUS.get(i).getStock_almacen();
+            preciobase=listSIGAUS.get(i).getContado();
+        }
+
+        Log.e("REOS", "FormulasController-addSIGAUS-listSalesOrder.size(): "+listSalesOrder.size());
+        Log.e("REOS", "FormulasController-addSIGAUS-preciobase: "+preciobase);
+        ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
+        listaOrdenVentaDetalleEntities=ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listSalesOrder);
+        for(int j=0;j<listaOrdenVentaDetalleEntities.size();j++)
+        {
+            Log.e("REOS", "FormulasController-addSIGAUS-listSalesOrder.get(j).getOrden_detalle_oil_tax(): "+listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_liter());
+            Log.e("REOS", "FormulasController-addSIGAUS-listSalesOrder.get(j).getOrden_detalle_liter(): "+listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_cantidad());
+            if(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_oil_tax() .equals("Y"))
+            {
+                cantidad=cantidad+
+                        (
+                                Float.parseFloat(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_gal_acumulado())
+                                /*Float.parseFloat(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_gal())
+                                        *
+                                        Float.parseFloat(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_cantidad())*/
+                        )
+                ;
+            }
+        }
+        ListaOrdenVentaDetalleEntity ObjListaProductosEntity=new ListaOrdenVentaDetalleEntity();
+        String indice="0";
+        if(listSalesOrder.isEmpty())
+        {
+            indice="1";
+        }
+        else
+        {
+            indice=String.valueOf(listSalesOrder.size()+1);
+        }
+
+        for(int j=0;j<listSalesOrder.size();j++)
+        {
+            if(listSalesOrder.get(j).getOrden_detalle_producto_id().equals("ECOVALOR"))
+            {
+                SIGAUS++;
+            }
+        }
+
+        if(SIGAUS==0)
+        {
+            ObjListaProductosEntity.orden_detalle_item = (indice);
+            ObjListaProductosEntity.orden_detalle_producto_id = producto_id;
+            ObjListaProductosEntity.orden_detalle_producto = producto;
+            ObjListaProductosEntity.orden_detalle_umd = umd;
+            ObjListaProductosEntity.orden_detalle_stock_almacen = stock;
+            ObjListaProductosEntity.orden_detalle_precio_unitario = preciobase;
+            ObjListaProductosEntity.orden_detalle_gal = "0";
+            ObjListaProductosEntity.orden_detalle_monto_igv = "0";
+            //Cambio
+            ObjListaProductosEntity.orden_detalle_cantidad = cantidad.toString();
+            //
+            ObjListaProductosEntity.orden_detalle_monto_descuento = "0";
+            ObjListaProductosEntity.orden_detalle_montototallinea = "0";
+            ObjListaProductosEntity.orden_detalle_promocion_habilitada = "0";
+            ObjListaProductosEntity.orden_detalle_lista_promocion_cabecera = null;
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento = "0";
+            ObjListaProductosEntity.orden_detalle_montosubtotal = "0";
+            ObjListaProductosEntity.orden_detalle_gal_acumulado = "0";
+            ObjListaProductosEntity.orden_detalle_descuentocontado = "0";
+            ObjListaProductosEntity.orden_detalle_terminopago_id = "0";
+            ObjListaProductosEntity.orden_detalle_chk_descuentocontado_cabecera = true;
+            ObjListaProductosEntity.orden_detalle_cardcode = "";
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo = "";
+            ObjListaProductosEntity.orden_detalle_oil_tax = "";
+            ObjListaProductosEntity.orden_detalle_liter = "";
+            ObjListaProductosEntity.orden_detalle_montosubtotalcondescuento = "0";
+            listSalesOrder.add(ObjListaProductosEntity);
+        }
+        return listSalesOrder;
+    }
 }

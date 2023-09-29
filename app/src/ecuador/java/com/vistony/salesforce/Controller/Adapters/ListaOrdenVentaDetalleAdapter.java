@@ -946,16 +946,15 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
     public void actualizarlistapromocioncabecera(ListaOrdenVentaDetalleEntity lead)
     {
         listaPromocionCabecera=promocionCabeceraSQLiteDao.ObtenerPromocionCabeceraUnidad(
-
                 SesionEntity.compania_id,
                 SesionEntity.fuerzatrabajo_id,
                 SesionEntity.usuario_id,
                 lead.getOrden_detalle_producto_id(),
                 lead.getOrden_detalle_umd(),
                 lead.getOrden_detalle_cantidad(),
-                SesionEntity.contado
-                ,""
-                ,""
+                SesionEntity.contado,
+                lead.getOrden_detalle_terminopago_id(),
+                lead.getOrden_detalle_cardcode()
         );
 
         if (listaPromocionCabecera.isEmpty()){
@@ -967,9 +966,10 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     lead.getOrden_detalle_producto_id(),
                     lead.getOrden_detalle_umd(),
                     lead.getOrden_detalle_cantidad(),
-                    SesionEntity.contado
-                    ,""
-                    ,""
+                    SesionEntity.contado,
+                    lead.getOrden_detalle_terminopago_id(),
+                    lead.getOrden_detalle_cardcode(),
+                    lead.getOrden_detalle_currency()
             );
 
         }

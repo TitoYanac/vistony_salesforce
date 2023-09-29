@@ -636,7 +636,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             ///BORRADOR - COTIZACION
             if ((object.equals("Borrador Orden de Venta")||object.equals("Orden de Venta"))&&lead.getInvoices()==null)
             {
-                holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.THREE);
+                holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
                 if(object.equals("Borrador Orden de Venta"))
                 {
                     String[] descriptionData = {"Cotización","Borrador\nOrden Venta", "Factura", "Entrega\nMercaderia"};
@@ -645,9 +645,8 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 {
                     String[] descriptionData = {"Cotización","Orden Venta", "Factura", "Entrega\nMercaderia"};
                     holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
-
-
                 }
+
                 Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_invoices, 580, 450, 200, 145);

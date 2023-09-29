@@ -42,12 +42,12 @@ public class VersionViewModel {
             baseUrl = "http://salesforce.vistony.com";
         }*/
         switch (BuildConfig.FLAVOR) {
-            case "chile":
+            //case "chile":
             //QA Aprobaciones 11/07/2023
-            //case "peru":
+            case "peru":
                 //Produccion
-            case "ecuador":
-            case "espania":
+            //case "ecuador":
+            //case "espania":
             case "marruecos":
                 baseUrl = "https://salesforce.vistony.pe";
                 break;
@@ -59,13 +59,22 @@ public class VersionViewModel {
                 baseUrl = "https://app.vistony.pe";
                 break;
             //Produccion
-            case "peru":
+            /*case "peru":
                 baseUrl = "http://190.12.79.132:8083";
-                break;
+                break;*/
             //Aprobaciones
             /*case "peru":
                 baseUrl = "http://190.12.79.132:8082";
                 break;*/
+            case "chile":
+                baseUrl = "http://190.12.79.132:8084";
+                break;
+            case "ecuador":
+                baseUrl = "http://190.12.79.132:8085";
+                break;
+            case "espania":
+                baseUrl = "http://190.12.79.132:8086";
+                break;
             default:
                 baseUrl = "http://salesforce.vistony.com";
                 break;

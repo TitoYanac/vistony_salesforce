@@ -80,7 +80,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
-import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 import static com.vistony.salesforce.View.OrdenVentaDetalleView.ActualizarResumenMontos;
 
 public class OrdenVentaCabeceraView extends Fragment  implements View.OnClickListener, DatePickerDialog.OnDateSetListener  {
@@ -988,7 +987,7 @@ public class OrdenVentaCabeceraView extends Fragment  implements View.OnClickLis
             listaOrdenVentaCabeceraEntity.orden_cabecera_planta=SesionEntity.planta_id;
             listaOrdenVentaCabeceraEntity.orden_cabecera_lista_precio_id=listaprecio_id;
 
-            if(codigomoneda.equals("USD ")){
+            if(codigomoneda.equals("CLP ")){
                 Log.e("REOS","OrdenVentaCabecera.RegistrarOrdenVentaBD-codigomoneda.equals(\"USD\")-SI:");
                 listaOrdenVentaCabeceraEntity.orden_cabecera_tipocambio="1";
             }else{

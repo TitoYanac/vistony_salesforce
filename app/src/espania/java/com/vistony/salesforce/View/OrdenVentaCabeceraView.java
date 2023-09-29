@@ -43,7 +43,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.perf.FirebasePerformance;
 import com.google.firebase.perf.metrics.Trace;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
@@ -64,6 +63,7 @@ import com.vistony.salesforce.Entity.Adapters.DireccionCliente;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
+import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
@@ -100,7 +100,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     View v;
     static Button btn_detalle_orden_venta;
     OnFragmentInteractionListener mListener;
-    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta;
+    String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta,ubigeo_id="0",statuscount="N",customerwhitelist="N";
     static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
     static String terminopago_id,terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;
@@ -1256,12 +1256,16 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         dialogButtonOK.setOnClickListener(v -> {
 
-            /*if(sp_cantidaddescuento.getSelectedItem()==null)
-            {
-                cantidaddescuento="0";
-            }else{
-                cantidaddescuento=sp_cantidaddescuento.getSelectedItem().toString();
-            }*/
+            String monedatotal="",codigomoneda="";
+            monedatotal=spnmoneda.getSelectedItem().toString();
+            String[] palabra = monedatotal.split("-");
+            codigomoneda=palabra[0];
+            if(ubigeo_id==null||ubigeo_id==""||ubigeo_id.isEmpty()||ubigeo_id.isBlank()){
+                ubigeo_id="0";
+            }
+            if(codigomoneda==null||codigomoneda==""||codigomoneda.isEmpty()||codigomoneda.isBlank()){
+                codigomoneda="0";
+            }
 
             String Fragment="OrdenVentaCabeceraView";
             String accion="detalle";
@@ -1276,11 +1280,20 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-cliente_terminopago_id: "+cliente_terminopago_id);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-codigocliente: "+codigocliente);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-Objeto: "+Objeto);
+
+            DocumentHeader documentHeader=new DocumentHeader();
+            documentHeader.setCardCode(codigocliente);
+            documentHeader.setDiscountCash(cantidaddescuento);
+            documentHeader.setDocCurrency(codigomoneda);
+            documentHeader.setDiscountPercent_BL("0");
+            documentHeader.setUbigeoCode(ubigeo_id);
+            documentHeader.setPaymentGroupCode(cliente_terminopago_id);
+
             String [] arrayObject={codigocliente,Objeto};
 
             dialog.dismiss();
-            mListener.onFragmentInteraction(compuesto,arrayObject);
-
+            //mListener.onFragmentInteraction(compuesto,arrayObject);
+            mListener.onFragmentInteraction(compuesto,documentHeader);
             btn_detalle_orden_venta.setEnabled(true);
             btn_detalle_orden_venta.setClickable(true);
         });

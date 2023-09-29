@@ -15,8 +15,8 @@ import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
-import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.CustomerComplaintFormsSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
@@ -30,10 +30,11 @@ import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
-import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.DocumentLine;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
@@ -478,9 +479,12 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_dispatch_date(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_route(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_Flete()
-
-
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_Flete(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_CompleteOV(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_TipTransGrat(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_discount_percent(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_discount_percent_reason(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_MOTAPLDESC()
             );
         }
 
@@ -786,6 +790,10 @@ public class FormulasController {
         documentHeader.setBrand(fabricante);
         documentHeader.setOSVersion(AndroidVersion);
         documentHeader.setModel(modelo);
+        documentHeader.setU_VIS_DiscountPercent(ovCabecera.getU_VIS_DiscountPercent());
+        documentHeader.setU_VIS_ReasonDiscountPercent(ovCabecera.getU_VIS_ReasonDiscountPercent());
+        documentHeader.setU_VIST_SUCUSU(SesionEntity.U_VIST_SUCUSU);
+        documentHeader.setU_VIS_MOTAPLDESC(ovCabecera.getU_VIS_MOTAPLDESC());
 
         ///////////////////////////FLAG PARA ENVIAR LA OV POR EL FLUJO DE  APROBACIÓN O NO//////
         ///ALTO RIESGO ASUMIDO/////////
@@ -1125,7 +1133,7 @@ public class FormulasController {
                 listaOrdenVentaDetalle.orden_detalle_producto_id = ListaSQlite.get(i).getProducto_id();
                 listaOrdenVentaDetalle.orden_detalle_producto = ListaSQlite.get(i).getProducto();
                 listaOrdenVentaDetalle.orden_detalle_umd = ListaSQlite.get(i).getUmd();
-                listaOrdenVentaDetalle.orden_detalle_stock = "";
+                listaOrdenVentaDetalle.orden_detalle_stock_almacen = "";
                 listaOrdenVentaDetalle.orden_detalle_cantidad = ListaSQlite.get(i).getCantidad();
                 listaOrdenVentaDetalle.orden_detalle_precio_unitario = ListaSQlite.get(i).getPreciounitario();
                 listaOrdenVentaDetalle.orden_detalle_montosubtotal = ListaSQlite.get(i).getMontosubtotal();
@@ -1204,6 +1212,11 @@ public class FormulasController {
                         ,listaClienteCabeceraEntities.get(i).getLatitud()
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
                         ,listaClienteCabeceraEntities.get(i).getAddresscode()
+                        , listaClienteCabeceraEntities.get(i).getStatuscount()
+                        , listaClienteCabeceraEntities.get(i).getAmountQuotation()
+                        , listaClienteCabeceraEntities.get(i).getChk_quotation()
+                        , listaClienteCabeceraEntities.get(i).getTypeVisit()
+                        , listaClienteCabeceraEntities.get(i).getCustomerwhitelist()
                 );
             }
 
@@ -1480,7 +1493,7 @@ public class FormulasController {
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto_id=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto_id();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_producto=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_producto();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_umd=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_umd();
-                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_stock_almacen=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_stock();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_cantidad=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_cantidad();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_precio_unitario=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_precio_unitario();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_montosubtotal=listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_lista_orden_detalle_promocion().get(b).getOrden_detalle_montosubtotal();
@@ -2184,7 +2197,7 @@ public class FormulasController {
             ObjListaProductosEntity.orden_detalle_producto_id = producto_id;
             ObjListaProductosEntity.orden_detalle_producto = producto;
             ObjListaProductosEntity.orden_detalle_umd = umd;
-            ObjListaProductosEntity.orden_detalle_stock = stock;
+            ObjListaProductosEntity.orden_detalle_stock_almacen = stock;
             ObjListaProductosEntity.orden_detalle_precio_unitario = preciobase;
             ObjListaProductosEntity.orden_detalle_gal = "0";
             ObjListaProductosEntity.orden_detalle_monto_igv = "0";
@@ -2211,5 +2224,42 @@ public class FormulasController {
         return listSalesOrder;
     }
 
+    public String getPriceIncrement(String PrecioUnitario, String Incremento) {
+
+        //Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+        //Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+
+        Incremento = (Incremento.equals("")) ? "0" : Incremento;
+
+        BigDecimal preUnit = new BigDecimal(PrecioUnitario).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal incremento = new BigDecimal(Incremento).divide(new BigDecimal("100")).add(new BigDecimal("1"));
+
+        BigDecimal product = preUnit.multiply(incremento);
+        return product.toString();
+    }
+
+    public void AddForms(List<CustomerComplaintSectionEntity> lead) {
+        try {
+            SimpleDateFormat dateFormathora = new SimpleDateFormat("HHmmss", Locale.getDefault());
+            SimpleDateFormat FormatFecha = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+            Date date = new Date();
+            CustomerComplaintFormsSQLiteDao customerComplaintFormsSQLiteDao = new CustomerComplaintFormsSQLiteDao(Context);
+            ArrayList<CustomerComplaintFormsEntity> ListCustomerComplaintForms = new ArrayList<>();
+            CustomerComplaintFormsEntity customerComplaintFormsEntity = new CustomerComplaintFormsEntity();
+            customerComplaintFormsEntity.forms = "Reclamo de Cliente";
+            customerComplaintFormsEntity.forms_id = "0";
+            customerComplaintFormsEntity.forms_date = FormatFecha.format(date);
+            customerComplaintFormsEntity.time = dateFormathora.format(date);
+            customerComplaintFormsEntity.salesrepcode = SesionEntity.fuerzatrabajo_id;
+            customerComplaintFormsEntity.user_id = SesionEntity.usuario_id;
+            customerComplaintFormsEntity.setListCustomerComplaintSection(lead);
+            ListCustomerComplaintForms.add(customerComplaintFormsEntity);
+
+            customerComplaintFormsSQLiteDao.addCustomerComplaintForms(ListCustomerComplaintForms);
+
+        } catch (Exception e) {
+            Log.e("REOS", "FormulasController.AddForms.error : " + e.toString());
+        }
+    }
 
 }

@@ -122,7 +122,7 @@ public class LoginView extends AppCompatActivity {
         String env = BuildConfig.BASE_ENVIRONMENT.equals("/api") ? "Producción" : "Test";
         version = Utilitario.getVersion(getApplication());
 
-        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion());
+        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion()+"_");
 
         // locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         loginRepository = new ViewModelProvider(this).get(LoginRepository.class);
@@ -532,6 +532,11 @@ public class LoginView extends AppCompatActivity {
                     btnlogin.setText(getResources().getString(R.string.user_inactive));
                     btnlogin.setClickable(false);
                 }
+                /*SharedPreferences.Editor editor = statusImei.edit();
+                editor.putString("country", userEntity.getCountry());
+                editor.putString("language", userEntity.getLenguage());
+                editor.apply();
+                verificationVersion();*/
             }
         } else {
             Toast.makeText(this, this.getResources().getString(R.string.unauthorized_equipment), Toast.LENGTH_SHORT).show();

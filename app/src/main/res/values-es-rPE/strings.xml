@@ -165,11 +165,19 @@
     <string name="promotions_vigents">Promociones Vigentes</string>
     <string name="guion">-</string>
     <string name="salesorder_promotional_mesh">Orden Venta \n (Malla Promocional)</string>
-    <string name="quotation_exception_promotional_mesh">Cotizacion \n(Propuesta de Venta)\n(Excepción Malla)</string>
+    <string name="quotation_exception_promotional_mesh">(Propuesta de Venta)\n(Excepción Malla)</string>
     <string name="delete">Eliminar</string>
-    <string name="update">Editar</string>
+    <string name="update">Actualizar</string>
     <string name="worth">Valor</string>
     <string name="update_product">Modificar\nProducto</string>
     <string name="exception_request">Solicitud Excepción</string>
     <string name="query_sales">Consulta Orden Venta/Oferta Ventas</string>
+    <string name="price_list_head">Lista Precio Cabecera</string>
+    <string name="edit">Editar</string>
+    <string name="busines_layer">Reglas de Negocio</string>
+    <string name="objects">Objetos</string>
+    <string name="percent_discount">% Descuento</string>
+    <string name="busines_layer_sales_detail">Reglas de Negocio Venta Detalle</string>
+    <string name="quotation">Cotización</string>
+
 </resources>

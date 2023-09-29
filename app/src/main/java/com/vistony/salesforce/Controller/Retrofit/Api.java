@@ -4,16 +4,16 @@ import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CatalogoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitaEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.AgenciaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.BusinessLayerEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.BusinessLayerSalesDetailEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ComisionesEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.CustomerComplaintFormsEntityResponse;
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.CustomerComplaintSectionEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DepositList;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.DetailDispatchSheetEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursCEntityResponse;
@@ -35,10 +35,13 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoOrdenVentaEntit
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.KardexPagoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.LeadAddressEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPrecioDetalleEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPrecioDetalleWarehouseEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPromocionEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.LoginEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.MotivoVisitaEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.ObjectEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PriceListEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.PriceListHeadEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PromocionCabeceraEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PromocionDetalleEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuotasPerCustomerDetailEntityResponse;
@@ -56,7 +59,8 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.TerminoPagoEntityRespons
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.TypeDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.UbigeoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.WareHousesEntityResponse;
-import com.vistony.salesforce.kotlin.data.ValidationAccountClientModelResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.WarehouseEntityResponse;
+import com.vistony.salesforce.kotlin.Model.ValidationAccountClientModelResponse;
 
 import java.util.List;
 
@@ -344,6 +348,25 @@ public interface Api {
             @Query("SalesOrderID") String SalesOrderID,
             @Query("slpCode") String slpCode
     );
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/PriceList/Header")
+    Call<PriceListHeadEntityResponse> getPriceListHead(@Query("imei") String imei);
+
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/SalesOrder/BusinessLayer")
+    Call<BusinessLayerEntityResponse> getBusinessLayer(@Query("imei") String imei);
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/SalesOrder/Object")
+    Call<ObjectEntityResponse> getObject(@Query("imei") String imei);
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/SalesOrder/BusinessLayerDetail")
+    Call<BusinessLayerSalesDetailEntityResponse> getBusinessLayerSalesDetail(@Query("imei") String imei);
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/PriceList/Warehouse")
+    Call<WarehouseEntityResponse> getWarehouse(@Query("imei") String imei);
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/PriceList/PriceListWarehouse")
+    Call<ListaPrecioDetalleWarehouseEntityResponse> getPriceListWarehouse(@Query("imei") String imei, @Query("whsCode") String warehouse, @Query("pl1") String PriceListCash, @Query("pl2") String PriceListCredit);
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);
     //@GET

@@ -17,7 +17,6 @@ import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
 import com.vistony.salesforce.Entity.Retrofit.JSON.CollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaItemEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.SignatureEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SignatureREntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.HistoricoCobranzaEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SignatureEntityResponse;

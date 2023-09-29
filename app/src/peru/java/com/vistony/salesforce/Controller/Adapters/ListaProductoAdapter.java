@@ -217,6 +217,9 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         listaProductoEntity.setGal(lead.getGal());
         listaProductoEntity.setPorcentaje_dsct(lead.getPorcentaje_dsct());
         listaProductoEntity.setPorcentaje_descuento_max(lead.getPorcentaje_descuento_max());
+        listaProductoEntity.setListnum(lead.getListnum());
+        Log.e("REOS", "ListaProductoAdapter-sendArrayProduc-lead.getListnum()" + lead.getListnum());
+        listaProductoEntity.setUnits(lead.getUnits());
         if(ProductoView.type.equals("PromocionDetalle"))
         {
             ProductoView.sendPromotionDetail(listaProductoEntity);

@@ -83,7 +83,11 @@ public class ListaOrdenVentaDetalleDao {
                         Lista.get(i).getOrden_detalle_oil_tax(),
                         Lista.get(i).getOrden_detalle_liter(),
                         Lista.get(i).getOrden_detalle_SIGAUS(),
-                        Lista.get(i).getOrden_detalle_currency()
+                        Lista.get(i).getOrden_detalle_currency(),
+                        Lista.get(i).getOrden_detalle_listnum(),
+                        Lista.get(i).getOrden_detalle_price_listprice(),
+                        Lista.get(i).getOrden_detalle_percent_discount_business_layer(),
+                        Lista.get(i).getOrden_detalle_units()
                 ));
             }
         }catch (Exception e)

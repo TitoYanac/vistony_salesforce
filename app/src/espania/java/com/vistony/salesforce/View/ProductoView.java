@@ -19,12 +19,11 @@ import android.widget.Toast;
 import com.vistony.salesforce.Controller.Adapters.ListaProductoAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaProductoDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
-import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.Sesion.Vendedor;
-
 import java.util.ArrayList;
+import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 
 
 public class ProductoView extends Fragment  implements SearchView.OnQueryTextListener {
@@ -95,7 +94,9 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
                 vendedor.getCliente().getPymntGroup(),
                 vendedor.getCliente().getChkpricelist(),
                 vendedor.getCliente().getPriceList_id(),
-                vendedor.getCliente().getPriceList()
+                vendedor.getCliente().getPriceList(),
+                vendedor.getCliente().getUbigeo_ID(),
+                vendedor.getCliente().getCurrency_ID()
         );
         return v;
     }
@@ -105,14 +106,18 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
             String terminoPago,
             String chkpricelist,
             String pricelist_id,
-            String pricelist)
+            String pricelist,
+            String ubigeo_id,
+            String currency_id
+
+    )
     {
         Log.e("REOS","ProductoView.cargarProductosSqlite.codigoCliente: "+codigoCliente);
         Log.e("REOS","ProductoView.cargarProductosSqlite.terminoPago:"+terminoPago);
+        Log.e("REOS","ProductoView.cargarProductosSqlite.currency_id:"+currency_id);
 
-
-            ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(codigoCliente,terminoPago);
-
+            //ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(codigoCliente,terminoPago);
+        ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(codigoCliente,terminoPago,ubigeo_id,getContext(),currency_id);
         if(ListaProductoEntity==null || ListaProductoEntity.size()<0){
             Toast.makeText(getContext(),"Actualiza tus parametros, no hay productos disponibles", Toast.LENGTH_LONG).show();
             getActivity().getSupportFragmentManager().popBackStack();

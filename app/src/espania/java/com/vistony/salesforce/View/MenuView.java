@@ -284,7 +284,7 @@ public class MenuView extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-        bxlPrinter = new BixolonPrinterController(this);
+        bxlPrinter = new BixolonPrinterController(this,this);
         tv_fuerzatrabajo_id_navheader=(TextView)
                 navigationView.getHeaderView(0).findViewById(R.id.tv_fuerzatrabajo_id_navheader);
         //findViewById( R.id.tv_fuerzatrabajo_id_navheader);
@@ -1295,7 +1295,8 @@ public class MenuView extends AppCompatActivity
                 case "listadopromocion":
                     OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
                     ft.hide(OrdenVentaDetalleFragment);
-                    ft.add(R.id.content_menu_view, ListadoPromocionView.newInstance(Lista),tag2);
+                    ft.add(R.id.content_menu_view, ListadoPromocionView.newInstance(Lista,getApplicationContext()),tag2);
+                    //ft.add(R.id.content_menu_view, ListadoPromocionView.newInstance(Lista,tag2);
                     //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                     ft.addToBackStack("po1p");
                     ft.commit();
@@ -2349,6 +2350,7 @@ public class MenuView extends AppCompatActivity
         onNavigationItemSelected(navigationView.getMenu().getItem(0).setChecked(true));
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -2364,7 +2366,7 @@ public class MenuView extends AppCompatActivity
                 }
                 break;
         }
-    }
+    }*/
 
     private BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
         @Override

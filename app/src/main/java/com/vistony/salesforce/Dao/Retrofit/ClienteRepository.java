@@ -17,8 +17,6 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.SeguridadEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ClienteEntityResponse;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
-import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.BuscarClienteView;
 
 import java.util.ArrayList;

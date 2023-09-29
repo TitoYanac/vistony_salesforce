@@ -49,7 +49,7 @@
     <string name="EnablePrint">Habilitar Impresora</string>
     <string name="LineUsed">Linea Utilizada</string>
     <string name="LineCredit">Línea de Crédito</string>
-    <string name="quotation">Oferta de ventas</string>
+    <string name="quotation">Cotización</string>
     <string name="lbl_orderhed_payterms">TÉRMINO DE PAGO</string>
     <string name="lbl_code">Código</string>
     <string name="lbl_gallon">Gallon</string>
@@ -574,15 +574,21 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="sales">Venta</string>
     <string name="traceability_sales">Trazabilidad de Venta</string>
     <string name="salesorder_promotional_mesh">Orden Venta \n (Malla Promocional)</string>
-    <string name="quotation_exception_promotional_mesh">Cotizacion \n(Propuesta de Venta)\n(Excepción Malla)</string>
+    <string name="quotation_exception_promotional_mesh">(Propuesta de Venta)\n(Excepción Malla)</string>
     <string name="promotions_vigents">Promociones Vigentes</string>
     <string name="Quotation">Oferta de Ventas</string>
     <string name="guion">-</string>
     <string name="delete">Eliminar</string>
-    <string name="update">Editar</string>
+    <string name="update">Actualizar</string>
     <string name="worth">Valor</string>
     <string name="update_product">Editar\nProducto</string>
     <string name="additionaldiscount">Descuento\nAdicional?</string>
     <string name="exception_request">Solicitud Excepción</string>
     <string name="query_sales">Consulta Orden Venta/Oferta Ventas</string>
+    <string name="price_list_head">Lista Precio Cabecera</string>
+    <string name="edit">Editar</string>
+    <string name="busines_layer">Reglas de Negocio</string>
+    <string name="objects">Objetos</string>
+    <string name="percent_discount">% Descuento</string>
+    <string name="busines_layer_sales_detail">Reglas de Negocio Venta Detalle</string>
 </resources>

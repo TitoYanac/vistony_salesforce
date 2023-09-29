@@ -6,20 +6,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 //import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.vistony.salesforce.BuildConfig;
-import com.vistony.salesforce.Dao.Retrofit.LoginRepository;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

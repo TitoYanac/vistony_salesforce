@@ -58,6 +58,39 @@ public class ListaPrecioEntity {
     @SerializedName("MonedaAdicionalCredito")
     private String MonedaAdicionalCredito;
 
+    @SerializedName("CodePriceListCash")
+    private String CodePriceListCash;
+
+    @SerializedName("CodePriceListCredit")
+    private String CodePriceListCredit;
+
+    @SerializedName("CodAlmacen")
+    private String CodAlmacen;
+
+    public String getCodAlmacen() {
+        return CodAlmacen;
+    }
+
+    public void setCodAlmacen(String codAlmacen) {
+        CodAlmacen = codAlmacen;
+    }
+
+    public String getCodePriceListCash() {
+        return CodePriceListCash;
+    }
+
+    public void setCodePriceListCash(String codePriceListCash) {
+        CodePriceListCash = codePriceListCash;
+    }
+
+    public String getCodePriceListCredit() {
+        return CodePriceListCredit;
+    }
+
+    public void setCodePriceListCredit(String codePriceListCredit) {
+        CodePriceListCredit = codePriceListCredit;
+    }
+
     public String getMonedaAdicional() {
         return MonedaAdicional;
     }

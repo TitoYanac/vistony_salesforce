@@ -49,6 +49,7 @@ public class Convert {
     }
 
     public static String currencyForView(String amount){
+        amount=amount.replace(" ","");
         String resultado="";
         if(amount==null)
         {
@@ -467,4 +468,35 @@ public class Convert {
         return amountRedonded.toString();
     }
 
+    public static boolean  getStatusEditPrice(String val_margin,String val_dinamic){
+
+        boolean status=false;
+        val_margin=val_margin.replace(" ","");
+        val_dinamic=val_dinamic.replace(" ","");
+        BigDecimal val_margin_=new BigDecimal(val_margin);
+        BigDecimal val_dinamic_=new BigDecimal(val_dinamic);
+        int comparisonResult = val_dinamic_.compareTo(val_margin_);
+        if (comparisonResult < 0) {
+            System.out.println("price_edit_ es menor que price_listprice_");
+            status=false;
+        } else if (comparisonResult > 0) {
+            status=true;
+            System.out.println("price_listprice_ es menor que price_edit_");
+        } else {
+            status=true;
+            System.out.println("Ambos valores son iguales");
+        }
+        return status;
+    }
+
+    public static double getPercentEditPrice(String price_listprice,String price_edit){
+        price_listprice=price_listprice.replace(" ","");
+        price_edit=price_edit.replace(" ","");
+        BigDecimal price_listprice_=new BigDecimal(price_listprice);
+        BigDecimal price_edit_=new BigDecimal(price_edit);
+        BigDecimal absoluteDifference = price_listprice_.subtract(price_edit_).abs();
+        double percentageDifference = (absoluteDifference.doubleValue() / price_listprice_.doubleValue()) * 100.0;
+
+        return percentageDifference;
+    }
 }

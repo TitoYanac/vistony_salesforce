@@ -40,7 +40,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.compose.runtime.Composer;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -75,9 +74,11 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.kotlin.compose.ComplaintScreen;
-import com.vistony.salesforce.kotlin.compose.DispatchSheetMapScreen;
-import com.vistony.salesforce.kotlin.compose.ValidationAccountClient;
+import com.vistony.salesforce.kotlin.View.Pages.DepositScreen;
+import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetMapScreen;
+import com.vistony.salesforce.kotlin.View.Pages.NotificationScreen;
+import com.vistony.salesforce.kotlin.View.Pages.ValidationAccountClient;
+
 
 import java.io.Closeable;
 import java.io.File;
@@ -152,8 +153,8 @@ public class MenuView extends AppCompatActivity
         ValidationAccountClient.OnFragmentInteractionListener,
         DispatchSheetMapScreen.OnFragmentInteractionListener,
         CustomerComplaintView.OnFragmentInteractionListener,
-        HistoricPromotionView.OnFragmentInteractionListener
-
+        HistoricPromotionView.OnFragmentInteractionListener,
+        DepositScreen.OnFragmentInteractionListener
 
 {
     CobranzaDetalleSQLiteDao cobranzaDetalleSQLiteDao;
@@ -735,6 +736,8 @@ public class MenuView extends AppCompatActivity
                 //contentFragment=new CobranzaCabeceraView();
                 //fragmentSeleccionado=true;
                 CobranzaCabeceraFragment = new CobranzaCabeceraView();
+                //CobranzaCabeceraFragment = new DepositScreen();
+                //CobranzaCabeceraFragment = new NotificationScreen();
                 fragment = "CobranzaCabeceraView";
                 accion = "inicio";
                 compuesto = fragment + "-" + accion;
@@ -2611,6 +2614,7 @@ public class MenuView extends AppCompatActivity
 
     @Override
     public void onRestart() {
+        Log.e("REOS","MenuView-onRestart");
         Log.e("REOS","MenuView-onRestart");
         super.onRestart();
         Induvis.refreshGlobalVariables(this);

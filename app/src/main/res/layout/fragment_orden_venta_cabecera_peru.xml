@@ -9,10 +9,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -197,8 +193,33 @@
                         android:layout_height="50dp"
                         android:background="@color/Rojo_Vistony"
                         android:src="@drawable/ic_search_white_24dp" />
-
-
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <TextView
+                        android:id="@+id/lbl_warehouse"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:enabled="true"
+                        android:hint=""
+                        android:text="@string/warehouse"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textSize="15dp" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                    <Spinner
+                        android:id="@+id/spn_warehouse"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="4"
+                        />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
@@ -231,6 +252,77 @@
                         android:layout_weight="4"
                         />
                 </TableRow>
+            </TableLayout>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/tl_tittle_discount_percent"
+                >
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <TextView
+                    android:id="@+id/lbl_tittle_discount_percent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:enabled="true"
+                    android:hint=""
+                    android:text="DESCUENTO POR PAGO ADELANTADO"
+                    android:textStyle="bold"
+                    android:textSize="15dp" />
+            </TableRow>
+            </TableLayout>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/tl_discount_percent"
+                >
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/tr_descount_bl"
+                    >
+                    <TextView
+                        android:id="@+id/tv_discount_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="0"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textSize="15dp"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:textColor="@color/Black"
+                        />
+                    <TextView
+                        android:id="@+id/lbl_discount_percent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="fill"
+                        android:text="@string/percent_discount"
+                        android:textAllCaps="true"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/imb_descount_bl"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@color/Rojo_Vistony"
+                        android:src="@drawable/ic_baseline_edit_24_white" />
+                </TableRow>
+            </TableLayout>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                >
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -347,7 +439,9 @@
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:id="@+id/tr_lbl_dispatch_date"
+                    >
 
                     <TextView
                         android:id="@+id/lbl_dispatch_date"
@@ -364,7 +458,9 @@
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:id="@+id/tr_tv_dispatch_date"
+                    >
 
                     <TextView
                         android:id="@+id/tv_dispatch_date"

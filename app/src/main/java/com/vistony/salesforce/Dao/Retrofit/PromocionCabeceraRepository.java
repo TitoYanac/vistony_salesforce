@@ -3,26 +3,16 @@ package com.vistony.salesforce.Dao.Retrofit;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
-import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
 import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.PromocionCabeceraEntity;
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPromocionEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PromocionCabeceraEntityResponse;
-import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;

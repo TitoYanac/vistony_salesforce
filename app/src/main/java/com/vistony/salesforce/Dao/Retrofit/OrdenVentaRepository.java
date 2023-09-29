@@ -3,7 +3,6 @@ package com.vistony.salesforce.Dao.Retrofit;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -12,7 +11,6 @@ import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
-import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
 
@@ -37,7 +35,11 @@ public class OrdenVentaRepository extends ViewModel {
                 if(data==null && data.size()==0){
                     temp.setValue("No hay ordenes de venta pendientes de enviar");
                 }else{
-                    temp.setValue(data.get(0));
+                    if(data.size()>0)
+                    {
+                        temp.setValue(data.get(0));
+                    }
+
                 }
             }
             @Override

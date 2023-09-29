@@ -133,10 +133,16 @@ public class ListaClienteDetalleAdapter extends ArrayAdapter<ListaClienteDetalle
         holder.tv_moneda_cliente_detalle.setText(lead.getMoneda());
         holder.tv_terminopago_cliente_detalle.setText(lead.getPymntgroup());
 
-        if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+        if(BuildConfig.FLAVOR.equals("peru"))
         {
+            if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
+            {
+                holder.tl_additionaldiscount.setVisibility(View.GONE);
+            }
+        }else {
             holder.tl_additionaldiscount.setVisibility(View.GONE);
         }
+
 
         if(lead.getAdditionaldiscount()==null)
         {

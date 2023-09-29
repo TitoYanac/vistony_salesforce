@@ -37,6 +37,7 @@ import com.vistony.salesforce.Dao.Adapters.ListaOrdenVentaDetalleDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
+import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
 import com.vistony.salesforce.ListenerBackPress;
@@ -70,7 +71,7 @@ public class OrdenVentaDetalleView extends Fragment {
     public static ArrayList<ListaPromocionCabeceraEntity> listaPromocionCabecera=new ArrayList<>();
     static MenuItem guardar_orden_venta,vincular_orden_venta_cabecera;
     static Menu menu_variable;
-    static String listaprecio_id,descuentocontado,terminopago_id,ubigeo_id="0",currency_id;
+    static String listaprecio_id,descuentocontado,terminopago_id,ubigeo_id="0",currency_id,discount_percent_bl;
     static Context context;
     private ProgressDialog pd;
     TableRow tr_summary_flete;
@@ -91,7 +92,7 @@ public class OrdenVentaDetalleView extends Fragment {
     public static OrdenVentaDetalleView newInstance(Object objeto){
 
 
-        String [] arrayObject= (String[]) objeto;
+        /*String [] arrayObject= (String[]) objeto;
 
         for(int i=0;i<arrayObject.length;i++){
             Log.e("JEPICAME","=>"+arrayObject[i]);
@@ -106,15 +107,25 @@ public class OrdenVentaDetalleView extends Fragment {
             descuentocontado=compuesto[0];
             terminopago_id=compuesto[1];
             currency_id=compuesto[2];
+            discount_percent_bl=compuesto[3];
+            ubigeo_id=compuesto[4];
 
         }else{
             listaprecio_id=arrayObject[0]; //codigocliente
             descuentocontado="false";
-        }
+        }*/
+        DocumentHeader documentHeader= (DocumentHeader) objeto;
+        listaprecio_id=documentHeader.getCardCode(); //codigocliente
+        descuentocontado=documentHeader.getDiscountCash();
+        terminopago_id=documentHeader.getPaymentGroupCode();
+        currency_id=documentHeader.getDocCurrency();
+        discount_percent_bl= documentHeader.getDiscountPercent_BL();
+        ubigeo_id=documentHeader.getUbigeoCode();
         Log.e("REOS","OrdenVentaDetalleView-newInstance-ubigeo_id: "+ubigeo_id);
         Log.e("REOS","OrdenVentaDetalleView-newInstance-listaprecio_id: "+listaprecio_id);
         Log.e("REOS","OrdenVentaDetalleView-newInstance-descuentocontado: "+descuentocontado);
         Log.e("REOS","OrdenVentaDetalleView-newInstance-terminopago_id: "+terminopago_id);
+        Log.e("REOS","OrdenVentaDetalleView-newInstance-discount_percent_bl: "+discount_percent_bl);
 
         ListenerBackPress.setCurrentFragment("OrdenVentaDetalleView");
         OrdenVentaDetalleView ordenVentaDetalleView = new OrdenVentaDetalleView();
@@ -180,7 +191,16 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_cardcode= listaprecio_id;
             ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo=productoAgregado.getPorcentaje_descuento_max();
             ObjListaProductosEntity.orden_detalle_currency=currency_id;
-        Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-currency_id:"+currency_id);
+            ObjListaProductosEntity.orden_detalle_listnum =productoAgregado.getListnum();
+            ObjListaProductosEntity.orden_detalle_price_listprice =productoAgregado.getPreciobase();
+            ObjListaProductosEntity.orden_detalle_percent_discount_business_layer=discount_percent_bl;
+            ObjListaProductosEntity.orden_detalle_units=productoAgregado.getUnits();
+
+
+            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-productoAgregado.getUnits(): "+productoAgregado.getUnits());
+            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-discount_percent_bl: "+discount_percent_bl);
+            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-productoAgregado.getListnum():"+productoAgregado.getListnum());
+            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-currency_id:"+currency_id);
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-descuentocontado:"+String.valueOf(descuentocontado));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-terminopago_id:"+String.valueOf(terminopago_id));
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-terminopago_id:"+String.valueOf(descuentocontadocabecera));

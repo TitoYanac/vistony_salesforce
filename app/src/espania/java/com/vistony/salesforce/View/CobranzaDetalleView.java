@@ -1,7 +1,5 @@
 package com.vistony.salesforce.View;
 
-import static com.vistony.salesforce.Controller.Utilitario.CifradoController.md5;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,7 +9,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -67,14 +64,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.JsonSyntaxException;
 import com.hitomi.cmlibrary.CircleMenu;
 import com.hitomi.cmlibrary.OnMenuSelectedListener;
 import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.CobranzaDetalleDialogController;
-import com.vistony.salesforce.Controller.Retrofit.Api;
-import com.vistony.salesforce.Controller.Retrofit.Config;
 import com.vistony.salesforce.Controller.Utilitario.Canvas;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoCobranzaPDF;
 import com.vistony.salesforce.Controller.Adapters.ListaCobranzaDetalleAdapter;
@@ -82,7 +76,6 @@ import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
-import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
 import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Dao.SQLite.CobranzaCabeceraSQLiteDao;
@@ -93,7 +86,6 @@ import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.DocumentoSQLite;
 import com.vistony.salesforce.Dao.Adapters.ListaCobranzaDetalleDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.VersionEntity;
 import com.vistony.salesforce.Entity.SQLite.BancoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -107,16 +99,10 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 
-import org.json.JSONException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -126,11 +112,6 @@ import java.util.Locale;
 import java.util.Random;
 
 import io.sentry.Sentry;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CobranzaDetalleView extends Fragment {
     //ListaClienteDetalleAdapter listaClienteDetalleAdapter;

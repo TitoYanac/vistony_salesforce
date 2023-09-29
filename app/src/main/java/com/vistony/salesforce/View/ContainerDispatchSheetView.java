@@ -2,10 +2,8 @@ package com.vistony.salesforce.View;
 
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -23,12 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.SearchView;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.material.tabs.TabLayout;
 import com.vistony.salesforce.Controller.Adapters.PageAdapter;
 import com.vistony.salesforce.Dao.Retrofit.ClienteRepository;
@@ -41,18 +35,12 @@ import com.vistony.salesforce.Entity.SQLite.HojaDespachoCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.kotlin.compose.DispatchSheetFailedScreen;
-import com.vistony.salesforce.kotlin.compose.DispatchSheetMapScreen;
-import com.vistony.salesforce.kotlin.compose.DispatchSheetMapScreenKt;
-import com.vistony.salesforce.kotlin.compose.DispatchSheetPendingScreen;
-import com.vistony.salesforce.kotlin.compose.theme.DispatchSheetSucessfulScreen;
+import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetFailedScreen;
+import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetPendingScreen;
+import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetSucessfulScreen;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.

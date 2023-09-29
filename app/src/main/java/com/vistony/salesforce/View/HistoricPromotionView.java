@@ -17,14 +17,10 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Adapters.ListHistoricPromotionAdapter;
-import com.vistony.salesforce.Controller.Adapters.ListaConsultaStockAdapter;
 import com.vistony.salesforce.Controller.Utilitario.HistoricPromotionPDF;
-import com.vistony.salesforce.Controller.Utilitario.Induvis;
-import com.vistony.salesforce.Controller.Utilitario.ResumenDiarioPDF;
 import com.vistony.salesforce.Dao.Adapters.ListaConsultaStockDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaConsultaStockEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;

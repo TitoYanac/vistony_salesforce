@@ -183,7 +183,7 @@
                 android:resource="@xml/provider_paths" />
         </provider>
         <service
-            android:name=".kotlin.utilities.ServiceNotificationApp"
+            android:name=".kotlin.Utilities.ServiceApp"
             android:enabled="true"
             android:exported="false"
             tools:ignore="MissingClass,WrongManifestParent"

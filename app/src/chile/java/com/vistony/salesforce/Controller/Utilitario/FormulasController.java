@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaUnidadWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
-import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.BusinessLayerSalesDetailDetailDao;
 import com.vistony.salesforce.Dao.SQLite.CustomerComplaintFormsSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPromocionSQLiteDao;
@@ -31,6 +31,7 @@ import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEnt
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.DocumentHeader;
 import com.vistony.salesforce.Entity.DocumentLine;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.BusinessLayerSalesDetailDetailEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.Entity.SQLite.CobranzaDetalleSQLiteEntity;
@@ -374,7 +375,11 @@ public class FormulasController {
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIT_VENMOS(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_Flete(),
                     listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_CompleteOV(),
-                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_TipTransGrat()
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_TipTransGrat(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_discount_percent(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_discount_percent_reason(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIS_MOTAPLDESC(),
+                    listaOrdenVentaCabeceraEntities.get(i).getOrden_cabecera_U_VIST_SUCUSU()
             );
         }
 
@@ -386,7 +391,7 @@ public class FormulasController {
             ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
             ArrayList<ListaPrecioDetalleSQLiteEntity> listaPrecioDetalleSQLiteEntities=new ArrayList<>();
 
-            listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id());
+            listaPrecioDetalleSQLiteEntities=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listaOrdenVentaDetalleEntity.get(j).getOrden_detalle_producto_id(), SesionEntity.TipoListaPrecio);
 
             for(int g=0;g<listaPrecioDetalleSQLiteEntities.size();g++){
                 producto=listaPrecioDetalleSQLiteEntities.get(g).getProducto();
@@ -728,11 +733,24 @@ public class FormulasController {
         for(int j=0;j<listaordenVentaDetalleSQLiteEntity.size();j++){
             String COGSAccountCode=SesionEntity.cogsacct,U_SYP_FECAT_07="",taxOnly="N",taxCode=SesionEntity.Impuesto_ID,U_VIST_CTAINGDCTO=SesionEntity.u_vist_ctaingdcto,montolineatotal="";
 
+            //Asignacion Dinamica de cuenta contable de promociones
+            ArrayList<BusinessLayerSalesDetailDetailEntity> listBusinessLayerSalesDetailDetailEntity=new ArrayList<>();
+            BusinessLayerSalesDetailDetailDao businessLayerSalesDetailDetailDao=new BusinessLayerSalesDetailDetailDao(context);
+            listBusinessLayerSalesDetailDetailEntity=businessLayerSalesDetailDetailDao.getBusinessLayerSalesDetailDetailPercent("1",listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
+            for(int g=0;g<listBusinessLayerSalesDetailDetailEntity.size();g++)
+            {
+                if(listBusinessLayerSalesDetailDetailEntity.get(g).getField().equals("COGSAccountCode"))
+                {
+                    COGSAccountCode=listBusinessLayerSalesDetailDetailEntity.get(g).getVariable();
+                }
+            }
+            /////////////////////////////////////////////////////////////
+
             //Casuistica Bonificacion
             if(Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())==100
             )
             {
-                COGSAccountCode="50-20-03-01-09";
+                //COGSAccountCode="50-20-03-01-09";
                 //U_SYP_FECAT_07="31";
                 //taxOnly="Y";
                 //taxCode="EXE_IGV";
@@ -744,7 +762,7 @@ public class FormulasController {
             else if(Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())>0&&
                     Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())<100)
             {
-                COGSAccountCode="50-10-01-01-01";
+                //COGSAccountCode="50-10-01-01-01";
                 //U_SYP_FECAT_07="10";
                 //taxOnly="N";
                 //taxCode="IGV";
@@ -767,7 +785,7 @@ public class FormulasController {
             else
             {
                 //U_SYP_FECAT_07="10";
-                COGSAccountCode="50-10-01-01-01";
+                //COGSAccountCode="50-10-01-01-01";
                 //taxOnly="N";
                 //taxCode="IGV";
                 //U_VIST_CTAINGDCTO="";
@@ -850,7 +868,7 @@ public class FormulasController {
         String producto="";
         ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(context);
         ArrayList<ListaPrecioDetalleSQLiteEntity> arraylistapreciodetalleentity=new ArrayList<>();
-        arraylistapreciodetalleentity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(producto_id);
+        arraylistapreciodetalleentity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(producto_id, SesionEntity.TipoListaPrecio);
         for(int i=0;i<arraylistapreciodetalleentity.size();i++)
         {
             producto=arraylistapreciodetalleentity.get(i).getProducto();
@@ -1125,6 +1143,10 @@ public class FormulasController {
                         ,listaClienteCabeceraEntities.get(i).getLongitud()
                         ,listaClienteCabeceraEntities.get(i).getAddresscode()
                         ,listaClienteCabeceraEntities.get(i).getStatuscount()
+                        ,listaClienteCabeceraEntities.get(i).getAmountQuotation()
+                        ,listaClienteCabeceraEntities.get(i).getChk_quotation()
+                        ,listaClienteCabeceraEntities.get(i).getTypeVisit()
+                        ,listaClienteCabeceraEntities.get(i).getCustomerwhitelist()
                 );
             }
 
@@ -1852,7 +1874,7 @@ public class FormulasController {
         boolean resultado=false;
         ArrayList<ListaPrecioDetalleSQLiteEntity> arrayListListaPrecioDetalleSQLiteEntity=new ArrayList<>();
         ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
-        arrayListListaPrecioDetalleSQLiteEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listapromocion_id);
+        arrayListListaPrecioDetalleSQLiteEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporID(listapromocion_id, SesionEntity.TipoListaPrecio);
 
         for(int i=0;i<arrayListListaPrecioDetalleSQLiteEntity.size();i++)
         {
@@ -1974,5 +1996,19 @@ public class FormulasController {
        // Log.e("REOS","FormulasController.getAmountRouteeffectiveness.resultado:" + resultado);
         //return String.valueOf(format.format(resultado));
         return repta.toString();
+    }
+
+    public String getPriceIncrement(String PrecioUnitario, String Incremento) {
+
+        //Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+        //Log.e("REOS","formulascontroller-ObtenerCalculoPrecioImpuesto-preciounitario-"+preciounitario);
+
+        Incremento = (Incremento.equals("")) ? "0" : Incremento;
+
+        BigDecimal preUnit = new BigDecimal(PrecioUnitario).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal incremento = new BigDecimal(Incremento).divide(new BigDecimal("100")).add(new BigDecimal("1"));
+
+        BigDecimal product = preUnit.multiply(incremento);
+        return product.toString();
     }
 }

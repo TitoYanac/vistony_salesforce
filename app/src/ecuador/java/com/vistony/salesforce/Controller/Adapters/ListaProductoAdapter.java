@@ -131,7 +131,11 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
                     listaProductoEntity.setPreciobase(lead.getPreciobase());
                     listaProductoEntity.setPrecioigv(lead.getPrecioigv()) ;
                     listaProductoEntity.setGal(lead.getGal());
+                    listaProductoEntity.setPorcentaje_dsct(lead.getPorcentaje_dsct());
                     listaProductoEntity.setPorcentaje_descuento_max(lead.getPorcentaje_descuento_max());
+                    listaProductoEntity.setOiltax(lead.getOiltax());
+                    listaProductoEntity.setLiter(lead.getLiter());
+                    listaProductoEntity.setSIGAUS(lead.getSIGAUS());
 
                     // arrayListaProductoEntity.add(listaProductoEntity);
 

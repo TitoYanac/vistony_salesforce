@@ -31,17 +31,9 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.vistony.salesforce.BuildConfig;
-import com.vistony.salesforce.Dao.SQLite.QuoteEffectivenessSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
-import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
-import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.QuoteEffectivenessEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.SummaryofeffectivenessEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.io.ByteArrayOutputStream;
@@ -56,10 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import harmony.java.awt.Color;
 

@@ -27,7 +27,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
-import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEntity;
@@ -957,9 +956,9 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                 lead.getOrden_detalle_producto_id(),
                 lead.getOrden_detalle_umd(),
                 lead.getOrden_detalle_cantidad(),
-                SesionEntity.contado
-                ,""
-                ,""
+                SesionEntity.contado,
+                lead.getOrden_detalle_terminopago_id(),
+                lead.getOrden_detalle_cardcode()
         );
 
         if (listaPromocionCabecera.isEmpty()){
@@ -971,9 +970,10 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     lead.getOrden_detalle_producto_id(),
                     lead.getOrden_detalle_umd(),
                     lead.getOrden_detalle_cantidad(),
-                    SesionEntity.contado
-                    ,""
-                    ,""
+                    SesionEntity.contado,
+                    lead.getOrden_detalle_terminopago_id(),
+                    lead.getOrden_detalle_cardcode(),
+                    lead.getOrden_detalle_currency()
             );
 
         }

@@ -56,6 +56,42 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String U_VIS_CompleteOV;
     public String U_VIS_TipTransGrat;
     public String status;
+    public String U_VIS_DiscountPercent;
+    public String U_VIS_ReasonDiscountPercent;
+    public String U_VIS_MOTAPLDESC;
+    public String U_VIST_SUCUSU;
+
+    public String getU_VIST_SUCUSU() {
+        return U_VIST_SUCUSU;
+    }
+
+    public void setU_VIST_SUCUSU(String u_VIST_SUCUSU) {
+        U_VIST_SUCUSU = u_VIST_SUCUSU;
+    }
+
+    public String getU_VIS_MOTAPLDESC() {
+        return U_VIS_MOTAPLDESC;
+    }
+
+    public void setU_VIS_MOTAPLDESC(String u_VIS_MOTAPLDESC) {
+        U_VIS_MOTAPLDESC = u_VIS_MOTAPLDESC;
+    }
+
+    public String getU_VIS_DiscountPercent() {
+        return U_VIS_DiscountPercent;
+    }
+
+    public void setU_VIS_DiscountPercent(String u_VIS_DiscountPercent) {
+        U_VIS_DiscountPercent = u_VIS_DiscountPercent;
+    }
+
+    public String getU_VIS_ReasonDiscountPercent() {
+        return U_VIS_ReasonDiscountPercent;
+    }
+
+    public void setU_VIS_ReasonDiscountPercent(String u_VIS_ReasonDiscountPercent) {
+        U_VIS_ReasonDiscountPercent = u_VIS_ReasonDiscountPercent;
+    }
 
     public String getStatus() {
         return status;

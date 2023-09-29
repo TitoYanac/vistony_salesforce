@@ -27,7 +27,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.lowagie.text.List;
 import com.vistony.salesforce.Controller.Adapters.ListSalesOrderDetailAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaOrdenVentaDetalleAdapter;
 import com.vistony.salesforce.Controller.Utilitario.Convert;

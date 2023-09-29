@@ -29,7 +29,6 @@ import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ClienteCabeceraView;
 import com.vistony.salesforce.View.DireccionClienteView;
 import com.vistony.salesforce.View.DispatchSheetView;
-import com.vistony.salesforce.kotlin.compose.DialogMain;
 //import com.vistony.salesforce.features.featureone.SomeScreenKt;
 
 import java.util.ArrayList;
@@ -186,10 +185,10 @@ public class ListDispatchSheetAdapter extends ArrayAdapter<ListaHojaDespachoEnti
                                                            //SomeScreenKt.DialogScreenOne(new SomeScreenViewModel());
                                                            Log.e("REOS", "ListDispatchSheetAdapter-holder.imv_visit_status-DialogMain().lead.getLatitude()"+lead.getLatitude());
                                                            Log.e("REOS", "ListDispatchSheetAdapter-holder.imv_visit_status-DialogMain().lead.getLongitude()"+lead.getLongitude());
-                                                           DialogMain dialogMain = new DialogMain();
+                                                           /*DialogMain dialogMain = new DialogMain();
                                                            dialogMain.vary(String.valueOf(latitude) ,String.valueOf(longitude),lead.getLatitude(),lead.getLongitude() );
                                                            fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
-                                                           dialogMain.show(fragmentManager,"");
+                                                           dialogMain.show(fragmentManager,"");*/
 
                                                           //new DialogMain().show();
                                                           //new DialogScreen().DefaultPreview1();

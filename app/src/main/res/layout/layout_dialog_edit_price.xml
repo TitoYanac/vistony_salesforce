@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentLeft="false"
+    android:layout_alignParentTop="false"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="409dp"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/custom_background_alert"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:background="@android:color/white"
+                android:clickable="false"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:maxLines="1"
+                android:minLines="1"
+                android:scrollbars="vertical"
+                android:text="@string/warning"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/white"
+                android:gravity="center_horizontal"
+                android:text="@string/warning"
+                android:textColor="#808080"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/white"
+                android:gravity="center_horizontal"
+                android:scrollbars="vertical"
+                android:text="@string/warning"
+                android:textColor="#000000"
+                android:textSize="14dp"
+                android:textStyle="bold"
+
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_background_alert"
+                android:orientation="horizontal"
+                android:paddingStart="25dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="25dp">
+
+                <TextView
+                    android:id="@+id/lbl_edit_price_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Precio lista"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/gray" />
+
+                <TextView
+                    android:id="@+id/tv_price_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/price"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_background_alert"
+                android:orientation="horizontal"
+                android:paddingStart="25dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="25dp">
+
+                <TextView
+                    android:id="@+id/lbl_edit_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Precio lista editable"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/gray" />
+
+                <EditText
+                    android:id="@+id/et_edit_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/borde_cuadrado_promocion_cabecera_cantidad"
+                    android:ems="9"
+                    android:gravity="right"
+                    android:hint="0"
+                    android:imeOptions="actionSend"
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"
+                    android:singleLine="true"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/Rojo_Vistony"
+                    android:textStyle="bold"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_background_alert"
+                android:orientation="horizontal"
+                android:paddingStart="25dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="25dp">
+
+                <TextView
+                    android:id="@+id/lbl_price_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Precio descuento"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/gray" />
+
+                <TextView
+                    android:id="@+id/tv_price_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/price"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_background_alert"
+                android:orientation="horizontal"
+                android:paddingStart="25dp"
+                android:paddingTop="15dp"
+                android:paddingEnd="25dp">
+
+                <TextView
+                    android:id="@+id/lbl_price_unit_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Precio unidad"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textColor="@color/gray" />
+
+                <TextView
+                    android:id="@+id/tv_price_unit_discount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/price"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="@android:color/white"
+                android:text=""
+                android:textColor="#D6001C"
+                android:textSize="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@android:color/white"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:weightSum="2">
+
+
+                <Button
+                    android:id="@+id/dialogButtonCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_border_button"
+                    android:text="@string/cancel"
+                    android:textColor="#0957C3" />
+
+                <Button
+                    android:id="@+id/dialogButtonOK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_border_button"
+                    android:text="@string/update"
+                    android:textColor="#0957C3" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/logo" />
+    </FrameLayout>
+
+
+</LinearLayout>

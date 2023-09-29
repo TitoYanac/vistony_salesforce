@@ -42,6 +42,42 @@ public class ListaOrdenVentaCabeceraEntity {
     public String orden_cabecera_U_VIS_Flete;
     public String orden_cabecera_U_VIS_CompleteOV;
     public String orden_cabecera_U_VIS_TipTransGrat;
+    public String orden_cabecera_discount_percent;
+    public String orden_cabecera_discount_percent_reason;
+    public String orden_cabecera_U_VIS_MOTAPLDESC;
+    public String orden_cabecera_U_VIST_SUCUSU;
+
+    public String getOrden_cabecera_U_VIST_SUCUSU() {
+        return orden_cabecera_U_VIST_SUCUSU;
+    }
+
+    public void setOrden_cabecera_U_VIST_SUCUSU(String orden_cabecera_U_VIST_SUCUSU) {
+        this.orden_cabecera_U_VIST_SUCUSU = orden_cabecera_U_VIST_SUCUSU;
+    }
+
+    public String getOrden_cabecera_U_VIS_MOTAPLDESC() {
+        return orden_cabecera_U_VIS_MOTAPLDESC;
+    }
+
+    public void setOrden_cabecera_U_VIS_MOTAPLDESC(String orden_cabecera_U_VIS_MOTAPLDESC) {
+        this.orden_cabecera_U_VIS_MOTAPLDESC = orden_cabecera_U_VIS_MOTAPLDESC;
+    }
+
+    public String getOrden_cabecera_discount_percent() {
+        return orden_cabecera_discount_percent;
+    }
+
+    public void setOrden_cabecera_discount_percent(String orden_cabecera_discount_percent) {
+        this.orden_cabecera_discount_percent = orden_cabecera_discount_percent;
+    }
+
+    public String getOrden_cabecera_discount_percent_reason() {
+        return orden_cabecera_discount_percent_reason;
+    }
+
+    public void setOrden_cabecera_discount_percent_reason(String orden_cabecera_discount_percent_reason) {
+        this.orden_cabecera_discount_percent_reason = orden_cabecera_discount_percent_reason;
+    }
 
     public String getOrden_cabecera_U_VIS_TipTransGrat() {
         return orden_cabecera_U_VIS_TipTransGrat;

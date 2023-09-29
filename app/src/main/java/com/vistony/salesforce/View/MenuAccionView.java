@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,39 +40,30 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
-import com.vistony.salesforce.Controller.Adapters.ListHistoricSalesOrderTraceabilityInvoiceAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListVisitUnClosedAdapter;
-import com.vistony.salesforce.Controller.Adapters.ListWareHousesAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaPendingCollectionAdapter;
 import com.vistony.salesforce.Controller.Adapters.StatusDispatchDialog;
 import com.vistony.salesforce.Controller.Adapters.VisitaDialogController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
-import com.vistony.salesforce.Dao.Adapters.ListWareHouseDao;
-import com.vistony.salesforce.Dao.Adapters.ListaPendingCollectionDao;
 import com.vistony.salesforce.Dao.Retrofit.KardexPagoRepository;
-import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.DetailDispatchSheetSQLite;
 import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
 import com.vistony.salesforce.Dao.SQLite.LeadSQLite;
-import com.vistony.salesforce.Dao.SQLite.ReasonDispatchSQLite;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.StatusDispatchSQLite;
-import com.vistony.salesforce.Dao.SQLite.TypeDispatchSQLite;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Dao.SQLite.VisitSectionSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPendingCollectionEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.VisitSectionEntity;
 import com.vistony.salesforce.Entity.SQLite.HojaDespachoDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
@@ -126,6 +116,8 @@ public class MenuAccionView extends Fragment {
     String fechainicio="",timeini="";
     private StatusDispatchRepository statusDispatchRepository;
     private ImageView imv_cobranza,imv_entrega;
+    UsuarioSQLiteEntity ObjUsuario;
+
     public MenuAccionView() {
         // Required empty public constructor
     }
@@ -198,6 +190,9 @@ public class MenuAccionView extends Fragment {
         super.onCreate(savedInstanceState);
 
         getLocation();
+        ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
         ////COMENTADO EL 26/08/2021
 
 
@@ -333,8 +328,6 @@ public class MenuAccionView extends Fragment {
         cv_pedido.setOnClickListener(v -> {
 
             switch (BuildConfig.FLAVOR){
-
-
                 case "paraguay":
                 case "perurofalab":
                 case "espania":
@@ -350,8 +343,20 @@ public class MenuAccionView extends Fragment {
                 case "bolivia":
                 case "chile":
                     //Aprobaciones
-                case "peru":
                     alertatipoventa(getContext()).show();
+                    break;
+                case "peru":
+                    if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+                    {
+                        alertatipoventa(getContext()).show();
+                    }else {
+                        String Fragment1="MenuAccionView";
+                        String accion1="pedido";
+                        String compuesto1=Fragment1+"-"+accion1;
+                        mListener.onFragmentInteraction(compuesto1,objetoMenuAccionView);
+                        SesionEntity.quotation="N";
+                    }
+
                     break;
             }
         });
@@ -407,8 +412,6 @@ public class MenuAccionView extends Fragment {
         });
         cv_lead.setOnClickListener(v -> {
                 String Fragment="MenuAccionView";
-
-                //String accion="leadUpdateClient";
                 String accion="leadUpdateClientCensus";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,objetoMenuAccionView);

@@ -2,8 +2,8 @@ package com.vistony.salesforce.View;
 
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 import static com.vistony.salesforce.Entity.SesionEntity.FLAG_BACKUP;
-import static com.vistony.salesforce.kotlin.utilities.NotificationKt.areNotificationsEnabled;
-import static com.vistony.salesforce.kotlin.utilities.NotificationKt.showNotificationDisabledDialog;
+import static com.vistony.salesforce.kotlin.Utilities.NotificationAppKt.areNotificationsEnabled;
+import static com.vistony.salesforce.kotlin.Utilities.NotificationAppKt.showNotificationDisabledDialog;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -42,11 +42,14 @@ import com.vistony.salesforce.Controller.Adapters.ListaParametrosAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Dao.Retrofit.BackupRepository;
+import com.vistony.salesforce.Dao.Retrofit.BusinessLayerRepository;
+import com.vistony.salesforce.Dao.Retrofit.BusinessLayerSalesDetailRepository;
 import com.vistony.salesforce.Dao.Retrofit.CobranzaRepository;
 import com.vistony.salesforce.Dao.Retrofit.EscColoursCRepository;
 import com.vistony.salesforce.Dao.Retrofit.HeaderDispatchSheetRepository;
 import com.vistony.salesforce.Dao.Retrofit.LeadClienteViewModel;
 import com.vistony.salesforce.Dao.Retrofit.MotivoVisitaWS;
+import com.vistony.salesforce.Dao.Retrofit.ObjectRepository;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.Retrofit.AgenciaWS;
 import com.vistony.salesforce.Dao.Retrofit.BancoRepository;
@@ -55,6 +58,7 @@ import com.vistony.salesforce.Dao.Retrofit.DepositoRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoCobranzaWS;
 import com.vistony.salesforce.Dao.Retrofit.ListaPrecioRepository;
 import com.vistony.salesforce.Dao.Retrofit.ListaPromocionWS;
+import com.vistony.salesforce.Dao.Retrofit.PriceListHeadRepository;
 import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Dao.Retrofit.PromocionCabeceraRepository;
 import com.vistony.salesforce.Dao.Retrofit.PromocionDetalleRepository;
@@ -68,6 +72,7 @@ import com.vistony.salesforce.Dao.Retrofit.TerminoPagoWS;
 import com.vistony.salesforce.Dao.Retrofit.TypeDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.UbigeoRepository;
 import com.vistony.salesforce.Dao.Retrofit.VisitaRepository;
+import com.vistony.salesforce.Dao.Retrofit.WarehouseRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
 import com.vistony.salesforce.Dao.SQLite.CatalogoSQLiteDao;
@@ -114,7 +119,11 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.kotlin.utilities.ServiceNotificationApp;
+import com.vistony.salesforce.kotlin.Model.SalesCalendarRepository;
+import com.vistony.salesforce.kotlin.Model.SalesCalendarViewModel;
+import com.vistony.salesforce.kotlin.Model.ServiceAppRepository;
+import com.vistony.salesforce.kotlin.Model.ServiceAppViewModel;
+import com.vistony.salesforce.kotlin.Utilities.ServiceApp;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -206,6 +215,11 @@ ParametrosView extends Fragment {
     private PromocionCabeceraRepository promocionCabeceraRepository;
     private PromocionDetalleRepository promocionDetalleRepository;
     private ReasonFreeTransferRepository reasonFreeTransferRepository;
+    private PriceListHeadRepository priceListHeadRepository;
+    private ObjectRepository objectRepository;
+    private BusinessLayerRepository businessLayerRepository;
+    private BusinessLayerSalesDetailRepository businessLayerSalesDetailRepository;
+    private WarehouseRepository warehouseRepository;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -307,10 +321,27 @@ ParametrosView extends Fragment {
         promocionCabeceraRepository = new ViewModelProvider(getActivity()).get(PromocionCabeceraRepository.class);
         promocionDetalleRepository = new ViewModelProvider(getActivity()).get(PromocionDetalleRepository.class);
         reasonFreeTransferRepository = new ViewModelProvider(getActivity()).get(ReasonFreeTransferRepository.class);
+        priceListHeadRepository = new ViewModelProvider(getActivity()).get(PriceListHeadRepository.class);
+        objectRepository= new ViewModelProvider(getActivity()).get(ObjectRepository.class);
+        businessLayerRepository= new ViewModelProvider(getActivity()).get(BusinessLayerRepository.class);
+        businessLayerSalesDetailRepository= new ViewModelProvider(getActivity()).get(BusinessLayerSalesDetailRepository.class);
+        warehouseRepository= new ViewModelProvider(getActivity()).get(WarehouseRepository.class);
+        ServiceAppRepository serviceAppRepository = new ServiceAppRepository();
+        ServiceAppViewModel serviceAppViewModel = new ViewModelProvider(this, new ServiceAppViewModel.ServiceAppViewModelFactory(
+                serviceAppRepository,
+                getContext(),
+                SesionEntity.imei
+        )).get(ServiceAppViewModel.class);
+
+        SalesCalendarRepository salesCalendarRepository = new SalesCalendarRepository();
+        SalesCalendarViewModel salesCalendarViewModel = new ViewModelProvider(this, new SalesCalendarViewModel.SalesCalendarViewModelFactory(
+                salesCalendarRepository,
+                getContext()
+        )).get(SalesCalendarViewModel.class);
+
         //CARGA DE MAESTROS
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
         switch (BuildConfig.FLAVOR){
-
             //case "ecuador":
             case "india":
                 if (listaparametrosSQLiteEntity.isEmpty()) {
@@ -364,6 +395,11 @@ ParametrosView extends Fragment {
                             parametrosSQLite.InsertaParametros("22",  this.getResources().getString(R.string.colors_detail).toUpperCase(), "0", getDateTime());
                             parametrosSQLite.InsertaParametros("25",  this.getResources().getString(R.string.ubigeous).toUpperCase(), "0", getDateTime());
                             parametrosSQLite.InsertaParametros("26",  this.getResources().getString(R.string.reason_free_transfer).toUpperCase(), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("27",  this.getResources().getString(R.string.price_list_head).toUpperCase(), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("28",  this.getResources().getString(R.string.busines_layer).toUpperCase(), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("29",  this.getResources().getString(R.string.objects).toUpperCase(), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("30", this.getResources().getString(R.string.busines_layer_sales_detail).toUpperCase(), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("31", this.getResources().getString(R.string.warehouse).toUpperCase(), "0", getDateTime());
                         }
                         /*if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
                             parametrosSQLite.InsertaParametros("18", this.getResources().getString(R.string.price_list), "0", getDateTime());
@@ -388,6 +424,11 @@ ParametrosView extends Fragment {
                         parametrosSQLite.InsertaParametros("22",  this.getResources().getString(R.string.colors_detail).toUpperCase(), "0", getDateTime());
                         parametrosSQLite.InsertaParametros("25",  this.getResources().getString(R.string.ubigeous).toUpperCase(), "0", getDateTime());
                         parametrosSQLite.InsertaParametros("26",  this.getResources().getString(R.string.reason_free_transfer).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("27",  this.getResources().getString(R.string.price_list_head).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("28",  this.getResources().getString(R.string.busines_layer).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("29",  this.getResources().getString(R.string.objects).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("30", this.getResources().getString(R.string.busines_layer_sales_detail).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("31", this.getResources().getString(R.string.warehouse).toUpperCase(), "0", getDateTime());
                     }
                 }
                 break;
@@ -580,6 +621,13 @@ ParametrosView extends Fragment {
             }
         }
 
+        //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+        //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+        priceListHeadRepository.getAddAllPriceListHead(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            Log.e("REOS", "PriceListHeadRepository-->getAddAllPriceListHead-->resultdata" + data);
+        });
+
+
 
         fabdescargarparametros.setOnClickListener(view -> {
             Object objeto=null,object2=null;
@@ -611,15 +659,31 @@ ParametrosView extends Fragment {
                     }
             );
 
+            objectRepository.getObjectAPI(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("REOS", "ObjectRepository-->getObjectAPI-->resultdata" + data);
+            });
+
+            businessLayerRepository.getBussinessLayer(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("REOS", "BusinessLayerRepository->getBussinessLayer-->resultdata" + data);
+            });
+
+            businessLayerSalesDetailRepository.getBussinessLayerSalesDetail(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("REOS", "BusinessLayerSalesDetailRepository->getBussinessLayerSalesDetail-->resultdata" + data);
+            });
+
+            warehouseRepository.getWarehouse(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                Log.e("REOS", "WarehouseRepository->getWarehouse-->resultdata" + data);
+            });
+
+
             objeto=listaParametrosAdapter.ObtenerListaParametros();
 
             arraylistaparametrosentity = (ArrayList<ListaParametrosEntity>) objeto;
-            String [] valores=new String[]{"","","","","","","","","","","","","","","",""};
+            String [] valores=new String[]{"","","","","","","","","","","","","","","","","","",""};
             int p=0;
             for(int i=0;i<arraylistaparametrosentity.size();i++){
                 if(arraylistaparametrosentity.get(i).isChkparametro()){
                     valores[p]=(arraylistaparametrosentity.get(i).getNombreparametro().toString());
-
                     p++;
                 }
             }
@@ -627,6 +691,8 @@ ParametrosView extends Fragment {
             obtenerWSParametros =  new ObtenerWSParametros();
             obtenerWSParametros.execute(valores);
 
+            serviceAppViewModel.addServiceApp();
+            salesCalendarViewModel.addSalesCalendar(SesionEntity.imei,"20230901","20230930");
         });
 
 
@@ -656,19 +722,35 @@ ParametrosView extends Fragment {
             }
         }
 
+
+
+
+        /*// Valida que existan recibos en la base de datos local y en caso de estar vacío, consulta la API
+        if (collectionDetailDB.getValue().getStatus().equals("Y")) {
+            if (collectionDetailDB.getValue().getCount().equals("0")) {
+                collectionDetailViewModel.getAPICollectionDetail(SesionEntity.usuario_id, "PD");
+            }
+        }*/
+        //LiveData<List<com.vistony.salesforce.kotlin.Model.ServiceApp>> serviceAppDBLiveData
+        //LiveData<List<com.vistony.salesforce.kotlin.Model.ServiceApp>> serviceAppDBLiveData= serviceAppViewModel.getResultDB().getValue();
+        //serviceAppViewModel.getServiceApp("1");
+        //serviceAppViewModel.getResultDB().getValue().getStatus();
+        //Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.serviceAppViewModel.getResultDB().getValue().getStatus(): "+ serviceAppViewModel.getResultDB().getValue().getStatus());
+        //Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.serviceAppViewModel.getResultAPI().getValue().getStatus(): "+ serviceAppViewModel.getResultAPI().getValue().getStatus());
+
+
         if(!SesionEntity.perfil_id.equals("chofer"))
         {
-            Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.isServiceRunning: "+ServiceNotificationApp.isServiceRunning);
+            Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.isServiceRunning: "+ ServiceApp.isServiceRunning);
 
-            if(!ServiceNotificationApp.isServiceRunning)
+            if(!ServiceApp.isServiceRunning)
             {
-
                 //Inicio de Servicio y Envio de Notificacion
                 if (areNotificationsEnabled(getContext())) {
                     // Las notificaciones están habilitadas
                     try {
                         //Intent intent = new Intent(this, MenuView.class);
-                        Intent intent = new Intent(getContext(), ServiceNotificationApp.class);
+                        Intent intent = new Intent(getContext(), ServiceApp.class);
                         //Log.e("REOS", "Composables-StatusIcons-contexto: "+context1)
                         //Log.e("REOS", "Composables-StatusIcons-intent: "+intent)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -692,6 +774,7 @@ ParametrosView extends Fragment {
                 Toast.makeText(getContext(), "El servicio ya se encuentra activo, no es necesario volverlo a iniciar.", Toast.LENGTH_SHORT).show();
             }
         }
+
 
         return v;
     }
@@ -1441,6 +1524,7 @@ ParametrosView extends Fragment {
 
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -1472,7 +1556,7 @@ ParametrosView extends Fragment {
                 break;
         }
 
-    }
+    }*/
 
 
     public void ObtenerParametrosCheck()

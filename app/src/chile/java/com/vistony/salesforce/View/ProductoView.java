@@ -19,11 +19,10 @@ import android.widget.Toast;
 import com.vistony.salesforce.Controller.Adapters.ListaProductoAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaProductoDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
-import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.Sesion.Vendedor;
-
+import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import java.util.ArrayList;
 
 
@@ -95,7 +94,9 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
                 vendedor.getCliente().getPymntGroup(),
                 vendedor.getCliente().getChkpricelist(),
                 vendedor.getCliente().getPriceList_id(),
-                vendedor.getCliente().getPriceList()
+                vendedor.getCliente().getPriceList(),
+                vendedor.getCliente().getUbigeo_ID(),
+                vendedor.getCliente().getCurrency_ID()
         );
         return v;
     }
@@ -105,7 +106,11 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
             String terminoPago,
             String chkpricelist,
             String pricelist_id,
-            String pricelist)
+            String pricelist,
+            String ubigeo_id,
+            String currency_id
+
+    )
     {
         Log.e("REOS","ProductoView.cargarProductosSqlite.codigoCliente: "+codigoCliente);
         Log.e("REOS","ProductoView.cargarProductosSqlite.terminoPago:"+terminoPago);
@@ -115,7 +120,8 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
         //     ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetallePriceList(codigoCliente,terminoPago,pricelist);
         //}else
         //{
-        ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(codigoCliente,terminoPago);
+        //ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(codigoCliente,terminoPago);
+        ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleQuotation(codigoCliente,terminoPago,ubigeo_id,getContext(),currency_id);
         // }
 
 

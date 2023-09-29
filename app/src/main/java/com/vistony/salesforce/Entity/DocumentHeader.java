@@ -48,6 +48,70 @@ public class DocumentHeader {
     private String U_VIS_Flete;
     private String U_VIS_CompleteOV;
     private String U_VIS_TipTransGrat;
+    private String U_VIS_DiscountPercent;
+    private String U_VIS_ReasonDiscountPercent;
+    private String DiscountCash;
+    private String DiscountPercent_BL;
+    private String UbigeoCode;
+    private String U_VIST_SUCUSU;
+    private String U_VIS_MOTAPLDESC;
+
+
+    public String getU_VIS_MOTAPLDESC() {
+        return U_VIS_MOTAPLDESC;
+    }
+
+    public void setU_VIS_MOTAPLDESC(String u_VIS_MOTAPLDESC) {
+        U_VIS_MOTAPLDESC = u_VIS_MOTAPLDESC;
+    }
+
+    public String getU_VIST_SUCUSU() {
+        return U_VIST_SUCUSU;
+    }
+
+    public void setU_VIST_SUCUSU(String u_VIST_SUCUSU) {
+        U_VIST_SUCUSU = u_VIST_SUCUSU;
+    }
+
+    public String getDiscountCash() {
+        return DiscountCash;
+    }
+
+    public void setDiscountCash(String discountCash) {
+        DiscountCash = discountCash;
+    }
+
+    public String getDiscountPercent_BL() {
+        return DiscountPercent_BL;
+    }
+
+    public void setDiscountPercent_BL(String discountPercent_BL) {
+        DiscountPercent_BL = discountPercent_BL;
+    }
+
+    public String getUbigeoCode() {
+        return UbigeoCode;
+    }
+
+    public void setUbigeoCode(String ubigeoCode) {
+        UbigeoCode = ubigeoCode;
+    }
+
+    public String getU_VIS_DiscountPercent() {
+        return U_VIS_DiscountPercent;
+    }
+
+    public void setU_VIS_DiscountPercent(String u_VIS_DiscountPercent) {
+        U_VIS_DiscountPercent = u_VIS_DiscountPercent;
+    }
+
+    public String getU_VIS_ReasonDiscountPercent() {
+        return U_VIS_ReasonDiscountPercent;
+    }
+
+    public void setU_VIS_ReasonDiscountPercent(String u_VIS_ReasonDiscountPercent) {
+        U_VIS_ReasonDiscountPercent = u_VIS_ReasonDiscountPercent;
+    }
 
     public String getU_VIS_TipTransGrat() {
         return U_VIS_TipTransGrat;

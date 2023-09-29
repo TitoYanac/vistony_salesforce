@@ -1,8 +1,6 @@
 package com.vistony.salesforce.Controller.Adapters;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,13 +13,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.vistony.salesforce.BuildConfig;
-import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ProductoView;
@@ -129,13 +122,15 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         holder.tv_umd.setText(lead.getUmd());
         holder.tv_precio.setText(lead.getPreciobase());
         //holder.tv_igv.setText(lead.getPrecioigv());
-        holder.tv_igv.setText(lead.getStock());
-        holder.tv_stock.setText(lead.getStock());
+        //holder.tv_igv.setText(lead.getStock());
+        //holder.tv_stock.setText(lead.getStock());
+        holder.tv_igv.setText(lead.getStock_almacen());
+        holder.tv_stock.setText(lead.getStock_almacen());
         holder.tv_gal.setText(lead.getGal());
 
 
         holder.relativeListaProducto.setOnClickListener(v -> {
-                    Log.e("REOS", "ListaProductoAdapter.relativeListaProducto.lead.getStock():" + lead.getStock());
+                    Log.e("REOS", "ListaProductoAdapter.relativeListaProducto.lead.getStock():" + lead.getStock_almacen());
                     switch (BuildConfig.FLAVOR){
                         case "bolivia":
                         case "india":
@@ -145,7 +140,7 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
                             break;
                         case "peru":
                         case "espania":
-                            if(Double.parseDouble (lead.getStock()) <=0)
+                            if(Double.parseDouble (lead.getStock_almacen()) <=0)
                             {
                                 alertaProductoSinStock(getContext(), "El Producto Elegido tiene Stock 0,desea continuar?", lead).show();
                             }else
@@ -216,7 +211,7 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         listaProductoEntity.setProducto_id(lead.getProducto_id());
         listaProductoEntity.setProducto(lead.getProducto());
         listaProductoEntity.setUmd(lead.getUmd());
-        listaProductoEntity.setStock(lead.getStock());
+        listaProductoEntity.setStock_almacen (lead.getStock_almacen());
         listaProductoEntity.setPreciobase(lead.getPreciobase());
         listaProductoEntity.setPrecioigv(lead.getPrecioigv()) ;
         listaProductoEntity.setGal(lead.getGal());

@@ -26,14 +26,13 @@ import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Utilitario.QuotasPerCustomerPDF;
 import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerDetailRepository;
-import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerHeadRepository;
 import com.vistony.salesforce.Dao.Retrofit.QuotasPerCustomerInvoiceRepository;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.QuotasPerCustomerInvoiceEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.kotlin.compose.DialogValidationAccountClient;
+import com.vistony.salesforce.kotlin.View.Pages.DialogValidationAccountClient;
 
 
 import java.util.ArrayList;

@@ -89,7 +89,7 @@
                         android:id="@+id/lbl_update_promocion_detalle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/update"
+                        android:text="@string/edit"
                         android:textColor="@color/gray"
                         android:textAppearance="?attr/textAppearanceListItem"
                         android:textStyle="bold"

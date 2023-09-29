@@ -9,6 +9,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -24,6 +26,8 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +45,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,10 +60,14 @@ import com.vistony.salesforce.Controller.Utilitario.DocumentoPedidoPDF;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
+import com.vistony.salesforce.Dao.Retrofit.ListaPrecioRepository;
 import com.vistony.salesforce.Dao.Retrofit.OrdenVentaRepository;
 import com.vistony.salesforce.Dao.SQLite.AgenciaSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.BusinessLayerHeadSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.DireccionSQLite;
+import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite;
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaDetallePromocionSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.ReasonFreeTransferSQLiteDao;
@@ -66,18 +75,24 @@ import com.vistony.salesforce.Dao.SQLite.RutaFuerzaTrabajoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.TerminoPagoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UbigeoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
+import com.vistony.salesforce.Dao.SQLite.WarehouseSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.DireccionCliente;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaCabeceraEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
+import com.vistony.salesforce.Entity.DocumentHeader;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.BusinessLayerHeadEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.ReasonDispatchEntity;
+import com.vistony.salesforce.Entity.Retrofit.Modelo.WarehouseEntity;
 import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetalleSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.SalesOrder;
 import com.vistony.salesforce.Entity.SQLite.TerminoPagoSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UbigeoSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
@@ -109,14 +124,14 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     static Button btn_detalle_orden_venta;
     OnFragmentInteractionListener mListener;
     String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta,ubigeo_id="0",statuscount="N",customerwhitelist="N";
-    static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id;
+    static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id,discountpercentreason="";
     static String terminopago_id="",terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id,zona_id;
     TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;
     static EditText et_comentario;
-    static TextView tv_terminopago,tv_orden_venta_agencia,tv_direccion,tv_increment_flete;
+    static TextView tv_terminopago,tv_orden_venta_agencia,tv_direccion,tv_increment_flete,tv_discount_percent,lbl_tittle_discount_percent;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
     public static ArrayList<ListaHistoricoOrdenVentaEntity> listaHistoricoOrdenVentaEntity=new ArrayList<>();
-    static ImageButton btn_orden_venta_consultar_agencia,btn_consultar_termino_pago,btn_consultar_direccion,btn_dispatch_date;
+    static ImageButton btn_orden_venta_consultar_agencia,btn_consultar_termino_pago,btn_consultar_direccion,btn_dispatch_date,imb_descount_bl;
     static ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
     static HiloObtenerResumenOrdenVenta hiloObtenerResumenOrdenVenta;
     static MenuItem guardar_orden_venta,enviar_erp,generarpdf;
@@ -131,7 +146,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private DireccionCliente direccionSelecionada;*/
 
     HiloObtenerAgencia hiloObtenerAgencia=new HiloObtenerAgencia();
-    static Spinner sp_cantidaddescuento,spnmoneda,spn_reason_freetransfer;
+    static Spinner sp_cantidaddescuento,spnmoneda,spn_reason_freetransfer,spn_warehouse;
     private ProgressDialog pd;
     ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabecera;
     ArrayList<OrdenVentaDetalleSQLiteEntity> listaOrdenVentaDetalle;
@@ -157,8 +172,12 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
-    static TableRow tr_dsct_cont,tr_summary_flete,tr_lbl_reason_free_transfer,tr_spn_reason_free_transfer;
-
+    static TableRow tr_dsct_cont,tr_summary_flete,tr_lbl_reason_free_transfer,tr_spn_reason_free_transfer,tr_descount_bl,tr_lbl_dispatch_date,tr_tv_dispatch_date;
+    static TableLayout tl_tittle_discount_percent,tl_discount_percent;
+    Integer discountPercent=0;
+    //TaskGetPriceList taskGetPriceList=new TaskGetPriceList();
+    private ListaPrecioRepository listaPrecioRepository;
+    UsuarioSQLiteEntity ObjUsuario;
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
@@ -222,6 +241,18 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             tr_lbl_reason_free_transfer.setVisibility(View.GONE);
             tr_spn_reason_free_transfer.setVisibility(View.GONE);
         }
+
+        if(terminopago_id.equals("44"))
+        {
+            tr_descount_bl.setVisibility(View.VISIBLE);
+            tl_tittle_discount_percent.setVisibility(View.VISIBLE);
+            tl_discount_percent.setVisibility(View.VISIBLE);
+        }else {
+            tr_descount_bl.setVisibility(View.GONE);
+            tl_tittle_discount_percent.setVisibility(View.GONE);
+            tl_discount_percent.setVisibility(View.GONE);
+        }
+
         return ordenVentaView;
     }
 
@@ -280,6 +311,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Utilitario.disabledImageButtton(btn_consultar_termino_pago,context);
         Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia,context);
         Utilitario.disabledSpinner(spnmoneda);
+        Utilitario.disabledImageButtton(imb_descount_bl,context);
 
         //Utilitario.disabledImageButtton(btn_dispatch_date);
         //Utilitario.disabledEditText(et_comentario);
@@ -293,20 +325,21 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
         context=getContext();
         SesionEntity.flagquerystock="N";
         hiloObtenerResumenOrdenVenta=new HiloObtenerResumenOrdenVenta();
         activity=getActivity();
         obtenerTituloFormulario();
         hiloObtenerAgencia=new HiloObtenerAgencia();
-
         listaTerminopago=new ArrayList<>();
         terminoPagoSQLiteDao=new TerminoPagoSQLiteDao(getContext());
         listaOrdenVentaCabeceraEntities=new ArrayList<>();
         listaOrdenVentaDetalleEntities=new ArrayList<>();
-
         values=new ArrayList<String>();
+        ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -447,8 +480,15 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             }
         }
 
+        ArrayList<BusinessLayerHeadEntity> businessLayerHeadEntityArrayList=new ArrayList<>();
+        BusinessLayerHeadSQLiteDao businessLayerHeadSQLiteDao=new BusinessLayerHeadSQLiteDao(getContext());
+        businessLayerHeadEntityArrayList=businessLayerHeadSQLiteDao.getBusinessLayer("27");
 
-
+        for(int i=0;i<businessLayerHeadEntityArrayList.size();i++)
+        {
+            discountPercent=Integer.parseInt(businessLayerHeadEntityArrayList.get(i).getU_VIS_Variable());
+            discountpercentreason=businessLayerHeadEntityArrayList.get(i).getName();
+        }
 
     }
 
@@ -506,8 +546,25 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         tr_lbl_reason_free_transfer=v.findViewById(R.id.tr_lbl_reason_free_transfer);
         tr_spn_reason_free_transfer=v.findViewById(R.id.tr_spn_reason_free_transfer);
         spn_reason_freetransfer=v.findViewById(R.id.spn_reason_freetransfer);
-        //Pruebas de Fecha de entrega
+        tr_descount_bl=v.findViewById(R.id.tr_descount_bl);
+        tr_descount_bl.setVisibility(View.GONE);
+        imb_descount_bl=v.findViewById(R.id.imb_descount_bl);
+        tv_discount_percent=v.findViewById(R.id.tv_discount_percent);
+        tl_tittle_discount_percent=v.findViewById(R.id.tl_tittle_discount_percent);
+        tl_discount_percent=v.findViewById(R.id.tl_discount_percent);
+        tl_tittle_discount_percent.setVisibility(View.GONE);
+        tl_discount_percent.setVisibility(View.GONE);
+        lbl_tittle_discount_percent=v.findViewById(R.id.lbl_tittle_discount_percent);
+        tr_lbl_dispatch_date=v.findViewById(R.id.tr_lbl_dispatch_date);
+        tr_tv_dispatch_date=v.findViewById(R.id.tr_tv_dispatch_date);
+        spn_warehouse=v.findViewById(R.id.spn_warehouse);
 
+        if(!ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+        {
+            tr_tv_dispatch_date.setVisibility(View.GONE);
+        }
+
+        //Pruebas de Fecha de entrega
         if(SesionEntity.deliverydateauto.equals("Y"))
         {
             tv_dispatch_date.setText(Induvis.getDateFormataDateUser(getDateWorkPathforZone()));
@@ -521,6 +578,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             parametrofecha=fecha;
             tv_dispatch_date.setText(induvis.getDate(BuildConfig.FLAVOR,fecha));
         }
+
 
 
         for(int i=0;i<listaTerminopago.size();i++)
@@ -552,7 +610,20 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             tv_terminopago.setText(cliente_terminopago);
         }
 
+        ArrayList<String> ListResponseWarehouse= new  ArrayList<String>();
+        ListResponseWarehouse.add("--SELECCIONAR--");
+        WarehouseSQLiteDao warehouseSQLiteDao=new WarehouseSQLiteDao(getContext());
+        ArrayList<WarehouseEntity> listWarehouseEntity=new ArrayList<>();
+        listWarehouseEntity=warehouseSQLiteDao.getWarehouse();
+        for(int i=0;i<listWarehouseEntity.size();i++)
+        {
+            ListResponseWarehouse.add(listWarehouseEntity.get(i).getWhsCode()+"-"+listWarehouseEntity.get(i).getWhsName()) ;
+        }
+        ArrayAdapter<String> adapterResponseWarehouse = new ArrayAdapter<String>(getContext(), R.layout.support_simple_spinner_dropdown_item, ListResponseWarehouse);
+        spn_warehouse.setAdapter(adapterResponseWarehouse);
+        adapterResponseWarehouse.notifyDataSetChanged();
 
+        ///Eventos
         btn_detalle_orden_venta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -566,9 +637,15 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     {
                         alertdialogInformative(getContext(),"Advertencia!!!","Motivo: \n Termino de Pago (Contado) no debe ir vinculado con agencia.\n Sugerencia: \n Cambiar a termino de pago (Pago adelantado) si se desea seguir con agencia.").show();
                     }else {
-                        btn_detalle_orden_venta.setEnabled(false);
-                        btn_detalle_orden_venta.setClickable(false);
-                        alertaCrearOrdenVenta("Esta Seguro de Abrir una "+Induvis.getTituloVentaString(getContext())+" Nueva?").show();
+                        if(spn_warehouse.getSelectedItem().toString().equals("--SELECCIONAR--"))
+                        {
+                            Toast.makeText(getContext(), "Debe Elegir un Almacen para poder continuar...", Toast.LENGTH_SHORT).show();
+                        }else
+                        {
+                            btn_detalle_orden_venta.setEnabled(false);
+                            btn_detalle_orden_venta.setClickable(false);
+                            alertaCrearOrdenVenta("Esta Seguro de Abrir una "+Induvis.getTituloVentaString(getContext())+" Nueva?").show();
+                        }
                     }
                 }
             }
@@ -708,6 +785,74 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                         monedatotal=spnmoneda.getSelectedItem().toString();
                         String[] palabra = monedatotal.split("-");
                         SesionEntity.currency_id=palabra[0];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                }
+        );
+
+        imb_descount_bl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInputEditext(getContext(),discountPercent.floatValue()).show();
+            }
+        });
+
+        lbl_tittle_discount_percent.setText(discountpercentreason);
+        lbl_tittle_discount_percent.setAllCaps(true);
+
+
+
+        spn_warehouse.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if(!spn_warehouse.getSelectedItem().toString().equals("--SELECCIONAR--"))
+                        {
+
+                            String wareHousePriceList;
+
+                            String warehouseCode="",warehouseName="",priceListCash="",priceListCredit="",U_VIST_SUCUSU="";
+                            String[] palabra = spn_warehouse.getSelectedItem().toString().split("-");
+                            warehouseCode=palabra[0];
+                            warehouseName=palabra[1];
+                            ArrayList<WarehouseEntity> listWarehouseEntity=new ArrayList<>();
+                            listWarehouseEntity=warehouseSQLiteDao.getWarehouseCode(warehouseCode);
+                            for(int j=0;j<listWarehouseEntity.size();j++)
+                            {
+                                priceListCash=listWarehouseEntity.get(j).getPriceListCash();
+                                priceListCredit=listWarehouseEntity.get(j).getPriceListCredit();
+                                U_VIST_SUCUSU=listWarehouseEntity.get(j).getU_VIST_SUCUSU();
+                            }
+                            SesionEntity.almacen_id=warehouseCode;
+                            SesionEntity.U_VIST_SUCUSU=U_VIST_SUCUSU;
+
+                            ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(getContext());
+                            wareHousePriceList= listaPrecioDetalleSQLiteDao.getWarehousePricelist();
+                            Log.e("REOS", "OrdenVentaCabeceraView-onCreateView-wareHousePriceList: " + wareHousePriceList);
+                            Log.e("REOS", "OrdenVentaCabeceraView-onCreateView-SesionEntity.almacen_id: " + SesionEntity.almacen_id);
+
+                            if(!SesionEntity.almacen_id.replaceAll(" ","").equals(wareHousePriceList.replaceAll(" ","")))
+                            {
+                                ProgressDialog pd1;
+                                pd1 = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.download_parameters), true, false);
+                                listaPrecioRepository = new ViewModelProvider(getActivity()).get(ListaPrecioRepository.class);
+                                listaPrecioRepository.execClarAndAddPriceListWarehouse(SesionEntity.imei, getContext(), warehouseCode, priceListCash, priceListCredit).observe(getActivity()
+                                        , data -> {
+
+                                            Toast.makeText(getContext(), "Maestro de Precios Actualizado", Toast.LENGTH_SHORT).show();
+                                            Log.e("REOS", "ParametrosView-listaPrecioRepository-data: " + data);
+                                            pd1.dismiss();
+                                        }
+                                );
+                            }
+
+                        }
+                        else {
+                            Toast.makeText(getContext(), "Debe elegir un Almacen", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -981,7 +1126,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     spn_reason_freetransfer.setAdapter(adapterResponse);
                 }
 
-
+                Log.e("REOS","ListSalesOrderDetailAdapter-onOptionsItemSelected-guardar_orden_venta-terminopago_id:"+terminopago_id);
+                Log.e("REOS","ListSalesOrderDetailAdapter-onOptionsItemSelected-guardar_orden_venta-spn_reason_freetransfer.getSelectedItem().toString():"+spn_reason_freetransfer.getSelectedItem().toString());
                 if( terminopago_id.equals("47")
                     &&(spn_reason_freetransfer.getSelectedItem().toString().equals("--SELECCIONAR--"))
                 )
@@ -1173,7 +1319,12 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
             listaOrdenVentaCabeceraEntity.orden_cabecera_fecha_creacion=String.valueOf(sdf.format(calendario.getTime()));
             listaOrdenVentaCabeceraEntity.orden_cabecera_terminopago_id=cliente_terminopago_id;
-            listaOrdenVentaCabeceraEntity.orden_cabecera_agencia_id=agencia_id;
+            if(!agencia_id.equals("P20102306598"))
+            {
+                listaOrdenVentaCabeceraEntity.orden_cabecera_agencia_id=agencia_id;
+            }else {
+                listaOrdenVentaCabeceraEntity.orden_cabecera_agencia_id="";
+            }
             listaOrdenVentaCabeceraEntity.orden_cabecera_moneda_id=codigomoneda;
             listaOrdenVentaCabeceraEntity.orden_cabecera_comentario=et_comentario.getText().toString();
             listaOrdenVentaCabeceraEntity.orden_cabecera_almacen_id=SesionEntity.almacen_id;
@@ -1249,6 +1400,15 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 String[] arrayU_VIS_TipTransGrat = U_VIS_TipTransGrat.split("-");
                 listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_TipTransGrat =arrayU_VIS_TipTransGrat[0];
             }
+
+            listaOrdenVentaCabeceraEntity.orden_cabecera_discount_percent=tv_discount_percent.getText().toString();
+            listaOrdenVentaCabeceraEntity.orden_cabecera_discount_percent_reason=discountpercentreason;
+
+            if(!tv_discount_percent.getText().toString().equals("0"))
+            {
+                listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_MOTAPLDESC="01";
+            }
+            listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIST_SUCUSU=SesionEntity.U_VIST_SUCUSU;
 
 
             Log.e("REOS","OrdenVentaCabeceraView.RegistrarOrdenVentaBD.listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_Flete:"+listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_Flete);
@@ -1434,7 +1594,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             }
             String Objeto=
                     //contado+"-"+
-                    cantidaddescuento+"&"+cliente_terminopago_id+"&"+codigomoneda;
+                    cantidaddescuento+"&"+cliente_terminopago_id+"&"+codigomoneda+"&"+tv_discount_percent.getText().toString()+"&"+ubigeo_id;
             //String Objeto=cantidaddescuento+"-"+cliente_terminopago_id;
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-cantidaddescuento: "+cantidaddescuento);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-cliente_terminopago_id: "+cliente_terminopago_id);
@@ -1442,11 +1602,22 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-Objeto: "+Objeto);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-ubigeo_id: "+ubigeo_id);
             Log.e("REOS","OrdenVentaCabeceraView-alertaCrearOrdenVenta-currency_id: "+codigomoneda);
+            //SalesOrder salesOrder=new SalesOrder();
+            //salesOrder.discountpercent=tv_discount_percent.getText().toString();
+            //salesOrder.payment=cliente_terminopago_id;
             String [] arrayObject={codigocliente,Objeto};
 
-            dialog.dismiss();
-            mListener.onFragmentInteraction(compuesto,arrayObject);
+            DocumentHeader documentHeader=new DocumentHeader();
+            documentHeader.setCardCode(codigocliente);
+            documentHeader.setDiscountCash(cantidaddescuento);
+            documentHeader.setDocCurrency(codigomoneda);
+            documentHeader.setDiscountPercent_BL(tv_discount_percent.getText().toString());
+            documentHeader.setUbigeoCode(ubigeo_id);
+            documentHeader.setPaymentGroupCode(cliente_terminopago_id);
 
+            dialog.dismiss();
+            //mListener.onFragmentInteraction(compuesto,arrayObject);
+            mListener.onFragmentInteraction(compuesto,documentHeader);
             btn_detalle_orden_venta.setEnabled(true);
             btn_detalle_orden_venta.setClickable(true);
         });
@@ -1548,4 +1719,116 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
         return  dialog;
     }
+
+
+    private Dialog DialogInputEditext(
+            Context context,
+            Float discountPercent
+
+    ) {
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_input_numeric);
+        EditText et_ViewMsj=(EditText) dialog.findViewById(R.id.textEditViewMsj);
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButtonOK = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButtonCancel = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        text.setText(discountpercentreason);
+        text.setAllCaps(true);
+        text.setTextSize(15);
+        et_ViewMsj.setHint("Hasta el "+discountPercent+"%");
+        //et_ViewMsj.setInputType(InputType.TYPE_CLASS_NUMBER);
+        dialogButtonOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                if(et_ViewMsj.getText().toString().equals(""))
+                {
+                    Toast.makeText(getContext(), "Ingrese un valor valido", Toast.LENGTH_SHORT).show();
+                }else {
+                    Log.e("REOS","OrdenVentaCabeceraView-DialogInputEditext-discount: "+discountPercent);
+                    Log.e("REOS","OrdenVentaCabeceraView-DialogInputEditext.et_ViewMsj.getText().toString(): "+et_ViewMsj.getText().toString());
+                    if(Float.parseFloat (et_ViewMsj.getText().toString())<=discountPercent)
+                    {
+                        tv_discount_percent.setText(et_ViewMsj.getText().toString());
+                        dialog.dismiss();
+                    }else
+                    {
+                        Toast.makeText(getContext(), "El % de descuento excede lo permitido", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
+        });
+        dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        return  dialog;
+    }
+
+
+    /*private class TaskGetPriceList extends AsyncTask<String, Void, String> {
+        String WhsCode="",WhsName="",PriceListCash="",PriceListCredit="";
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            pd = new ProgressDialog(getActivity());
+            pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.download_parameters), true, false);
+        }
+        @Override
+        protected String doInBackground(String... arg0) {
+            try {
+                for(int i=0;i<arg0.length;i++) {
+                    switch (i)
+                    {
+                        case 0: {
+                            WhsCode=arg0[i];
+                            break;
+                        }
+                        case 1: {
+                            WhsName=arg0[i];
+                            break;
+                        }
+                        case 2: {
+                            PriceListCash=arg0[i];
+                            break;
+                        }
+                        case 3: {
+                            PriceListCredit=arg0[i];
+                            break;
+                        }
+                    }
+                }
+
+
+            } catch (Exception e)
+            {
+                // TODO: handle exception
+                System.out.println(e.getMessage());
+            }
+            return "1";
+        }
+
+        protected void onPostExecute(Object result){
+            obtenerTituloFormulario();
+
+            ActualizarResumenMontos(tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones);
+
+            hiloObtenerResumenOrdenVenta= new HiloObtenerResumenOrdenVenta();
+            setHasOptionsMenu(true);
+            if (getArguments().getString("FLAG") != null) {
+                callbackFlag(getArguments().getString("FLAG"));
+            }
+        }
+    }*/
 }

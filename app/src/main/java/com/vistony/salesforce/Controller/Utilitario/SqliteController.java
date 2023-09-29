@@ -22,7 +22,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 39;
+    private static final int VERSION = 44;
 
 
     public SqliteController(Context context){
@@ -83,7 +83,7 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE promocioncabecera (compania_id text ,lista_promocion_id text ,promocion_id TEXT,producto_id TEXT,producto TEXT,umd TEXT,cantidad TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,total_preciobase TEXT,descuento TEXT,cantidad_maxima TEXT,tipo_malla TEXT )");
             db.execSQL("CREATE TABLE promociondetalle (compania_id text ,lista_promocion_id text ,promocion_id TEXT,promocion_detalle_id TEXT,producto_id TEXT,producto TEXT,umd TEXT,cantidad TEXT,fuerzatrabajo_id TEXT,usuario_id TEXT,preciobase TEXT,chkdescuento TEXT,descuento TEXT)");
             db.execSQL("CREATE TABLE listapreciodetalle (compania_id text ,contado TEXT,credito TEXT,producto_id TEXT,producto TEXT,umd TEXT,gal TEXT ,U_VIS_CashDscnt text,Tipo TEXT,porcentaje_dsct TEXT,stock_almacen TEXT,stock_general TEXT,units TEXT" +
-                    ", oiltax TEXT, liter TEXT, SIGAUS TEXT,MonedaAdicional TEXT,MonedaAdicionalContado TEXT,MonedaAdicionalCredito TEXT )");
+                    ", oiltax TEXT, liter TEXT, SIGAUS TEXT,MonedaAdicional TEXT,MonedaAdicionalContado TEXT,MonedaAdicionalCredito TEXT,CodePriceListCash TEXT,CodePriceListCredit TEXT,CodAlmacen TEXT )");
 
             //db.execSQL("CREATE TABLE stock (compania_id text,producto_id TEXT,producto TEXT,umd TEXT,stock TEXT,almacen_id TEXT,comprometido TEXT,enstock TEXT,pedido TEXT)");
             db.execSQL("CREATE TABLE rutafuerzatrabajo (compania_id text,zona_id TEXT,zona TEXT,dia TEXT,frecuencia TEXT,fechainicioruta TEXT,estado TEXT)");
@@ -95,7 +95,7 @@ public class SqliteController extends SQLiteOpenHelper {
                     " TEXT,listaprecio_id TEXT,planta_id TEXT,fecharegistro TEXT,tipocambio TEXT,fechatipocambio TEXT,rucdni TEXT,U_SYP_MDTD TEXT,U_SYP_MDSD TEXT,U_SYP_MDCD TEXT," +
                     "U_SYP_MDMT TEXT,U_SYP_STATUS TEXT,DocType TEXT,mensajeWS TEXT,total_gal_acumulado TEXT,descuentocontado TEXT,dueDays_cliente TEXT,excede_lineacredito TEXT,U_VIS_AgencyRUC TEXT" +
                     ",U_VIS_AgencyName TEXT,U_VIS_AgencyDir TEXT,domfactura_id TEXT,domembarque_text TEXT,cliente_text TEXT" +
-                    ", terminopago_text TEXT,quotation TEXT,dispatchdate TEXT,countsend TEXT,route TEXT, U_VIT_VENMOS TEXT, U_VIS_Flete TEXT, U_VIS_CompleteOV TEXT, U_VIS_TipTransGrat TEXT, status TEXT)");
+                    ", terminopago_text TEXT,quotation TEXT,dispatchdate TEXT,countsend TEXT,route TEXT, U_VIT_VENMOS TEXT, U_VIS_Flete TEXT, U_VIS_CompleteOV TEXT, U_VIS_TipTransGrat TEXT, status TEXT,U_VIS_DiscountPercent TEXT,U_VIS_ReasonDiscountPercent TEXT,U_VIS_MOTAPLDESC TEXT,U_VIST_SUCUSU TEXT)");
 
             db.execSQL("CREATE TABLE ordenventadetalle (compania_id text ,ordenventa_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT,chk_descuentocontado TEXT)");
             db.execSQL("CREATE TABLE ordenventadetallepromocion (compania_id text ,ordenventa_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT,chk_descuentocontado TEXT )");
@@ -155,6 +155,26 @@ public class SqliteController extends SQLiteOpenHelper {
             //ReasonFreetransfer
             db.execSQL("CREATE TABLE reasonfreetransfer (compania_id text,fuerzatrabajo_id text,usuario_id text,Value TEXT, Dscription TEXT)");
 
+            //PriceListHead
+            db.execSQL("CREATE TABLE pricelisthead (compania_id text,fuerzatrabajo_id text,usuario_id text,ListNum TEXT,ListName TEXT,U_VIS_PercentageIncrease TEXT)");
+
+            //Business Layer Head
+            db.execSQL("CREATE TABLE businesslayerhead (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text,U_VIS_Objetive text,U_VIS_VariableType text,U_VIS_Variable text,U_VIS_Trigger text,U_VIS_TriggerType text,U_VIS_Active text,U_VIS_ValidFrom text,U_VIS_ValidUntil text )");
+
+            //Business Layer Detail
+            db.execSQL("CREATE TABLE businesslayerdetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,LineId text,U_VIS_Type text,U_VIS_Object text,U_VIS_Action text)");
+
+            //Object App
+            db.execSQL("CREATE TABLE object (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text)");
+
+            //Business Layer Head
+            db.execSQL("CREATE TABLE businesslayersalesdetailHeader (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text ,Object text,Name text, Action text )");
+
+            //Business Layer Head
+            db.execSQL("CREATE TABLE businesslayersalesdetailDetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text ,LineId text,RangeActive Text,Object text ,TypeObject text,ValueMin text,ValueMax text,Field text,Variable text )");
+
+            //Almacenes
+            db.execSQL("CREATE TABLE warehouse (WhsCode text,WhsName text,PriceListCash text,PriceListCredit text,U_VIST_SUCUSU text)");
     }
 
     @Override
@@ -903,6 +923,100 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN cantidad_maxima TEXT");
             db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN tipo_malla TEXT");
             db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN status TEXT");
+        }
+        if(oldVersion==39&&newVersion==40)
+        {
+            db.execSQL("CREATE TABLE pricelisthead (compania_id text,fuerzatrabajo_id text,usuario_id text,ListNum TEXT,ListName TEXT,U_VIS_PercentageIncrease TEXT)");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodePriceListCash TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodePriceListCredit TEXT");
+        }
+        if(oldVersion==40&&newVersion==41)
+        {
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_DiscountPercent TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_ReasonDiscountPercent TEXT");
+            //Business Layer Head
+            db.execSQL("CREATE TABLE businesslayerhead (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text,U_VIS_Objetive text,U_VIS_VariableType text,U_VIS_Variable text,U_VIS_Trigger text,U_VIS_TriggerType text,U_VIS_Active text,U_VIS_ValidFrom text,U_VIS_ValidUntil text )");
+            //Business Layer Detail
+            db.execSQL("CREATE TABLE businesslayerdetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,LineId text,U_VIS_Type text,U_VIS_Object text,U_VIS_Action text)");
+            //Object App
+            db.execSQL("CREATE TABLE object (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text)");
+        }
+
+        if(oldVersion==35&&newVersion==41)
+        {
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN typevisit TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN quotationamount TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chk_quotation TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliveryrefusedmoney TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN status TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN sendvisits TEXT");
+            db.execSQL("ALTER TABLE cliente ADD COLUMN customerwhitelist TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN customerwhitelist TEXT");
+            db.execSQL("ALTER TABLE documentodeuda ADD COLUMN additionaldiscount TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN sendvalidations TEXT");
+            db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN cantidad_maxima TEXT");
+            db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN tipo_malla TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN status TEXT");
+            db.execSQL("CREATE TABLE pricelisthead (compania_id text,fuerzatrabajo_id text,usuario_id text,ListNum TEXT,ListName TEXT,U_VIS_PercentageIncrease TEXT)");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodePriceListCash TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodePriceListCredit TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_DiscountPercent TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_ReasonDiscountPercent TEXT");
+            db.execSQL("CREATE TABLE businesslayerhead (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text,U_VIS_Objetive text,U_VIS_VariableType text,U_VIS_Variable text,U_VIS_Trigger text,U_VIS_TriggerType text,U_VIS_Active text,U_VIS_ValidFrom text,U_VIS_ValidUntil text )");
+            db.execSQL("CREATE TABLE businesslayerdetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,LineId text,U_VIS_Type text,U_VIS_Object text,U_VIS_Action text)");
+            db.execSQL("CREATE TABLE object (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text)");
+        }
+        if(oldVersion==41&&newVersion==42)
+        {
+            //Business Layer Head
+            db.execSQL("CREATE TABLE businesslayersalesdetailHeader (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text ,Object text,Name text, Action text )");
+            //Business Layer Head
+            db.execSQL("CREATE TABLE businesslayersalesdetailDetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text ,LineId text,RangeActive Text,Object text ,TypeObject text,ValueMin text,ValueMax text,Field text,Variable text )");
+        }
+
+        if(oldVersion==33&&newVersion==42){
+            //Formulario
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_CompleteOV TEXT");
+            db.execSQL("CREATE TABLE reasonfreetransfer (compania_id text,fuerzatrabajo_id text,usuario_id text,Value TEXT, Dscription TEXT)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_TipTransGrat TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicional TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicionalContado TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN MonedaAdicionalCredito TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN typevisit TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN quotationamount TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN chk_quotation TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN deliveryrefusedmoney TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN status TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN sendvisits TEXT");
+            db.execSQL("ALTER TABLE cliente ADD COLUMN customerwhitelist TEXT");
+            db.execSQL("ALTER TABLE rutavendedor ADD COLUMN customerwhitelist TEXT");
+            db.execSQL("ALTER TABLE documentodeuda ADD COLUMN additionaldiscount TEXT");
+            db.execSQL("ALTER TABLE usuario ADD COLUMN sendvalidations TEXT");
+            db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN cantidad_maxima TEXT");
+            db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN tipo_malla TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN status TEXT");
+            db.execSQL("CREATE TABLE pricelisthead (compania_id text,fuerzatrabajo_id text,usuario_id text,ListNum TEXT,ListName TEXT,U_VIS_PercentageIncrease TEXT)");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodePriceListCash TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodePriceListCredit TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_DiscountPercent TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_ReasonDiscountPercent TEXT");
+            db.execSQL("CREATE TABLE businesslayerhead (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text,U_VIS_Objetive text,U_VIS_VariableType text,U_VIS_Variable text,U_VIS_Trigger text,U_VIS_TriggerType text,U_VIS_Active text,U_VIS_ValidFrom text,U_VIS_ValidUntil text )");
+            db.execSQL("CREATE TABLE businesslayerdetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,LineId text,U_VIS_Type text,U_VIS_Object text,U_VIS_Action text)");
+            db.execSQL("CREATE TABLE object (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text)");
+            db.execSQL("CREATE TABLE businesslayersalesdetailHeader (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text ,Object text,Name text, Action text )");
+            db.execSQL("CREATE TABLE businesslayersalesdetailDetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text ,LineId text,RangeActive Text,Object text ,TypeObject text,ValueMin text,ValueMax text,Field text,Variable text )");
+        }
+
+        if(oldVersion==42&&newVersion==43)
+        {
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_MOTAPLDESC TEXT");
+        }
+
+        if(oldVersion==43&&newVersion==44)
+        {
+            //Almacenes
+            db.execSQL("CREATE TABLE warehouse (WhsCode text,WhsName text,PriceListCash text,PriceListCredit text,U_VIST_SUCUSU text)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIST_SUCUSU TEXT");
         }
     }
 

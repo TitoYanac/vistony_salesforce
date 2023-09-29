@@ -143,12 +143,19 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center">
 
-                <TextView
-                    android:id="@+id/lbl_orden_detalle_precio"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
+                <Button
+                    android:id="@+id/btn_edit_price"
+                    android:layout_width="50dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/custom_border_button_red"
+                    android:enabled="true"
                     android:text="@string/price"
-                    android:textAppearance="?attr/textAppearanceListItem" />
+                    android:textColor="@color/White"
+                    android:textSize="11sp"
+                    android:textAllCaps="false"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    />
+
 
                 <TextView
                     android:id="@+id/tv_orden_detalle_precio"
@@ -156,6 +163,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/price"
                     android:textAlignment="center"
+
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
@@ -171,11 +179,11 @@
                     android:layout_width="70dp"
                     android:layout_height="30dp"
                     android:background="@drawable/borde_editext_ov_negro"
-                    android:digits="0123456789"
+                    android:digits="0123456789.-"
                     android:ems="9"
                     android:hint="0"
                     android:imeOptions="actionSend"
-                    android:inputType="number"
+                    android:inputType="numberDecimal|numberSigned"
                     android:maxLength="4"
                     android:singleLine="true"
                     android:textAlignment="center"
@@ -355,56 +363,60 @@
             </TableRow>
 
         </TableLayout>
+
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp">
+
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp">
+
                 <TextView
                     android:id="@+id/lbl_orden_detalle_resumen_promocion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_marginStart="80dp"
+                    android:gravity="center"
                     android:text="@string/Promotion_Summary"
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textStyle="bold" />
             </TableRow>
         </TableLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        >
-        <TableLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:gravity="center"
-            >
-            <TableRow
+            android:orientation="horizontal">
+
+            <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:gravity="center"
-                >
-                <LinearLayout
-                    android:id="@+id/content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginStart="50dp"
-                    android:background="@drawable/borde_cuadrado"
-                    android:orientation="vertical"></LinearLayout>
-            </TableRow>
-        </TableLayout>
-    </LinearLayout>
+                android:gravity="center">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center">
+
+                    <LinearLayout
+                        android:id="@+id/content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="50dp"
+                        android:background="@drawable/borde_cuadrado"
+                        android:gravity="center"
+                        android:orientation="vertical"></LinearLayout>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
     </LinearLayout>
     <TextView
         android:id="@+id/tv_orden_detalle_porcentaje_descuento"

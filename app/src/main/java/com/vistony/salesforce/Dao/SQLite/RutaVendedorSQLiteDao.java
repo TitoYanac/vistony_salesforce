@@ -5,15 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
-import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.RutaVendedorSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
 
@@ -216,7 +213,20 @@ public class RutaVendedorSQLiteDao {
         UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
         usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
 
-        Cursor fila = bd.rawQuery("SELECT * FROM rutavendedor WHERE fecharuta=" +
+        Cursor fila = bd.rawQuery("SELECT A.cliente_id,A.domembarque_id ,A.compania_id, A.nombrecliente,A.direccion,A.zona_id,A.ordenvisita ," +
+                " A.zona ,A.rucdni,A.moneda,A.telefonofijo,A.telefonomovil ,A.correo ,A.ubigeo_id ,A.impuesto_id ,A.impuesto ,A.tipocambio " +
+                ",A.categoria ,A.linea_credito ,A.terminopago_id , A.chk_visita ,chk_pedido ,chk_cobranza ,chk_ruta ,fecharuta " +
+                ",saldomn ,slpCode ,userCode ,salesorderamount ,collectionamount ,A.lastpurchase ,saldosincontado ,chkgeolocation " +
+                ",chkvisitsection ,terminopago ,contado ,latitud ,longitud ,addresscode ,B.statuscounted " +
+                ",typevisit , quotationamount ,chk_quotation ,B.customerwhitelist  FROM rutavendedor A " +
+                "       LEFT JOIN (SELECT A.cliente_id,A.domembarque_id,statuscounted,customerwhitelist FROM cliente A " +
+                "       LEFT JOIN direccioncliente B ON " +
+                "      A.cliente_id=B.cliente_id " +
+                "      GROUP BY A.cliente_id,A.domembarque_id,statuscounted,customerwhitelist" +
+                " ) B ON " +
+                " A.cliente_id=B.cliente_id AND " +
+                " A.domembarque_id=B.domembarque_id " +
+                "WHERE fecharuta=" +
                 //"date('now','localtime') " +
                 " strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime'))" +
                 "AND chk_ruta=? AND slpCode=?",new String[]{checkRuta,usuarioSQLiteEntity.getFuerzatrabajo_id()});

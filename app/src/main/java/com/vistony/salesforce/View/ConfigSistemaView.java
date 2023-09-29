@@ -9,8 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -85,7 +83,7 @@ public class ConfigSistemaView extends Fragment{
     private CobranzaRepository cobranzaRepository;
 
     private File fileRuta;
- private UsuarioSQLite usuarioSQLite;
+    private UsuarioSQLite usuarioSQLite;
     public ConfigSistemaView() {
         // Required empty public constructor
     }

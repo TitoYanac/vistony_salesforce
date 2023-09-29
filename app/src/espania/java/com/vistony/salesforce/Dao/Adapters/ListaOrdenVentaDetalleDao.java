@@ -60,7 +60,7 @@ public class ListaOrdenVentaDetalleDao {
                         Lista.get(i).getOrden_detalle_producto_id(),
                         Lista.get(i).getOrden_detalle_producto(),
                         Lista.get(i).getOrden_detalle_umd(),
-                        Lista.get(i).getOrden_detalle_stock(),
+                        Lista.get(i).getOrden_detalle_stock_almacen(),
                         Lista.get(i).getOrden_detalle_cantidad(),
                         Lista.get(i).getOrden_detalle_precio_unitario(),
                         Lista.get(i).getOrden_detalle_montosubtotal(),
@@ -83,7 +83,11 @@ public class ListaOrdenVentaDetalleDao {
                         Lista.get(i).getOrden_detalle_porcentaje_descuento_maximo(),
                         Lista.get(i).getOrden_detalle_oil_tax(),
                         Lista.get(i).getOrden_detalle_liter(),
-                        Lista.get(i).getOrden_detalle_SIGAUS()
+                        Lista.get(i).getOrden_detalle_SIGAUS(),
+                        Lista.get(i).getOrden_detalle_currency(),
+                        Lista.get(i).getOrden_detalle_listnum(),
+                        Lista.get(i).getOrden_detalle_price_listprice(),
+                        Lista.get(i).getOrden_detalle_percent_discount_business_layer()
                 ));
             }
         }catch (Exception e)

@@ -21,7 +21,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
@@ -1215,7 +1214,7 @@ public class MenuView extends AppCompatActivity
                 case "listadopromocion":
                     OrdenVentaDetalleFragment = getSupportFragmentManager().findFragmentByTag(tagOrdenVentaDetalleView);
                     ft.hide(OrdenVentaDetalleFragment);
-                    ft.add(R.id.content_menu_view, ListadoPromocionView.newInstance(Lista),tag2);
+                    ft.add(R.id.content_menu_view, ListadoPromocionView.newInstance(Lista,getApplicationContext()),tag2);
                     //ft.add(R.id.content_menu_view,MenuAccionView.newInstance(Lista),tag2);
                     ft.addToBackStack("po1p");
                     ft.commit();

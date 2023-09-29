@@ -63,6 +63,8 @@ public class ListaPromocionSQLiteDao {
             String lista_promocion_id
     )
     {
+        Log.e("REOS","ListaPromocionSQLiteDao-ObtenerListaPromocion.compania_id: "+compania_id);
+        Log.e("REOS","ListaPromocionSQLiteDao-ObtenerListaPromocion.lista_promocion_id: "+lista_promocion_id);
         listaPromocionSQLiteEntity = new ArrayList<>();
         ListaPromocionSQLiteEntity ObjListaPromocionSQLiteEntity= new ListaPromocionSQLiteEntity();
         abrir();

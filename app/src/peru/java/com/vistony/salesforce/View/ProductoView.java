@@ -20,6 +20,7 @@ import com.vistony.salesforce.Controller.Adapters.ListaProductoAdapter;
 import com.vistony.salesforce.Dao.Adapters.ListaProductoDao;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.Sesion.Vendedor;
@@ -168,8 +169,14 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
         Log.e("REOS","ProductoView.cargarProductosSqlite.terminoPago:"+terminoPago);
         Log.e("REOS","ProductoView.cargarProductosSqlite.ubigeo_id:"+ubigeo_id);
         Log.e("REOS","ProductoView.cargarProductosSqlite.currency_id:"+currency_id);
+        if(SesionEntity.quotation.equals("Y"))
+        {
+            ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleQuotation(codigoCliente,terminoPago,ubigeo_id,getContext(),currency_id);
 
+        }else {
             ListaProductoEntity=listaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle(codigoCliente,terminoPago,ubigeo_id,getContext(),currency_id);
+        }
+
 
         if(ListaProductoEntity==null || ListaProductoEntity.size()<0){
             Toast.makeText(getContext(),"Actualiza tus parametros, no hay productos disponibles", Toast.LENGTH_LONG).show();
