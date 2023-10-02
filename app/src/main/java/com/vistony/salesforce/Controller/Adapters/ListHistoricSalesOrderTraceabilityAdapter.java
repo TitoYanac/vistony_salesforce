@@ -34,6 +34,7 @@ import com.vistony.salesforce.Dao.Adapters.ListaPendingCollectionDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoFacturasHistorialDespachosWS;
 import com.vistony.salesforce.Dao.Retrofit.HistoricoFacturasLineasNoFacturadasWS;
 import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoFacturasEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoFacturasHistorialDespachosEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoFacturasLineasNoFacturadasEntity;
@@ -41,6 +42,7 @@ import com.vistony.salesforce.Entity.Adapters.ListaPendingCollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesOrderTraceabilityEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
@@ -57,6 +59,8 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
     private ProgressDialog pd;
     ListaHistoricoFacturasHistorialDespachoAdapter listaHistoricoFacturasHistorialDespachoAdapter;
     String date;
+    UsuarioSQLiteEntity ObjUsuario;
+
     public ListHistoricSalesOrderTraceabilityAdapter(
             android.content.Context context,
             List<HistoricSalesOrderTraceabilityEntity> objects,
@@ -183,6 +187,10 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
         holder.tv_date_pend_rev.setVisibility(View.GONE);
         holder.tv_date_invoice.setVisibility(View.GONE);
         holder.tv_date_delivery.setVisibility(View.GONE);
+        ObjUsuario=new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(Context);
+        ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
+
 
         if(BuildConfig.FLAVOR.equals("chile"))
         {
@@ -608,173 +616,210 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
         else if((BuildConfig.FLAVOR.equals("peru")))
         {
 
-            //holder.your_state_progress_bar_id=null;
-            //holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
-            //String[] descriptionData = {"Orden\nVenta","Pend.\nRevision", "Aprobacion\nOrden", "Factura", "Entrega\nMercaderia"};
-            //String[] descriptionData=null;
-            Log.e("REOS", "ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:" + statusDispatch);
-            String[] cadena= lead.getComentarioaprobacion().split("-");
-            String object= cadena[0].trim();
-            String status= cadena[1].trim();
-            holder.tv_status_aprob.setText(status);
-            Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.object:"+object.toString());
-            Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.status:"+status.toString());
-            holder.imv_historic_pend_rev.setVisibility(View.GONE);
-            holder.imv_historic_order_aprob.setVisibility(View.GONE);
-            //Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
-            //Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
-            //holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
-            //holder.imv_preview.setVisibility(View.GONE);
-            //holder.imv_historic_orders.setVisibility(View.GONE);
-            Convert.setMarginsView(holder.imv_historic_pend_rev, 80, 450, 200, 145);
-            Convert.setMarginsView(holder.imv_historic_order_aprob, 330, 450, 200, 145);
-            Convert.setMarginsView(holder.imv_historic_invoices, 580, 450, 200, 145);
-            Convert.setMarginsView(holder.imv_historic_delivery, 830, 450, 0, 145);
-
-
-
-            ///BORRADOR - COTIZACION
-            if ((object.equals("Borrador Orden de Venta")||object.equals("Orden de Venta"))&&lead.getInvoices()==null)
-            {
-                holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
-                if(object.equals("Borrador Orden de Venta"))
-                {
-                    String[] descriptionData = {"Cotización","Borrador\nOrden Venta", "Factura", "Entrega\nMercaderia"};
-                    holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
-                }else if(object.equals("Orden de Venta"))
-                {
-                    String[] descriptionData = {"Cotización","Orden Venta", "Factura", "Entrega\nMercaderia"};
-                    holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
-                }
-
-                Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
-                Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
+            if(ObjUsuario.getU_VIS_ManagementType().equals("B2B")) {
+                //holder.your_state_progress_bar_id=null;
+                //holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
+                //String[] descriptionData = {"Orden\nVenta","Pend.\nRevision", "Aprobacion\nOrden", "Factura", "Entrega\nMercaderia"};
+                //String[] descriptionData=null;
+                Log.e("REOS", "ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:" + statusDispatch);
+                String[] cadena = lead.getComentarioaprobacion().split("-");
+                String object = cadena[0].trim();
+                String status = cadena[1].trim();
+                holder.tv_status_aprob.setText(status);
+                Log.e("REOS", "ListHistoricSalesOrderTraceabilityAdapter.object:" + object.toString());
+                Log.e("REOS", "ListHistoricSalesOrderTraceabilityAdapter.status:" + status.toString());
+                holder.imv_historic_pend_rev.setVisibility(View.GONE);
+                holder.imv_historic_order_aprob.setVisibility(View.GONE);
+                //Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
+                //Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
+                //holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+                //holder.imv_preview.setVisibility(View.GONE);
+                //holder.imv_historic_orders.setVisibility(View.GONE);
+                Convert.setMarginsView(holder.imv_historic_pend_rev, 80, 450, 200, 145);
+                Convert.setMarginsView(holder.imv_historic_order_aprob, 330, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_invoices, 580, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_delivery, 830, 450, 0, 145);
+                ///BORRADOR - COTIZACION
+                if ((object.equals("Borrador Orden de Venta") || object.equals("Orden de Venta")) && lead.getInvoices() == null) {
+                    holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
+                    if (object.equals("Borrador Orden de Venta")) {
+                        String[] descriptionData = {"Cotización", "Borrador\nOrden Venta", "Factura", "Entrega\nMercaderia"};
+                        holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+                    } else if (object.equals("Orden de Venta")) {
+                        String[] descriptionData = {"Cotización", "Orden Venta", "Factura", "Entrega\nMercaderia"};
+                        holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+                    }
+
+                    Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
+                    Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
+                    Convert.setMarginsView(holder.imv_historic_invoices, 580, 450, 200, 145);
+                    Convert.setMarginsView(holder.imv_historic_delivery, 830, 450, 0, 145);
 
 
+                    holder.your_state_progress_bar_id.setAllStatesCompleted(false);
+                    holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+                    holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.your_state_progress_bar_id.setForegroundColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.imv_preview.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(), R.color.gray));
+                    holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(), R.color.gray));
+                    holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(), R.color.gray));
 
-                holder.your_state_progress_bar_id.setAllStatesCompleted(false);
-                holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-                holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
-                        (
-                                ContextCompat.getColor(getContext(),R.color.colorPrimary)
-                        );
-                holder.your_state_progress_bar_id.setForegroundColor
-                        (
-                                ContextCompat.getColor(getContext(),R.color.colorPrimary)
-                        );
-                holder.imv_preview.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
-                holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
-                holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.gray));
+                } else if ((object.equals("Borrador Cotización") || object.equals("Cotización")) && lead.getInvoices() == null) {
+                    holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
+                    if (object.equals("Borrador Cotización")) {
+                        String[] descriptionData = {"Borrador\nCotización", "Orden Venta", "Factura", "Entrega\nMercaderia"};
+                        holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+                    } else if (object.equals("Cotización")) {
+                        String[] descriptionData = {"Cotización", "Orden Venta", "Factura", "Entrega\nMercaderia"};
+                        holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
 
-            }
-            else if((object.equals("Borrador Cotización")||object.equals("Cotización"))&&lead.getInvoices()==null)
-            {
-                holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
-                if(object.equals("Borrador Cotización"))
-                {
-                    String[] descriptionData = {"Borrador\nCotización", "Orden Venta", "Factura", "Entrega\nMercaderia"};
-                    holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
-                }else if(object.equals("Cotización"))
-                {
+                    }
+
+                    Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
+                    Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
+                    Convert.setMarginsView(holder.imv_historic_invoices, 580, 450, 200, 145);
+                    Convert.setMarginsView(holder.imv_historic_delivery, 830, 450, 0, 145);
+
+                    holder.your_state_progress_bar_id.setAllStatesCompleted(false);
+                    holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+                    holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.your_state_progress_bar_id.setForegroundColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.imv_preview.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(), R.color.gray));
+                    holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(), R.color.gray));
+                    holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(), R.color.gray));
+                    holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(), R.color.gray));
+                } else if (lead.getInvoices() != null
+                        //&&lead.getComentarioaprobacion().equals("Aprobado")
+                        && !statusDispatch.equals("Entregado")) {
+                    holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
                     String[] descriptionData = {"Cotización", "Orden Venta", "Factura", "Entrega\nMercaderia"};
                     holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+                    holder.your_state_progress_bar_id.setAllStatesCompleted(false);
+                    holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
+                    holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.your_state_progress_bar_id.setForegroundColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.imv_preview.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    //holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
+                    Log.e("REOS", "ListHistoricSalesOrderTraceabilityAdapter.estado:" + lead.getNombrecliente() + "-" + "Orden Venta con Facturado y Proceso Despacho");
 
+                } else if (lead.getInvoices() != null
+                        //&&lead.getComentarioaprobacion().equals("Aprobado")
+                        && statusDispatch.equals("Entregado")) {
+                    //holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.FIVE);
+                    holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
+                    String[] descriptionData = {"Cotización", "Orden Venta", "Factura", "Entrega\nMercaderia"};
+                    holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+                    holder.your_state_progress_bar_id.setAllStatesCompleted(true);
+                    holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.your_state_progress_bar_id.setForegroundColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.imv_preview.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+
+
+                    holder.tv_date_orders.setText(Induvis.getDateShort(date));
+                    for (int i = 0; i < lead.getInvoices().size(); i++) {
+
+                        holder.tv_date_delivery.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechadespacho()));
+                        holder.tv_date_invoice.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechaEmision()));
+                    }
                 }
-
-                Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
-                Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
+            }else {
+                //holder.your_state_progress_bar_id=null;
+                /*holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
+                String[] descriptionData = {"Orden\nVenta","Pend.\nRevision", "Aprobacion\nOrden", "Factura", "Entrega\nMercaderia"};
+                //String[] descriptionData=null;
+                Log.e("REOS", "ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:" + statusDispatch);
+                /*String[] cadena = lead.getComentarioaprobacion().split("-");
+                String object = cadena[0].trim();
+                String status = cadena[1].trim();
+                holder.tv_status_aprob.setText(status);*/
+                //Log.e("REOS", "ListHistoricSalesOrderTraceabilityAdapter.object:" + object.toString());
+                //Log.e("REOS", "ListHistoricSalesOrderTraceabilityAdapter.status:" + status.toString());
+                //holder.imv_historic_pend_rev.setVisibility(View.GONE);
+                //holder.imv_historic_order_aprob.setVisibility(View.GONE);
+                //Convert.setMarginsView(holder.imv_preview, 80, 450, 200, 145);
+                //Convert.setMarginsView(holder.imv_historic_orders, 330, 450, 200, 145);
+                /*holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+                holder.imv_preview.setVisibility(View.GONE);
+                //holder.imv_historic_orders.setVisibility(View.GONE);
+                Convert.setMarginsView(holder.imv_historic_pend_rev, 80, 450, 200, 145);
+                Convert.setMarginsView(holder.imv_historic_order_aprob, 330, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_invoices, 580, 450, 200, 145);
                 Convert.setMarginsView(holder.imv_historic_delivery, 830, 450, 0, 145);
+                if (lead.getInvoices() != null
+                        &&lead.getComentarioaprobacion().equals("Aprobado")
+                        && statusDispatch.equals("Entregado")) {
+                    //holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.FIVE);
+                    //holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
+                    //String[] descriptionData = {"Cotización", "Orden Venta", "Factura", "Entrega\nMercaderia"};
+                    holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
+                    holder.your_state_progress_bar_id.setAllStatesCompleted(true);
+                    holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.your_state_progress_bar_id.setForegroundColor
+                            (
+                                    ContextCompat.getColor(getContext(), R.color.colorPrimary)
+                            );
+                    holder.imv_preview.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
-                holder.your_state_progress_bar_id.setAllStatesCompleted(false);
-                holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
-                holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
-                        (
-                                ContextCompat.getColor(getContext(),R.color.colorPrimary)
-                        );
-                holder.your_state_progress_bar_id.setForegroundColor
-                        (
-                                ContextCompat.getColor(getContext(),R.color.colorPrimary)
-                        );
-                holder.imv_preview.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
-                holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
-                holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.gray));
-                holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.gray));
-            }
-            else if(lead.getInvoices()!=null
-                    //&&lead.getComentarioaprobacion().equals("Aprobado")
-                    &&!statusDispatch.equals("Entregado"))
-            {
-                holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
-                String[] descriptionData = {"Cotización", "Orden Venta", "Factura", "Entrega\nMercaderia"};
+
+                    holder.tv_date_orders.setText(Induvis.getDateShort(date));
+                    for (int i = 0; i < lead.getInvoices().size(); i++) {
+
+                        holder.tv_date_delivery.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechadespacho()));
+                        holder.tv_date_invoice.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechaEmision()));
+                    }
+                }*/
+                String[] descriptionData = {"Orden\nVenta","Pend.\nRevision", "Aprobacion\nOrden", "Factura", "Entrega\nMercaderia"};
                 holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
-                holder.your_state_progress_bar_id.setAllStatesCompleted(false);
-                holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
-                holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
-                        (
-                                ContextCompat.getColor(getContext(),R.color.colorPrimary)
-                        );
-                holder.your_state_progress_bar_id.setForegroundColor
-                        (
-                                ContextCompat.getColor(getContext(),R.color.colorPrimary)
-                        );
-                holder.imv_preview.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                //holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Facturado y Proceso Despacho");
-
-            }
-            else if(lead.getInvoices()!=null
-                    //&&lead.getComentarioaprobacion().equals("Aprobado")
-                    &&statusDispatch.equals("Entregado"))
-            {
-                //holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.FIVE);
-                holder.your_state_progress_bar_id.setMaxStateNumber(StateProgressBar.StateNumber.FOUR);
-                String[] descriptionData = {"Cotización", "Orden Venta", "Factura", "Entrega\nMercaderia"};
-                holder.your_state_progress_bar_id.setStateDescriptionData(descriptionData);
-                holder.your_state_progress_bar_id.setAllStatesCompleted(true);
-                holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
-                        (
-                                ContextCompat.getColor(getContext(),R.color.colorPrimary)
-                        );
-                holder.your_state_progress_bar_id.setForegroundColor
-                        (
-                                ContextCompat.getColor(getContext(),R.color.colorPrimary)
-                        );
-                holder.imv_preview.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.imv_historic_invoices.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.imv_historic_delivery.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-                holder.your_state_progress_bar_id.setStateDescriptionColor(ContextCompat.getColor(getContext(),R.color.colorPrimary));
-
-
-                holder.tv_date_orders.setText(Induvis.getDateShort(date));
-                for(int i=0;i<lead.getInvoices().size();i++)
+                Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:"+statusDispatch);
+                holder.imv_preview.setVisibility(View.GONE);
+                if(lead.getInvoices()==null&&lead.getComentarioaprobacion().equals("Cancelado"))
                 {
-
-                    holder.tv_date_delivery.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechadespacho()));
-                    holder.tv_date_invoice.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechaEmision()));
-                }
-
-
-                Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Facturado y Proceso Despacho y Entregado");
-            }
-            //////////////////////////////////////////////
-            Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.statusDispatch:"+statusDispatch);
-            /*if(lead.getInvoices()==null&&lead.getComentarioaprobacion().equals("Cancelado"))
-            {
-                holder.your_state_progress_bar_id.setAllStatesCompleted(false);
-                holder.your_state_progress_bar_id.setStateNumberForegroundColor(
+                    holder.your_state_progress_bar_id.setAllStatesCompleted(false);
+                /*holder.your_state_progress_bar_id.setStateNumberForegroundColor(
                         ContextCompat.getColor(getContext(),R.color.Rojo_Vistony)
-                );
+                );*/
                 holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
                         (
                         ContextCompat.getColor(getContext(),R.color.Rojo_Vistony)
@@ -783,6 +828,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                         (
                                 ContextCompat.getColor(getContext(),R.color.Rojo_Vistony)
                         );
+
 
                 holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
                 holder.imv_historic_orders.setColorFilter(ContextCompat.getColor(getContext(),R.color.Rojo_Vistony));
@@ -860,7 +906,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             else if(lead.getInvoices()!=null&&lead.getComentarioaprobacion().equals("Aprobado")&&!statusDispatch.equals("Entregado"))
             {
                 holder.your_state_progress_bar_id.setAllStatesCompleted(false);
-                holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
+                holder.your_state_progress_bar_id.setCurrentStateNumber(StateProgressBar.StateNumber.FIVE);
                 holder.your_state_progress_bar_id.setCurrentStateDescriptionColor
                         (
                                 ContextCompat.getColor(getContext(),R.color.colorPrimary)
@@ -902,13 +948,17 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
                 holder.tv_date_orders.setText(Induvis.getDateShort(date));
                 for(int i=0;i<lead.getInvoices().size();i++)
                 {
+
                     holder.tv_date_delivery.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechadespacho()));
                     holder.tv_date_invoice.setText(Induvis.getDateShort(lead.getInvoices().get(i).getFechaEmision()));
-                }*/
+                }
 
 
                 Log.e("REOS","ListHistoricSalesOrderTraceabilityAdapter.estado:"+lead.getNombrecliente()+"-"+"Orden Venta con Facturado y Proceso Despacho y Entregado");
             }
+
+            }
+        }
 
         holder.imv_historic_invoices.setOnClickListener(new View.OnClickListener() {
             @Override

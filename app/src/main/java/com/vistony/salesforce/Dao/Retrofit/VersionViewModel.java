@@ -44,7 +44,7 @@ public class VersionViewModel {
         switch (BuildConfig.FLAVOR) {
             //case "chile":
             //QA Aprobaciones 11/07/2023
-            case "peru":
+            //case "peru":
                 //Produccion
             //case "ecuador":
             //case "espania":
@@ -59,9 +59,9 @@ public class VersionViewModel {
                 baseUrl = "https://app.vistony.pe";
                 break;
             //Produccion
-            /*case "peru":
+            case "peru":
                 baseUrl = "http://190.12.79.132:8083";
-                break;*/
+                break;
             //Aprobaciones
             /*case "peru":
                 baseUrl = "http://190.12.79.132:8082";

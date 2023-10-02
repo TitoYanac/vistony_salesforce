@@ -126,7 +126,7 @@ android {
             //Pruebas Autorizaciones B2B -->Produccion
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
-            versionName "2.2.20"
+            versionName "2.2.21"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')

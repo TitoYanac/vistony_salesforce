@@ -172,7 +172,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private  int day_dispatch_date,mes_dispatch_date,ano_dispatch_date;
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
-    static TableRow tr_dsct_cont,tr_summary_flete,tr_lbl_reason_free_transfer,tr_spn_reason_free_transfer,tr_descount_bl,tr_lbl_dispatch_date,tr_tv_dispatch_date;
+    static TableRow tr_dsct_cont,tr_summary_flete,tr_lbl_reason_free_transfer,tr_spn_reason_free_transfer,tr_descount_bl,tr_lbl_dispatch_date,tr_tv_dispatch_date,tr_lbl_spn_warehouse,tr_spn_warehouse;
     static TableLayout tl_tittle_discount_percent,tl_discount_percent;
     Integer discountPercent=0;
     //TaskGetPriceList taskGetPriceList=new TaskGetPriceList();
@@ -312,6 +312,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         Utilitario.disabledImageButtton(btn_orden_venta_consultar_agencia,context);
         Utilitario.disabledSpinner(spnmoneda);
         Utilitario.disabledImageButtton(imb_descount_bl,context);
+        Utilitario.disabledSpinner(spn_warehouse);
 
         //Utilitario.disabledImageButtton(btn_dispatch_date);
         //Utilitario.disabledEditText(et_comentario);
@@ -558,10 +559,13 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         tr_lbl_dispatch_date=v.findViewById(R.id.tr_lbl_dispatch_date);
         tr_tv_dispatch_date=v.findViewById(R.id.tr_tv_dispatch_date);
         spn_warehouse=v.findViewById(R.id.spn_warehouse);
+        tr_lbl_spn_warehouse=v.findViewById(R.id.tr_lbl_spn_warehouse);
+        tr_spn_warehouse=v.findViewById(R.id.tr_spn_warehouse);
 
         if(!ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
         {
-            tr_tv_dispatch_date.setVisibility(View.GONE);
+            tr_lbl_spn_warehouse.setVisibility(View.GONE);
+            tr_spn_warehouse.setVisibility(View.GONE);
         }
 
         //Pruebas de Fecha de entrega
@@ -637,7 +641,9 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     {
                         alertdialogInformative(getContext(),"Advertencia!!!","Motivo: \n Termino de Pago (Contado) no debe ir vinculado con agencia.\n Sugerencia: \n Cambiar a termino de pago (Pago adelantado) si se desea seguir con agencia.").show();
                     }else {
-                        if(spn_warehouse.getSelectedItem().toString().equals("--SELECCIONAR--"))
+                        //if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+
+                        if(spn_warehouse.getSelectedItem().toString().equals("--SELECCIONAR--")&&ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
                         {
                             Toast.makeText(getContext(), "Debe Elegir un Almacen para poder continuar...", Toast.LENGTH_SHORT).show();
                         }else

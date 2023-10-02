@@ -122,7 +122,7 @@ public class LoginView extends AppCompatActivity {
         String env = BuildConfig.BASE_ENVIRONMENT.equals("/api") ? "Producción" : "Test";
         version = Utilitario.getVersion(getApplication());
 
-        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion()+"_");
+        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion()+"");
 
         // locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         loginRepository = new ViewModelProvider(this).get(LoginRepository.class);

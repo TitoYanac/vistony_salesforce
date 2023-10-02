@@ -126,6 +126,9 @@ import com.vistony.salesforce.kotlin.Model.ServiceAppViewModel;
 import com.vistony.salesforce.kotlin.Utilities.ServiceApp;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -220,6 +223,7 @@ ParametrosView extends Fragment {
     private BusinessLayerRepository businessLayerRepository;
     private BusinessLayerSalesDetailRepository businessLayerSalesDetailRepository;
     private WarehouseRepository warehouseRepository;
+    UsuarioSQLiteEntity usuarioSQLiteEntity;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -338,6 +342,11 @@ ParametrosView extends Fragment {
                 salesCalendarRepository,
                 getContext()
         )).get(SalesCalendarViewModel.class);
+        UsuarioSQLite usuarioSQLite = new UsuarioSQLite(getContext());
+        usuarioSQLiteEntity = new UsuarioSQLiteEntity();
+        usuarioSQLiteEntity = usuarioSQLite.ObtenerUsuarioSesion();
+
+
 
         //CARGA DE MAESTROS
         listaparametrosSQLiteEntity = parametrosSQLite.ObtenerParametros();
@@ -461,9 +470,7 @@ ParametrosView extends Fragment {
                 OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite = new OrdenVentaCabeceraSQLite(getContext());
                 ArrayList<OrdenVentaCabeceraSQLiteEntity> listSalesOrders = new ArrayList<>();
                 listSalesOrders = ordenVentaCabeceraSQLite.getSalesOrderPendingSAP();
-                UsuarioSQLite usuarioSQLite = new UsuarioSQLite(getContext());
-                UsuarioSQLiteEntity usuarioSQLiteEntity = new UsuarioSQLiteEntity();
-                usuarioSQLiteEntity = usuarioSQLite.ObtenerUsuarioSesion();
+
                 for (int i = 0; i < listSalesOrders.size(); i++) {
                     ordenVentaRepository.validateSalesOrder(
                             listSalesOrders.get(i).getCliente_id(),
@@ -690,9 +697,31 @@ ParametrosView extends Fragment {
 
             obtenerWSParametros =  new ObtenerWSParametros();
             obtenerWSParametros.execute(valores);
+            if(usuarioSQLiteEntity.getU_VIS_ManagementType().equals("B2B")) {
+                LocalDate today = LocalDate.now();
 
-            serviceAppViewModel.addServiceApp();
-            salesCalendarViewModel.addSalesCalendar(SesionEntity.imei,"20230901","20230930");
+                // Obtener el primer día del mes anterior
+                LocalDate firstDayOfLastMonth = today.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
+
+                // Formatear el primer día del mes anterior
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                String formattedFirstDay = firstDayOfLastMonth.format(formatter);
+                Log.e("REOS", "ParametrosView->salesCalendarViewModel.addSalesCalendar-formattedFirstDay: " + formattedFirstDay);
+                System.out.println("Primer día del mes anterior: " + formattedFirstDay);
+
+                // Obtener el último día de este mes
+                LocalDate lastDayOfThisMonth = today.with(TemporalAdjusters.lastDayOfMonth());
+
+                // Formatear el último día de este mes
+                String formattedLastDay = lastDayOfThisMonth.format(formatter);
+                Log.e("REOS", "ParametrosView->salesCalendarViewModel.addSalesCalendar-formattedLastDay: " + formattedLastDay);
+                System.out.println("Último día de este mes: " + formattedLastDay);
+                //Log.e("REOS", "WarehouseRepository->getWarehouse-->resultdata" + formattedLastDay);
+
+                serviceAppViewModel.addServiceApp();
+                salesCalendarViewModel.addSalesCalendar(SesionEntity.imei, formattedFirstDay, formattedLastDay);
+            }
+
         });
 
 
@@ -742,36 +771,37 @@ ParametrosView extends Fragment {
         if(!SesionEntity.perfil_id.equals("chofer"))
         {
             Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.isServiceRunning: "+ ServiceApp.isServiceRunning);
-
-            if(!ServiceApp.isServiceRunning)
+            if(usuarioSQLiteEntity.getU_VIS_ManagementType().equals("B2B"))
             {
-                //Inicio de Servicio y Envio de Notificacion
-                if (areNotificationsEnabled(getContext())) {
-                    // Las notificaciones están habilitadas
-                    try {
-                        //Intent intent = new Intent(this, MenuView.class);
-                        Intent intent = new Intent(getContext(), ServiceApp.class);
-                        //Log.e("REOS", "Composables-StatusIcons-contexto: "+context1)
-                        //Log.e("REOS", "Composables-StatusIcons-intent: "+intent)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            //Log.e("REOS", "Composables-StatusIcons-startForegroundService")
-                            ContextCompat.startForegroundService(getActivity(), intent);
-                        } else {
-                            //Log.e("REOS", "Composables-StatusIcons-startService ")
-                            //ServiceNotificationApp serviceNotificationApp=new ServiceNotificationApp();
-                            //serviceNotificationApp.startService(intent);
-                            ContextCompat.startForegroundService(getActivity(), intent);
+                if (!ServiceApp.isServiceRunning) {
+                    //Inicio de Servicio y Envio de Notificacion
+                    if (areNotificationsEnabled(getContext())) {
+                        // Las notificaciones están habilitadas
+                        try {
+                            //Intent intent = new Intent(this, MenuView.class);
+                            Intent intent = new Intent(getContext(), ServiceApp.class);
+                            //Log.e("REOS", "Composables-StatusIcons-contexto: "+context1)
+                            //Log.e("REOS", "Composables-StatusIcons-intent: "+intent)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                //Log.e("REOS", "Composables-StatusIcons-startForegroundService")
+                                ContextCompat.startForegroundService(getActivity(), intent);
+                            } else {
+                                //Log.e("REOS", "Composables-StatusIcons-startService ")
+                                //ServiceNotificationApp serviceNotificationApp=new ServiceNotificationApp();
+                                //serviceNotificationApp.startService(intent);
+                                ContextCompat.startForegroundService(getActivity(), intent);
+                            }
+                        } catch (Exception e) {
+                            Log.e("REOS", "Composables-StatusIcons-error: " + e.toString());
                         }
-                    }catch (Exception e){
-                        Log.e("REOS", "Composables-StatusIcons-error: "+e.toString());
+                    } else {
+                        // Las notificaciones están deshabilitadas
+                        showNotificationDisabledDialog(getContext());
                     }
+                    Toast.makeText(getContext(), "El servicio de notificaciones, esta en proceso de inicio.", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Las notificaciones están deshabilitadas
-                    showNotificationDisabledDialog(getContext());
+                    Toast.makeText(getContext(), "El servicio ya se encuentra activo, no es necesario volverlo a iniciar.", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getContext(), "El servicio de notificaciones, esta en proceso de inicio.", Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(getContext(), "El servicio ya se encuentra activo, no es necesario volverlo a iniciar.", Toast.LENGTH_SHORT).show();
             }
         }
 

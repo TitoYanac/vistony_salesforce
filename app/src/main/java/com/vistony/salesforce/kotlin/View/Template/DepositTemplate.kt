@@ -216,13 +216,73 @@ fun StageOneDeposit(
                                     //.fillMaxSize()
                                     .padding(10.dp)
                             ) {
-                                // Contenido de LazyColumn
-                                /*AnimatedVisibility(
-                                    visible = expanded,
-                                    enter = expandIn(),
-                                    exit = shrinkOut()
-                                )
-                                {*/
+                                val typeDepositList = listOf( "Todos","Cobranza Ordinaria","Deposito Directo")
+                                val currentSelectionSpinner = remember {
+                                    mutableStateOf("Todos")
+                                }
+
+                                val filteredData = remember(currentSelectionSpinner) {
+                                    derivedStateOf {
+                                        if (currentSelectionSpinner.value == "Todos") {
+                                            collectionDetail.value.data
+                                        } else {
+                                            collectionDetail.value.data.filter { it.U_VIS_Type == currentSelectionSpinner.value }
+                                        }
+                                    }
+                                }
+                                Row(modifier = Modifier.padding(0.dp,0.dp)){
+                                    Column(modifier = Modifier.weight(0.8f)) {
+                                        Spinner(
+                                            items = typeDepositList,
+                                            selectedItem = currentSelectionSpinner.value,
+                                            onItemSelected = { item ->
+                                                currentSelectionSpinner.value = item
+                                            }
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Column(modifier = Modifier.weight(0.15f)) {
+                                        ButtonCircle(
+                                            size = DpSize(45.dp,45.dp),
+                                            OnClick = {
+                                                for (i in 0 until filteredData.value.size)
+                                                {
+                                                    filteredData.value.get(i).StatusSelection=true
+                                                }
+                                            }, roundedCornerShape = RoundedCornerShape(4.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_check_box_white_24),
+                                                contentDescription = null,
+                                                tint = Color.White,
+                                                modifier = Modifier
+                                                //tint = if ( stepsStatus.get(index) == "Y") BlueVistony else Color.Gray
+                                            )
+                                        }
+                                    }
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Column(modifier = Modifier.weight(0.15f)) {
+                                        ButtonCircle(
+                                            size = DpSize(45.dp,45.dp),
+                                            OnClick = {
+                                                onSelectCollection(filteredData.value)
+                                                statusBoolean.value = statusBoolean.value.not()
+                                            }, roundedCornerShape = RoundedCornerShape(4.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = ImageVector.vectorResource(R.drawable.ic_menu_send),
+                                                contentDescription = null,
+                                                tint = Color.White,
+                                                modifier = Modifier
+                                                //tint = if ( stepsStatus.get(index) == "Y") BlueVistony else Color.Gray
+                                            )
+                                        }
+                                    }
+
+                                }
+
+
+
                                     Box(
                                         modifier = Modifier
                                            // .weight(1f)
@@ -236,7 +296,10 @@ fun StageOneDeposit(
                                                 //.weight(1f)
                                                 //.fillMaxWidth()
                                             ) {
-                                                itemsIndexed(collectionDetail.value.data) { index, line ->
+                                                itemsIndexed(
+                                                    //collectionDetail.value.data
+                                                    filteredData.value
+                                                ) { index, line ->
                                                     Card(
                                                         elevation = 4.dp, modifier = Modifier
                                                             //.fillMaxWidth()
@@ -260,14 +323,14 @@ fun StageOneDeposit(
                                                             line.StatusSelection = isChecked.value
                                                             QuantitySelected = 0
                                                             AmountSelected = 0f
-                                                            for (i in 0 until collectionDetail.value.data!!.size) {
-                                                                if (collectionDetail.value.data.get(
+                                                            for (i in 0 until filteredData.value!!.size) {
+                                                                if (filteredData.value.get(
                                                                         i
                                                                     ).StatusSelection
                                                                 ) {
                                                                     QuantitySelected++
                                                                     AmountSelected =
-                                                                        AmountSelected + collectionDetail.value.data.get(
+                                                                        AmountSelected + filteredData.value.get(
                                                                             i
                                                                         ).AmountCharged.toFloat()
                                                                 }
@@ -471,7 +534,7 @@ fun StageOneDeposit(
                                             {
                                                 ButtonCircle(
                                                     OnClick = {
-                                                        onSelectCollection(collectionDetail.value.data)
+                                                        onSelectCollection(filteredData.value)
                                                         statusBoolean.value = statusBoolean.value.not()
                                                     },
                                                     size = DpSize(40.dp, 40.dp),
@@ -508,10 +571,10 @@ fun StageOneDeposit(
                                         )
                                         TableCell(
                                             text = "${
-                                                if (collectionDetail.value.data.isNullOrEmpty()) {
+                                                if (filteredData.value.isNullOrEmpty()) {
                                                     0
                                                 } else {
-                                                    collectionDetail.value.data.size
+                                                    filteredData.value.size
                                                 }
                                             }",
                                             weight = 1f,
@@ -577,7 +640,7 @@ fun StageOneDeposit(
                                                 description = "Siguente",
                                                 OnClick = {
                                                     //ExpandableInvoices()
-                                                    onSelectCollection(collectionDetail.value.data)
+                                                    onSelectCollection(filteredData.value)
                                                     statusBoolean.value = statusBoolean.value.not()
                                                 },
                                                 context = contexto,

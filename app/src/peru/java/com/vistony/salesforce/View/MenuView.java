@@ -723,9 +723,9 @@ public class MenuView extends AppCompatActivity
                 //fragmentSeleccionado=true;
                 //TAG_FRAGMENT="config_print";
 
-                //HojaDespachoFragment = new DispatchSheetView();
+                HojaDespachoFragment = new DispatchSheetView();
                 //HojaDespachoFragment = new ContainerDispatchSheetView();
-                HojaDespachoFragment = new ContainerDispatchView();
+                //HojaDespachoFragment = new ContainerDispatchView();
                 fragment = "HojaDespachoView";
                 accion = "inicio";
                 compuesto = fragment + "-" + accion;

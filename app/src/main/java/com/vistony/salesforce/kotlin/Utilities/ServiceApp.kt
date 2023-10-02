@@ -179,7 +179,7 @@ class ServiceApp: Service()  {
                             "REOS",
                             "Service-onStartCommand-listOrdenVentaCabecera.size" + listOrdenVentaCabecera.size
                         )
-                        /*try {
+                        try {
                             for (i in 0 until listOrdenVentaCabecera.size)
                             {
                                 var historicSalesOrderTraceabilityRepository: HistoricSalesOrderTraceabilityRepository
@@ -259,7 +259,7 @@ class ServiceApp: Service()  {
                                 "REOS",
                                 "Service-onStartCommand-error: " + e.toString()
                             )
-                        }*/
+                        }
                     }
                 }
                         Log.e(
