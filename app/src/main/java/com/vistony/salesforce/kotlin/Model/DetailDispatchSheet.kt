@@ -65,6 +65,13 @@ data class DetailDispatchSheet (
     @SerializedName("Status")
     var timefin: String? = null
 )
+
+data class DetailDispatchSheetEntity(
+    var Status:String="",
+    //@SerializedName("Notification")
+    //var DATA: LiveData<List<Notification>> = emptyList(),
+    val DATA: List<DetailDispatchSheet> = (emptyList())
+)
 /*
 {
     // Constructor personalizado para Room

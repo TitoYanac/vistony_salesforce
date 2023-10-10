@@ -3,12 +3,13 @@ package com.vistony.salesforce.Dao.Adapters;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.appcompat.view.menu.MenuView;
+
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
 import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.DocumentoDeudaSQLiteEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteDetalleEntity;
 import com.vistony.salesforce.View.ClienteDetalleView;
-import com.vistony.salesforce.View.MenuView;
 import com.vistony.salesforce.View.ParametrosView;
 
 import java.util.ArrayList;

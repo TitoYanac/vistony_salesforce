@@ -10,7 +10,6 @@ import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.BancoEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.PromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.PromocionCabeceraSQLiteEntity;

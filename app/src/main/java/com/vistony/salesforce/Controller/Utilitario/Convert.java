@@ -499,4 +499,30 @@ public class Convert {
 
         return percentageDifference;
     }
+
+    public static Integer getScale(){
+        Integer Scale=0;
+        switch (BuildConfig.FLAVOR){
+            case "chile":
+                break;
+            case "ecuador":
+                break;
+            case "peru":
+                Scale=2;
+                break;
+            case "bolivia":
+                Scale=5;
+                break;
+            case "paraguay":
+                Scale=5;
+                break;
+            case "perurofalab":
+                break;
+            case "espania":
+                break;
+            case "marruecos":
+                break;
+        }
+        return Scale;
+    }
 }

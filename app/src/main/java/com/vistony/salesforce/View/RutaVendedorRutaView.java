@@ -25,6 +25,7 @@ import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Dao.Adapters.ListaClienteCabeceraDao;
 import com.vistony.salesforce.Dao.SQLite.ClienteSQlite;
+import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Dao.SQLite.RutaFuerzaTrabajoSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
 import com.vistony.salesforce.Entity.Adapters.ListaClienteCabeceraEntity;
@@ -61,7 +62,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
     ListView listrutavendedorruta;
     ObtenerSQLiteRutaFuerzaTrabajo obtenerSQLiteRutaFuerzaTrabajo;
     private SearchView mSearchView;
-    TextView tv_cantidad_cliente_ruta,tv_cantidad_cliente_cabecera_total,tv_cantidad_cliente_cabecera_visita,tv_cantidad_cliente_cabecera_cobranza,tv_cantidad_cliente_cabecera_pedido,tv_cantidad_cliente_cabecera_geolocation;
+    TextView tv_cantidad_cliente_ruta,tv_cantidad_cliente_cabecera_total,tv_cantidad_cliente_cabecera_visita,tv_cantidad_cliente_cabecera_cobranza,tv_cantidad_cliente_cabecera_pedido,tv_cantidad_cliente_cabecera_geolocation,tv_update_date;
     private ProgressDialog pd;
     SwipeRefreshLayout swipeRefreshLayout;
     TableRow table_row_geolocation;
@@ -109,10 +110,27 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         tv_cantidad_cliente_cabecera_pedido=v.findViewById(R.id.tv_cantidad_cliente_cabecera_pedido);
         table_row_geolocation=v.findViewById(R.id.table_row_geolocation);
         tv_cantidad_cliente_cabecera_geolocation=v.findViewById(R.id.tv_cantidad_cliente_cabecera_geolocation);
+        tv_update_date=v.findViewById(R.id.tv_update_date);
         obtenerSQLiteRutaFuerzaTrabajo=new ObtenerSQLiteRutaFuerzaTrabajo();
         obtenerSQLiteRutaFuerzaTrabajo.execute();
 
-        if(!BuildConfig.FLAVOR.equals("peru"))
+        switch (BuildConfig.FLAVOR)
+        {
+            case "peru":
+            case "bolivia":
+            case "paraguay":
+                if(SesionEntity.census.equals("N")){
+                    table_row_geolocation.setVisibility(View.GONE);
+                }
+                else {
+                    table_row_geolocation.setVisibility(View.VISIBLE);
+                }
+                break;
+            default:
+                table_row_geolocation.setVisibility(View.GONE);
+                break;
+        }
+        /*if(!BuildConfig.FLAVOR.equals("peru"))
         {
             table_row_geolocation.setVisibility(View.GONE);
         }
@@ -123,7 +141,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
             else {
                 table_row_geolocation.setVisibility(View.VISIBLE);
             }
-        }
+        }*/
         //table_row_geolocation.setVisibility(View.GONE);
         //Implementing setOnRefreshListener on SwipeRefreshLayout
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -134,6 +152,11 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                 UpdateListView();
             }
         });
+        ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getContext());
+        String datesellerroute="";
+        datesellerroute=parametrosSQLite.getDateTimeParemeterforName(getContext().getResources().getString(R.string.seller_route).toUpperCase());
+
+        tv_update_date.setText("Fecha de Actualización: "+datesellerroute);
         return v;
     }
 
@@ -208,22 +231,16 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
 
                     //recorre la lista
                     for(int i=0;i<Lista.size();i++){
-
                         fechainicioruta=Lista.get(i).getFechainicioruta();
                         fechainiciorutadate=ConvertirFechaStringDate(fechainicioruta);
-
                         Integer frecuencia=1;
                         try{
                             frecuencia=Integer.parseInt(Lista.get(i).getFrecuencia());
                         }catch(Exception e){
                             Sentry.captureMessage(e.getMessage());
                         }
-
-
                         //Actualiza la Fecha de la tabla a la mas cercana a la actual
                         fecharutaactualizada=sumarDiasAFecha(fechainiciorutadate,frecuencia);
-
-
                         //Actualiza en la tabla
                         rutaFuerzaTrabajoSQLiteDao.ActualizaFechaInicioRuta(
                                 Lista.get(i).getCompania_id(),
@@ -231,7 +248,6 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                                 Lista.get(i).getDia(),
                                 String.valueOf(fecharutaactualizada)
                         );
-
                     }
 
                     //Obtiene lista menor con fecha actual
@@ -263,12 +279,14 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     String fecha =dateFormat.format(date);
 
                     //Evalua si RutaVendedor ya tiene clientes
-                    listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta,getContext(),fecha);
+                    //listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta,getContext(),fecha);
+                    listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.getSellerRoute(chk_ruta,getContext(),fecha);
                     Log.e("REOS","RutaVendedorRutaView-ObtenerSQLiteRutaFuerzaTrabajo-listaClienteCabeceraEntityconruta: "+listaClienteCabeceraEntityconruta.size());
                     if(listaClienteCabeceraEntityconruta.isEmpty()){
 
                         formulasController.RegistrarRutaVendedor(listaClienteCabeceraEntities,fecha,chk_ruta);
-                        listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta,getContext(),fecha);
+                        //listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha(chk_ruta,getContext(),fecha);
+                        listaClienteCabeceraEntityconruta=rutaVendedorSQLiteDao.getSellerRoute(chk_ruta,getContext(),fecha);
                     }
 
                     listaClienteCabeceraAdapter = new ListaClienteCabeceraAdapter(getActivity(), ListaClienteCabeceraDao.getInstance().getLeads(listaClienteCabeceraEntityconruta));

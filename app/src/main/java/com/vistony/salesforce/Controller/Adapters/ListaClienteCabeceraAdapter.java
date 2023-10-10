@@ -37,8 +37,6 @@ import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ClienteCabeceraView;
 import com.vistony.salesforce.View.RutaVendedorView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -180,7 +178,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
         Log.e("Percona=>","====================");
         Log.e("Percona=>",""+lead.getCliente_id());
         Log.e("Percona=>","====================");
-
+        Log.e("REOS","ListaClienteCabeceraAdapter-getView-lead.getSaldo() "+lead.getSaldo());
         holder.tv_clienteid.setText(lead.getCliente_id());
         holder.tv_nombrecliente.setText(lead.getNombrecliente());
         holder.tv_saldo_cliente_cabecera.setText(Convert.currencyForView(lead.getSaldo()));
@@ -280,7 +278,25 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             holder.chk_visitsection.setChecked(false);
         }
 
-        if(!BuildConfig.FLAVOR.equals("peru"))
+        switch (BuildConfig.FLAVOR)
+        {
+            case "peru":
+            case "bolivia":
+            case "paraguay":
+                if(SesionEntity.census.equals("N")){
+                    holder.chk_geolocation.setVisibility(View.GONE);
+                }
+                else {
+                    holder.chk_geolocation.setVisibility(View.VISIBLE);
+                }
+                break;
+            default:
+                holder.chk_geolocation.setVisibility(View.GONE);
+                holder.chk_visitsection.setVisibility(View.GONE);
+                break;
+        }
+
+       /* if(!BuildConfig.FLAVOR.equals("peru"))
        {
             holder.chk_geolocation.setVisibility(View.GONE);
             holder.chk_visitsection.setVisibility(View.GONE);
@@ -291,7 +307,7 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             else {
                 holder.chk_geolocation.setVisibility(View.VISIBLE);
             }
-        }
+        }*/
 
         holder.relativeListaCabezeraCns.setOnClickListener(v -> {
 

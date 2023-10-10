@@ -160,7 +160,24 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
         obtenerRutaVendedorNoRuta=new ObtenerRutaVendedorNoRuta();
         obtenerRutaVendedorNoRuta.execute();
 
-        if(!BuildConfig.FLAVOR.equals("peru"))
+        switch (BuildConfig.FLAVOR)
+        {
+            case "peru":
+            case "bolivia":
+            case "paraguay":
+                if(SesionEntity.census.equals("N")){
+                    table_row_no_ruta_geolocation.setVisibility(View.GONE);
+                }
+                else {
+                    table_row_no_ruta_geolocation.setVisibility(View.VISIBLE);
+                }
+                break;
+            default:
+                table_row_no_ruta_geolocation.setVisibility(View.GONE);
+                break;
+        }
+
+        /*if(!BuildConfig.FLAVOR.equals("peru"))
         {
             table_row_no_ruta_geolocation.setVisibility(View.GONE);
         }
@@ -171,7 +188,7 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
             else {
                 table_row_no_ruta_geolocation.setVisibility(View.VISIBLE);
             }
-        }
+        }*/
 
         //table_row_no_ruta_geolocation.setVisibility(View.GONE);
         fabagregarclientenoruta.setOnClickListener(view -> {

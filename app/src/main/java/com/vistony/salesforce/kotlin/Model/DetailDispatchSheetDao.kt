@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DetailDispatchSheetDao {
@@ -64,5 +65,5 @@ interface DetailDispatchSheetDao {
         dateDispatch: String,
         statusValue1: String,
         statusValue2: String
-    ): List<DetailDispatchSheet>?
+    ): Flow<List<DetailDispatchSheet>?>
 }

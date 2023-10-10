@@ -16,11 +16,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -34,7 +31,6 @@ import com.vistony.salesforce.Entity.Adapters.ListaHistoricoCobranzaEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.HistoricoCobranzaView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

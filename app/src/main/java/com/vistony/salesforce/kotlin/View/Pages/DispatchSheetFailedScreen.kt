@@ -14,11 +14,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
 import com.vistony.salesforce.kotlin.View.Atoms.theme.VistonyTheme
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.View.ContainerDispatchView
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheet
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetRepository
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetViewModel
+import com.vistony.salesforce.kotlin.Model.NotificationViewModel
+import com.vistony.salesforce.kotlin.View.Template.CardNotification
 import com.vistony.salesforce.kotlin.View.components.DispatchSheetTemplate
 
 class DispatchSheetFailedScreen : Fragment()
@@ -41,7 +44,7 @@ class DispatchSheetFailedScreen : Fragment()
                         val appContext = LocalContext.current
                         val lifecycleOwner = LocalContext.current as LifecycleOwner
                         val detailDispatchSheetRepository = DetailDispatchSheetRepository()
-                        var detailDispatchSheetList by remember { mutableStateOf(emptyList<DetailDispatchSheet>()) }
+                        /*var detailDispatchSheetList by remember { mutableStateOf(emptyList<DetailDispatchSheet>()) }
                         detailDispatchSheetViewModel = DetailDispatchSheetViewModel(detailDispatchSheetRepository)
                         detailDispatchSheetViewModel?.getStateDetailDispatchSheet(
                             SesionEntity.imei,
@@ -59,8 +62,32 @@ class DispatchSheetFailedScreen : Fragment()
                             //Conversation1(data)
                             detailDispatchSheetList= data
 
+                        }*/
+                        val detailDispatchSheetViewModel: DetailDispatchSheetViewModel = viewModel(
+                            factory = DetailDispatchSheetViewModel.DetailDispatchSheetViewModelFactory(
+                                detailDispatchSheetRepository,
+                                appContext
+                            )
+                        )
+                        detailDispatchSheetViewModel?.getStateDetailDispatchSheet(
+                            SesionEntity.imei,
+                            ContainerDispatchView.parametrofecha,
+                            appContext,
+                            lifecycleOwner,
+                            "F"
+                        )
+
+                        var detailDispatchSheetDB=detailDispatchSheetViewModel.resultDB.collectAsState()
+                        //val notificationEntity by notificationViewModel.notificationLiveData.observeAsState(NotificationEntity())
+
+                        when (detailDispatchSheetDB.value.Status) {
+                            "Y" -> {
+                                //CardNotification(detailDispatchSheetDB.value.DATA)
+                                DispatchSheetTemplate(detailDispatchSheetDB.value.DATA,appContext,lifecycleOwner)
+                            }
                         }
-                        DispatchSheetTemplate(detailDispatchSheetList,appContext,lifecycleOwner)
+
+                        //DispatchSheetTemplate(detailDispatchSheetList,appContext,lifecycleOwner)
                     }
                 }
             }

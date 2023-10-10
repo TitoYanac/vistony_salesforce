@@ -30,9 +30,11 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="RUC"
+                        android:text="@string/ruc"
                         android:textStyle="bold"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:textAllCaps="true"
+                        />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
@@ -47,8 +49,9 @@
                         android:enabled="true"
                         android:hint=""
                         android:background="@drawable/borde_cuadrado"
-                        android:text="RUC1:"
+                        android:text="@string/ruc"
                         android:layout_gravity="center_horizontal"
+                        android:textAllCaps="true"
                         android:textSize="20dp" />
 
 
@@ -64,9 +67,11 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="CLIENTE"
+                        android:text="@string/client"
                         android:textStyle="bold"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:textAllCaps="true"
+                        />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
@@ -80,10 +85,12 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="Cliente1:"
+                        android:text="@string/client"
                         android:background="@drawable/borde_cuadrado"
                         android:layout_gravity="center_horizontal"
-                        android:textSize="20dp" />
+                        android:textSize="20dp"
+                        android:textAllCaps="true"
+                        />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
@@ -96,9 +103,11 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="DIRECCIÓN"
+                        android:text="@string/lbl_street"
                         android:textStyle="bold"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:textAllCaps="true"
+                        />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
@@ -112,10 +121,12 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="Direccion1:"
+                        android:text="@string/lbl_street"
                         android:background="@drawable/borde_cuadrado"
                         android:layout_gravity="center_horizontal"
-                        android:textSize="20dp" />
+                        android:textSize="20dp"
+                        android:textAllCaps="true"
+                        />
                     <ImageButton
                         android:id="@+id/btn_consultar_direccion"
                         android:layout_width="50dp"
@@ -134,9 +145,11 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="MONEDA"
+                        android:text="@string/lbl_currency"
                         android:textStyle="bold"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:textAllCaps="true"
+                        />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
@@ -148,7 +161,7 @@
                         android:layout_height="50dp"
                         android:layout_marginTop="0dp"
                         android:layout_weight="4"
-                        android:entries="@array/Moneda_Peru"
+                        android:entries="@array/Moneda"
                         android:textAlignment="gravity"
                         android:spinnerMode="dropdown"
                         style="@android:style/Widget.Holo.Light.Spinner"
@@ -165,9 +178,11 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="TÉRMINO PAGO"
+                        android:text="@string/lbl_payment_term"
                         android:textStyle="bold"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:textAllCaps="true"
+                        />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
@@ -180,12 +195,14 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="CONTRA ENTREGA"
+                        android:text="@string/lbl_payment_term"
                         android:gravity="center"
                         android:background="@drawable/borde_cuadrado"
                         android:layout_gravity="center_horizontal"
                         android:textAlignment="center"
-                        android:textSize="20dp" />
+                        android:textSize="20dp"
+                        android:textAllCaps="true"
+                        />
 
                     <ImageButton
                         android:id="@+id/btn_consultar_termino_pago"
@@ -272,9 +289,11 @@
                     android:layout_weight="4"
                     android:enabled="true"
                     android:hint=""
-                    android:text="DESCUENTO POR PAGO ADELANTADO"
+                    android:text="@string/early_payment_discount"
                     android:textStyle="bold"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:textAllCaps="true"
+                    />
             </TableRow>
             </TableLayout>
             <TableLayout
@@ -337,9 +356,11 @@
                         android:layout_weight="4"
                         android:enabled="false"
                         android:hint=""
-                        android:text="DESCUENTO POR CONTADO"
+                        android:text="@string/cash_discount"
                         android:textStyle="bold"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:textAllCaps="true"
+                        />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
@@ -410,9 +431,11 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="AGENCIA"
+                        android:text="@string/agency"
                         android:textStyle="bold"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:textAllCaps="true"
+                        />
                 </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
@@ -426,11 +449,13 @@
                         android:enabled="true"
                         android:hint=""
                         android:gravity="center"
-                        android:text="VISTONY S.A.C."
+                        android:text="@string/agency"
                         android:textAlignment="center"
                         android:background="@drawable/borde_cuadrado"
                         android:layout_gravity="center_horizontal"
-                        android:textSize="20dp" />
+                        android:textSize="20dp"
+                        android:textAllCaps="true"
+                        />
 
                     <ImageButton
                         android:id="@+id/btn_orden_venta_consultar_agencia"
@@ -496,10 +521,11 @@
                         android:layout_weight="4"
                         android:enabled="true"
                         android:hint=""
-                        android:text="COMENTARIO"
+                        android:text="@string/comentario"
                         android:textStyle="bold"
                         android:textSize="15dp"
                         android:textAlignment="center"
+                        android:textAllCaps="true"
                         />
                 </TableRow>
                 <TableRow
@@ -512,7 +538,7 @@
                         android:layout_height="100dp"
                         android:layout_weight="4"
                         android:enabled="true"
-                        android:hint="Ingrese Comentario"
+                        android:hint="@string/entry_commentary"
                         android:textAlignment="center"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/borde_cuadrado"
@@ -522,18 +548,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.omega_r.libs.OmegaCenterIconButton
+                    <Button
                         android:id="@+id/btn_detalle_orden_venta"
 
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
                         android:enabled="true"
-                        android:text="DETALLE"
+                        android:text="@string/detail"
                         android:background="@drawable/custom_border_button_red"
-                        android:drawableLeft="@drawable/ic_baseline_format_list_numbered_24"
                         android:textColor="@color/white"
-                        android:textSize="20dp" />
+                        android:textSize="20dp"
+                        android:textAllCaps="true"
+                        />
                 </TableRow>
             </TableLayout>
 
@@ -549,7 +576,9 @@
                 android:focusable="false">
                 <TableRow
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tr_gallons"
+                    >
 
                     <TextView
                         android:id="@+id/lbl_orden_cabecera_galonaje"
@@ -558,7 +587,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:focusable="false"
-                        android:text="Galones:"
+                        android:text="@string/gallons"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
 
@@ -586,7 +615,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:focusable="false"
-                        android:text="SubTotal"
+                        android:text="@string/subtotal"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
 
@@ -644,7 +673,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:focusable="false"
-                        android:text="Descuento"
+                        android:text="@string/descount"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
 
@@ -674,7 +703,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:focusable="false"
-                        android:text="IGV"
+                        android:text="@string/tax_code"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
 
@@ -703,7 +732,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:focusable="false"
-                        android:text="Total"
+                        android:text="@string/total"
                         android:textColor="@color/white"
                         android:textSize="24dp"></TextView>
 

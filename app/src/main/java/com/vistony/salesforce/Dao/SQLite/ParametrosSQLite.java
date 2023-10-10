@@ -179,5 +179,21 @@ public class ParametrosSQLite {
         return resultado;
     }
 
+    public String getDateTimeParemeterforName (String name)
+    {
+        String resultado="";
+        abrir();
+        Cursor fila = bd.rawQuery(
+                "Select fechacarga as date from parametros  where nombreparametro='"+name+"' and cantidadregistros>0 ",null);
+
+        while (fila.moveToNext())
+        {
+            resultado= (fila.getString(0));
+        }
+
+        bd.close();
+        return resultado;
+    }
+
 
 }

@@ -113,7 +113,6 @@ public class BancoSQLite {
         }finally {
             bd.close();
         }
-
         return resultado;
     }
 

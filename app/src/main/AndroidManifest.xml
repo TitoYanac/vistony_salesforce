@@ -113,6 +113,12 @@
             android:exported="true"
             />
         <activity
+            android:name=".View.MenuView"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true"
+            />
+        <activity
             android:name=".View.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme"
@@ -139,20 +145,6 @@
             </intent-filter>
         </activity>-->
 
-        <activity
-            android:name=".View.MenuView"
-            android:alwaysRetainTaskState="true"
-            android:configChanges="screenSize|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true"
-            android:windowSoftInputMode="stateVisible|adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"

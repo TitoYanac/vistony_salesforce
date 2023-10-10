@@ -66,6 +66,7 @@ import com.vistony.salesforce.Dao.Retrofit.QuoteEffectivenessRepository;
 import com.vistony.salesforce.Dao.Retrofit.ReasonDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.ReasonFreeTransferRepository;
 import com.vistony.salesforce.Dao.Retrofit.RutaFuerzaTrabajoRepository;
+import com.vistony.salesforce.Dao.Retrofit.SellerRouteRepository;
 import com.vistony.salesforce.Dao.Retrofit.StatusDispatchRepository;
 import com.vistony.salesforce.Dao.Retrofit.StockWS;
 import com.vistony.salesforce.Dao.Retrofit.TerminoPagoWS;
@@ -224,6 +225,7 @@ ParametrosView extends Fragment {
     private BusinessLayerSalesDetailRepository businessLayerSalesDetailRepository;
     private WarehouseRepository warehouseRepository;
     UsuarioSQLiteEntity usuarioSQLiteEntity;
+    private SellerRouteRepository sellerRouteRepository;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -279,6 +281,7 @@ ParametrosView extends Fragment {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         date = new Date();
         fecha =dateFormat.format(date);
+
         sqliteController =  new SqliteController(getContext());
         usuarioSQLite = new UsuarioSQLite(getContext());
 
@@ -345,7 +348,7 @@ ParametrosView extends Fragment {
         UsuarioSQLite usuarioSQLite = new UsuarioSQLite(getContext());
         usuarioSQLiteEntity = new UsuarioSQLiteEntity();
         usuarioSQLiteEntity = usuarioSQLite.ObtenerUsuarioSesion();
-
+        sellerRouteRepository = new ViewModelProvider(getActivity()).get(SellerRouteRepository.class);
 
 
         //CARGA DE MAESTROS
@@ -409,6 +412,7 @@ ParametrosView extends Fragment {
                             parametrosSQLite.InsertaParametros("29",  this.getResources().getString(R.string.objects).toUpperCase(), "0", getDateTime());
                             parametrosSQLite.InsertaParametros("30", this.getResources().getString(R.string.busines_layer_sales_detail).toUpperCase(), "0", getDateTime());
                             parametrosSQLite.InsertaParametros("31", this.getResources().getString(R.string.warehouse).toUpperCase(), "0", getDateTime());
+                            parametrosSQLite.InsertaParametros("32", this.getResources().getString(R.string.seller_route).toUpperCase(), "0", getDateTime());
                         }
                         /*if (parametrosSQLite.ObtenerCantidadParametroID("18") == 0) {
                             parametrosSQLite.InsertaParametros("18", this.getResources().getString(R.string.price_list), "0", getDateTime());
@@ -438,6 +442,7 @@ ParametrosView extends Fragment {
                         parametrosSQLite.InsertaParametros("29",  this.getResources().getString(R.string.objects).toUpperCase(), "0", getDateTime());
                         parametrosSQLite.InsertaParametros("30", this.getResources().getString(R.string.busines_layer_sales_detail).toUpperCase(), "0", getDateTime());
                         parametrosSQLite.InsertaParametros("31", this.getResources().getString(R.string.warehouse).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("32", this.getResources().getString(R.string.seller_route).toUpperCase(), "0", getDateTime());
                     }
                 }
                 break;
@@ -605,6 +610,8 @@ ParametrosView extends Fragment {
                     }
             );
 
+
+
             if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
             {
                 //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -634,7 +641,10 @@ ParametrosView extends Fragment {
             Log.e("REOS", "PriceListHeadRepository-->getAddAllPriceListHead-->resultdata" + data);
         });
 
-
+        ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
+        sellerRouteRepository.getAddSellerRoute (SesionEntity.imei,fecha, getContext()).observe(getActivity(), data -> {
+            Log.e("REOS-ParametrosView-sellerRouteRepository-getAddSellerRoute","=>"+data);
+        });
 
         fabdescargarparametros.setOnClickListener(view -> {
             Object objeto=null,object2=null;
@@ -686,7 +696,7 @@ ParametrosView extends Fragment {
             objeto=listaParametrosAdapter.ObtenerListaParametros();
 
             arraylistaparametrosentity = (ArrayList<ListaParametrosEntity>) objeto;
-            String [] valores=new String[]{"","","","","","","","","","","","","","","","","","",""};
+            String [] valores=new String[]{"","","","","","","","","","","","","","","","","","","",""};
             int p=0;
             for(int i=0;i<arraylistaparametrosentity.size();i++){
                 if(arraylistaparametrosentity.get(i).isChkparametro()){

@@ -591,4 +591,8 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="objects">Objetos</string>
     <string name="percent_discount">% Descuento</string>
     <string name="busines_layer_sales_detail">Reglas de Negocio Venta Detalle</string>
+    <string name="early_payment_discount">Descuento por pago adelantado</string>
+    <string name="cash_discount">Descuento por contado</string>
+    <string name="gallons">Galones</string>
+    <string name="seller_route">Ruta Dinamica</string>
 </resources>

@@ -22,7 +22,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 44;
+    private static final int VERSION = 45;
 
 
     public SqliteController(Context context){
@@ -175,6 +175,9 @@ public class SqliteController extends SQLiteOpenHelper {
 
             //Almacenes
             db.execSQL("CREATE TABLE warehouse (WhsCode text,WhsName text,PriceListCash text,PriceListCredit text,U_VIST_SUCUSU text)");
+
+            //Almacenes
+            db.execSQL("CREATE TABLE sellerroute (CardCode text,Address text,Chk_Visit text,Chk_Pedido text,Chk_Cobranza text,Chk_Ruta text,FechaRuta text)");
     }
 
     @Override
@@ -1041,6 +1044,11 @@ public class SqliteController extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE warehouse (WhsCode text,WhsName text,PriceListCash text,PriceListCredit text,U_VIST_SUCUSU text)");
             db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIST_SUCUSU TEXT");
             db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodAlmacen TEXT");
+        }
+
+        if(oldVersion==44&&newVersion==45)
+        {
+            db.execSQL("CREATE TABLE sellerroute (CardCode text,Address text,Chk_Visit text,Chk_Pedido text,Chk_Cobranza text,Chk_Ruta text,FechaRuta text)");
         }
 
     }

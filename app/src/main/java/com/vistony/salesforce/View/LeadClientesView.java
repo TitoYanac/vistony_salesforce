@@ -222,7 +222,9 @@ public class LeadClientesView extends Fragment {
         ti_textcellphone=v.findViewById(R.id.ti_textcellphone);
 
         et_telfhouseclient=v.findViewById(R.id.et_telfhouseclient);
-        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("espania"))
+        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("espania")
+                ||BuildConfig.FLAVOR.equals("bolivia")
+        )
         {
             getActivity().setTitle(getResources().getString(R.string.lead_cliente));
             ti_commercial_name.setVisibility(View.GONE);
@@ -329,8 +331,18 @@ public class LeadClientesView extends Fragment {
                 File photoFile = null;
                 photoFile = createImageFile(cliente_id+domebarque_id+"_"+getDate(),"C");
                 if (photoFile != null) {
+                    Uri photoURI=null;
                     Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
-                    Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                    switch (BuildConfig.FLAVOR)
+                    {
+                        case "peru":
+                            photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                            break;
+                        case "bolivia":
+                            photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.bolivia" , photoFile);
+                            break;
+                    }
+
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     someActivityResultLauncher.launch(intent);
                 }
@@ -391,7 +403,7 @@ public class LeadClientesView extends Fragment {
                 mListener.onFragmentInteraction(compuesto, object
                 );
             }*/
-            if(BuildConfig.FLAVOR.equals("peru"))
+            if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("bolivia"))
             {
                 if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
                 {
@@ -554,7 +566,7 @@ public class LeadClientesView extends Fragment {
                 parametros.put("DateTime", "" + formattedDate);
                 //parametros.put("photo", encoded);
                 parametros.put("photo", fileCliente.toString());
-                if(BuildConfig.FLAVOR.equals("peru"))
+                if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("bolivia"))
                 {
                     if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
                     {

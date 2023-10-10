@@ -7,15 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.View.ContainerDispatchView
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheet
@@ -44,7 +42,7 @@ class DispatchSheetSucessfulScreen : Fragment()
                         val appContext = LocalContext.current
                         val lifecycleOwner = LocalContext.current as LifecycleOwner
                         val detailDispatchSheetRepository = DetailDispatchSheetRepository()
-                        var detailDispatchSheetList by remember { mutableStateOf(emptyList<DetailDispatchSheet>()) }
+                        /*var detailDispatchSheetList by remember { mutableStateOf(emptyList<DetailDispatchSheet>()) }
                         detailDispatchSheetViewModel = DetailDispatchSheetViewModel(detailDispatchSheetRepository)
                         detailDispatchSheetViewModel?.getStateDetailDispatchSheet(
                             SesionEntity.imei,
@@ -61,9 +59,31 @@ class DispatchSheetSucessfulScreen : Fragment()
                             )
                             //Conversation1(data)
                             detailDispatchSheetList= data
+                        }*/
+                        val detailDispatchSheetViewModel: DetailDispatchSheetViewModel = viewModel(
+                            factory = DetailDispatchSheetViewModel.DetailDispatchSheetViewModelFactory(
+                                detailDispatchSheetRepository,
+                                appContext
+                            )
+                        )
+                        detailDispatchSheetViewModel?.getStateDetailDispatchSheet(
+                            SesionEntity.imei,
+                            ContainerDispatchView.parametrofecha,
+                            appContext,
+                            lifecycleOwner,
+                            "E"
+                        )
 
+                        var detailDispatchSheetDB=detailDispatchSheetViewModel.resultDB.collectAsState()
+                        //val notificationEntity by notificationViewModel.notificationLiveData.observeAsState(NotificationEntity())
+
+                        when (detailDispatchSheetDB.value.Status) {
+                            "Y" -> {
+                                //CardNotification(detailDispatchSheetDB.value.DATA)
+                                DispatchSheetTemplate(detailDispatchSheetDB.value.DATA,appContext,lifecycleOwner)
+                            }
                         }
-                        DispatchSheetTemplate(detailDispatchSheetList,appContext,lifecycleOwner)
+                        //DispatchSheetTemplate(detailDispatchSheetList,appContext,lifecycleOwner)
                     }
                 }
             }

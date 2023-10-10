@@ -76,7 +76,39 @@ public class ListadoPromocionView extends Fragment {
         Object[] listaobjetos=new Object[2];
         listaobjetos=(Object[]) objeto;
         ArrayList<PromocionCabeceraSQLiteEntity> Lista = (ArrayList<PromocionCabeceraSQLiteEntity>) listaobjetos[0];
-        if(BuildConfig.FLAVOR.equals("peru"))
+        switch (BuildConfig.FLAVOR)
+        {
+            case "peru":
+                if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+                {
+                    if (Lista.isEmpty())
+                    {
+                        ListaPromocionSQLiteEntity listaPromocionSQLiteEntity2= new ListaPromocionSQLiteEntity();
+                        listaPromocionSQLiteEntity2.setLista_promocion_id("0000");
+                        listaPromocionSQLiteEntity2.setLista_promocion("LISTA PROMOCIONAL EXCEPCION");
+                        listaPromocionSQLiteEntity2.setCompania_id("C001");
+                        listaPromocionSQLiteEntity2.setU_vis_cashdscnt("0");
+                        listaListadoPromocionSQLiteEntity.add(listaPromocionSQLiteEntity2);
+                    }
+                }
+                break;
+            case "bolivia":
+                if(SesionEntity.quotation.equals("Y"))
+                {
+                    if (Lista.isEmpty())
+                    {
+                        ListaPromocionSQLiteEntity listaPromocionSQLiteEntity2= new ListaPromocionSQLiteEntity();
+                        listaPromocionSQLiteEntity2.setLista_promocion_id("0000");
+                        listaPromocionSQLiteEntity2.setLista_promocion("LISTA PROMOCIONAL EXCEPCION");
+                        listaPromocionSQLiteEntity2.setCompania_id("C001");
+                        listaPromocionSQLiteEntity2.setU_vis_cashdscnt("0");
+                        listaListadoPromocionSQLiteEntity.add(listaPromocionSQLiteEntity2);
+                    }
+                }
+                break;
+
+        }
+        /*if(BuildConfig.FLAVOR.equals("peru"))
         {
             if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
             {
@@ -90,7 +122,7 @@ public class ListadoPromocionView extends Fragment {
                     listaListadoPromocionSQLiteEntity.add(listaPromocionSQLiteEntity2);
                 }
             }
-        }
+        }*/
 
         Log.e("REOS", "ListadoPromocionView:Lista.size(): " + Lista.size());
         listaOrdenVentaDetalleEntities= (ArrayList<ListaOrdenVentaDetalleEntity>) listaobjetos[1];

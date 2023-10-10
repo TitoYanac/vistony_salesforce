@@ -10,8 +10,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.vistony.salesforce.R
-import com.vistony.salesforce.View.MenuView
-import com.vistony.salesforce.View.SplashActivity
 
 
 public fun  showNotification(context: Context,id: Int,message: String) {

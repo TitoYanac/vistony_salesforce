@@ -6,17 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
-import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
-import com.vistony.salesforce.Entity.Retrofit.JSON.CollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintFormsEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.CustomerComplaintFormsEntityResponse;
-import com.vistony.salesforce.Entity.SQLite.ClienteSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
 import java.util.List;

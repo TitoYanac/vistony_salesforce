@@ -159,7 +159,21 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         holder.tv_paymentterms.setText(lead.getTerminopago());
         //holder.ll_geolocation.setVisibility(View.GONE);
         holder.chk_visitsection.setVisibility(View.GONE);
-        if(!BuildConfig.FLAVOR.equals("peru"))
+
+        switch (BuildConfig.FLAVOR)
+        {
+            case "peru":
+            case "bolivia":
+                break;
+            case "paraguay":
+                holder.tablerowpaymentterms.setVisibility(View.GONE);
+                break;
+            default:
+                holder.chk_geolocation.setVisibility(View.GONE);
+                holder.chk_visitsection.setVisibility(View.GONE);
+                break;
+        }
+        /*if(!BuildConfig.FLAVOR.equals("peru"))
         {
             holder.chk_geolocation.setVisibility(View.GONE);
             holder.chk_visitsection.setVisibility(View.GONE);
@@ -173,8 +187,7 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         }
         else if(BuildConfig.FLAVOR.equals("paraguay")){
             holder.tablerowpaymentterms.setVisibility(View.GONE);
-
-        }
+        }*/
 
         if(lead.getChkgeolocation() !=null) {
             if (lead.getChkgeolocation().equals("1")) {

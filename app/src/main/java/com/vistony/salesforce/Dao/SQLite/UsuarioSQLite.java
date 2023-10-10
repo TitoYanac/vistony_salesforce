@@ -281,7 +281,8 @@ public class UsuarioSQLite {
 
             while (fila.moveToNext()) {
                 usuarioSQLiteEntity = new UsuarioSQLiteEntity();
-                usuarioSQLiteEntity.setChkbloqueopago(fila.getString(0));
+                //usuarioSQLiteEntity.setChkbloqueopago(fila.getString(0));
+                usuarioSQLiteEntity.setChkbloqueopago(fila.getString(fila.getColumnIndex("chkbloqueopago")));
                 listaDDeudaentity.add(usuarioSQLiteEntity);
             }
 
@@ -371,29 +372,27 @@ public class UsuarioSQLite {
         Cursor fila=null;
         try
         {
-
             if(contado.equals("1"))
             {
                 fila = bd.rawQuery(
-                        "Select listaPrecios_id_1 from usuario where chksesion='1'", null);
+                        "Select listaPrecios_id_1 as codigolistaprecio from usuario where chksesion='1'", null);
             }
             else
             {
                 fila = bd.rawQuery(
-                        "Select listaPrecios_id_2 from usuario where chksesion='1'", null);
+                        "Select listaPrecios_id_2 as codigolistaprecio from usuario where chksesion='1'", null);
             }
 
             while (fila.moveToNext()) {
-                codigolistaprecio=fila.getString(0);
+                //codigolistaprecio=fila.getString(0);
+                codigolistaprecio=fila.getString(fila.getColumnIndex("codigolistaprecio"));
             }
-
             bd.close();
         }catch (Exception e)
         {
             bd.close();
             e.printStackTrace();
         }
-
         return codigolistaprecio;
     }
 

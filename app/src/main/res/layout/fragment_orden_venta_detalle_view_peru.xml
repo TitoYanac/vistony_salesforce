@@ -31,7 +31,9 @@
         android:focusable="false">
         <TableRow
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/tr_detail_gallons"
+            >
 
             <TextView
                 android:id="@+id/lbl_orden_detalle_galonaje"
@@ -40,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Galones:"
+                android:text="@string/gallons"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -51,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
                 android:focusable="false"
-
+                android:text="0"
                 android:textColor="@color/white"
                 android:gravity="right"
                 android:textSize="24dp"></TextView>
@@ -69,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="SubTotal:"
+                android:text="@string/subtotal"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -129,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Descuento:"
+                android:text="@string/descount"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -160,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="IGV:"
+                android:text="@string/tax_code"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 
@@ -174,8 +176,9 @@
                 android:gravity="right"
                 android:text="0"
                 android:textColor="@color/white"
+                android:textSize="24dp">
 
-                android:textSize="24dp"></TextView>
+            </TextView>
         </TableRow>
 
         <TableRow
@@ -191,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:focusable="false"
-                android:text="Total:"
+                android:text="@string/total"
                 android:textColor="@color/white"
                 android:textSize="24dp"></TextView>
 

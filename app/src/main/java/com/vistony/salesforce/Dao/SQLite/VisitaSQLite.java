@@ -15,7 +15,6 @@ import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.VisitaSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
 

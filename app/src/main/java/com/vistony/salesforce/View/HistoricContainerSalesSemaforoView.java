@@ -15,20 +15,15 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.vistony.salesforce.Controller.Adapters.ListaClienteCabeceraAdapter;
 import com.vistony.salesforce.Controller.Adapters.ListaHistoricContainerSalesAdapter;
-import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
-import com.vistony.salesforce.Dao.Adapters.ListaClienteCabeceraDao;
 import com.vistony.salesforce.Dao.Adapters.ListaHistoricContainerSalesDao;
 import com.vistony.salesforce.Dao.Retrofit.HistoricContainerSalesRepository;
 import com.vistony.salesforce.Dao.Retrofit.HistoricContainerSalesWS;
-import com.vistony.salesforce.Dao.Retrofit.PriceListRepository;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

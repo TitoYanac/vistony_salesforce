@@ -1,14 +1,11 @@
 package com.vistony.salesforce.Controller.Adapters;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,29 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.FragmentManager;
 
 import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
-import com.vistony.salesforce.Dao.Adapters.ListaHistoricoFacturasHistorialDespachosDao;
-import com.vistony.salesforce.Dao.Adapters.ListaHistoricoFacturasLineasNoFacturadasDao;
-import com.vistony.salesforce.Dao.Adapters.ListaPendingCollectionDao;
-import com.vistony.salesforce.Dao.Retrofit.HistoricoFacturasHistorialDespachosWS;
-import com.vistony.salesforce.Dao.Retrofit.HistoricoFacturasLineasNoFacturadasWS;
-import com.vistony.salesforce.Dao.SQLite.CobranzaDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
-import com.vistony.salesforce.Entity.Adapters.ListaHistoricoFacturasEntity;
-import com.vistony.salesforce.Entity.Adapters.ListaHistoricoFacturasHistorialDespachosEntity;
-import com.vistony.salesforce.Entity.Adapters.ListaHistoricoFacturasLineasNoFacturadasEntity;
-import com.vistony.salesforce.Entity.Adapters.ListaPendingCollectionEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricSalesOrderTraceabilityEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricStatusDispatchEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.InvoicesEntity;
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
 import java.util.ArrayList;

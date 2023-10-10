@@ -8,12 +8,21 @@
    android:id="@+id/fragmentRutaVendedorNoRuta"
    tools:context=".View.RutaVendedorNoRutaView">
    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/tv_update_date"
+        style="@android:style/TextAppearance.Widget.TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="170dp"
+            android:layout_marginTop="20dp"
             >
 
             <ListView

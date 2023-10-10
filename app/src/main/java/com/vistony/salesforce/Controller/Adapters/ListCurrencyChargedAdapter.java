@@ -1,8 +1,6 @@
 package com.vistony.salesforce.Controller.Adapters;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,8 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,19 +29,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Entity.Adapters.ListCurrencyChargedEntity;
-import com.vistony.salesforce.Entity.Adapters.ListaAgenciaEntity;
-import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
-import com.vistony.salesforce.Entity.SQLite.AgenciaSQLiteEntity;
-import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
-import com.vistony.salesforce.View.AgenciaView;
 import com.vistony.salesforce.View.CurrencyChargedView;
-import com.vistony.salesforce.View.LoginView;
-import com.vistony.salesforce.View.OrdenVentaDetalleView;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class ListCurrencyChargedAdapter extends ArrayAdapter<ListCurrencyChargedEntity>  {
     private android.content.Context Context;

@@ -267,7 +267,7 @@ public class MenuAccionView extends Fragment {
         dialog = new Dialog(getActivity());
         setHasOptionsMenu(true);
         cv_canvas.setVisibility(View.GONE);
-        //cv_customer_complaint.setVisibility(View.GONE);
+        cv_customer_complaint.setVisibility(View.GONE);
 
         cv_canvas.setOnClickListener(v -> {
             /*String Fragment="MenuAccionView";
@@ -328,7 +328,7 @@ public class MenuAccionView extends Fragment {
         cv_pedido.setOnClickListener(v -> {
 
             switch (BuildConfig.FLAVOR){
-                case "paraguay":
+                //case "paraguay":
                 case "perurofalab":
                 case "espania":
                 case "marruecos":
@@ -342,6 +342,7 @@ public class MenuAccionView extends Fragment {
                 case "ecuador":
                 case "bolivia":
                 case "chile":
+                case "paraguay":
                     //Aprobaciones
                     alertatipoventa(getContext()).show();
                     break;
@@ -700,7 +701,7 @@ public class MenuAccionView extends Fragment {
 
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
-            if(BuildConfig.FLAVOR.equals("paraguay")||BuildConfig.FLAVOR.equals("chile"))
+            if(BuildConfig.FLAVOR.equals("paraguay")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
             {
                 cv_collection_salesperson.setVisibility(View.GONE);
                 cv_cobranza_pago_pos.setVisibility(View.GONE);

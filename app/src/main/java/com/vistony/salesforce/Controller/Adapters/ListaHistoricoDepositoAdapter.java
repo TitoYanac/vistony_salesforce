@@ -44,7 +44,6 @@ import com.vistony.salesforce.Entity.Adapters.ListaHistoricoDepositoEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.HistoricoDepositoView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 

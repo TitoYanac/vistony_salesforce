@@ -1,15 +1,11 @@
 package com.vistony.salesforce.Controller.Adapters;
 
-import static com.vistony.salesforce.Controller.Utilitario.CifradoController.decrypt;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,16 +21,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.blikoon.qrcodescanner.QrCodeActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Entity.Adapters.ListaHistoricoOrdenVentaEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.HistoricoOrdenVentaView;
-import com.vistony.salesforce.View.MenuView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

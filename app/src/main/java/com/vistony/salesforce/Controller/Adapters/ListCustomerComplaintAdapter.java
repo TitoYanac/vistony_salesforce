@@ -1,7 +1,5 @@
 package com.vistony.salesforce.Controller.Adapters;
 
-import static android.app.Activity.RESULT_OK;
-
 import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
 
 import android.Manifest;
@@ -13,12 +11,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.hardware.Camera;
-import android.media.CamcorderProfile;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -45,43 +39,29 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.ComponentActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.DialogFragment;
 
 import com.baoyachi.stepview.HorizontalStepView;
 import com.baoyachi.stepview.bean.StepBean;
 import com.google.android.material.textfield.TextInputLayout;
 
 import com.vistony.salesforce.BuildConfig;
-import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
-import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
 import com.vistony.salesforce.Controller.Utilitario.VideoRecorder;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintResponseEntity;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.CustomerComplaintView;
-import com.vistony.salesforce.View.LoginView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.LifecycleOwner;
 
-import org.w3c.dom.Text;
+import androidx.lifecycle.LifecycleOwner;
 
 public class ListCustomerComplaintAdapter extends
         ArrayAdapter<CustomerComplaintSectionEntity>

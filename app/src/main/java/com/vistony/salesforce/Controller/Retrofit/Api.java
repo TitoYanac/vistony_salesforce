@@ -52,6 +52,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuoteEffectivenessEntity
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ReasonDispatchEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.RutaFuerzaTrabajoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
+import com.vistony.salesforce.Entity.Retrofit.Respuesta.SellerRouteEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SignatureEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.StockEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SummaryofeffectivenessEntityResponse;
@@ -367,6 +368,10 @@ public interface Api {
 
     @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/PriceList/PriceListWarehouse")
     Call<ListaPrecioDetalleWarehouseEntityResponse> getPriceListWarehouse(@Query("imei") String imei, @Query("whsCode") String warehouse, @Query("pl1") String PriceListCash, @Query("pl2") String PriceListCredit);
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Traceabilities/route")
+    Call<SellerRouteEntityResponse> getSellerRoute(@Query("imei") String imei,@Query("fecha") String fecha);
+
     // @GET("/AppVistonySalesTestNew/ServicioApp.svc/Pedidos_Leer_FacturaC/{Imei},{Compania_ID},{Fuerzatrabajo_ID},{FechaFactura}") //Pruebas Mockups Pedidos
    //Call<HistoricoFacturasEntityResponse> getHistoricoFactura (@Path("Imei") String Imei,@Path("Compania_ID") String Compania_ID,@Path("Fuerzatrabajo_ID") String Fuerzatrabajo_ID,@Path("FechaFactura") String FechaFactura);
     //@GET

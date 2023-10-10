@@ -6,10 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintQuestionsEntity;
-import com.vistony.salesforce.Entity.Retrofit.Modelo.CustomerComplaintSectionEntity;
 import com.vistony.salesforce.Entity.SQLite.ConfiguracionSQLEntity;
 
 import java.util.ArrayList;

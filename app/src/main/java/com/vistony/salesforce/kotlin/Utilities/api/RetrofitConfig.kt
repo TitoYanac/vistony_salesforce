@@ -18,10 +18,10 @@ class RetrofitConfig {
         baseUrl =
             when (BuildConfig.FLAVOR) {
                 "chile", "ecuador", "espania", "marruecos"
-                //,"peru"
+                ,"peru"
                 -> "https://salesforce.vistony.pe"
                 "perurofalab", "bolivia", "paraguay" -> "https://app.vistony.pe"
-                "peru" ->"http://190.12.79.132:8083"
+                //"peru" ->"http://190.12.79.132:8083"
                 else -> "http://salesforce.vistony.com"
             }
         var puerto = ""

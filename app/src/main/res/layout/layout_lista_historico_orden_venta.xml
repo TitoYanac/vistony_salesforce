@@ -64,8 +64,8 @@
         android:layout_marginLeft="95dp"
         android:layout_marginTop="50dp"
         android:text="@string/client"
-        android:textStyle="bold"
-        android:textAppearance="?attr/textAppearanceListItem"/>
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/lbl_monto_orden_venta"

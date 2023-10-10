@@ -106,7 +106,38 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
 
         // Lead actual.
         final ListaPromocionCabeceraEntity lead = getItem(position);
-        if(BuildConfig.FLAVOR.equals("peru"))
+
+        switch (BuildConfig.FLAVOR)
+        {
+            case "peru":
+                if(SesionEntity.quotation.equals("Y"))
+                {
+                    if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+                    {
+
+                    }else {
+                        holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                        holder.imv_editar_promocion_detalle.setEnabled(false);
+                    }
+                }else {
+                    holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                    holder.imv_editar_promocion_detalle.setEnabled(false);
+                }
+                break;
+            case "bolivia":
+                if(SesionEntity.quotation.equals("Y"))
+                {
+                }else {
+                    holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                    holder.imv_editar_promocion_detalle.setEnabled(false);
+                }
+                break;
+            default:
+                holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
+                holder.imv_editar_promocion_detalle.setEnabled(false);
+                break;
+        }
+        /*if(BuildConfig.FLAVOR.equals("peru"))
         {
             if(SesionEntity.quotation.equals("Y"))
             {
@@ -125,7 +156,7 @@ public class ListaPromocionCabeceraAdapter extends ArrayAdapter<ListaPromocionCa
         }else {
             holder.imv_editar_promocion_detalle.setImageResource(R.drawable.ic_baseline_edit_gray_24);
             holder.imv_editar_promocion_detalle.setEnabled(false);
-        }
+        }*/
 
 
         // Setup.

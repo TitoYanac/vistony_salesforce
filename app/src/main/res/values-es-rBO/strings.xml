@@ -71,7 +71,7 @@
     <string name="lbl_code_control">Código Control:</string>
     <string name="lbl_client_dispatch_sheet">Cliente:</string>
     <string name="lbl_seller_dispatch_sheet">Vendedor:</string>
-    <string name="lbl_payment_term">Termino de Pago:</string>
+    <string name="lbl_payment_term">Termino de Pago</string>
     <string name="lbl_address">Dirección:</string>
     <string name="lbl_credit">Crédito:</string>
     <string name="lbl_f_emision">F.Emisión:</string>
@@ -151,4 +151,9 @@
     <string name="lbl_dispatch_failed">Fallidos</string>
     <string name="lbl_dispatch_sucessfull">Exitosos</string>
     <string name="lbl_date_dispatch">Fecha Despacho</string>
+    <string name="warehouse">Almacen</string>
+    <string name="early_payment_discount">Descuento por pago adelantado</string>
+    <string name="cash_discount">Descuento por contado</string>
+    <string name="gallons">Galones</string>
+    <string name="total">Total</string>
 </resources>

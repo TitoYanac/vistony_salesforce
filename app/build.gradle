@@ -115,11 +115,11 @@ android {
             applicationIdSuffix ".peru"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------Aprobaciones
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //QA 2
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe_V2"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
@@ -150,6 +150,9 @@ android {
             //----------Ambiente Ultima Milla
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo.qa"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo.qa"')
+            //----------Produccion
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             versionName "1.0.9"
             manifestPlaceholders = [country:"Bolivia"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"BO"')
@@ -164,8 +167,10 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"/bo"')
             //buildConfigField('String' , 'BASE_ENDPOINT', '"py.get"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"py.post"')
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.py"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.py"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.py"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.py"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             versionName "1.0.1"
             manifestPlaceholders = [country:"Paraguay"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PY"')

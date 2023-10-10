@@ -314,10 +314,6 @@ public class RutaVendedorSQLiteDao {
             }else {
                 ObjListaClienteCabeceraEntity.setSaldo(fila.getString(25));
             }
-
-
-
-
             ObjListaClienteCabeceraEntity.setLastpurchase(fila.getString(30));
             ObjListaClienteCabeceraEntity.setChkgeolocation(fila.getString(32));
             ObjListaClienteCabeceraEntity.setChkvisitsection(fila.getString(33));
@@ -739,5 +735,157 @@ public class RutaVendedorSQLiteDao {
             System.out.println(e.getMessage());
         }
         return resultado;
+    }
+
+    public ArrayList<ListaClienteCabeceraEntity> getSellerRoute (String checkRuta,Context context,String date){
+
+        ArrayList<ListaClienteCabeceraEntity> listaClienteCabeceraEntity=new ArrayList<>();
+        ListaClienteCabeceraEntity ObjListaClienteCabeceraEntity;
+        abrir();
+        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
+        UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
+        usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
+
+        Cursor fila = bd.rawQuery(
+                "SELECT A.CardCode,A.Address ,B.compania_id, B.nombrecliente,B.direccion,B.zona_id,B.ordenvisita , " +
+                "B.zona ,B.rucdni,B.moneda,B.telefonofijo,B.telefonomovil ,B.correo ,B.ubigeo_id ,B.impuesto_id ,B.impuesto ,B.tipocambio " +
+                ",B.categoria ,B.linea_credito ,B.terminopago_id , A.Chk_Visit ,chk_pedido ,chk_cobranza ,A.chk_ruta ,A.fecharuta " +
+                ",IFNULL(c.saldo,'0') saldomn ,B.fuerzatrabajo_id as slpCode ,d.usuario_id userCode ,'0' as salesorderamount ,'0' as collectionamount " +
+                ",B.lastpurchase ,IFNULL(e.saldo,'0') saldosincontado ,B.geolocalizado AS chkgeolocation " +
+                ",(case when f.latitudini is not null and f.latitudini is not null then '1' else '0' end) as chkvisitsection ,g.terminopago " +
+                ",g.contado ,B.latitud ,B.longitud ,B.addresscode ,B.statuscounted " +
+                ",'' AS typevisit ,'0' as quotationamount ,'0' as chk_quotation ,B.customerwhitelist " +
+                "FROM sellerroute A " +
+                "LEFT JOIN ( " +
+                "SELECT A.cliente_id,A.domembarque_id,statuscounted,customerwhitelist,A.compania_id, A.nombrecliente " +
+                ",B.direccion,B.zona_id ,A.ordenvisita,B.zona,A.rucdni,A.moneda,A.telefonofijo,A.telefonomovil " +
+                ",A.correo,A.ubigeo_id,A.impuesto_id,A.impuesto ,A.tipocambio,A.categoria,A.linea_credito,A.terminopago_id " +
+                ",B.fuerzatrabajo_id,A.lastpurchase,(case when B.latitud='0' or B.latitud is null then '0' else '1' end) as geolocalizado " +
+                ",B.latitud ,B.longitud,B.addresscode " +
+                "FROM cliente A " +
+                "LEFT JOIN direccioncliente B ON " +
+                "A.cliente_id=B.cliente_id " +
+                "GROUP BY A.cliente_id,A.domembarque_id,statuscounted,customerwhitelist,A.compania_id,B.direccion " +
+                ",B.zona_id ,A.ordenvisita,B.zona,A.rucdni,A.moneda,A.telefonofijo,A.telefonomovil " +
+                ",A.correo,A.ubigeo_id,A.impuesto_id,A.impuesto ,A.tipocambio,A.categoria,A.linea_credito " +
+                ",A.terminopago_id,B.fuerzatrabajo_id,A.lastpurchase,B.latitud ,B.longitud,B.addresscode " +
+                ") B ON " +
+                "A.CardCode=B.cliente_id AND " +
+                "A.Address=B.domembarque_id " +
+                "LEFT JOIN (SELECT cliente_id,domembarque_id,SUM(saldo) AS saldo FROM documentodeuda GROUP BY cliente_id,domembarque_id ) C ON " +
+                "A.CardCode=C.cliente_id AND " +
+                "A.Address=C.domembarque_id " +
+                "LEFT JOIN usuario D ON " +
+                "B.fuerzatrabajo_id=D.fuerzatrabajo_id " +
+                "LEFT JOIN (Select SUM(saldo) AS saldo,compania_id,cliente_id,domembarque_id,moneda " +
+                "from documentodeuda where fechaemision<>fechavencimiento " +
+                "GROUP BY compania_id,cliente_id,domembarque_id,moneda) e ON " +
+                "A.CardCode=e.cliente_id AND " +
+                "A.Address=e.domembarque_id " +
+                "LEFT JOIN visitsection f ON " +
+                "a.CardCode=f.cliente_id and " +
+                "a.Address=f.domembarque_id and " +
+                "f.dateini=strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime')) " +
+                "LEFT JOIN terminopago g ON " +
+                "B.terminopago_id=g.terminopago_id " +
+                "WHERE fecharuta= " +
+                "strftime ('%Y',date('now','localtime'))||strftime ('%m',date('now','localtime'))||strftime ('%d',date('now','localtime')) " +
+                "AND chk_ruta=?  AND slpCode=? ",new String[]{checkRuta,usuarioSQLiteEntity.getFuerzatrabajo_id()});
+
+        while (fila.moveToNext())
+        {
+            int countsalesorder=0,countcollection=0,countvisit=0;
+            String visitsalesorder="0",visitcollection="0",visit="0";
+            ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity=new ArrayList<>();
+            ClienteSQlite clienteSQlite =new ClienteSQlite(context);
+            VisitaSQLite visitaSQLite=new VisitaSQLite(context);
+            String terminopago_id="";
+            String linea_credito_usado="";
+            String domfactura_id="";
+            String ShipToCode="";
+
+            listaClienteSQLiteEntity= clienteSQlite.ObtenerDatosCliente(fila.getString(0),fila.getString(2));
+            Log.e("REOS","RutaVendedorSQLiteDao.listaClienteSQLiteEntity.get(i).fila.getString(0): "+fila.getString(0));
+            Log.e("REOS","RutaVendedorSQLiteDao.listaClienteSQLiteEntity.get(i).fila.getString(2): "+fila.getString(2));
+            Log.e("REOS","RutaVendedorSQLiteDao.listaClienteSQLiteEntity.get(i).listaClienteSQLiteEntity.size(): "+listaClienteSQLiteEntity.size());
+            for(int i=0;i<listaClienteSQLiteEntity.size();i++){
+                terminopago_id=listaClienteSQLiteEntity.get(i).getTerminopago_id();
+                Log.e("REOS","RutaVendedorSQLiteDao.listaClienteSQLiteEntity.get(i).getTerminopago_id(): "+listaClienteSQLiteEntity.get(i).getTerminopago_id());
+                linea_credito_usado=listaClienteSQLiteEntity.get(i).getLinea_credito_usado();
+                domfactura_id=listaClienteSQLiteEntity.get(i).getDomfactura_id();
+                ShipToCode=listaClienteSQLiteEntity.get(i).getDomembarque_id();
+            }
+            countsalesorder=visitaSQLite.getCountVisitWithOV(date,fila.getString(0),"01",checkRuta,fila.getString(1));
+            countcollection=visitaSQLite.getCountVisitWithType(date,fila.getString(0),"02",checkRuta,fila.getString(1));
+            countvisit=visitaSQLite.getCountVisitWithDate(date,fila.getString(0),checkRuta,fila.getString(1));
+            if(countsalesorder>0)
+            {
+                visitsalesorder="1";
+            }
+            if(countcollection>0)
+            {
+                visitcollection="1";
+            }
+            if(countvisit>0)
+            {
+                visit="1";
+            }
+            ObjListaClienteCabeceraEntity= new ListaClienteCabeceraEntity();
+            ObjListaClienteCabeceraEntity.setCliente_id(fila.getString(0));
+            ObjListaClienteCabeceraEntity.setDomembarque_id(fila.getString(1));
+            ObjListaClienteCabeceraEntity.setDomfactura_id(domfactura_id);
+            ObjListaClienteCabeceraEntity.setCompania_id(fila.getString(2));
+            ObjListaClienteCabeceraEntity.setNombrecliente(fila.getString(3));
+            ObjListaClienteCabeceraEntity.setDireccion(fila.getString(4));
+            ObjListaClienteCabeceraEntity.setZona_id(fila.getString(5));
+            ObjListaClienteCabeceraEntity.setOrdenvisita(fila.getString(6));
+            ObjListaClienteCabeceraEntity.setZona(fila.getString(7));
+            ObjListaClienteCabeceraEntity.setRucdni(fila.getString(8));
+            ObjListaClienteCabeceraEntity.setMoneda(fila.getString(9));
+            ObjListaClienteCabeceraEntity.setTelefonofijo(fila.getString(10));
+            ObjListaClienteCabeceraEntity.setTelefonomovil(fila.getString(11));
+            ObjListaClienteCabeceraEntity.setCorreo(fila.getString(12));
+            ObjListaClienteCabeceraEntity.setUbigeo_id(fila.getString(13));
+            ObjListaClienteCabeceraEntity.setImpuesto_id(fila.getString(14));
+            ObjListaClienteCabeceraEntity.setImpuesto(fila.getString(15));
+            ObjListaClienteCabeceraEntity.setTipocambio(fila.getString(16));
+            ObjListaClienteCabeceraEntity.setCategoria(fila.getString(17));
+            ObjListaClienteCabeceraEntity.setLinea_credito(fila.getString(18));
+            ObjListaClienteCabeceraEntity.setLinea_credito_usado(linea_credito_usado);
+            ObjListaClienteCabeceraEntity.setTerminopago_id(terminopago_id);
+            ObjListaClienteCabeceraEntity.setChk_visita(visit);
+            ObjListaClienteCabeceraEntity.setChk_pedido(visitsalesorder);
+            ObjListaClienteCabeceraEntity.setChk_cobranza(visitcollection);
+            ObjListaClienteCabeceraEntity.setChk_ruta(checkRuta);
+            ObjListaClienteCabeceraEntity.setFecharuta(fila.getString(24));
+            if(checkRuta.equals("0"))
+            {
+                ClienteSQlite clienteSQlite1 = new ClienteSQlite(context);
+                ArrayList<ListaClienteCabeceraEntity> listClient = new ArrayList<>();
+                listClient = clienteSQlite1.ObtenerClienteporClienteID(fila.getString(0));
+                for (int i = 0; i < listClient.size(); i++) {
+                    ObjListaClienteCabeceraEntity.setSaldo(listClient.get(i).getSaldo());
+                }
+            }else {
+                ObjListaClienteCabeceraEntity.setSaldo(fila.getString(25));
+            }
+            ObjListaClienteCabeceraEntity.setLastpurchase(fila.getString(30));
+            ObjListaClienteCabeceraEntity.setChkgeolocation(fila.getString(32));
+            ObjListaClienteCabeceraEntity.setChkvisitsection(fila.getString(33));
+            ObjListaClienteCabeceraEntity.setTerminopago(fila.getString(34));
+            ObjListaClienteCabeceraEntity.setContado(fila.getString(35));
+            ObjListaClienteCabeceraEntity.setLatitud(fila.getString(36));
+            ObjListaClienteCabeceraEntity.setLongitud(fila.getString(37));
+            ObjListaClienteCabeceraEntity.setAddresscode(fila.getString(38));
+            ObjListaClienteCabeceraEntity.setStatuscount (fila.getString(39));
+            ObjListaClienteCabeceraEntity.setCustomerwhitelist (fila.getString(43));
+            Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getLastpurchase"+ObjListaClienteCabeceraEntity.getLastpurchase());
+            Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getStatuscount"+ObjListaClienteCabeceraEntity.getStatuscount());
+            Log.e("REOS","RutaVendedorSQLiteDao.ObtenerRutaVendedorPorFecha.getCustomerwhitelist"+ObjListaClienteCabeceraEntity.getCustomerwhitelist());
+            listaClienteCabeceraEntity.add(ObjListaClienteCabeceraEntity);
+        }
+
+        bd.close();
+        return listaClienteCabeceraEntity;
     }
 }

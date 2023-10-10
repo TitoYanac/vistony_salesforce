@@ -337,7 +337,33 @@ public class PromocionCabeceraView extends Fragment {
         lv_listapromociones = (ListView) v.findViewById(R.id.lv_listapromociones);
         FormulasController formulasController=new FormulasController(getContext());
 
-        if(BuildConfig.FLAVOR.equals("peru"))
+        switch (BuildConfig.FLAVOR)
+        {
+            case "peru":
+                if(SesionEntity.quotation.equals("Y"))
+                {
+                    if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+                    {
+                        fab_add_promotionhead.setVisibility(View.GONE);
+                    }
+                }else {
+                    fab_add_promotionhead.setVisibility(View.GONE);
+                }
+                break;
+            case "bolivia":
+                if(SesionEntity.quotation.equals("Y"))
+                {
+
+                }else
+                {
+                    fab_add_promotionhead.setVisibility(View.GONE);
+                }
+                break;
+            default:
+                fab_add_promotionhead.setVisibility(View.GONE);
+                break;
+        }
+        /*if(BuildConfig.FLAVOR.equals("peru"))
         {
             if(SesionEntity.quotation.equals("Y"))
             {
@@ -350,7 +376,7 @@ public class PromocionCabeceraView extends Fragment {
             }
         }else {
             fab_add_promotionhead.setVisibility(View.GONE);
-        }
+        }*/
 
 
         fab_add_promotionhead.setOnClickListener(view -> {
@@ -488,21 +514,6 @@ public class PromocionCabeceraView extends Fragment {
                                 promocion_id = promocionCabeceraSQLiteDao.getPromotionHeaderException(
                                         listaPromocionCabeceraEntities.get(i).producto_id,
                                         listaPromocionCabeceraEntities.get(i).getCantidadcompra());
-
-                                /*descuento = promocionCabeceraSQLiteDao.getPromotionHeaderExceptionDescount(
-                                        listaPromocionCabeceraEntities.get(i).producto_id,
-                                        listaPromocionCabeceraEntities.get(i).getCantidadcompra());
-                                Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-descuento-descuento:" + descuento);
-                                Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-descuento-listaPromocionCabeceraEntities.get(i).getDescuento():" + listaPromocionCabeceraEntities.get(i).getDescuento());
-                                Log.e("REOS", "dentro del if-PromocionCabeceraView-onOptionsItemSelected-nocumple:" + nocumple);
-                                if(Integer.parseInt(listaPromocionCabeceraEntities.get(i).getDescuento())>Integer.parseInt(descuento))
-                                {
-                                    Log.e("REOS", "dentro del if-PromocionCabeceraView-onOptionsItemSelected-descuento:" + descuento);
-                                    Log.e("REOS", "dentro del if-PromocionCabeceraView-onOptionsItemSelected-listaPromocionCabeceraEntities.get(i).getDescuento():" + listaPromocionCabeceraEntities.get(i).getDescuento());
-                                    nocumple++;
-                                }*/
-
-
                                 if (promocion_id != null && !promocion_id.equals("")) {
                                     for (int j = 0; j < listaPromocionCabeceraEntities.get(i).getListaPromocionDetalleEntities().size(); j++) {
                                         int resultadodetail = 0;
@@ -527,7 +538,7 @@ public class PromocionCabeceraView extends Fragment {
                                 }
                                 //Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-vincular-resultado:" + resultado);
                             }
-                            if (nocumple > 0) {
+                            if (nocumple > 0 && BuildConfig.FLAVOR.equals("peru")) {
                                 Toast.makeText(getContext(), "No cumple con las reglas de excepción", Toast.LENGTH_LONG).show();
                             } else {
                                 Toast.makeText(getContext(), "Si cumple con las reglas de excepcion!!!!", Toast.LENGTH_LONG).show();

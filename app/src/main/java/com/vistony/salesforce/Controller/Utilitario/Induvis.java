@@ -404,6 +404,14 @@ public class Induvis {
         String draft="N";
         switch (BuildConfig.FLAVOR){
             case "peru":
+                if(SesionEntity.quotation.equals("Y"))
+                {
+                    draft="Y";
+                }else
+                {
+                    draft="N";
+                }
+                break;
             case "perurofalab":
             case "espania":
             case "marruecos":
@@ -415,12 +423,11 @@ public class Induvis {
             case "paraguay":
                 if(SesionEntity.quotation.equals("Y"))
                 {
-                    draft="N";
+                    draft="Y";
                 }else
                     {
                         draft="Y";
                     }
-
                 break;
         }
         return draft;
@@ -536,12 +543,18 @@ public class Induvis {
         ArrayList<String> currency = new  ArrayList<String>();
         try {
             switch (BuildConfig.FLAVOR){
-                case "bolivia":
                 case "india":
                 case "chile":
                 case "ecuador":
                 case "peru":
+                    currency.add("S/ - SOLES");
+                    currency.add("US$/ - DOLARES");
+                case "bolivia":
+                    currency.add("Bs - Bolivianos");
+                    break;
                 case "paraguay":
+                    currency.add("Gs - Guaraníes");
+                    break;
                 case "perurofalab":
                 case "espania":
                     currency.add("EUR - Euro");
@@ -612,5 +625,24 @@ public class Induvis {
         }
         Log.e("REOS","Induvis-getDate-dateUser:"+dateUser);
         return dateUser;
+    }
+
+    public static int getDiscountPercentDecimals(){
+        int decimals=0;
+        switch (BuildConfig.FLAVOR){
+            case "peru":
+                decimals=3;
+                break;
+            case "perurofalab":
+            case "espania":
+            case "marruecos":
+            case "ecuador":
+            case "chile":
+            case "paraguay":
+            case "bolivia":
+                decimals=2;
+                break;
+        }
+        return decimals;
     }
 }

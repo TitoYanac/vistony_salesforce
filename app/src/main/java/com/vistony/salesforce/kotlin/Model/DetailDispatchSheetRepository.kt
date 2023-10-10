@@ -3,12 +3,17 @@ package com.vistony.salesforce.kotlin.Model
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class DetailDispatchSheetRepository {
-    private val _status = MutableLiveData<List<DetailDispatchSheet>>()
-    val status: MutableLiveData<List<DetailDispatchSheet>> = _status
+    private val _resultDB = MutableStateFlow(DetailDispatchSheetEntity())
+    val resultDB: StateFlow<DetailDispatchSheetEntity> get() = _resultDB
 
     suspend fun getStateDispatchSheet(
         Imei:String,
@@ -36,21 +41,47 @@ class DetailDispatchSheetRepository {
                             var data=database?.detailDispatchSheetDao
                                 ?.getDetailDispatchSheetforDateStatus(
                                     FechaDespacho, "A","V")
-                            _status.postValue(data)
+
+                            CoroutineScope(Dispatchers.Default).launch {
+                                try {
+                                    data!!.collect { value ->
+                                        _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    }
+                                } catch (e: Exception) {
+                                    println("The flow has thrown an exception: $e")
+                                }
+                            }
+
                         }
                         type == "P" ->
                         {
                             var data=database?.detailDispatchSheetDao
                                 ?.getDetailDispatchSheetforDateStatus(
                                     FechaDespacho, "S","P")
-                            _status.postValue(data)
+                            CoroutineScope(Dispatchers.Default).launch {
+                                try {
+                                    data!!.collect { value ->
+                                        _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    }
+                                } catch (e: Exception) {
+                                    println("The flow has thrown an exception: $e")
+                                }
+                            }
                         }
                         type == "E" ->
                         {
                             var data=database?.detailDispatchSheetDao
                                 ?.getDetailDispatchSheetforDateStatus(
                                     FechaDespacho, "E","")
-                            _status.postValue(data)
+                            CoroutineScope(Dispatchers.Default).launch {
+                                try {
+                                    data!!.collect { value ->
+                                        _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    }
+                                } catch (e: Exception) {
+                                    println("The flow has thrown an exception: $e")
+                                }
+                            }
                         }
                     }
 
