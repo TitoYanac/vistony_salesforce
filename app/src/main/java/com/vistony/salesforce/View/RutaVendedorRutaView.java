@@ -219,7 +219,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
             Log.e("REOS", "RutaVendedorRutaView-ObtenerSQLiteRutaFuerzaTrabajo-Lista.size(): "+Lista.size());
             //Log.e("REOS", "RutaVendedorRutaView-ObtenerSQLiteRutaFuerzaTrabajo-rutaFuerzaTrabajoSQLiteDaoO.ObtenerCantidadRutaFuerzaTrabajo(): "+rutaFuerzaTrabajoSQLiteDaoO.ObtenerCantidadRutaFuerzaTrabajo());
             //Evalua si la lista obtenida por fecha tiene data y si la tabla tiene registros
-            if(Lista.isEmpty()&&rutaFuerzaTrabajoSQLiteDao.ObtenerCantidadRutaFuerzaTrabajo()>0){
+            /*if(Lista.isEmpty()&&rutaFuerzaTrabajoSQLiteDao.ObtenerCantidadRutaFuerzaTrabajo()>0){
                 Log.e("REOS", "RutaVendedorRutaView-onPostExecute-Entraif:");
                 Lista=rutaFuerzaTrabajoSQLiteDao.ObtenerRutaFuerzaTrabajoFechaMenor();
 
@@ -253,7 +253,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     //Obtiene lista menor con fecha actual
                     Lista=rutaFuerzaTrabajoSQLiteDao.ObtenerRutaFuerzaTrabajoFechaMenor();
                 }
-            }else{
+            }else{*/
 
                    /* ArrayList<String> zonas=new ArrayList<>();
                     //recorre lista para obtener codigo de Zona
@@ -323,7 +323,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
                     tv_cantidad_cliente_cabecera_pedido.setText(String.valueOf(pedido));
                     tv_cantidad_cliente_cabecera_geolocation.setText(String.valueOf(geolocalizacion));
                     //getActivity().setTitle("Ruta Vendedor");
-                }
+                //}
 
 
             Log.e("REOS","Finaliza Hilo");

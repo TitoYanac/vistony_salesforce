@@ -23,6 +23,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.sax.ElementListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,6 +49,7 @@ import android.widget.Toast;
 import com.google.firebase.perf.metrics.Trace;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.DocumentQuotationPDF;
 import com.vistony.salesforce.Controller.Utilitario.DocumentoPedidoPDF;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
@@ -168,6 +170,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     //TaskGetPriceList taskGetPriceList=new TaskGetPriceList();
     private ListaPrecioRepository listaPrecioRepository;
     UsuarioSQLiteEntity ObjUsuario;
+
+
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
@@ -1262,7 +1266,6 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     }
 
     public void GenerarArchivoPDF() {
-
         ArrayList<OrdenVentaCabeceraSQLiteEntity> listaOrdenVentaCabecera=new ArrayList<>();
         ArrayList<OrdenVentaDetallePromocionSQLiteEntity> listaOrdenVentaDetallePromocion=new ArrayList<>();
 
@@ -1272,8 +1275,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         listaOrdenVentaCabecera= ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraporID(ordenventa_id);
         listaOrdenVentaDetallePromocion=ordenVentaDetallePromocionSQLiteDao.ObtenerOrdenVentaDetallePromocionporID(ordenventa_id);
 
-        DocumentoPedidoPDF documentoPedidoPdf =new DocumentoPedidoPDF();
-        documentoPedidoPdf.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
+        /*DocumentoPedidoPDF documentoPedidoPdf =new DocumentoPedidoPDF();
+        documentoPedidoPdf.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);*/
         //TOAST DE ARCHIVOC READO ESTA EN EL generarPdf
 
         switch (BuildConfig.FLAVOR){
@@ -1281,6 +1284,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             case "india":
             case "ecuador":
             case "chile":
+                DocumentoPedidoPDF documentoPedidoPdf =new DocumentoPedidoPDF();
+                documentoPedidoPdf.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
                 Drawable drawable = menu_variable.findItem(R.id.enviar_erp).getIcon();
                 drawable = DrawableCompat.wrap(drawable);
                 DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.Black));
@@ -1293,7 +1298,14 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 generarpdf.setEnabled(true);
                 break;
             case "peru":
-
+                if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+                {
+                    DocumentoPedidoPDF documentoPedidoPdf1 =new DocumentoPedidoPDF();
+                    documentoPedidoPdf1.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
+                }else {
+                    DocumentQuotationPDF documentQuotationPDF =new DocumentQuotationPDF();
+                    documentQuotationPDF.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
+                }
                 break;
             default:
                 break;

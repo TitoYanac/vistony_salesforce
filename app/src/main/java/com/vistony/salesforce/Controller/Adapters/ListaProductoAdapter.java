@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
+import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
+import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.ProductoView;
 
@@ -31,6 +33,7 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
     private List<ListaProductoEntity> Listanombres =null;
     LayoutInflater inflater;
     private ArrayList<ListaProductoEntity> arrayList;
+    FormulasController formulasController;
 
     public ListaProductoAdapter(android.content.Context context, List<ListaProductoEntity> objects) {
         super(context, 0, objects);
@@ -90,6 +93,7 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
 
         // Obtener inflater.
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        formulasController=new FormulasController(getContext());
 
         final ViewHolder holder;
 
@@ -99,7 +103,6 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
             convertView = inflater.inflate(R.layout.layout_lista_producto,parent,false);
 
             holder = new ViewHolder();
-            // holder.lbl_documento = (TextView) convertView.findViewById(R.id.lbl_documento);
             holder.tv_productoid = (TextView) convertView.findViewById(R.id.tv_productoid);
             holder.tv_umd = (TextView) convertView.findViewById(R.id.tv_umd);
             holder.tv_producto = (TextView) convertView.findViewById(R.id.tv_producto);
@@ -107,7 +110,6 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
             holder.tv_precio = (TextView) convertView.findViewById(R.id.tv_precio);
             holder.tv_igv = (TextView) convertView.findViewById(R.id.tv_igv);
             holder.tv_gal = (TextView) convertView.findViewById(R.id.tv_gal);
-
             holder.relativeListaProducto=convertView.findViewById(R.id.relativeListaProducto);
             convertView.setTag(holder);
         } else {
@@ -121,11 +123,21 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         holder.tv_productoid.setText(lead.getProducto_id());
         holder.tv_producto.setText(lead.getProducto());
         holder.tv_umd.setText(lead.getUmd());
-        holder.tv_precio.setText(Convert.currencyForView(lead.getPreciobase()));
+        //holder.tv_precio.setText(Convert.currencyForView(lead.getPreciobase()));
         //holder.tv_igv.setText(lead.getPrecioigv());
         holder.tv_igv.setText(lead.getStock_almacen());
         holder.tv_stock.setText(lead.getStock_almacen());
         holder.tv_gal.setText(lead.getGal());
+
+        switch (BuildConfig.FLAVOR)
+        {
+            case "bolivia":
+                holder.tv_precio.setText(Convert.currencyForView(formulasController.ObtenerCalculoPrecioImpuesto(lead.getPreciobase(), SesionEntity.Impuesto)));
+                break;
+            default:
+                holder.tv_precio.setText(Convert.currencyForView(lead.getPreciobase()));
+                break;
+        }
 
 
         holder.relativeListaProducto.setOnClickListener(v -> {
@@ -149,8 +161,6 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
                         default:
                             break;
                     }
-
-
 
         }
 
