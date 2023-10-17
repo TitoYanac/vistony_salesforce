@@ -12,7 +12,7 @@ apply plugin: 'kotlin-kapt'
 android {
     signingConfigs {
         config {
-            storeFile file('C:\\Users\\Vistony\\Documents\\GitHub\\SalesForceInternacional\\salesforce-intenacional-principal\\key\\keyStore.jks')
+            storeFile file('C:\\Users\\Vistony\\Documents\\GitHub\\salesforce-intenacional-principal\\key\\keyStore.jks')
             storePassword 'keyStore.jks'
             keyPassword 'keyStore.jks'
             keyAlias 'SalesForce'
@@ -115,11 +115,11 @@ android {
             applicationIdSuffix ".peru"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------Aprobaciones
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //QA 2
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe_V2"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
@@ -145,12 +145,12 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"bo.get"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"bo.post"')
             //----------Ambiente Server20 Produccion
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo"')
             //----------Ambiente Ultima Milla
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo.qa"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo.qa"')
-            //----------Produccion
+            //----------Produccion 13.10.2023
             buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
             buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             versionName "1.0.9"

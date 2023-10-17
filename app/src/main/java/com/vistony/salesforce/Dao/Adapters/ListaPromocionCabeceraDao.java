@@ -49,6 +49,8 @@ public class ListaPromocionCabeceraDao {
                 Log.e("REOS","ListaPromocionCabeceraDao.getLeads.Lista.get(i).getCantidadcompra(): "+Lista.get(i).getCantidadcompra());
                 Log.e("REOS","ListaPromocionCabeceraDao.getLeads.Lista.get(i).getCantidadpromocion(): "+Lista.get(i).getCantidadpromocion());
                 Log.e("REOS","ListaPromocionCabeceraDao.getLeads.Lista.get(i).getCount(): "+Lista.get(i).getCount());
+                Log.e("REOS","ListaPromocionCabeceraDao.getLeads.Lista.get(i).getPromocion_id(): "+Lista.get(i).getPromocion_id());
+                Log.e("REOS","ListaPromocionCabeceraDao.getLeads.Lista.get(i).getLista_promocion(): "+Lista.get(i).getLista_promocion());
                 saveLead(new ListaPromocionCabeceraEntity(
                         Lista.get(i).getLista_promocion_id()
                         ,Lista.get(i).getPromocion_id()

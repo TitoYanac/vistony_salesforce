@@ -167,9 +167,9 @@ fun ItemGetImageCapture(
     var photoFile: File? = null
 
     photoFile = createImageFile1(tittle+ "_" + getDate(), type,activity)
-
+    Log.e("REOS", "MenuGetImage-ItemGetImageCapture-photoFile: "+photoFile)
     if (photoFile != null) {
-        Log.e("REOS", "statusDispatchRepository-->FotoLocal-->photoFile != null")
+        Log.e("REOS", "MenuGetImage-ItemGetImageCapture-->FotoLocal-->photoFile != null")
         var photoURI: Uri? = null
         when (BuildConfig.FLAVOR) {
             "ecuador" -> photoURI = FileProvider.getUriForFile(

@@ -81,7 +81,7 @@ class RetrofitConfig {
         baseUrl =
             when (BuildConfig.FLAVOR) {
                 "chile", "ecuador", "espania", "marruecos"
-                //    ,"peru"
+                //  ,"peru"
                 -> "https://salesforce.vistony.pe"
                 "perurofalab", "bolivia", "paraguay" ->                 //QA Peru
                     //case "peru":

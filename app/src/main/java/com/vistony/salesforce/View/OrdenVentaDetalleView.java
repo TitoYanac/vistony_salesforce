@@ -176,7 +176,7 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_gal=productoAgregado.getGal();
             ObjListaProductosEntity.orden_detalle_monto_igv="0";
             //Cambio
-            ObjListaProductosEntity.orden_detalle_cantidad="";
+            ObjListaProductosEntity.orden_detalle_cantidad="0";
             //
             ObjListaProductosEntity.orden_detalle_monto_descuento="0";
             ObjListaProductosEntity.orden_detalle_montototallinea="0";

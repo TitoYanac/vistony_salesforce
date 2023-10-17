@@ -73,18 +73,32 @@
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
-                <TextView
+                <Button
+                    android:id="@+id/btn_edit_orden_detalle_cantidad"
+                    android:layout_width="50dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/custom_border_button_red"
+                    android:enabled="true"
+                    android:text="@string/count"
+                    android:textColor="@color/White"
+                    android:textSize="11sp"
+                    android:textAllCaps="false"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    />
+
+               <!-- <TextView
                     android:id="@+id/lbl_orden_detalle_cantidad"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:text="@string/quantity"
                     android:textAppearance="?attr/textAppearanceListItem" />
-
+                -->
                 <EditText
                     android:id="@+id/et_orden_detalle_cantidad"
                     android:layout_width="70dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/borde_editext_ov_rojo"
+                    android:background="@drawable/borde_editext_ov_gray"
                     android:digits="0123456789"
                     android:ems="9"
                     android:hint="0"
@@ -94,8 +108,11 @@
                     android:singleLine="true"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:textColor="@color/Rojo_Vistony"
-                    android:textStyle="bold" />
+                    android:textColor="@color/gray"
+                    android:textStyle="bold"
+                    android:enabled="false"
+                    android:clickable="false"
+                    />
 
 
             </TableRow>
@@ -165,20 +182,32 @@
                     android:textAlignment="center"
 
                     android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
+                <Button
+                    android:id="@+id/btn_editDspPorcentaje"
+                    android:layout_width="50dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/custom_border_button_red"
+                    android:enabled="true"
+                    android:text="@string/descount"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="@color/White"
+                    android:textSize="11sp"
+                    android:textAllCaps="false"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    />
+                <!--<TextView
                     android:id="@+id/lbl_editDspPorcentaje"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/descount"
-                    android:textAppearance="?attr/textAppearanceListItem" />
+                    android:textAppearance="?attr/textAppearanceListItem" />-->
 
                 <EditText
                     android:id="@+id/editDspPorcentaje"
                     android:layout_width="70dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/borde_editext_ov_negro"
+                    android:background="@drawable/borde_editext_ov_gray"
                     android:digits="0123456789.-"
                     android:ems="9"
                     android:hint="0"
@@ -188,10 +217,10 @@
                     android:singleLine="true"
                     android:textAlignment="center"
                     android:textAppearance="?attr/textAppearanceListItem"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/gray"
                     android:textStyle="bold"
-
                     />
+
             </TableRow>
 
             <TableRow

@@ -250,25 +250,30 @@ public class PromocionCabeceraView extends Fragment {
     public static PromocionCabeceraView newInstanceEditarPromocionDetalle (Object objeto) {
         PromocionCabeceraView listadoPromocionView = new PromocionCabeceraView();
         ArrayList<ListaPromocionCabeceraEntity> listadoPromocionCabeceraEntity=(ArrayList<ListaPromocionCabeceraEntity>)  objeto;
-        Log.e("REOS","PromocionCabeceraView:Listado:"+Listado.size());
-        Log.e("REOS","PromocionCabeceraView:listadoPromocionCabeceraEntity:"+listadoPromocionCabeceraEntity.size());
+        Log.e("REOS","PromocionCabeceraView-newInstanceEditarPromocionDetalle-Listado:"+Listado.size());
+        Log.e("REOS","PromocionCabeceraView-newInstanceEditarPromocionDetalle-listadoPromocionCabeceraEntity:"+listadoPromocionCabeceraEntity.size());
         String promocion_id="",descuento="";
         ArrayList<PromocionDetalleSQLiteEntity> listPromocionDetalleSQLite=new ArrayList<>();
         for(int j=0;j<listadoPromocionCabeceraEntity.size();j++)
         {
+            Log.e("REOS","PromocionCabeceraView-newInstanceEditarPromocionDetalle-listadoPromocionCabeceraEntity.get(j).getPromocion_id():"+listadoPromocionCabeceraEntity.get(j).getPromocion_id());
             promocion_id=listadoPromocionCabeceraEntity.get(j).getPromocion_id();
             descuento=listadoPromocionCabeceraEntity.get(j).getDescuento();
             listPromocionDetalleSQLite=listadoPromocionCabeceraEntity.get(j).getListaPromocionDetalleEntities();
         }
         for(int i=0;i<Listado.size();i++)
         {
+            Log.e("REOS","PromocionCabeceraView-newInstanceEditarPromocionDetalle-Listado.get(i).getPromocion_id():"+Listado.get(i).getPromocion_id());
+            Log.e("REOS","PromocionCabeceraView-newInstanceEditarPromocionDetalle-promocion_id:"+promocion_id);
             if(Listado.get(i).getPromocion_id().equals(promocion_id))
             {
+                Log.e("REOS","PromocionCabeceraView-newInstanceEditarPromocionDetalle-SesionEntity.quotation:"+SesionEntity.quotation);
                 Listado.get(i).setDescuento(descuento);
                 if(SesionEntity.quotation.equals("Y"))
                 {
-                    //Listado.get(i).setPromocion_id(promocion_id+"_M");
+                    Listado.get(i).setPromocion_id(promocion_id+"_M");
                 }
+                Log.e("REOS","PromocionCabeceraView-dentrodelif-newInstanceEditarPromocionDetalle-Listado.get(i).getPromocion_id():"+Listado.get(i).getPromocion_id());
                 Listado.get(i).setListaPromocionDetalleEntities(listPromocionDetalleSQLite);
             }
                 /*if(listadoPromocionCabeceraEntity.get(i).getPromocion_id().equals(Listado.get(j).getPromocion_id()))
@@ -308,7 +313,18 @@ public class PromocionCabeceraView extends Fragment {
                 getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
             }
         }else {
-            getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
+            if(SesionEntity.quotation.equals("Y"))
+            {
+                /*if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+                {
+                    getActivity().setTitle(getActivity().getResources().getString(R.string.exception_request));
+                }else {
+                    getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
+                }*/
+                getActivity().setTitle(getActivity().getResources().getString(R.string.exception_request));
+            }else {
+                getActivity().setTitle(getActivity().getResources().getString(R.string.menu_promotion));
+            }
         }
 
 
@@ -500,9 +516,11 @@ public class PromocionCabeceraView extends Fragment {
                 {
                     lista_promocion_id=listaPromocionCabeceraEntities.get(l).getLista_promocion_id();
                 }
-
+                Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-vincular-lista_promocion_id" + lista_promocion_id);
+                Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-vincular-SesionEntity.flagquerystock" + SesionEntity.flagquerystock);
                 if(SesionEntity.flagquerystock.equals("N"))
                 {
+                    Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-vincular-SesionEntity.quotation" + SesionEntity.quotation);
                     if(SesionEntity.quotation.equals("Y"))
                     {
                         if (lista_promocion_id.equals("0000"))
@@ -544,7 +562,12 @@ public class PromocionCabeceraView extends Fragment {
                                 Toast.makeText(getContext(), "Si cumple con las reglas de excepcion!!!!", Toast.LENGTH_LONG).show();
                                 for(int i=0;i<listaPromocionCabeceraEntities.size();i++)
                                 {
-                                    listaPromocionCabeceraEntities.get(i).setPromocion_id(promocion_id);
+                                    Log.e("REOS", "PromocionCabeceraView-onOptionsItemSelected-vincular-valor-antesdevincular-promocion_id" + promocion_id);
+                                   if(BuildConfig.FLAVOR.equals("peru"))
+                                   {
+                                       listaPromocionCabeceraEntities.get(i).setPromocion_id(promocion_id);
+                                   }
+
                                 }
 
                                 String Fragment = "PromocionCabeceraView";

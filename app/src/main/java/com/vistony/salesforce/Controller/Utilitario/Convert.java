@@ -496,7 +496,6 @@ public class Convert {
         BigDecimal price_edit_=new BigDecimal(price_edit);
         BigDecimal absoluteDifference = price_listprice_.subtract(price_edit_).abs();
         double percentageDifference = (absoluteDifference.doubleValue() / price_listprice_.doubleValue()) * 100.0;
-
         return percentageDifference;
     }
 
@@ -524,5 +523,33 @@ public class Convert {
                 break;
         }
         return Scale;
+    }
+
+    public static String getDiscountPercentage(String price1, String price2) {
+        try {
+            price1 = price1.replace(" ", "");
+            price2 = price2.replace(" ", "");
+            BigDecimal price1Value = new BigDecimal(price1);
+            BigDecimal price2Value = new BigDecimal(price2);
+
+            // Verifica si el Precio 2 es menor que el Precio 1 y evita la división por cero.
+            if (price2Value.compareTo(price1Value) < 0) {
+                BigDecimal discount = price1Value.subtract(price2Value);
+                double discountPercentage = (discount.doubleValue() / price1Value.doubleValue()) * 100.0;
+
+                // Redondea el resultado a tres decimales.
+                DecimalFormat df = new DecimalFormat("0.000");
+                String formattedDiscount = df.format(discountPercentage);
+
+                return formattedDiscount;
+            } else {
+                // Si el Precio 2 no es menor que el Precio 1, devuelve "0.000".
+                return "0.000";
+            }
+        } catch (NumberFormatException e) {
+            // Maneja el error de conversión de cadenas a BigDecimal.
+            System.err.println("Error en la conversión de cadenas a números: " + e.getMessage());
+            return "0.000"; // Puedes devolver un valor predeterminado o lanzar una excepción personalizada según tus necesidades.
+        }
     }
 }

@@ -595,4 +595,7 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="cash_discount">Descuento por contado</string>
     <string name="gallons">Galones</string>
     <string name="seller_route">Ruta Dinamica</string>
+    <string name="count">Cantidad</string>
+    <string name="edit_count">Cantidad Editable</string>
+    <string name="close">Cerrar</string>
 </resources>

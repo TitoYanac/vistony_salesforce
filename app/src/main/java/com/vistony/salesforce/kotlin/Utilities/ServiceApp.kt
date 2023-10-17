@@ -47,9 +47,7 @@ class ServiceApp: Service()  {
         val serviceAppRepository:ServiceAppRepository= ServiceAppRepository()
         val salesCalendarRepository:SalesCalendarRepository= SalesCalendarRepository()
         val coroutineScope = CoroutineScope(Dispatchers.Default)
-        var interval:Long=20000
-        var startTime:Long=20000
-        var endTime:Long=20000
+        var interval:Long=360000
         var statusService:Boolean=false
         var statusVariableRange:Boolean=false
         var statusDayHabil:Boolean=false

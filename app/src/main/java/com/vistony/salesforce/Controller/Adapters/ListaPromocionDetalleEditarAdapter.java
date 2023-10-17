@@ -148,6 +148,7 @@ public class ListaPromocionDetalleEditarAdapter  extends ArrayAdapter<ListaPromo
                                     {
                                         PromocionDetalleView.copiaeditablelistaPromocionCabeceraEntity.get(i).setPromocion_id(PromocionDetalleView.copiaeditablelistaPromocionCabeceraEntity.get(i).getPromocion_id()+"_M");
                                     }*/
+                                    Log.e("REOS","ListaPromocionCabeceraEditar-imv_incrementar-lead.getCantidad_editada(): "+lead.getCantidad_editada());
                                     //PromocionDetalleView.listaPromocionCabeceraEntity.get(i).setPromocion_id(PromocionDetalleView.listaPromocionCabeceraEntity.get(i).getPromocion_id()+"_M");
                                     //PromocionDetalleView.copiaeditablelistaPromocionCabeceraEntity.get(i).setDescuento(lead.getCantidad_editada().toString());
                                     for(int j=0;j<PromocionDetalleView.listaPromocionCabeceraEntity.get(i).getListaPromocionDetalleEntities().size();j++)

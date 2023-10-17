@@ -134,7 +134,7 @@ public class FormulasController {
         BigDecimal monto = new BigDecimal(MontoTotalLineaSinIGV);
         BigDecimal porcentaje = new BigDecimal(PorcentajeDescuento);
 
-        BigDecimal montoDescuento = monto.multiply(porcentaje).divide(new BigDecimal(100)).setScale(3, RoundingMode.HALF_UP);
+        BigDecimal montoDescuento = monto.multiply(porcentaje).divide(new BigDecimal(100)).setScale(getScale(), RoundingMode.HALF_UP);
         Log.e("applyDiscountPercentageForLine", "=>" + montoDescuento);
 
         return montoDescuento.toString();
@@ -2001,13 +2001,22 @@ public class FormulasController {
     }
 
     public String getPriceReferencePack(String PrecioPackconDescuento, String QuantityPackPromotion) {
-        String efectividad = "";
-        Log.e("REOS", "FormulasController.getAmountRouteeffectiveness.PrecioPackconDescuento:" + PrecioPackconDescuento);
-        Log.e("REOS", "FormulasController.getAmountRouteeffectiveness.QuantityPackPromotion:" + QuantityPackPromotion);
-        double resultado;
-        resultado = (Double.parseDouble(PrecioPackconDescuento) / Double.parseDouble(QuantityPackPromotion));
-        Log.e("REOS", "FormulasController.getAmountRouteeffectiveness.resultado:" + resultado);
-        return String.valueOf(format.format(resultado));
+        Log.e("REOS", "FormulasController.getPriceReferencePack.PrecioPackconDescuento:" + PrecioPackconDescuento);
+        Log.e("REOS", "FormulasController.getPriceReferencePack.QuantityPackPromotion:" + QuantityPackPromotion);
+        //double resultado;
+        //resultado = (Double.parseDouble(PrecioPackconDescuento) / Double.parseDouble(QuantityPackPromotion));
+        //Log.e("REOS", "FormulasController.getAmountRouteeffectiveness.resultado:" + resultado);
+        BigDecimal repta =new BigDecimal(0);
+        try {
+            BigDecimal temp1 = new BigDecimal(PrecioPackconDescuento);
+            //BigDecimal repta = temp1.multiply(porcentaje).divide(new BigDecimal(100)).setScale(3, RoundingMode.HALF_UP);
+            repta = temp1.divide (new BigDecimal(QuantityPackPromotion)).setScale(getScale(), RoundingMode.HALF_UP);
+        }catch (Exception e){
+            Log.e("REOS", "FormulasController.getPriceReferencePack.error:" + e.toString());
+        }
+
+        //return String.valueOf(format.format(resultado));
+        return repta.toString();
     }
 
     public String ObtenerCalculoPrecioImpuesto(String preciounitario, String FactorImpuesto) {

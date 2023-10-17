@@ -1147,8 +1147,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
                 Log.e("REOS","ListSalesOrderDetailAdapter-onOptionsItemSelected-guardar_orden_venta-terminopago_id:"+terminopago_id);
                 Log.e("REOS","ListSalesOrderDetailAdapter-onOptionsItemSelected-guardar_orden_venta-spn_reason_freetransfer.getSelectedItem().toString():"+spn_reason_freetransfer.getSelectedItem().toString());
-                if( terminopago_id.equals("47")
-                    &&(spn_reason_freetransfer.getSelectedItem().toString().equals("--SELECCIONAR--"))
+                if( terminopago_id.equals("47") &&(spn_reason_freetransfer.getSelectedItem().toString().equals("--SELECCIONAR--"))&&BuildConfig.FLAVOR.equals("peru")
                 )
                 {
                     alertdialogInformative(getContext(), "ADVERTENCIA", "El termino de pago TRANSFERENCIA GRATUITA, debe ir vinculando a un motivo valido favor de elegir").show();
@@ -1156,15 +1155,26 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     if (SesionEntity.deliverydateauto.equals("Y")) {
                         alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
                     } else {
-                        dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-                        date = new Date();
-                        fechacomparativa = dateFormat.format(date);
-                        if (!parametrofecha.equals(fechacomparativa)) {
-                            alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
-                        } else {
 
-                            alertdialogInformative(getContext(), "ADVERTENCIA", "La Fecha de entrega de la Orden de Venta, debe ser distinta a la fecha actual, se sugiere 2 dias en adelante...").show();
+                        switch (BuildConfig.FLAVOR)
+                        {
+                            case "peru":
+                                dateFormat = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
+                                date = new Date();
+                                fechacomparativa = dateFormat.format(date);
+                                if (!parametrofecha.equals(fechacomparativa)) {
+                                    alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                                } else {
+
+                                    alertdialogInformative(getContext(), "ADVERTENCIA", "La Fecha de entrega de la Orden de Venta, debe ser distinta a la fecha actual, se sugiere 2 dias en adelante...").show();
+                                }
+                                break;
+                            default:
+                                alertaGuardarOrdenVenta("Esta Seguro de Guardar la Orden de Venta?").show();
+                                break;
                         }
+
+
                     }
                 }
                 return false;
@@ -1379,7 +1389,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             switch (BuildConfig.FLAVOR)
             {
                 case "peru":
-                    if(codigomoneda.equals("S/")){
+                    if(codigomoneda.replace(" ","").equals("S/")){
                         listaOrdenVentaCabeceraEntity.orden_cabecera_tipocambio="1";
                     }else{
                         //Esperando que el Tipo de Cambio viaje hacia el Usuario

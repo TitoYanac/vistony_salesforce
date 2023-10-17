@@ -10,6 +10,13 @@ import androidx.room.TypeConverters
 //import androidx.work.workDataOf
 //import com.vistony.salesforce.kotlin.data.UbigeousWorker.Companion.KEY_FILENAME
 import com.vistony.salesforce.kotlin.Utilities.DATABASE_NAME
+import com.vistony.salesforce.kotlin.View.Pages.ApiResponse
+import com.vistony.salesforce.kotlin.View.Pages.DatosPrincipales
+import com.vistony.salesforce.kotlin.View.Pages.DatosVisita
+import com.vistony.salesforce.kotlin.View.Pages.Opcion
+import com.vistony.salesforce.kotlin.View.Pages.PreguntaRespuesta
+import com.vistony.salesforce.kotlin.View.Pages.ResumenVisita
+import com.vistony.salesforce.kotlin.View.Pages.TipoSalida
 
 @Database(entities = [
     Ubigeous::class,
@@ -26,8 +33,15 @@ import com.vistony.salesforce.kotlin.Utilities.DATABASE_NAME
     ServiceApp::class,
     SalesCalendar::class,
     Notification::class,
-    Bank::class
-                     ], version = 77,exportSchema = false)
+    Bank::class,
+    ApiResponse::class,
+    DatosPrincipales::class,
+    DatosVisita::class,
+    TipoSalida::class,
+    ResumenVisita::class,
+    PreguntaRespuesta::class,
+    Opcion::class,
+                     ], version = 81,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,
@@ -52,7 +66,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val salesCalendarDao:SalesCalendarDao
     abstract val notificationDao:NotificationDao
     abstract val bankDao:BankDao
-
+    abstract val formularioTestDao:FormularioTestDao
 
     companion object {
 

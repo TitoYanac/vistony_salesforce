@@ -83,6 +83,8 @@ public class ClienteEntity {
     @SerializedName("CustomerWhiteList")
     private String customerwhitelist;
 
+
+
     public String getCustomerwhitelist() {
         return customerwhitelist;
     }

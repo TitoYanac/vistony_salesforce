@@ -357,7 +357,7 @@ public class PromocionDetalleView extends Fragment {
             for (int i = 0; i < listaPromocionCabeceraEntity.size(); i++)
             {
                 listaPromocionCabeceraEntity.get(i).setDescuento("1");
-                //listaPromocionCabeceraEntity.get(i).setPromocion_id(listaPromocionCabeceraEntity.get(i).getPromocion_id()+"_M");
+                listaPromocionCabeceraEntity.get(i).setPromocion_id(listaPromocionCabeceraEntity.get(i).getPromocion_id()+"_M");
                 listaPromocionCabeceraEntity.get(i).getListaPromocionDetalleEntities().add(promocionDetalleSQLiteEntity);
             }
 

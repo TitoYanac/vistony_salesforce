@@ -3,6 +3,7 @@ package com.vistony.salesforce.View;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.obtenerImei;
 
 import android.Manifest;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -122,7 +123,7 @@ public class LoginView extends AppCompatActivity {
         String env = BuildConfig.BASE_ENVIRONMENT.equals("/api") ? "Producción" : "Test";
         version = Utilitario.getVersion(getApplication());
 
-        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion()+"_");
+        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion()+"___");
 
         // locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         loginRepository = new ViewModelProvider(this).get(LoginRepository.class);
@@ -136,7 +137,7 @@ public class LoginView extends AppCompatActivity {
 
         ObtenerVideo();
         //verifyPermission();
-        verifyPermission2();
+        Induvis.verifyPermission(this);
         /*if(BuildConfig.FLAVOR.equals("perurofalab"))
         {
             imv_compania_login.setImageResource(R.mipmap.rofalab304x90_2);
@@ -345,7 +346,7 @@ public class LoginView extends AppCompatActivity {
         videoBG.setOnPreparedListener(mp -> mp.setLooping(true));
     }
 
-    private void verifyPermission() {
+/*    private void verifyPermission() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int permsRequestCode = 255;
@@ -384,8 +385,9 @@ public class LoginView extends AppCompatActivity {
                 requestPermissions(perms, permsRequestCode);
             }
         }
-    }
+    }*/
 
+    /*
     private void verifyPermission2() {
 
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -409,7 +411,7 @@ public class LoginView extends AppCompatActivity {
             int accessReadExternalStorage = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
             int accessBluetoothConnect = checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT);
             int accessBluetooth = checkSelfPermission(Manifest.permission.BLUETOOTH);
-            int accessBluetoothScan = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN);*/
+            int accessBluetoothScan = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN);
 
         if (
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
@@ -427,8 +429,9 @@ public class LoginView extends AppCompatActivity {
         } else {
 
         }
-    }
+    }*/
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -440,7 +443,7 @@ public class LoginView extends AppCompatActivity {
                 }
             }
         }
-    }
+    }*/
 
     public void btnLogin(View v) {
         btnlogin.setEnabled(false);
@@ -783,5 +786,7 @@ public class LoginView extends AppCompatActivity {
         return compuesto;
 
     }
+
+
 
 }

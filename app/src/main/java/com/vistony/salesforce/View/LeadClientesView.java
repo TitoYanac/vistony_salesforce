@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -168,6 +169,7 @@ public class LeadClientesView extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         latitude=0;
         longitude=0;
+        verifyPermission();
         if(type!=null)
         {
             if (type.equals("leadUpdateClient")) {
@@ -725,7 +727,8 @@ public class LeadClientesView extends Fragment {
                 LocationManager locationManager = (LocationManager) getActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
                 if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                        ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                {
 
                     mapView.getMapAsync(new OnMapReadyCallback() {
                         @Override
@@ -765,120 +768,19 @@ public class LeadClientesView extends Fragment {
                                     //myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                                 }
 
-                            /*locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-                                    new LocationListener() {
-                                        @Override
-                                        public void onLocationChanged(Location location) {
-                                            Toast.makeText(getActivity(), "onLocationChanged", Toast.LENGTH_SHORT).show();
-
-                                            latitud = location.getLatitude();
-                                            longitud = location.getLongitude();
-                                            Log.e("REOS","LeadClientesView.displayDialogMap.latitud:"+latitud);
-                                            Log.e("REOS","LeadClientesView.displayDialogMap.longitud:"+longitud);
-                                            LatLng latLng = new LatLng(latitud, longitud);
-                                            myGoogleMap.clear();
-                                            myGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Potential client").draggable(true));
-
-                                            editTextCoordenates.setText(latitud + "," + longitud);
-
-                                            if (status) {
-                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
-                                                status = false;
-                                            } else {
-                                                myGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                                                //myGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-                                            }
-
-                                        }
-
-                                        @Override
-                                        public void onStatusChanged(String provider, int status, Bundle extras) {
-                                            Toast.makeText(getActivity(), "onStatusChanged", Toast.LENGTH_SHORT).show();
-
-                                        }
-
-                                        @Override
-                                        public void onProviderEnabled(String provider) {
-                                            Toast.makeText(getActivity(), "onProviderEnabled", Toast.LENGTH_SHORT).show();
-
-                                        }
-
-                                        @Override
-                                        public void onProviderDisabled(String provider) {
-                                            Toast.makeText(getActivity(), "onProviderDisabled", Toast.LENGTH_SHORT).show();
-
-                                        }
-
-                                    }
-                            );*/
-
-
                                 dialog.show();
 
                             } else {
                                 Toast.makeText(getActivity().getApplicationContext(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
-                                getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-                            }
-
-                            ////////////////////////////////////////////////////////////////////////////////////
-
-
-                /*
-                if(googleMap!=null) {
-
-                    googleMap.setOnMyLocationChangeListener(location -> {
-                        if (location != null) {
-
-                            latitud = location.getLatitude();
-                            longitud = location.getLongitude();
-
-                            LatLng latLng = new LatLng(latitud, longitud);
-                            googleMap.clear();
-                            googleMap.addMarker(new MarkerOptions().position(latLng).title("Potential client").draggable(true));
-
-                            editTextCoordenates.setText(latitud + "," + longitud);
-
-                            if (status) {
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
-                                status = false;
-                            } else {
-                                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                verifyPermission();
+                                //getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 255);
                             }
                         }
                     });
-
-                    googleMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-                        @Override
-                        public void onMarkerDragStart(Marker location) {
-                            // TODO Auto-generated method stub
-                        }
-
-                        @Override
-                        public void onMarkerDragEnd(Marker location) {
-                            latitud = location.getPosition().latitude;
-                            longitud = location.getPosition().longitude;
-                            editTextCoordenates.setText(latitud + "," + longitud);
-
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLng(location.getPosition()));
-                        }
-
-                        @Override
-                        public void onMarkerDrag(Marker arg0) {
-                            // TODO Auto-generated method stub
-                        }
-                    });
-
-                    googleMap.setMyLocationEnabled(true);
-                    googleMap.getUiSettings().setZoomControlsEnabled(true);
-                }
-                */
-                        }
-                    });
-
-
                 } else {
                     Toast.makeText(getActivity(), "R.string.error_permission_map", Toast.LENGTH_LONG).show();
-                    getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+                    verifyPermission();
+                    //getActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 255);
                 }
 
             }
@@ -999,6 +901,52 @@ public class LeadClientesView extends Fragment {
         File image = File.createTempFile(imageFileName,".jpg",storageDir);
         mCurrentPhotoPath=image.getAbsolutePath();
         return image;
+    }
+
+
+    private void verifyPermission() {
+
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        int permsRequestCode = 255;
+
+        String[] perms = {
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        };
+
+            /*int accessReadPhoneState = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
+            int accessWriteExternalStorage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            int accessCamera = checkSelfPermission(Manifest.permission.CAMERA);
+            int accessCoarseLocation = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+            int accessReadExternalStorage = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+            int accessBluetoothConnect = checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT);
+            int accessBluetooth = checkSelfPermission(Manifest.permission.BLUETOOTH);
+            int accessBluetoothScan = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN);*/
+
+        if (
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
+                        ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            requestPermissions(perms, permsRequestCode);
+        } else {
+
+        }
     }
 
 

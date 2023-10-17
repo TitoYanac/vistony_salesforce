@@ -76,6 +76,7 @@ import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.kotlin.View.Pages.DepositScreen;
 import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetMapScreen;
+import com.vistony.salesforce.kotlin.View.Pages.FormularioTest1;
 import com.vistony.salesforce.kotlin.View.Pages.ValidationAccountClient;
 
 
@@ -742,9 +743,10 @@ public class MenuView extends AppCompatActivity
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
                 //fragmentSeleccionado=true;
-                CobranzaCabeceraFragment = new CobranzaCabeceraView();
+                //CobranzaCabeceraFragment = new CobranzaCabeceraView();
                 //CobranzaCabeceraFragment = new DepositScreen();
                 //CobranzaCabeceraFragment = new NotificationScreen();
+                CobranzaCabeceraFragment = new FormularioTest1();
                 fragment = "CobranzaCabeceraView";
                 accion = "inicio";
                 compuesto = fragment + "-" + accion;

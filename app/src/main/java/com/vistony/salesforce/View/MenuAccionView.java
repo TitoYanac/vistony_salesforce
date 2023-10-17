@@ -397,6 +397,9 @@ public class MenuAccionView extends Fragment {
             ConnectivityManager manager= (ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);;
             NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
+            DialogFragment dialogFragment = new VisitaDialogController(objetoMenuAccionView);
+            dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
+            /*
             if (networkInfo != null) {
                 if (networkInfo.getState() == NetworkInfo.State.CONNECTED) {
                     DialogFragment dialogFragment = new VisitaDialogController(objetoMenuAccionView);
@@ -406,7 +409,7 @@ public class MenuAccionView extends Fragment {
                 }
             }else{
                 Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.mse_module_availaible), Toast.LENGTH_LONG).show();
-            }
+            }*/
             //DialogFragment dialogFragment = new VisitaDialogController(objetoMenuAccionView);
             //dialogFragment.show(getActivity().getSupportFragmentManager(),"un dialogo");
             //alertaAdvertencia("La Opcion Aun no Esta Habilitada",getContext()).show();
