@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.DataBaseManager;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.SqliteController;
@@ -173,27 +174,55 @@ public class ListaPrecioDetalleSQLiteDao {
                 Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.listaArtificio: "+listaArtificio);
 
                 String query="";
-                if(currency_id.equals("US$"))
-                {
-                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
-                    String addCurrency;
-                    if(isCash.equals("0")){
-                        addCurrency="MonedaAdicionalCredito";
-                    }else {
-                        addCurrency="MonedaAdicionalContado";
-                    }
+                switch (BuildConfig.FLAVOR) {
+                    case "peru":
+                        if (currency_id.equals("US$")) {
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
+                            String addCurrency;
+                            if (isCash.equals("0")) {
+                                addCurrency = "MonedaAdicionalCredito";
+                            } else {
+                                addCurrency = "MonedaAdicionalContado";
+                            }
 
-                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-addCurrency "+addCurrency);
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-addCurrency " + addCurrency);
 
-                    query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
-                            "IFNULL(stock_general,0) stock_general,"+addCurrency+","+addCurrency+",gal," +
-                            "porcentaje_dsct,"+listnum+",oiltax,liter,SIGAUS,units  FROM listapreciodetalle  WHERE Tipo IN("+listaArtificio+") AND "+addCurrency+" NOT IN ('0.00') ";
-                }else
-                {
-                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
-                    query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
-                            "IFNULL(stock_general,0) stock_general,"+tipoDeCompra+","+tipoDeCompra+",gal," +
-                            "porcentaje_dsct,"+listnum+",oiltax,liter,SIGAUS,units FROM listapreciodetalle  WHERE Tipo IN("+listaArtificio+")";
+                            query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                    "IFNULL(stock_general,0) stock_general," + addCurrency + "," + addCurrency + ",gal," +
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units  FROM listapreciodetalle  WHERE Tipo IN(" + listaArtificio + ") AND " + addCurrency + " NOT IN ('0.00') ";
+                        } else {
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
+                            query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                    "IFNULL(stock_general,0) stock_general," + tipoDeCompra + "," + tipoDeCompra + ",gal," +
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle  WHERE Tipo IN(" + listaArtificio + ")";
+                        }
+
+                        break;
+                    case "bolivia":
+                        if (currency_id.equals("US$")) {
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
+                            String addCurrency;
+                            if (isCash.equals("0")) {
+                                addCurrency = "MonedaAdicionalCredito";
+                            } else {
+                                addCurrency = "MonedaAdicionalContado";
+                            }
+
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-addCurrency " + addCurrency);
+
+                            query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                    "IFNULL(stock_general,0) stock_general," + addCurrency + "," + addCurrency + ",gal," +
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units  FROM listapreciodetalle  WHERE Tipo IN(" + listaArtificio + ") AND " + addCurrency + " NOT IN ('0.00') ";
+                        } else {
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
+                            query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                    "IFNULL(stock_general,0) stock_general," + tipoDeCompra + "," + tipoDeCompra + ",gal," +
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle " +
+                                    " WHERE Tipo like '%"+tipoDeCompra+"%'"+
+                                    "";
+                        }
+
+                        break;
                 }
 
 
@@ -702,33 +731,61 @@ public class ListaPrecioDetalleSQLiteDao {
                 Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.listaArtificio: "+listaArtificio);
 
                 String query="";
-                if(currency_id.equals("US$"))
+                switch (BuildConfig.FLAVOR)
                 {
-                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
-                    String addCurrency;
-                    if(isCash.equals("0")){
-                        addCurrency="MonedaAdicionalCredito";
-                    }else {
-                        addCurrency="MonedaAdicionalContado";
-                    }
+                    case "peru":
+                        if (currency_id.equals("US$")) {
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
+                            String addCurrency;
+                            if (isCash.equals("0")) {
+                                addCurrency = "MonedaAdicionalCredito";
+                            } else {
+                                addCurrency = "MonedaAdicionalContado";
+                            }
 
-                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-addCurrency "+addCurrency);
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-addCurrency " + addCurrency);
 
-                    query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
-                            "IFNULL(stock_general,0) stock_general,"+addCurrency+","+addCurrency+",gal," +
-                            "porcentaje_dsct,"+listnum+",oiltax,liter,SIGAUS,units  FROM listapreciodetalle  WHERE " +
-                            //"Tipo IN("+listaArtificio+") AND " +
-                            ""+addCurrency+" NOT IN ('0.00') ";
-                }else
-                {
-                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
-                    query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
-                            "IFNULL(stock_general,0) stock_general,"+tipoDeCompra+","+tipoDeCompra+",gal," +
-                            "porcentaje_dsct,"+listnum+",oiltax,liter,SIGAUS,units FROM listapreciodetalle  " +
-                            //"WHERE Tipo IN("+listaArtificio+")" +
-                            "";
+                            query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                    "IFNULL(stock_general,0) stock_general," + addCurrency + "," + addCurrency + ",gal," +
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units  FROM listapreciodetalle  WHERE " +
+                                    //"Tipo IN("+listaArtificio+") AND " +
+                                    "" + addCurrency + " NOT IN ('0.00') ";
+                        } else {
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
+                            query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                    "IFNULL(stock_general,0) stock_general," + tipoDeCompra + "," + tipoDeCompra + ",gal," +
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle  " +
+                                    //"WHERE Tipo IN("+listaArtificio+")" +
+                                    "";
+                        }
+                        break;
+                    case "bolivia":
+                        if (currency_id.equals("US$")) {
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
+                            String addCurrency;
+                            if (isCash.equals("0")) {
+                                addCurrency = "MonedaAdicionalCredito";
+                            } else {
+                                addCurrency = "MonedaAdicionalContado";
+                            }
+
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-addCurrency " + addCurrency);
+
+                            query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                    "IFNULL(stock_general,0) stock_general," + addCurrency + "," + addCurrency + ",gal," +
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units  FROM listapreciodetalle  WHERE " +
+                                    "Tipo IN("+listaArtificio+") AND " +
+                                    "" + addCurrency + " NOT IN ('0.00') ";
+                        } else {
+                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
+                            query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                    "IFNULL(stock_general,0) stock_general," + tipoDeCompra + "," + tipoDeCompra + ",gal," +
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle  " +
+                                    "WHERE Tipo like '%"+tipoDeCompra+"%'"+
+                                    "";
+                        }
+                        break;
                 }
-
 
 
                 fila = sqlite.rawQuery(query,null);

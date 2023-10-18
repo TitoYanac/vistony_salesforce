@@ -41,7 +41,7 @@ class FormularioTest1 : Fragment() {
             // Simulate an API call and get the JSON response
             val imei = "355531114784577"
             val date = "2023-10-13"
-
+            requireActivity().setTitle("Formulario de Supervisión")
             GlobalScope.launch(Dispatchers.IO) {
                 try {
                     val jsonResponse = simulateApiCall(imei, date)
@@ -115,19 +115,24 @@ fun simulateApiCall(imei: String? = "", date: String): String {
 
 @Entity(tableName = "formsuperviser")
 data class ApiResponse(
-    @PrimaryKey(autoGenerate = true)
+        @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
-    @SerializedName("id_supervisor") var idSupervisor: String?="",
-    @SerializedName("id_vendedor") var idVendedor: String?="",
-    @Ignore
-    @SerializedName("datos_principales") val datosPrincipales: DatosPrincipales? = null,
-    @Ignore
-    @SerializedName("datos_visita") val datosVisita: DatosVisita? = null,
-    @Ignore
-    @SerializedName("formulario") val formulario: List<PreguntaRespuesta>? = listOf(),
-    @SerializedName("comentario") var comentario: String = "",
-    var numInforme: String = "",
-
+        @SerializedName("id_supervisor") var idSupervisor: String?="",
+        @SerializedName("id_vendedor") var idVendedor: String?="",
+        @Ignore
+    @SerializedName("datos_principales") var datosPrincipales: DatosPrincipales? = null,
+        @Ignore
+    @SerializedName("datos_visita") var datosVisita: DatosVisita? = null,
+        @Ignore
+    @SerializedName("formulario") var formulario: List<PreguntaRespuesta>? = listOf(),
+        @SerializedName("comentario") var comentario: String = "",
+        var numInforme: String = "",
+        var chkrecibido: String = "N",
+        var code: String = "",
+        var message: String = "",
+        var dateregister: String = "",
+        @Ignore
+        var num_informe: String = "",
 )
 
 @Entity(tableName = "maindata")
@@ -186,6 +191,7 @@ data class PreguntaRespuesta(
         @SerializedName("opciones") var opciones: List<Opcion> = listOf(),
         @SerializedName("respuesta") var respuesta: String? = "",
         var numInforme: String? = "",
+        @SerializedName("code") var code: String?="",
 )
 
 @Entity(tableName = "option")
@@ -198,7 +204,7 @@ data class Opcion(
 )
 
 data class ApiResponseEntity(
-        var Status:String="",
-        @SerializedName("Service")
+        var StatusCode:String="",
+        @SerializedName("Data")
         var Data: ApiResponse? = null,
 )

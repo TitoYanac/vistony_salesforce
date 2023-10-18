@@ -118,14 +118,14 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             //QA 2
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe_V2"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Pruebas Autorizaciones B2B -->Produccion
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
             versionName "2.2.21"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')

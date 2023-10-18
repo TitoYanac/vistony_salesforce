@@ -305,6 +305,7 @@ public class ListaPromocionDetalleEditarAdapter  extends ArrayAdapter<ListaPromo
                 }
             }
             lead.setStatusEdit(true);
+            dialog.dismiss();
         });
 
         dialogButtonCancel.setOnClickListener(new View.OnClickListener() {

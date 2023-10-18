@@ -50,4 +50,11 @@ class FormularioTestViewModel(
         }
     }
 
+    fun sendFormularioTest()
+    {
+        viewModelScope.launch {
+            formularioTestRepository.sendFormularioTest(context)
+        }
+    }
+
 }

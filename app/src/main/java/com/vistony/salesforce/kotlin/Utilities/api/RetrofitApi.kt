@@ -3,6 +3,8 @@ package com.vistony.salesforce.kotlin.Utilities.api
 import com.vistony.salesforce.BuildConfig
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse
 import com.vistony.salesforce.kotlin.Model.*
+import com.vistony.salesforce.kotlin.View.Pages.ApiResponse
+import com.vistony.salesforce.kotlin.View.Pages.ApiResponseEntity
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -55,4 +57,9 @@ interface RetrofitApi {
 
     @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Banks")
     fun getBanks(@Query("imei") imei: String?): Call<BankEntity?>?
+
+    @POST(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Superviser")
+    fun sendFormSupervisor(@Body params: RequestBody?): Call<ApiResponseEntity?>?
+
+
 }

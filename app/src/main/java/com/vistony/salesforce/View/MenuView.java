@@ -743,10 +743,10 @@ public class MenuView extends AppCompatActivity
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
                 //fragmentSeleccionado=true;
-                //CobranzaCabeceraFragment = new CobranzaCabeceraView();
+                CobranzaCabeceraFragment = new CobranzaCabeceraView();
                 //CobranzaCabeceraFragment = new DepositScreen();
                 //CobranzaCabeceraFragment = new NotificationScreen();
-                CobranzaCabeceraFragment = new FormularioTest1();
+                //CobranzaCabeceraFragment = new FormularioTest1();
                 fragment = "CobranzaCabeceraView";
                 accion = "inicio";
                 compuesto = fragment + "-" + accion;
@@ -1478,6 +1478,9 @@ public class MenuView extends AppCompatActivity
                     break;
                 case "agregarcliente":
                     contentFragment=new LeadClientesView();
+                    break;
+                case "formsupervisor":
+                    contentFragment=new FormularioTest1();
                     break;
             }
 

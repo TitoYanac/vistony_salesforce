@@ -19,9 +19,16 @@ fun CustomOutlinedNumericField(
     onValueChange: (String) -> Unit,
     validator: (String) -> Boolean = { true },  // Añadido un validador genérico por defecto que siempre devuelve true
     modifier: Modifier = Modifier  // Permite pasar modificadores externamente
+    ,status: Boolean = true
+    ,keyboardType:KeyboardType= KeyboardType.Number
 ) {
+    val sanitizedValue = value?.takeIf { it.all { char -> char.isDigit() } }
+    val displayValue = sanitizedValue ?: "0"
+
     OutlinedTextField(
-        value = value,
+        enabled=status,
+        //value = value,
+        value = displayValue,
         onValueChange = { newValue ->
             if (newValue.all { it.isDigit() } && validator(newValue)) {  // Añadido el validador
                 onValueChange(newValue)
@@ -30,7 +37,7 @@ fun CustomOutlinedNumericField(
         label = { Text(labelText, Modifier.padding(horizontal = 4.dp)) },
         modifier = modifier.padding(16.dp),
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Number,  // Asegurándose de que el tipo de teclado es Number
+            keyboardType = keyboardType,  // Asegurándose de que el tipo de teclado es Number
             imeAction = ImeAction.Done
         ),
         keyboardActions = KeyboardActions(onDone = { /* Optional: Handle done button press */ })

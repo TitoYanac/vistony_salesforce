@@ -16,8 +16,8 @@ import com.vistony.salesforce.kotlin.View.Pages.TipoSalida
 @Dao
 interface FormularioTestDao {
 
-    @Query("SELECT * FROM formsuperviser")
-    fun getFormSuperviser(): LiveData<List<ApiResponse>>
+    @Query("SELECT  * FROM formsuperviser WHERE chkrecibido='N' LIMIT 1")
+    fun getFormSuperviser(): ApiResponse
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addFormSuperviser(FormSuperviser: ApiResponse)
@@ -25,8 +25,11 @@ interface FormularioTestDao {
     @Query("DELETE FROM formsuperviser")
     fun deleteFormSuperviser()
 
-    @Query("SELECT * FROM maindata")
-    fun getDatosPrincipales(): LiveData<List<DatosPrincipales>>
+    @Query("UPDATE formsuperviser SET code = :code, message = :message, chkrecibido = :chkrecibido WHERE numInforme = :num_informe ")
+    fun updateStatusFormSupervisor(code: String, message: String, chkrecibido: String, num_informe: String)
+
+    @Query("SELECT * FROM maindata where numInforme=:numInforme ")
+    fun getDatosPrincipales(numInforme:String): DatosPrincipales
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addDatosPrincipales(DatosPrincipales: DatosPrincipales)
@@ -34,8 +37,8 @@ interface FormularioTestDao {
     @Query("DELETE FROM maindata")
     fun deleteDatosPrincipales()
 
-    @Query("SELECT * FROM visitdata")
-    fun getDatosVisita(): LiveData<List<DatosVisita>>
+    @Query("SELECT * FROM visitdata where numInforme=:numInforme")
+    fun getDatosVisita(numInforme:String): DatosVisita
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addDatosVisita(DatosPrincipales: DatosVisita?)
@@ -43,8 +46,8 @@ interface FormularioTestDao {
     @Query("DELETE FROM visitdata")
     fun deleteDatosVisita()
 
-    @Query("SELECT * FROM outputtype")
-    fun getTipoSalida(): LiveData<List<TipoSalida>>
+    @Query("SELECT * FROM outputtype where numInforme=:numInforme")
+    fun getTipoSalida(numInforme:String): List<TipoSalida>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addTipoSalida(TipoSalida: List<TipoSalida>?)
@@ -52,8 +55,8 @@ interface FormularioTestDao {
     @Query("DELETE FROM outputtype")
     fun deleteTipoSalida()
 
-    @Query("SELECT * FROM visitsummary")
-    fun getResumenVisita(): LiveData<List<ResumenVisita>>
+    @Query("SELECT * FROM visitsummary where numInforme=:numInforme ")
+    fun getResumenVisita(numInforme:String): List<ResumenVisita>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addResumenVisita(ResumenVisita: List<ResumenVisita>?)
@@ -61,8 +64,8 @@ interface FormularioTestDao {
     @Query("DELETE FROM visitsummary")
     fun deleteResumenVisita()
 
-    @Query("SELECT * FROM questionanswer")
-    fun getPreguntaRespuesta(): LiveData<List<PreguntaRespuesta>>
+    @Query("SELECT * FROM questionanswer where numInforme=:numInforme")
+    fun getPreguntaRespuesta(numInforme:String): List<PreguntaRespuesta>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addPreguntaRespuesta(PreguntaRespuesta: List<PreguntaRespuesta>?)

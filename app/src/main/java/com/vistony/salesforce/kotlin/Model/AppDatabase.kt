@@ -41,7 +41,7 @@ import com.vistony.salesforce.kotlin.View.Pages.TipoSalida
     ResumenVisita::class,
     PreguntaRespuesta::class,
     Opcion::class,
-                     ], version = 81,exportSchema = false)
+                     ], version = 83,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,
