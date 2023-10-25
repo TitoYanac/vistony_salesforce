@@ -13,7 +13,6 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
 import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 
 import io.sentry.BuildConfig;
-import io.sentry.Sentry;
 
 public class SqliteController extends SQLiteOpenHelper {
 
@@ -22,7 +21,7 @@ public class SqliteController extends SQLiteOpenHelper {
     private Context context;
     //ParametrosSQLite parametrosSQLite;
     private static final String DATABASE_NAME = "dbcobranzas";
-    private static final int VERSION = 45;
+    private static final int VERSION = 46;
 
 
     public SqliteController(Context context){
@@ -36,7 +35,6 @@ public class SqliteController extends SQLiteOpenHelper {
             }catch (Exception e){
                 Log.e("REOS","SqliteController.Construtor.context:"+context);
                 Log.e("REOS","SqliteController.Construtor.error:"+e.toString());
-                Sentry.captureMessage(e.getMessage());
                 Toast.makeText(context, "Ocurrio un Error al levantar el SqlController "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 System.exit(0);
             }
@@ -95,7 +93,7 @@ public class SqliteController extends SQLiteOpenHelper {
                     " TEXT,listaprecio_id TEXT,planta_id TEXT,fecharegistro TEXT,tipocambio TEXT,fechatipocambio TEXT,rucdni TEXT,U_SYP_MDTD TEXT,U_SYP_MDSD TEXT,U_SYP_MDCD TEXT," +
                     "U_SYP_MDMT TEXT,U_SYP_STATUS TEXT,DocType TEXT,mensajeWS TEXT,total_gal_acumulado TEXT,descuentocontado TEXT,dueDays_cliente TEXT,excede_lineacredito TEXT,U_VIS_AgencyRUC TEXT" +
                     ",U_VIS_AgencyName TEXT,U_VIS_AgencyDir TEXT,domfactura_id TEXT,domembarque_text TEXT,cliente_text TEXT" +
-                    ", terminopago_text TEXT,quotation TEXT,dispatchdate TEXT,countsend TEXT,route TEXT, U_VIT_VENMOS TEXT, U_VIS_Flete TEXT, U_VIS_CompleteOV TEXT, U_VIS_TipTransGrat TEXT, status TEXT,U_VIS_DiscountPercent TEXT,U_VIS_ReasonDiscountPercent TEXT,U_VIS_MOTAPLDESC TEXT,U_VIST_SUCUSU TEXT)");
+                    ", terminopago_text TEXT,quotation TEXT,dispatchdate TEXT,countsend TEXT,route TEXT, U_VIT_VENMOS TEXT, U_VIS_Flete TEXT, U_VIS_CompleteOV TEXT, U_VIS_TipTransGrat TEXT, status TEXT,U_VIS_DiscountPercent TEXT,U_VIS_ReasonDiscountPercent TEXT,U_VIS_MOTAPLDESC TEXT,U_VIST_SUCUSU TEXT, DocEntry TEXT)");
 
             db.execSQL("CREATE TABLE ordenventadetalle (compania_id text ,ordenventa_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT,chk_descuentocontado TEXT)");
             db.execSQL("CREATE TABLE ordenventadetallepromocion (compania_id text ,ordenventa_id TEXT,lineaordenventa_id TEXT,producto_id TEXT,umd TEXT,cantidad TEXT,preciounitario TEXT,montosubtotal TEXT,porcentajedescuento TEXT,montodescuento TEXT,montoimpuesto TEXT,montototallinea TEXT,lineareferencia TEXT,impuesto_id TEXT,producto TEXT,AcctCode TEXT,almacen_id TEXT,promocion_id TEXT,gal_unitario TEXT,gal_acumulado TEXT,U_SYP_FECAT07 TEXT,montosubtotalcondescuento TEXT,chk_descuentocontado TEXT )");
@@ -1050,6 +1048,13 @@ public class SqliteController extends SQLiteOpenHelper {
         {
             db.execSQL("CREATE TABLE sellerroute (CardCode text,Address text,Chk_Visit text,Chk_Pedido text,Chk_Cobranza text,Chk_Ruta text,FechaRuta text)");
         }
+
+        if(oldVersion==45&&newVersion==46)
+        {
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN DocEntry TEXT");
+        }
+
+
 
     }
 

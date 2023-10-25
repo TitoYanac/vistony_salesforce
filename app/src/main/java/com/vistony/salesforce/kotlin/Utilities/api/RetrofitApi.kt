@@ -61,5 +61,6 @@ interface RetrofitApi {
     @POST(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Superviser")
     fun sendFormSupervisor(@Body params: RequestBody?): Call<ApiResponseEntity?>?
 
-
+    @POST(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Notifications/Quotation")
+    fun getNotificationQuotation(@Query("imei") imei: String?,@Body params: RequestBody?): Call<NotificationQuotationEntity?>?
 }

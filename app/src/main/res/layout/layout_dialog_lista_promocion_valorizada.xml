@@ -67,19 +67,19 @@
                     android:paddingRight="5dp"
                     android:layout_weight="10"
                     >
-                <TextView
-                    android:id="@+id/lbl_tipo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:layout_weight="20"
-                    android:text="@string/type"
-                    android:textAllCaps="true"
-                    />
+
+                    <TextView
+                        android:id="@+id/lbl_tipo"
+                        android:layout_width="116dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="20"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:paddingEnd="10dp"
+                        android:text="@string/type"
+                        android:textAllCaps="true"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
                 <TextView
                     android:id="@+id/lbl_contado"
                     android:layout_width="match_parent"
@@ -120,7 +120,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="5dp"
-                        android:paddingRight="5dp"
+                        android:paddingEnd="10dp"
                         android:layout_weight="20"
                         android:textAlignment="textStart"
                         android:text="@string/price"
@@ -168,7 +168,6 @@
                         android:id="@+id/tv_pack_contado"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:textAlignment="textEnd"

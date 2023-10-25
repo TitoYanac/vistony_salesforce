@@ -17,7 +17,6 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.sentry.Sentry;
 
 public class BusinessLayerHeadSQLiteDao {
     SqliteController sqliteController;
@@ -91,7 +90,7 @@ public class BusinessLayerHeadSQLiteDao {
             }
         }catch (Exception e)
         {
-            Sentry.captureMessage(e.getMessage());
+            //Sentry.captureMessage(e.getMessage());
         }finally {
             bd.close();
         }

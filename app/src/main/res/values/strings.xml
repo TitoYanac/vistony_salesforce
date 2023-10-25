@@ -598,4 +598,7 @@ No se eligio Banco, debe elegir banco para poder continuar</string>
     <string name="count">Cantidad</string>
     <string name="edit_count">Cantidad Editable</string>
     <string name="close">Cerrar</string>
+    <string name="quantity_pack_assigned">Cuántos packs desea asignar?</string>
+    <string name="edit_quantity_line">Editar cantidad</string>
+    <string name="edit_quantity_in_the_box">Edite la cantidad en la caja de texto y calcule con el bóton enviar en el teclado numérico</string>
 </resources>

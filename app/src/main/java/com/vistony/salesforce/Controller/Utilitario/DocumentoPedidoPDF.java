@@ -350,7 +350,19 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                         tblLineas.addCell(cellLineasDetalle);
                         break;
                     case "bolivia":
-                        cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontosubtotal()),font3));
+                        /*cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontosubtotal()),font3));
+                        cellLineasDetalle.disableBorderSide(Rectangle.BOX);
+                        cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        tblLineas.addCell(cellLineasDetalle)*/
+                        /*if(ListaOrdenVentaDetalle.get(l).getPorcentajedescuento().equals("100")||ListaOrdenVentaDetalle.get(l).getPorcentajedescuento().equals("100.00"))
+                        {
+                            cellLineasDetalle = new PdfPCell(new Phrase( (ListaOrdenVentaDetalle.get(l).getMontosubtotal()),font3));
+                        }
+                        else
+                        {
+                            cellLineasDetalle = new PdfPCell(new Phrase((ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
+                        }*/
+                        cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         tblLineas.addCell(cellLineasDetalle);

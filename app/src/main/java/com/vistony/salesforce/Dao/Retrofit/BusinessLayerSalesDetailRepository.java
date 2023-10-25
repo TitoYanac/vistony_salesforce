@@ -18,6 +18,8 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.BusinessLayerEntityRespo
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BusinessLayerSalesDetailEntityResponse;
 import com.vistony.salesforce.R;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,7 +32,7 @@ public class BusinessLayerSalesDetailRepository extends ViewModel {
     private MutableLiveData<String> status= new MutableLiveData<>();
 
 
-    public MutableLiveData<String> getBussinessLayerSalesDetail(String Imei, Context context){
+    public MutableLiveData<String> getBussinessLayerSalesDetail(String Imei, Context context, Executor executor){
 
         Config.getClient().create(Api.class).getBusinessLayerSalesDetail(Imei).enqueue(new Callback<BusinessLayerSalesDetailEntityResponse>() {
             @Override
@@ -39,16 +41,16 @@ public class BusinessLayerSalesDetailRepository extends ViewModel {
                 BusinessLayerSalesDetailEntityResponse businessLayerSalesDetailEntityResponse=response.body();
 
                 if(response.isSuccessful() && businessLayerSalesDetailEntityResponse.getBusinessLayerSalesDetailEntityResponse()!=null){
-
+                    executor.execute(() -> {
                     businessLayerSalesDetailHeaderDao = new BusinessLayerSalesDetailHeaderDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
                     businessLayerSalesDetailDetailDao = new BusinessLayerSalesDetailDetailDao(context);
                     businessLayerSalesDetailHeaderDao.clearTableBusinessLayerSalesDetailHeader();
                     businessLayerSalesDetailDetailDao.clearTableBusinessLayerSalesDetailDetail();
-
                     businessLayerSalesDetailHeaderDao.addBusinessLayerSalesOrder(businessLayerSalesDetailEntityResponse.getBusinessLayerSalesDetailEntityResponse());
                     Integer countBussinessLayer=getBussinessLayerSalesDetail(context);
                     parametrosSQLite.ActualizaCantidadRegistros("30", context.getResources().getString(R.string.busines_layer_sales_detail), ""+countBussinessLayer, getDateTime());
+                    });
                 }
 
                 status.setValue("1");

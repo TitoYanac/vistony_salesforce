@@ -16,6 +16,8 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPrecioDetalleEntity
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ListaPrecioDetalleWarehouseEntityResponse;
 import com.vistony.salesforce.R;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,7 +79,7 @@ public class ListaPrecioRepository
         return LPDetalle;
     }*/
 
-    public MutableLiveData<String> execClarAndAddPriceList(String Imei,Context context){
+    public MutableLiveData<String> execClarAndAddPriceList(String Imei, Context context, Executor executor){
 
         Config.getClient().create(Api.class).getListaPrecioDetalle(Imei).enqueue(new Callback<ListaPrecioDetalleEntityResponse>() {
             @Override
@@ -85,12 +87,14 @@ public class ListaPrecioRepository
                 ListaPrecioDetalleEntityResponse listaPrecioDetalleEntityResponse=response.body();
                 if(response.isSuccessful() && listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity()!=null)
                 {
+                    executor.execute(() -> {
                     listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
                     listaPrecioDetalleSQLiteDao.LimpiarTablaListaPrecioDetalle();
                     listaPrecioDetalleSQLiteDao.AddListPriceList(listaPrecioDetalleEntityResponse.getListaPrecioDetalleEntity());
                     Integer countPriceList=getCountPriceList(context);
                     parametrosSQLite.ActualizaCantidadRegistros("7", context.getResources().getString(R.string.price_list).toUpperCase(), ""+countPriceList, getDateTime());
+                    });
                 }
                 status.setValue("1");
             }
@@ -107,7 +111,7 @@ public class ListaPrecioRepository
         return listaPrecioDetalleSQLiteDao.ObtenerCantidadListaPrecioDetalle();
     }
 
-    public MutableLiveData<String> execClarAndAddPriceListWarehouse(String Imei,Context context,String WhsCode,String PriceListCash,String PriceListCredit){
+    public MutableLiveData<String> execClarAndAddPriceListWarehouse(String Imei,Context context,String WhsCode,String PriceListCash,String PriceListCredit,Executor executor){
 
         Log.e("REOS","ListaPrecioRepository-execClarAndAddPriceListWarehouse-WhsCode: "+WhsCode);
         Log.e("REOS","ListaPrecioRepository-execClarAndAddPriceListWarehouse-PriceListCash: "+PriceListCash);
@@ -120,6 +124,7 @@ public class ListaPrecioRepository
                 ListaPrecioDetalleWarehouseEntityResponse listaPrecioDetalleWarehouseEntityResponse=response.body();
                 if(response.isSuccessful() && listaPrecioDetalleWarehouseEntityResponse.getListaPrecioDetalleWarehouseEntity()!=null)
                 {
+                    executor.execute(() -> {
                     Log.e("REOS", "ParametrosView-listaPrecioRepository-response.isSuccessful(): " + response.isSuccessful());
                     listaPrecioDetalleSQLiteDao = new ListaPrecioDetalleSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
@@ -127,6 +132,7 @@ public class ListaPrecioRepository
                     listaPrecioDetalleSQLiteDao.AddListPriceList(listaPrecioDetalleWarehouseEntityResponse.getListaPrecioDetalleWarehouseEntity());
                     Integer countPriceList=getCountPriceList(context);
                     parametrosSQLite.ActualizaCantidadRegistros("7", context.getResources().getString(R.string.price_list).toUpperCase(), ""+countPriceList, getDateTime());
+                    });
                 }
                 status.setValue("1");
             }

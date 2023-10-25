@@ -573,7 +573,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@color/colorPrimary"
-                android:focusable="false">
+                android:focusable="false"
+                android:id="@+id/tbl_summary"
+                >
                 <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -606,7 +608,9 @@
                 </TableRow>
                 <TableRow
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+
+                    >
 
                     <TextView
                         android:id="@+id/lbl_orden_cabecera_subtotal"
@@ -617,13 +621,15 @@
                         android:focusable="false"
                         android:text="@string/subtotal"
                         android:textColor="@color/white"
-                        android:textSize="24dp"></TextView>
+                        android:textSize="24dp">
+
+                    </TextView>
 
                     <TextView
                         android:id="@+id/tv_orden_cabecera_subtotal"
                         style="@android:style/TextAppearance.Widget.TextView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="4"
                         android:focusable="false"
                         android:text="0"

@@ -58,7 +58,7 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Codigo:"
+                android:text="@string/code"
                 />
 
             <TextView
@@ -68,21 +68,36 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textStyle="bold"
                 android:gravity="end"
-                tools:text="UMD1" />
+                android:text="@string/code" />
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/lbl_orden_detalle_cantidad"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Cantidad:" />
+                android:text="Cantidad:" />-->
+            <Button
+                android:id="@+id/btn_edit_orden_detalle_cantidad"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/custom_border_button_red"
+                android:enabled="true"
+                android:text="@string/count"
+                android:textColor="@color/White"
+                android:textSize="11sp"
+                android:textAllCaps="false"
+                android:textAppearance="?attr/textAppearanceListItem"
+
+                />
 
             <EditText
                 android:id="@+id/et_orden_detalle_cantidad"
                 android:layout_width="70dp"
                 android:layout_height="30dp"
-                android:background="@drawable/borde_editext_ov_rojo"
+                android:background="@drawable/borde_editext_ov_gray"
                 android:digits="0123456789"
                 android:ems="9"
                 android:hint="0"
@@ -91,9 +106,13 @@
                 android:maxLength="5"
                 android:singleLine="true"
                 android:textAlignment="center"
-                android:textColor="@color/Rojo_Vistony"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textStyle="bold" />
+                android:textColor="@color/gray"
+                android:textStyle="bold"
+                android:enabled="false"
+                android:clickable="false"
+
+                />
 
 
         </TableRow>
@@ -107,7 +126,7 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Gal Unit:"
+                android:text="@string/gallon"
                 />
 
             <TextView
@@ -116,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:gravity="end"
-                tools:text="Gal Unit" />
+                android:text="@string/gallon" />
 
             <TextView
                 android:id="@+id/lbl_orden_detalle_galon_acumulado"
@@ -124,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Gal Total:" />
+                android:text="@string/gallon_total" />
 
             <TextView
                 android:id="@+id/tv_orden_detalle_galon_acumulado"
@@ -144,7 +163,7 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Pre Unit:"
+                android:text="@string/price"
                 />
 
             <TextView
@@ -153,14 +172,14 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:layout_gravity="end"
-                tools:text="Precio1" />
+                android:text="@string/price" />
 
             <TextView
                 android:id="@+id/lbl_orden_detalle_stock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Stock:"
+                android:text="@string/stock"
                 android:layout_marginLeft="5dp"
                 />
 
@@ -244,7 +263,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="% Dscto"
+                android:text="@string/percent_discount"
 
                 />
 
@@ -314,7 +333,7 @@
                 android:textStyle="bold"
                 android:layout_marginLeft="5dp"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Total:" />
+                android:text="@string/total" />
 
             <TextView
                 android:id="@+id/tv_orden_detalle_total"
@@ -323,7 +342,7 @@
                 android:textStyle="bold"
                 android:layout_gravity="end"
                 android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="Total1" />
+                tools:text="@string/total" />
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -334,7 +353,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Promocion:" />
+                android:text="@string/promotion" />
             <ImageView
                 android:id="@+id/imv_consultar_promocion_cabecera"
                 android:layout_width="wrap_content"
@@ -349,7 +368,7 @@
                 android:layout_marginLeft="5dp"
                 android:textStyle="bold"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:text="Borrar:" />
+                android:text="@string/erase" />
 
             <ImageView
                 android:id="@+id/imv_eliminar_orden_venta_detalle"
@@ -366,7 +385,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="190dp"
-        android:text="Resumen Promocion"
+        android:text="@string/Promotion_Summary"
         android:textAppearance="?attr/textAppearanceListItem"
         android:textStyle="bold" />
 

@@ -1,7 +1,9 @@
 package com.vistony.salesforce.kotlin.View.Template
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.widget.DatePicker
 import android.widget.ScrollView
@@ -32,8 +34,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -55,6 +59,7 @@ import com.vistony.salesforce.kotlin.Model.*
 import com.vistony.salesforce.kotlin.Utilities.CollectionReceipPDF
 import com.vistony.salesforce.kotlin.Utilities.ConvertDateSAPaUserDate
 import com.vistony.salesforce.kotlin.Utilities.getDate
+import com.vistony.salesforce.kotlin.Utilities.getDateCurrent
 import com.vistony.salesforce.kotlin.Utilities.sendSMS
 import com.vistony.salesforce.kotlin.View.Atoms.*
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
@@ -92,6 +97,14 @@ fun ContentDeposit()
         )
     )
     bankViewModel.getAddBanks()
+    val headerDispatchSheetRepository : HeaderDispatchSheetRepository = HeaderDispatchSheetRepository()
+    val headerDispatchSheetViewModel: HeaderDispatchSheetViewModel = viewModel(
+            factory = HeaderDispatchSheetViewModel.HeaderDispatchSheetViewModelFactory(
+                    headerDispatchSheetRepository,
+                    appContext,
+            )
+    )
+
 
     //Valida que existan recibos en la base de datos local y en caso de estar vacio, consulta la API
     when (collectionDetailDB.value.Status) {
@@ -114,6 +127,9 @@ fun ContentDeposit()
     }
     var statusBoolean: MutableState<Boolean> = remember { mutableStateOf(true) }
     Log.e("REOS", "DepositTemplate-ContentDeposit-statusBoolean.value: " + statusBoolean.value)
+    val activity = LocalContext.current as Activity
+
+
     Column()
     {
         StageOneDeposit(
@@ -133,7 +149,9 @@ fun ContentDeposit()
             StageTwoDeposit(
                 appContext,
                 bankViewModel,
-                statusBoolean
+                statusBoolean,
+                    activity,
+                    headerDispatchSheetViewModel
             )
         }
 
@@ -146,7 +164,7 @@ fun StageOneDeposit(
     statusBoolean: MutableState<Boolean>,
     onSelectCollection: (List<CollectionDetail> ) -> Unit
 ) {
-    var DateApp: MutableState<String> = remember { mutableStateOf("") }
+    var DateApp: MutableState<String> = remember { mutableStateOf(getDate()!!) }
     //var expanded by remember { mutableStateOf(statusBoolean.value) }
 
     Log.e("REOS", "DepositTemplate-StageOneDeposit-DateApp.value: " + DateApp.value)
@@ -669,9 +687,11 @@ fun StageTwoDeposit(
     context:Context,
     bankViewModel: BankViewModel,
     statusBoolean: MutableState<Boolean>,
+    activity:Activity,
+    headerDispatchSheetViewModel: HeaderDispatchSheetViewModel
 )
 {
-    var DateApp: MutableState<String> = remember { mutableStateOf("") }
+    var DateApp: MutableState<String> = remember { mutableStateOf(getDate()!!) }
     var DialogEditStatus by remember { mutableStateOf(true) }
     var DialogEditResult :MutableState<String> = remember { mutableStateOf("0") }
     var DialogShowEditText by remember { mutableStateOf(false) }
@@ -682,12 +702,14 @@ fun StageTwoDeposit(
         mutableStateOf("SELECCIONAR BANCO")
     }
     val typeDepositList = listOf( "DE-DEPOSITO","CH-CHEQUE")
-    val currentSelectionSpinner2 = remember {
-        mutableStateOf("SELECCIONAR TIPO DEPOSITO")
-    }
-    //var expanded by remember { mutableStateOf(statusBoolean.value) }
-
-
+    val currentSelectionSpinner2 = remember { mutableStateOf("SELECCIONAR TIPO DEPOSITO") }
+    var DialogShowCaptureImage by remember { mutableStateOf(false) }
+    val bitmapLocale = remember { mutableStateOf<Bitmap?>(null) }
+    val openDialogShowDispatch:MutableState<Boolean?> = remember { mutableStateOf(false) }
+    val tittleDialogDispatch:MutableState<String> = remember { mutableStateOf("Codigo Despacho") }
+    val currentDispatchSelected = remember { mutableStateOf("SELECCIONAR CODIGO DEPOSITO") }
+    val headerDispatch=headerDispatchSheetViewModel.resultDB.collectAsState()
+    var headerDispatchlist: MutableList<String> = mutableListOf()
     when (banks.value.Status)
     {
         "Y"->{
@@ -697,9 +719,21 @@ fun StageTwoDeposit(
         }
     }
 
+    when(headerDispatch.value.status)
+    {
+        "Y"->{
+            for (i in 0 until headerDispatch.value.data!!.size) {
+                headerDispatchlist.add(headerDispatch.value.data!!.get(i).control_id.toString())
+            }
+        }
+    }
+
+
+
 
     if(DialogShowEditText)
     {
+
         DialogView(
             "N° Operación", "",
             onClickCancel = {
@@ -718,6 +752,91 @@ fun StageTwoDeposit(
             )
         }
     }
+
+    if(DialogShowCaptureImage)
+    {
+        /*CaptureImage(
+                resultBitmap = { result ->
+                    bitmapLocale.value=result
+                },
+                context,
+                activity,
+                "DEP",
+                "G"
+        )*/
+        /*CaptureImageSave(context,activity,"DEP", getDateCurrent()!!,
+                resultBitmap = { result ->
+            bitmapLocale.value=result
+                               }
+                ,)*/
+        CaptureImageAndRetrieveBitmap(
+                activity = activity,
+                context,
+                "DEP",
+                getDateCurrent()!!
+
+
+        ) { bitmap ->
+            bitmapLocale.value = bitmap
+        }
+    }
+
+    if(openDialogShowDispatch.value!!)
+    {
+
+        DialogView(
+                tittle = tittleDialogDispatch.value
+                , subtittle = ""
+                ,onClickCancel = {
+            openDialogShowDispatch.value = false
+        }
+                ,onClickAccept = {
+            openDialogShowDispatch.value = false
+        }
+                ,statusButtonAccept = false
+                ,statusButtonIcon = false
+                ,context=context
+        ){
+            Column() {
+                TextLabel(text = "Elegir una fecha para su consulta")
+                Row() {
+                    Column(modifier = Modifier.weight(1f)) {
+                        //CalendarAppView(tittle = "Elegir una fecha para su consulta", DateApp = DateApp)
+                        CalendarApp(
+                                DateApp = DateApp
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Column(modifier = Modifier.weight(0.15f)) {
+                        ButtonCircle(
+                                OnClick = {
+                                    /*collectionDetailViewModel.getCollectionDetailPendingDeposit(
+                                            DateApp.value
+                                    )*/
+                                    headerDispatchSheetViewModel.getCodeDispatch(DateApp.value,context)
+                                }, roundedCornerShape = RoundedCornerShape(4.dp)
+                        ) {
+                            Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.ic_search_white_24dp),
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier
+                                    //tint = if ( stepsStatus.get(index) == "Y") BlueVistony else Color.Gray
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+                if(headerDispatchlist.size>0)
+                {
+                    SpinnerView(
+                            "Seleccione el codigo de deposito: ", headerDispatchlist, currentDispatchSelected
+                    )
+                }
+            }
+        }
+    }
+
 
     CardView(
         cardtTittle =
@@ -823,8 +942,9 @@ fun StageTwoDeposit(
                             modifier = Modifier
                                 .weight(0.5f)
                         ) {
-                            ButtonCircle(
+                            /*ButtonCircle(
                                 OnClick = {
+                                   // DialogShowCaptureImage=true
 
                                 },
                                 size = DpSize(50.dp, 50.dp),
@@ -838,7 +958,16 @@ fun StageTwoDeposit(
                                     tint = Color.White,
                                     contentDescription = null
                                 )
-                            }
+                            }*/
+                            CaptureImageCircle(
+                                    resultBitmap = { result ->
+                                        bitmapLocale.value=result
+                                    },
+                                    context,
+                                    activity,
+                                    "DEP",
+                                    "G"
+                            )
                             Text(
                                 text = "Capturar",
                                 color = Color.Black,
@@ -853,7 +982,7 @@ fun StageTwoDeposit(
                         ) {
                             ButtonCircle(
                                 OnClick = {
-
+                                    openDialogShowDispatch.value=true
                                 },
                                 size = DpSize(50.dp, 50.dp),
                                 //color = colorButtonSave.value,
@@ -984,9 +1113,9 @@ fun FloatingButtonMenu() {
                         }*/
                         Box(
                             modifier = Modifier
-                                .size(60.dp)
-                                .background(Color.Red, CircleShape)
-                                .clickable { }
+                                    .size(60.dp)
+                                    .background(Color.Red, CircleShape)
+                                    .clickable { }
                             ,
                             contentAlignment = Alignment.Center
                         ) {
@@ -1009,8 +1138,8 @@ fun FloatingButtonMenu() {
                             .size(50.dp) // E // Aplicar una forma circular al botón*/
                     shape = CircleShape, // Utiliza CircleShape para la forma circular
                     modifier = Modifier
-                        .padding(16.dp)
-                        .size(50.dp) // Asegúrate de que el tamaño sea igual en ancho y alto
+                            .padding(16.dp)
+                            .size(50.dp) // Asegúrate de que el tamaño sea igual en ancho y alto
                 )
             }
 
@@ -1038,9 +1167,9 @@ fun FloatingButtonMenu() {
                     }*/
                     Box(
                         modifier = Modifier
-                            .size(60.dp)
-                            .background(Color.Red, CircleShape)
-                            .clickable { }
+                                .size(60.dp)
+                                .background(Color.Red, CircleShape)
+                                .clickable { }
                         ,
                         contentAlignment = Alignment.Center
                     ) {
@@ -1067,8 +1196,8 @@ fun FloatingButtonMenu() {
                 // Aplicar una forma circular al botón
                 shape = CircleShape, // Utiliza CircleShape para la forma circular
                 modifier = Modifier
-                    .padding(16.dp)
-                    .size(50.dp) // Asegúrate de que el tamaño sea igual en ancho y alto
+                        .padding(16.dp)
+                        .size(50.dp) // Asegúrate de que el tamaño sea igual en ancho y alto
             )
         }
     }

@@ -132,7 +132,7 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
                             val reasonDispatchRepository = ReasonDispatchRepository()
                             //viewModel = ViewModelProvider(viewModelStoreOwner, HeaderDispatchSheetViewModel(headerDispatchSheetRepository))[HeaderDispatchSheetViewModel::class.java]
                             //viewModel = ViewModelProvider(viewModelStoreOwner)[HeaderDispatchSheetViewModel::class.java]
-                            headerDispatchSheetViewModel = HeaderDispatchSheetViewModel(headerDispatchSheetRepository)
+                            headerDispatchSheetViewModel = HeaderDispatchSheetViewModel(headerDispatchSheetRepository, context = appContext )
                             typeDispatchViewModel = TypeDispatchViewModel(SesionEntity.imei,appContext,typeDispatchRepository)
                             reasonDispatchViewModel = ReasonDispatchViewModel(reasonDispatchRepository,appContext)
 

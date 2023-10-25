@@ -18,6 +18,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.TypeDispatchEntityRespon
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.WareHousesEntityResponse;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,22 +29,22 @@ public class TypeDispatchRepository  extends ViewModel {
     TypeDispatchSQLite typeDispatchSQLite;
     ParametrosSQLite parametrosSQLite;
 
-    public MutableLiveData<String> geTypeDispatch (String Imei, Context context){
+    public MutableLiveData<String> geTypeDispatch (String Imei, Context context, Executor executor){
         Config.getClient().create(Api.class).getTypeDispatch(Imei).enqueue(new Callback<TypeDispatchEntityResponse>() {
             @Override
             public void onResponse(Call<TypeDispatchEntityResponse> call, Response<TypeDispatchEntityResponse> response) {
 
                 TypeDispatchEntityResponse typeDispatchEntityResponse=response.body();
                 if(response.isSuccessful() && typeDispatchEntityResponse.getTypeDispatchEntities().size()>0){
+                    executor.execute(() -> {
                     typeDispatchSQLite = new TypeDispatchSQLite(context);
                     parametrosSQLite = new ParametrosSQLite(context);
-
                     typeDispatchSQLite.DeleteTableTypeDispatch();
                     typeDispatchSQLite.AddTypeDispatch (typeDispatchEntityResponse.getTypeDispatchEntities());
                     Integer countTypeDispatch=getCountTypeDispatch(context);
                     parametrosSQLite.ActualizaCantidadRegistros("23", "TIPO DESPACHO", ""+countTypeDispatch, getDateTime());
-
                     status.setValue("1");
+                    });
                 }else
                 {
                     status.setValue("0");

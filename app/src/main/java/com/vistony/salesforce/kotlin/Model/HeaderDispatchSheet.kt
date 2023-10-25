@@ -38,4 +38,8 @@ data class HeaderDispatchSheet(
     var Datetimeregister: String? = null
 )
 
-
+data class HeaderDispatchSheetEntity(
+        var status: String? = null,
+        var data:List<HeaderDispatchSheet> = emptyList(),
+        var listString:List<String> = emptyList(),
+)

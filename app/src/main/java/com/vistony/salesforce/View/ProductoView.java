@@ -136,21 +136,27 @@ public class ProductoView extends Fragment  implements SearchView.OnQueryTextLis
         v= inflater.inflate(R.layout.fragment_producto_view, container, false);
         lv_producto=v.findViewById(R.id.lv_producto);
 
-        if(vendedor.getCliente()!=null)
+        try {
+            if(vendedor.getCliente()!=null)
+            {
+                Log.e("REOS","ProductoView.onCreateView.vendedor.getCliente().getUbigeo_ID():"+vendedor.getCliente().getUbigeo_ID());
+                cargarProductosSqlite(
+                        vendedor.getCliente().getCardCode(),
+                        vendedor.getCliente().getPymntGroup(),
+                        vendedor.getCliente().getChkpricelist(),
+                        vendedor.getCliente().getPriceList_id(),
+                        vendedor.getCliente().getPriceList(),
+                        vendedor.getCliente().getUbigeo_ID(),
+                        vendedor.getCliente().getCurrency_ID()
+                );
+            }else {
+                Toast.makeText(getContext(),"No se cargaron, correctamente los datos del cliente, reingrese a la app!!!", Toast.LENGTH_LONG).show();
+            }
+        }catch (Exception e)
         {
-            Log.e("REOS","ProductoView.onCreateView.vendedor.getCliente().getUbigeo_ID():"+vendedor.getCliente().getUbigeo_ID());
-            cargarProductosSqlite(
-                    vendedor.getCliente().getCardCode(),
-                    vendedor.getCliente().getPymntGroup(),
-                    vendedor.getCliente().getChkpricelist(),
-                    vendedor.getCliente().getPriceList_id(),
-                    vendedor.getCliente().getPriceList(),
-                    vendedor.getCliente().getUbigeo_ID(),
-                    vendedor.getCliente().getCurrency_ID()
-            );
-        }else {
-            Toast.makeText(getContext(),"No se cargaron, correctamente los datos del cliente, reingrese a la app!!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Mensaje del sistema: "+e, Toast.LENGTH_LONG).show();
         }
+
         return v;
     }
 

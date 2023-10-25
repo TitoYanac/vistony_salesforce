@@ -134,6 +134,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 public class
 ParametrosView extends Fragment {
@@ -226,6 +227,7 @@ ParametrosView extends Fragment {
     private WarehouseRepository warehouseRepository;
     UsuarioSQLiteEntity usuarioSQLiteEntity;
     private SellerRouteRepository sellerRouteRepository;
+    AppExecutors executor;
 
     public static ParametrosView newInstance(String param1) {
         ParametrosView fragment = new ParametrosView();
@@ -287,7 +289,7 @@ ParametrosView extends Fragment {
 
         cobranzaDetalleSQLiteDao = new CobranzaDetalleSQLiteDao(getContext());
         rutaFuerzaTrabajoSQLiteDao=new RutaFuerzaTrabajoSQLiteDao(getContext());
-
+        executor=new AppExecutors();
 
 
         if (getArguments() != null) {
@@ -447,7 +449,7 @@ ParametrosView extends Fragment {
                 }
                 break;
         }
-        AppExecutors executor=new AppExecutors();
+
 
         if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
         {
@@ -468,28 +470,7 @@ ParametrosView extends Fragment {
                 Log.e("REOS-ParametrosView-depositedPendingCollection","=>"+data);
             });
 
-            //Se desactivo para identificar el motivo de reinicio 14/06/2023 14:22
-            //Validar Pedidos
-            if(SesionEntity.sendvalidations.equals("Y"))
-            {
-                OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite = new OrdenVentaCabeceraSQLite(getContext());
-                ArrayList<OrdenVentaCabeceraSQLiteEntity> listSalesOrders = new ArrayList<>();
-                listSalesOrders = ordenVentaCabeceraSQLite.getSalesOrderPendingSAP();
 
-                for (int i = 0; i < listSalesOrders.size(); i++) {
-                    ordenVentaRepository.validateSalesOrder(
-                            listSalesOrders.get(i).getCliente_id(),
-                            FormulasController.Convertirfechahoraafechanumerica(listSalesOrders.get(i).getFecharegistro()),
-                            listSalesOrders.get(i).getOrdenventa_id(),
-                            usuarioSQLiteEntity.fuerzatrabajo_id,
-                            getContext()
-                    ).observe(getActivity(), data -> {
-                        Log.e("REOS", "ParametrosView-validateSalesOrder-data: " + data);
-                    });
-                }
-           }else {
-
-            }
             ///////////////////////////// ENVIAR VISITAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             if(SesionEntity.sendvisits.equals("Y"))
             {
@@ -503,11 +484,6 @@ ParametrosView extends Fragment {
                 Log.e("REOS-ParametrosView-depositResend", "=>" + data);
             });
 
-            ///////////////////////////// ENVIAR COBRANZAS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            //cobranzaRepository.depositResend(getContext()).observe(getActivity(), data -> {
-            //    Log.e("Jepicame","=>"+data);
-            //});
-
             ///////////////////////////// BACKUP SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             if(FLAG_BACKUP.equals("")){
                 backupRepository.sendSqlite(getContext()).observe(getActivity(), data -> {
@@ -519,7 +495,7 @@ ParametrosView extends Fragment {
                 Log.e("REOS-ParametrosView-Synchronizevoidedreceipts-","=>"+data);
             });
             ///////////////////////////// BANCO SLITE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            bancoRepository.getAndInsertBank(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            bancoRepository.getAndInsertBank(SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("REOS-ParametrosView-getAndInsertBank-","=>"+data);
             });
 
@@ -531,85 +507,6 @@ ParametrosView extends Fragment {
             cobranzaRepository.ReceiptDetachedDeposit(getContext()).observe(getActivity(), data -> {
                 Log.e("Jepicame","=>"+data);
             });
-
-            ///////////////////////////COLORES/////////////////////////////////////////////////
-            escColoursCRepository.getEscColours(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-                Log.e("Jepicame","=>"+data);
-            });
-
-            ///////////////////////////COLORES/////////////////////////////////////////////////
-            typeDispatchRepository.geTypeDispatch  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-                Log.e("Jepicame","=>"+data);
-            });
-
-            ///////////////////////////Cuota de Efectividad/////////////////////////////////////////////////
-            quoteEffectivenessRepository.getQuoteEffectiveness  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-                Log.e("Jepicame","=>"+data);
-            });
-
-            ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
-            reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext()).observe(getActivity(), data -> {
-                Log.e("Jepicame", "=>" + data);
-            });
-
-            //Envio de Geolocalizacion con Foto
-            leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
-                Log.e("REOS", "sendGeolocationClient" + data);
-            });
-
-            //Envio de Geolocalizacion sin Foto en Bloque
-            leadClienteViewModel.sendGeolocationBlock(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
-                Log.e("REOS", "sendGeolocationBlock" + data);
-            });
-
-            ubigeoRepository.geUbigeo (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-                Log.e("REOS", "ParametrosView-ubigeoRepository-data: " + data);
-            });
-
-            String datepricelist="",datepromotionhead="",datepromotiondetail="";
-            ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getContext());
-            datepricelist=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.price_list).toUpperCase());
-            Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
-            Log.e("REOS", "ParametrosView-onCreate-datepricelist: " + datepricelist);
-            if(!fecha.equals(datepricelist))
-            {
-                listaPrecioRepository.execClarAndAddPriceList(SesionEntity.imei, getContext()).observe(getActivity()
-                        , data -> {
-                            Log.e("REOS", "ParametrosView-listaPrecioRepository-data: " + data);
-                        }
-                );
-            }
-
-            datepromotionhead=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_head).toUpperCase());
-            Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
-            Log.e("REOS", "ParametrosView-onCreate-datepromotionhead: " + datepromotionhead);
-            if(!fecha.equals(datepromotionhead))
-            {
-                promocionCabeceraRepository.exeClearandAddPromotionHead(SesionEntity.imei, getContext()).observe(getActivity()
-                        , data -> {
-                            Log.e("REOS", "ParametrosView-promocionCabeceraRepository-data: " + data);
-                        }
-                );
-            }
-
-            datepromotiondetail=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_detail).toUpperCase());
-            Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
-            Log.e("REOS", "ParametrosView-onCreate-datepromotiondetail: " + datepromotiondetail);
-            if(!fecha.equals(datepromotiondetail))
-            {
-                promocionDetalleRepository.exeClearandAddPromotionDetail(SesionEntity.imei, getContext()).observe(getActivity()
-                        , data -> {
-                            Log.e("REOS", "ParametrosView-promocionDetalleRepository-data: " + data);
-                        }
-                );
-            }
-
-            reasonFreeTransferRepository.getReasonFreeTransfer(SesionEntity.imei,getContext()).observe(getActivity()
-                    ,data-> {
-                        Log.e("REOS", "ParametrosView-getReasonFreeTransfer-data: " + data);
-                    }
-            );
-
 
 
             if(SesionEntity.perfil_id.equals("CHOFER")||SesionEntity.perfil_id.equals("Chofer"))
@@ -632,63 +529,165 @@ ParametrosView extends Fragment {
                     Log.e("REOS", "statusDispatchRepository-->statusDispatchListSend-->resultdata" + data);
                 });
 
+                ///////////////////////////Motivos de Despacho/////////////////////////////////////////////////
+                reasonDispatchRepository.geReasonDispatch(SesionEntity.imei, getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("Jepicame", "=>" + data);
+                });
+
+                ///////////////////////////COLORES/////////////////////////////////////////////////
+                typeDispatchRepository.geTypeDispatch  (SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("Jepicame","=>"+data);
+                });
+            }
+            else {
+
+                reasonFreeTransferRepository.getReasonFreeTransfer(SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity()
+                        ,data-> {
+                            Log.e("REOS", "ParametrosView-getReasonFreeTransfer-data: " + data);
+                        }
+                );
+                //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
+                priceListHeadRepository.getAddAllPriceListHead(SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("REOS", "PriceListHeadRepository-->getAddAllPriceListHead-->resultdata" + data);
+                });
+
+                ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
+                sellerRouteRepository.getAddSellerRoute (SesionEntity.imei,fecha, getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("REOS-ParametrosView-sellerRouteRepository-getAddSellerRoute","=>"+data);
+                });
+
+                String datepricelist="",datepromotionhead="",datepromotiondetail="";
+                ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getContext());
+                datepricelist=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.price_list).toUpperCase());
+                Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
+                Log.e("REOS", "ParametrosView-onCreate-datepricelist: " + datepricelist);
+                if(!fecha.equals(datepricelist))
+                {
+                    listaPrecioRepository.execClarAndAddPriceList(SesionEntity.imei, getContext(),executor.diskIO()).observe(getActivity()
+                            , data -> {
+                                Log.e("REOS", "ParametrosView-listaPrecioRepository-data: " + data);
+                            }
+                    );
+                }
+
+                datepromotionhead=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_head).toUpperCase());
+                Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
+                Log.e("REOS", "ParametrosView-onCreate-datepromotionhead: " + datepromotionhead);
+                if(!fecha.equals(datepromotionhead))
+                {
+                    promocionCabeceraRepository.exeClearandAddPromotionHead(SesionEntity.imei, getContext(),executor.diskIO()).observe(getActivity()
+                            , data -> {
+                                Log.e("REOS", "ParametrosView-promocionCabeceraRepository-data: " + data);
+                            }
+                    );
+                }
+
+                datepromotiondetail=parametrosSQLite.getDateParemeterforName(getContext().getResources().getString(R.string.promotion_detail).toUpperCase());
+                Log.e("REOS", "ParametrosView-onCreate-fecha: " + fecha);
+                Log.e("REOS", "ParametrosView-onCreate-datepromotiondetail: " + datepromotiondetail);
+                if(!fecha.equals(datepromotiondetail))
+                {
+                    promocionDetalleRepository.exeClearandAddPromotionDetail(SesionEntity.imei, getContext(),executor.diskIO()).observe(getActivity()
+                            , data -> {
+                                Log.e("REOS", "ParametrosView-promocionDetalleRepository-data: " + data);
+                            }
+                    );
+                }
+
+                //Envio de Geolocalizacion sin Foto en Bloque
+                leadClienteViewModel.sendGeolocationBlock(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("REOS", "sendGeolocationBlock" + data);
+                });
+
+                ubigeoRepository.geUbigeo (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+                    Log.e("REOS", "ParametrosView-ubigeoRepository-data: " + data);
+                });
+
+                //Envio de Geolocalizacion con Foto
+                leadClienteViewModel.sendGeolocationClient(getContext(),SesionEntity.imei,executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("REOS", "sendGeolocationClient" + data);
+                });
+
+                ///////////////////////////Cuota de Efectividad/////////////////////////////////////////////////
+                quoteEffectivenessRepository.getQuoteEffectiveness  (SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("Jepicame","=>"+data);
+                });
+
+                ///////////////////////////COLORES/////////////////////////////////////////////////
+                escColoursCRepository.getEscColours(SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
+                    Log.e("Jepicame","=>"+data);
+                });
+
+                //Se desactivo para identificar el motivo de reinicio 14/06/2023 14:22
+                //Validar Pedidos
+                if(SesionEntity.sendvalidations.equals("Y"))
+                {
+                    OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite = new OrdenVentaCabeceraSQLite(getContext());
+                    ArrayList<OrdenVentaCabeceraSQLiteEntity> listSalesOrders = new ArrayList<>();
+                    listSalesOrders = ordenVentaCabeceraSQLite.getSalesOrderPendingSAP();
+
+                    for (int i = 0; i < listSalesOrders.size(); i++) {
+                        ordenVentaRepository.validateSalesOrder(
+                                listSalesOrders.get(i).getCliente_id(),
+                                FormulasController.Convertirfechahoraafechanumerica(listSalesOrders.get(i).getFecharegistro()),
+                                listSalesOrders.get(i).getOrdenventa_id(),
+                                usuarioSQLiteEntity.fuerzatrabajo_id,
+                                getContext()
+                        ).observe(getActivity(), data -> {
+                            Log.e("REOS", "ParametrosView-validateSalesOrder-data: " + data);
+                        });
+                    }
+                }else {
+
+                }
             }
         }
 
-        //////////////////////ENVIAR RECIBOS PENDIENTES SIN DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-        //statusDispatchRepository.statusDispatchSendTime(getContext()).observe(getActivity(), data -> {
-        priceListHeadRepository.getAddAllPriceListHead(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
-            Log.e("REOS", "PriceListHeadRepository-->getAddAllPriceListHead-->resultdata" + data);
-        });
 
-        ///////////////  /ENVIAR RECIBOS PENDIENTE CON DEPOSITO\\\\\\\\\\\\\\\\\\\\\\\\
-        sellerRouteRepository.getAddSellerRoute (SesionEntity.imei,fecha, getContext()).observe(getActivity(), data -> {
-            Log.e("REOS-ParametrosView-sellerRouteRepository-getAddSellerRoute","=>"+data);
-        });
 
         fabdescargarparametros.setOnClickListener(view -> {
             Object objeto=null,object2=null;
             ///////////////////////////// ENVIAR PEDIDOS \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             ordenVentaRepository.salesOrderResend(getContext()).observe(getActivity(), data -> {
-                Log.e("REOS-ParametrosView-salesOrderResend", "=>" + data);
-            });
-
+                            Log.e("REOS-ParametrosView-salesOrderResend", "=>" + data);
+                        });
             ///////////////////////////Ruta de Trabajo/////////////////////////////////////////////////
-            rutaFuerzaTrabajoRepository.getInsertDBWorkPath  (SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            rutaFuerzaTrabajoRepository.getInsertDBWorkPath (SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("Jepicame","=>"+data);
             });
 
-            listaPrecioRepository.execClarAndAddPriceList(SesionEntity.imei, getContext()).observe(getActivity()
+            listaPrecioRepository.execClarAndAddPriceList(SesionEntity.imei, getContext(),executor.diskIO()).observe(getActivity()
                     , data -> {
                         Log.e("REOS", "ParametrosView-listaPrecioRepository-data: " + data);
                     }
             );
 
-            promocionCabeceraRepository.exeClearandAddPromotionHead(SesionEntity.imei, getContext()).observe(getActivity()
+            promocionCabeceraRepository.exeClearandAddPromotionHead(SesionEntity.imei, getContext(),executor.diskIO()).observe(getActivity()
                             , data -> {
                                 Log.e("REOS", "ParametrosView-promocionCabeceraRepository-data: " + data);
                             }
                     );
 
-            promocionDetalleRepository.exeClearandAddPromotionDetail(SesionEntity.imei, getContext()).observe(getActivity()
+            promocionDetalleRepository.exeClearandAddPromotionDetail(SesionEntity.imei, getContext(),executor.diskIO()).observe(getActivity()
                     , data -> {
                         Log.e("REOS", "ParametrosView-promocionDetalleRepository-data: " + data);
                     }
             );
 
-            objectRepository.getObjectAPI(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            objectRepository.getObjectAPI(SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("REOS", "ObjectRepository-->getObjectAPI-->resultdata" + data);
             });
 
-            businessLayerRepository.getBussinessLayer(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            businessLayerRepository.getBussinessLayer(SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("REOS", "BusinessLayerRepository->getBussinessLayer-->resultdata" + data);
             });
 
-            businessLayerSalesDetailRepository.getBussinessLayerSalesDetail(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            businessLayerSalesDetailRepository.getBussinessLayerSalesDetail(SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("REOS", "BusinessLayerSalesDetailRepository->getBussinessLayerSalesDetail-->resultdata" + data);
             });
 
-            warehouseRepository.getWarehouse(SesionEntity.imei,getContext()).observe(getActivity(), data -> {
+            warehouseRepository.getWarehouse(SesionEntity.imei,getContext(),executor.diskIO()).observe(getActivity(), data -> {
                 Log.e("REOS", "WarehouseRepository->getWarehouse-->resultdata" + data);
             });
 
@@ -777,43 +776,87 @@ ParametrosView extends Fragment {
         //Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.serviceAppViewModel.getResultDB().getValue().getStatus(): "+ serviceAppViewModel.getResultDB().getValue().getStatus());
         //Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.serviceAppViewModel.getResultAPI().getValue().getStatus(): "+ serviceAppViewModel.getResultAPI().getValue().getStatus());
 
-
-        if(!SesionEntity.perfil_id.equals("chofer"))
+        //Manejo de servicios de Notificaciones
+        switch (BuildConfig.FLAVOR)
         {
-            Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.isServiceRunning: "+ ServiceApp.isServiceRunning);
-            if(usuarioSQLiteEntity.getU_VIS_ManagementType().equals("B2B"))
-            {
-                if (!ServiceApp.isServiceRunning) {
-                    //Inicio de Servicio y Envio de Notificacion
-                    if (areNotificationsEnabled(getContext())) {
-                        // Las notificaciones están habilitadas
-                        try {
-                            //Intent intent = new Intent(this, MenuView.class);
-                            Intent intent = new Intent(getContext(), ServiceApp.class);
-                            //Log.e("REOS", "Composables-StatusIcons-contexto: "+context1)
-                            //Log.e("REOS", "Composables-StatusIcons-intent: "+intent)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                //Log.e("REOS", "Composables-StatusIcons-startForegroundService")
-                                ContextCompat.startForegroundService(getActivity(), intent);
+            case "peru":
+                if(!SesionEntity.perfil_id.equals("chofer"))
+                {
+                    Log.e("REOS", "ParametrosView-oncreate-ServiceNotificationApp.isServiceRunning: "+ ServiceApp.isServiceRunning);
+                    if(usuarioSQLiteEntity.getU_VIS_ManagementType().equals("B2B"))
+                    {
+                        if (!ServiceApp.isServiceRunning) {
+                            //Inicio de Servicio y Envio de Notificacion
+                            if (areNotificationsEnabled(getContext())) {
+                                // Las notificaciones están habilitadas
+                                try {
+                                    //Intent intent = new Intent(this, MenuView.class);
+                                    Intent intent = new Intent(getContext(), ServiceApp.class);
+                                    //Log.e("REOS", "Composables-StatusIcons-contexto: "+context1)
+                                    //Log.e("REOS", "Composables-StatusIcons-intent: "+intent)
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        //Log.e("REOS", "Composables-StatusIcons-startForegroundService")
+                                        ContextCompat.startForegroundService(getActivity(), intent);
+                                    } else {
+                                        //Log.e("REOS", "Composables-StatusIcons-startService ")
+                                        //ServiceNotificationApp serviceNotificationApp=new ServiceNotificationApp();
+                                        //serviceNotificationApp.startService(intent);
+                                        ContextCompat.startForegroundService(getActivity(), intent);
+                                    }
+                                } catch (Exception e) {
+                                    Log.e("REOS", "Composables-StatusIcons-error: " + e.toString());
+                                }
                             } else {
-                                //Log.e("REOS", "Composables-StatusIcons-startService ")
-                                //ServiceNotificationApp serviceNotificationApp=new ServiceNotificationApp();
-                                //serviceNotificationApp.startService(intent);
-                                ContextCompat.startForegroundService(getActivity(), intent);
+                                // Las notificaciones están deshabilitadas
+                                showNotificationDisabledDialog(getContext());
                             }
-                        } catch (Exception e) {
-                            Log.e("REOS", "Composables-StatusIcons-error: " + e.toString());
+                            Toast.makeText(getContext(), "El servicio de notificaciones, esta en proceso de inicio.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "El servicio ya se encuentra activo, no es necesario volverlo a iniciar.", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        // Las notificaciones están deshabilitadas
-                        showNotificationDisabledDialog(getContext());
                     }
-                    Toast.makeText(getContext(), "El servicio de notificaciones, esta en proceso de inicio.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "El servicio ya se encuentra activo, no es necesario volverlo a iniciar.", Toast.LENGTH_SHORT).show();
                 }
-            }
+                break;
+            case "bolivia":
+                if(!SesionEntity.perfil_id.equals("chofer"))
+                {
+                        if (!ServiceApp.isServiceRunning) {
+                            //Inicio de Servicio y Envio de Notificacion
+                            if (areNotificationsEnabled(getContext())) {
+                                // Las notificaciones están habilitadas
+                                try {
+                                    //Intent intent = new Intent(this, MenuView.class);
+                                    Intent intent = new Intent(getContext(), ServiceApp.class);
+                                    //Log.e("REOS", "Composables-StatusIcons-contexto: "+context1)
+                                    //Log.e("REOS", "Composables-StatusIcons-intent: "+intent)
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                        //Log.e("REOS", "Composables-StatusIcons-startForegroundService")
+                                        ContextCompat.startForegroundService(getActivity(), intent);
+                                    } else {
+                                        //Log.e("REOS", "Composables-StatusIcons-startService ")
+                                        //ServiceNotificationApp serviceNotificationApp=new ServiceNotificationApp();
+                                        //serviceNotificationApp.startService(intent);
+                                        ContextCompat.startForegroundService(getActivity(), intent);
+                                    }
+                                } catch (Exception e) {
+                                    Log.e("REOS", "Composables-StatusIcons-error: " + e.toString());
+                                }
+                            } else {
+                                // Las notificaciones están deshabilitadas
+                                showNotificationDisabledDialog(getContext());
+                            }
+                            Toast.makeText(getContext(), "El servicio de notificaciones, esta en proceso de inicio.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "El servicio ya se encuentra activo, no es necesario volverlo a iniciar.", Toast.LENGTH_SHORT).show();
+                        }
+
+                }
+                break;
+            default:
+                break;
         }
+
+
 
 
         return v;
@@ -970,7 +1013,7 @@ ParametrosView extends Fragment {
                     }
 
                     else if (argumento.equals(getActivity().getResources().getString(R.string.banks).toUpperCase())) {
-                        bancoRepository.getAndInsertBank(SesionEntity.imei,getContext());
+                        bancoRepository.getAndInsertBank(SesionEntity.imei,getContext(),executor.diskIO());
                     }
                     else if (argumento.equals(getActivity().getResources().getString(R.string.lbl_orderhed_payterms).toUpperCase())) {
                         TerminoPagoWS terminoPagoWS = new TerminoPagoWS(getContext());

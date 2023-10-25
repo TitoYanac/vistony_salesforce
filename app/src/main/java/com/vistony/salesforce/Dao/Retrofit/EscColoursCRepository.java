@@ -17,6 +17,8 @@ import com.vistony.salesforce.Dao.SQLite.PriceListSQLiteDao;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.EscColoursCEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PriceListEntityResponse;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +30,7 @@ public class EscColoursCRepository extends ViewModel {
     private MutableLiveData<String> status= new MutableLiveData<>();
 
 
-    public MutableLiveData<String> getEscColours(String Imei, Context context){
+    public MutableLiveData<String> getEscColours(String Imei, Context context, Executor executor){
 
         Config.getClient().create(Api.class).getScColoursC(Imei).enqueue(new Callback<EscColoursCEntityResponse>() {
             @Override
@@ -37,21 +39,15 @@ public class EscColoursCRepository extends ViewModel {
                 EscColoursCEntityResponse escColoursCEntityResponse=response.body();
                 Log.e("REOS","EscColoursCRepository-getEscColours-call"+response.toString());
                 if(response.isSuccessful()){
-
+                    executor.execute(() -> {
                     escColoursCSQLiteDao = new EscColoursCSQLiteDao(context);
                     escColoursDSQLiteDao = new EscColoursDSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
                     escColoursCSQLiteDao.ClearEscColoursC() ;
                     escColoursDSQLiteDao.ClearEscColoursD() ;
-                    //escColoursCSQLiteDao.InsertEscColoursC (escColoursCEntityResponse.getEscColoursEntity());
-
-
                     for(int i=0;i< escColoursCEntityResponse.getEscColoursEntity().size();i++ )
                     {
-
                         escColoursCSQLiteDao.InsertEscColoursC (escColoursCEntityResponse.getEscColoursEntity());
-
-
                         //Documentos
                         if (escColoursCEntityResponse.getEscColoursEntity().get(i).getEscColoursDEntityList() == null || escColoursCEntityResponse.getEscColoursEntity().get(i).getEscColoursDEntityList().size() == 0) {
                             //ObjCliente.setListInvoice(null);
@@ -63,13 +59,13 @@ public class EscColoursCRepository extends ViewModel {
                                 escColoursCEntityResponse.getEscColoursEntity().get(i).getEscColoursDEntityList().get(j).setId_esc_colours_c(escColoursCEntityResponse.getEscColoursEntity().get(i).getId());
                             }
                             escColoursDSQLiteDao.InsertEscColoursD (escColoursCEntityResponse.getEscColoursEntity().get(i).getEscColoursDEntityList());
-
                         }
                     }
                     Integer countColoursC=escColoursCSQLiteDao.getCountEscColoursC();
                     parametrosSQLite.ActualizaCantidadRegistros("21", "COLORES CABECERA", ""+countColoursC, getDateTime());
                     Integer countColoursD=escColoursDSQLiteDao.getCountEscColoursD();
                     parametrosSQLite.ActualizaCantidadRegistros("22", "COLORES DETALLE", ""+countColoursD, getDateTime());
+                    });
                 }
 
                 status.setValue("1");

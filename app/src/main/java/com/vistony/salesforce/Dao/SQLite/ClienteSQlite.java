@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import io.sentry.Sentry;
+//import io.sentry.Sentry;
 
 public class ClienteSQlite {
     private ArrayList<ClienteSQLiteEntity> listaClienteSQLiteEntity;
@@ -82,7 +82,7 @@ public class ClienteSQlite {
                 terminoPago=fila.getString(0);
             }
         }catch (Exception e){
-            Sentry.captureMessage(e.getMessage());
+            //Sentry.captureMessage(e.getMessage());
         }finally {
             DataBaseManager.getInstance().closeDatabase();
         }

@@ -24,7 +24,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.sax.ElementListener;
+import android.text.Layout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +49,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.perf.metrics.Trace;
+import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.DocumentQuotationPDF;
@@ -118,7 +121,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     String nombrecliente,codigocliente,direccioncliente,moneda,rucdni,comentario,galonesAcum,subtotalAcum,descuentoAcum,impuestosAcum,totalAcum,Flag,dispatchdate,chkruta,ubigeo_id="0",statuscount="N",customerwhitelist="N";
     static String cliente_terminopago,cliente_terminopago_id,cliente_domembarque_id,discountpercentreason="";
     static String terminopago_id="",terminopago,listaprecio_id,agencia,agencia_id,historicoordenventa_agencia,impuesto_id,impuesto,contado,ordenventa_id,zona_id;
-    TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;
+    static TextView tv_ruc,tv_cliente,tv_moneda,tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones,tv_dispatch_date;
     static EditText et_comentario;
     static TextView tv_terminopago,tv_orden_venta_agencia,tv_direccion,tv_increment_flete,tv_discount_percent,lbl_tittle_discount_percent;
     public static ArrayList<ListaClienteCabeceraEntity> Listado;
@@ -165,13 +168,12 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     private static DatePickerDialog oyenteSelectorFecha;
     Induvis induvis;
     static TableRow tr_dsct_cont,tr_summary_flete,tr_lbl_reason_free_transfer,tr_spn_reason_free_transfer,tr_descount_bl,tr_lbl_dispatch_date,tr_tv_dispatch_date,tr_lbl_spn_warehouse,tr_spn_warehouse,tr_sale_counter,tr_add_flete,tr_ovcomplete,tr_gallons;
-    static TableLayout tl_tittle_discount_percent,tl_discount_percent;
+    static TableLayout tl_tittle_discount_percent,tl_discount_percent,tbl_summary;
     Float discountPercent=0f;
     //TaskGetPriceList taskGetPriceList=new TaskGetPriceList();
     private ListaPrecioRepository listaPrecioRepository;
     UsuarioSQLiteEntity ObjUsuario;
-
-
+    AppExecutors executor;
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
     }
@@ -247,6 +249,17 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             tl_discount_percent.setVisibility(View.GONE);
         }
 
+        // Configura la alineación a la derecha
+        /*tv_orden_cabecera_subtotal.setGravity(Gravity.RIGHT);
+        tv_orden_cabecera_subtotal.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+        tv_orden_cabecera_subtotal.set
+        tv_orden_cabecera_descuento.setGravity(Gravity.RIGHT);
+        tv_orden_cabecera_igv.setGravity(Gravity.RIGHT);
+        tv_orden_cabecera_total.setGravity(Gravity.RIGHT);*/
+
+        //hiloObtenerResumenOrdenVenta.execute();
+        tbl_summary.setVisibility(View.GONE);
+        tbl_summary.setVisibility(View.VISIBLE);
         return ordenVentaView;
     }
 
@@ -334,7 +347,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         ObjUsuario=new UsuarioSQLiteEntity();
         UsuarioSQLite usuarioSQLite=new UsuarioSQLite(context);
         ObjUsuario=usuarioSQLite.ObtenerUsuarioSesion();
-
+        executor=new AppExecutors();
 
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -358,6 +371,12 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
                 for(int j=0;j<listaHistoricoOrdenVentaEntity.size();j++){
                     ordenventa_id=listaHistoricoOrdenVentaEntity.get(j).getSalesOrderID();
+                    if(listaHistoricoOrdenVentaEntity.get(j).getObject().equals("Cotizacion"))
+                    {
+                        SesionEntity.quotation="Y";
+                    }else {
+                        SesionEntity.quotation="N";
+                    }
                 }
 
                 FormulasController formulasController=new FormulasController(getContext());
@@ -444,6 +463,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                         statuscount=Listado.get(i).getStatuscount();
                     }
                     customerwhitelist=Listado.get(i).getCustomerwhitelist();
+
+                    Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.moneda: "+moneda);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.customerwhitelist: "+customerwhitelist);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.ubigeo_id: "+ubigeo_id);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.zona_id: "+zona_id);
@@ -452,6 +473,9 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.statuscount: "+statuscount);
 
                 }
+
+
+
             }else{
                 Log.e("jpcm","ESTA NULO lISTADO");
             }
@@ -558,6 +582,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         tr_ovcomplete=v.findViewById(R.id.tr_ovcomplete);
         tr_add_flete=v.findViewById(R.id.tr_add_flete);
         tr_gallons=v.findViewById(R.id.tr_gallons);
+        tbl_summary=v.findViewById(R.id.tbl_summary);
+
         if(!ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
         {
             tr_lbl_spn_warehouse.setVisibility(View.GONE);
@@ -567,6 +593,8 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         //Ocultar Funcionalidades
         //Descuento por contado
         tr_dsct_cont.setVisibility(View.GONE);
+
+
         //Para solo induvis
         if(!BuildConfig.FLAVOR.equals("peru"))
         {
@@ -576,7 +604,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             tr_gallons.setVisibility(View.GONE);
         }
 
-        ArrayList<String> currencyList = Induvis.getCurrency();
+        ArrayList<String> currencyList = Induvis.getCurrency(moneda);
         ArrayAdapter<String> adapterCurrency = new ArrayAdapter<String>(getContext(),R.layout.support_simple_spinner_dropdown_item,currencyList);
         spnmoneda.setAdapter(adapterCurrency);
         adapterCurrency.notifyDataSetChanged();
@@ -771,6 +799,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 obtenerTituloFormulario();
                 hiloObtenerResumenOrdenVenta.execute();
             }
+
         }
         if(SesionEntity.activecurrency.equals("N"))
         {
@@ -858,7 +887,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                                 ProgressDialog pd1;
                                 pd1 = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.download_parameters), true, false);
                                 listaPrecioRepository = new ViewModelProvider(getActivity()).get(ListaPrecioRepository.class);
-                                listaPrecioRepository.execClarAndAddPriceListWarehouse(SesionEntity.imei, getContext(), warehouseCode, priceListCash, priceListCredit).observe(getActivity()
+                                listaPrecioRepository.execClarAndAddPriceListWarehouse(SesionEntity.imei, getContext(), warehouseCode, priceListCash, priceListCredit,executor.diskIO() ).observe(getActivity()
                                         , data -> {
 
                                             Toast.makeText(getContext(), "Maestro de Precios Actualizado", Toast.LENGTH_SHORT).show();
@@ -879,7 +908,12 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     }
                 }
         );
-
+        //hiloObtenerResumenOrdenVenta.execute();
+        // Configura la alineación a la derecha
+        tv_orden_cabecera_subtotal.setGravity(Gravity.RIGHT);
+        tv_orden_cabecera_descuento.setGravity(Gravity.RIGHT);
+        tv_orden_cabecera_igv.setGravity(Gravity.RIGHT);
+        tv_orden_cabecera_total.setGravity(Gravity.RIGHT);
         return v;
     }
 
@@ -985,11 +1019,11 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
 
                 }
 
-                tv_orden_cabecera_galones.setText(galonesAcum);
-                tv_orden_cabecera_subtotal.setText(Convert.currencyForView(subtotalAcum));
-                tv_orden_cabecera_descuento.setText(Convert.currencyForView(descuentoAcum));
-                tv_orden_cabecera_igv.setText(Convert.currencyForView(impuestosAcum));
-                tv_orden_cabecera_total.setText(Convert.currencyForView(totalAcum));
+                tv_orden_cabecera_galones.setText(""+galonesAcum);
+                tv_orden_cabecera_subtotal.setText(""+Convert.currencyForView(subtotalAcum));
+                tv_orden_cabecera_descuento.setText(""+Convert.currencyForView(descuentoAcum));
+                tv_orden_cabecera_igv.setText(""+Convert.currencyForView(impuestosAcum));
+                tv_orden_cabecera_total.setText(""+Convert.currencyForView(totalAcum));
 
 
                 Utilitario.disabledButtton(btn_detalle_orden_venta);
@@ -1308,13 +1342,20 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 generarpdf.setEnabled(true);
                 break;
             case "peru":
-                if(ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
+                if(ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
                 {
+                    if(SesionEntity.quotation.equals("Y"))
+                    {
+                        DocumentQuotationPDF documentQuotationPDF =new DocumentQuotationPDF();
+                        documentQuotationPDF.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
+                    }else {
+                        DocumentoPedidoPDF documentoPedidoPdf1 =new DocumentoPedidoPDF();
+                        documentoPedidoPdf1.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
+                    }
+
+                }else {
                     DocumentoPedidoPDF documentoPedidoPdf1 =new DocumentoPedidoPDF();
                     documentoPedidoPdf1.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
-                }else {
-                    DocumentQuotationPDF documentQuotationPDF =new DocumentQuotationPDF();
-                    documentQuotationPDF.generarPdf(getContext(),listaOrdenVentaCabecera,listaOrdenVentaDetallePromocion);
                 }
                 break;
             default:
@@ -1446,8 +1487,10 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                 String[] arrayU_VIS_TipTransGrat = U_VIS_TipTransGrat.split("-");
                 listaOrdenVentaCabeceraEntity.orden_cabecera_U_VIS_TipTransGrat =arrayU_VIS_TipTransGrat[0];
             }
-
+            Log.e("REOS","OrdenVentaCabeceraView-RegistrarOrdenVentaBD-tv_discount_percent.getText().toString():"+tv_discount_percent.getText().toString());
             listaOrdenVentaCabeceraEntity.orden_cabecera_discount_percent=tv_discount_percent.getText().toString();
+            if(tv_discount_percent.getText().toString().equals("0"))
+            {discountpercentreason="";}
             listaOrdenVentaCabeceraEntity.orden_cabecera_discount_percent_reason=discountpercentreason;
 
             if(!tv_discount_percent.getText().toString().equals("0"))
@@ -1821,60 +1864,4 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         return  dialog;
     }
 
-
-    /*private class TaskGetPriceList extends AsyncTask<String, Void, String> {
-        String WhsCode="",WhsName="",PriceListCash="",PriceListCredit="";
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), getActivity().getResources().getString(R.string.please_wait), getActivity().getResources().getString(R.string.download_parameters), true, false);
-        }
-        @Override
-        protected String doInBackground(String... arg0) {
-            try {
-                for(int i=0;i<arg0.length;i++) {
-                    switch (i)
-                    {
-                        case 0: {
-                            WhsCode=arg0[i];
-                            break;
-                        }
-                        case 1: {
-                            WhsName=arg0[i];
-                            break;
-                        }
-                        case 2: {
-                            PriceListCash=arg0[i];
-                            break;
-                        }
-                        case 3: {
-                            PriceListCredit=arg0[i];
-                            break;
-                        }
-                    }
-                }
-
-
-            } catch (Exception e)
-            {
-                // TODO: handle exception
-                System.out.println(e.getMessage());
-            }
-            return "1";
-        }
-
-        protected void onPostExecute(Object result){
-            obtenerTituloFormulario();
-
-            ActualizarResumenMontos(tv_orden_cabecera_subtotal,tv_orden_cabecera_descuento,tv_orden_cabecera_igv,tv_orden_cabecera_total,tv_orden_cabecera_galones);
-
-            hiloObtenerResumenOrdenVenta= new HiloObtenerResumenOrdenVenta();
-            setHasOptionsMenu(true);
-            if (getArguments().getString("FLAG") != null) {
-                callbackFlag(getArguments().getString("FLAG"));
-            }
-        }
-    }*/
 }

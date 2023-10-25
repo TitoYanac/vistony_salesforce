@@ -314,18 +314,6 @@ public class LeadClientesView extends Fragment {
             startActivity(intent);
         });
         floatingButtonTakePhoto.setOnClickListener(data -> {
-            /*if (picturefile != null) {
-                Uri pictureUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() +
-                        ".provider", picturefile);
-                imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri); //This makes the image to save in full rather than just a low quality scaled-down thumbnail.
-            }*/
-
-            //startActivityForResult(imageIntent, REQUEST_IMAGE_CAPTURE);
-            /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                someActivityResultLauncher.launch(intent);
-            }*/
-
             try {
                 Log.e("REOS","statusDispatchRepository-->FotoLocal-->Inicia");
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -359,11 +347,6 @@ public class LeadClientesView extends Fragment {
         });
 
         LeadClientesView.this.someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-           /* if (result.getResultCode() == RESULT_OK) {
-                Bundle extras = result.getData().getExtras();
-                imgBitmap = (Bitmap) extras.get("data");
-                imageViewPhoto.setImageBitmap(imgBitmap);
-            }*/
 
             if (result.getResultCode() == RESULT_OK) {
                 Bitmap bitmap2=null;
@@ -381,8 +364,6 @@ public class LeadClientesView extends Fragment {
                         //imageViewPhoto.setImageBitmap(bitmap2);
                         Convert.resizeImage(imageViewPhoto,bitmap2,getActivity());
                     }
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
@@ -390,10 +371,6 @@ public class LeadClientesView extends Fragment {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
                 }
-
-                //Bundle extras = result.getData().getExtras();
-                //imgBitmap2 = (Bitmap) extras.get("data");
-                //imageViewPhoto2.setImageBitmap(imgBitmap2);
             }
         });
 
@@ -893,11 +870,8 @@ public class LeadClientesView extends Fragment {
     }
 
     private File createImageFile(String entrega_id,String type) throws IOException {
-
-        //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = entrega_id+"_"+type;
         File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
         File image = File.createTempFile(imageFileName,".jpg",storageDir);
         mCurrentPhotoPath=image.getAbsolutePath();
         return image;
@@ -921,15 +895,6 @@ public class LeadClientesView extends Fragment {
                 Manifest.permission.ACCESS_FINE_LOCATION
         };
 
-            /*int accessReadPhoneState = checkSelfPermission(Manifest.permission.READ_PHONE_STATE);
-            int accessWriteExternalStorage = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            int accessCamera = checkSelfPermission(Manifest.permission.CAMERA);
-            int accessCoarseLocation = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-            int accessReadExternalStorage = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-            int accessBluetoothConnect = checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT);
-            int accessBluetooth = checkSelfPermission(Manifest.permission.BLUETOOTH);
-            int accessBluetoothScan = checkSelfPermission(Manifest.permission.BLUETOOTH_SCAN);*/
-
         if (
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
                         ||ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
@@ -948,8 +913,5 @@ public class LeadClientesView extends Fragment {
 
         }
     }
-
-
-
 }
 

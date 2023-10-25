@@ -66,7 +66,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import io.sentry.Sentry;
 import io.sentry.protocol.User;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -123,7 +122,7 @@ public class LoginView extends AppCompatActivity {
         String env = BuildConfig.BASE_ENVIRONMENT.equals("/api") ? "Producción" : "Test";
         version = Utilitario.getVersion(getApplication());
 
-        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion()+"..");
+        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion()+"_");
 
         // locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         loginRepository = new ViewModelProvider(this).get(LoginRepository.class);
@@ -617,7 +616,7 @@ public class LoginView extends AppCompatActivity {
 
         User user = new User();
         user.setOthers(vendedor);
-        Sentry.setUser(user);
+        //Sentry.setUser(user);
 
         startActivity(intent);
         finish();

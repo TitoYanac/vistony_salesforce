@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import io.sentry.Sentry;
 
 public class CobranzaDetalleSQLiteDao {
     SqliteController sqliteController;
@@ -820,7 +819,7 @@ public class CobranzaDetalleSQLiteDao {
 
 
         }catch (Exception e){
-            Sentry.captureMessage(e.getMessage());
+           // Sentry.captureMessage(e.getMessage());
         }finally {
             bd.close();
         }

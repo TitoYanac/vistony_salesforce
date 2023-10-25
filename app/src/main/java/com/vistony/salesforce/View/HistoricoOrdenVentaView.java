@@ -379,9 +379,11 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                     listaHOV.setApprovalCommentary(listaOrdenVentaSQLite.get(l).getMensajeWS());
 
                                     switch (BuildConfig.FLAVOR){
-                                        case "peru":
+
                                         case "india":
                                         case "perurofalab":
+                                            //Cambio realizado el 20/10/2023
+                                        case "peru":
                                             listaHOV.setApprovalStatus("Pendiente");
                                             break;
                                         case "bolivia":
@@ -390,6 +392,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         case "paraguay":
                                         case "espania":
                                         case "marruecos":
+
                                             if(listaOrdenVentaSQLite.get(l).getQuotation()==null)
                                             {
                                                 listaOrdenVentaSQLite.get(l).setQuotation("N");
@@ -403,7 +406,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                             else
                                                 {
                                                     listaHOV.setApprovalStatus("Orden Venta");
-                                                   // SesionEntity.quotation="N";
+                                                   //SesionEntity.quotation="N";
                                                 }
                                             break;
                                         default:
@@ -426,6 +429,14 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         listaHOV.envioERPOV = true;
                                     }else{
                                         listaHOV.envioERPOV = false;
+                                    }
+
+                                    if(listaOrdenVentaSQLite.get(l).getQuotation().equals("N"))
+                                    {
+                                        listaHOV.setObject("Orden Venta");
+
+                                    }else {
+                                        listaHOV.setObject("Cotizacion");
                                     }
 
                                     listaHistoricoOrdenVentaEntities.add(listaHOV);
@@ -472,9 +483,10 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                     listaHOV.setApprovalCommentary(listaOrdenVentaSQLite.get(k).getMensajeWS());
 
                                     switch (BuildConfig.FLAVOR){
-                                        case "peru":
+
                                         case "india":
                                         case "perurofalab":
+                                        case "peru":
                                             listaHOV.setApprovalStatus("Pendiente");
                                             break;
                                         case "bolivia":
@@ -483,6 +495,7 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         case "paraguay":
                                         case "espania":
                                         case "marruecos":
+
                                             if(listaOrdenVentaSQLite.get(k).getQuotation()==null)
                                             {
                                                 listaOrdenVentaSQLite.get(k).setQuotation("N");
@@ -520,6 +533,14 @@ public class HistoricoOrdenVentaView extends Fragment implements View.OnClickLis
                                         listaHOV.envioERPOV = true;
                                     }else{
                                         listaHOV.envioERPOV = false;
+                                    }
+
+                                    if(listaOrdenVentaSQLite.get(k).getQuotation().equals("N"))
+                                    {
+                                        listaHOV.setObject("Orden Venta");
+
+                                    }else {
+                                        listaHOV.setObject("Cotizacion");
                                     }
 
                                     listaHistoricoOrdenVentaEntities.add(listaHOV);

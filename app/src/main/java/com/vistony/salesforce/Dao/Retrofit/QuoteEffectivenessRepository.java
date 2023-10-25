@@ -16,6 +16,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.QuoteEffectivenessEntity
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ReasonDispatchEntityResponse;
 
 import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,21 +27,20 @@ public class QuoteEffectivenessRepository extends ViewModel {
     QuoteEffectivenessSQLiteDao quoteEffectivenessSQLiteDao;
     ParametrosSQLite parametrosSQLite;
 
-    public MutableLiveData<String> getQuoteEffectiveness (String Imei, Context context){
+    public MutableLiveData<String> getQuoteEffectiveness (String Imei, Context context, Executor executor){
         Config.getClient().create(Api.class).getQuoteEffectiveness (Imei).enqueue(new Callback<QuoteEffectivenessEntityResponse>() {
             @Override
             public void onResponse(Call<QuoteEffectivenessEntityResponse> call, Response<QuoteEffectivenessEntityResponse> response) {
 
                 QuoteEffectivenessEntityResponse quoteEffectivenessEntityResponse=response.body();
                 if(response.isSuccessful() && Objects.requireNonNull(quoteEffectivenessEntityResponse).getQuoteEffectivenessEntities().size()>0){
+                    executor.execute(() -> {
                     quoteEffectivenessSQLiteDao = new QuoteEffectivenessSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
-
                     quoteEffectivenessSQLiteDao.DeleteTableQuoteEffectiveness();
                     quoteEffectivenessSQLiteDao.AddQuoteEffectiveness (quoteEffectivenessEntityResponse.getQuoteEffectivenessEntities()   );
                     Integer countReasonDispatch=getCountReasonDispatch(context);
-                    //parametrosSQLite.ActualizaCantidadRegistros("24", "MOTIVO DESPACHO", ""+countReasonDispatch, getDateTime());
-
+                    });
                     status.setValue("1");
                 }else
                 {

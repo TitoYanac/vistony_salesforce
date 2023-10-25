@@ -61,6 +61,16 @@ public class OrdenVentaCabeceraSQLiteEntity {
     public String U_VIS_MOTAPLDESC;
     public String U_VIST_SUCUSU;
 
+    public String DocEntry;
+
+    public String getDocEntry() {
+        return DocEntry;
+    }
+
+    public void setDocEntry(String docEntry) {
+        DocEntry = docEntry;
+    }
+
     public String getU_VIST_SUCUSU() {
         return U_VIST_SUCUSU;
     }

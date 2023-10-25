@@ -3,6 +3,7 @@ package com.vistony.salesforce.kotlin.View.components
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
@@ -10,6 +11,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
@@ -20,10 +22,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ComponentActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import com.vistony.salesforce.BuildConfig
 import com.vistony.salesforce.R
-import com.vistony.salesforce.kotlin.Utilities.MakePhotoUtil
 import com.vistony.salesforce.kotlin.Utilities.ResourceToImageBitmap
+import com.vistony.salesforce.kotlin.Utilities.createImageFile1
+import com.vistony.salesforce.kotlin.Utilities.getDate
 import java.io.File
 
 
@@ -138,7 +144,7 @@ fun MyComposeScreen(
                 // Permiso de cámara concedido, ejecutar MakePhotoUtil()
                 //val delivery = "delivery_value" // Reemplaza con el valor adecuado
                 //val date = "date_value" // Reemplaza con el valor adecuado
-                MakePhotoUtil(context, activity, delivery, date)
+                //MakePhotoUtil(context, activity, delivery, date)
             } else {
                 // Permiso de cámara denegado, manejar el caso adecuado
             }
@@ -155,7 +161,7 @@ fun MyComposeScreen(
                 // Permiso de cámara concedido, ejecutar MakePhotoUtil()
                 //val delivery = "delivery_value" // Reemplaza con el valor adecuado
                 //val date = "date_value" // Reemplaza con el valor adecuado
-                MakePhotoUtil(context, activity, delivery, date)
+                //MakePhotoUtil(context, activity, delivery, date)
             } else {
                 // Permiso de cámara denegado, solicitar permiso al usuario
                 requestCameraPermissionLauncher.launch(cameraPermission)
@@ -432,6 +438,92 @@ fun CaptureImage(
                 fileMutable.value=resultFile
             },
         )
+    }
+}
+
+@Composable
+fun CaptureImageAndRetrieveBitmap(
+        activity: Activity,
+        context:Context,
+        tittle:String,
+        type:String,
+        onBitmapCaptured: (Bitmap) -> Unit,
+
+) {
+    var photoFile: File? = null
+    val fileMutable = remember { mutableStateOf<File?>(null) }
+    val takePicture: ActivityResultLauncher<Intent> = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            /*val data = result.data
+            val imageBitmap = data?.extras?.get("data") as? Bitmap
+            imageBitmap?.let { onBitmapCaptured(it) }*/
+            val file = fileMutable
+            var bitmap = MediaStore.Images.Media.getBitmap(
+                    context.getContentResolver(),
+                    Uri.fromFile(file.value)
+            )
+            //val intent = result.data
+            //var bitmap = intent?.extras?.get("data") as Bitmap
+            onBitmapCaptured(bitmap!!)
+        }
+    }
+
+    //val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+
+    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    // Crea el File
+    // Crea el File
+
+
+    photoFile = createImageFile1(tittle+ "_" + getDate(), type,activity)
+    Log.e("REOS", "MenuGetImage-ItemGetImageCapture-photoFile: "+photoFile)
+    if (photoFile != null) {
+        Log.e("REOS", "MenuGetImage-ItemGetImageCapture-->FotoLocal-->photoFile != null")
+        var photoURI: Uri? = null
+        when (BuildConfig.FLAVOR) {
+            "ecuador" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.ecuador",
+                    photoFile
+            )
+
+            "peru", "marruecos" -> photoURI =
+                    FileProvider.getUriForFile(context, "com.vistony.salesforce.peru", photoFile)
+
+            "espania" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.espania",
+                    photoFile
+            )
+
+            "perurofalab" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.perurofalab",
+                    photoFile
+            )
+
+            "bolivia" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.bolivia",
+                    photoFile
+            )
+
+            "paraguay" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.paraguay",
+                    photoFile
+            )
+
+            "chile" -> photoURI =
+                    FileProvider.getUriForFile(context, "com.vistony.salesforce.chile", photoFile)
+        }
+       // resultFile(photoFile)
+        fileMutable.value=photoFile
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        takePicture.launch(intent)
     }
 }
 

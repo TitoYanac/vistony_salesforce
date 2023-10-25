@@ -122,6 +122,8 @@ fun getDate(): String? {
 }
 
 fun ConvertDateSAPaUserDate(dateSAP: String?): String? {
+
+
     var dateUser = ""
     var year = ""
     var month = ""
@@ -155,3 +157,18 @@ fun getStatusVariableinRange(StartTime:String,EndTime:String): Boolean {
     return status
 }
 
+@Throws(IOException::class)
+fun createImageFile(delivery: String, type: String,activity: Activity): File? {
+
+    //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+    val imageFileName = delivery + "_" + type
+    val storageDir: File = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+    val image = File.createTempFile(imageFileName, ".jpg", storageDir)
+
+    if (type == "G") {
+        StatusDispatchDialog.mCurrentPhotoPathG = image.absolutePath
+    } else if (type == "L") {
+        StatusDispatchDialog.mCurrentPhotoPathL = image.absolutePath
+    }
+    return image
+}

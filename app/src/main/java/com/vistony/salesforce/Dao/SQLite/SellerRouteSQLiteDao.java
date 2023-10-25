@@ -15,7 +15,6 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.sentry.Sentry;
 
 public class SellerRouteSQLiteDao {
     SqliteController sqliteController;
@@ -107,7 +106,7 @@ public class SellerRouteSQLiteDao {
             }
         }catch (Exception e)
         {
-            Sentry.captureMessage(e.getMessage());
+
         }finally {
             bd.close();
         }

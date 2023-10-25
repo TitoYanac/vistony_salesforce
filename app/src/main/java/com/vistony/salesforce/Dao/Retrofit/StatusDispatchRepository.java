@@ -233,24 +233,6 @@ public class StatusDispatchRepository  extends ViewModel {
                     }
 
                 }
-                    /*if(response.isSuccessful() && statusDispatchEntityResponse!=null){
-                        ArrayList<String> responseData=new ArrayList<>();
-
-                        for (StatusDispatchEntity respuesta:statusDispatchEntityResponse.getStatusDispatch()) {
-                            if(respuesta.getHaveError().equals("N")){//se envio
-                                responseData.add("La Hora de Estado de Despacho fue aceptado en SAP");
-                                statusDispatchSQLite.UpdateResultStatusDispatchTime(respuesta.getDocEntry(),respuesta.getLineId());
-
-                            }else{//tiene error
-                                responseData.add("La Hora de Estado de Despacho no fue aceptado en SAP");
-                            }
-                        }
-
-                        callback.onResponseSap(responseData);
-                    }else{
-                        callback.onResponseErrorSap(response.message());
-                    }*/
-
 
                 @Override
                 public void onFailure(Call<HeaderStatusDispatchEntityResponse> call, Throwable t) {

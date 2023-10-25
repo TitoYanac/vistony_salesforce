@@ -46,6 +46,7 @@ public class ListaHistoricoOrdenVentaDao {
                  temp.setRecepcionERPOV(Lista.get(i).isRecepcionERPOV());
                  temp.setEnvioERPOV(Lista.get(i).isEnvioERPOV());
                  temp.setComentariows(Lista.get(i).getComentariows());
+                 temp.setObject(Lista.get(i).getObject());
                 saveLead(temp);
             }
         }catch (Exception e){

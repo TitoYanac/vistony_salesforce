@@ -115,8 +115,8 @@ android {
             applicationIdSuffix ".peru"
             buildConfigField('String' , 'IMEI_DEFAULT', '""')
             //QA -------Aprobaciones
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
@@ -124,8 +124,8 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe_V2"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Pruebas Autorizaciones B2B -->Produccion
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
             versionName "2.2.21"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
@@ -147,12 +147,12 @@ android {
             //----------Ambiente Server20 Produccion
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo"')
-            //----------Ambiente Ultima Milla
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo.qa"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo.qa"')
+            //----------Ambiente QA
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //----------Produccion 13.10.2023
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
             versionName "1.0.9"
             manifestPlaceholders = [country:"Bolivia"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"BO"')

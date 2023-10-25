@@ -15,6 +15,8 @@ import com.vistony.salesforce.Dao.SQLite.PriceListSQLiteDao;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PriceListEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PriceListHeadEntityResponse;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,7 +27,7 @@ public class PriceListHeadRepository extends ViewModel {
     private MutableLiveData<String> status= new MutableLiveData<>();
 
 
-    public MutableLiveData<String> getAddAllPriceListHead(String Imei, Context context){
+    public MutableLiveData<String> getAddAllPriceListHead(String Imei, Context context,Executor executor){
 
         Config.getClient().create(Api.class).getPriceListHead(Imei).enqueue(new Callback<PriceListHeadEntityResponse>() {
             @Override
@@ -34,7 +36,7 @@ public class PriceListHeadRepository extends ViewModel {
                 PriceListHeadEntityResponse priceListHeadEntityResponse=response.body();
 
                 if(response.isSuccessful() && priceListHeadEntityResponse.getPriceListHeadEntity().size()>0){
-
+                    executor.execute(() -> {
                     priceListHeadSQLite = new PriceListHeadSQLite(context);
                     parametrosSQLite = new ParametrosSQLite(context);
 
@@ -42,6 +44,7 @@ public class PriceListHeadRepository extends ViewModel {
                     priceListHeadSQLite.addPriceListHead(priceListHeadEntityResponse.getPriceListHeadEntity());
                     Integer countBank=getCountPriceListHead(context);
                     parametrosSQLite.ActualizaCantidadRegistros("27", "LISTA PRECIO CABECERA", ""+countBank, getDateTime());
+                    });
                 }
 
                 status.setValue("1");

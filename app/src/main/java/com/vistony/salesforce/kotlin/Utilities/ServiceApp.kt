@@ -157,25 +157,19 @@ class ServiceApp: Service()  {
                     if (isServiceRunning)
                     {
                         counter++
-                        //Toast.makeText(this, "Contador: $counter", Toast.LENGTH_SHORT).show()
-                        //handler.postDelayed(runnable, 20000) // Ejecutar cada segundo
-                        //handler.postDelayed(runnable, 10000) // Ejecutar cada segundo
                         handler.postDelayed(runnable, interval) // Ejecutar cada segundo
-                        Log.e(
-                            "REOS",
-                            "Service-onStartCommand-counter" + counter
-                        )
-
-
                         var ordenVentaCabeceraSQLite: OrdenVentaCabeceraSQLite =OrdenVentaCabeceraSQLite(contexto)
                         var listOrdenVentaCabecera:List<OrdenVentaCabeceraSQLiteEntity>
                         listOrdenVentaCabecera=ordenVentaCabeceraSQLite.getQuotationStatus()
-                        Log.e(
-                            "REOS",
-                            "Service-onStartCommand-listOrdenVentaCabecera.size" + listOrdenVentaCabecera.size
-                        )
+                        var lista:ArrayList<String> = ArrayList()
+
                         try {
                             for (i in 0 until listOrdenVentaCabecera.size)
+                            {
+                                lista.add(listOrdenVentaCabecera.get(i).DocEntry)
+                            }
+                            Log.e("REOS", "Service-onStartCommand-lista: "+lista)
+                            /*for (i in 0 until listOrdenVentaCabecera.size)
                             {
                                 var historicSalesOrderTraceabilityRepository: HistoricSalesOrderTraceabilityRepository
                                         = ViewModelProvider(MenuView.viewModelStoreOwner).get(
@@ -183,22 +177,6 @@ class ServiceApp: Service()  {
                                 )
                                 var fecha:String=""
                                 fecha=listOrdenVentaCabecera.get(i).getFecharegistro()
-                                Log.e(
-                                    "REOS",
-                                    "Service-onStartCommand-listOrdenVentaCabecera.fecha: " + fecha
-                                )
-                                Log.e(
-                                    "REOS",
-                                    "Service-onStartCommand-i: " + i.toString()
-                                )
-                                Log.e(
-                                    "REOS",
-                                    "Service-onStartCommand-listOrdenVentaCabecera.get(i).getFecharegistro(): " + listOrdenVentaCabecera.get(i).getFecharegistro()
-                                )
-                                Log.e(
-                                    "REOS",
-                                    "Service-onStartCommand-historicSalesOrderTraceabilityRepository: " + historicSalesOrderTraceabilityRepository
-                                )
                                 historicSalesOrderTraceabilityRepository.getHistoricSalesOrderTraceabilityRepository(
                                     SesionEntity.imei, //listOrdenVentaCabecera.get(i).getFecharegistro()
                                     fecha
@@ -214,18 +192,6 @@ class ServiceApp: Service()  {
                                             try {
                                                 if(listOrdenVentaCabecera.get(i).getOrdenventa_id().equals(data.get(j).ordenventa_id))
                                                 {
-                                                    Log.e(
-                                                        "REOS",
-                                                        "Service-onStartCommand-data.get(j).ordenventa_id" + data.get(j).ordenventa_id
-                                                    )
-                                                    Log.e(
-                                                        "REOS",
-                                                        "Service-onStartCommand-data.get(j).ordenventa_id" + data.get(j).comentarioaprobacion
-                                                    )
-                                                    Log.e(
-                                                        "REOS",
-                                                        "Service-onStartCommand-listOrdenVentaCabecera.get(i).getStatus()" + listOrdenVentaCabecera.get(i).getStatus()
-                                                    )
                                                     if (!listOrdenVentaCabecera.get(i).getStatus().equals(data.get(j).comentarioaprobacion)){
                                                         showNotification(contexto,counter,"La cotización del cliente "+data.get(j).nombrecliente +", con monto "+ Convert.currencyForView(data.get(j).montototalorden)+",  cambio al estado: "+data.get(j).comentarioaprobacion)
                                                         ordenVentaCabeceraSQLite.UpdateStatusSales(data.get(j).ordenventa_id,data.get(j).comentarioaprobacion)
@@ -247,7 +213,7 @@ class ServiceApp: Service()  {
                                         }
                                     }
                                 }
-                            }
+                            }*/
                         }catch (e:Exception)
                         {
                             Log.e(

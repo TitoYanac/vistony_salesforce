@@ -307,7 +307,7 @@
                   android:layout_height="wrap_content"
 
                   android:gravity="center_horizontal"
-                  android:text="Cuantos packs desea asignar?"
+                  android:text="@string/quantity_pack_assigned"
                   android:textAlignment="center"
                  android:textColor="@color/gray"
                  android:layout_marginStart="10dp"

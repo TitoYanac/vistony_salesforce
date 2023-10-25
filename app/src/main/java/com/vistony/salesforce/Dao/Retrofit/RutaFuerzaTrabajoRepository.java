@@ -18,6 +18,7 @@ import com.vistony.salesforce.Entity.SQLite.RutaFuerzaTrabajoSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,23 +65,20 @@ public class RutaFuerzaTrabajoRepository extends ViewModel {
         return LRFTrabajo;
     }*/
 
-    public MutableLiveData<String> getInsertDBWorkPath(String Imei, Context context){
+    public MutableLiveData<String> getInsertDBWorkPath(String Imei, Context context, Executor executor){
         Config.getClient().create(Api.class).getRutaFuerzaTrabajo(Imei).enqueue(new Callback<RutaFuerzaTrabajoEntityResponse>() {
             @Override
             public void onResponse(Call<RutaFuerzaTrabajoEntityResponse> call, Response<RutaFuerzaTrabajoEntityResponse> response) {
-
                 RutaFuerzaTrabajoEntityResponse rutaFuerzaTrabajoList=response.body();
-
                 if(response.isSuccessful() && rutaFuerzaTrabajoList.getRutaFuerzaTrabajoEntity().size()>0){
-
-                    rutaFuerzaTrabajoSQLiteDao = new RutaFuerzaTrabajoSQLiteDao(context);
-                    parametrosSQLite = new ParametrosSQLite(context);
-
-                    rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo()  ;
-                    rutaFuerzaTrabajoSQLiteDao.InsertWorkPath (rutaFuerzaTrabajoList.getRutaFuerzaTrabajoEntity());
-                    Integer countWorkPath=getCountWorkPath (context);
-                    //parametrosSQLite.ActualizaCantidadRegistros("2", "BANCOS", ""+countBank, getDateTime());
-                    parametrosSQLite.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(countWorkPath), getDateTime());
+                    executor.execute(() -> {
+                        rutaFuerzaTrabajoSQLiteDao = new RutaFuerzaTrabajoSQLiteDao(context);
+                        parametrosSQLite = new ParametrosSQLite(context);
+                        rutaFuerzaTrabajoSQLiteDao.LimpiarTablaRutaFuerzaTrabajo()  ;
+                        rutaFuerzaTrabajoSQLiteDao.InsertWorkPath (rutaFuerzaTrabajoList.getRutaFuerzaTrabajoEntity());
+                        Integer countWorkPath=getCountWorkPath (context);
+                        parametrosSQLite.ActualizaCantidadRegistros("12", "RUTA FUERZATRABAJO", String.valueOf(countWorkPath), getDateTime());
+                    });
                 }
 
                 status.setValue("1");

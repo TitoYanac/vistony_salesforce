@@ -52,7 +52,6 @@ import com.vistony.salesforce.View.OrdenVentaDetalleView;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.sentry.Sentry;
 
 public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDetalleEntity>  {
 
@@ -385,7 +384,7 @@ public class ListSalesOrderDetailAdapter  extends ArrayAdapter<ListaOrdenVentaDe
             ActualizarResumenOrdenVenta();*/
 
         }catch(Exception e){
-            Sentry.captureMessage(e.getMessage());
+            //Sentry.captureMessage(e.getMessage());
             e.printStackTrace();
             Log.e("REOS","ListSalesOrderDetailAdapter PINTADO DE EDITtEXT DE DESCUENTO:e:"+e.toString());
         }

@@ -730,10 +730,21 @@ public class MenuView extends AppCompatActivity
                 //fragmentSeleccionado=true;
                 //TAG_FRAGMENT="config_print";
                 //Peru Produccion
-                HojaDespachoFragment = new DispatchSheetView();
+                switch (BuildConfig.FLAVOR)
+                {
+                    case "peru":
+                        //Version Java
+                        HojaDespachoFragment = new DispatchSheetView();
+                        //Version Kotlin
+                        //HojaDespachoFragment = new ContainerDispatchView();
+                        break;
+                    default:
+                        HojaDespachoFragment = new DispatchSheetView();
+                        break;
+                }
+
                 //HojaDespachoFragment = new ContainerDispatchSheetView();
-                //Version Kotlin
-                //HojaDespachoFragment = new ContainerDispatchView();
+
                 fragment = "HojaDespachoView";
                 accion = "inicio";
                 compuesto = fragment + "-" + accion;
@@ -743,10 +754,21 @@ public class MenuView extends AppCompatActivity
             case R.id.nav_cobranzas:
                 //contentFragment=new CobranzaCabeceraView();
                 //fragmentSeleccionado=true;
-                CobranzaCabeceraFragment = new CobranzaCabeceraView();
                 //CobranzaCabeceraFragment = new DepositScreen();
                 //CobranzaCabeceraFragment = new NotificationScreen();
                 //CobranzaCabeceraFragment = new FormularioTest1();
+                switch (BuildConfig.FLAVOR)
+                {
+                    case "peru":
+                        //Version Java
+                        CobranzaCabeceraFragment = new CobranzaCabeceraView();
+                        //Version Kotlin
+                        //CobranzaCabeceraFragment = new DepositScreen();
+                        break;
+                    default:
+                        CobranzaCabeceraFragment = new CobranzaCabeceraView();
+                        break;
+                }
                 fragment = "CobranzaCabeceraView";
                 accion = "inicio";
                 compuesto = fragment + "-" + accion;
@@ -2596,6 +2618,8 @@ public class MenuView extends AppCompatActivity
         registerReceiver(networkStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         if(SesionEntity.imei==null||SesionEntity.imei.equals(""))
         {
+            Log.e("REOS","MenuView-onResume-Identifico-SesionEntity.imei: "+SesionEntity.imei);
+            Log.e("REOS","MenuView-onResume-Identifico-SesionEntity.imei en blanco y mando a inicio");
             Intent intent = new Intent(this, LoginView.class);
             startActivity(intent);
             finish();

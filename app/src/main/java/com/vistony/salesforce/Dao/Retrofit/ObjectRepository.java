@@ -16,6 +16,8 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.BusinessLayerEntityRespo
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.ObjectEntityResponse;
 import com.vistony.salesforce.R;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,7 +28,7 @@ public class ObjectRepository extends ViewModel {
     private MutableLiveData<String> status= new MutableLiveData<>();
 
 
-    public MutableLiveData<String> getObjectAPI(String Imei, Context context){
+    public MutableLiveData<String> getObjectAPI(String Imei, Context context, Executor executor){
         objectSQLite=new ObjectSQLite(context);
         parametrosSQLite=new ParametrosSQLite(context);
         Config.getClient().create(Api.class).getObject(Imei).enqueue(new Callback<ObjectEntityResponse>() {
@@ -36,11 +38,12 @@ public class ObjectRepository extends ViewModel {
                 ObjectEntityResponse objectEntityResponse=response.body();
 
                 if(response.isSuccessful() && objectEntityResponse.getObjectEntityResponse()!=null){
+                    executor.execute(() -> {
                     objectSQLite.clearTableObject();
                     objectSQLite.addObject(objectEntityResponse.getObjectEntityResponse());
                     Integer countObjects=getCountObject(context);
                     parametrosSQLite.ActualizaCantidadRegistros("29", context.getResources().getString(R.string.objects), ""+countObjects, getDateTime());
-
+                    });
                 }
 
                 status.setValue("1");

@@ -543,7 +543,7 @@ public class Induvis {
         Log.e("REOS","Induvis-getDate-dateView:"+dateView);
         return dateView;
     }
-    public static ArrayList<String> getCurrency(){
+    public static ArrayList<String> getCurrency(String currency_id){
         ArrayList<String> currency = new  ArrayList<String>();
         try {
             switch (BuildConfig.FLAVOR){
@@ -551,8 +551,15 @@ public class Induvis {
                 case "chile":
                 case "ecuador":
                 case "peru":
-                    currency.add("S/ - SOLES");
-                    currency.add("US$/ - DOLARES");
+                    if(currency_id.equals("##"))
+                    {
+                        currency.add("S/ - SOLES");
+                        currency.add("US$-DOLARES");
+                    }else {
+                        currency.add("S/ - SOLES");
+                    }
+
+                    break;
                 case "bolivia":
                     currency.add("Bs - Bolivianos");
                     break;

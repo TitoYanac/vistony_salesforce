@@ -16,7 +16,6 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.sentry.Sentry;
 
 public class PriceListSQLiteDao {
     SqliteController sqliteController;
@@ -102,7 +101,7 @@ public class PriceListSQLiteDao {
             }
         }catch (Exception e)
         {
-            Sentry.captureMessage(e.getMessage());
+            //Sentry.captureMessage(e.getMessage());
         }finally {
             bd.close();
         }

@@ -40,7 +40,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import io.sentry.Sentry;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -107,7 +107,7 @@
                     android:textAppearance="?attr/textAppearanceListItem"
                     android:textColor="@color/Rojo_Vistony"
                     android:textStyle="bold"
-                    android:digits="0123456789.-"
+                    android:digits="0123456789"
 
                     />
             </LinearLayout>

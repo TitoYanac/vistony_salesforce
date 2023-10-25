@@ -102,7 +102,8 @@ fun FormularioTest1Template(initialApiResponse: ApiResponse) {
                         OnClick = { formularioTestViewModel.addFormularioTest(apiResponse.value) },
                         context = contexto,
                         backGroundColor = BlueVistony,
-                        textColor = Color.White
+                        textColor = Color.White,
+                        status = true
                 )
                 Spacer(modifier = Modifier.width(20.dp))
                 ButtonView(

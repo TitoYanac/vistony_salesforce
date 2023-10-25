@@ -34,7 +34,8 @@ fun NotificationTemplate()
     val notificationViewModel: NotificationViewModel = viewModel(
         factory = NotificationViewModel.NotificationViewModelFactory(
             notificationRepository,
-            appContext
+            appContext,
+                SesionEntity.imei
         )
     )
 

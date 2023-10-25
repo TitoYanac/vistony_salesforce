@@ -15,6 +15,8 @@ import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.R;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,7 +27,7 @@ public class BancoRepository extends ViewModel {
     private MutableLiveData<String> status= new MutableLiveData<>();
 
 
-    public MutableLiveData<String> getAndInsertBank(String Imei,Context context){
+    public MutableLiveData<String> getAndInsertBank(String Imei, Context context, Executor executor){
 
         Config.getClient().create(Api.class).getBanco(Imei).enqueue(new Callback<BancoEntityResponse>() {
             @Override
@@ -34,7 +36,7 @@ public class BancoRepository extends ViewModel {
                 BancoEntityResponse bancosList=response.body();
 
                 if(response.isSuccessful() && bancosList.getBancoEntity()!=null){
-
+                    executor.execute(() -> {
                     bancoSQLite = new BancoSQLite(context);
                     parametrosSQLite = new ParametrosSQLite(context);
 
@@ -42,6 +44,7 @@ public class BancoRepository extends ViewModel {
                     bancoSQLite.InsertaBanco(bancosList.getBancoEntity());
                     Integer countBank=getCountBank(context);
                     parametrosSQLite.ActualizaCantidadRegistros("2", context.getResources().getString(R.string.banks), ""+countBank, getDateTime());
+                    });
                 }
 
                 status.setValue("1");

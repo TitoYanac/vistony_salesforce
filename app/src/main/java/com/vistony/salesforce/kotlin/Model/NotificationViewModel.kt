@@ -8,21 +8,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class NotificationViewModel(
-    private var notificationRepository: NotificationRepository,
-    private var context: Context
+    private val notificationRepository: NotificationRepository,
+    private val context: Context,
+    private val imei:String
 ): ViewModel()  {
     private val _resultDB = MutableStateFlow(NotificationEntity())
     val resultDB: StateFlow<NotificationEntity> get() = _resultDB
 
     class NotificationViewModelFactory(
         private val notificationRepository: NotificationRepository,
-        private var context: Context
+        private var context: Context,
+        private val imei:String
     ): ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return NotificationViewModel(
                 notificationRepository,
-                context
+                context,
+                imei
             ) as T
         }
     }
@@ -55,12 +58,10 @@ class NotificationViewModel(
         }
     }
 
-    /*fun getNotificationLiveData(startDate: String,endDate:String)
+    fun getNotificationQuotation(list:String)
     {
-        Log.e("REOS", "NotificationViewModel-lgetNotification-startDate: " +startDate)
-        Log.e("REOS", "NotificationViewModel-lgetNotification-endDate: " +endDate)
         viewModelScope.launch {
-            notificationLiveData=notificationRepository.getNotificationLiveData(context = context, startDate = startDate,endDate=endDate)
+            notificationRepository.getNotificationQuotation(context,imei,list)
         }
-    }*/
+    }
 }

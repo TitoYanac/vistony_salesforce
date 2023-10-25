@@ -17,6 +17,8 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.BusinessLayerEntityResponse;
 import com.vistony.salesforce.R;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +30,7 @@ public class BusinessLayerRepository extends ViewModel {
     private MutableLiveData<String> status= new MutableLiveData<>();
 
 
-    public MutableLiveData<String> getBussinessLayer(String Imei, Context context){
+    public MutableLiveData<String> getBussinessLayer(String Imei, Context context, Executor executor){
 
         Config.getClient().create(Api.class).getBusinessLayer(Imei).enqueue(new Callback<BusinessLayerEntityResponse>() {
             @Override
@@ -37,16 +39,16 @@ public class BusinessLayerRepository extends ViewModel {
                 BusinessLayerEntityResponse businessLayerEntityResponse=response.body();
 
                 if(response.isSuccessful() && businessLayerEntityResponse.getBusinessLayerEntityResponse()!=null){
-
+                    executor.execute(() -> {
                     businessLayerHeadSQLiteDao = new BusinessLayerHeadSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
                     businessLayerDetailSQLiteDao = new BusinessLayerDetailSQLiteDao(context);
                     businessLayerHeadSQLiteDao.clearTableBusinessLayerHead();
                     businessLayerDetailSQLiteDao.clearTableBusinessLayerDetail();
-
                     businessLayerHeadSQLiteDao.addBusinessLayer(businessLayerEntityResponse.getBusinessLayerEntityResponse());
                     Integer countBussinessLayer=getBussinessLayer(context);
                     parametrosSQLite.ActualizaCantidadRegistros("28", context.getResources().getString(R.string.busines_layer), ""+countBussinessLayer, getDateTime());
+                    });
                 }
 
                 status.setValue("1");

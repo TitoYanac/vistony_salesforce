@@ -15,6 +15,7 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -54,25 +55,23 @@ public class OrdenVentaRepository extends ViewModel {
     public MutableLiveData<String> salesOrderResend(Context context){
         MutableLiveData<String> temp=new MutableLiveData<String>();
 
-        sendSalesOrder(null,context, new SalesOrderCallback(){
-            @Override
-            public void onResponseSap(ArrayList<String> data) {
-                if(data==null){
-                    temp.setValue("No hay ordenes de venta pendientes de enviar");
-                }else{
-
-                    for(int i=0;i<data.size();i++)
-                    {
-                        temp.setValue(data.get(i));
+            sendSalesOrder(null,context, new SalesOrderCallback(){
+                @Override
+                public void onResponseSap(ArrayList<String> data) {
+                    if(data==null){
+                        temp.setValue("No hay ordenes de venta pendientes de enviar");
+                    }else{
+                        for(int i=0;i<data.size();i++)
+                        {
+                            temp.setValue(data.get(i));
+                        }
                     }
-
                 }
-            }
-            @Override
-            public void onResponseErrorSap(String response) {
-                temp.setValue(response);
-            }
-        });
+                @Override
+                public void onResponseErrorSap(String response) {
+                    temp.setValue(response);
+                }
+            });
         return temp;
     }
 
@@ -92,14 +91,15 @@ public class OrdenVentaRepository extends ViewModel {
 
         if(idSalesOrder==null){
             ArrayList<String> listSalesOrders = new ArrayList<>();
-            listSalesOrders=ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
 
+            listSalesOrders=ordenVentaCabeceraSQLite.ObtenerOrdenVentaCabeceraPendientesEnvioWS();
             if(listSalesOrders!=null && listSalesOrders.size()>0) {
                 for (int i = 0; i < listSalesOrders.size(); i++) {
                     json = json + EnviarNubeOV(/*OrdenVentaId*/listSalesOrders.get(i), context);
                 }
 
             }
+
         }else{
             json = EnviarNubeOV(idSalesOrder, context);
         }
@@ -129,7 +129,8 @@ public class OrdenVentaRepository extends ViewModel {
                                             respuesta.getSalesOrderID(),
                                             "1",
                                             respuesta.getDocNum(),
-                                            respuesta.getMessage()
+                                            respuesta.getMessage(),
+                                            respuesta.getDocEntry()
                                     );
                                     responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+respuesta.getSalesOrderID()+", pasara por un flujo de aprobación");
                                 }else{//pasa por flujo automatico
@@ -137,7 +138,8 @@ public class OrdenVentaRepository extends ViewModel {
                                             respuesta.getSalesOrderID(),
                                         "1",
                                             respuesta.getDocNum(),
-                                            respuesta.getMessage()
+                                            respuesta.getMessage(),
+                                            respuesta.getDocEntry()
                                     );
                                     responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+respuesta.getDocNum()+", fue aceptado en SAP");
                                 }
@@ -147,7 +149,8 @@ public class OrdenVentaRepository extends ViewModel {
                                         respuesta.getSalesOrderID(),
                                         "0",
                                         respuesta.getDocNum(),
-                                        respuesta.getMessage()
+                                        respuesta.getMessage(),
+                                        respuesta.getDocEntry()
                                 );
 
                                 responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+respuesta.getSalesOrderID()+", tiene un error");
@@ -239,7 +242,9 @@ public class OrdenVentaRepository extends ViewModel {
                                             salesOrderEntity.getSalesOrderID(),
                                             "1",
                                             salesOrderEntity.getDocNum(),
-                                            salesOrderEntity.getMessage()
+                                            salesOrderEntity.getMessage(),
+                                            salesOrderEntity.getDocEntry()
+
                                     );
 
                                     responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+salesOrderEntity.getSalesOrderID()+", pasara por un flujo de aprobación");
@@ -248,7 +253,8 @@ public class OrdenVentaRepository extends ViewModel {
                                             salesOrderEntity.getSalesOrderID(),
                                             "1",
                                             salesOrderEntity.getDocNum(),
-                                            salesOrderEntity.getMessage()
+                                            salesOrderEntity.getMessage(),
+                                            salesOrderEntity.getDocEntry()
                                     );
 
                                     responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+salesOrderEntity.getDocNum()+", fue aceptado en SAP");
@@ -258,7 +264,8 @@ public class OrdenVentaRepository extends ViewModel {
                                         salesOrderEntity.getSalesOrderID(),
                                         "0",
                                         salesOrderEntity.getDocNum(),
-                                        salesOrderEntity.getMessage()
+                                        salesOrderEntity.getMessage(),
+                                        salesOrderEntity.getDocEntry()
                                 );
                                 responseData.add("La "+ Induvis.getTituloVentaString(context)+" "+salesOrderEntity.getSalesOrderID()+", tiene un error");
                             }

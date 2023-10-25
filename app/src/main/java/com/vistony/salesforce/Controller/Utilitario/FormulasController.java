@@ -116,6 +116,9 @@ public class FormulasController {
      */
     public String getTotalPerLine(String PrecioUnitario, String Cantidad) {
 
+        if(PrecioUnitario==null){
+            PrecioUnitario="0";
+        }
         PrecioUnitario = PrecioUnitario.replace(" ", "");
         Cantidad = Cantidad.replace(" ", "");
         Cantidad = (Cantidad.equals("")) ? "0" : Cantidad;
@@ -308,6 +311,9 @@ public class FormulasController {
         for(int i=0;i<Lista.size();i++)
         {¨*/
         for (int j = 0; j < Lista.get(posicion).getListaPromocionDetalleEntities().size(); j++) {
+
+            Log.e("REOS","formulascontroller-ObtenerCalculoPromocionDetalle.getListaPromocionDetalleEntities().get(j).getPreciobase():"+Lista.get(posicion).getListaPromocionDetalleEntities().get(j).getPreciobase());
+            Log.e("REOS","formulascontroller-ObtenerCalculoPromocionDetalle.Lista.get(posicion).getListaPromocionDetalleEntities().get(j).getCantidad():"+Lista.get(posicion).getListaPromocionDetalleEntities().get(j).getCantidad());
             CalculoPromocion = CalculoPromocion +
                     ((Float.parseFloat(Lista.get(posicion).getListaPromocionDetalleEntities().get(j).getPreciobase())) *
                             Float.parseFloat(Lista.get(posicion).getListaPromocionDetalleEntities().get(j).getCantidad()));

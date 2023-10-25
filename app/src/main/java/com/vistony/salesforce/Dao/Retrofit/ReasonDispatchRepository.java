@@ -19,6 +19,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.TypeDispatchEntityRespon
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,22 +29,22 @@ public class ReasonDispatchRepository  extends ViewModel {
     private MutableLiveData<String> status= new MutableLiveData<>();
     ReasonDispatchSQLite reasonDispatchSQLite;
     ParametrosSQLite parametrosSQLite;
-    public MutableLiveData<String> geReasonDispatch (String Imei, Context context){
+    public MutableLiveData<String> geReasonDispatch (String Imei, Context context, Executor executor){
         Config.getClient().create(Api.class).getReasonDispatch(Imei).enqueue(new Callback<ReasonDispatchEntityResponse>() {
             @Override
             public void onResponse(Call<ReasonDispatchEntityResponse> call, Response<ReasonDispatchEntityResponse> response) {
 
                 ReasonDispatchEntityResponse reasonDispatchEntityResponse=response.body();
                 if(response.isSuccessful() && Objects.requireNonNull(reasonDispatchEntityResponse).getReasonDispatchEntities().size()>0){
+                    executor.execute(() -> {
                     reasonDispatchSQLite = new ReasonDispatchSQLite(context);
                     parametrosSQLite = new ParametrosSQLite(context);
-
                     reasonDispatchSQLite.DeleteTableReasonDispatch();
                     reasonDispatchSQLite.AddReasonDispatch (reasonDispatchEntityResponse.getReasonDispatchEntities());
                     Integer countReasonDispatch=getCountReasonDispatch(context);
                     parametrosSQLite.ActualizaCantidadRegistros("24", "MOTIVO DESPACHO", ""+countReasonDispatch, getDateTime());
-
                     status.setValue("1");
+                    });
                 }else
                 {
                     status.setValue("0");

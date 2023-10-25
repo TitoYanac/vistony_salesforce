@@ -423,18 +423,25 @@ public class DocumentQuotationPDF extends AppCompatActivity {
 
             }
             documento.add(tblLineas);
-            /*PdfPTable tblResumen = new PdfPTable(1);
-            tblResumen.setWidthPercentage(100);
-            PdfPCell cellResumen = null;
-            cellResumen = new PdfPCell(new Phrase("************************************RESUMEN*************************************",font3));
-            cellResumen.disableBorderSide(Rectangle.BOX);
-            cellResumen.setHorizontalAlignment(Element.ALIGN_LEFT);
-            tblResumen.addCell(cellResumen);
-            documento.add(tblResumen);*/
+
+            Paragraph paragraph6 = new Paragraph("");
+            paragraph6.setSpacingBefore(10f); // Espacio antes del párrafo
+            paragraph6.setSpacingAfter(10f);  // Espacio después del párrafo
+            documento.add(paragraph6);
+
+            PdfPTable tbltextdispatch = new PdfPTable(1);
+            tbltextdispatch.setWidthPercentage(100);
+            PdfPCell celltextdispatch = null;
+            celltextdispatch = new PdfPCell(new Phrase("Entrega a 48 horas, despues de recibida la orden de compra",font3));
+            celltextdispatch.disableBorderSide(Rectangle.BOX);
+            celltextdispatch.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tbltextdispatch.addCell(celltextdispatch);
+            documento.add(tbltextdispatch);
+
 
             Paragraph paragraph4 = new Paragraph("");
-            paragraph4.setSpacingBefore(20f); // Espacio antes del párrafo
-            paragraph4.setSpacingAfter(20f);  // Espacio después del párrafo
+            //paragraph4.setSpacingBefore(10); // Espacio antes del párrafo
+            paragraph4.setSpacingAfter(10);  // Espacio después del párrafo
             documento.add(paragraph4);
 
             PdfPTable tblResumen = new PdfPTable(1);
@@ -495,6 +502,7 @@ public class DocumentQuotationPDF extends AppCompatActivity {
             cellResu.disableBorderSide(Rectangle.TOP);
             cellResu.disableBorderSide(Rectangle.LEFT);
             tblResu.addCell(cellResu);
+
 
             /*BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             String encData="",Data="";

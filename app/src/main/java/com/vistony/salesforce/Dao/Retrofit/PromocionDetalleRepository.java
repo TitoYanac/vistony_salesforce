@@ -14,6 +14,8 @@ import com.vistony.salesforce.Dao.SQLite.PromocionDetalleSQLiteDao;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PromocionDetalleEntityResponse;
 import com.vistony.salesforce.R;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,7 +77,7 @@ public class PromocionDetalleRepository extends ViewModel
         return LPDetalle;
     }*/
 
-    public MutableLiveData<String> exeClearandAddPromotionDetail(String Imei,Context context){
+    public MutableLiveData<String> exeClearandAddPromotionDetail(String Imei, Context context, Executor executor){
 
         Config.getClient().create(Api.class).getPromomocionDetalle(Imei).enqueue(new Callback<PromocionDetalleEntityResponse>() {
             @Override
@@ -85,13 +87,14 @@ public class PromocionDetalleRepository extends ViewModel
 
                 if(response.isSuccessful() && promocionDetalleEntityResponse.getPromocionDetalleEntity()
                         !=null){
-
+                    executor.execute(() -> {
                     promocionDetalleSQLiteDao = new PromocionDetalleSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
                     promocionDetalleSQLiteDao.LimpiarTablaPromocionDetalle();
                     promocionDetalleSQLiteDao.AddListPromotionDetail(promocionDetalleEntityResponse.getPromocionDetalleEntity());
                     Integer countPromotionDetail=getPromotionDetail(context);
                     parametrosSQLite.ActualizaCantidadRegistros("11", context.getResources().getString(R.string.promotion_detail).toUpperCase(), ""+countPromotionDetail, getDateTime());
+                    });
                 }
 
                 status.setValue("1");

@@ -29,7 +29,7 @@ public class Config {
             //case "chile"://Produccion
             //case "ecuador":
             //QA Aprobaciones 11/07/2023
-            //case "peru":
+            case "peru":
                 //Produccion
                 //case "bolivia":
             //case "espania":
@@ -45,9 +45,9 @@ public class Config {
                baseUrl = "https://app.vistony.pe";
                 break;
                 //Produccion
-            case "peru":
+            /*case "peru":
                 baseUrl = "http://190.12.79.132:8083";
-            break;
+            break;*/
             //QA Aprobaciones
             /*case "peru":
                 baseUrl = "http://190.12.79.132:8082";
@@ -149,7 +149,7 @@ public class Config {
         switch (BuildConfig.FLAVOR) {
             //case "chile"://Produccion
             //QA Aprobaciones 11/07/2023
-            //case "peru":
+            case "peru":
                 //Produccion
             //case "ecuador":
             //case "espania":
@@ -165,9 +165,9 @@ public class Config {
                 baseUrl = "https://app.vistony.pe";
                 break;
             //Produccion
-            case "peru":
+            /*case "peru":
                 baseUrl = "http://190.12.79.132:8083";
-                break;
+                break;*/
             //QA Aprobaciones
             /*case "peru":
                 baseUrl = "http://190.12.79.132:8082";
@@ -278,7 +278,7 @@ public class Config {
         switch (BuildConfig.FLAVOR) {
             //case "chile"://Produccion
             //QA Aprobaciones 11/07/2023
-            //case "peru":
+            case "peru":
             //case "ecuador":
             //case "espania":
             case "marruecos":
@@ -292,9 +292,9 @@ public class Config {
                 baseUrl = "https://app.vistony.pe";
                 break;
              //Produccion
-            case "peru":
+            /*case "peru":
                 baseUrl = "http://190.12.79.132:8083";
-                break;
+                break;*/
             //QA Aprobaciones
             /*case "peru":
                 baseUrl = "http://190.12.79.132:8082";

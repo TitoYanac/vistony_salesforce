@@ -14,18 +14,40 @@ import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.vistony.salesforce.BuildConfig
 import com.vistony.salesforce.Controller.Adapters.StatusDispatchDialog
+import com.vistony.salesforce.R
+import com.vistony.salesforce.kotlin.View.Atoms.TextLabel
 import java.io.*
 
 
 private const val NameOfFolder = "/RECIBOS"
 
-fun MakePhotoUtil(
-    context: Context,activity: Activity,delivery:String,date:String
+/*
+fun CaptureImageSave(
+    context: Context,
+    activity: Activity
+    ,tittle:String
+    ,date:String
+    ,resultBitmap: (Bitmap) -> Unit,
 ){
     val permsRequestCode = 255
     val perms = arrayOf(Manifest.permission.CAMERA)
@@ -43,89 +65,109 @@ fun MakePhotoUtil(
         // for ActivityCompat#requestPermissions for more details.
         requestPermissions(activity,  perms, permsRequestCode)
     } else {
-        try {
-            Log.e("REOS,", "Image-MakePhotoUtil-el permiso fue asignado")
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            // Crea el File
-            var photoFile: File? = null
-            //startActivityForResult(intent,0);
-            photoFile = createImageFile(delivery + "_" + date, "G",activity)
-            Log.e("REOS,", "Image-MakePhotoUtil-photoFile"+photoFile)
-            if (photoFile != null) {
-                //Uri photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
-                var photoURI: Uri? = null
-                when (BuildConfig.FLAVOR) {
-                    "ecuador" -> photoURI = FileProvider.getUriForFile(
-                        context,
-                        "com.vistony.salesforce.ecuador",
-                        photoFile
-                    )
-                    "peru", "marruecos" -> photoURI = FileProvider.getUriForFile(
-                        context,
-                        "com.vistony.salesforce.peru",
-                        photoFile
-                    )
-                    "espania" -> photoURI = FileProvider.getUriForFile(
-                        context,
-                        "com.vistony.salesforce.espania",
-                        photoFile
-                    )
-                    "perurofalab" -> photoURI = FileProvider.getUriForFile(
-                        context,
-                        "com.vistony.salesforce.perurofalab",
-                        photoFile
-                    )
-                    "bolivia" -> photoURI = FileProvider.getUriForFile(
-                        context,
-                        "com.vistony.salesforce.bolivia",
-                        photoFile
-                    )
-                    "paraguay" -> {
-                        photoURI = FileProvider.getUriForFile(
+            // Función para capturar la imagen con el launcher
+            val permsRequestCode = 255
+            val perms = arrayOf(android.Manifest.permission.CAMERA)
+            val fileMutable = remember { mutableStateOf<File?>(null) }
+
+            // Aquí puedes realizar las comprobaciones de permisos
+            if (ContextCompat.checkSelfPermission(
                             context,
-                            "com.vistony.salesforce.paraguay",
-                            photoFile
+                            Manifest.permission.CAMERA
+                    ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Permiso de cámara no concedido, solicitar permiso
+                ActivityCompat.requestPermissions(activity, perms, permsRequestCode)
+            } else {
+                // Lanzar el launcher para capturar la imagen
+                val startForResult = rememberLauncherForActivityResult(
+                        contract = ActivityResultContracts.StartActivityForResult()
+                ) {
+
+                    result: ActivityResult ->
+                    if (result.resultCode == Activity.RESULT_OK) {
+                        val file = fileMutable
+                        var bitmap = MediaStore.Images.Media.getBitmap(
+                                context.getContentResolver(),
+                                Uri.fromFile(file.value)
                         )
-                        photoURI = FileProvider.getUriForFile(
-                            context,
-                            "com.vistony.salesforce.chile",
-                            photoFile
-                        )
+                        resultBitmap(bitmap!!)
                     }
-                    "chile" -> photoURI = FileProvider.getUriForFile(
-                        context,
-                        "com.vistony.salesforce.chile",
-                        photoFile
-                    )
                 }
-                Log.e("REOS,", "Image-MakePhotoUtil-antes.del.intent.putExtra")
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                //startActivityForResult(intent,20);
-                //someActivityResultLauncherGuia.launch(intent)
-                /*if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                                someActivityResultLauncherGuia.launch(intent);
-                            }*/
+
+                startCaptureImge(
+                        startForResult,
+                        context,
+                        activity,
+                        tittle,
+                        date,
+                        resultFile = { resultFile ->
+                            fileMutable.value=resultFile
+                        },
+                )
+
             }
-        } catch (ex: IOException) {
-            Log.e("REOS,", "StatusDispatchDialog-onCreateDialog-imageViewPhoto-error:$ex")
+
+    }
+}*/
+
+fun startCaptureImge(
+        startForResult: ManagedActivityResultLauncher<Intent, ActivityResult>,
+        context: Context,
+        activity: Activity,
+        tittle:String,
+        type: String,
+        resultFile: (File) -> Unit,
+)
+{
+    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    // Crea el File
+    // Crea el File
+    var photoFile: File? = null
+
+    photoFile = createImageFile1(tittle+ "_" + getDate(), type,activity)
+    Log.e("REOS", "MenuGetImage-ItemGetImageCapture-photoFile: "+photoFile)
+    if (photoFile != null) {
+        Log.e("REOS", "MenuGetImage-ItemGetImageCapture-->FotoLocal-->photoFile != null")
+        var photoURI: Uri? = null
+        when (BuildConfig.FLAVOR) {
+            "ecuador" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.ecuador",
+                    photoFile
+            )
+            "peru", "marruecos" -> photoURI =
+                    FileProvider.getUriForFile(context, "com.vistony.salesforce.peru", photoFile)
+            "espania" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.espania",
+                    photoFile
+            )
+            "perurofalab" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.perurofalab",
+                    photoFile
+            )
+            "bolivia" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.bolivia",
+                    photoFile
+            )
+            "paraguay" -> photoURI = FileProvider.getUriForFile(
+                    context,
+                    "com.vistony.salesforce.paraguay",
+                    photoFile
+            )
+            "chile" -> photoURI =
+                    FileProvider.getUriForFile(context, "com.vistony.salesforce.chile", photoFile)
         }
+        resultFile(photoFile)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        startForResult.launch(intent)
     }
 }
 
-@Throws(IOException::class)
-private fun createImageFile(entrega_id: String, type: String,activity: Activity): File? {
 
-    //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-    val imageFileName = entrega_id + "_" + type
-    val storageDir: File = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-    val image = File.createTempFile(imageFileName, ".jpg", storageDir)
-    if (type == "G") {
-        StatusDispatchDialog.mCurrentPhotoPathG = image.absolutePath
-    } else if (type == "L") {
-        StatusDispatchDialog.mCurrentPhotoPathL = image.absolutePath
-    }
-    return image
-}
 
 
 fun SaveImageStatusDispatch(

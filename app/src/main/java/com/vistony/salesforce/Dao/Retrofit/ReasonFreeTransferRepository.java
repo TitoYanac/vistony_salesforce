@@ -16,6 +16,7 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.ReasonDispatchEntityResp
 import com.vistony.salesforce.R;
 
 import java.util.Objects;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,7 +26,7 @@ public class ReasonFreeTransferRepository  extends ViewModel {
     private MutableLiveData<String> status= new MutableLiveData<>();
     ReasonFreeTransferSQLiteDao reasonFreeTransferSQLiteDao;
     ParametrosSQLite parametrosSQLite;
-    public MutableLiveData<String> getReasonFreeTransfer (String Imei, Context context){
+    public MutableLiveData<String> getReasonFreeTransfer (String Imei, Context context, Executor executor){
         Config.getClient().create(Api.class).getReasonFreeTransfer(Imei).enqueue(new Callback<ReasonDispatchEntityResponse>() {
             @Override
             public void onResponse(Call<ReasonDispatchEntityResponse> call, Response<ReasonDispatchEntityResponse> response) {
@@ -35,6 +36,7 @@ public class ReasonFreeTransferRepository  extends ViewModel {
                         //Objects.requireNonNull(reasonDispatchEntityResponse).getReasonDispatchEntities().size()>0
                         response.body()!=null
                 ){
+                    executor.execute(() -> {
                     reasonFreeTransferSQLiteDao = new ReasonFreeTransferSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
 
@@ -42,6 +44,7 @@ public class ReasonFreeTransferRepository  extends ViewModel {
                     reasonFreeTransferSQLiteDao.AddReasonFreeTransfer (reasonDispatchEntityResponse.getReasonDispatchEntities());
                     Integer countReasonFreeTransfer=getCountReasonFreeTransfer(context);
                     parametrosSQLite.ActualizaCantidadRegistros("26", context.getResources().getString(R.string.reason_free_transfer).toUpperCase(), ""+countReasonFreeTransfer, getDateTime());
+                    });
                     status.setValue("1");
                 }else
                 {

@@ -14,6 +14,8 @@ import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.PromocionCabeceraEntityResponse;
 import com.vistony.salesforce.R;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,7 +77,7 @@ public class PromocionCabeceraRepository extends ViewModel {
     */
 
 
-    public MutableLiveData<String> exeClearandAddPromotionHead(String Imei,Context context){
+    public MutableLiveData<String> exeClearandAddPromotionHead(String Imei, Context context, Executor executor){
 
         Config.getClient().create(Api.class).getPromomocionCabecera(Imei).enqueue(new Callback<PromocionCabeceraEntityResponse>() {
             @Override
@@ -85,27 +87,14 @@ public class PromocionCabeceraRepository extends ViewModel {
 
                 if(response.isSuccessful() && promocionCabeceraEntityResponse.getPromocionCabeceraEntity()
                         !=null){
-                    //PromocionCabeceraEntity promocionCabeceraEntity=new PromocionCabeceraEntity();
-                    //ArrayList<PromocionCabeceraEntity> promocionCabeceraEntityArrayList=new ArrayList<>();
+                    executor.execute(() -> {
                     promocionCabeceraSQLiteDao = new PromocionCabeceraSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
-
-                    /*promocionCabeceraEntity.setProducto_id("1400026");
-                    promocionCabeceraEntity.setProducto("PRODUCTO DE PRUEBA");
-                    promocionCabeceraEntity.setCantidad("24");
-                    promocionCabeceraEntity.setTipo_malla("E");
-                    promocionCabeceraEntity.setLista_promocion_id("0000");
-                    promocionCabeceraEntity.setDescuento("0");
-                    promocionCabeceraEntity.setCantidad_maxima("49");
-                    promocionCabeceraEntity.setUmd("CAJ12");
-                    promocionCabeceraEntityArrayList.add(promocionCabeceraEntity);*/
-
                     promocionCabeceraSQLiteDao.LimpiarTablaPromocionCabecera();
                     promocionCabeceraSQLiteDao.AddListPromotionHead(promocionCabeceraEntityResponse.getPromocionCabeceraEntity());
-                    //promocionCabeceraSQLiteDao.AddListPromotionHead(promocionCabeceraEntityArrayList);
                     Integer countPromotionHead=getPromotionHead(context);
                     parametrosSQLite.ActualizaCantidadRegistros("10", context.getResources().getString(R.string.promotion_head).toUpperCase(), ""+countPromotionHead, getDateTime());
-
+                    });
                 }
 
                 status.setValue("1");

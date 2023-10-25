@@ -16,6 +16,8 @@ import com.vistony.salesforce.Entity.Retrofit.Respuesta.ObjectEntityResponse;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.WarehouseEntityResponse;
 import com.vistony.salesforce.R;
 
+import java.util.concurrent.Executor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,7 +27,7 @@ public class WarehouseRepository  extends ViewModel {
     private MutableLiveData<String> status= new MutableLiveData<>();
     private ParametrosSQLite parametrosSQLite;
 
-    public MutableLiveData<String> getWarehouse(String Imei, Context context){
+    public MutableLiveData<String> getWarehouse(String Imei, Context context, Executor executor){
         warehouseSQLiteDao=new WarehouseSQLiteDao(context);
         parametrosSQLite=new ParametrosSQLite(context);
         Config.getClient().create(Api.class).getWarehouse(Imei).enqueue(new Callback<WarehouseEntityResponse>() {
@@ -35,11 +37,12 @@ public class WarehouseRepository  extends ViewModel {
                 WarehouseEntityResponse warehouseEntityResponse=response.body();
 
                 if(response.isSuccessful() && warehouseEntityResponse.getWarehouseEntityResponse()!=null){
+                    executor.execute(() -> {
                     warehouseSQLiteDao.clearTableWarehouse();
                     warehouseSQLiteDao.addWarehouse(warehouseEntityResponse.getWarehouseEntityResponse());
                     Integer countObjects=getCountWarehouse(context);
                     parametrosSQLite.ActualizaCantidadRegistros("31", context.getResources().getString(R.string.warehouse), ""+countObjects, getDateTime());
-
+                    });
                 }
 
                 status.setValue("1");

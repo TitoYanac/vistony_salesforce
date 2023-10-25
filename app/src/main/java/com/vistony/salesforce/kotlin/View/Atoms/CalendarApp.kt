@@ -1,6 +1,7 @@
 package com.vistony.salesforce.kotlin.View.Atoms
 
 import android.app.DatePickerDialog
+import android.util.Log
 import android.widget.DatePicker
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -43,14 +44,14 @@ fun CalendarApp(
     mYear = mCalendar.get(Calendar.YEAR)
     mMonth = mCalendar.get(Calendar.MONTH)
     mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
-    mCalendar.time = Date()
+    /*mCalendar.time = Date()
     val mDate = remember { mutableStateOf(getDate()) }
 
     if (mDate.value!=DateApp.value)
     {
         DateApp.value= mDate.value!!
-    }
-
+    }*/
+    //DateApp.value= getDate()!!
     //DateApp.value= getDate()!!
     // Declaring DatePickerDialog and setting
     // initial values as current values (present year, month and day)
@@ -59,9 +60,17 @@ fun CalendarApp(
         { _: DatePicker, mYear: Int, mMonth: Int, mDayOfMonth: Int ->
             var month:String=""
             var day:String=""
-            if(mMonth.toString().length==1){month="0"+(mMonth+1).toString()}else{month=(mMonth+1).toString()}
+            Log.e(
+                    "REOS",
+                    "CalendarApp-CalendarApp-mMonth.toString()" +mMonth.toString()
+            )
+            Log.e(
+                    "REOS",
+                    "CalendarApp-CalendarApp-mMonth.toString().length " + mMonth.toString().length
+            )
+            if((mMonth+1).toString().length==1){month="0"+(mMonth+1).toString()}else{month=(mMonth+1).toString()}
             if(mDayOfMonth.toString().length==1){day="0"+mDayOfMonth.toString()}else{day=mDayOfMonth.toString()}
-            mDate.value = //"$mDayOfMonth/${mMonth+1}/$mYear"
+            DateApp.value = //"$mDayOfMonth/${mMonth+1}/$mYear"
                 "$mYear$month$day"
             //DateApp.value= mDate.value!!
         }, mYear, mMonth, mDay
@@ -89,10 +98,21 @@ fun CalendarApp(
                     //tint = if ( stepsStatus.get(index) == "Y") BlueVistony else Color.Gray
                 )
             }
-            TableCell(text = ConvertDateSAPaUserDate(mDate.value)!!
-                , weight = 1f
-                ,title = true, textAlign = TextAlign.Center)
-
+            Log.e(
+                    "REOS",
+                    "CalendarApp-CalendarApp-mDate.value " + DateApp.value
+            )
+            Log.e(
+                    "REOS",
+                    "CalendarApp-CalendarApp-ConvertDateSAPaUserDate(mDate.value)!!: " + ConvertDateSAPaUserDate(DateApp.value)!!
+            )
+            TableCell(
+                    text = ConvertDateSAPaUserDate(DateApp.value)!!
+                    ,weight = 1f
+                    ,title = true
+                    ,textAlign = TextAlign.Center
+                    , color = Color.Black
+            )
         }
     }
 }

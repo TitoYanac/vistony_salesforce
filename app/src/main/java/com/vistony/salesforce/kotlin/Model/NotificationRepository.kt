@@ -2,24 +2,21 @@ package com.vistony.salesforce.kotlin.Model
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import com.google.gson.Gson
 import com.vistony.salesforce.kotlin.Utilities.api.RetrofitApi
 import com.vistony.salesforce.kotlin.Utilities.api.RetrofitConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 class NotificationRepository {
     private val _resultDB = MutableStateFlow(NotificationEntity())
@@ -84,39 +81,6 @@ class NotificationRepository {
                                 println("The flow has thrown an exception: $e")
                             }
                     }
-                            /*try {
-                                data.collect { value ->
-                                    println("Received $value")
-                                }
-                            } catch (e: Exception) {
-                                println("The flow has thrown an exception: $e")
-                            }*/
-
-
-
-                    /*data.map { notifications ->
-                        if (notifications.size>0)
-                        {
-                            _resultDB.value=NotificationEntity(Status = "Y", DATA = notifications)
-                        }else {
-                            _resultDB.value=NotificationEntity(Status = "N", DATA = emptyList())
-                        }
-                    }*/
-                    /*viewModelScope.launch {
-                        data.collect { notifications ->
-                            _notificationStateFlow.value = notifications
-                        }
-                    }
-
-                    if(data.collect())
-                    {
-                        _resultDB.value=NotificationEntity(Status = "Y", DATA = data!!)
-                        Log.e("REOS", "NotificationRepository-getNotification-_resultDB.value: " + _resultDB.value)
-                    }
-                    else {
-                        _resultDB.value=NotificationEntity(Status = "N", DATA = emptyList())
-                    }*/
-
                     println("Tarea $i completada")
                 }
 
@@ -130,14 +94,72 @@ class NotificationRepository {
         }
     }
 
-    /*suspend fun getData(data:Flow<List<Notification>>?)
+    suspend fun getNotificationQuotation(context: Context,Imei: String,lista:String)
     {
         try {
-            data!!.collect { value ->
-                println("Received $value")
+            val retrofitConfig: RetrofitConfig? = RetrofitConfig()
+            val service = retrofitConfig?.getClientLog()?.create(
+                    RetrofitApi
+                    ::class.java
+            )
+            var json: String = ""
+            val gson = Gson()
+            if (lista != null) {
+                json = gson.toJson(lista)
+                json = "{ \"Imei\":$Imei,\"DocEntry\":$json}"
             }
+            Log.e("REOS", "NotificationRepository-getNotificationQuotation-json: " +json)
+            val jsonRequest: RequestBody = RequestBody.create(
+                    ("application/json; charset=utf-8").toMediaTypeOrNull(),
+                    json
+            )
+            service?.getNotificationQuotation(
+                    Imei,
+                    jsonRequest
+            )?.enqueue(object : Callback<NotificationQuotationEntity?> {
+
+                override fun onResponse(
+                        call: Call<NotificationQuotationEntity?>,
+                        response: Response<NotificationQuotationEntity?>
+                ) {
+
+                    /*val notificationQuotationEntity = response.body()
+                    if (response.isSuccessful&&reasonDispatchResponse?.getReasonDispatch()?.size!!>0) {
+                        val executor: ExecutorService = Executors.newFixedThreadPool(1)
+                        for (i in 1..1) {
+                            executor.execute {
+                                println("Tarea $i en ejecución en ${Thread.currentThread().name}")
+                                //Thread.sleep(1000)
+                                val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+                                database?.reasonDispatchDao
+                                        ?.deleteReasonDispatch()
+                                database?.reasonDispatchDao
+                                        ?.inserReasonDispatch (
+                                                reasonDispatchResponse?.getReasonDispatch()
+                                        )
+
+                                println("Tarea $i completada")
+                            }
+
+                        }
+                        executor.shutdown()
+                       // _status.setValue("1")
+
+                    } else {
+
+                        //_status.setValue("0")
+
+                    }*/
+                }
+
+                override fun onFailure(call: Call<NotificationQuotationEntity?>, t: Throwable) {
+                    //_status.setValue("0")
+                }
+            })
+
+
         } catch (e: Exception) {
-            println("The flow has thrown an exception: $e")
+
         }
-    }*/
+    }
 }

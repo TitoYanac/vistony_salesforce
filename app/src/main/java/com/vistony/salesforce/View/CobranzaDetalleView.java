@@ -111,7 +111,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
-import io.sentry.Sentry;
 
 public class CobranzaDetalleView extends Fragment {
     //ListaClienteDetalleAdapter listaClienteDetalleAdapter;
@@ -288,7 +287,7 @@ public class CobranzaDetalleView extends Fragment {
                 latitude = mLocation.getLatitude();
                 longitude = mLocation.getLongitude();
             } catch (Exception e) {
-                Sentry.captureMessage(e.getMessage());
+                //Sentry.captureMessage(e.getMessage());
             }
         }
         //fecha =obtenerFechaYHoraActual();

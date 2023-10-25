@@ -15,8 +15,6 @@ import com.vistony.salesforce.Entity.SesionEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.sentry.Sentry;
-
 public class UsuarioSQLite {
     SqliteController sqliteController;
     SQLiteDatabase bd;
@@ -143,7 +141,7 @@ public class UsuarioSQLite {
             resultado = bd.update("usuario",registro,"nombrecompania like '%asdasds%'" ,null);
             cerrar();
         }catch (Exception e){
-            Sentry.captureMessage(e.getMessage());
+            //Sentry.captureMessage(e.getMessage());
         }finally {
             cerrar();
         }
@@ -223,7 +221,7 @@ public class UsuarioSQLite {
 
 
         }catch (Exception e){
-            Sentry.captureMessage(e.getMessage());
+            //Sentry.captureMessage(e.getMessage());
         }
 
         bd.close();

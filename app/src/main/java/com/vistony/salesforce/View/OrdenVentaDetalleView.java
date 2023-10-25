@@ -175,8 +175,8 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_precio_unitario=productoAgregado.getPreciobase();
             ObjListaProductosEntity.orden_detalle_gal=productoAgregado.getGal();
             ObjListaProductosEntity.orden_detalle_monto_igv="0";
-            //Cambio
-            ObjListaProductosEntity.orden_detalle_cantidad="0";
+            //Cambio 18/10/2023 21:25 solucion error perdida de foco
+            ObjListaProductosEntity.orden_detalle_cantidad="";
             //
             ObjListaProductosEntity.orden_detalle_monto_descuento="0";
             ObjListaProductosEntity.orden_detalle_montototallinea="0";
@@ -448,10 +448,10 @@ public class OrdenVentaDetalleView extends Fragment {
         listaOrdenVentaDetalleEntities=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
         TotalSalesOrder salesOrder=formulasController.CalcularMontosPedidoCabeceraDetallePromocion(listaOrdenVentaDetalleEntities);
 
-        textSubTotal.setText(Convert.currencyForView(salesOrder.getSubtotal()));
-        textSescuento.setText(Convert.currencyForView(salesOrder.getDescuento()));
-        textIgv.setText(Convert.currencyForView(salesOrder.getIgv()));
-        textTotal.setText(Convert.currencyForView(salesOrder.getTotal()));
+        textSubTotal.setText(""+Convert.currencyForView(salesOrder.getSubtotal()));
+        textSescuento.setText(""+Convert.currencyForView(salesOrder.getDescuento()));
+        textIgv.setText(""+Convert.currencyForView(salesOrder.getIgv()));
+        textTotal.setText(""+Convert.currencyForView(salesOrder.getTotal()));
         textGalones.setText(""+ Convert.amountForTwoDecimal(salesOrder.getGalones()));
     }
 

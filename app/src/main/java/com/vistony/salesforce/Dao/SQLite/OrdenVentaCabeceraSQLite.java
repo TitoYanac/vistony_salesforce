@@ -411,7 +411,13 @@ public class OrdenVentaCabeceraSQLite {
         return listaOrdenVentaCabeceraSQLiteEntity;
     }
 
-    public int ActualizaResultadoOVenviada (String ordenventa_id, String estado,String ordenventa_id_erp,String mensajeWS)
+    public int ActualizaResultadoOVenviada (
+            String ordenventa_id,
+            String estado,
+            String ordenventa_id_erp,
+            String mensajeWS,
+            String DocEntry
+    )
     {
         int resultado=0;
 
@@ -420,12 +426,11 @@ public class OrdenVentaCabeceraSQLite {
             ContentValues registro = new ContentValues();
             //registro.put("enviadoERP","1");
             registro.put("recibidoERP",estado);
-
             if(!estado.equals("0")){
                 registro.put("ordenventa_ERP_id",ordenventa_id_erp);
             }
-
             registro.put("mensajeWS",mensajeWS);
+            registro.put("DocEntry",DocEntry);
             bd = sqliteController.getWritableDatabase();
             resultado = bd.update("ordenventacabecera",registro,"ordenventa_id='"+ordenventa_id+"'" ,null);
             bd.close();
@@ -691,7 +696,7 @@ public class OrdenVentaCabeceraSQLite {
                     "usuario_id,enviadoERP,recibidoERP,ordenventa_ERP_id,listaprecio_id,planta_id, substr(ordenventa_id,1,8) as fecharegistro,tipocambio,fechatipocambio,rucdni,DocType," +
                     "mensajeWS,total_gal_acumulado,descuentocontado,dueDays_cliente,excede_lineacredito,domembarque_text,cliente_text,terminopago_text,quotation,U_SYP_MDTD," +
                     "U_SYP_MDSD,U_SYP_MDCD,U_SYP_MDMT,U_SYP_STATUS,dispatchdate,countsend,IFNULL(route,'0') AS route," +
-                    " IFNULL(U_VIT_VENMOS,'N') AS U_VIT_VENMOS , IFNULL(U_VIS_Flete,'0') AS U_VIS_Flete , IFNULL(U_VIS_CompleteOV,'N') AS U_VIS_CompleteOV,U_VIS_TipTransGrat,ifnull(status,'') as status   " +
+                    " IFNULL(U_VIT_VENMOS,'N') AS U_VIT_VENMOS , IFNULL(U_VIS_Flete,'0') AS U_VIS_Flete , IFNULL(U_VIS_CompleteOV,'N') AS U_VIS_CompleteOV,U_VIS_TipTransGrat,ifnull(status,'') as status,IFNULL(DocEntry,'0') as DocEntry   " +
                     " FROM ordenventacabecera WHERE recibidoERP is null or recibidoERP='1' and enviadoERP='1' and quotation='Y' and ifnull(status,'')<>'Facturado' ",null );
             if (fila.moveToFirst()) {
                 do {
@@ -761,6 +766,7 @@ public class OrdenVentaCabeceraSQLite {
                     ordenVentaCabeceraSQLiteEntity.setU_VIS_CompleteOV(fila.getString(fila.getColumnIndex("U_VIS_CompleteOV")));
                     ordenVentaCabeceraSQLiteEntity.setU_VIS_TipTransGrat (fila.getString(fila.getColumnIndex("U_VIS_TipTransGrat")));
                     ordenVentaCabeceraSQLiteEntity.setStatus (fila.getString(fila.getColumnIndex("status")));
+                    ordenVentaCabeceraSQLiteEntity.setDocEntry(fila.getString(fila.getColumnIndex("DocEntry")));
                     listaOrdenVentaCabeceraSQLiteEntity.add(ordenVentaCabeceraSQLiteEntity);
                     UpdateCountSend(fila.getString(fila.getColumnIndex("ordenventa_id")),SesionEntity.compania_id,SesionEntity.usuario_id,fila.getString(fila.getColumnIndex("countsend")));
                 } while (fila.moveToNext());

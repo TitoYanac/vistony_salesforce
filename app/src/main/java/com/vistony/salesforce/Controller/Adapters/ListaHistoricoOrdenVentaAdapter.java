@@ -199,11 +199,13 @@ public class ListaHistoricoOrdenVentaAdapter extends ArrayAdapter<ListaHistorico
 
 
         holder.imv_flecha_historico_orden_venta.setOnClickListener(v -> {
+            //Toast.makeText(getContext(), "ListaHistoricoOrdenVentaAdapter-getView-Lead.getObject():" + lead.getObject(), Toast.LENGTH_SHORT).show();
             if(formulasController.ValidarOrdenVentaIDSQLite(getContext() ,lead.getSalesOrderID())){
                 fragmentManager = ((AppCompatActivity) Context).getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 ArrayList<ListaHistoricoOrdenVentaEntity> Lista = new ArrayList<>();
                 Lista.add(lead);
+
                 transaction.add(R.id.content_menu_view, historicoOrdenVentaView.newInstanceEnviarOrdenVentaID(Lista));
             }else{
                 alertamostrarcomentario("Advertencia","La Orden de Venta, No existe en la Base de Datos Local").show();

@@ -149,9 +149,9 @@ public class ListaPrecioDetalleSQLiteDao {
             {
                 flete=listUbigeoSQLiteEntity.get(i).getU_VIS_Flete();
             }
-            Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ubigeo_id:"+ubigeo_id);
-            Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.flete:"+flete);
-            Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.currency_id:"+currency_id);
+            //Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ubigeo_id:"+ubigeo_id);
+            //Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.flete:"+flete);
+            //Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.currency_id:"+currency_id);
 
             SQLiteDatabase sqlite = DataBaseManager.getInstance().openDatabase();
             Cursor listaPre=sqlite.rawQuery("SELECT lista_precio,(SELECT contado FROM terminopago WHERE terminopago_id="+terminoPago+" LIMIT 1) AS isCash FROM cliente WHERE cliente_id=? LIMIT 1",new String[]{cardCode});
@@ -172,12 +172,12 @@ public class ListaPrecioDetalleSQLiteDao {
                 }
                 Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.tipoDeCompra: "+tipoDeCompra);
                 Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.listaArtificio: "+listaArtificio);
-
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.currency_id: "+currency_id);
                 String query="";
                 switch (BuildConfig.FLAVOR) {
                     case "peru":
                         if (currency_id.equals("US$")) {
-                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
+                            //Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
                             String addCurrency;
                             if (isCash.equals("0")) {
                                 addCurrency = "MonedaAdicionalCredito";
@@ -189,18 +189,22 @@ public class ListaPrecioDetalleSQLiteDao {
 
                             query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
                                     "IFNULL(stock_general,0) stock_general," + addCurrency + "," + addCurrency + ",gal," +
-                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units  FROM listapreciodetalle  WHERE Tipo IN(" + listaArtificio + ") AND " + addCurrency + " NOT IN ('0.00') ";
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units  FROM listapreciodetalle  " +
+                                    " WHERE Tipo like '%"+tipoDeCompra+"%'"+
+                                    " AND " + addCurrency + " NOT IN ('0.00') ";
                         } else {
-                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
+                            //Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
                             query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
                                     "IFNULL(stock_general,0) stock_general," + tipoDeCompra + "," + tipoDeCompra + ",gal," +
-                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle  WHERE Tipo IN(" + listaArtificio + ")";
+                                    //"porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle  WHERE Tipo IN(" + listaArtificio + ")";
+                                    "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle   WHERE Tipo like '%"+tipoDeCompra+"%'"+
+                                    "";
                         }
 
                         break;
                     case "bolivia":
                         if (currency_id.equals("US$")) {
-                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
+                            //Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$ ");
                             String addCurrency;
                             if (isCash.equals("0")) {
                                 addCurrency = "MonedaAdicionalCredito";
@@ -208,13 +212,13 @@ public class ListaPrecioDetalleSQLiteDao {
                                 addCurrency = "MonedaAdicionalContado";
                             }
 
-                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-addCurrency " + addCurrency);
+                            //Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-addCurrency " + addCurrency);
 
                             query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
                                     "IFNULL(stock_general,0) stock_general," + addCurrency + "," + addCurrency + ",gal," +
                                     "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units  FROM listapreciodetalle  WHERE Tipo IN(" + listaArtificio + ") AND " + addCurrency + " NOT IN ('0.00') ";
                         } else {
-                            Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
+                            //Log.e("REOS", "ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.NO-ENTROIF-US$ ");
                             query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
                                     "IFNULL(stock_general,0) stock_general," + tipoDeCompra + "," + tipoDeCompra + ",gal," +
                                     "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle " +
@@ -237,7 +241,7 @@ public class ListaPrecioDetalleSQLiteDao {
                     listaProductoEntity.setStock_almacen(fila.getString(3));
                     //listaProductoEntity.setPreciobase(fila.getString(5));
                     listaProductoEntity.setPreciobase(formulasController.getPriceIncrement(fila.getString(5),flete) );
-                    Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-listaProductoEntity.getPreciobase "+listaProductoEntity.getPreciobase());
+                    //Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.ENTROIF-US$-listaProductoEntity.getPreciobase "+listaProductoEntity.getPreciobase());
                     //listaProductoEntity.setPrecioigv(fila.getString(6));
                     listaProductoEntity.setPrecioigv(formulasController.getPriceIncrement(fila.getString(6),flete) );
                     listaProductoEntity.setGal(fila.getString(7));
@@ -285,11 +289,15 @@ public class ListaPrecioDetalleSQLiteDao {
                     tipoDeCompra=TipoDeCompra.credito;
                 }
                 SesionEntity.TipoListaPrecio=tipoDeCompra.toString();
-                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.tipoDeCompra: "+tipoDeCompra);
-                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalle.listaArtificio: "+listaArtificio);
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporProductoArtificio.cardCode: "+cardCode);
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporProductoArtificio.tipoDeCompra: "+tipoDeCompra);
+                Log.e("REOS","ListaPrecioDetalleSQLiteDao.ObtenerListaPrecioDetalleporProductoArtificio.listaArtificio: "+listaArtificio);
                 String query="SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
                         "IFNULL(stock_general,0) stock_general,"+tipoDeCompra+","+tipoDeCompra+",gal," +
-                        "porcentaje_dsct,oiltax,liter,SIGAUS FROM listapreciodetalle  WHERE Tipo IN("+listaArtificio+") and producto_id='"+producto_id+"'";
+                        //"porcentaje_dsct,oiltax,liter,SIGAUS FROM listapreciodetalle  WHERE Tipo IN("+listaArtificio+") and producto_id='"+producto_id+"'";
+                        "porcentaje_dsct,oiltax,liter,SIGAUS FROM listapreciodetalle " +
+                        " WHERE Tipo like '%"+tipoDeCompra+"%'"+
+                        "and producto_id='"+producto_id+"'";
 
                 fila = sqlite.rawQuery(query,null);
 
