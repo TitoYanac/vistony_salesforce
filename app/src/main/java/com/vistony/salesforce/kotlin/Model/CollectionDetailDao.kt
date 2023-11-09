@@ -30,4 +30,21 @@ interface CollectionDetailDao {
 
     @Query("SELECT IFNULL(COUNT(Receip),0) as Receip FROM collectiondetail")
     fun getCountCollectionDetail(): Int
+
+    @Query("UPDATE collectiondetail SET Deposit = :Deposit, BankID = :BankID,StatusDeposit='Y' WHERE Receip = :Receip ")
+    fun updateDepositCollectionDetail(Receip: String, Deposit: String, BankID: String,)
+
+    @Query("SELECT APICode,Deposit,BankID,Receip,QRStatus  FROM collectiondetail where StatusDeposit='Y' and CANCELED='N' and StatusSendAPIDeposit='N' ")
+    fun getCollectionDetailDeposited(): List<CollectionDetailPendingDeposit>
+
+    @Query("UPDATE collectiondetail SET StatusSendAPIDeposit = 'Y', StatusSendAPIQR = 'Y' WHERE Receip = :Receip ")
+    fun updateDepositReceiveCollectionDetail(Receip: String)
+
+    @Query("SELECT   AmountCharged,AppVersion,Balance,BankID,Banking,Brand,CancelReason,CardCode,CollectionCheck,Commentary," +
+            "Deposit,DirectDeposit,DocEntryFT,DocNum,DocTotal,IncomeDate,IncomeTime,Intent,ItemDetail,Model,NewBalance," +
+            "OSVersion,POSPay,QRStatus,Receip,SlpCode,Status,U_VIS_CollectionSalesperson,U_VIS_Type,UserID FROM collectiondetail WHERE StatusSendAPI = 'N' AND CompanyCode=:CompanyCode AND UserID=:UserID")
+    fun sendAPICollectionDetail(CompanyCode: String,UserID:String): List<CollectionDetailAPI>
+
+    @Query("SELECT * FROM collectiondetail where IncomeDate=:IncomeDate ")
+    fun getCollectionDetailForDate(IncomeDate: String): List<CollectionDetail>
 }

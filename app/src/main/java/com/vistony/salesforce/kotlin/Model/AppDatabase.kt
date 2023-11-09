@@ -41,7 +41,8 @@ import com.vistony.salesforce.kotlin.View.Pages.TipoSalida
     ResumenVisita::class,
     PreguntaRespuesta::class,
     Opcion::class,
-                     ], version = 83,exportSchema = false)
+    CollectionHead::class
+                     ], version = 84,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,
@@ -67,6 +68,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val notificationDao:NotificationDao
     abstract val bankDao:BankDao
     abstract val formularioTestDao:FormularioTestDao
+    abstract val collectionHeadDao:CollectionHeadDao
 
     companion object {
 

@@ -201,9 +201,7 @@ class CollectionDetailViewModel(
         }
     }
 
-    fun getCollectionDetailPendingDeposit(
-        IncomeDate:String,
-    )
+    fun getCollectionDetailPendingDeposit(IncomeDate:String)
     {
         viewModelScope.launch {
             try {
@@ -255,6 +253,54 @@ class CollectionDetailViewModel(
                     "REOS",
                     "CollectionDetailViewModel-getCountCollectionDetail-error: " + e.toString()
                 )
+            }
+        }
+    }
+
+    fun updateDepositCollectionDetail(
+            collectionDetailList:List<CollectionDetail>,
+            deposit:String,
+            bank:String
+    )
+    {
+        viewModelScope.launch {
+            try {
+                collectionDetailRepository.updateDepositCollectionDetail(
+                        context,
+                        collectionDetailList,
+                        deposit,
+                        bank
+                )
+            }
+            catch (e: Exception) {
+                Log.e(
+                        "REOS",
+                        "CollectionDetailViewModel-updateDepositCollectionDetail-error: " + e.toString()
+                )
+            }
+        }
+    }
+
+    fun sendAPIUpdateDepositCollectionDetail()
+    {
+        viewModelScope.launch {
+            try {
+                collectionDetailRepository.sendAPIUpdateDepositCollectionDetail()
+            }
+            catch (e: Exception) {
+                Log.e("REOS", "CollectionDetailViewModel-sendAPIUpdateDepositCollectionDetail-error: " + e.toString())
+            }
+        }
+    }
+
+    fun getCollectionDetailForDate(IncomeDate:String)
+    {
+        viewModelScope.launch {
+            try {
+                collectionDetailRepository.getCollectionDetailForDate(IncomeDate)
+            }
+            catch (e: Exception) {
+                Log.e("REOS", "CollectionDetailViewModel-getCollectionDetailForDate-error: " + e.toString())
             }
         }
     }

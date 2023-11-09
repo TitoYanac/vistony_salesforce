@@ -146,15 +146,12 @@ class HeaderDispatchSheetRepository(
                             "REOS",
                             "HeaderDispatchSheetRepository-getCodeDispatch-FechaDespacho: " + FechaDespacho
                     )
-                    val data =  database?.headerDispatchSheetDao
-                            ?.getCodeDispatch(
-                                    FechaDespacho
-                            )
+                    val data =  database?.headerDispatchSheetDao?.getCodeDispatch(FechaDespacho)
                     Log.e(
                             "REOS",
-                            "HeaderDispatchSheetRepository-getCodeDispatch-data.value: " + data!!.value
+                            "HeaderDispatchSheetRepository-getCodeDispatch-data.value: " + data
                     )
-                    _resultDB.value=HeaderDispatchSheetEntity(status = "Y", data = data!!.value!!)
+                    _resultDB.value=HeaderDispatchSheetEntity(status = "Y", data = data!!)
                     println("Tarea $i completada")
                 }
             }

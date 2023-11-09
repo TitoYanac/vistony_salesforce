@@ -227,6 +227,13 @@ public class ListaPrecioDetalleSQLiteDao {
                         }
 
                         break;
+                    case "ecuador":
+                        query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                "IFNULL(stock_general,0) stock_general," + tipoDeCompra + "," + tipoDeCompra + ",gal," +
+                                "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle " +
+                                " WHERE Tipo like '%"+tipoDeCompra+"%'"+
+                                "";
+                        break;
                 }
 
 
@@ -792,6 +799,19 @@ public class ListaPrecioDetalleSQLiteDao {
                                     "WHERE Tipo like '%"+tipoDeCompra+"%'"+
                                     "";
                         }
+                        break;
+                    case "india":
+                    case "chile":
+                    case "ecuador":
+                    case "paraguay":
+                    case "perurofalab":
+                    case "espania":
+                    case "marruecos":
+                        query = "SELECT producto_id,producto,umd,IFNULL(stock_almacen,0) stock_almacen," +
+                                "IFNULL(stock_general,0) stock_general," + tipoDeCompra + "," + tipoDeCompra + ",gal," +
+                                "porcentaje_dsct," + listnum + ",oiltax,liter,SIGAUS,units FROM listapreciodetalle " +
+                                " WHERE Tipo like '%"+tipoDeCompra+"%'"+
+                                "";
                         break;
                 }
 

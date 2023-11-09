@@ -58,6 +58,7 @@ import com.vistony.salesforce.R
 import com.vistony.salesforce.kotlin.Model.*
 import com.vistony.salesforce.kotlin.Utilities.CollectionReceipPDF
 import com.vistony.salesforce.kotlin.Utilities.ConvertDateSAPaUserDate
+import com.vistony.salesforce.kotlin.Utilities.CreateCollectionHead
 import com.vistony.salesforce.kotlin.Utilities.getDate
 import com.vistony.salesforce.kotlin.Utilities.getDateCurrent
 import com.vistony.salesforce.kotlin.Utilities.sendSMS
@@ -73,8 +74,7 @@ import java.util.*
 fun ContentDeposit()
 {
     val appContext = LocalContext.current
-    //val lifecycleOwner = LocalContext.current as LifecycleOwner
-    val collectionDetailRepository : CollectionDetailRepository = CollectionDetailRepository()
+    val collectionDetailRepository : CollectionDetailRepository = CollectionDetailRepository(appContext)
     val collectionDetailViewModel: CollectionDetailViewModel = viewModel(
         factory = CollectionDetailViewModel.CollectionDetailViewModelFactory(
             SesionEntity.imei,
@@ -86,7 +86,7 @@ fun ContentDeposit()
     collectionDetailViewModel.getCountCollectionDetail()
     var collectionDetailDB=collectionDetailViewModel.result_get_DB.collectAsState()
     var collectionDetailAPI=collectionDetailViewModel.result_get_API.collectAsState()
-    var collectionlist:List<CollectionDetail> = emptyList()
+    var collectionlist:MutableState<List<CollectionDetail>> = remember { mutableStateOf( emptyList())}
     val openDialog:MutableState<Boolean?> = remember { mutableStateOf(false) }
     val bankRepository : BankRepository = BankRepository()
     val bankViewModel: BankViewModel = viewModel(
@@ -104,8 +104,7 @@ fun ContentDeposit()
                     appContext,
             )
     )
-
-
+    val amountDeposit:MutableState<String> = remember { mutableStateOf("0") }
     //Valida que existan recibos en la base de datos local y en caso de estar vacio, consulta la API
     when (collectionDetailDB.value.Status) {
         "Y" -> {
@@ -128,15 +127,27 @@ fun ContentDeposit()
     var statusBoolean: MutableState<Boolean> = remember { mutableStateOf(true) }
     Log.e("REOS", "DepositTemplate-ContentDeposit-statusBoolean.value: " + statusBoolean.value)
     val activity = LocalContext.current as Activity
-
+    val typeCollection:MutableState<String> = remember { mutableStateOf("")}
+    val collectionHeadRepository : CollectionHeadRepository = CollectionHeadRepository()
+    val collectionHeadViewModel: CollectionHeadViewModel = viewModel(
+            factory = CollectionHeadViewModel.CollectionHeadViewModelFactory(
+                    appContext,
+                    collectionHeadRepository
+            )
+    )
+    collectionHeadViewModel.sendAPICollectionHead()
+    collectionDetailViewModel.SendAPICollectionDetail(appContext, SesionEntity.compania_id,SesionEntity.usuario_id)
+    collectionDetailViewModel.sendAPIUpdateDepositCollectionDetail()
 
     Column()
     {
         StageOneDeposit(
             collectionDetailViewModel,
             statusBoolean,
+            amountDeposit,
+            typeCollection,
             onSelectCollection = { collection ->
-                collectionlist = collection
+                collectionlist.value = collection
                 openDialog.value = true
                 Log.e(
                     "REOS",
@@ -151,7 +162,12 @@ fun ContentDeposit()
                 bankViewModel,
                 statusBoolean,
                     activity,
-                    headerDispatchSheetViewModel
+                    headerDispatchSheetViewModel,
+                    amountDeposit,
+                    typeCollection,
+                    collectionHeadViewModel,
+                    collectionlist,
+                    collectionDetailViewModel
             )
         }
 
@@ -162,6 +178,8 @@ fun ContentDeposit()
 fun StageOneDeposit(
     collectionDetailViewModel:CollectionDetailViewModel,
     statusBoolean: MutableState<Boolean>,
+    amountDeposit: MutableState<String>,
+    typeCollection: MutableState<String>,
     onSelectCollection: (List<CollectionDetail> ) -> Unit
 ) {
     var DateApp: MutableState<String> = remember { mutableStateOf(getDate()!!) }
@@ -171,6 +189,11 @@ fun StageOneDeposit(
 
     var collectionDetail = collectionDetailViewModel.result_pending_deposit.collectAsState()
     Log.e("REOS", "DepositTemplate-StageOneDeposit-collectionDetail: " + collectionDetail)
+    val typeDepositList = listOf( "Todos","Cobranza Ordinaria","Deposito Directo")
+    val currentSelectionSpinner = remember {
+        mutableStateOf("Todos")
+    }
+    typeCollection.value=currentSelectionSpinner.value
 
     CardView(
         cardtTittle =
@@ -234,10 +257,6 @@ fun StageOneDeposit(
                                     //.fillMaxSize()
                                     .padding(10.dp)
                             ) {
-                                val typeDepositList = listOf( "Todos","Cobranza Ordinaria","Deposito Directo")
-                                val currentSelectionSpinner = remember {
-                                    mutableStateOf("Todos")
-                                }
 
                                 val filteredData = remember(currentSelectionSpinner) {
                                     derivedStateOf {
@@ -351,6 +370,7 @@ fun StageOneDeposit(
                                                                         AmountSelected + filteredData.value.get(
                                                                             i
                                                                         ).AmountCharged.toFloat()
+                                                                    amountDeposit.value=AmountSelected.toString()
                                                                 }
                                                             }
                                                         }
@@ -688,7 +708,12 @@ fun StageTwoDeposit(
     bankViewModel: BankViewModel,
     statusBoolean: MutableState<Boolean>,
     activity:Activity,
-    headerDispatchSheetViewModel: HeaderDispatchSheetViewModel
+    headerDispatchSheetViewModel: HeaderDispatchSheetViewModel,
+    amountDeposit: MutableState<String>,
+    typeCollection: MutableState<String>,
+    collectionHeadViewModel:CollectionHeadViewModel,
+    collectionDetailList:MutableState<List<CollectionDetail>>,
+    collectionDetailViewModel:CollectionDetailViewModel
 )
 {
     var DateApp: MutableState<String> = remember { mutableStateOf(getDate()!!) }
@@ -728,8 +753,7 @@ fun StageTwoDeposit(
         }
     }
 
-
-
+    Log.e("REOS", "DepositTemplate-StageTwoDeposit-collectionDetailList:" + collectionDetailList)
 
     if(DialogShowEditText)
     {
@@ -791,9 +815,12 @@ fun StageTwoDeposit(
             openDialogShowDispatch.value = false
         }
                 ,onClickAccept = {
+            //openDialogShowDispatch.value = false
+            DialogEditResult.value=currentDispatchSelected.value
             openDialogShowDispatch.value = false
+
         }
-                ,statusButtonAccept = false
+                ,statusButtonAccept = true
                 ,statusButtonIcon = false
                 ,context=context
         ){
@@ -1011,6 +1038,21 @@ fun StageTwoDeposit(
                         ) {
                             ButtonCircle(
                                 OnClick = {
+
+                                    var collectionHead=CreateCollectionHead(
+                                            context,
+                                            amountDeposit.value,
+                                            DialogEditResult.value,
+                                            DateApp.value,
+                                            currentSelectionSpinner2.value,
+                                            currentSelectionSpinner.value,
+                                            typeCollection.value
+                                    )
+                                    collectionHeadViewModel.addCollectionHead(collectionHead)
+                                    collectionHeadViewModel.sendAPICollectionHead()
+                                    collectionDetailViewModel.updateDepositCollectionDetail(collectionDetailList.value,DialogEditResult.value,currentSelectionSpinner.value)
+                                    collectionDetailViewModel.sendAPIUpdateDepositCollectionDetail()
+
                                 },
                                 size = DpSize(50.dp, 50.dp),
                                 //color = colorButtonPrint,

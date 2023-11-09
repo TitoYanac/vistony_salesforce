@@ -483,7 +483,7 @@ public class ListHistoricSalesOrderTraceabilityAdapter  extends ArrayAdapter<His
             holder.tv_date_invoice.setVisibility(View.GONE);
             holder.tv_date_delivery.setVisibility(View.GONE);
             holder.tv_date_order_aprob.setVisibility(View.GONE);
-
+            holder.imv_preview.setVisibility(View.GONE);
             Convert.setMarginsView(holder.imv_historic_orders,80, 450, 200, 145);
             Convert.setMarginsView(holder.imv_historic_order_aprob,325, 450, 200, 145);
             Convert.setMarginsView(holder.imv_historic_invoices,580, 450, 0, 145);

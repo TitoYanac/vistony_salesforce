@@ -1,16 +1,22 @@
 package com.vistony.salesforce.kotlin.Model
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity
 import com.vistony.salesforce.Entity.SesionEntity
+import com.vistony.salesforce.kotlin.Utilities.*
 import com.vistony.salesforce.kotlin.Utilities.api.RetrofitApi
 import com.vistony.salesforce.kotlin.Utilities.api.RetrofitConfig
-import com.vistony.salesforce.kotlin.Utilities.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -19,7 +25,18 @@ import retrofit2.Response
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class CollectionDetailRepository {
+class CollectionDetailRepository(appContext: Context) {
+
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+    private val database by lazy {
+        AppDatabase.getInstance(appContext.applicationContext)
+    }
+
+    private val retrofitConfig by lazy {
+        RetrofitConfig()
+    }
+
     private val _result_add = MutableStateFlow(CollectionDetailEntity())
     val result_add: StateFlow<CollectionDetailEntity> get() = _result_add
 
@@ -145,16 +162,21 @@ class CollectionDetailRepository {
 
 
     fun SendAPICollectionDetail(context: Context, CompanyCode: String, UserID: String) {
+        Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-Context "+ context)
+        Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-CompanyCode" + CompanyCode)
+        Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-ingresoOnResponse" + UserID)
         val executor: ExecutorService = Executors.newFixedThreadPool(1)
         for (i in 1..1) {
             executor.execute {
                 println("Tarea $i en ejecución en ${Thread.currentThread().name}")
                 val database by lazy { AppDatabase.getInstance(context.applicationContext) }
                 val data = database?.collectionDetailDao
-                    ?.getCollectionDetailSendAPIList(
+                  //  ?.getCollectionDetailSendAPIList(
+                        ?.sendAPICollectionDetail(
                         CompanyCode,
                         UserID
                     )
+
                 var json: String? = null
                 val gson = Gson()
                 try {
@@ -183,31 +205,16 @@ class CollectionDetailRepository {
                                 call: Call<CollectionDetailEntity?>,
                                 response: Response<CollectionDetailEntity?>
                             ) {
-                                Log.e(
-                                    "REOS",
-                                    "CollectionDetailRepository-SendAPICollectionDetail-ingresoOnResponse"
-                                )
+                                Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-ingresoOnResponse")
                                 val cobranzaDetalleEntity = response.body()
-                                Log.e(
-                                    "REOS",
-                                    "CollectionDetailRepository-SendAPICollectionDetail-response.isSuccessful" + response.isSuccessful
-                                )
-                                Log.e(
-                                    "REOS",
-                                    "CollectionDetailRepository-SendAPICollectionDetail-cobranzaDetalleEntity: " + cobranzaDetalleEntity
-                                )
+                                Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-response.isSuccessful" + response.isSuccessful)
+                                Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-cobranzaDetalleEntity: " + cobranzaDetalleEntity)
 
                                 if (response.isSuccessful && cobranzaDetalleEntity != null) {
-                                    Log.e(
-                                        "REOS",
-                                        "CollectionDetailRepository-SendAPICollectionDetail-response.isSuccessful"
-                                    )
+                                    Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-response.isSuccessful")
                                     val responseData = ArrayList<String>()
                                     for (respuesta in cobranzaDetalleEntity.data!!) {
-                                        Log.e(
-                                            "REOS",
-                                            "CollectionDetailRepository-SendAPICollectionDetail- for"
-                                        )
+                                        Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail- for")
                                         var response = "N"
                                         response =
                                             if (respuesta.APICode != null && respuesta.APIErrorCode == "0") {
@@ -221,6 +228,11 @@ class CollectionDetailRepository {
                                             Executors.newFixedThreadPool(1)
                                         for (i in 1..1) {
                                             executor1.execute {
+                                                Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-respuesta.Receip.toString() "+ respuesta.Receip.toString())
+                                                Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-UserID " +UserID)
+                                                Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-respuesta.APICode!! " + respuesta.APICode!!)
+                                                Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail- respuesta.APIMessage!! "+respuesta.APIMessage!!)
+                                                Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-response " +response)
                                                 val data = database?.collectionDetailDao
                                                     ?.updateCollectionDetailAPI(
                                                         respuesta.Receip.toString(),
@@ -272,6 +284,7 @@ class CollectionDetailRepository {
         context: Context
     ) {
         try {
+            Log.e("REOS", "CollectionDetailRepository-getCollectionDetailPendingDeposit-IncomeDate: " + IncomeDate)
             val executor: ExecutorService = Executors.newFixedThreadPool(1)
             for (i in 1..1) {
                 executor.execute {
@@ -285,7 +298,7 @@ class CollectionDetailRepository {
                         CollectionDetailEntity(data = data!!, Status = "Y")
                     Log.e(
                         "REOS",
-                        "CollectionDetailRepository-getCollectionDetailPendingDeposit-_result_pending_deposit.value.Status: " + _result_collection_unit.value.Status
+                        "CollectionDetailRepository-getCollectionDetailPendingDeposit-_result_pending_deposit.value: " + _result_collection_unit.value
                     )
                     println("Tarea $i completada")
                 }
@@ -389,4 +402,214 @@ class CollectionDetailRepository {
         }
         executor.shutdown()
     }
+
+
+    fun updateDepositCollectionDetail(
+            context: Context,
+            collectionDetailList:List<CollectionDetail>,
+            deposit:String,
+            bank:String
+    ) {
+        var bankList= bank.split(Regex("-"))
+        var bankCode=bankList[0]
+        var bankName=bankList[1]
+
+            val executor: ExecutorService = Executors.newFixedThreadPool(1)
+            executor.execute {
+                try {
+                    val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+
+                    for (i in 0 until collectionDetailList.size)
+                    {
+
+                        database?.collectionDetailDao?.updateDepositCollectionDetail(
+                                collectionDetailList.get(i).Receip,
+                                deposit,
+                                bankCode
+                        )
+                    }
+                }
+                catch (e:Exception)
+                {
+                    Log.e("REOS", "CollectionDetailRepository-updateDepositCollectionDetail-error: $e")
+                }
+
+            }
+            executor.shutdown()
+    }
+
+    /*
+    fun updateDepositCollectionDetail(
+            context: Context,
+            collectionDetailList:List<CollectionDetail>,
+            deposit:String,
+            bank:String
+    ) {
+        coroutineScope.launch {
+            try {
+                 updateDepositDB(collectionDetailList)
+            } catch (e: Exception) {
+                Log.e("REOS", "Error sending API update for deposit collection detail: $e")
+            }
+        }
+    }
+
+    private suspend fun updateDepositDB(data: List<CollectionDetail>,deposit:String,bank:String) {
+        withContext(Dispatchers.IO) {
+            var bankList= bank.split(Regex("-"))
+            var bankCode=bankList[0]
+            var bankName=bankList[1]
+            data.forEach { detail ->
+                database?.collectionDetailDao?.updateDepositCollectionDetail(
+                        collectionDetailList.get(i).Receip,
+                        deposit,
+                        bankCode
+                )
+            }
+        }
+    }*/
+    suspend fun sendAPIUpdateDepositCollectionDetail() {
+        coroutineScope.launch {
+            try {
+                // Preparar y enviar datos a la API
+                val response = sendDepositDetails()
+                // Manejar la respuesta aquí o pasar los datos a otro método para su procesamiento
+                if (response!!.isSuccessful) {
+                    response.body()?.let { entity ->
+                        updateDatabase(entity.data)
+                    }
+                } else {
+                    // Log or handle error response
+                }
+            } catch (e: Exception) {
+                Log.e("REOS", "Error sending API update for deposit collection detail: $e")
+            }
+        }
+    }
+
+    private suspend fun sendDepositDetails(): Response<CollectionDetailEntity?>? {
+        val data = database!!.collectionDetailDao.getCollectionDetailDeposited()
+        val json = prepareJson(data)
+        val service = retrofitConfig.getClientLog()!!.create(RetrofitApi::class.java)
+        val jsonRequest = json!!.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        return service.updateCollection(data.first().APICode, jsonRequest)
+    }
+
+    private fun prepareJson(data: List<CollectionDetailPendingDeposit>?): String? {
+        if (data.isNullOrEmpty()) return null
+
+        return Gson().toJson(data).let {
+            "{ \"Collections\":$it}"
+        }
+    }
+
+    private suspend fun updateDatabase(data: List<CollectionDetail>) {
+        withContext(Dispatchers.IO) {
+            data.forEach { detail ->
+                database!!.collectionDetailDao?.updateDepositReceiveCollectionDetail(detail.Number)
+            }
+        }
+    }
+
+    private fun String.toRequestBody(mediaType: MediaType?): RequestBody {
+        return RequestBody.create(mediaType, this)
+    }
+
+    suspend fun getCollectionDetailForDate(IncomeDate: String)
+    {
+        try {
+            getCollectionDetailForDateDB(IncomeDate)
+
+        } catch (e: Exception) {
+            Log.e("REOS", "Error sending API collection detail: $e")
+            _result_get_DB.value = CollectionDetailEntity(Status = "N",data = emptyList())
+        }
+    }
+
+    private suspend fun getCollectionDetailForDateDB(IncomeDate: String) {
+        withContext(Dispatchers.IO) {
+                var data=database!!.collectionDetailDao?.getCollectionDetailForDate(IncomeDate)
+                _result_get_DB.value = CollectionDetailEntity(Status = "Y",data = data!!)
+                Log.e("REOS", "CollectionDetailRepository-getCollectionDetailForDateDB-_result_get_DB.value  "+_result_get_DB.value )
+        }
+    }
+
+    /*
+    fun getCollectionDetailForDateAPI(Imei: String, Date: String) {
+        val executor: ExecutorService = Executors.newFixedThreadPool(1)
+        for (i in 1..1) {
+            executor.execute {
+                try {
+                    val retrofitConfig: RetrofitConfig? = RetrofitConfig()
+                    val service = retrofitConfig?.getClientLog()?.create(
+                            RetrofitApi
+                            ::class.java
+                    )
+                    service?.getCollectionDetail(
+                            Imei, Status, UserID
+                    )?.enqueue(object : Callback<CollectionDetailEntity?> {
+                        override fun onResponse(
+                                call: Call<CollectionDetailEntity?>,
+                                response: Response<CollectionDetailEntity?>
+                        ) {
+                            val cobranzaDetalleEntity = response.body()
+
+                            if (response.isSuccessful && cobranzaDetalleEntity != null) {
+                                _result_get_API.value = CollectionDetailEntity(
+                                        Status = "Y",
+                                        data = cobranzaDetalleEntity.data
+                                )
+
+                                val executor1: ExecutorService = Executors.newFixedThreadPool(1)
+                                for (i in 1..1) {
+                                    executor1.execute {
+                                        val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+                                        val data = database?.collectionDetailDao
+                                                ?.addListCollectionDetail(
+                                                        cobranzaDetalleEntity.data
+                                                )
+                                    }
+                                }
+                                executor1.shutdown()
+
+                            }
+                        }
+
+                        override fun onFailure(call: Call<CollectionDetailEntity?>, t: Throwable) {
+                            Log.e(
+                                    "REOS",
+                                    "CollectionDetailRepository-getAPICollectionDetail-ingresoonFailure:" + t.toString()
+                            )
+                            _result_get_API.value =
+                                    CollectionDetailEntity(Status = "N", data = emptyList())
+                        }
+                    })
+
+                } catch (e: java.lang.Exception) {
+                    Log.e("REOS", "CollectionDetailRepository-getAPICollectionDetail-error: $e")
+                }
+                println("Tarea $i completada")
+            }
+        }
+        executor.shutdown()
+    }
+
+    suspend fun getCollectionDetailForDateAPI(Imei: String, Date: String) {
+        coroutineScope.launch {
+            try {
+                // Preparar y enviar datos a la API
+                val response = sendDepositDetails()
+                // Manejar la respuesta aquí o pasar los datos a otro método para su procesamiento
+                if (response!!.isSuccessful) {
+                    response.body()?.let { entity ->
+                        updateDatabase(entity.data)
+                    }
+                } else {
+                    // Log or handle error response
+                }
+            } catch (e: Exception) {
+                Log.e("REOS", "Error sending API update for deposit collection detail: $e")
+            }
+        }
+    }*/
 }

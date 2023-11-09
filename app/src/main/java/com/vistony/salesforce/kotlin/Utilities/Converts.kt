@@ -122,8 +122,6 @@ fun getDate(): String? {
 }
 
 fun ConvertDateSAPaUserDate(dateSAP: String?): String? {
-
-
     var dateUser = ""
     var year = ""
     var month = ""
@@ -172,3 +170,5 @@ fun createImageFile(delivery: String, type: String,activity: Activity): File? {
     }
     return image
 }
+
+

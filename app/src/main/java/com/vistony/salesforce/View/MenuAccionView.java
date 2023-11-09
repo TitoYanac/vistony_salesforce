@@ -702,14 +702,35 @@ public class MenuAccionView extends Fragment {
         //cv_cobranza_kardex_pago=dialog.findViewById(R.id.cv_cobranza_kardex_pago);
         kardexPagoRepository = new ViewModelProvider(getActivity()).get(KardexPagoRepository.class);
 
-        if(!BuildConfig.FLAVOR.equals("peru"))
+        switch (BuildConfig.FLAVOR) {
+            case "peru":
+                    if(SesionEntity.perfil_id.equals("CHOFER"))
+                    {
+                        //cv_cobranza_deposito_directo.setVisibility(View.GONE);
+                    }else {
+                        cv_collection_salesperson.setVisibility(View.GONE);
+                    }
+                break;
+            case "perurofalab":
+            case "espania":
+            case "marruecos":
+                break;
+            case "ecuador":
+            case "bolivia":
+            case "paraguay":
+            case "chile":
+                cv_collection_salesperson.setVisibility(View.GONE);
+                cv_cobranza_pago_pos.setVisibility(View.GONE);
+                break;
+        }
+
+        /*if(!BuildConfig.FLAVOR.equals("peru"))
         {
             if(BuildConfig.FLAVOR.equals("paraguay")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
             {
                 cv_collection_salesperson.setVisibility(View.GONE);
                 cv_cobranza_pago_pos.setVisibility(View.GONE);
             }
-
         }
         else {
             //cv_collection_check.setVisibility(View.GONE);
@@ -719,7 +740,7 @@ public class MenuAccionView extends Fragment {
             }else {
                 cv_collection_salesperson.setVisibility(View.GONE);
             }
-        }
+        }*/
 
 
         if(!BuildConfig.FLAVOR.equals("chile"))

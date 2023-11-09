@@ -34,6 +34,7 @@ import com.vistony.salesforce.R
 import com.vistony.salesforce.kotlin.View.Atoms.TableCell
 import com.vistony.salesforce.kotlin.View.Atoms.TextLabel
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
+import com.vistony.salesforce.kotlin.View.Atoms.theme.RedVistony
 import com.vistony.salesforce.kotlin.View.Atoms.theme.Typography
 
 @Composable
@@ -278,7 +279,7 @@ fun ButtonSurface(
 fun ButtonCircle(
     OnClick:() ->Unit
     ,size: DpSize = DpSize(40.dp,40.dp)
-    ,color: Color= BlueVistony
+    ,color: Color= RedVistony
     ,roundedCornerShape: RoundedCornerShape= CircleShape
     ,content: @Composable () -> Unit
 ){

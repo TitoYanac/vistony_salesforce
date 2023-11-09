@@ -148,12 +148,12 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo"')
             //----------Ambiente QA
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //----------Produccion 13.10.2023
-            //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
-            versionName "1.0.9"
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            versionName "1.0.10"
             manifestPlaceholders = [country:"Bolivia"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"BO"')
             buildConfigField('String' , 'LANGUAGE_DEFAULT', '"ES"')

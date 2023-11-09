@@ -30,8 +30,10 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.vistony.salesforce.BuildConfig;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity;
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaDetallePromocionSQLiteEntity;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 
@@ -68,6 +70,10 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
         String cliente_id="",nombrecliente="",direccion="",fecharegistro="",terminopago="",subtotal=""
                 ,igv="",descuento="",total="",ordenventa_id="",ordenventa_erp_id="",vendedor=""
                 ,moneda="",flete="";
+        UsuarioSQLiteEntity ObjUsuario = new UsuarioSQLiteEntity();
+        UsuarioSQLite usuarioSQLite = new UsuarioSQLite(context);
+        ObjUsuario = usuarioSQLite.ObtenerUsuarioSesion();
+
 
         for(int i=0;i<ListaOrdenVentaCabecera.size();i++){
             ordenventa_id=ListaOrdenVentaCabecera.get(i).getOrdenventa_id();
@@ -323,12 +329,41 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
                 tblLineas.addCell(cellLineasDetalle);*/
-                cellLineasDetalle = new PdfPCell(new Phrase(
-                        ListaOrdenVentaDetalle.get(l).getProducto_id()+" "+
-                        ListaOrdenVentaDetalle.get(l).getProducto(),font3));
-                cellLineasDetalle.disableBorderSide(Rectangle.BOX);
-                cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
-                tblLineas.addCell(cellLineasDetalle);
+                switch (BuildConfig.FLAVOR)
+                {
+                    case "peru":
+                        if (ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+                        {
+                            String compuesto=ListaOrdenVentaDetalle.get(l).getProducto_id()+" "+ListaOrdenVentaDetalle.get(l).getProducto()+" ["+Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getPreciounitario())+"]";
+                            cellLineasDetalle = new PdfPCell(new Phrase(compuesto,font3));
+                            cellLineasDetalle.disableBorderSide(Rectangle.BOX);
+                            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
+                            tblLineas.addCell(cellLineasDetalle);
+                        }else {
+                            cellLineasDetalle = new PdfPCell(new Phrase(
+                                    ListaOrdenVentaDetalle.get(l).getProducto_id()+" "+ ListaOrdenVentaDetalle.get(l).getProducto(),font3));
+                            cellLineasDetalle.disableBorderSide(Rectangle.BOX);
+                            cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
+                            tblLineas.addCell(cellLineasDetalle);
+                        }
+                        break;
+                    case "bolivia":
+                        cellLineasDetalle = new PdfPCell(new Phrase(
+                                ListaOrdenVentaDetalle.get(l).getProducto_id()+" "+ ListaOrdenVentaDetalle.get(l).getProducto(),font3));
+                        cellLineasDetalle.disableBorderSide(Rectangle.BOX);
+                        cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblLineas.addCell(cellLineasDetalle);
+                        break;
+                    case "ecuador":
+                        String compuesto=ListaOrdenVentaDetalle.get(l).getProducto_id()+" "+ListaOrdenVentaDetalle.get(l).getProducto()+" ["+Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getPreciounitario())+"]";
+                        cellLineasDetalle = new PdfPCell(new Phrase(compuesto,font3));
+                        cellLineasDetalle.disableBorderSide(Rectangle.BOX);
+                        cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblLineas.addCell(cellLineasDetalle);
+                        break;
+                }
+
+
                 cellLineasDetalle = new PdfPCell(new Phrase(ListaOrdenVentaDetalle.get(l).getCantidad(),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -344,25 +379,15 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                 switch (BuildConfig.FLAVOR)
                 {
                     case "peru":
+                    case "bolivia":
                         cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         tblLineas.addCell(cellLineasDetalle);
                         break;
-                    case "bolivia":
-                        /*cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontosubtotal()),font3));
-                        cellLineasDetalle.disableBorderSide(Rectangle.BOX);
-                        cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
-                        tblLineas.addCell(cellLineasDetalle)*/
-                        /*if(ListaOrdenVentaDetalle.get(l).getPorcentajedescuento().equals("100")||ListaOrdenVentaDetalle.get(l).getPorcentajedescuento().equals("100.00"))
-                        {
-                            cellLineasDetalle = new PdfPCell(new Phrase( (ListaOrdenVentaDetalle.get(l).getMontosubtotal()),font3));
-                        }
-                        else
-                        {
-                            cellLineasDetalle = new PdfPCell(new Phrase((ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
-                        }*/
-                        cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
+                    case "ecuador":
+                        cellLineasDetalle = new PdfPCell(new Phrase(""+Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontosubtotal()),font3));
+                        //cellLineasDetalle = new PdfPCell(new Phrase(""+Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         tblLineas.addCell(cellLineasDetalle);
@@ -379,15 +404,122 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
             cellResumen.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblResumen.addCell(cellResumen);
             documento.add(tblResumen);
+
             PdfPTable tblResu = new PdfPTable(2);
-            tblResu.setWidthPercentage(100);
-            PdfPCell cellResu = new PdfPCell(new Phrase("TOTAL ORDEN VENTA:",font3));
-            cellResu.disableBorderSide(Rectangle.BOX);
-            cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
-            tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase(Convert.currencyForView(total),font3));
-            cellResu.disableBorderSide(Rectangle.BOX);
-            cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            PdfPCell cellResu=null;
+            switch (BuildConfig.FLAVOR) {
+                case "peru":
+                    if (ObjUsuario.getU_VIS_ManagementType().equals("B2B"))
+                    {
+                        tblResu.setWidthPercentage(100);
+                        cellResu =  new PdfPCell(new Phrase("SubTotal:",font3));
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblResu.addCell(cellResu);
+
+                        cellResu = new PdfPCell(new Phrase(Convert.currencyForView(subtotal),font3));
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        tblResu.addCell(cellResu);
+
+                        cellResu = new PdfPCell(new Phrase("Descuento:",font3));
+                        cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        tblResu.addCell(cellResu);
+
+                        cellResu = new PdfPCell(new Phrase(Convert.currencyForView(descuento),font3));
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        tblResu.addCell(cellResu);
+
+                        cellResu = new PdfPCell(new Phrase(context.getResources().getString(R.string.tax_code),font3));
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblResu.addCell(cellResu);
+
+                        cellResu = new PdfPCell(new Phrase(Convert.currencyForView(igv),font3));
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        tblResu.addCell(cellResu);
+
+                        cellResu = new PdfPCell(new Phrase("TOTAL ORDEN VENTA:",font3));
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblResu.addCell(cellResu);
+
+                        cellResu = new PdfPCell(new Phrase(""+Convert.currencyForView(total),font3));
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        //tblResu.addCell(cellResu);
+                    }else {
+                        tblResu.setWidthPercentage(100);
+                        cellResu = new PdfPCell(new Phrase("TOTAL ORDEN VENTA:",font3));
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                        tblResu.addCell(cellResu);
+                        cellResu = new PdfPCell(new Phrase(Convert.currencyForView(total),font3));
+                        cellResu.disableBorderSide(Rectangle.BOX);
+                        cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    }
+
+                    break;
+
+                case "bolivia":
+
+                    tblResu.setWidthPercentage(100);
+                    cellResu = new PdfPCell(new Phrase("TOTAL ORDEN VENTA:",font3));
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    tblResu.addCell(cellResu);
+                    cellResu = new PdfPCell(new Phrase(Convert.currencyForView(total),font3));
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+
+                    break;
+                case "ecuador":
+                    //PdfPTable tblResu2 = new PdfPTable(2);
+                    tblResu.setWidthPercentage(100);
+                    cellResu =  new PdfPCell(new Phrase("SubTotal:",font3));
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    tblResu.addCell(cellResu);
+
+                    cellResu = new PdfPCell(new Phrase(Convert.currencyForView(subtotal),font3));
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    tblResu.addCell(cellResu);
+
+                    cellResu = new PdfPCell(new Phrase("Descuento:",font3));
+                    cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    tblResu.addCell(cellResu);
+
+                    cellResu = new PdfPCell(new Phrase(Convert.currencyForView(descuento),font3));
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    tblResu.addCell(cellResu);
+
+                    cellResu = new PdfPCell(new Phrase(context.getResources().getString(R.string.tax_code),font3));
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    tblResu.addCell(cellResu);
+
+                    cellResu = new PdfPCell(new Phrase(Convert.currencyForView(igv),font3));
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    tblResu.addCell(cellResu);
+
+                    cellResu = new PdfPCell(new Phrase("TOTAL ORDEN VENTA:",font3));
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
+                    tblResu.addCell(cellResu);
+
+                    cellResu = new PdfPCell(new Phrase(""+Convert.currencyForView(total),font3));
+                    cellResu.disableBorderSide(Rectangle.BOX);
+                    cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    //tblResu.addCell(cellResu);
+                    break;
+            }
 
 
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();

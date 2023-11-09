@@ -286,7 +286,6 @@ public class RutaFuerzaTrabajoSQLiteDao {
             frecuenciastring=direccionSQLite.getDayAddress(cliente_id,domembarque_id);
             Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-frecuencia"+frecuenciastring.toString());
             Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-zone_id"+zone_id.toString());
-
             Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-frecuenciaupdate"+frecuenciastring.toString());
             Cursor filafechainicioruta = bd.rawQuery(
                     "Select  fechainicioruta,dia from rutafuerzatrabajo where zona_id='"+zone_id+"'",null);
@@ -296,18 +295,19 @@ public class RutaFuerzaTrabajoSQLiteDao {
                 diaruta= (filafechainicioruta.getString(1));
             }
 
-            if(diaruta.equals("VIERNES")||diaruta.equals("VIERNES2")||diaruta.equals("SABADO")||diaruta.equals("SABAD02"))
+            /*if(diaruta.equals("VIERNES")||diaruta.equals("VIERNES2")||diaruta.equals("SABADO")||diaruta.equals("SABAD02"))
             {
                 frecuenciastring=String.valueOf(Integer.valueOf(frecuenciastring)+1) ;
-            }
+            }*/
             frecuenciastring="'+"+ frecuenciastring+" day'";
             Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-fechainicioruta"+fechainicioruta);
             fechainicioruta= Induvis.ConvertDateSAPaDate(fechainicioruta);
             fechainicioruta="'"+fechainicioruta+"'";
 
             Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-fechainicioruta"+fechainicioruta);
+            Log.e("REOS","RutaFuerzaTrabajoSQLiteDao-getDateWorkPathforZone-frecuenciastring"+frecuenciastring);
             Cursor fila = bd.rawQuery(
-                    "Select  DATE("+fechainicioruta+","+frecuenciastring+") AS fecha from rutafuerzatrabajo where zona_id='"+zone_id+"'",null);
+                    "Select  CASE strftime('%w',DATE("+fechainicioruta+","+frecuenciastring+")) WHEN '0' THEN DATE(DATE("+fechainicioruta+","+frecuenciastring+"),'+1 day') ELSE DATE("+fechainicioruta+","+frecuenciastring+") END AS fecha from rutafuerzatrabajo where zona_id='"+zone_id+"'",null);
             while (fila.moveToNext())
             {
                 resultado= (fila.getString(0));

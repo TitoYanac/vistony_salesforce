@@ -2,6 +2,7 @@ package com.vistony.salesforce.kotlin.View.Atoms
 
 import android.widget.Switch
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +20,8 @@ import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
 
 @Composable
 fun SwitchExample(
-    isChecked:MutableState<Boolean>
+    isChecked:MutableState<Boolean>,
+    enable:Boolean=true
 ) {
     //var isChecked by remember { mutableStateOf(false) }
     Column(
@@ -38,6 +40,8 @@ fun SwitchExample(
             onCheckedChange = {
                 isChecked.value=it
                               },
+                enabled = enable
+                , modifier = Modifier.clickable {  }
         )
     }
 }

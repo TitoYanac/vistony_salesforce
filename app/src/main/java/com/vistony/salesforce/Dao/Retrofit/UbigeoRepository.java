@@ -3,6 +3,7 @@ package com.vistony.salesforce.Dao.Retrofit;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -30,20 +31,24 @@ public class UbigeoRepository  extends ViewModel {
             @Override
             public void onResponse(Call<UbigeoEntityResponse> call, Response<UbigeoEntityResponse> response) {
 
-                UbigeoEntityResponse ubigeoEntityResponse=response.body();
-                if(response.isSuccessful() && ubigeoEntityResponse.getUbigeoEntity().size()>0){
-                    ubigeoSQLiteDao = new UbigeoSQLiteDao(context);
-                    parametrosSQLite = new ParametrosSQLite(context);
+                try {
+                    UbigeoEntityResponse ubigeoEntityResponse = response.body();
+                    if (response.isSuccessful() && ubigeoEntityResponse.getUbigeoEntity().size() > 0) {
+                        ubigeoSQLiteDao = new UbigeoSQLiteDao(context);
+                        parametrosSQLite = new ParametrosSQLite(context);
 
-                    ubigeoSQLiteDao.LimpiarTablaUbigeo ();
-                    ubigeoSQLiteDao.addListUbigeo (ubigeoEntityResponse.getUbigeoEntity());
-                    Integer countTypeDispatch=getCountUbigeo(context);
-                    parametrosSQLite.ActualizaCantidadRegistros("25", context.getResources().getString(R.string.ubigeous).toUpperCase(), ""+countTypeDispatch, getDateTime());
+                        ubigeoSQLiteDao.LimpiarTablaUbigeo();
+                        ubigeoSQLiteDao.addListUbigeo(ubigeoEntityResponse.getUbigeoEntity());
+                        Integer countTypeDispatch = getCountUbigeo(context);
+                        parametrosSQLite.ActualizaCantidadRegistros("25", context.getResources().getString(R.string.ubigeous).toUpperCase(), "" + countTypeDispatch, getDateTime());
 
-                    status.setValue("1");
-                }else
+                        status.setValue("1");
+                    } else {
+                        status.setValue("0");
+                    }
+                }catch (Exception e)
                 {
-                    status.setValue("0");
+                    Toast.makeText(context,"Ubigeo : "+e.toString(),Toast.LENGTH_LONG).show();
                 }
             }
 

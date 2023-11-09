@@ -35,10 +35,12 @@ import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.Adapters.ListaOrdenVentaDetalleDao;
+import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaProductoEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
 import com.vistony.salesforce.Entity.DocumentHeader;
+import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.Entity.View.TotalSalesOrder;
 import com.vistony.salesforce.ListenerBackPress;
@@ -196,8 +198,12 @@ public class OrdenVentaDetalleView extends Fragment {
             ObjListaProductosEntity.orden_detalle_price_listprice =productoAgregado.getPreciobase();
             ObjListaProductosEntity.orden_detalle_percent_discount_business_layer=discount_percent_bl;
             ObjListaProductosEntity.orden_detalle_units=productoAgregado.getUnits();
-
-
+            ObjListaProductosEntity.orden_detalle_oil_tax= productoAgregado.getOiltax();
+            ObjListaProductosEntity.orden_detalle_liter= productoAgregado.getLiter();
+            ObjListaProductosEntity.orden_detalle_SIGAUS= productoAgregado.getSIGAUS();
+            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-productoAgregado.getOiltax(): "+productoAgregado.getOiltax());
+            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-productoAgregado.getLiter(): "+productoAgregado.getLiter());
+            Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-productoAgregado.getSIGAUS(): "+productoAgregado.getSIGAUS());
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-productoAgregado.getUnits(): "+productoAgregado.getUnits());
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-discount_percent_bl: "+discount_percent_bl);
             Log.e("REOS","OrdenVentaDetalleView-newInstanceAgregarProducto-productoAgregado.getListnum():"+productoAgregado.getListnum());
@@ -386,6 +392,11 @@ public class OrdenVentaDetalleView extends Fragment {
             {
                 case "peru":
                 case "bolivia":
+                case "ecuador":
+                case "chile":
+                case "espania":
+                case "marruecos":
+                case "perurofalab":
                 case "paraguay":
                     if(SesionEntity.quotation.equals("N"))
                     {
@@ -395,17 +406,7 @@ public class OrdenVentaDetalleView extends Fragment {
                         listSalesOrderDetailAdapter = new ListSalesOrderDetailAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
                     }
                     break;
-                /*case "bolivia":
-                    if(SesionEntity.quotation.equals("N"))
-                    {
-                        listaOrdenVentaDetalleAdapter = new ListaOrdenVentaDetalleAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
-                    }
-                    else {
-                        listSalesOrderDetailAdapter = new ListSalesOrderDetailAdapter(getActivity(), ListaOrdenVentaDetalleDao.getInstance().getLeads(listadoProductosAgregados));
-                    }
-                    break;*/
             }
-
 
             if(lv_ordenventadetalle!=null)
             {
@@ -413,19 +414,18 @@ public class OrdenVentaDetalleView extends Fragment {
                 {
                     case "peru":
                     case "bolivia":
+                    case "ecuador":
+                    case "chile":
+                    case "espania":
+                    case "marruecos":
+                    case "perurofalab":
+                    case "paraguay":
                         if (SesionEntity.quotation.equals("N")) {
                             lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
                         } else {
                             lv_ordenventadetalle.setAdapter(listSalesOrderDetailAdapter);
                         }
                         break;
-                    /*case "bolivia":
-                        if (SesionEntity.quotation.equals("N")) {
-                            lv_ordenventadetalle.setAdapter(listaOrdenVentaDetalleAdapter);
-                        } else {
-                            lv_ordenventadetalle.setAdapter(listSalesOrderDetailAdapter);
-                        }
-                        break;*/
                 }
                 hiloAgregarListaProductos = new HiloAgregarListaProductos();
 
@@ -519,10 +519,79 @@ public class OrdenVentaDetalleView extends Fragment {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        /*switch (item.getItemId()) {
             case R.id.vincular_orden_venta_cabecera:
                 DialogoOrdenVentaDetalle().show();
 
+                return false;
+            default:
+                break;
+        }
+        return false;*/
+        switch (item.getItemId()) {
+            case R.id.vincular_orden_venta_cabecera:
+
+                switch (BuildConfig.FLAVOR)
+                {
+                    case "bolivia":
+                    case "india":
+                    case "chile":
+                    case "peru":
+                    case "paraguay":
+                    case "perurofalab":
+                    case "espania":
+                    case "marruecos":
+                        DialogoOrdenVentaDetalle().show();
+                        break;
+                    case "ecuador":
+                        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
+                        UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
+                        int SIGAUS=0,OilTax=0;
+                        usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
+                        Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-usuarioSQLiteEntity.getOiltaxstatus(): " + usuarioSQLiteEntity.getOiltaxstatus());
+                        if(usuarioSQLiteEntity.getOiltaxstatus().equals("Y")){
+                            Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.size(): " + listadoProductosAgregados.size());
+                            for(int i=0;i<listadoProductosAgregados.size();++i)
+                            {
+                                //Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size(): " + listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size());
+                                if(listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion()!=null)
+                                {
+                                    Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size(): " + listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size());
+                                    for(int j=0;j<listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size();j++)
+                                    {
+                                        Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id(): " + listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id());
+                                        if(listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id().equals("ECOVALOR"))
+                                        {
+                                            SIGAUS++;
+                                        }
+                                    }
+                                }
+                                Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_oil_tax(): " + listadoProductosAgregados.get(i).getOrden_detalle_oil_tax());
+                                if(listadoProductosAgregados.get(i).getOrden_detalle_oil_tax().equals("Y"))
+                                {
+                                    OilTax++;
+                                }
+                            }
+                            Log.e("REOS","OrdenVentaDetalleView-onOptionsItemSelected-SIGAUS: "+SIGAUS);
+                            Log.e("REOS","OrdenVentaDetalleView-onOptionsItemSelected-OilTax: "+OilTax);
+                            if(OilTax==0)
+                            {
+                                DialogoOrdenVentaDetalle().show();
+                            }else
+                            {
+                                if(SIGAUS>0){
+                                    DialogoOrdenVentaDetalle().show();
+                                }else {
+                                    //calculateSIGAUS();
+                                    alertAddSIGAUS().show();
+                                }
+                            }
+
+                        }else {
+                            DialogoOrdenVentaDetalle().show();
+                        }
+                        break;
+                }
                 return false;
             default:
                 break;
@@ -593,6 +662,45 @@ public class OrdenVentaDetalleView extends Fragment {
             }
         });
         return  dialog;
+    }
+
+    public Dialog alertAddSIGAUS() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.layout_dialog);
+        TextView textTitle = dialog.findViewById(R.id.text);
+        textTitle.setText("ADVERTENCIA");
+        final TextView textMsj = dialog.findViewById(R.id.textViewMsj);
+        textMsj.setText("Se generara la Linea de ECOVALOR, reintente el vincular para finalizar");
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        Drawable background = image.getBackground();
+        image.setImageResource(R.mipmap.logo_circulo);
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        dialogButton.setText("OK");
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        image.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                calculateSIGAUS();
+                dialog.dismiss();
+            }
+        });
+        return  dialog;
+    }
+
+    public void calculateSIGAUS(){
+        FormulasController formulasController=new FormulasController(getContext());
+        ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
+        //listaOrdenVentaDetalleEntities=formulasController.ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listadoProductosAgregados);
+        //formulasController.addSIGAUS(listaOrdenVentaDetalleEntities,listadoProductosAgregados);
+        if(!formulasController.addSIGAUS(listadoProductosAgregados).isEmpty())
+        {
+            hiloAgregarListaProductos.execute();
+            //DialogoOrdenVentaDetalle().show();
+        }
+
     }
 
 

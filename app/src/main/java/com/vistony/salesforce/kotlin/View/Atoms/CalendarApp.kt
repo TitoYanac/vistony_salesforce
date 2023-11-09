@@ -26,6 +26,7 @@ import com.vistony.salesforce.R
 import com.vistony.salesforce.kotlin.Utilities.ConvertDateSAPaUserDate
 import com.vistony.salesforce.kotlin.Utilities.getDate
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
+import com.vistony.salesforce.kotlin.View.Atoms.theme.RedVistony
 import com.vistony.salesforce.kotlin.View.components.ButtonCircle
 import java.util.*
 
@@ -35,8 +36,6 @@ fun CalendarApp(
 ){
     // Fetching the Local Context
     val mContext = LocalContext.current
-    // Declaring integer values
-    // for year, month and day
     val mYear: Int
     val mMonth: Int
     val mDay: Int
@@ -82,7 +81,7 @@ fun CalendarApp(
         , verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally)
     {
         Row(
-            Modifier.border(4.dp, BlueVistony).align(Alignment.CenterHorizontally)
+            Modifier.border(4.dp, RedVistony).align(Alignment.CenterHorizontally)
             , horizontalArrangement= Arrangement.Center,verticalAlignment = Alignment.CenterVertically,
         ) {
             //Text(text = "${mDate.value}", fontSize = 18.sp, textAlign = TextAlign.Center)

@@ -189,11 +189,13 @@ public class ImageCameraController {
     }
 
     private void UnableToSave(String error) {
-        Toast.makeText(TheThis, TheThis.getResources().getString(R.string.dont_sava_image) +error, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(TheThis, TheThis.getResources().getString(R.string.dont_sava_image) +error, Toast.LENGTH_SHORT).show();
+        Log.e("REOS","ImageCameraController-UnableToSave-toast"+TheThis.getResources().getString(R.string.dont_sava_image) +error);
     }
 
     private void AbleToSave() {
         Toast.makeText(TheThis, TheThis.getResources().getString(R.string.image_save_galery), Toast.LENGTH_SHORT).show();
+        Log.e("REOS","ImageCameraController-AbleToSave-toast"+TheThis.getResources().getString(R.string.image_save_galery));
     }
 
     public byte[] getImageSDtoByte(Context context,String file_path) {

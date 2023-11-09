@@ -243,68 +243,6 @@ private fun InvoicesList(
                 }
             }
         }
-        /*Row(
-            modifier = Modifier.padding(0.dp,0.dp,0.dp,20.dp)
-        )
-        {
-            IconButton(
-                onClick = {
-
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(BlueVistony),
-                enabled = false,
-            ) {
-                Row()
-                {
-                    Icon(
-                        ImageVector.vectorResource(R.drawable.ic_arrow_back_white_24dp),
-                        tint = Color.White,
-                        contentDescription = null
-                    )
-                    Text(
-                        text = "Anterior",
-                        color = Color.White
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            IconButton(
-                onClick = {
-
-                    expandableCollectionProcess(invoicesobj)
-                    onBooleanValueChanged(!statusEnable)
-                    //invoicelegalnum=invoicesobj?.nroFactura.toString()
-                    Log.e(
-                        "REOS",
-                        "BottomSheet-InvoicesList-line.isSelected.clickable.invoicesobj" +invoicesobj
-                    )
-                   // invoicesobj?.let { expandableCollectionProcess(it) }
-                          },
-                //colors = ButtonDefaults.buttonColors(Colors = MaterialTheme.colors.primary),
-                modifier = Modifier
-                    .weight(1f)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(BlueVistony)
-                // , enabled = false
-            ) {
-                Row()
-                {
-
-                    Text(
-                        text = "Siguiente",
-                        color = Color.White
-                    )
-                    Icon(
-                        ImageVector.vectorResource(R.drawable.ic_baseline_arrow_forward_24),
-                        tint = Color.White,
-                        contentDescription = null
-                    )
-                }
-            }
-        }*/
     }
 }
 
@@ -470,130 +408,6 @@ fun InvoicesList(
             }
         }
     )
-
-    /*
-    Column(
-    )
-    {
-        var invoicelegalnum by remember { mutableStateOf("") }
-        var expanded by remember { mutableStateOf(true) }
-        //var invoicelegalnum by remember { mutableStateOf("") }
-
-        Card(
-            modifier = Modifier
-                //.clickable { expanded = !expanded },
-                .padding(10.dp),
-            elevation = 4.dp
-        ) {
-            //Column(modifier = Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp))
-            Column(modifier = Modifier.padding(10.dp))
-            {
-                Row(
-                    modifier = Modifier
-                        //.padding(0.dp, 5.dp, 10.dp, 0.dp)
-                        .fillMaxWidth()
-                ) {
-                    ButtonCircle(OnClick = {}) {
-                        Text(
-                            text = "2",
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(30.dp))
-                    /*SpinnerView(
-                        "Seleccione tipo de cobranza: "
-                        ,listTypeCollecion
-                        ,currentSelected
-                    )*/
-                    TableCell(text = "FACTURA", weight =1f ,title = true)
-
-                    /*Box(
-                        modifier = Modifier
-                            .size(30.dp)
-                            .background(BlueVistony, CircleShape)
-                    ) {
-                        Text(
-                            text = "2",
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Text(
-                        "SELECCIONE FACTURA:",
-                        modifier = Modifier.padding(0.dp, 5.dp, 10.dp, 0.dp)
-                        ,
-                        color = Color.Black,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontWeight = FontWeight.Bold
-                    )*/
-                    Icon(
-                        imageVector =
-                        if (expanded) {
-                            ImageVector.vectorResource(R.drawable.ic_baseline_arrow_drop_up_24_black)
-                        } else {
-                            ImageVector.vectorResource(R.drawable.ic_baseline_arrow_drop_down_24_black)
-                        },
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(0.dp, 5.dp, 0.dp, 0.dp)
-                            .clickable { expanded = !expanded },
-                        //tint = Color.White,
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .padding(0.dp, 5.dp, 10.dp, 0.dp)
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        "FACTURA:",
-                        modifier = Modifier.padding(0.dp, 5.dp, 10.dp, 0.dp)
-                        ,
-                        color = Color.Black,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        invoicelegalnum
-                        ,modifier = Modifier.padding(0.dp, 5.dp, 10.dp, 0.dp)
-                        ,
-                        color = Color.Black,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                AnimatedVisibility(
-                    visible = expanded,
-                    enter = expandIn(),
-                    exit = shrinkOut()
-                ) {
-                    Column()
-                    {
-                        //var invoices:Invoices?=null
-                        InvoicesList(
-                            invoiceViewModel
-                            , cliente_id
-                            ,expandableCollectionProcess= {
-                                    invoices -> expandableCollectionProcess(invoices)
-                                invoicelegalnum=invoices?.nroFactura.toString()
-                                                          }
-                            ,expanded
-                            ,invoicelegalnum
-                        ){
-                            expanded = it
-                            Log.e(
-                                "REOS",
-                                "BottomSheet-ExpandableInvoices-expanded" +expanded
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }*/
 }
 
 
@@ -735,7 +549,7 @@ private fun CardProcessCollection(
 
     val appContext = LocalContext.current
     //val lifecycleOwner = LocalContext.current as LifecycleOwner
-    val collectionDetailRepository :CollectionDetailRepository= CollectionDetailRepository()
+    val collectionDetailRepository :CollectionDetailRepository= CollectionDetailRepository(appContext)
     val collectionDetailViewModel: CollectionDetailViewModel= viewModel(
         factory = CollectionDetailViewModel.CollectionDetailViewModelFactory(
             SesionEntity.imei,

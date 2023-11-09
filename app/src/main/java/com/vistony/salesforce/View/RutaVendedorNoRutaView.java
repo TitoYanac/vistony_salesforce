@@ -165,6 +165,11 @@ public class RutaVendedorNoRutaView extends Fragment implements SearchView.OnQue
             case "peru":
             case "bolivia":
             case "paraguay":
+            case "ecuador":
+            case "chile":
+            case "espania":
+            case "marruecos":
+            case "perurofalab":
                 if(SesionEntity.census.equals("N")){
                     table_row_no_ruta_geolocation.setVisibility(View.GONE);
                 }

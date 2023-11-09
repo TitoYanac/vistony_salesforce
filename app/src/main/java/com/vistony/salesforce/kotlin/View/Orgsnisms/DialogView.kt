@@ -142,7 +142,7 @@ fun DialogView(
 
         Box(
             modifier = Modifier
-                .height(600.dp)
+                .height(400.dp)
         ) {
             Column(
                 modifier = Modifier

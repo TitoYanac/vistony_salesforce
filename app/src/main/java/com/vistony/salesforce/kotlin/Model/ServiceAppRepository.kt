@@ -39,6 +39,8 @@ class ServiceAppRepository {
                     call: Call<ServiceAppEntity?>,
                     response: Response<ServiceAppEntity?>
                 ) {
+                    Log.e("REOS", "-RetrofitConfig-getClientLog-call $call")
+                    Log.e("REOS", "-RetrofitConfig-getClientLog-response.body ${response.body()}")
                     val servicesAppEntityResponse = response.body()
                     if (response.isSuccessful&&servicesAppEntityResponse?.Data?.size!!>0) {
                         val executor: ExecutorService = Executors.newFixedThreadPool(1)

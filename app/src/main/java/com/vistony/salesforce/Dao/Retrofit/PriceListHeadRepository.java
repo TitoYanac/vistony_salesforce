@@ -35,7 +35,7 @@ public class PriceListHeadRepository extends ViewModel {
 
                 PriceListHeadEntityResponse priceListHeadEntityResponse=response.body();
 
-                if(response.isSuccessful() && priceListHeadEntityResponse.getPriceListHeadEntity().size()>0){
+                if(response.isSuccessful() && priceListHeadEntityResponse.getPriceListHeadEntity()!=null){
                     executor.execute(() -> {
                     priceListHeadSQLite = new PriceListHeadSQLite(context);
                     parametrosSQLite = new ParametrosSQLite(context);

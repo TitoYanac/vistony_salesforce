@@ -283,6 +283,11 @@ public class ListaClienteCabeceraAdapter extends ArrayAdapter<ListaClienteCabece
             case "peru":
             case "bolivia":
             case "paraguay":
+            case "ecuador":
+            case "chile":
+            case "espania":
+            case "marruecos":
+            case "perurofalab":
                 if(SesionEntity.census.equals("N")){
                     holder.chk_geolocation.setVisibility(View.GONE);
                 }

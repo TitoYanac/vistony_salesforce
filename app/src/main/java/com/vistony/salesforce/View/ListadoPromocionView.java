@@ -93,6 +93,13 @@ public class ListadoPromocionView extends Fragment {
                 }
                 break;
             case "bolivia":
+            case "india":
+            case "chile":
+            case "ecuador":
+            case "paraguay":
+            case "perurofalab":
+            case "espania":
+            case "marruecos":
                 if(SesionEntity.quotation.equals("Y"))
                 {
                     if (Lista.isEmpty())

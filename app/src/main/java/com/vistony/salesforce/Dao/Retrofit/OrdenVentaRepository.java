@@ -15,7 +15,6 @@ import com.vistony.salesforce.Entity.Retrofit.Modelo.SalesOrderEntity;
 import com.vistony.salesforce.Entity.Retrofit.Respuesta.SalesOrderEntityResponse;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;

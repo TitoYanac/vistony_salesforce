@@ -7,13 +7,10 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.util.Log
-import androidx.lifecycle.ViewModelProvider
 import com.vistony.salesforce.Controller.Utilitario.Convert
-import com.vistony.salesforce.Dao.Retrofit.HistoricSalesOrderTraceabilityRepository
 import com.vistony.salesforce.Dao.SQLite.OrdenVentaCabeceraSQLite
 import com.vistony.salesforce.Entity.SQLite.OrdenVentaCabeceraSQLiteEntity
 import com.vistony.salesforce.Entity.SesionEntity
-import com.vistony.salesforce.View.MenuView
 import com.vistony.salesforce.kotlin.Model.Notification
 import com.vistony.salesforce.kotlin.Model.NotificationRepository
 import com.vistony.salesforce.kotlin.Model.SalesCalendarRepository
@@ -169,6 +166,40 @@ class ServiceApp: Service()  {
                                 lista.add(listOrdenVentaCabecera.get(i).DocEntry)
                             }
                             Log.e("REOS", "Service-onStartCommand-lista: "+lista)
+                            val notificationRepository:NotificationRepository= NotificationRepository()
+
+                            if(listOrdenVentaCabecera.size>0)
+                            {
+                                coroutineScope.launch {
+
+                                    notificationRepository.getNotificationQuotation(SesionEntity.imei, lista)
+
+                                }
+
+                                coroutineScope.launch {
+                                    notificationRepository.resultAPI.collect { newValue ->
+                                        for (i in 0 until listOrdenVentaCabecera.size) {
+                                            for (j in 0 until newValue.DATA.size) {
+                                                Log.e("REOS", "Service-onStartCommand-newValue.DATA.get(i).DocEntry:" + newValue.DATA.get(j).DocEntry)
+                                                Log.e("REOS", "Service-onStartCommand-listOrdenVentaCabecera.get(j).DocEntry:" + listOrdenVentaCabecera.get(i).DocEntry)
+                                                if (listOrdenVentaCabecera.get(i).DocEntry.equals(newValue.DATA.get(j).DocEntry)) {
+                                                    var estadoTotal = newValue.DATA.get(j).EstadoAprobacion!!.split("-")
+                                                    var objeto = estadoTotal[0]
+                                                    var status = estadoTotal[1]
+                                                    Log.e("REOS", "Service-onStartCommand-status:" + status)
+                                                    Log.e("REOS", "Service-onStartCommand-listOrdenVentaCabecera.get(j).getStatus():" + listOrdenVentaCabecera.get(i).getStatus())
+                                                    if (!listOrdenVentaCabecera.get(i).getStatus().replace(" ", "").equals(status.replace(" ", ""))) {
+                                                        showNotification(contexto, counter, "La cotización del cliente " + newValue.DATA.get(j).NombreCliente + ", con monto " + Convert.currencyForView(newValue.DATA.get(j).MontoTotalOrden) + ",  cambio al estado: " + newValue.DATA.get(j).EstadoAprobacion)
+                                                        ordenVentaCabeceraSQLite.UpdateStatusSales(newValue.DATA.get(j).OrdenVenta_ID, status)
+                                                        notificationRepository.addNotification(
+                                                                contexto, Notification(id = 0, message = "La cotización del cliente " + newValue.DATA.get(j).NombreCliente + ", con monto " + Convert.currencyForView(newValue.DATA.get(j).MontoTotalOrden) + ",  cambio al estado: " + newValue.DATA.get(j).EstadoAprobacion, date = getDateCurrent(), time = getTimeCurrent()))
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             /*for (i in 0 until listOrdenVentaCabecera.size)
                             {
                                 var historicSalesOrderTraceabilityRepository: HistoricSalesOrderTraceabilityRepository

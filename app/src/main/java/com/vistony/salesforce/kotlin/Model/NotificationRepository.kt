@@ -22,6 +22,9 @@ class NotificationRepository {
     private val _resultDB = MutableStateFlow(NotificationEntity())
     val resultDB: StateFlow<NotificationEntity> get() = _resultDB
 
+    private val _resultAPI = MutableStateFlow(NotificationQuotationEntity())
+    val resultAPI: StateFlow<NotificationQuotationEntity> get() = _resultAPI
+
     fun addNotification(context: Context,notificationList: Notification)
     {
         try {
@@ -94,7 +97,7 @@ class NotificationRepository {
         }
     }
 
-    suspend fun getNotificationQuotation(context: Context,Imei: String,lista:String)
+    suspend fun getNotificationQuotation(Imei: String,lista:ArrayList<String> )
     {
         try {
             val retrofitConfig: RetrofitConfig? = RetrofitConfig()
@@ -106,7 +109,7 @@ class NotificationRepository {
             val gson = Gson()
             if (lista != null) {
                 json = gson.toJson(lista)
-                json = "{ \"Imei\":$Imei,\"DocEntry\":$json}"
+                json = "{ \"Imei\":\"${Imei}\",\"DocEntry\":$json}"
             }
             Log.e("REOS", "NotificationRepository-getNotificationQuotation-json: " +json)
             val jsonRequest: RequestBody = RequestBody.create(
@@ -114,7 +117,6 @@ class NotificationRepository {
                     json
             )
             service?.getNotificationQuotation(
-                    Imei,
                     jsonRequest
             )?.enqueue(object : Callback<NotificationQuotationEntity?> {
 
@@ -122,38 +124,20 @@ class NotificationRepository {
                         call: Call<NotificationQuotationEntity?>,
                         response: Response<NotificationQuotationEntity?>
                 ) {
+                    Log.e("REOS", "NotificationRepository-getNotificationQuotation-call:: " +call)
+                    Log.e("REOS", "NotificationRepository-getNotificationQuotation-response: " +response)
+                    val notificationQuotation = response.body()
 
-                    /*val notificationQuotationEntity = response.body()
-                    if (response.isSuccessful&&reasonDispatchResponse?.getReasonDispatch()?.size!!>0) {
-                        val executor: ExecutorService = Executors.newFixedThreadPool(1)
-                        for (i in 1..1) {
-                            executor.execute {
-                                println("Tarea $i en ejecución en ${Thread.currentThread().name}")
-                                //Thread.sleep(1000)
-                                val database by lazy { AppDatabase.getInstance(context.applicationContext) }
-                                database?.reasonDispatchDao
-                                        ?.deleteReasonDispatch()
-                                database?.reasonDispatchDao
-                                        ?.inserReasonDispatch (
-                                                reasonDispatchResponse?.getReasonDispatch()
-                                        )
-
-                                println("Tarea $i completada")
-                            }
-
-                        }
-                        executor.shutdown()
-                       // _status.setValue("1")
-
-                    } else {
-
-                        //_status.setValue("0")
-
-                    }*/
+                    if (response.isSuccessful&&notificationQuotation?.DATA?.size!!>0)
+                    {
+                        var list= notificationQuotation.DATA
+                        _resultAPI.value= NotificationQuotationEntity (Status = "Y", DATA = list)
+                    }
+                    Log.e("REOS", "NotificationRepository-getNotificationQuotation-_resultAPI.value.DATA: " +_resultAPI.value.DATA)
                 }
 
                 override fun onFailure(call: Call<NotificationQuotationEntity?>, t: Throwable) {
-                    //_status.setValue("0")
+                    _resultAPI.value= NotificationQuotationEntity (Status = "N")
                 }
             })
 

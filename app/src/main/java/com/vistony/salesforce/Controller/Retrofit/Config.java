@@ -242,9 +242,9 @@ public class Config {
         try{
             if(client==null) {
                 client = new OkHttpClient. Builder()
-                        .connectTimeout(30, TimeUnit.SECONDS)
-                        .writeTimeout(30, TimeUnit.SECONDS)
-                        .readTimeout(30, TimeUnit.SECONDS)
+                        .connectTimeout(5, TimeUnit.SECONDS)
+                        .writeTimeout(5, TimeUnit.SECONDS)
+                        .readTimeout(5, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
                         .proxy(Proxy.NO_PROXY)
                         .build();

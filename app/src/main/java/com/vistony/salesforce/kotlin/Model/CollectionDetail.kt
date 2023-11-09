@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class CollectionDetailEntity(
     var Status:String="",
     var Count:String="",
-    @SerializedName("CollectionDetail") val data: List<CollectionDetail> = emptyList(),
+    @SerializedName("Collections") val data: List<CollectionDetail> = emptyList(),
 )
 
 @Entity(tableName = "collectiondetail")
@@ -39,7 +39,6 @@ data class CollectionDetail(
     @SerializedName("DepositID")
     var Deposit: String="",
     var DocEntryFT: String="",
-    @SerializedName("UserCode")
     var UserID: String="",
     var SlpCode: String="",
     var Intent: String="",
@@ -71,6 +70,49 @@ data class CollectionDetail(
     var APIErrorCode:String="",
     @Ignore
     var StatusSelection:Boolean=false,
+    @Ignore
+    var Number:String="",
 )
 
+data class CollectionDetailPendingDeposit(
+        @SerializedName("Code")
+        val APICode: String,
+        val Deposit: String, // o el tipo que sea adecuado
+        val BankID: String,     // o el tipo que sea adecuado
+        val Receip: String,
+        val QRStatus: String
+)
 
+@Entity(tableName = "collectiondetail")
+data class CollectionDetailAPI(
+        val AmountCharged:String,
+        val AppVersion:String,
+        val Balance:String,
+        val BankID:String,
+        val Banking:String,
+        val Brand:String,
+        val CancelReason:String,
+        val CardCode:String,
+        val CollectionCheck:String,
+        val Commentary:String,
+        val Deposit:String,
+        val DirectDeposit:String,
+        val DocEntryFT:String,
+        val DocNum:String,
+        val DocTotal:String,
+        val IncomeDate:String,
+        val IncomeTime:String,
+        val Intent:String,
+        val ItemDetail:String,
+        val Model:String,
+        val NewBalance:String,
+        val OSVersion:String,
+        val POSPay:String,
+        val QRStatus:String,
+        val Receip:String,
+        val SlpCode:String,
+        val Status:String,
+        val U_VIS_CollectionSalesperson:String,
+        val U_VIS_Type:String,
+        val UserID:String
+)

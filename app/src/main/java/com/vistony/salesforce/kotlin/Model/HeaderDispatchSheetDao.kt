@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface HeaderDispatchSheetDao {
     @Query("SELECT * FROM headerdispatchsheet where fechahojadespacho =:fechahojadespacho ")
-    fun getCodeDispatch(fechahojadespacho: String): LiveData<List<HeaderDispatchSheet>>
+    fun getCodeDispatch(fechahojadespacho: String): List<HeaderDispatchSheet>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHeaderDispatchSheet(HeaderDispatchSheet: List<HeaderDispatchSheet>?)

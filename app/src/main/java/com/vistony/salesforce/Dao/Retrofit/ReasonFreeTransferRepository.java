@@ -3,6 +3,8 @@ package com.vistony.salesforce.Dao.Retrofit;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -32,23 +34,25 @@ public class ReasonFreeTransferRepository  extends ViewModel {
             public void onResponse(Call<ReasonDispatchEntityResponse> call, Response<ReasonDispatchEntityResponse> response) {
 
                 ReasonDispatchEntityResponse reasonDispatchEntityResponse=response.body();
-                if(response.isSuccessful() &&
-                        //Objects.requireNonNull(reasonDispatchEntityResponse).getReasonDispatchEntities().size()>0
-                        response.body()!=null
-                ){
-                    executor.execute(() -> {
-                    reasonFreeTransferSQLiteDao = new ReasonFreeTransferSQLiteDao(context);
-                    parametrosSQLite = new ParametrosSQLite(context);
-
-                    reasonFreeTransferSQLiteDao.DeleteTableReasonFreeTransfer();
-                    reasonFreeTransferSQLiteDao.AddReasonFreeTransfer (reasonDispatchEntityResponse.getReasonDispatchEntities());
-                    Integer countReasonFreeTransfer=getCountReasonFreeTransfer(context);
-                    parametrosSQLite.ActualizaCantidadRegistros("26", context.getResources().getString(R.string.reason_free_transfer).toUpperCase(), ""+countReasonFreeTransfer, getDateTime());
-                    });
-                    status.setValue("1");
-                }else
+                Log.e("REOS","ReasonFreeTransferRepository-getReasonFreeTransfer-response.code(): "+response.code());
+                try {
+                    if (response.isSuccessful() && reasonDispatchEntityResponse.getReasonDispatchEntities().size() > 0
+                    ) {
+                        executor.execute(() -> {
+                            reasonFreeTransferSQLiteDao = new ReasonFreeTransferSQLiteDao(context);
+                            parametrosSQLite = new ParametrosSQLite(context);
+                            reasonFreeTransferSQLiteDao.DeleteTableReasonFreeTransfer();
+                            reasonFreeTransferSQLiteDao.AddReasonFreeTransfer(reasonDispatchEntityResponse.getReasonDispatchEntities());
+                            Integer countReasonFreeTransfer = getCountReasonFreeTransfer(context);
+                            parametrosSQLite.ActualizaCantidadRegistros("26", context.getResources().getString(R.string.reason_free_transfer).toUpperCase(), "" + countReasonFreeTransfer, getDateTime());
+                        });
+                        status.setValue("1");
+                    } else {
+                        status.setValue("0");
+                    }
+                }catch (Exception e)
                 {
-                    status.setValue("0");
+                    Toast.makeText(context,"ReasonFreeTransfer: "+e.toString(),Toast.LENGTH_LONG).show();
                 }
             }
 

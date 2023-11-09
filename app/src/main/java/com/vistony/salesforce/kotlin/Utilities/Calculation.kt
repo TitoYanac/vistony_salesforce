@@ -15,6 +15,7 @@ import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite
 import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.kotlin.Model.CollectionDetail
+import com.vistony.salesforce.kotlin.Model.CollectionHead
 import com.vistony.salesforce.kotlin.Model.Invoices
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -45,7 +46,6 @@ fun CreateListCollectionDetail(
     lastReceip:String?
 ): List<CollectionDetail>? {
 
-
         var listCollectionDetail: List<CollectionDetail>? = ArrayList()
         var collectionOrdinary: String = "N";
         var pagoPOS: String = "N";
@@ -58,30 +58,6 @@ fun CreateListCollectionDetail(
         val osVersion = Build.VERSION.RELEASE
         val numAleatorio = Random()
         val codeSMS: Int = numAleatorio.nextInt(9999 + 1000 + 1) + 1000
-    /*Log.e(
-        "REOS",
-        "Calculation-CreateListCollectionDetail-invoices: " + invoices
-    )
-    Log.e(
-        "REOS",
-        "Calculation-CreateListCollectionDetail-newBalance: " + newBalance
-    )
-    Log.e(
-        "REOS",
-        "Calculation-CreateListCollectionDetail-collection: " + collection
-    )
-    Log.e(
-        "REOS",
-        "Calculation-CreateListCollectionDetail-typeCollection: " + typeCollection
-    )
-    Log.e(
-        "REOS",
-        "Calculation-CreateListCollectionDetail-cardName: " + cardName
-    )
-    Log.e(
-        "REOS",
-        "Calculation-CreateListCollectionDetail-lastReceip: " + lastReceip
-    )*/
         try {
             when (typeCollection) {
                 "Cobranza Ordinaria" -> {
@@ -176,59 +152,6 @@ fun CreateListCollectionDetail(
                     ,""
                     ,"N"
             )
-            /*collectionDetail?.AmountCharged
-            collectionDetail?.AmountCharged = collection
-            collectionDetail?.CollectionCheck = "N"
-            collectionDetail?.Balance =
-            collectionDetail?.CardCode =
-            collectionDetail?.BankID = ""
-            collectionDetail?.Banking = "N"
-            collectionDetail?.CancelReason = ""
-            collectionDetail?.AppVersion = Utilitario.getVersion(context)
-            collectionDetail?.Brand = brand
-            collectionDetail?.Code = ""
-            collectionDetail?.CardName = cardName
-            collectionDetail?.Commentary = commentary
-            collectionDetail?.CodeSMS = ""
-            collectionDetail?.Data = ""
-            collectionDetail?.Deposit = ""
-            collectionDetail?.DirectDeposit = directDeposit.toString()
-            collectionDetail?.DocEntryFT =
-            collectionDetail?.DocNum = invoices?.documentoId.toString()
-            collectionDetail?.DocTotal =
-            collectionDetail?.IncomeDate = getDateCurrent().toString()
-            collectionDetail?.IncomeTime = getTimeCurrent().toString()
-            collectionDetail?.Intent = "1"
-            collectionDetail?.LegalNumber = invoices?.nroFactura.toString()
-            collectionDetail?.Model = model
-            collectionDetail?.NewBalance = newBalance
-            collectionDetail?.OSVersion = osVersion
-            collectionDetail?.POSPay = pagoPOS
-            collectionDetail?.Phone = ""
-            collectionDetail?.QRStatus = QR
-            if (lastReceip != null) {
-                collectionDetail?.Receip = lastReceip
-            }
-            collectionDetail?.SlpCode = ObjUsuario.fuerzatrabajo_id
-            collectionDetail?.SlpName = ObjUsuario.nombrefuerzatrabajo
-            collectionDetail?.Status = ""
-            collectionDetail?.U_VIS_CollectionSalesperson = collectionSalesPerson
-            collectionDetail?.U_VIS_Type = typeCollection
-            collectionDetail?.UserID = ObjUsuario.usuario_id*/
-
-            /*Log.e(
-                "REOS",
-                "Calculation-CreateListCollectionDetail-collectionDetail?.UserID: " + collectionDetail?.UserID
-            )
-            Log.e(
-                "REOS",
-                "Calculation-CreateListCollectionDetail-collectionDetail?.U_VIS_Type: " + collectionDetail?.U_VIS_Type
-            )
-            Log.e(
-                "REOS",
-                "Calculation-CreateListCollectionDetail-collectionDetail?.AmountCharged: " + collectionDetail?.AmountCharged
-            )*/
-            //if (listCollectionDetail == null) {
                 listCollectionDetail = ArrayList()
                 if (collectionDetail != null) {
                     /*Log.e(
@@ -237,28 +160,12 @@ fun CreateListCollectionDetail(
                     )*/
                     listCollectionDetail.add(collectionDetail)
                 }
-            //}
-            /*if (collectionDetail != null)
-            {
-                listCollectionDetail.add(collectionDetail)
-            }*/
-            /*if (listCollectionDetail == null) {
-                listCollectionDetail = ArrayList()
-                if (collectionDetail != null) {
-                    listCollectionDetail.add(collectionDetail)
-                }
-            }*/
-
     }catch (e: Exception){
             Log.e(
                 "REOS",
                 "Calculation-CreateListCollectionDetail-error: " + e.toString()
             )
     }
-    /*Log.e(
-        "REOS",
-        "Calculation-CreateListCollectionDetail-listCollectionDetail.size: " + listCollectionDetail?.size
-    )*/
     return listCollectionDetail
 }
 
@@ -372,4 +279,73 @@ fun sendSMS(telefono: String?,context: Context,activity: Activity,collectionDeta
     } catch (e: java.lang.Exception) {
         Log.e("REOS", "CobranzaDetalleView-alertaEnviarSMS-Erroe-$e")
     }
+}
+
+
+fun CreateCollectionHead(
+        context: Context,
+        AmountDeposit:String,
+        numberDeposit:String,
+        DeferredDate:String,
+        IncomeType:String,
+        BankID:String,
+        typeCollection:String
+): CollectionHead {
+
+
+    val fabricante = Build.MANUFACTURER
+    val modelo = Build.MODEL
+    val AndroidVersion = Build.VERSION.RELEASE
+    var collectionHead:CollectionHead?=null
+    var (collectionOrdinary,pagoPOS,prePayment,collectionSalesPerson,directDeposit)=listOf("N", "N", "N", "N", "N")
+    var bankList= BankID.split(Regex("-"))
+    var bankCode=bankList[0]
+    var bankName=bankList[1]
+    var incomeTypeList = IncomeType.split(Regex("-"))
+    var incomeTypeCode=incomeTypeList[0]
+    var incomeTypeName=incomeTypeList[1]
+
+    try {
+
+        when (typeCollection) {
+            "Cobranza Ordinaria" -> {
+                collectionOrdinary = "Y"
+            }
+            "Deposito Directo" -> {
+                directDeposit = "Y"
+            }
+            "Pago POS" -> {
+                pagoPOS = "Y"
+            }
+            "Cobro Vendedor" -> {
+                collectionSalesPerson = "Y"
+            }
+            "Pago Adelantado" -> {
+                prePayment = "Y"
+            }
+        }
+
+        collectionHead=CollectionHead(
+            AmountDeposit =AmountDeposit,
+            Date= getDateCurrent().toString(),
+            UserID = SesionEntity.usuario_id,
+            Deposit = numberDeposit,
+            DeferredDate = DeferredDate,
+            IncomeType = incomeTypeCode,
+            BankID = bankCode,
+            CompanyCode = SesionEntity.compania_id,
+            SlpCode = SesionEntity.fuerzatrabajo_id,
+            AppVersion = Utilitario.getVersion(context),
+            Model = modelo,
+            Brand = fabricante,
+            OSVersion = AndroidVersion,
+            DirectDeposit = directDeposit,
+            POSPay = pagoPOS,
+            U_VIS_CollectionSalesPerson = collectionSalesPerson,
+    )
+
+    }catch (e: Exception){
+        Log.e("REOS", "Calculation-CreateCollectionHead-error: " + e.toString())
+    }
+    return collectionHead!!
 }

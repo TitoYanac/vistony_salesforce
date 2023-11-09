@@ -224,6 +224,10 @@ public class ListaProductoAdapter extends ArrayAdapter<ListaProductoEntity> {
         listaProductoEntity.setListnum(lead.getListnum());
         Log.e("REOS", "ListaProductoAdapter-sendArrayProduc-lead.getListnum()" + lead.getListnum());
         listaProductoEntity.setUnits(lead.getUnits());
+        listaProductoEntity.setOiltax(lead.getOiltax());
+        listaProductoEntity.setLiter(lead.getLiter());
+        listaProductoEntity.setSIGAUS(lead.getSIGAUS());
+
         if(ProductoView.type.equals("PromocionDetalle"))
         {
             ProductoView.sendPromotionDetail(listaProductoEntity);

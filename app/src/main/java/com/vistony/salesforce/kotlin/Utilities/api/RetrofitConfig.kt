@@ -17,7 +17,9 @@ class RetrofitConfig {
         var baseUrl: String? = null
         baseUrl =
             when (BuildConfig.FLAVOR) {
-                "chile", "ecuador", "espania", "marruecos"
+                "chile"
+                    //, "ecuador"
+                    , "espania", "marruecos"
                 ,"peru"
                 -> "https://salesforce.vistony.pe"
                 "perurofalab"
@@ -25,6 +27,7 @@ class RetrofitConfig {
                     , "paraguay" -> "https://app.vistony.pe"
                 //"peru" ->"http://190.12.79.132:8083"
                 "bolivia" -> "http://190.12.79.132:8088"
+                "ecuador" -> "http://190.12.79.132:8085"
                 else -> "http://salesforce.vistony.com"
             }
         var puerto = ""
@@ -83,7 +86,9 @@ class RetrofitConfig {
         var baseUrl: String? = null
         baseUrl =
             when (BuildConfig.FLAVOR) {
-                "chile", "ecuador", "espania", "marruecos"
+                "chile"
+                    //, "ecuador"
+                    , "espania", "marruecos"
                   ,"peru"
                 -> "https://salesforce.vistony.pe"
                 "perurofalab"
@@ -93,6 +98,7 @@ class RetrofitConfig {
                     "https://app.vistony.pe"
                 //"peru" ->"http://190.12.79.132:8083"
                 "bolivia" -> "http://190.12.79.132:8088"
+                "ecuador" -> "http://190.12.79.132:8085"
                 else -> "http://salesforce.vistony.com"
             }
         Log.e("REOS", "-RetrofitConfig-getClientLog-baseUrl$baseUrl")

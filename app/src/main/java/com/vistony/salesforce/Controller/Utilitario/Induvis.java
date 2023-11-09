@@ -549,7 +549,6 @@ public class Induvis {
             switch (BuildConfig.FLAVOR){
                 case "india":
                 case "chile":
-                case "ecuador":
                 case "peru":
                     if(currency_id.equals("##"))
                     {
@@ -558,7 +557,6 @@ public class Induvis {
                     }else {
                         currency.add("S/ - SOLES");
                     }
-
                     break;
                 case "bolivia":
                     currency.add("Bs - Bolivianos");
@@ -572,6 +570,9 @@ public class Induvis {
                     break;
                 case "marruecos":
                     currency.add("MAD - Dírham marroquí");
+                    break;
+                case "ecuador":
+                    currency.add("US$-DÓLARES AMERICANOS");
                     break;
             }
         }catch (Exception e)

@@ -505,6 +505,7 @@ public class Convert {
             case "chile":
                 break;
             case "ecuador":
+                Scale=6;
                 break;
             case "peru":
                 Scale=2;

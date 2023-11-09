@@ -1,12 +1,12 @@
 package com.vistony.salesforce.kotlin.Utilities.api
 
 import com.vistony.salesforce.BuildConfig
-import com.vistony.salesforce.Entity.Retrofit.Respuesta.BancoEntityResponse
+import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity
 import com.vistony.salesforce.kotlin.Model.*
-import com.vistony.salesforce.kotlin.View.Pages.ApiResponse
 import com.vistony.salesforce.kotlin.View.Pages.ApiResponseEntity
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface RetrofitApi {
@@ -62,5 +62,15 @@ interface RetrofitApi {
     fun sendFormSupervisor(@Body params: RequestBody?): Call<ApiResponseEntity?>?
 
     @POST(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Notifications/Quotation")
-    fun getNotificationQuotation(@Query("imei") imei: String?,@Body params: RequestBody?): Call<NotificationQuotationEntity?>?
+    fun getNotificationQuotation(@Body params: RequestBody?): Call<NotificationQuotationEntity?>?
+
+    @POST(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Deposits")
+    fun  sendDeposit(@Body params: RequestBody?): Call<CollectionHeadEntity?>?
+
+    //@POST(BuildConfig.BASE_ENDPOINTPOST+BuildConfig.BASE_ENVIRONMENT+"/Collections/Valid")
+    //@POST(BuildConfig.BASE_ENDPOINT+BuildConfig.BASE_ENVIRONMENT+"/Collections")
+    //Call<CobranzaDetalleEntity> sendCollectionCountSend ( @Body RequestBody params);
+    @PATCH(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Collections/{codeSap}")
+    suspend fun updateCollection(@Path("codeSap") codeSap: String?, @Body params: RequestBody?): Response<CollectionDetailEntity?>?
+
 }

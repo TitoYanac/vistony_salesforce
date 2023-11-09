@@ -3,7 +3,6 @@ package com.vistony.salesforce.View;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.obtenerImei;
 
 import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -122,7 +120,7 @@ public class LoginView extends AppCompatActivity {
         String env = BuildConfig.BASE_ENVIRONMENT.equals("/api") ? "Producción" : "Test";
         version = Utilitario.getVersion(getApplication());
 
-        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion()+"_");
+        viewVersion.setText(env + ": " + version + " db: " + db.getWritableDatabase().getVersion()+"");
 
         // locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         loginRepository = new ViewModelProvider(this).get(LoginRepository.class);

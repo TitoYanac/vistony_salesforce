@@ -164,6 +164,11 @@ public class ListaConsClienteCabeceraAdapter extends ArrayAdapter<ListaConsClien
         {
             case "peru":
             case "bolivia":
+            case "ecuador":
+            case "chile":
+            case "espania":
+            case "marruecos":
+            case "perurofalab":
                 break;
             case "paraguay":
                 holder.tablerowpaymentterms.setVisibility(View.GONE);

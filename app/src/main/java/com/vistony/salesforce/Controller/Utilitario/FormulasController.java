@@ -662,6 +662,7 @@ public class FormulasController {
         switch (BuildConfig.FLAVOR)
         {
             case "peru":
+
                 if (ovCabecera.getTerminopago_id().equals("47")) {
                     U_SYP_MDMT = "08";
                     U_SYP_TVENTA = "03";
@@ -673,6 +674,7 @@ public class FormulasController {
                 }
                 break;
             case "bolivia":
+            case "ecuador":
                 if(ovCabecera.getTerminopago_id().equals("47"))
                 {
                     U_SYP_MDMT="08";
@@ -687,15 +689,6 @@ public class FormulasController {
                 }
                 break;
         }
-        /*if (ovCabecera.getTerminopago_id().equals("47")) {
-            U_SYP_MDMT = "08";
-            U_SYP_TVENTA = "03";
-            U_SYP_VIST_TG = "Y";
-        } else {
-            U_SYP_MDMT = ovCabecera.getU_SYP_MDMT();
-            U_SYP_TVENTA = "01";
-            U_SYP_VIST_TG = "N";
-        }*/
 
         DocumentHeader documentHeader = new DocumentHeader();
         Gson gson = new Gson();
@@ -862,6 +855,50 @@ public class FormulasController {
                         montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
                     }
                     break;
+                case "ecuador":
+                    taxCode=SesionEntity.Impuesto_ID;
+                    COGSAccountCode=SesionEntity.cogsacct;
+                    taxOnly="N";
+                    U_VIST_CTAINGDCTO=SesionEntity.u_vist_ctaingdcto;
+                    PercentDescnt = listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento();
+                    //Asignacion Dinamica de cuenta contable de promociones
+                    //ArrayList<BusinessLayerSalesDetailDetailEntity> listBusinessLayerSalesDetailDetailEntity=new ArrayList<>();
+                    //BusinessLayerSalesDetailDetailDao businessLayerSalesDetailDetailDao=new BusinessLayerSalesDetailDetailDao(context);
+
+                    if(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id().equals("ECOVALOR"))
+                    {
+                        listBusinessLayerSalesDetailDetailEntity=businessLayerSalesDetailDetailDao.getBusinessLayerSalesDetailDetailType("1","7","ECOVALOR");
+                    }else {
+                        listBusinessLayerSalesDetailDetailEntity=businessLayerSalesDetailDetailDao.getBusinessLayerSalesDetailDetailPercent("1",listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
+                    }
+
+                    for(int g=0;g<listBusinessLayerSalesDetailDetailEntity.size();g++)
+                    {
+                        if(listBusinessLayerSalesDetailDetailEntity.get(g).getField().equals("COGSAccountCode"))
+                        {
+                            //AcctCode=listBusinessLayerSalesDetailDetailEntity.get(g).getVariable();
+                            COGSAccountCode=listBusinessLayerSalesDetailDetailEntity.get(g).getVariable();
+                        }
+                    }
+
+                    //Casuistica Bonificacion
+                    if(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento().equals("100"))
+                    {
+                        montolineatotal="0";
+                    }
+                    //Casustica Descuento
+                    else if(Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())>0&&
+                            Float.parseFloat(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento())<100)
+                    {
+                        montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
+                    }
+                    //Casuistica Venta
+                    else
+                    {
+                        montolineatotal=listaordenVentaDetalleSQLiteEntity.get(j).getMontosubtotalcondescuento();
+                    }
+
+                    break;
             }
 
 
@@ -875,6 +912,14 @@ public class FormulasController {
             documentLine.setCostingCode3(SesionEntity.LineaProduccion);
             //el vendedor puede desde 0 a 99.9%, de 0 a 5% todo ok en adelnate mostrar alerta
             //documentLine.setDiscountPercent(listaordenVentaDetalleSQLiteEntity.get(j).getPorcentajedescuento());
+            /*switch (BuildConfig.FLAVOR)
+            {
+                case "ecuador":
+                    break;
+                default:
+                    documentLine.setDiscountPercent(PercentDescnt);
+                    break;
+            }*/
             documentLine.setDiscountPercent(PercentDescnt);
             documentLine.setDscription(ObtenerProductoDescripcion(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id(), context));
             documentLine.setItemCode(listaordenVentaDetalleSQLiteEntity.get(j).getProducto_id());
@@ -1433,8 +1478,6 @@ public class FormulasController {
         ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntitycopia = new ArrayList<>();
         ListaOrdenVentaDetalleEntity ObjlistaOrdenVentaDetalleEntity;
 
-        //Inicia Bucle
-
         if (listaOrdenVentaDetalleEntity != null) {
             for (int a = 0; a < listaOrdenVentaDetalleEntity.size(); a++) {
                 Log.e("REOS", "FormulasController-ConversionListaOrdenDetallepoListaOrdenDetallePromocion-a" + String.valueOf(a));
@@ -1464,13 +1507,14 @@ public class FormulasController {
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_lista_orden_detalle_promocion = null;
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_descuentocontado = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_descuentocontado();
                         ObjlistaOrdenVentaDetalleEntity.orden_detalle_chk_descuentocontado_aplicado = listaOrdenVentaDetalleEntity.get(a).isOrden_detalle_chk_descuentocontado_aplicado();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_oil_tax = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_oil_tax();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_liter = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_liter();
+                        ObjlistaOrdenVentaDetalleEntity.orden_detalle_SIGAUS = listaOrdenVentaDetalleEntity.get(a).getOrden_detalle_SIGAUS();
                         listaOrdenVentaDetalleEntitycopia.add(ObjlistaOrdenVentaDetalleEntity);
                     }
                 }
             }
         }
-
-
         return listaOrdenVentaDetalleEntitycopia;
     }
 
@@ -2128,5 +2172,100 @@ public class FormulasController {
             }
         }
         return status;
+    }
+
+    public ArrayList<ListaOrdenVentaDetalleEntity> addSIGAUS
+            (ArrayList<ListaOrdenVentaDetalleEntity> listSalesOrder
+             //,ArrayList<ListaOrdenVentaDetalleEntity> listadoProductosAgregados
+            )
+    {
+        ListaPrecioDetalleSQLiteDao listaPrecioDetalleSQLiteDao=new ListaPrecioDetalleSQLiteDao(Context);
+        ArrayList<ListaPrecioDetalleSQLiteEntity> listSIGAUS=new ArrayList<>();
+        listSIGAUS=listaPrecioDetalleSQLiteDao.getProductSIGAUS();
+        Log.e("REOS", "FormulasController-addSIGAUS-listSIGAUS.size(): "+listSIGAUS.size());
+
+        String producto_id="",producto="",umd="",stock="",preciobase="";
+        Float cantidad=0f,SIGAUS=0f;
+        for(int i=0;i<listSIGAUS.size();i++)
+        {
+            producto_id=listSIGAUS.get(i).getProducto_id();
+            producto=listSIGAUS.get(i).getProducto();
+            umd=listSIGAUS.get(i).getUmd();
+            stock=listSIGAUS.get(i).getStock_almacen();
+            preciobase=listSIGAUS.get(i).getContado();
+        }
+
+        Log.e("REOS", "FormulasController-addSIGAUS-listSalesOrder.size(): "+listSalesOrder.size());
+        Log.e("REOS", "FormulasController-addSIGAUS-preciobase: "+preciobase);
+        ArrayList<ListaOrdenVentaDetalleEntity> listaOrdenVentaDetalleEntities=new ArrayList<>();
+        listaOrdenVentaDetalleEntities=ConversionListaOrdenDetallepoListaOrdenDetallePromocion(listSalesOrder);
+        for(int j=0;j<listaOrdenVentaDetalleEntities.size();j++)
+        {
+            Log.e("REOS", "FormulasController-addSIGAUS-listSalesOrder.get(j).getOrden_detalle_oil_tax(): "+listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_liter());
+            Log.e("REOS", "FormulasController-addSIGAUS-listSalesOrder.get(j).getOrden_detalle_liter(): "+listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_cantidad());
+            Log.e("REOS", "FormulasController-addSIGAUS-listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_oil_tax(): "+listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_oil_tax());
+            if(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_oil_tax() .equals("Y"))
+            {
+                cantidad=cantidad+
+                        (
+                                Float.parseFloat(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_gal_acumulado())
+                                /*Float.parseFloat(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_gal())
+                                        *
+                                        Float.parseFloat(listaOrdenVentaDetalleEntities.get(j).getOrden_detalle_cantidad())*/
+                        )
+                ;
+            }
+        }
+        ListaOrdenVentaDetalleEntity ObjListaProductosEntity=new ListaOrdenVentaDetalleEntity();
+        String indice="0";
+        if(listSalesOrder.isEmpty())
+        {
+            indice="1";
+        }
+        else
+        {
+            indice=String.valueOf(listSalesOrder.size()+1);
+        }
+
+        for(int j=0;j<listSalesOrder.size();j++)
+        {
+            if(listSalesOrder.get(j).getOrden_detalle_producto_id().equals("ECOVALOR"))
+            {
+                SIGAUS++;
+            }
+        }
+
+        if(SIGAUS==0)
+        {
+            ObjListaProductosEntity.orden_detalle_item = (indice);
+            ObjListaProductosEntity.orden_detalle_producto_id = producto_id;
+            ObjListaProductosEntity.orden_detalle_producto = producto;
+            ObjListaProductosEntity.orden_detalle_umd = umd;
+            ObjListaProductosEntity.orden_detalle_stock_almacen = stock;
+            ObjListaProductosEntity.orden_detalle_precio_unitario = preciobase;
+            ObjListaProductosEntity.orden_detalle_gal = "0";
+            ObjListaProductosEntity.orden_detalle_monto_igv = "0";
+            //Cambio
+            ObjListaProductosEntity.orden_detalle_cantidad = cantidad.toString();
+            //
+            ObjListaProductosEntity.orden_detalle_monto_descuento = "0";
+            ObjListaProductosEntity.orden_detalle_montototallinea = "0";
+            ObjListaProductosEntity.orden_detalle_promocion_habilitada = "0";
+            ObjListaProductosEntity.orden_detalle_lista_promocion_cabecera = null;
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento = "0";
+            ObjListaProductosEntity.orden_detalle_montosubtotal = "0";
+            ObjListaProductosEntity.orden_detalle_gal_acumulado = "0";
+            ObjListaProductosEntity.orden_detalle_descuentocontado = "0";
+            ObjListaProductosEntity.orden_detalle_terminopago_id = "0";
+            ObjListaProductosEntity.orden_detalle_chk_descuentocontado_cabecera = true;
+            ObjListaProductosEntity.orden_detalle_cardcode = "";
+            ObjListaProductosEntity.orden_detalle_porcentaje_descuento_maximo = "";
+            ObjListaProductosEntity.orden_detalle_oil_tax = "";
+            ObjListaProductosEntity.orden_detalle_liter = "";
+            ObjListaProductosEntity.orden_detalle_montosubtotalcondescuento = "0";
+            ObjListaProductosEntity.orden_detalle_SIGAUS = "Y";
+            listSalesOrder.add(ObjListaProductosEntity);
+        }
+        return listSalesOrder;
     }
 }

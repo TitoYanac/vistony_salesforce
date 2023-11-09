@@ -49,7 +49,6 @@ import com.omega_r.libs.OmegaCenterIconButton;
 import com.vistony.salesforce.AppExecutors;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Controller.Adapters.AlertGPSDialogController;
-import com.vistony.salesforce.Controller.Utilitario.Convert;
 import com.vistony.salesforce.Controller.Utilitario.FormulasController;
 import com.vistony.salesforce.Controller.Utilitario.GPSController;
 import com.vistony.salesforce.Controller.Utilitario.ImageCameraController;
@@ -117,7 +116,7 @@ public class LeadClientesView extends Fragment {
     public static String mCurrentPhotoPath="";
     File fileCliente;
     private static final int MAX_BITMAP_SIZE = 100 * 1024 * 1024; // 100 MB
-
+    AppExecutors executor;
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(String tag, Object dato);
     }
@@ -170,6 +169,7 @@ public class LeadClientesView extends Fragment {
         latitude=0;
         longitude=0;
         verifyPermission();
+        executor=new AppExecutors();
         if(type!=null)
         {
             if (type.equals("leadUpdateClient")) {
@@ -224,8 +224,13 @@ public class LeadClientesView extends Fragment {
         ti_textcellphone=v.findViewById(R.id.ti_textcellphone);
 
         et_telfhouseclient=v.findViewById(R.id.et_telfhouseclient);
-        if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("espania")
-                ||BuildConfig.FLAVOR.equals("bolivia")
+        if(BuildConfig.FLAVOR.equals("peru") ||
+           BuildConfig.FLAVOR.equals("espania")||
+           BuildConfig.FLAVOR.equals("bolivia")||
+           BuildConfig.FLAVOR.equals("ecuador")||
+           BuildConfig.FLAVOR.equals("marruecos")||
+           BuildConfig.FLAVOR.equals("chile")||
+           BuildConfig.FLAVOR.equals("paraguay")
         )
         {
             getActivity().setTitle(getResources().getString(R.string.lead_cliente));
@@ -269,7 +274,7 @@ public class LeadClientesView extends Fragment {
 
 
         }
-        else if(BuildConfig.FLAVOR.equals("ecuador")||BuildConfig.FLAVOR.equals("marruecos")||
+        /*else if(BuildConfig.FLAVOR.equals("ecuador")||BuildConfig.FLAVOR.equals("marruecos")||
                 BuildConfig.FLAVOR.equals("chile")
         )
         {
@@ -290,7 +295,7 @@ public class LeadClientesView extends Fragment {
             editTextEmail.setEnabled(false);
             btnUpload.setText(getActivity().getResources().getString(R.string.accept).toUpperCase());
             ti_textcellphone.setVisibility(View.GONE);
-        }
+        }*/
         editTextCardCode.setText(rucdni);
         editTextCardName.setText(nombrecliente);
         editTextStreet.setText(domebarque);
@@ -314,36 +319,60 @@ public class LeadClientesView extends Fragment {
             startActivity(intent);
         });
         floatingButtonTakePhoto.setOnClickListener(data -> {
-            try {
-                Log.e("REOS","statusDispatchRepository-->FotoLocal-->Inicia");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Crea el File
-                File photoFile = null;
-                photoFile = createImageFile(cliente_id+domebarque_id+"_"+getDate(),"C");
-                if (photoFile != null) {
-                    Uri photoURI=null;
-                    Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
-                    switch (BuildConfig.FLAVOR)
-                    {
-                        case "peru":
-                            photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
-                            break;
-                        case "bolivia":
-                            photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.bolivia" , photoFile);
-                            break;
-                    }
 
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    someActivityResultLauncher.launch(intent);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(getActivity(), "No se pudo grabar la Geolocalizacion error: "+e.toString(), Toast.LENGTH_SHORT).show();
+            try {
+                //executor.diskIO().execute(() -> {
+                    Log.e("REOS","statusDispatchRepository-->FotoLocal-->Inicia");
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    // Crea el File
+                    File photoFile = null;
+                        try {
+                            photoFile = createImageFile(cliente_id+domebarque_id+"_"+getDate(),"C");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        if (photoFile != null) {
+                        Uri photoURI=null;
+                        Log.e("REOS","statusDispatchRepository-->FotoLocal-->photoFile != null");
+                        switch (BuildConfig.FLAVOR)
+                        {
+                            case "peru":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.peru" , photoFile);
+                                break;
+                            case "bolivia":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.bolivia" , photoFile);
+                                break;
+                            case "ecuador":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.ecuador" , photoFile);
+                                break;
+                            case "paraguay":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.paraguay" , photoFile);
+                                break;
+                            case "chile":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.chile" , photoFile);
+                                break;
+                            case "espania":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.espania" , photoFile);
+                                break;
+                            case "marruecos":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.marruecos" , photoFile);
+                                break;
+                            case "perurofalab":
+                                photoURI = FileProvider.getUriForFile(getContext(),"com.vistony.salesforce.perurofalab" , photoFile);
+                                break;
+                        }
+
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        someActivityResultLauncher.launch(intent);
+                    }
+                    //someActivityResultLauncher.launch(intent);
+               // });
             } catch (Exception e){
                 e.printStackTrace();
                 Toast.makeText(getActivity(), "No se pudo grabar la Geolocalizacion error: "+e.toString(), Toast.LENGTH_SHORT).show();
             }
             Log.e("REOS","statusDispatchRepository-->FotoLocal-->Fin");
+
         });
 
         LeadClientesView.this.someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -351,27 +380,49 @@ public class LeadClientesView extends Fragment {
             if (result.getResultCode() == RESULT_OK) {
                 Bitmap bitmap2=null;
                 try {
-                    File file = new File(mCurrentPhotoPath);
-                    bitmap2 = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file));
-                    ImageCameraController imageCameraController = new ImageCameraController();
-                    fileCliente=imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,cliente_id+domebarque_id+"_"+getDate(),"C");
-                    imgBitmap=bitmap2;
-                    int bitmapSize = imgBitmap.getByteCount();
-                    if (bitmapSize > MAX_BITMAP_SIZE) {
-                        throw new RuntimeException(
-                                "Canvas: trying to draw too large(" + bitmapSize + "bytes) bitmap.");
-                    }else {
-                        //imageViewPhoto.setImageBitmap(bitmap2);
-                        Convert.resizeImage(imageViewPhoto,bitmap2,getActivity());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
+                        File file = new File(mCurrentPhotoPath);
+                            try {
+                                bitmap2 = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.fromFile(file));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            ImageCameraController imageCameraController = new ImageCameraController();
+                            try {
+                                fileCliente=imageCameraController.SaveImageStatusDispatch (getContext(),bitmap2,cliente_id+domebarque_id+"_"+getDate(),"C");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                    //Bundle extras = result.getData().getExtras();
+                    //Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    //ImageView imageView = findViewById(R.id.imageviewTest);
+                    //imageView.setImageBitmap(imageBitmap);
+                    //imgBitmap=bitmap2;
+                   // imgBitmap=imageBitmap;
+                        /*int bitmapSize = imgBitmap.getByteCount();
+                        if (bitmapSize > MAX_BITMAP_SIZE) {
+                            throw new RuntimeException(
+                                    "Canvas: trying to draw too large(" + bitmapSize + "bytes) bitmap.");
+                        }else {
+                            //imageViewPhoto.setImageBitmap(bitmap2);
+                            Convert.resizeImage(imageViewPhoto,bitmap2,getActivity());
+                        }*/
+                    imageViewPhoto.setImageBitmap(bitmap2);
+                    bitmap2=null;
+                    //imageViewPhoto.setImageBitmap(imgBitmap);
+                    executor.diskIO().execute(() -> {
+                        boolean isDeleted = deleteImageFile(mCurrentPhotoPath);
+                        if (isDeleted) {
+                            System.out.println("La foto fue eliminada exitosamente");
+                        } else {
+                            System.out.println("No se pudo eliminar la foto");
+                        }
+                    });
                 } catch (Exception e){
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "No se pudo mostrar la imagen en miniatura - error: "+e.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
+
         });
 
         btnUpload.setOnClickListener(e -> {
@@ -382,8 +433,8 @@ public class LeadClientesView extends Fragment {
                 mListener.onFragmentInteraction(compuesto, object
                 );
             }*/
-            if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("bolivia"))
-            {
+            /*if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("bolivia"))
+            {*/
                 if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
                 {
                     String Fragment="RutaVendedorView";
@@ -397,8 +448,8 @@ public class LeadClientesView extends Fragment {
                     sendLeadApi();
                 }
 
-            }
-            else if(BuildConfig.FLAVOR.equals("ecuador")||BuildConfig.FLAVOR.equals("espania")
+            //}
+            /*else if(BuildConfig.FLAVOR.equals("ecuador")||BuildConfig.FLAVOR.equals("espania")
                     ||BuildConfig.FLAVOR.equals("marruecos")||BuildConfig.FLAVOR.equals("chile"))
             {
                 String Fragment="RutaVendedorView";
@@ -408,7 +459,7 @@ public class LeadClientesView extends Fragment {
                     mListener.onFragmentInteraction(compuesto, object
                     );
                 }
-            }
+            }*/
         });
         try {
         buttonSendGPS.setOnClickListener(e -> {
@@ -545,8 +596,8 @@ public class LeadClientesView extends Fragment {
                 parametros.put("DateTime", "" + formattedDate);
                 //parametros.put("photo", encoded);
                 parametros.put("photo", fileCliente.toString());
-                if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("bolivia"))
-                {
+                //if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("bolivia"))
+                //{
                     if(SesionEntity.perfil_id.equals("Chofer")||SesionEntity.perfil_id.equals("CHOFER"))
                     {
 
@@ -554,7 +605,7 @@ public class LeadClientesView extends Fragment {
                         type="leadUpdateClientCensus";
                     }
 
-                }
+                //}
                 parametros.put("type", type);
                 parametros.put("CardCode", cliente_id);
                 parametros.put("domembarque_id", domebarque_id);
@@ -912,6 +963,11 @@ public class LeadClientesView extends Fragment {
         } else {
 
         }
+    }
+
+    private boolean deleteImageFile(String filePath) {
+        File file = new File(filePath);
+        return file.delete();
     }
 }
 

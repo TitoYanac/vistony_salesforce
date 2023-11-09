@@ -1053,9 +1053,39 @@ public class SqliteController extends SQLiteOpenHelper {
         {
             db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN DocEntry TEXT");
         }
-
-
-
+        if(oldVersion==38&&newVersion==46)
+        {
+            db.execSQL("ALTER TABLE usuario ADD COLUMN U_VIS_ManagementType TEXT");
+            db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN cantidad_maxima TEXT");
+            db.execSQL("ALTER TABLE promocioncabecera ADD COLUMN tipo_malla TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN status TEXT");
+            db.execSQL("CREATE TABLE pricelisthead (compania_id text,fuerzatrabajo_id text,usuario_id text,ListNum TEXT,ListName TEXT,U_VIS_PercentageIncrease TEXT)");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodePriceListCash TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodePriceListCredit TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_DiscountPercent TEXT");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_ReasonDiscountPercent TEXT");
+            //42
+            db.execSQL("CREATE TABLE businesslayerhead (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text,U_VIS_Objetive text,U_VIS_VariableType text,U_VIS_Variable text,U_VIS_Trigger text,U_VIS_TriggerType text,U_VIS_Active text,U_VIS_ValidFrom text,U_VIS_ValidUntil text )");
+            db.execSQL("CREATE TABLE businesslayerdetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,LineId text,U_VIS_Type text,U_VIS_Object text,U_VIS_Action text)");
+            db.execSQL("CREATE TABLE object (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text,Name text)");
+            db.execSQL("CREATE TABLE businesslayersalesdetailHeader (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text ,Object text,Name text, Action text )");
+            db.execSQL("CREATE TABLE businesslayersalesdetailDetail (compania_id text,fuerzatrabajo_id text,usuario_id text,Code text ,LineId text,RangeActive Text,Object text ,TypeObject text,ValueMin text,ValueMax text,Field text,Variable text )");
+            //43
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIS_MOTAPLDESC TEXT");
+            //44
+            db.execSQL("CREATE TABLE warehouse (WhsCode text,WhsName text,PriceListCash text,PriceListCredit text,U_VIST_SUCUSU text)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN U_VIST_SUCUSU TEXT");
+            db.execSQL("ALTER TABLE listapreciodetalle ADD COLUMN CodAlmacen TEXT");
+            //45
+            db.execSQL("CREATE TABLE sellerroute (CardCode text,Address text,Chk_Visit text,Chk_Pedido text,Chk_Cobranza text,Chk_Ruta text,FechaRuta text)");
+            //46
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN DocEntry TEXT");
+        }
+        if(oldVersion==44&&newVersion==46)
+        {
+            db.execSQL("CREATE TABLE sellerroute (CardCode text,Address text,Chk_Visit text,Chk_Pedido text,Chk_Cobranza text,Chk_Ruta text,FechaRuta text)");
+            db.execSQL("ALTER TABLE ordenventacabecera ADD COLUMN DocEntry TEXT");
+        }
     }
 
     public  static void deleteDatabase(Context mContext){

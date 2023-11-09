@@ -58,10 +58,10 @@ class NotificationViewModel(
         }
     }
 
-    fun getNotificationQuotation(list:String)
+    fun getNotificationQuotation(list:ArrayList<String>)
     {
         viewModelScope.launch {
-            notificationRepository.getNotificationQuotation(context,imei,list)
+            notificationRepository.getNotificationQuotation(imei,list)
         }
     }
 }

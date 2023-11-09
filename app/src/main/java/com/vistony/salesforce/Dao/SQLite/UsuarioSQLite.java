@@ -96,8 +96,7 @@ public class UsuarioSQLite {
         catch (Exception e){
             Log.e("REOS", "UsuarioSQLite.InsertaUsuario.e: " + e.toString());
         }
-            bd.close();
-
+            cerrar();
             return 1;
 
     }
@@ -171,6 +170,7 @@ public class UsuarioSQLite {
 
             if (fila.moveToFirst()) {
                 do {
+
                     usuarioSQLiteEntity.setCompania_id(fila.getString(fila.getColumnIndex("compania_id")));
                     usuarioSQLiteEntity.setFuerzatrabajo_id(fila.getString(fila.getColumnIndex("fuerzatrabajo_id")));
                     usuarioSQLiteEntity.setNombrecompania(fila.getString(fila.getColumnIndex("nombrecompania")));
@@ -213,8 +213,8 @@ public class UsuarioSQLite {
                     usuarioSQLiteEntity.setSendvalidations (fila.getString(fila.getColumnIndex("sendvalidations")));
                     usuarioSQLiteEntity.setU_VIS_ManagementType (fila.getString(fila.getColumnIndex("U_VIS_ManagementType")));
                     usuarioSQLiteEntity.setOiltaxstatus (fila.getString(fila.getColumnIndex("oiltaxstatus")));
-                    usuarioSQLiteEntity.setOiltaxdesc (fila.getString(fila.getColumnIndex("oiltaxdesc")));
-                    usuarioSQLiteEntity.setOiltaxvalue (fila.getString(fila.getColumnIndex("oiltaxvalue")));
+                    //usuarioSQLiteEntity.setOiltaxdesc (fila.getString(fila.getColumnIndex("oiltaxdesc")));
+                    //usuarioSQLiteEntity.setOiltaxvalue (fila.getString(fila.getColumnIndex("oiltaxvalue")));
 
                 } while (fila.moveToNext());
             }
@@ -223,8 +223,8 @@ public class UsuarioSQLite {
         }catch (Exception e){
             //Sentry.captureMessage(e.getMessage());
         }
-
-        bd.close();
+        cerrar();
+        //bd.close();
         return usuarioSQLiteEntity;
 
     }

@@ -43,8 +43,9 @@ public class ReasonDispatchRepository  extends ViewModel {
                     reasonDispatchSQLite.AddReasonDispatch (reasonDispatchEntityResponse.getReasonDispatchEntities());
                     Integer countReasonDispatch=getCountReasonDispatch(context);
                     parametrosSQLite.ActualizaCantidadRegistros("24", "MOTIVO DESPACHO", ""+countReasonDispatch, getDateTime());
-                    status.setValue("1");
+
                     });
+                    status.setValue("1");
                 }else
                 {
                     status.setValue("0");

@@ -77,6 +77,7 @@ import com.vistony.salesforce.R;
 import com.vistony.salesforce.kotlin.View.Pages.DepositScreen;
 import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetMapScreen;
 import com.vistony.salesforce.kotlin.View.Pages.FormularioTest1;
+import com.vistony.salesforce.kotlin.View.Pages.HistoricalCollectionDetail;
 import com.vistony.salesforce.kotlin.View.Pages.ValidationAccountClient;
 
 
@@ -1137,7 +1138,10 @@ public class MenuView extends AppCompatActivity
         else if(tag.equals("HistoricoCobranzaView")){
             if(tag2.equals("COBRANZA"))
             {
+                //Version Java
                 contentFragment=new HistoricoCobranzaView();
+                //Version Kotlin
+                //contentFragment = new HistoricalCollectionDetail();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();

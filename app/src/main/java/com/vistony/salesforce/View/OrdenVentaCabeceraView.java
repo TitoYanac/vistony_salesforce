@@ -23,8 +23,6 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.sax.ElementListener;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -172,7 +170,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
     Float discountPercent=0f;
     //TaskGetPriceList taskGetPriceList=new TaskGetPriceList();
     private ListaPrecioRepository listaPrecioRepository;
-    UsuarioSQLiteEntity ObjUsuario;
+    static UsuarioSQLiteEntity ObjUsuario;
     AppExecutors executor;
     public OrdenVentaCabeceraView() {
         // Required empty public constructor
@@ -238,7 +236,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             tr_spn_reason_free_transfer.setVisibility(View.GONE);
         }
 
-        if(terminopago_id.equals("44"))
+        if(terminopago_id.equals("44")&&BuildConfig.FLAVOR.equals("peru")&&ObjUsuario.getU_VIS_ManagementType().equals("B2C"))
         {
             tr_descount_bl.setVisibility(View.VISIBLE);
             tl_tittle_discount_percent.setVisibility(View.VISIBLE);
@@ -1573,29 +1571,29 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
         dialogButtonOK.setOnClickListener(v -> {
 
             pd = new ProgressDialog(getActivity());
-            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando "+Induvis.getTituloVentaString(context), true, false);
+            pd = ProgressDialog.show(getActivity(), "Por favor espere", "Enviando "+Induvis.getTituloVentaString(context), true, true);
             OrdenVentaCabeceraSQLite ordenVentaCabeceraSQLite=new OrdenVentaCabeceraSQLite(getContext());
             ordenVentaCabeceraSQLite.UpdateStatusOVenviada(ordenventa_id);
             ordenVentaRepository.sendSalesOrder(ordenventa_id,getContext()).observe(getActivity(), data->{
 
                 Toast.makeText(getContext(),data, Toast.LENGTH_LONG).show();
 
-                Drawable drawable = menu_variable.findItem(R.id.enviar_erp).getIcon();
-                drawable = DrawableCompat.wrap(drawable);
-                DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.Black));
-                menu_variable.findItem(R.id.enviar_erp).setIcon(drawable);
-                enviar_erp.setEnabled(false);
 
-                Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
-                drawable2 = DrawableCompat.wrap(drawable2);
-                DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.white));
-                menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
-                generarpdf.setEnabled(true);
 
                 pd.dismiss();
             });
 //            myTrace.stop();
+            Drawable drawable = menu_variable.findItem(R.id.enviar_erp).getIcon();
+            drawable = DrawableCompat.wrap(drawable);
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(context, R.color.Black));
+            menu_variable.findItem(R.id.enviar_erp).setIcon(drawable);
+            enviar_erp.setEnabled(false);
 
+            Drawable drawable2 = menu_variable.findItem(R.id.generarpdf).getIcon();
+            drawable2 = DrawableCompat.wrap(drawable2);
+            DrawableCompat.setTint(drawable2, ContextCompat.getColor(context, R.color.white));
+            menu_variable.findItem(R.id.generarpdf).setIcon(drawable2);
+            generarpdf.setEnabled(true);
             //HiloEnviarNubeOV hiloEnviarNubeOV = new HiloEnviarNubeOV();
             //hiloEnviarNubeOV.execute(Jsonx);
 

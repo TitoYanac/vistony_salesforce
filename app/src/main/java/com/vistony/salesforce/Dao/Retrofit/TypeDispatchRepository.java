@@ -43,8 +43,9 @@ public class TypeDispatchRepository  extends ViewModel {
                     typeDispatchSQLite.AddTypeDispatch (typeDispatchEntityResponse.getTypeDispatchEntities());
                     Integer countTypeDispatch=getCountTypeDispatch(context);
                     parametrosSQLite.ActualizaCantidadRegistros("23", "TIPO DESPACHO", ""+countTypeDispatch, getDateTime());
-                    status.setValue("1");
+
                     });
+                    status.setValue("1");
                 }else
                 {
                     status.setValue("0");

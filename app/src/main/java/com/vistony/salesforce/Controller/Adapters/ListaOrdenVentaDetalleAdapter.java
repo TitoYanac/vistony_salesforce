@@ -1,7 +1,5 @@
 package com.vistony.salesforce.Controller.Adapters;
 
-import static com.vistony.salesforce.Controller.Utilitario.Convert.getTotaLine;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -23,10 +21,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -37,13 +33,10 @@ import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Controller.Utilitario.Utilitario;
 import com.vistony.salesforce.Dao.SQLite.ListaPrecioDetalleSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.PromocionCabeceraSQLiteDao;
-import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetalleEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaOrdenVentaDetallePromocionEntity;
 import com.vistony.salesforce.Entity.Adapters.ListaPromocionCabeceraEntity;
-import com.vistony.salesforce.Entity.LoginEntity;
 import com.vistony.salesforce.Entity.SQLite.ListaPrecioDetalleSQLiteEntity;
-import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.R;
 import com.vistony.salesforce.View.OrdenVentaDetalleView;
@@ -156,8 +149,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                 }
                 //boolean status=formulasController.StatusDiscountAdittional(lead,getContext());
                 //Log.e("REOS","ListaOrdenVentaDetalleAdapter-getView-status: "+status);
-                Log.e("REOS","ListaOrdenVentaDetalleAdapter-getView-lead.getOrden_detalle_porcentaje_descuento(): "+lead.getOrden_detalle_porcentaje_descuento());
-                Log.e("REOS","ListaOrdenVentaDetalleAdapter-getView-formulasController.StatusDiscountAdittional(lead,getContext()): "+formulasController.StatusDiscountAdittional(lead,getContext()));
+                //Log.e("REOS","ListaOrdenVentaDetalleAdapter-getView-lead.getOrden_detalle_porcentaje_descuento(): "+lead.getOrden_detalle_porcentaje_descuento());
+                //Log.e("REOS","ListaOrdenVentaDetalleAdapter-getView-formulasController.StatusDiscountAdittional(lead,getContext()): "+formulasController.StatusDiscountAdittional(lead,getContext()));
                 if(lead.getOrden_detalle_terminopago_id().equals("44"))
                 {
                     if(formulasController.StatusDiscountAdittional(lead,getContext()))
@@ -209,8 +202,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     UpdateLine(lead,holder);
                 }
             }*/
-            Log.e("REOS","ListaOrdenVentaDetalleAdapter-OnCreate-lead.getOrden_detalle_porcentaje_descuento(): "+lead.getOrden_detalle_porcentaje_descuento());
-            Log.e("REOS","ListaOrdenVentaDetalleAdapter-OnCreate-entrosinpromocion");
+            //Log.e("REOS","ListaOrdenVentaDetalleAdapter-OnCreate-lead.getOrden_detalle_porcentaje_descuento(): "+lead.getOrden_detalle_porcentaje_descuento());
+            //Log.e("REOS","ListaOrdenVentaDetalleAdapter-OnCreate-entrosinpromocion");
         }
         else
         {
@@ -232,7 +225,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     holder.tv_discount_percent.setText(lead.getOrden_detalle_percent_discount_business_layer());
                 }
             }*/
-            Log.e("REOS","ListaOrdenVentaDetalleAdapter-OnCreate-entroconpromocion");
+            //Log.e("REOS","ListaOrdenVentaDetalleAdapter-OnCreate-entroconpromocion");
         }
 
         if(!(lead.getOrden_detalle_lista_promocion_cabecera()==null))
@@ -244,14 +237,14 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     lead.getOrden_detalle_percent_discount_business_layer()
 
             );
-            Log.e("REOS","ListaOrdenVentaDetalleAdapter:calculodescuento:" + calculodescuento);
+            //Log.e("REOS","ListaOrdenVentaDetalleAdapter:calculodescuento:" + calculodescuento);
             holder.tv_orden_detalle_porcentaje_descuento.setText((calculodescuento));
             lead.setOrden_detalle_porcentaje_descuento(calculodescuento);
             UpdateLine(lead,holder);
 
         }else
         {
-            Log.e("REOS", "ListaOrdenVentaDetalleAdapter-LineaSinPromocion-Inicio");
+            //Log.e("REOS", "ListaOrdenVentaDetalleAdapter-LineaSinPromocion-Inicio");
             holder.tv_orden_detalle_porcentaje_descuento.setText(lead.getOrden_detalle_porcentaje_descuento());
             //holder.tv_orden_detalle_total.setText(Convert.currencyForView(lead.getOrden_detalle_montosubtotal()));
             switch (BuildConfig.FLAVOR)
@@ -271,6 +264,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                             //Variable 2  Monto Descuento
                             lead.getOrden_detalle_monto_descuento()
                     ));
+            UpdateLine(lead,holder);
         }
         /*ActualizaListaOrdenDetallePromocion(lead);
         ActualizarResumenOrdenVenta();
@@ -310,8 +304,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean procesado = false;
-                Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-onEditorAction");
-                Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-onEditorAction");
+                //Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-onEditorAction");
+                //Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-onEditorAction");
                 /*if (actionId == EditorInfo.IME_ACTION_SEND && v == currentEditText) {
                     Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-onEditorAction-EditorInfo.IME_ACTION_SEND");
                     Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-procesado: " + procesado);
@@ -319,8 +313,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                     procesado = true; // Marca como procesado
                 }*/
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-onEditorAction-EditorInfo.IME_ACTION_SEND");
-                    Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-procesado: "+procesado);
+                    //Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-onEditorAction-EditorInfo.IME_ACTION_SEND");
+                    //Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-procesado: "+procesado);
                     procesado = true; // Marca como procesado
 
                     String valor="0";
@@ -774,7 +768,24 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                             listaOrdenVentaDetallePromocionEntity.orden_detalle_montosubtotal = formulasController.getTotalPerLine
                                     (lead.getOrden_detalle_lista_promocion_cabecera().get(a).getListaPromocionDetalleEntities().get(b).getPreciobase(),
                                             listaOrdenVentaDetallePromocionEntity.getOrden_detalle_cantidad());
-                            listaOrdenVentaDetallePromocionEntity.orden_detalle_porcentaje_descuento = "100";
+
+                            switch (BuildConfig.FLAVOR)
+                            {
+                                case "bolivia":
+                                case "india":
+                                case "chile":
+                                case "peru":
+                                case "paraguay":
+                                case "perurofalab":
+                                case "espania":
+                                case "marruecos":
+                                    listaOrdenVentaDetallePromocionEntity.orden_detalle_porcentaje_descuento = "100";
+                                    break;
+                                case "ecuador":
+                                    listaOrdenVentaDetallePromocionEntity.orden_detalle_porcentaje_descuento= lead.getOrden_detalle_lista_promocion_cabecera().get(a).getListaPromocionDetalleEntities().get(b).getDescuento();
+                                    break;
+                            }
+
                             listaOrdenVentaDetallePromocionEntity.orden_detalle_monto_descuento =
                                     //Formula Para Calcular el Monto de Descuento
                                     formulasController.applyDiscountPercentageForLine(
@@ -798,8 +809,19 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                             ));
                             listaOrdenVentaDetallePromocionEntity.orden_detalle_lista_promocion_cabecera = null;
                             listaOrdenVentaDetallePromocionEntity.orden_detalle_promocion_habilitada = "0";
-                            listaOrdenVentaDetallePromocionEntity.orden_detalle_gal = "0";
-                            listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado = "0";
+
+                            /*listaOrdenVentaDetallePromocionEntity.orden_detalle_gal = "0";
+                            listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado = "0";*/
+                            if(BuildConfig.FLAVOR.equals("ecuador"))
+                            {
+                                listaOrdenVentaDetallePromocionEntity.orden_detalle_gal = lead.getOrden_detalle_gal();
+                                listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado = String.valueOf(Float.parseFloat(listaOrdenVentaDetallePromocionEntity.orden_detalle_cantidad) * Float.parseFloat(lead.getOrden_detalle_gal()));
+                            }else {
+                                listaOrdenVentaDetallePromocionEntity.orden_detalle_gal = "0";
+                                listaOrdenVentaDetallePromocionEntity.orden_detalle_gal_acumulado = "0";
+                            }
+
+
                             listaOrdenVentaDetallePromocionEntity.orden_detalle_montosubtotalcondescuento = formulasController.CalcularMontoTotalconDescuento(
                                     //Variable 1 Monto Total Linea Sin IGV
                                     listaOrdenVentaDetallePromocionEntity.getOrden_detalle_montosubtotal(),
@@ -1002,7 +1024,6 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
         }
         Log.e("REOS","ListaOrdenVentaAdapter-Finaliza-ActualizaListaOrdenDetallePromocion");
     }
-
     public void actualizarlistapromocioncabecera(ListaOrdenVentaDetalleEntity lead)
     {
         listaPromocionCabecera=promocionCabeceraSQLiteDao.ObtenerPromocionCabeceraUnidad(
@@ -1095,7 +1116,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
     public void UpdateLine(ListaOrdenVentaDetalleEntity lead,ListaOrdenVentaDetalleAdapter.ViewHolder holder)
     {
         //lead.setOrden_detalle_porcentaje_descuento(calculodescuento);
-        Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.getOrden_detalle_porcentaje_descuento:" + lead.getOrden_detalle_porcentaje_descuento());
+        //Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.getOrden_detalle_porcentaje_descuento:" + lead.getOrden_detalle_porcentaje_descuento());
         lead.setOrden_detalle_monto_descuento(
                 //Formula Para Calcular el Monto de Descuento
                 formulasController.applyDiscountPercentageForLine(
@@ -1105,14 +1126,14 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                         //Variable 2  Porcentaje Descuento
                         (lead.getOrden_detalle_porcentaje_descuento())
                 ));
-        Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.getOrden_detalle_monto_descuento:" + lead.getOrden_detalle_monto_descuento());
+        //Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.getOrden_detalle_monto_descuento:" + lead.getOrden_detalle_monto_descuento());
         //Monto subtotal sin descuento
         lead.setOrden_detalle_montosubtotal(
                 formulasController.getTotalPerLine
                         (lead.getOrden_detalle_precio_unitario(),
                                 lead.getOrden_detalle_cantidad()));
         //Monto subtotal con descuento
-        Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.setOrden_detalle_montosubtotal:" + lead.getOrden_detalle_montosubtotal());
+        //Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.setOrden_detalle_montosubtotal:" + lead.getOrden_detalle_montosubtotal());
         lead.setOrden_detalle_montosubtotalcondescuento(
                 //Formula para Calcular el Monto Sub Total Con Descuento
                 formulasController.CalcularMontoTotalconDescuento(
@@ -1129,7 +1150,7 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                 lead.getOrden_detalle_monto_descuento(),
                 Induvis.getImpuestoString()
         ));
-        Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.getOrden_detalle_monto_igv():" + lead.getOrden_detalle_monto_igv());
+        //Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.getOrden_detalle_monto_igv():" + lead.getOrden_detalle_monto_igv());
         lead.setOrden_detalle_montototallinea(
                 String.valueOf(Float.parseFloat(formulasController.CalcularMontoTotalconDescuento(
                                 lead.getOrden_detalle_montosubtotal(),
@@ -1138,16 +1159,16 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
                                 +
                                 Float.parseFloat( lead.getOrden_detalle_monto_igv())
                 ));
-        Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.getOrden_detalle_montosubtotalcondescuento:" + lead.getOrden_detalle_montosubtotalcondescuento());
+        //Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-lead.getOrden_detalle_montosubtotalcondescuento:" + lead.getOrden_detalle_montosubtotalcondescuento());
         //holder.tv_orden_detalle_total.setText(Convert.currencyForView(lead.getOrden_detalle_montosubtotal()));
         switch (BuildConfig.FLAVOR)
         {
             case "bolivia":
-                Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-bolivia-lead.getOrden_detalle_montototallinea:" + lead.getOrden_detalle_montototallinea());
+                //Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-bolivia-lead.getOrden_detalle_montototallinea:" + lead.getOrden_detalle_montototallinea());
                 holder.tv_orden_detalle_total.setText(Convert.currencyForView(lead.getOrden_detalle_montototallinea()));
                 break;
             default:
-                Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-default-lead.getOrden_detalle_montosubtotal:" + lead.getOrden_detalle_montosubtotal());
+                //Log.e("REOS","ListaOrdenVentaDetalleAdapter-UpdateLine-default-lead.getOrden_detalle_montosubtotal:" + lead.getOrden_detalle_montosubtotal());
                 holder.tv_orden_detalle_total.setText(Convert.currencyForView(lead.getOrden_detalle_montosubtotal()));
                 break;
         }
@@ -1198,8 +1219,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
             boolean FLAG_STOCK=(SesionEntity.FLAG_STOCK.equals("Y"))?true:false;
             boolean result_flag=true;
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-onEditorAction-EditorInfo.IME_ACTION_SEND");
-                Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-procesado: "+procesado);
+                //Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-onEditorAction-EditorInfo.IME_ACTION_SEND");
+                //Log.e("REOS", "ListaOrdenVentaDetalleAdapter-holder.et_orden_detalle_cantidad-procesado: "+procesado);
                 procesado = true; // Marca como procesado
 
                 String valor="0";
@@ -1389,4 +1410,8 @@ public class ListaOrdenVentaDetalleAdapter extends ArrayAdapter<ListaOrdenVentaD
 
         return  dialog;
     }
+
+
 }
+
+

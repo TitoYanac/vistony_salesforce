@@ -52,7 +52,8 @@ public class ListaOrdenVentaDetalleDao {
                 {
                     contadodescuento="0";
                 }*/
-                Log.e("REOS", "regreso here 1 de " + ListenerBackPress.getCurrentFragment());
+                Log.e("REOS", "ListaOrdenVentaDetalleDao-getLeads-Lista.get(i).getOrden_detalle_producto_id()" + Lista.get(i).getOrden_detalle_producto_id());
+                Log.e("REOS", "ListaOrdenVentaDetalleDao-getLeads-Lista.get(i).getOrden_detalle_SIGAUS()" + Lista.get(i).getOrden_detalle_SIGAUS());
                 saveLead(new ListaOrdenVentaDetalleEntity(
                         Lista.get(i).getOrden_detalle_item(),
                         Lista.get(i).getOrden_detalle_producto_id(),

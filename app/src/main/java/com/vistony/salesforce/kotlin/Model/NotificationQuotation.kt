@@ -20,8 +20,8 @@ data class NotificationQuotation(
         var PymntGroup: String?
 )
 
-data class NotificationQuotationEntity(
+class NotificationQuotationEntity(
         var Status:String="",
         @SerializedName("Quotation")
-        val DATA: List<NotificationQuotation> = (emptyList())
+        var DATA: List<NotificationQuotation> = emptyList()
 )

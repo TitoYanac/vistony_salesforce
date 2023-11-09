@@ -914,6 +914,12 @@ public class CobranzaDetalleView extends Fragment {
                 }
                 break;
             case "bolivia":
+            case "perurofalab":
+            case "espania":
+            case "marruecos":
+            case "ecuador":
+            case "paraguay":
+            case "chile":
                 if (getArguments() != null) {
                     if(!(Listado==null)){
                         guardar.setEnabled(false);
@@ -1073,7 +1079,13 @@ public class CobranzaDetalleView extends Fragment {
                             }
                         }
                         break;
+                    case "perurofalab":
+                    case "espania":
+                    case "marruecos":
+                    case "ecuador":
                     case "bolivia":
+                    case "paraguay":
+                    case "chile":
                         alertaGenerarPDF().show();
                         break;
                 }
@@ -1530,6 +1542,13 @@ public class CobranzaDetalleView extends Fragment {
                     }
                     break;
                 case "bolivia":
+                case "india":
+                case "chile":
+                case "ecuador":
+                case "paraguay":
+                case "perurofalab":
+                case "espania":
+                case "marruecos":
                     qrvalidado = "Y";
                     wsqrvalidado="Y";
                     break;
