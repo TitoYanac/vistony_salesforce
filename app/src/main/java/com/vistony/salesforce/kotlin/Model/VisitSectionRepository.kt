@@ -21,7 +21,8 @@ class VisitSectionRepository {
         cliente_id:String,
         domembarque_id:String,
         dateini:String,
-        idref:String
+        idref:String,
+        idrefitemid:String,
 
     )
     {
@@ -45,8 +46,9 @@ class VisitSectionRepository {
                         ?.getVisitSectionList(
                             cliente_id,
                             domembarque_id,
-                            dateini,
-                            idref
+                            //dateini,
+                            idref,
+                            idrefitemid
                         )
                     _list.postValue(data)
                     println("Tarea $i completada")

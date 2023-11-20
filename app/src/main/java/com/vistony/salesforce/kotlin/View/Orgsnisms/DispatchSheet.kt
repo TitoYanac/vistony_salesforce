@@ -2,6 +2,8 @@ package com.vistony.salesforce.kotlin.View.Molecules
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -9,9 +11,13 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -23,43 +29,80 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vistony.salesforce.R
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheet
+import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetUI
 import com.vistony.salesforce.kotlin.Utilities.Geolocation
 import com.vistony.salesforce.kotlin.View.Atoms.TableCell
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
 import com.vistony.salesforce.kotlin.View.Atoms.theme.Typography
+import com.vistony.salesforce.kotlin.View.Template.BottomSheetScreen
+import com.vistony.salesforce.kotlin.View.Template.ProcessCollectionTemplate
+import com.vistony.salesforce.kotlin.View.Template.SheetLayout
 import com.vistony.salesforce.kotlin.View.components.ButtonCircle
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class
+)
 @Composable
 fun StatusAdvanceDispatch(
     icons:String,
-    InfoDialog: (status:String) -> Unit,
-    InfoDialogEnd: (status:String) -> Unit,
-    list: DetailDispatchSheet,
+    InfoDialog: (detailDispatchSheet: DetailDispatchSheetUI) -> Unit,
+    InfoDialogEnd: (detailDispatchSheet: DetailDispatchSheetUI) -> Unit,
+    list: DetailDispatchSheetUI,
     context1: Context,
-    formProcessCollection:(cliente_id:String) -> Unit,
-    formProcessStatusDispatch:(detailDispatchSheet: DetailDispatchSheet) -> Unit,
+    formProcessCollection:(detailDispatchSheet: DetailDispatchSheetUI) -> Unit,
+    formProcessStatusDispatch:(detailDispatchSheet: DetailDispatchSheetUI) -> Unit,
 )
 {
-    Log.e(
-        "REOS",
-        "Composables-StatusIcons-Ingreso"
-    )
+
     when (icons) {
         "Entrada" -> {
-            InfoDialog("Entrada")
+            InfoDialog(list)
         }
         "Despacho" -> {
             formProcessStatusDispatch(list)
         }
+
         "Cobranza" -> {
-            Log.e(
-                "REOS",
-                "Composables-StatusIcons-Cobranza"
-            )
-            formProcessCollection(list.cliente_id)
+            formProcessCollection(list)
+            //openSheet(
+            /*var modal = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden, confirmStateChange = {false})
+            val scope = rememberCoroutineScope()
+            var currentBottomSheet: BottomSheetScreen? by remember { mutableStateOf(null) }
+            val closeSheet: () -> Unit = { scope.launch {
+                modal.hide()
+                //modal==null
+            }}
+
+            ModalBottomSheetLayout(
+                sheetState = modal,
+                sheetContent = {
+                    Box(modifier = Modifier.defaultMinSize(minHeight = 1.dp)) {
+                        currentBottomSheet?.let { currentSheet ->
+                            SheetLayout(currentSheet, closeSheet,showIconClose=true)
+                        }
+                    }
+                }
+            ) {
+                val openSheet: (BottomSheetScreen) -> Unit = {
+                    scope.launch {
+                        currentBottomSheet = it
+                        modal.animateTo(ModalBottomSheetValue.Expanded)
+                    }
+                }
+
+                openSheet(
+                    BottomSheetScreen.collectionDetailBottom(
+                        //objDistpatch.nombrecliente.toString()
+                        //,invoiceViewModel
+                        list
+                    )
+                )
+            }*/
+            //ProcessCollectionTemplate(list)
         }
         "Salida" -> {
-            InfoDialogEnd("Salida")
+            InfoDialogEnd(list)
         }
     }
     Log.e(
@@ -259,12 +302,13 @@ fun HorizontalStepView2(
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CardDispatch(
-    list: DetailDispatchSheet,
+    list: DetailDispatchSheetUI,
     context: Context,
-    formProcessCollection: (cliente_id: String) -> Unit,
-    formProcessStatusDispatch: (list: DetailDispatchSheet) -> Unit,
+    formProcessCollection: (list: DetailDispatchSheetUI) -> Unit,
+    formProcessStatusDispatch: (list: DetailDispatchSheetUI) -> Unit,
     listelementsinvoice: List<Pair<String, String>>,
     //steps: List<Pair<String, ImageVector>>,
     //numberStatus: Array<String>,
@@ -272,7 +316,8 @@ fun CardDispatch(
     openVisitDriver: MutableState<Boolean>,
     openDialogMapNavigation: MutableState<Boolean>,
     latitud: MutableState<String>,
-    longitud: MutableState<String>
+    longitud: MutableState<String>,
+    statusvisitDispatch: (list: DetailDispatchSheetUI) -> Unit,
 ){
     Log.e(
         "REOS",
@@ -287,14 +332,17 @@ fun CardDispatch(
         //onClick = { },
         modifier = Modifier
             .padding(all = 10.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                Log.e("REOS", "DispatchSheet-CardDispatch-list: "+list) }
+        ,
     )
     {
         Column()
         {
             Row(Modifier.padding(10.dp,10.dp,10.dp,0.dp))
             {
-                ButtonCircle(OnClick = {})
+                ButtonCircle(OnClick = {}, color = BlueVistony)
                 {
                     Text(
                         text = list.item_id.toString(),
@@ -334,24 +382,24 @@ fun CardDispatch(
                 Row {
                     Box(modifier = Modifier.weight(1f)) {
                         Row() {
-                            TableCell (text ="Razon Social", weight = 1f ,title = false,color = Color.Gray, fontSise = 13.sp)
+                            TableCell (text ="Razon Social", weight = 1f ,title = false,color = Color.Gray, fontSise = 13.sp, textAlign = TextAlign.Left)
                         }
                     }
                     Box(modifier = Modifier.weight(3f)) {
                         Row() {
-                            TableCell (text =list.nombrecliente.toString(), weight = 1f ,title = true, fontSise = 13.sp)
+                            TableCell (text =list.nombrecliente.toString(), weight = 1f ,title = true, fontSise = 13.sp, textAlign = TextAlign.Left)
                         }
                     }
                 }
                 Row {
                     Box(modifier = Modifier.weight(1f)) {
                         Row() {
-                            TableCell (text ="Dirección", weight = 1f ,title = false,color = Color.Gray, fontSise = 13.sp)
+                            TableCell (text ="Dirección", weight = 1f ,title = false,color = Color.Gray, fontSise = 13.sp, textAlign = TextAlign.Left)
                         }
                     }
                     Box(modifier = Modifier.weight(3f)) {
                         Row() {
-                            TableCell (text =list.direccion.toString(), weight = 1f ,title = true, fontSise = 13.sp)
+                            TableCell (text =list.direccion.toString(), weight = 1f ,title = true, fontSise = 13.sp, textAlign = TextAlign.Left)
                         }
                     }
                 }
@@ -366,12 +414,18 @@ fun CardDispatch(
                     StatusAdvanceDispatch(
                         resultValue.value,
                         //InfoDialog,
-                        { openVisitDriver.value = true },
-                        { openVisitDriver.value = true },
+                        {
+                            //openVisitDriver.value = true
+                            list -> statusvisitDispatch(list)
+                        },
+                        {
+                            //openVisitDriver.value = true
+                                list -> statusvisitDispatch(list)
+                        },
                         list,
                         context,
                         //formProcessCollection = formProcessCollection(list.cliente_id)
-                        { clienteId -> formProcessCollection(clienteId) }
+                        { clienteId -> formProcessCollection(list) }
                         //{formProcessCollection(index, list)}
                         , {list -> formProcessStatusDispatch(list)}
                     )

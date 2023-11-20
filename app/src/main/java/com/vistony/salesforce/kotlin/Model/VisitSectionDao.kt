@@ -14,8 +14,8 @@ interface VisitSectionDao {
     @Query("DELETE FROM visitsection")
     fun deleteVisitSection()
 
-    @Query("SELECT * FROM visitsection where cliente_id=:cliente_id and domembarque_id=:domembarque_id and dateini=:dateini and idref=:idref ")
-    fun getVisitSectionList(cliente_id: String , domembarque_id: String, dateini: String, idref:String): List<VisitSection>
+    @Query("SELECT * FROM visitsection where cliente_id=:cliente_id and domembarque_id=:domembarque_id and idref=:idref and idrefitemid=:idrefitemid ")
+    fun getVisitSectionList(cliente_id: String , domembarque_id: String, idref:String,idrefitemid:String): List<VisitSection>
 
     @Update
     fun updateVisitSection(visitSection: List<VisitSection>?)

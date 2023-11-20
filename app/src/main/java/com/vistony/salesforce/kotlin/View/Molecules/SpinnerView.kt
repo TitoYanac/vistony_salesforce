@@ -1,5 +1,6 @@
 package com.vistony.salesforce.kotlin.View.Molecules
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -13,6 +14,8 @@ fun SpinnerView(
     ,currentSelected: MutableState<String>
 )
 {
+    Log.e("REOS", "SpinnerView-SpinnerView-tittle: " +tittle)
+    Log.e("REOS", "SpinnerView-SpinnerView-currentSelected: " +currentSelected.value)
     Column() {
         TextLabel(text=tittle)
         Spinner(

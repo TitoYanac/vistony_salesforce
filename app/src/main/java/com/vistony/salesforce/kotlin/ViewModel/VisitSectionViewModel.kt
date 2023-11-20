@@ -27,7 +27,8 @@ class VisitSectionViewModel(
         cliente_id:String,
         domembarque_id:String,
         dateini:String,
-        idref:String
+        idref:String,
+        idrefitemid:String
 
     )
     {
@@ -46,7 +47,8 @@ class VisitSectionViewModel(
                 cliente_id,
                 domembarque_id,
                 dateini,
-                idref
+                idref,
+                idrefitemid
             )
         }
 

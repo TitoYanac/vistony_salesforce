@@ -4,6 +4,7 @@ import android.content.Context
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.kotlin.Model.AppDatabase
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheet
+import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetUI
 import com.vistony.salesforce.kotlin.Model.StatusDispatch
 import com.vistony.salesforce.kotlin.Model.StatusDispatchViewModel
 import java.text.SimpleDateFormat
@@ -13,18 +14,18 @@ import java.util.concurrent.Executors
 
 
 public fun ConvertStatusDispatch(
-        Delivered:String,
-        ReturnReason:String,
-        comments:String,
-        PhotoDocument:String,
-        latitud:String,
-        longitud:String,
-        detailDispatchSheet: DetailDispatchSheet,
-        PhotoStore:String,
-        context:Context,
-        DeliveryNotes:String,
-        ReturnReasonText:String,
-        statusDispatchViewModel: StatusDispatchViewModel
+    Delivered:String,
+    ReturnReason:String,
+    comments:String,
+    PhotoDocument:String,
+    latitud:String,
+    longitud:String,
+    detailDispatchSheet: DetailDispatchSheetUI,
+    PhotoStore:String,
+    context:Context,
+    DeliveryNotes:String,
+    ReturnReasonText:String,
+    statusDispatchViewModel: StatusDispatchViewModel
         ) {
     val dateFormathora = SimpleDateFormat("HHmmss", Locale.getDefault())
     val FormatFecha = SimpleDateFormat("yyyyMMdd", Locale.getDefault())

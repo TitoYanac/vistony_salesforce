@@ -64,14 +64,12 @@ class DispatchSheetPendingScreen : Fragment()
                         val detailDispatchSheetViewModel: DetailDispatchSheetViewModel = viewModel(
                             factory = DetailDispatchSheetViewModel.DetailDispatchSheetViewModelFactory(
                                 detailDispatchSheetRepository,
-                                appContext
+                                appContext,
+                                SesionEntity.imei,
                             )
                         )
                         detailDispatchSheetViewModel?.getStateDetailDispatchSheet(
-                            SesionEntity.imei,
                             ContainerDispatchView.parametrofecha,
-                            appContext,
-                            lifecycleOwner,
                             "P"
                         )
 
@@ -81,7 +79,7 @@ class DispatchSheetPendingScreen : Fragment()
                         when (detailDispatchSheetDB.value.Status) {
                             "Y" -> {
                                 //CardNotification(detailDispatchSheetDB.value.DATA)
-                                DispatchSheetTemplate(detailDispatchSheetDB.value.DATA,appContext,lifecycleOwner)
+                                DispatchSheetTemplate(detailDispatchSheetDB.value.UI,appContext,lifecycleOwner)
                             }
                         }
                         //DispatchSheetTemplate(detailDispatchSheetList,appContext,lifecycleOwner)

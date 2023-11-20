@@ -34,6 +34,7 @@ import com.vistony.salesforce.kotlin.Utilities.SaveImageStatusDispatch
 import com.vistony.salesforce.kotlin.View.Atoms.TableCell
 import com.vistony.salesforce.kotlin.View.Atoms.TextLabel
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
+import com.vistony.salesforce.kotlin.View.Atoms.theme.RedVistony
 import com.vistony.salesforce.kotlin.View.Molecules.ButtonViewSurface
 import com.vistony.salesforce.kotlin.View.Molecules.SpinnerView
 import com.vistony.salesforce.kotlin.View.components.ButtonView
@@ -41,13 +42,14 @@ import com.vistony.salesforce.kotlin.View.components.MenuGetImage
 
 @Composable
 fun ProcessDispatchTemplate(
-    detailDispatchSheet: DetailDispatchSheet,
+    detailDispatchSheet: DetailDispatchSheetUI,
     bitMapMutable: MutableState<Bitmap?>,
     openDialogShowImage: MutableState<Boolean?>,
     context: Context,
     openDialogEditCommentary: MutableState<Boolean?>,
     tittleDialogPhoto: MutableState<String>,
 ){
+
     val statusDispatchRepository : StatusDispatchRepository = StatusDispatchRepository()
     val statusDispatchViewModel: StatusDispatchViewModel = viewModel(
         factory = StatusDispatchViewModel.StatusDispatchViewModelFactory(
@@ -103,12 +105,12 @@ fun ProcessDispatchTemplate(
     }
 
     //val currentSelection = remember { mutableStateOf(typeDispatchList.find { it.toUpperCase() == typeDispatchList.toString().toUpperCase() } ?: typeDispatchList.first()) }
-    val currentSelectionSpinner1 = remember {
+    /*val currentSelectionSpinner1 :MutableState<String> = remember {
         mutableStateOf("SELECCIONAR TIPO")
     }
-    val currentSelectionSpinner2 = remember {
+    val currentSelectionSpinner2 :MutableState<String> = remember {
         mutableStateOf("SELECCIONAR MOTIVO")
-    }
+    }*/
 
 
     Column() {
@@ -124,18 +126,10 @@ fun ProcessDispatchTemplate(
                         //.padding(10.dp, 5.dp, 10.dp, 0.dp)
                         .fillMaxWidth()
                 ) {
-                    //Spacer(modifier = Modifier.width(30.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
                     TableCell(text = "PROCESO DE DESPACHO", weight = 1f,title = true, textAlign = TextAlign.Center)
-                    //TableCell(text = detailDispatchSheet.nombrecliente.toString(), weight = 1f,title = true)
-                    /*Text(
-                        detailDispatchSheet.nombrecliente.toString(),
-                        modifier = Modifier.padding(0.dp, 5.dp, 10.dp, 0.dp)
-                        ,
-                        color = Color.Black,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontWeight = FontWeight.Bold
-                    )*/
                 }
+                Divider()
                 AnimatedVisibility(
                     visible = expanded,
                     enter = expandIn(),
@@ -152,8 +146,8 @@ fun ProcessDispatchTemplate(
                             openDialogEditCommentary,
                             tittleDialogPhoto,
                             activity,
-                            currentSelectionSpinner1,
-                            currentSelectionSpinner2,
+                            //currentSelectionSpinner1,
+                            //currentSelectionSpinner2,
                             typeDispatchList,
                             reasonDispatchList
                         )
@@ -166,7 +160,7 @@ fun ProcessDispatchTemplate(
 
 @Composable
 fun ProcessDispatch(
-    detailDispatchSheet: DetailDispatchSheet,
+    detailDispatchSheet: DetailDispatchSheetUI,
     bitMapMutable: MutableState<Bitmap?>,
     openDialogShowImage: MutableState<Boolean?>,
     appContext: Context,
@@ -174,8 +168,8 @@ fun ProcessDispatch(
     openDialogEditCommentary: MutableState<Boolean?>,
     tittleDialogPhoto: MutableState<String>,
     activity:Activity,
-    currentSelectionSpinner1:MutableState<String>,
-    currentSelectionSpinner2:MutableState<String>,
+    //currentSelectionSpinner1:MutableState<String>,
+    //currentSelectionSpinner2:MutableState<String>,
     typeDispatchList: MutableList<String>,
     reasonDispatchList: MutableList<String>
 ) {
@@ -185,14 +179,31 @@ fun ProcessDispatch(
     val geoLocalizacion = Geolocation(appContext)
     var latitud by remember { mutableStateOf(0.0) }
     var longitud by remember { mutableStateOf(0.0) }
-    Log.e(
-        "REOS",
-        "BottomSheet-ProcessStatusDispatch-latitud: " + latitud
-    )
-    Log.e(
-        "REOS",
-        "BottomSheet-ProcessStatusDispatch-longitud: " + longitud
-    )
+    var errorsaveby: String by remember { mutableStateOf<String>("") }
+    var statusbuttonsave: Boolean by remember { mutableStateOf<Boolean>(true) }
+    var colorbackgroundbuttonsave: Color by remember { mutableStateOf<Color>(RedVistony) }
+    val currentSelectionSpinner1 :MutableState<String> = remember {
+        mutableStateOf("")
+    }
+    val currentSelectionSpinner2 :MutableState<String> = remember {
+        mutableStateOf("")
+    }
+
+    LaunchedEffect(typeDispatchList) {
+        // Este bloque se ejecutará cada vez que typeDispatchList cambie
+        currentSelectionSpinner1.value = "SELECCIONAR TIPO"
+        currentSelectionSpinner2.value = "SELECCIONAR MOTIVO"
+    }
+
+
+
+    //var typeDispatchList: MutableList<String> = mutableListOf()
+    Log.e("REOS", "BottomSheet-ProcessStatusDispatch-latitud: " + latitud)
+    Log.e("REOS", "BottomSheet-ProcessStatusDispatch-longitud: " + longitud)
+    Log.e("REOS", "BottomSheet-ProcessStatusDispatch-currentSelectionSpinner1: " + currentSelectionSpinner1.value)
+    Log.e("REOS", "BottomSheet-ProcessStatusDispatch-currentSelectionSpinner2: " + currentSelectionSpinner2.value)
+
+
 
     geoLocalizacion.obtenerUbicacionActual(
         onSuccess = { location ->
@@ -265,7 +276,7 @@ fun ProcessDispatch(
                     ) {
 
                         SpinnerView(
-                            "Tipo"
+                            "Tipo (*)"
                             ,typeDispatchList
                             ,currentSelectionSpinner1
                         )
@@ -284,7 +295,7 @@ fun ProcessDispatch(
                         ) {
 
                             SpinnerView(
-                                "Motivo"
+                                "Motivo (*)"
                                 ,reasonDispatchList
                                 ,currentSelectionSpinner2
                           )
@@ -295,7 +306,7 @@ fun ProcessDispatch(
                 Row(horizontalArrangement = Arrangement.Center)
                 {
                     MenuGetImage(
-                        "Foto Local", false, true, true,
+                        "Foto Local (*)", false, true, true,
                         appContext,
                         activity,
                         resultBitmap = { result ->
@@ -324,7 +335,7 @@ fun ProcessDispatch(
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     MenuGetImage(
-                        "Foto Guia", false, true, true,
+                        "Foto Guia (*)", false, true, true,
                         appContext,
                         activity,
                         resultBitmap = { result ->
@@ -356,7 +367,7 @@ fun ProcessDispatch(
                 Row()
                 {
                     ButtonViewSurface(
-                        tittle = "Comentario",
+                        tittle = "Comentario (Opcional)",
                         description = "Comentario",
                         OnClick = { openDialogEditCommentary.value=true },
                         status = true,
@@ -369,140 +380,120 @@ fun ProcessDispatch(
                 Spacer(modifier = Modifier.height(10.dp))
                 Row()
                 {
+                    TableCell(text = errorsaveby, weight =1f ,title = true, textAlign = TextAlign.Left, color = RedVistony)
+                }
+                Row()
+                {
                     Row()
                     {
-                        ButtonView(
+                        /*ButtonView(
                             description = "Cerrar",
-                            OnClick = {},
+                            OnClick = {expanded = true},
                             status = true,
                             IconActive = false,
                             context=appContext,
-                            backGroundColor = BlueVistony,
+                            backGroundColor = RedVistony,
                             textColor = Color.White
                         )
-                        Spacer(modifier = Modifier.width(10.dp))
+                        Spacer(modifier = Modifier.width(10.dp))*/
                         ButtonView(
-                            description = "Aceptar",
-                            OnClick = { } ,
-                            status = true,
+                            description = "Guardar",
+                            OnClick = {
+
+                                var typeDispatch_id: String = ""
+                                var typeDispatch: String = ""
+                                var reasonDispatch_id: String = ""
+                                var reasonDispatch: String = ""
+                                val elementsTypeDispatch =
+                                    currentSelectionSpinner1.value.split("-", limit = 2)
+                                for (i in 0 until elementsTypeDispatch.size) {
+                                    when (i) {
+                                        0 -> {
+                                            typeDispatch_id = elementsTypeDispatch.get(i)
+                                        }
+                                        1 -> {
+                                            typeDispatch = elementsTypeDispatch.get(i)
+                                        }
+                                    }
+                                }
+                                val elementsReasonDispatch =
+                                    currentSelectionSpinner2.value.split("-", limit = 2)
+                                for (i in 0 until elementsReasonDispatch.size) {
+                                    when (i) {
+                                        0 -> {
+                                            reasonDispatch_id =
+                                                elementsReasonDispatch.get(i)
+                                        }
+                                        1 -> {
+                                            reasonDispatch = elementsReasonDispatch.get(i)
+                                        }
+                                    }
+                                }
+                                if(currentSelectionSpinner1.value.equals("SELECCIONAR TIPO"))
+                                {
+                                    errorsaveby="Importante: Debe seleccionar un tipo de despacho"
+                                }else
+                                {
+                                    if(!currentSelectionSpinner1.value.equals("E-ENTREGADO")&&currentSelectionSpinner2.value.equals("SELECCIONAR MOTIVO"))
+                                    {
+                                        errorsaveby="Importante: Debe seleccionar un motivo de despacho"
+                                    }
+                                    else
+                                    {
+                                        if(bitmapLocale.value==null)
+                                        {
+                                            errorsaveby="Importante: Debe tomar foto del local del cliente"
+                                        }else
+                                        {
+                                            if(bitmapDelivery.value==null)
+                                            {
+                                                errorsaveby="Importante: Debe tomar foto de la guia del cliente"
+                                            }
+                                            else {
+                                                errorsaveby=""
+                                                statusbuttonsave=false
+                                                colorbackgroundbuttonsave=Color.Gray
+                                                ConvertStatusDispatch(
+                                                    typeDispatch_id,
+                                                    reasonDispatch_id,
+                                                    "",
+                                                    SaveImageStatusDispatch(
+                                                        appContext,
+                                                        bitmapDelivery.value,
+                                                        detailDispatchSheet.entrega,
+                                                        "G"
+                                                    ).toString(),
+                                                    latitud.toString(),
+                                                    longitud.toString(),
+                                                    detailDispatchSheet,
+                                                    SaveImageStatusDispatch(
+                                                        appContext,
+                                                        bitmapLocale.value,
+                                                        detailDispatchSheet.entrega,
+                                                        "L"
+                                                    ).toString(),
+                                                    appContext,
+                                                    typeDispatch,
+                                                    reasonDispatch,
+                                                    statusDispatchViewModel
+                                                )
+                                            }
+                                        }
+
+                                    }
+                                }
+                            } ,
+                            status = statusbuttonsave,
                             IconActive = false,
                             context=appContext,
-                            backGroundColor = BlueVistony,
+                            backGroundColor = colorbackgroundbuttonsave,
                             textColor = Color.White
                         )
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Row()
-                    {
-                        Box(
-                            modifier = Modifier
-                                //.size(200.dp)
-                                .weight(1f)
-                                .height(50.dp)
-                                .fillMaxWidth()
-                                .background(Color.Gray, RoundedCornerShape(16.dp))
-                                .clickable { expanded = true }
-                            ,
-                            contentAlignment = Alignment.Center
-
-                        ) {
-                            Row()
-                            {
-                                Icon(
-                                    ImageVector.vectorResource(R.drawable.ic_arrow_back_white_24dp),
-                                    tint = Color.White,
-                                    contentDescription = null
-                                )
-                                Text(
-                                    text = "Anterior",
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center,
-                                    //modifier = Modifier.align(Alignment.Center)
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Box(
-                            modifier = Modifier
-                                .clickable {
-                                    var typeDispatch_id: String = ""
-                                    var typeDispatch: String = ""
-                                    var reasonDispatch_id: String = ""
-                                    var reasonDispatch: String = ""
-                                    val elementsTypeDispatch =
-                                        currentSelectionSpinner1.value.split("-", limit = 2)
-                                    for (i in 0 until elementsTypeDispatch.size) {
-                                        when (i) {
-                                            0 -> {
-                                                typeDispatch_id = elementsTypeDispatch.get(i)
-                                            }
-                                            1 -> {
-                                                typeDispatch = elementsTypeDispatch.get(i)
-                                            }
-                                        }
-                                    }
-                                    val elementsReasonDispatch =
-                                        currentSelectionSpinner2.value.split("-", limit = 2)
-                                    for (i in 0 until elementsReasonDispatch.size) {
-                                        when (i) {
-                                            0 -> {
-                                                reasonDispatch_id =
-                                                    elementsReasonDispatch.get(i)
-                                            }
-                                            1 -> {
-                                                reasonDispatch = elementsReasonDispatch.get(i)
-                                            }
-                                        }
-                                    }
-                                    ConvertStatusDispatch(
-                                        typeDispatch_id,
-                                        reasonDispatch_id,
-                                        "",
-                                        SaveImageStatusDispatch(
-                                            appContext,
-                                            bitmapDelivery.value,
-                                            detailDispatchSheet.entrega,
-                                            "G"
-                                        ).toString(),
-                                        latitud.toString(),
-                                        longitud.toString(),
-                                        detailDispatchSheet,
-                                        SaveImageStatusDispatch(
-                                            appContext,
-                                            bitmapLocale.value,
-                                            detailDispatchSheet.entrega,
-                                            "L"
-                                        ).toString(),
-                                        appContext,
-                                        typeDispatch,
-                                        reasonDispatch,
-                                        statusDispatchViewModel
-                                    )
-                                    //statusDispatchViewModel.sendAPIStatusDispatch(appContext)
-                                    //statusDispatchViewModel.sendAPIPhotoStatusDispatch(appContext)
-                                }
-                                .weight(1f)
-                                .height(50.dp)
-                                .fillMaxWidth()
-                                .background(BlueVistony, RoundedCornerShape(16.dp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Row()
-                            {
-                                Text(
-                                    text = "Guardar",
-                                    color = Color.White,
-                                    textAlign = TextAlign.Center,
-                                    //modifier = Modifier.align(Alignment.Center)
-                                )
-                                Icon(
-                                    ImageVector.vectorResource(R.drawable.ic_baseline_save_white_24),
-                                    tint = Color.White,
-                                    contentDescription = null
-                                )
-                            }
-                        }
-                    }
+                }
+                Row()
+                {
+                    TableCell(text = "(*) son campos obligatorios", weight =1f ,title = false, textAlign = TextAlign.Left)
                 }
             }
         //}

@@ -72,6 +72,7 @@ data class CollectionDetail(
     var StatusSelection:Boolean=false,
     @Ignore
     var Number:String="",
+    var StatusCancelDeposit:String="N",
 )
 
 data class CollectionDetailPendingDeposit(

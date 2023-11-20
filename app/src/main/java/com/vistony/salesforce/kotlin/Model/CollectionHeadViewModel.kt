@@ -61,4 +61,40 @@ class CollectionHeadViewModel (
             }
         }
     }
+
+    fun getCollectionHeadForDate(startDate:String,endDate:String)
+    {
+        viewModelScope.launch {
+            try {
+                collectionHeadRepository.getCollectionHeadForDate(startDate,endDate)
+            }
+            catch (e: Exception) {
+                Log.e("REOS", "CollectionHeadViewModel-getCollectionHeadForDate-error: " + e.toString())
+            }
+        }
+    }
+
+    fun updateCancelCollectionHead(deposit:String,date:String,comment:String)
+    {
+        viewModelScope.launch {
+            try {
+                collectionHeadRepository.updateCancelCollectionHead(deposit,date,comment)
+            }
+            catch (e: Exception) {
+                Log.e("REOS", "CollectionHeadViewModel-updateCancelCollectionHead-error: " + e.toString())
+            }
+        }
+    }
+
+    fun sendAPICancelCollectionHead()
+    {
+        viewModelScope.launch {
+            try {
+                collectionHeadRepository.sendAPICancelDepositCollectionHead()
+            }
+            catch (e: Exception) {
+                Log.e("REOS", "CollectionHeadViewModel-sendAPICancelCollectionHead-error: " + e.toString())
+            }
+        }
+    }
 }

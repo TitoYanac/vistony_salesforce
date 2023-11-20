@@ -79,7 +79,7 @@ public class MenuFormulariosView extends Fragment {
         {
             cv_reclamocliente.setVisibility(View.GONE);
         }
-        cv_reclamocliente.setVisibility(View.GONE);
+        //cv_reclamocliente.setVisibility(View.GONE);
         cv_agregarcliente.setVisibility(View.GONE);
         cv_form_supervisor.setVisibility(View.GONE);
 

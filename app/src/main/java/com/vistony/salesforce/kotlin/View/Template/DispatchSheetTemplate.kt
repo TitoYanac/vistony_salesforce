@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vistony.salesforce.Controller.Utilitario.Convert
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.R
 import com.vistony.salesforce.View.MenuView
@@ -39,7 +40,7 @@ var contexto: Context = MenuView.context
 )
 @Composable
 fun DispatchSheetTemplate(
-    listDispatch: List<DetailDispatchSheet>,
+    listDispatch: List<DetailDispatchSheetUI>,
     context: Context,
     lifecycleOwner:  LifecycleOwner
     )
@@ -47,14 +48,17 @@ fun DispatchSheetTemplate(
     var modal = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden, confirmStateChange = {false})
     val scope = rememberCoroutineScope()
     var currentBottomSheet: BottomSheetScreen? by remember { mutableStateOf(null) }
-    val closeSheet: () -> Unit = { scope.launch { modal.hide() }}
+    val closeSheet: () -> Unit = { scope.launch {
+        modal.hide()
+        //modal==null
+    }}
     val openDialogShowImage:MutableState<Boolean?> = remember { mutableStateOf(false) }
     val bitMapMutable:MutableState<Bitmap?> = remember { mutableStateOf(null) }
     val openDialogEditCommentary:MutableState<Boolean?> = remember { mutableStateOf(false) }
     val tittleDialogPhoto:MutableState<String> = remember { mutableStateOf("") }
     var expandedCommentary by remember { mutableStateOf(true) }
     var commentary :MutableState<String> = remember { mutableStateOf("") }
-    val invoicesRepository:InvoicesRepository= InvoicesRepository()
+
     val openVisitDriver:MutableState<Boolean> = remember { mutableStateOf(false) }
     val openDialogMapNavigation:MutableState<Boolean> = remember { mutableStateOf(false) }
     val latitud:MutableState<String> = remember { mutableStateOf("") }
@@ -68,15 +72,10 @@ fun DispatchSheetTemplate(
             context
         )
     )
-
-    Log.e(
-        "REOS",
-        "Composables-ScreenDispatch-openDialogShowImage.value: "+openDialogShowImage.value
-    )
-    Log.e(
-        "REOS",
-        "Composables-ScreenDispatch-bitMapMutable.value:"+bitMapMutable.value
-    )
+    val leadDispatch:MutableState<DetailDispatchSheetUI?> = remember { mutableStateOf(null) }
+    Log.e("REOS", "DispatchSheetTemplate-DispatchSheetTemplate-openVisitDriver: " +openVisitDriver.value)
+    Log.e("REOS", "DispatchSheetTemplate-DispatchSheetTemplate-openDialogShowImage.value: "+openDialogShowImage.value)
+    Log.e("REOS", "DispatchSheetTemplate-DispatchSheetTemplate-bitMapMutable.value:"+bitMapMutable.value)
     if(openDialogShowImage.value!!)
     {
         DialogView(
@@ -132,6 +131,34 @@ fun DispatchSheetTemplate(
     }
 
 
+    if(openVisitDriver.value!!)
+    {
+        DialogView(
+            tittle = "Registre su visita"
+            , subtittle = if(leadDispatch.value!!.statusvisitstart.equals("Y")){"Desea finalizar la visita al cliente?"}else{"Desea iniciar la visita al cliente?"}
+            ,onClickCancel = {
+                openVisitDriver.value = false
+            }
+            ,onClickAccept = {
+
+                contentVisitDriver(
+                    context = context,
+                    lifecycleOwner = lifecycleOwner,
+                    list = leadDispatch.value!!,
+                    statusDispatchViewModel =statusDispatchViewModel,
+                    statusStartVisit = leadDispatch.value!!.statusvisitstart.toString()
+                )
+                openVisitDriver.value = false
+            }
+            ,statusButtonAccept = true
+            ,statusButtonIcon = false
+            ,context=context
+        ){
+
+        }
+    }
+
+
     /*val numberStatus = arrayOf(
         "1",
         "2",
@@ -150,16 +177,31 @@ fun DispatchSheetTemplate(
     ) {
         LazyColumn{
             items(listDispatch){ objDistpatch ->
-                val listelementsinvoice: List<Pair<String, String>>
-                        = listOf(
-                    Pair("Factura", objDistpatch.factura.toString()),
-                    Pair("Cond.Venta",objDistpatch.terminopago.toString()),
-                    Pair("Saldo",objDistpatch.saldo.toString()),
-                    Pair("Entrega", objDistpatch.entrega.toString()),
-                    Pair("Estado", objDistpatch.estado.toString()),
-                    Pair("Motivo", objDistpatch.motivo.toString()),
-                    Pair("Vendedor", objDistpatch.factura_fuerzatrabajo.toString()),
-                )
+                var listelementsinvoice: List<Pair<String, String>>?=null
+
+                if (objDistpatch.estado.equals("ENTREGADO"))
+                {
+                    listelementsinvoice = listOf(
+                        Pair("Factura", objDistpatch.factura.toString()),
+                        Pair("Cond.Venta",objDistpatch.terminopago.toString()),
+                        Pair("Saldo", Convert.currencyForView(objDistpatch.saldo.toString()) ),
+                        Pair("Entrega", objDistpatch.entrega.toString()),
+                        Pair("Estado", objDistpatch.estado.toString()),
+                        Pair("Vendedor", objDistpatch.factura_fuerzatrabajo.toString()),
+                    )
+                }else
+                {
+                    listelementsinvoice = listOf(
+                        Pair("Factura", objDistpatch.factura.toString()),
+                        Pair("Cond.Venta",objDistpatch.terminopago.toString()),
+                        Pair("Saldo", Convert.currencyForView(objDistpatch.saldo.toString()) ),
+                        Pair("Entrega", objDistpatch.entrega.toString()),
+                        Pair("Estado", objDistpatch.estado.toString()),
+                        Pair("Motivo", objDistpatch.motivo.toString()),
+                        Pair("Vendedor", objDistpatch.factura_fuerzatrabajo.toString()),
+                    )
+                }
+
                 val stepsStatus = arrayOf(
                     objDistpatch.statusvisitstart,
                     objDistpatch.statusupdatedispatch,
@@ -172,42 +214,9 @@ fun DispatchSheetTemplate(
                         modal.animateTo(ModalBottomSheetValue.Expanded)
                     }
                 }
-                val invoiceViewModel: InvoicesViewModel= viewModel(
-                    factory = InvoicesViewModel.InvoiceModelFactory(
-                        SesionEntity.imei,
-                        context,
-                        lifecycleOwner,
-                        objDistpatch.cliente_id,
-                        invoicesRepository
-                    )
-                )
 
-                if(openVisitDriver.value!!)
-                {
-                    DialogView(
-                        tittle = "Registre su visita"
-                        , subtittle = if(objDistpatch.statusvisitstart.equals("Y")){"Desea finalizar la visita al cliente?"}else{"Desea iniciar la visita al cliente?"}
-                        ,onClickCancel = {
-                            openVisitDriver.value = false
-                        }
-                        ,onClickAccept = {
 
-                            contentVisitDriver(
-                                context = context,
-                                lifecycleOwner = lifecycleOwner,
-                                list = objDistpatch,
-                                statusDispatchViewModel =statusDispatchViewModel,
-                                statusStartVisit =objDistpatch.statusvisitstart.toString()
-                            )
-                            openVisitDriver.value = false
-                        }
-                        ,statusButtonAccept = true
-                        ,statusButtonIcon = false
-                        ,context=context
-                    ){
 
-                    }
-                }
 
                 if(openDialogMapNavigation.value!!)
                 {
@@ -239,13 +248,20 @@ fun DispatchSheetTemplate(
                     objDistpatch,context,
                     formProcessCollection =   {
                         //bottomSheetVisible = true
-                        invoiceViewModel.getInvoices(objDistpatch.cliente_id)
-                        openSheet(
-                            BottomSheetScreen.collectionDetailBottom(
-                                objDistpatch.nombrecliente.toString()
-                                ,invoiceViewModel
+                        //invoiceViewModel.getInvoices(objDistpatch.cliente_id)
+                        //if(leadDispatch.value!=null)
+                        //{
+                            openSheet(
+                                BottomSheetScreen.collectionDetailBottom(
+                                    //objDistpatch.nombrecliente.toString()
+                                    //,invoiceViewModel
+                                    //objDistpatch
+                                    //leadDispatch.value!!
+                                    it
+                                )
                             )
-                        )
+                        //}
+                        //currentBottomSheet = BottomSheetScreen.collectionDetailBottom(objDistpatch)
                     },
                     formProcessStatusDispatch ={
                         openSheet(
@@ -266,7 +282,11 @@ fun DispatchSheetTemplate(
                     openVisitDriver,
                     openDialogMapNavigation,
                     latitud,
-                    longitud
+                    longitud,
+                    statusvisitDispatch ={
+                        openVisitDriver.value=true
+                        leadDispatch.value=it
+                    }
                 )
             }
         }

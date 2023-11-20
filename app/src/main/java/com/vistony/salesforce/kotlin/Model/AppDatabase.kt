@@ -42,7 +42,7 @@ import com.vistony.salesforce.kotlin.View.Pages.TipoSalida
     PreguntaRespuesta::class,
     Opcion::class,
     CollectionHead::class
-                     ], version = 84,exportSchema = false)
+                     ], version = 85,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,

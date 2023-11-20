@@ -1,5 +1,6 @@
 package com.vistony.salesforce.kotlin.View.Template
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,15 +10,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.R
+import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetUI
 import com.vistony.salesforce.kotlin.Model.Invoices
+import com.vistony.salesforce.kotlin.Model.InvoicesRepository
 import com.vistony.salesforce.kotlin.Model.InvoicesViewModel
 import com.vistony.salesforce.kotlin.View.Atoms.TableCell
 import com.vistony.salesforce.kotlin.View.Molecules.HorizontalStepView
@@ -25,9 +35,21 @@ import com.vistony.salesforce.kotlin.View.Molecules.HorizontalStepView2
 
 @Composable
 fun ProcessCollectionTemplate(
-    invoiceViewModel: InvoicesViewModel
-    ,cliente_id: String
+     detailDispatchSheet: DetailDispatchSheetUI,
 ){
+
+    val appContext = LocalContext.current
+    val lifecycleOwner = LocalContext.current as LifecycleOwner
+    val invoicesRepository: InvoicesRepository = InvoicesRepository()
+    val invoiceViewModel: InvoicesViewModel= viewModel(
+        factory = InvoicesViewModel.InvoiceModelFactory(
+            SesionEntity.imei,
+            appContext,
+            lifecycleOwner,
+            invoicesRepository
+        )
+    )
+    //invoiceViewModel.resetInvoices()
     val showDialog = remember { mutableStateOf(false) }
     val selectedInvoices = remember { mutableStateOf<Invoices?>(null) }
     val typesCollectionlist = listOf( "Cobranza Ordinaria", "Deposito Directo","Pago POS", "Cobro Vendedor", "Pago Adelantado")
@@ -35,6 +57,20 @@ fun ProcessCollectionTemplate(
     val openDialog = remember { mutableStateOf(false) }
     val invoices = selectedInvoices.value
     var progress:Float=0.6f
+    var expandedCollectionType: MutableState<Boolean> = remember { mutableStateOf(true) }
+    var expandedInvoiceList:MutableState<Boolean> = remember { mutableStateOf(true) }
+    var expandedProcessCollection:MutableState<Boolean> =  remember{ mutableStateOf(true) }
+
+    Log.e("REOS", "ProcessCollectionTemplate-ProcessCollectionTemplate-selectedInvoices.value: " +selectedInvoices.value)
+    if (selectedInvoices.value!=null)
+    {
+        if(!selectedInvoices.value!!.cliente_id.equals(detailDispatchSheet.cliente_id))
+        {
+            expandedCollectionType.value=true
+            expandedInvoiceList.value=false
+            expandedProcessCollection.value=false
+        }
+    }
 
     Surface(
         //modifier = Modifier.fillMaxHeight(),
@@ -73,24 +109,22 @@ fun ProcessCollectionTemplate(
                         "Y",
                         "Y"
                     )
-
-                    /*LinearProgressIndicator(
-                        progress = progress,
-                        color = BlueVistony,
-                        backgroundColor = Color.Gray, // el color de fondo siempre será gris
-                        //progress = 0.3f,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            //.padding(0.dp, 20.dp, 0.dp, 20.dp)
-                    )*/
                     CollectionType(
+                        appContext,
                         ExpandableInvoices = { showDialog.value = true },
                         typesCollectionlist,
-                        currentSelection
+                        currentSelection,
+                        expandedCollectionType,
+                        expandedInvoiceList,
+                        detailDispatchSheet
                     )
                     if (showDialog.value) {
                         InvoicesList(
-                            invoiceViewModel, cliente_id
+                            expandedProcessCollection,
+                            expandedCollectionType,
+                            expandedInvoiceList,
+                            invoiceViewModel,
+                            detailDispatchSheet.cliente_id
                         ) { invoices ->
                             selectedInvoices.value = invoices as Invoices?
                             showDialog.value = true
@@ -98,13 +132,16 @@ fun ProcessCollectionTemplate(
                     }
                     if (invoices != null) {
                         CollectionProcess(
+                            invoiceViewModel,
+                            expandedInvoiceList,
+                            expandedProcessCollection,
                             invoices = invoices,
-                            cliente_id,
+                            detailDispatchSheet.cliente_id,
                             currentSelection.value,
                             InfoDialog = { openDialog.value = true },
                         )
                     }
-                    HorizontalStepView2(
+                    /*HorizontalStepView2(
                         statusTittleIcon = steps
                         , statusList = stepsStatus
                         , OnClick = {
@@ -114,7 +151,7 @@ fun ProcessCollectionTemplate(
                         },
                         progress,
                         false
-                    )
+                    )*/
 
                 }
             }

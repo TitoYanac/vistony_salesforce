@@ -304,4 +304,28 @@ class CollectionDetailViewModel(
             }
         }
     }
+
+    fun getCollectionDetailForDeposit(Deposit:String)
+    {
+        viewModelScope.launch {
+            try {
+                collectionDetailRepository.getCollectionDetailForDeposit(Deposit)
+            }
+            catch (e: Exception) {
+                Log.e("REOS", "CollectionDetailViewModel-getCollectionDetailForDate-error: " + e.toString())
+            }
+        }
+    }
+
+    fun sendAPICancelDepositCollectionDetail()
+    {
+        viewModelScope.launch {
+            try {
+                collectionDetailRepository.sendAPICancelDepositCollectionDetail()
+            }
+            catch (e: Exception) {
+                Log.e("REOS", "CollectionDetailViewModel-sendAPICancelDepositCollectionDetail-error: " + e.toString())
+            }
+        }
+    }
 }

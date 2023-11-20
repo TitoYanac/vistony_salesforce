@@ -11,7 +11,6 @@ class InvoicesViewModel(
     private var Imei:String,
     private var context: Context,
     private var lifecycleOwner: LifecycleOwner,
-    private var cliente_id:String,
     private var invoicesRepository: InvoicesRepository
 ): ViewModel()  {
 
@@ -22,13 +21,12 @@ class InvoicesViewModel(
         private var Imei:String,
         private var context: Context,
         private var lifecycleOwner: LifecycleOwner,
-        private var cliente_id:String,
         private var invoicesRepository: InvoicesRepository
         ): ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return InvoicesViewModel(
-                Imei,context,lifecycleOwner,cliente_id,invoicesRepository
+                Imei,context,lifecycleOwner,invoicesRepository
             ) as T
         }
     }
@@ -50,9 +48,9 @@ class InvoicesViewModel(
 
 
 
-    /*fun resetClient(){
-        _invoices.value= List<Invoices>(0)
-    }*/
+    fun resetInvoices(){
+        _invoices.value= emptyList()
+    }
 
 
     fun getInvoices(

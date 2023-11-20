@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 class DetailDispatchSheetViewModel
     (
     private val detailDispatchSheetRepository: DetailDispatchSheetRepository,
-    private val context: Context
+    private val context: Context,
+    private val Imei:String,
     ): ViewModel()
 {
     private val _resultDB = MutableStateFlow(DetailDispatchSheetEntity())
@@ -18,13 +19,15 @@ class DetailDispatchSheetViewModel
 
     class DetailDispatchSheetViewModelFactory(
         private val detailDispatchSheetRepository: DetailDispatchSheetRepository,
-        private val context: Context
+        private val context: Context,
+        private val Imei:String,
     ): ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return DetailDispatchSheetViewModel(
                 detailDispatchSheetRepository,
-                context
+                context,
+                Imei
             ) as T
         }
     }
@@ -43,20 +46,13 @@ class DetailDispatchSheetViewModel
     }
 
     fun getStateDetailDispatchSheet(
-        Imei:String,
         FechaDespacho:String,
-        context: Context,
-        lifecycleOwner: LifecycleOwner,
         type: String
-
     )
     {
         viewModelScope.launch {
             detailDispatchSheetRepository.getStateDispatchSheet(Imei,FechaDespacho,context,type)
         }
-        /*detailDispatchSheetRepository.status.observe(lifecycleOwner) { data ->
-            // actualizar la UI con los datos obtenidos
-            _status.setValue(data)
-        }*/
     }
+
 }

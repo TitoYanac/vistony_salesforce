@@ -153,7 +153,7 @@ fun contentMapNavigation(
 fun contentVisitDriver(
     context:Context,
     lifecycleOwner: LifecycleOwner,
-    list: DetailDispatchSheet,
+    list: DetailDispatchSheetUI,
     statusDispatchViewModel: StatusDispatchViewModel,
     statusStartVisit:String
 )
@@ -176,9 +176,14 @@ fun contentVisitDriver(
             val FormatFecha =
                 SimpleDateFormat("yyyyMMdd", Locale.getDefault())
             val date = Date()
-
+            Log.e("REOS", "ContentDialog-contentVisitDriver-statusStartVisit: "+statusStartVisit)
             if(statusStartVisit.equals("Y"))
             {
+                Log.e("REOS", "ContentDialog-contentVisitDriver-if-SesionEntity.imei: "+SesionEntity.imei)
+                Log.e("REOS", "ContentDialog-contentVisitDriver-if-list.cliente_id: "+list.cliente_id.toString())
+                Log.e("REOS", "ContentDialog-contentVisitDriver-if-list.domembarque_id: "+list.domembarque_id)
+                Log.e("REOS", "ContentDialog-contentVisitDriver-if-FormatFecha.format(date): "+FormatFecha.format(date))
+                Log.e("REOS", "ContentDialog-contentVisitDriver-if-list.control_id.toString(): "+list.control_id)
                 visitSectionViewModel?.getVisitSection(
                     SesionEntity.imei,
                     context,
@@ -186,7 +191,8 @@ fun contentVisitDriver(
                     list.cliente_id.toString(),
                     list.domembarque_id.toString(),
                     FormatFecha.format(date),
-                    list.control_id.toString()
+                    list.control_id.toString(),
+                    list.item_id.toString()
                 )
                 visitSectionViewModel.list.observe(lifecycleOwner) { data ->
                     // actualizar la UI con los datos obtenidos
@@ -252,6 +258,11 @@ fun contentVisitDriver(
                     }
                 }
             }else {
+                Log.e("REOS", "ContentDialog-contentVisitDriver-noif-SesionEntity.imei: "+SesionEntity.imei)
+                Log.e("REOS", "ContentDialog-contentVisitDriver-noif-list.cliente_id: "+list.cliente_id.toString())
+                Log.e("REOS", "ContentDialog-contentVisitDriver-noif-list.domembarque_id: "+list.domembarque_id)
+                Log.e("REOS", "ContentDialog-contentVisitDriver-noif-FormatFecha.format(date): "+FormatFecha.format(date))
+                Log.e("REOS", "ContentDialog-contentVisitDriver-noif-list.control_id.toString(): "+list.control_id)
                 visitSectionViewModel?.getVisitSection(
                     SesionEntity.imei,
                     context,
@@ -259,7 +270,8 @@ fun contentVisitDriver(
                     list.cliente_id.toString(),
                     list.domembarque_id.toString(),
                     FormatFecha.format(date),
-                    list.control_id.toString()
+                    list.control_id.toString(),
+                    list.item_id.toString()
                 )
                 visitSectionViewModel.list.observe(lifecycleOwner) { data ->
                     // actualizar la UI con los datos obtenidos

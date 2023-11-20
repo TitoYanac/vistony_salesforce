@@ -31,8 +31,8 @@ interface CollectionDetailDao {
     @Query("SELECT IFNULL(COUNT(Receip),0) as Receip FROM collectiondetail")
     fun getCountCollectionDetail(): Int
 
-    @Query("UPDATE collectiondetail SET Deposit = :Deposit, BankID = :BankID,StatusDeposit='Y' WHERE Receip = :Receip ")
-    fun updateDepositCollectionDetail(Receip: String, Deposit: String, BankID: String,)
+    @Query("UPDATE collectiondetail SET Deposit = :Deposit, BankID = :BankID,StatusDeposit=:StatusDeposit,StatusCancelDeposit=:StatusCancelDeposit WHERE Receip = :Receip ")
+    fun updateDepositCollectionDetail(Receip: String, Deposit: String, BankID: String, StatusDeposit:String,StatusCancelDeposit:String)
 
     @Query("SELECT APICode,Deposit,BankID,Receip,QRStatus  FROM collectiondetail where StatusDeposit='Y' and CANCELED='N' and StatusSendAPIDeposit='N' ")
     fun getCollectionDetailDeposited(): List<CollectionDetailPendingDeposit>
@@ -47,4 +47,11 @@ interface CollectionDetailDao {
 
     @Query("SELECT * FROM collectiondetail where IncomeDate=:IncomeDate ")
     fun getCollectionDetailForDate(IncomeDate: String): List<CollectionDetail>
+
+    @Query("SELECT * FROM collectiondetail where Deposit=:deposit and  Status='P' ")
+    fun getCollectionDetailForDeposit(deposit: String): List<CollectionDetail>
+
+    @Query("SELECT APICode,Deposit,BankID,Receip,QRStatus  FROM collectiondetail where StatusCancelDeposit='Y' and StatusDeposit='N' ")
+    fun getCollectionDetailDepositCancel(): List<CollectionDetailPendingDeposit>
+
 }

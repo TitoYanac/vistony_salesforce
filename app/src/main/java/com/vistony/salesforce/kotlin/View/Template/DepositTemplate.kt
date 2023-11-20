@@ -128,7 +128,7 @@ fun ContentDeposit()
     Log.e("REOS", "DepositTemplate-ContentDeposit-statusBoolean.value: " + statusBoolean.value)
     val activity = LocalContext.current as Activity
     val typeCollection:MutableState<String> = remember { mutableStateOf("")}
-    val collectionHeadRepository : CollectionHeadRepository = CollectionHeadRepository()
+    val collectionHeadRepository : CollectionHeadRepository = CollectionHeadRepository(appContext)
     val collectionHeadViewModel: CollectionHeadViewModel = viewModel(
             factory = CollectionHeadViewModel.CollectionHeadViewModelFactory(
                     appContext,

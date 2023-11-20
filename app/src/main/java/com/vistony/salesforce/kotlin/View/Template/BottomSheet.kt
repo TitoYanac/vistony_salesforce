@@ -54,6 +54,7 @@ import com.vistony.salesforce.kotlin.Model.*
 import com.vistony.salesforce.kotlin.Utilities.*
 import com.vistony.salesforce.kotlin.View.Atoms.TableCell
 import com.vistony.salesforce.kotlin.View.Atoms.TextLabel
+import com.vistony.salesforce.kotlin.View.Atoms.theme.RedVistony
 import com.vistony.salesforce.kotlin.View.Molecules.ButtonViewSurface
 import com.vistony.salesforce.kotlin.View.Molecules.CardView
 import com.vistony.salesforce.kotlin.View.Molecules.SpinnerView
@@ -63,14 +64,44 @@ import com.vistony.salesforce.kotlin.View.Molecules.SpinnerView
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @Composable
-fun SheetLayout(currentScreen: BottomSheetScreen,onCloseBottomSheet :()->Unit,showIconClose:Boolean=true) {
+fun SheetLayout(currentScreen: BottomSheetScreen, onCloseBottomSheet: () -> Unit, showIconClose: Boolean = true) {
+    Log.e("REOS", "BottomSheet-SheetLayout-nuevo ingreso-currentScreen $currentScreen")
+    BottomSheetWithCloseDialog(onCloseBottomSheet, showIconClose = showIconClose) {
+        when (currentScreen) {
+            is BottomSheetScreen.collectionDetailBottom -> {
+                // Realizar lógica específica si es necesario
+                ProcessCollectionTemplate(
+                    detailDispatchSheet = currentScreen.detailDispatchSheet,
+                )
+            }
+            is BottomSheetScreen.processDispatch -> {
+                // Realizar lógica específica si es necesario
+                ProcessDispatchTemplate(
+                    detailDispatchSheet = currentScreen.detailDispatchSheet,
+                    bitMapMutable = currentScreen.bitMapMutable,
+                    openDialogShowImage = currentScreen.openDialogShowImage,
+                    context = currentScreen.context,
+                    openDialogEditCommentary = currentScreen.openDialogEditCommentary,
+                    tittleDialogPhoto = currentScreen.tittleDialogPhoto
+                )
+            }
+        }
+    }
+}
+/*fun SheetLayout(currentScreen: BottomSheetScreen,onCloseBottomSheet :()->Unit,showIconClose:Boolean=true) {
+    Log.e("REOS", "BottomSheet-SheetLayout-nuevo ingreso-currentScreen "+currentScreen)
     BottomSheetWithCloseDialog(onCloseBottomSheet,showIconClose=showIconClose){
         when(currentScreen){
+
             is BottomSheetScreen.collectionDetailBottom ->
-                ProcessCollectionTemplate(cliente_id=currentScreen.cliente_id
+
+                ProcessCollectionTemplate(
+                    //cliente_id=currentScreen.cliente_id
                     //,Imei=currentScreen.Imei,appContext=currentScreen.appContext,lifecycleOwner=currentScreen.lifecycleOwner,invoicesRepository=currentScreen.invoicesRepository
-                        ,invoiceViewModel=currentScreen.invoiceViewModel
+                        //,invoiceViewModel=currentScreen.invoiceViewModel
+                    detailDispatchSheet=currentScreen.detailDispatchSheet,
                 )
+
             is BottomSheetScreen.processDispatch ->
                 ProcessDispatchTemplate(
                     detailDispatchSheet=currentScreen.detailDispatchSheet,
@@ -82,22 +113,21 @@ fun SheetLayout(currentScreen: BottomSheetScreen,onCloseBottomSheet :()->Unit,sh
                 )
         }
     }
-    Log.e(
-        "REOS",
-        "BottomSheet-SheetLayout-fin"
-    )
-}
+}*/
 
 
 sealed class BottomSheetScreen() {
-    class collectionDetailBottom(val cliente_id: String,val invoiceViewModel: InvoicesViewModel):BottomSheetScreen()
+    class collectionDetailBottom(
+        //val cliente_id: String,val invoiceViewModel: InvoicesViewModel
+        val detailDispatchSheet: DetailDispatchSheetUI,
+    ):BottomSheetScreen()
     class processDispatch(
-        val detailDispatchSheet: DetailDispatchSheet,
+        val detailDispatchSheet: DetailDispatchSheetUI,
         var bitMapMutable: MutableState<Bitmap?>,
         var openDialogShowImage: MutableState<Boolean?>,
         var context: Context,
         var openDialogEditCommentary: MutableState<Boolean?>,
-        var tittleDialogPhoto: MutableState<String>,
+        var tittleDialogPhoto: MutableState<String>
     ):BottomSheetScreen()
 }
 
@@ -105,12 +135,15 @@ sealed class BottomSheetScreen() {
 fun BottomSheetWithCloseDialog(onClosePressed: () -> Unit, closeButtonColor: Color = Color.Gray, showIconClose:Boolean, content: @Composable() () -> Unit){
     Box{
         content()
+
         if(showIconClose){
             IconButton(
-                onClick = onClosePressed,
+                onClick = {
+                            onClosePressed()
+                },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 10.dp, end = 10.dp, start = 16.dp, bottom = 16.dp)
+                    .padding(top = 5.dp, end = 10.dp, start = 16.dp, bottom = 16.dp)
                     .size(29.dp)
             ) {
                 Icon(Icons.Filled.Close, tint = closeButtonColor, contentDescription = null)
@@ -121,16 +154,15 @@ fun BottomSheetWithCloseDialog(onClosePressed: () -> Unit, closeButtonColor: Col
 }
 
 @Composable
-private fun InvoicesList(
+private fun InvoicesListDetail(
     invoiceViewModel: InvoicesViewModel
     ,cliente_id: String
     ,expandableCollectionProcess: (invoices:Invoices?) -> Unit
-    ,statusEnable: Boolean
-    ,invoicelegalnum:String
-    ,onBooleanValueChanged: (Boolean) -> Unit
-
 ){
+    Log.e("REOS", "BottomSheet-InvoicesListDetail-cliente_id: " + cliente_id)
+    invoiceViewModel.getInvoices(cliente_id)
     var invoices = invoiceViewModel.invoices.collectAsState()
+    Log.e("REOS", "BottomSheet-InvoicesListDetail-invoices: " + invoices)
     var invoicesobj:Invoices?=null
     //val selectedLines = remember { mutableStateListOf<Boolean>() }
     //var isSelected by remember { mutableStateOf(false) }
@@ -251,17 +283,21 @@ private fun InvoicesList(
 
 @Composable
 fun CollectionType(
+    appContext:Context,
     ExpandableInvoices: () -> Unit
     ,listTypeCollecion: List<String>
     ,currentSelected:MutableState<String>
+    ,expandedCollectionType:MutableState<Boolean>
+    ,expandedInvoiceList:MutableState<Boolean>
+    ,detailDispatchSheet: DetailDispatchSheetUI,
 ) {
 
-    var expanded by remember { mutableStateOf(true) }
+
     CardView(
         cardtTittle =
         {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ButtonCircle(OnClick = {}) {
+                ButtonCircle(OnClick = {}, color = BlueVistony) {
                     Text(
                         text = "1",
                         color = Color.White,
@@ -274,7 +310,7 @@ fun CollectionType(
         , cardContent =
         {
             AnimatedVisibility(
-                visible = expanded,
+                visible = expandedCollectionType.value,
                 enter = expandIn(),
                 exit = shrinkOut()
             ) {
@@ -287,7 +323,7 @@ fun CollectionType(
         , cardBottom =
         {
             AnimatedVisibility(
-                visible = expanded,
+                visible = expandedCollectionType.value,
                 enter = expandIn(),
                 exit = shrinkOut()
             ) {
@@ -305,11 +341,17 @@ fun CollectionType(
                     ButtonView(
                         description = "Siguente",
                         OnClick = {
-                            ExpandableInvoices()
-                            expanded = false
+                            if(detailDispatchSheet.saldo.equals("0")&&!currentSelected.value.equals("Pago Adelantado"))
+                            {
+                                Toast.makeText(appContext,"El cliente no tiene deuda, cambiar a Pago Adelantado",Toast.LENGTH_SHORT).show()
+                            }else {
+                                ExpandableInvoices()
+                                expandedCollectionType.value = false
+                                expandedInvoiceList.value=true
+                            }
                                   },
                         context = contexto,
-                        backGroundColor = BlueVistony,
+                        backGroundColor = RedVistony,
                         textColor = Color.White,
                         status = true
                     )
@@ -323,36 +365,39 @@ fun CollectionType(
 
 @Composable
 fun InvoicesList(
+    expandedProcessCollection:MutableState<Boolean>,
+    expandedCollectionType:MutableState<Boolean>,
+    expandedInvoiceList:MutableState<Boolean>,
     invoiceViewModel: InvoicesViewModel,
     cliente_id: String,
     expandableCollectionProcess: (Any?) -> Unit,
 ) {
+    Log.e("REOS", "BottomSheet-InvoicesList-cliente_id: " +cliente_id)
     var invoicelegalnum by remember { mutableStateOf("") }
-    var expanded by remember { mutableStateOf(true) }
-    var expanded2 by remember { mutableStateOf(true) }
+
     var invoice:Invoices?=null
     CardView(
         cardtTittle =
         {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ButtonCircle(OnClick = {}) {
+                ButtonCircle(OnClick = {}, color = BlueVistony) {
                     Text(
                         text = "2",
                         color = Color.White,
                         textAlign = TextAlign.Center,
                     ) }
-                TableCell(text = "FACTURAS", weight =1f ,title = true, textAlign = TextAlign.Center)
+                TableCell(text = "DOCUMENTOS CON SALDO", weight =1f ,title = true, textAlign = TextAlign.Center)
             }
         }
         , cardContent =
         {
             AnimatedVisibility(
-                visible = expanded,
+                visible = expandedInvoiceList.value,
                 enter = expandIn(),
                 exit = shrinkOut()
             ) {
 
-                InvoicesList(
+                InvoicesListDetail(
                     invoiceViewModel
                     , cliente_id
                     ,expandableCollectionProcess= {
@@ -361,22 +406,23 @@ fun InvoicesList(
                         invoice=invoices
                         invoicelegalnum=invoices?.nroFactura.toString()
                     }
-                    ,expanded2
-                    ,invoicelegalnum
-                ){
+                    //,expanded2
+                    //,invoicelegalnum
+                )
+                /*{
                     //expanded = it
                     Log.e(
                         "REOS",
-                        "BottomSheet-ExpandableInvoices-expanded" +expanded
+                        "BottomSheet-ExpandableInvoices-expanded" +expandedInvoiceList.value
                     )
-                }
+                }*/
             }
 
         }
         , cardBottom =
         {
             AnimatedVisibility(
-                visible = expanded,
+                visible = expandedInvoiceList.value,
                 enter = expandIn(),
                 exit = shrinkOut()
             ) {
@@ -385,22 +431,27 @@ fun InvoicesList(
 
                     ButtonView(
                         description = "Anterior",
-                        OnClick = { /*TODO*/ },
+                        OnClick = {
+                            expandedCollectionType.value=true
+                            expandedInvoiceList.value=false
+                                  },
                         context = contexto,
-                        backGroundColor = Color.Gray,
-                        textColor = Color.White
+                        backGroundColor = RedVistony,
+                        textColor = Color.White,
+                        status = true
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     ButtonView(
                         description = "Siguente",
                         OnClick = {
                             //expandableCollectionProcess(invoicesobj)
-                            expanded=false
+                            expandedInvoiceList.value=false
                             expandableCollectionProcess(invoice)
+                            expandedProcessCollection.value=true
 
                         },
                         context = contexto,
-                        backGroundColor = BlueVistony,
+                        backGroundColor = RedVistony,
                         textColor = Color.White,
                         status = true
                     )
@@ -417,36 +468,75 @@ fun InvoicesList(
 
 @Composable
 fun CollectionProcess(
+    invoiceViewModel: InvoicesViewModel,
+    expandedInvoiceList:MutableState<Boolean>,
+    expandedProcessCollection:MutableState<Boolean>,
     invoices: Invoices?,
     client:String,
     type: String,
     InfoDialog: () -> Unit
 ) {
 
+    var colorButtonCollectionAfter:MutableState<Color> = remember {
+        mutableStateOf(RedVistony)
+    }
+    var statusButtonCollectionAfter:MutableState<Boolean> = remember {
+        mutableStateOf(true)
+    }
 
     CardView(
         cardtTittle =
         {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ButtonCircle(OnClick = {}) {
+                ButtonCircle(OnClick = {}, color = BlueVistony) {
                     Text(
                         text = "3",
                         color = Color.White,
                         textAlign = TextAlign.Center,
                     ) }
-                TableCell(text = "GENERACION COBRANZA:", weight =1f ,title = true, textAlign = TextAlign.Center)
+                TableCell(text = "GENERACION DE COBRANZA:", weight =1f ,title = true, textAlign = TextAlign.Center)
             }
         }
         , cardContent =
         {
-            CardProcessCollection(
-                invoices,type,client,
-                //invoiceViewModel, cliente_id
-                //,Imei: String,appContext: Context,lifecycleOwner:LifecycleOwner,invoicesRepository: InvoicesRepository
-            )
+            CardProcessCollection(invoiceViewModel,invoices,type,client,expandedProcessCollection,colorButtonCollectionAfter,statusButtonCollectionAfter )
         },cardBottom=
         {
+            AnimatedVisibility(
+                visible = expandedProcessCollection.value,
+                enter = expandIn(),
+                exit = shrinkOut()
+            ) {
+                Spacer(modifier = Modifier.height(5.dp))
+                Row() {
 
+                    ButtonView(
+                        description = "Anterior",
+                        OnClick = {
+                            expandedInvoiceList.value=true
+                            expandedProcessCollection.value=false
+                        },
+                        context = contexto,
+                        backGroundColor = colorButtonCollectionAfter.value,
+                        textColor = Color.White,
+                        status = statusButtonCollectionAfter.value
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                    ButtonView(
+                        description = "Siguente",
+                        OnClick = {
+                            //expandableCollectionProcess(invoicesobj)
+                            //expandedInvoiceList.value=false
+                            //expandableCollectionProcess(invoice)
+
+                        },
+                        context = contexto,
+                        backGroundColor = Color.Gray,
+                        textColor = Color.White,
+                        status = false
+                    )
+                }
+            }
         }
     )
 
@@ -454,86 +544,19 @@ fun CollectionProcess(
         "REOS",
         "BottomSheet-ExpandableCollectionProcess-invoices" +invoices
     )
-    /*Column(
-        //modifier = Modifier.padding(top = 20.dp, bottom = 10.dp)
-    )
-    {
-        //Divider()
-        var expanded by remember { mutableStateOf(true) }
-        Card(
-            modifier = Modifier
-             //   .clickable { expanded = !expanded },
-            //.padding(20.dp),
-                ,elevation = 4.dp
-        ) {
-            Column(modifier = Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp))
-            {
-                Row(
-                    modifier = Modifier
-                        .padding(0.dp, 5.dp, 10.dp, 0.dp)
-                        .fillMaxWidth()
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(30.dp)
-                            .background(BlueVistony, CircleShape)
-                    ) {
-                        Text(
-                            text = "3",
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(30.dp))
-                    Text(
-                        "GENERACION COBRANZA:",
-                        modifier = Modifier.padding(0.dp, 5.dp, 10.dp, 0.dp)
-                        ,
-                        color = Color.Black,
-                        style = MaterialTheme.typography.subtitle2,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Icon(
-                        imageVector =
-                        if (expanded) {
-                            ImageVector.vectorResource(R.drawable.ic_baseline_arrow_drop_up_24_black)
-                        } else {
-                            ImageVector.vectorResource(R.drawable.ic_baseline_arrow_drop_down_24_black)
-                        },
-                        contentDescription = null,
-                        modifier = Modifier.padding(0.dp, 5.dp, 0.dp, 0.dp)
-                        //tint = Color.White,
-                    )
-
-                }
-
-                AnimatedVisibility(
-                    visible = expanded,
-                    enter = expandIn(),
-                    exit = shrinkOut()
-                ) {
-                    Column()
-                    {
-                        CardProcessCollection(
-                            invoices,type,client,
-                            //invoiceViewModel, cliente_id
-                            //,Imei: String,appContext: Context,lifecycleOwner:LifecycleOwner,invoicesRepository: InvoicesRepository
-                        )
-                    }
-                }
-            }
-        }
-    }*/
 }
 
 @SuppressLint("ShowToast")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun CardProcessCollection(
+    invoiceViewModel:InvoicesViewModel,
     invoices: Invoices?
     ,type: String
     ,cardName:String
+    ,expandedProcessCollection:MutableState<Boolean>
+    ,colorButtonCollectionAfter:MutableState<Color>
+    ,statusButtonCollectionAfter:MutableState<Boolean>
 ){
 
     var textNumber by remember { mutableStateOf( "0") }
@@ -562,16 +585,14 @@ private fun CardProcessCollection(
     var collectionDetail: CollectionDetail? = null
     var collectionDetailResponseAdd = collectionDetailViewModel.result_add.collectAsState()
     val activity = LocalContext.current as Activity
-    Log.e(
-        "REOS",
-        "BottomSheet-CardProcessCollection-collectionDetailResponseAdd.value: "+collectionDetailResponseAdd.value
-    )
+    Log.e("REOS", "BottomSheet-CardProcessCollection-collectionDetailResponseAdd.value: "+collectionDetailResponseAdd.value)
+    Log.e("REOS", "BottomSheet-CardProcessCollection-cardName: "+cardName)
     if(collectionDetailResponseAdd.value.Status.equals("Y"))
     {
         colorButtonSave.value=Color.Gray
         enableButtonSave=false
-        colorButtonValidate= BlueVistony
-        colorButtonPrint= BlueVistony
+        colorButtonValidate= RedVistony
+        colorButtonPrint= RedVistony
         enableButtonPrint=true
         enableButtonValidate=true
         collectionDetailViewModel.SendAPICollectionDetail(appContext,SesionEntity.compania_id,SesionEntity.usuario_id)
@@ -580,7 +601,6 @@ private fun CardProcessCollection(
             "BottomSheet-CardProcessCollection-collectionDetailResponseAdd.EntroalIF.alterminarlaInsercion "
         )
     }
-    var expanded by remember { mutableStateOf(true) }
     var context= LocalContext.current
     val openDialogEdit:MutableState<Boolean?> = remember { mutableStateOf(false) }
     var DialogEditStatus by remember { mutableStateOf(true) }
@@ -590,36 +610,43 @@ private fun CardProcessCollection(
     var DialogResultCommentary :MutableState<String> = remember { mutableStateOf("") }
     var DialogCommentaryStatus by remember { mutableStateOf(true) }
     var newBalance by remember { mutableStateOf(CalculateNewBalance(invoices?.saldo.toString(),DialogEditResult.value))}
+    var DialogEditResultSMS :MutableState<String> = remember { mutableStateOf("0") }
+    val openDialogSensSMS:MutableState<Boolean?> = remember { mutableStateOf(false) }
+    var colorButtonCollection by remember { mutableStateOf(RedVistony)}
+    var enableButtonCollection by remember { mutableStateOf(true)}
+
 
 
     if(openDialogEdit.value!!)
     {
         DialogView(
-            "Cobranza"
-            ,""
-            ,onClickCancel = {
-                openDialogEdit.value = false
-            }
-            ,onClickAccept = {
-                openDialogEdit.value = false
-            }
-            ,statusButtonAccept = true
-            ,statusButtonIcon = false
-            ,context=context
+                "Cobranza"
+                ,""
+                ,onClickCancel = {
+            openDialogEdit.value = false
+        }
+                ,onClickAccept = {
+            openDialogEdit.value = false
+        }
+                ,statusButtonAccept = true
+                ,statusButtonIcon = false
+                ,context=context
         ){
             Editext(
-                DialogEditStatus
-                ,DialogEditResult
-                ,"Ingrese cobranza"
-                ,"Cobranza"
-                ,painterResource(id = R.drawable.ic_baseline_numbers_24)
-            , KeyboardType.Number
+                    DialogEditStatus
+                    ,DialogEditResult
+                    ,"Ingrese cobranza"
+                    ,"Cobranza"
+                    ,painterResource(id = R.drawable.ic_baseline_numbers_24)
+                    , KeyboardType.Number
             )
         }
     }
 
+
+
     if(!DialogEditResult.value.equals("0")&&receip.value.equals("0")){
-        colorButtonSave.value= BlueVistony
+        colorButtonSave.value= RedVistony
         enableButtonSave=true
     }
 
@@ -659,12 +686,66 @@ private fun CardProcessCollection(
         }
     }
 
+    if(openDialogSensSMS.value!!)
+    {
+        DialogView(
+                "SMS"
+                ,""
+                ,onClickCancel = {
+            openDialogSensSMS.value = false
+        }
+                ,onClickAccept = {
+            for (i in 0 until collectionDetailResponseAdd.value.data!!.size) {
+                collectionDetail =
+                        collectionDetailResponseAdd.value.data!!.get(
+                                i
+                        )
+            }
+            sendSMS(
+                    DialogEditResultSMS.value,
+                    appContext,
+                    activity,
+                    collectionDetail
+            )
+        }
+                ,statusButtonAccept = true
+                ,statusButtonIcon = false
+                ,context=context
+        ){
+            Row(
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                        horizontalAlignment = Alignment.Start,
+                        modifier=Modifier.weight(0.5f)
+                ) {
+                    Text(text = "Enviar SMS", fontWeight = FontWeight.Bold)
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+            ) {
+                Editext(
+                        status = true,
+                        text= DialogEditResultSMS,
+                        "Ingresa el numero telefonico",
+                        "Telefono",
+                        painterResource(id = R.drawable.ic_baseline_numbers_24),
+                        KeyboardType.Number
+                )
+            }
+        }
+    }
+
     Column(
         //modifier = Modifier.padding(top = 0.dp, bottom = 0.dp)
     ) {
         //Divider()
         AnimatedVisibility(
-            visible = expanded,
+            visible = expandedProcessCollection.value,
             enter = expandIn(),
             exit = shrinkOut()
         ) {
@@ -721,11 +802,18 @@ private fun CardProcessCollection(
                             ) {
                                 ButtonCircle(
                                     OnClick={
-                                        openDialogCommentary.value=true
-                                        Toast.makeText(context,"Boton comentario",Toast.LENGTH_SHORT).show()
+                                        if(enableButtonCollection)
+                                        {
+                                            //openDialogEdit.value = true
+                                            openDialogCommentary.value=true
+                                            Toast.makeText(context,"Boton comentario",Toast.LENGTH_SHORT).show()
+                                        }else{
+                                            Toast.makeText(context,"Boton deshabilitado",Toast.LENGTH_SHORT).show()
+                                        }
+
                                     }
                                     , size = DpSize(40.dp,40.dp)
-                                    , color = BlueVistony
+                                    , color = colorButtonCollection
                                     , roundedCornerShape = CircleShape
                                 )
                                 {
@@ -736,22 +824,17 @@ private fun CardProcessCollection(
                                     )
                                 }
                             }
+
                         }
 
                         Row(
-                            //horizontalArrangement = Arrangement.Start,
-                            //modifier = Modifier.fillMaxWidth()
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.Start,
                                 modifier=Modifier.weight(0.5f)
                             ) {
-                                //Text(text = "Importe", color = Color.Gray)
-                                //Text(text = "${Convert.currencyForView(invoices?.importeFactura)}", fontWeight = FontWeight.Bold)
-                                //TextLabel(text ="Importe", textAlign = TextAlign.Center )
                                 Row() {
                                     TableCell(
-                                        //text = "${Convert.currencyForView(invoices?.)}",
                                         text = "Importe",
                                         color = Color.Gray,
                                         title = false,
@@ -793,30 +876,34 @@ private fun CardProcessCollection(
                                         textAlign = TextAlign.End
                                     )
                                 }
-                                /*Column(
-                                    horizontalAlignment = Alignment.Start,
-                                    modifier=Modifier.weight(0.5f)
-                                ) {
-                                    Text(text = "Saldo", color = Color.Gray)
-                                    Text(text = "${Convert.currencyForView(invoices?.saldo)}", fontWeight = FontWeight.Bold)
-                                }*/
                             }
                         }
                         Row(
-                            //horizontalArrangement = Arrangement.Start,
-                            //modifier=Modifier.weight(0.5f)
                         ) {
                             Column(
                                 horizontalAlignment = Alignment.Start,
-                                modifier=Modifier
+                                modifier= Modifier
                                     .weight(0.5f)
                                     .background(
-                                    BlueVistony, RoundedCornerShape(4.dp)
-                                ).clickable { openDialogEdit.value=true  }
+                                        colorButtonCollection, RoundedCornerShape(4.dp)
+                                    )
+                                    .clickable {
+                                        if (enableButtonCollection) {
+                                            openDialogEdit.value = true
+                                        } else {
+                                            Toast
+                                                .makeText(
+                                                    context,
+                                                    "Boton deshabilitado",
+                                                    Toast.LENGTH_SHORT
+                                                )
+                                                .show()
+                                        }
+
+                                    }
                             ) {
                                 Row() {
                                     TableCell(
-                                        //text = "${Convert.currencyForView(invoices?.)}",
                                         text = "Cobranza",
                                         color = Color.White,
                                         title = false,
@@ -824,10 +911,8 @@ private fun CardProcessCollection(
                                         textAlign = TextAlign.End
                                     )
                                 }
-                                //TextLabel(text = "Cobranza", textAlign = TextAlign.Center )
                                 Row() {
                                     TableCell(
-                                        //text = "${Convert.currencyForView(invoices?.)}",
                                         text = "${Convert.currencyForView(DialogEditResult.value)}",
                                         color = Color.White,
                                         title = true,
@@ -836,26 +921,6 @@ private fun CardProcessCollection(
                                     )
                                 }
                             }
-                            /*Column(
-                                horizontalAlignment = Alignment.Start,
-                                modifier=Modifier.weight(0.5f)
-                            ) {
-                                ButtonCircle(OnClick = { openDialogEditCommentary.value=true }) {
-                                    Text(
-                                        text = "1",
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center,
-                                    ) }
-                            }*/
-                            /*Column(
-                                //horizontalAlignment = Alignment.Start,
-                                modifier=Modifier//.weight(0.5f)
-                                    .clickable {
-                                    openDialogEditCommentary.value=true }
-                            ) {
-                                Text(text = "Cobranza", color = Color.Gray)
-                                Text(text = "${Convert.currencyForView(invoices?.saldo)}", fontWeight = FontWeight.Bold)
-                            }*/
                             Column(
                                 horizontalAlignment = Alignment.Start,
                                 modifier=Modifier.weight(0.5f)
@@ -885,54 +950,8 @@ private fun CardProcessCollection(
                                             )
                                         }
                                 }
-                                /*Text(text = "Nuevo Saldo", color = Color.Gray)
-                                newBalance=CalculateNewBalance(invoices?.saldo.toString(),textNumber)
-                                "${Convert.currencyForView(newBalance)}"
-                                    ?.let {
-                                    Text(text =
-                                    //"${Convert.currencyForView(invoices?.saldo)}"
-                                    it, fontWeight = FontWeight.Bold)
-                                }*/
                             }
                         }
-                        /*Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            OutlinedTextField(
-                                enabled= enableEditext ,
-                                singleLine=true,
-                                value = textNumber,
-                                onValueChange = {
-                                    //if(!it.contains("B") ) {textNumber = it}
-                                    textNumber = it
-                                },
-                                //modifier = Modifier.padding(bottom = 300.dp),
-                                placeholder = {
-                                    Text(text = "Ingresa el monto cobrado")
-                                },
-                                label = { Text("Cobranza")},
-                                trailingIcon = { Icon(painter = painterResource(id = R.drawable.ic_baseline_numbers_24), contentDescription = null, tint = colorEditext) },
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number
-                                    //,keyboardLayout = KeyboardLayout.Qwerty
-                                    ,imeAction = ImeAction.Go
-                                ),
-                                /*keyboardActions = KeyboardActions(
-                                    onGo = {keyboardController?.hide()}
-                                )*/
-                                keyboardActions = KeyboardActions(
-                                    onGo = {
-                                        keyboardController?.hide()
-                                        //enableEditext=false
-
-                                        colorButtonSave= BlueVistony
-                                        enableButtonSave=true
-                                    }
-                                )
-                            )
-                        }*/
                         Spacer(modifier = Modifier.height(10.dp))
                         Row(
                             horizontalArrangement = Arrangement.Start,
@@ -944,26 +963,36 @@ private fun CardProcessCollection(
                                     .weight(0.5f)
                             ) {
                                 ButtonCircle(
-                                    OnClick={
-                                        if (enableButtonSave) {
-                                        enableButtonSave = false
-                                        //colorButtonSave.value = Color.LightGray
-                                            collectionDetailViewModel.addListCollectionDetail(
-                                            invoices,
-                                            newBalance.toString(),
-                                                DialogEditResult.value,
-                                            type,
-                                            SesionEntity.compania_id,
-                                            SesionEntity.usuario_id,
-                                            cardName,
-                                            commentary
-                                        )
-                                            Toast.makeText(context,"Recibo guardado correctamente",Toast.LENGTH_SHORT)
-                                            colorButtonSave.value=Color.Gray
-                                    }else {
-                                        Toast.makeText(context,"Boton deshabilitado",Toast.LENGTH_SHORT)
-                                    }
+                                    OnClick=
+                                    {
+                                            if (enableButtonSave)
+                                            {
+                                                colorButtonCollection=Color.Gray
+                                                enableButtonSave = false
+                                                enableButtonCollection= false
+                                                colorButtonCollectionAfter.value = Color.Gray
+                                                statusButtonCollectionAfter.value = false
+                                                //colorButtonSave.value = Color.LightGray
+                                                collectionDetailViewModel.addListCollectionDetail(
+                                                    invoices,
+                                                    newBalance.toString(),
+                                                    DialogEditResult.value,
+                                                    type,
+                                                    SesionEntity.compania_id,
+                                                    SesionEntity.usuario_id,
+                                                    cardName,
+                                                    commentary
+                                                )
+                                                Toast.makeText(context, "Recibo guardado correctamente", Toast.LENGTH_SHORT)
+                                                colorButtonSave.value = Color.Gray
+                                                invoiceViewModel.resetInvoices()
+
                                             }
+                                            else
+                                            {
+                                            Toast.makeText(context,"Boton deshabilitado",Toast.LENGTH_SHORT)
+                                            }
+                                    }
                                 , size = DpSize(50.dp,50.dp)
                                 , color = colorButtonSave.value
                                 , roundedCornerShape = CircleShape
@@ -981,52 +1010,6 @@ private fun CardProcessCollection(
                                     textAlign = TextAlign.Center,
                                     //modifier = Modifier.align(Alignment.Center)
                                 )
-                                /*Box(
-                                    contentAlignment = Alignment.Center
-                                )
-                                {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(50.dp)
-                                                .background(colorButtonSave, CircleShape)
-                                                .clickable {
-                                                    if (enableButtonSave) {
-                                                        enableEditext = false
-                                                        colorEditext = Color.LightGray
-                                                        collectionDetailViewModel.addListCollectionDetail(
-                                                            invoices,
-                                                            newBalance.toString(),
-                                                            textNumber.toString(),
-                                                            type,
-                                                            SesionEntity.compania_id,
-                                                            SesionEntity.usuario_id,
-                                                            cardName,
-                                                            commentary
-                                                        )
-                                                    } else {
-
-                                                    }
-                                                }
-                                            , contentAlignment = Alignment.Center
-                                        ) {
-                                            Icon(
-                                                ImageVector.vectorResource(R.drawable.ic_save_black_24dp),
-                                                tint = Color.White,
-                                                contentDescription = null
-                                            )
-                                        }
-                                        Text(
-                                            text = "Guardar",
-                                            color = Color.Black,
-                                            textAlign = TextAlign.Center,
-                                            //modifier = Modifier.align(Alignment.Center)
-                                        )
-                                    }
-                                }*/
-
                             }
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -1037,18 +1020,8 @@ private fun CardProcessCollection(
                                 ButtonCircle(
                                     OnClick={
                                         if (enableButtonPrint) {
-                                            var collectionReceipPDF: CollectionReceipPDF =
-                                                CollectionReceipPDF()
-                                            null
-                                            Log.e(
-                                                "REOS",
-                                                "BottomSheet-CardProcessCollection-collectionDetailResponseAdd.value.data!!.size: " + collectionDetailResponseAdd.value.data!!.size
-                                            )
-
-                                            collectionReceipPDF.generarPdf(
-                                                appContext,
-                                                collectionDetail
-                                            )
+                                            var collectionReceipPDF: CollectionReceipPDF = CollectionReceipPDF()
+                                            collectionReceipPDF.generarPdf(appContext, collectionDetail)
 
                                         } else {
 
@@ -1071,60 +1044,6 @@ private fun CardProcessCollection(
                                     textAlign = TextAlign.Center,
                                     //modifier = Modifier.align(Alignment.Center)
                                 )
-                                /*Box(
-                                    //modifier =
-                                    //Modifier.align(alignment = Alignment.CenterHorizontally)
-                                 contentAlignment = Alignment.Center
-                                )
-                                {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(50.dp)
-                                                .background(colorButtonPrint, CircleShape)
-                                                .clickable {
-                                                    if (enableButtonPrint) {
-                                                        var collectionReceipPDF: CollectionReceipPDF =
-                                                            CollectionReceipPDF()
-                                                        null
-                                                        Log.e(
-                                                            "REOS",
-                                                            "BottomSheet-CardProcessCollection-collectionDetailResponseAdd.value.data!!.size: " + collectionDetailResponseAdd.value.data!!.size
-                                                        )
-
-                                                        collectionReceipPDF.generarPdf(
-                                                            appContext,
-                                                            collectionDetail
-                                                        )
-
-                                                        /*collectionDetailViewModel.getCollectionDetailUnit(
-
-                                                        )*/
-
-
-                                                    } else {
-
-                                                    }
-                                                }
-                                            , contentAlignment = Alignment.Center
-                                        ) {
-                                            Icon(
-                                                ImageVector.vectorResource(R.drawable.ic_print_black_24dp),
-                                                tint = Color.White,
-                                                contentDescription = null
-                                            )
-                                        }
-                                        Text(
-                                            text = "Imprimir",
-                                            color = Color.Black,
-                                            textAlign = TextAlign.Center,
-                                            //modifier = Modifier.align(Alignment.Center)
-                                        )
-                                    }
-                                }*/
-
                             }
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -1139,7 +1058,7 @@ private fun CardProcessCollection(
                                     Modifier
                                         .align(alignment = Alignment.CenterHorizontally)
                                         .clickable {
-                                            expanded = false
+                                            openDialogSensSMS.value = true
                                         }
                                 )
                                 {
@@ -1172,139 +1091,6 @@ private fun CardProcessCollection(
               //  }
         }
 
-        var textNumber1 by remember { mutableStateOf( "0") }
-        var enableEditext1 by remember { mutableStateOf( true) }
-        var colorEditext1 by remember { mutableStateOf(BlueVistony)}
-        AnimatedVisibility(
-            visible = expanded.not(),
-            enter = expandIn(),
-            exit = shrinkOut()
-        ) {
-            Card(
-                elevation = 4.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-            ){
-                Column(modifier = Modifier
-                    .padding(10.dp)){
-                    Row(
-                        horizontalArrangement = Arrangement.Start,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.Start,
-                            modifier=Modifier.weight(0.5f)
-                        ) {
-                            Text(text = "Enviar SMS", fontWeight = FontWeight.Bold)
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        OutlinedTextField(
-                            enabled= enableEditext1 ,
-                            singleLine=true,
-                            value = textNumber1,
-                            onValueChange = {
-                                //if(!it.contains("B") ) {textNumber = it}
-                                textNumber1 = it
-                            },
-                            //modifier = Modifier.padding(bottom = 300.dp),
-                            placeholder = {
-                                Text(text = "Ingresa el numero telefonico")
-                            },
-                            label = { Text("Telefono")},
-                            trailingIcon = { Icon(painter = painterResource(id = R.drawable.ic_baseline_numbers_24), contentDescription = null, tint = colorEditext1) },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number
-                                //,keyboardLayout = KeyboardLayout.Qwerty
-                                ,imeAction = ImeAction.Go
-                            ),
-                            /*keyboardActions = KeyboardActions(
-                                onGo = {keyboardController?.hide()}
-                            )*/
-                            keyboardActions = KeyboardActions(
-                                onGo = {
-                                    keyboardController?.hide()
-                                }
-                            )
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Row()
-                    {
-                            Box(
-                                modifier = Modifier
-                                    //.size(200.dp)
-                                    .weight(1f)
-                                    .height(50.dp)
-                                    .fillMaxWidth()
-                                    .background(BlueVistony, RoundedCornerShape(16.dp))
-                                    .clickable { expanded = true }
-                                ,
-                                contentAlignment = Alignment.Center
-
-                            ) {
-                                Row()
-                                {
-                                    Icon(
-                                        ImageVector.vectorResource(R.drawable.ic_arrow_back_white_24dp),
-                                        tint = Color.White,
-                                        contentDescription = null
-                                    )
-                                    Text(
-                                        text = "Anterior",
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center,
-                                        //modifier = Modifier.align(Alignment.Center)
-                                    )
-                                }
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Box(
-                                modifier = Modifier
-                                    .clickable {
-                                        for (i in 0 until collectionDetailResponseAdd.value.data!!.size) {
-                                            collectionDetail =
-                                                collectionDetailResponseAdd.value.data!!.get(
-                                                    i
-                                                )
-                                        }
-                                        sendSMS(
-                                            textNumber1,
-                                            appContext,
-                                            activity,
-                                            collectionDetail
-                                        )
-                                    }
-                                    .weight(1f)
-                                    .height(50.dp)
-                                    .fillMaxWidth()
-                                    .background(BlueVistony, RoundedCornerShape(16.dp)),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Row()
-                                {
-                                    Text(
-                                        text = "Enviar",
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center,
-                                        //modifier = Modifier.align(Alignment.Center)
-                                    )
-                                    Icon(
-                                        ImageVector.vectorResource(R.drawable.ic_baseline_send_24_white),
-                                        tint = Color.White,
-                                        contentDescription = null
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 

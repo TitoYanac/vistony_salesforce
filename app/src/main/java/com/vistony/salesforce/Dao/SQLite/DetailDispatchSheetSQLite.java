@@ -806,7 +806,7 @@ public class DetailDispatchSheetSQLite {
                         "A.cliente_id=I.cliente_id AND " +
                         "A.domembarque_id=I.domembarque_id  " +
                         //"  where A.control_id='"+codeControl+"'" +
-                        " where D.fechahojadespacho='"+dateDispatch+"'" +
+                        " where D.fechahojadespacho='"+dateDispatch+"' " +
                         //" AND G.typedispatch_id in ('A','V') " +
                         " ORDER BY A.item_id",null);
                         //" ORDER BY A.item_id",null);

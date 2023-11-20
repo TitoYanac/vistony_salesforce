@@ -425,7 +425,9 @@ class CollectionDetailRepository(appContext: Context) {
                         database?.collectionDetailDao?.updateDepositCollectionDetail(
                                 collectionDetailList.get(i).Receip,
                                 deposit,
-                                bankCode
+                                bankCode,
+                                "Y",
+                                "N"
                         )
                     }
                 }
@@ -534,82 +536,74 @@ class CollectionDetailRepository(appContext: Context) {
         }
     }
 
-    /*
-    fun getCollectionDetailForDateAPI(Imei: String, Date: String) {
-        val executor: ExecutorService = Executors.newFixedThreadPool(1)
-        for (i in 1..1) {
-            executor.execute {
-                try {
-                    val retrofitConfig: RetrofitConfig? = RetrofitConfig()
-                    val service = retrofitConfig?.getClientLog()?.create(
-                            RetrofitApi
-                            ::class.java
-                    )
-                    service?.getCollectionDetail(
-                            Imei, Status, UserID
-                    )?.enqueue(object : Callback<CollectionDetailEntity?> {
-                        override fun onResponse(
-                                call: Call<CollectionDetailEntity?>,
-                                response: Response<CollectionDetailEntity?>
-                        ) {
-                            val cobranzaDetalleEntity = response.body()
-
-                            if (response.isSuccessful && cobranzaDetalleEntity != null) {
-                                _result_get_API.value = CollectionDetailEntity(
-                                        Status = "Y",
-                                        data = cobranzaDetalleEntity.data
-                                )
-
-                                val executor1: ExecutorService = Executors.newFixedThreadPool(1)
-                                for (i in 1..1) {
-                                    executor1.execute {
-                                        val database by lazy { AppDatabase.getInstance(context.applicationContext) }
-                                        val data = database?.collectionDetailDao
-                                                ?.addListCollectionDetail(
-                                                        cobranzaDetalleEntity.data
-                                                )
-                                    }
-                                }
-                                executor1.shutdown()
-
-                            }
-                        }
-
-                        override fun onFailure(call: Call<CollectionDetailEntity?>, t: Throwable) {
-                            Log.e(
-                                    "REOS",
-                                    "CollectionDetailRepository-getAPICollectionDetail-ingresoonFailure:" + t.toString()
-                            )
-                            _result_get_API.value =
-                                    CollectionDetailEntity(Status = "N", data = emptyList())
-                        }
-                    })
-
-                } catch (e: java.lang.Exception) {
-                    Log.e("REOS", "CollectionDetailRepository-getAPICollectionDetail-error: $e")
-                }
-                println("Tarea $i completada")
-            }
+    suspend fun getCollectionDetailForDeposit(Deposit:String)
+    {
+        try {
+            getCollectionDetailForDepositDB(Deposit)
+        } catch (e: Exception) {
+            Log.e("REOS", "CollectionDetailRepository-getCollectionDetailForDeposit-erroe: "+e)
+            _result_get_DB.value = CollectionDetailEntity(Status = "N",data = emptyList())
         }
-        executor.shutdown()
     }
 
-    suspend fun getCollectionDetailForDateAPI(Imei: String, Date: String) {
+    private suspend fun getCollectionDetailForDepositDB(Deposit:String) {
+        withContext(Dispatchers.IO) {
+            Log.e("REOS", "CollectionDetailRepository-getCollectionDetailForDepositDB-Deposit: "+Deposit)
+            var data=database!!.collectionDetailDao?.getCollectionDetailForDeposit(Deposit)
+            // Check if data exists
+            Log.e("REOS", "CollectionDetailRepository-getCollectionDetailForDepositDB-data: "+data)
+            data?.takeIf { it.isNotEmpty() }?.let {
+                it.forEach{
+                    database!!.collectionDetailDao?.updateDepositCollectionDetail(it.Receip,"","","N","Y")
+                }
+            }
+        }
+    }
+
+    suspend fun sendAPICancelDepositCollectionDetail() {
         coroutineScope.launch {
             try {
                 // Preparar y enviar datos a la API
-                val response = sendDepositDetails()
+                val response = sendAPICancelDepositCollectionDetailDBAPI()
                 // Manejar la respuesta aquí o pasar los datos a otro método para su procesamiento
                 if (response!!.isSuccessful) {
                     response.body()?.let { entity ->
-                        updateDatabase(entity.data)
+                        updateDatabaseCancelDeposit(entity.data)
                     }
                 } else {
                     // Log or handle error response
                 }
             } catch (e: Exception) {
-                Log.e("REOS", "Error sending API update for deposit collection detail: $e")
+                Log.e("REOS", "CollectionDetailRepository-sendAPICancelDepositCollectionDetail-error: "+e)
             }
         }
-    }*/
+    }
+
+    private suspend fun sendAPICancelDepositCollectionDetailDBAPI(): Response<CollectionDetailEntity?>? {
+        val data = database!!.collectionDetailDao.getCollectionDetailDepositCancel()
+        Log.e("REOS", "CollectionDetailRepository-sendAPICancelDepositCollectionDetailDBAPI-data: "+data)
+        val json = prepareJson(data)
+        Log.e("REOS", "CollectionDetailRepository-sendAPICancelDepositCollectionDetailDBAPI-json: "+json)
+        val service = retrofitConfig.getClientLog()!!.create(RetrofitApi::class.java)
+        val jsonRequest = json!!.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        return service.updateCollection(data.first().APICode, jsonRequest)
+    }
+
+    private suspend fun updateDatabaseCancelDeposit(data: List<CollectionDetail>) {
+        withContext(Dispatchers.IO) {
+            Log.e("REOS", "CollectionDetailRepository-updateDatabaseCancelDeposit-data:: "+data)
+            data.forEach { detail ->
+                var status="N"
+                if (detail.Deposit.isNullOrEmpty()){status="N"}else{status="Y"}
+                database!!.collectionDetailDao?.updateDepositCollectionDetail(
+                        detail.Number,
+                        detail.Deposit,
+                        detail.BankID,
+                        status,
+                        "N"
+                )
+            }
+        }
+    }
+
 }

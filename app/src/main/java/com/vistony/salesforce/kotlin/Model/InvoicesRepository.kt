@@ -60,10 +60,7 @@ class InvoicesRepository {
             executor.shutdown()
         }
         catch (e: Exception) {
-            Log.e(
-                "REOS",
-                "InvoicesRepository-getInvoices-error: " + e.toString()
-            )
+            Log.e("REOS", "InvoicesRepository-getInvoices-error: " + e.toString())
         }
     }
 }

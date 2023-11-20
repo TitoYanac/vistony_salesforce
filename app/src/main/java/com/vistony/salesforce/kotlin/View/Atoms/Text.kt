@@ -59,7 +59,7 @@ fun TableCellBody(
 ) {
         Text(
             text = text,
-            modifier = Modifier.padding(2.dp),
+            //modifier = Modifier.padding(2.dp),
             color = color,
             textAlign = textAlign, style = Typography.body1
         )

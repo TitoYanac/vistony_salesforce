@@ -78,6 +78,8 @@ import com.vistony.salesforce.kotlin.View.Pages.DepositScreen;
 import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetMapScreen;
 import com.vistony.salesforce.kotlin.View.Pages.FormularioTest1;
 import com.vistony.salesforce.kotlin.View.Pages.HistoricalCollectionDetail;
+import com.vistony.salesforce.kotlin.View.Pages.HistoricalCollectionHeader;
+import com.vistony.salesforce.kotlin.View.Pages.HistoricalDispatchScreen;
 import com.vistony.salesforce.kotlin.View.Pages.ValidationAccountClient;
 
 
@@ -1114,8 +1116,10 @@ public class MenuView extends AppCompatActivity
             Log.e("jpvm","ingreso al interation brother");
             if(tag2.equals("nuevoinicioHistoricoDepositoView"))
             {
-
+                //Version Java
                 contentFragment=new HistoricoDepositoView();
+                //Version Kotlin
+                //contentFragment=new HistoricalCollectionHeader();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popllloppp");
                 ft.commit();
@@ -1473,7 +1477,10 @@ public class MenuView extends AppCompatActivity
             }
             if(tag2.equals("dispatch"))
             {
+                //Version Java
                 contentFragment=new HistoricStatusDispatchView() ;
+                //Version kotlin
+                //contentFragment=new HistoricalDispatchScreen();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();

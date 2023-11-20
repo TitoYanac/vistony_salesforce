@@ -1,10 +1,15 @@
 package com.vistony.salesforce.kotlin.View.Template
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,11 +27,14 @@ import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,7 +42,10 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,7 +57,9 @@ import com.vistony.salesforce.kotlin.Model.CollectionDetail
 import com.vistony.salesforce.kotlin.Model.CollectionDetailRepository
 import com.vistony.salesforce.kotlin.Model.CollectionDetailViewModel
 import com.vistony.salesforce.kotlin.Model.Notification
+import com.vistony.salesforce.kotlin.Utilities.CollectionReceipPDF
 import com.vistony.salesforce.kotlin.Utilities.getDate
+import com.vistony.salesforce.kotlin.Utilities.sendSMS
 import com.vistony.salesforce.kotlin.View.Atoms.CalendarApp
 import com.vistony.salesforce.kotlin.View.Atoms.Cell
 import com.vistony.salesforce.kotlin.View.Atoms.SwitchExample
@@ -56,6 +69,7 @@ import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
 import com.vistony.salesforce.kotlin.View.Pages.ApiResponse
 import com.vistony.salesforce.kotlin.View.components.ButtonCircle
 import com.vistony.salesforce.kotlin.View.components.DialogView
+import com.vistony.salesforce.kotlin.View.components.Editext
 import com.vistony.salesforce.kotlin.View.components.contexto
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -87,7 +101,7 @@ fun HistoricalCollectionDetailTemplate()
                 DateQuery(DateApp,collectionDetailViewModel)
             }
             Row (modifier= Modifier
-                    .padding(0.dp,0.dp)
+                    .padding(0.dp, 0.dp)
                     .background(BlueVistony)
                     .height(30.dp)
                     .fillMaxWidth()
@@ -161,7 +175,7 @@ fun BottomBar(
                     fontSise = 20.sp
             )
             Cell(
-                    text = Convert.currencyForView(amount.value) ,
+                    text = Convert.currencyForView(if(amount.value==null){"0"}else{amount.value}) ,
                     title = true,
                     color = Color.White,
                     fontSise = 20.sp
@@ -177,7 +191,9 @@ fun DateQuery(
         collectionDetailViewModel: CollectionDetailViewModel
 )
 {
-    Column(modifier= Modifier.padding(10.dp)) {
+    Column(
+            //modifier= Modifier.padding(10.dp)
+    ) {
         TextLabel(text = "Elegir una fecha para su consulta")
         Row() {
             Column(modifier = Modifier.weight(1f)) {
@@ -186,14 +202,14 @@ fun DateQuery(
                         DateApp = DateApp
                 )
             }
-            Spacer(modifier = Modifier.width(5.dp))
-            Column(modifier = Modifier.weight(0.10f)) {
+            //Spacer(modifier = Modifier.width(5.dp))
+            Column(modifier = Modifier.width(40.dp)) {
                 ButtonCircle(
                         OnClick = {
                             collectionDetailViewModel.getCollectionDetailForDate(
                                     DateApp.value
                             )
-                        }, roundedCornerShape = RoundedCornerShape(4.dp)
+                        }, roundedCornerShape = RoundedCornerShape(0.dp)
                 ) {
                     Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_search_white_24dp),
@@ -215,6 +231,12 @@ fun CardHistoricalCollectionDetail(
 ){
     val openDialogShowDialog:MutableState<Boolean?> = remember { mutableStateOf(false) }
     val messageDialog:MutableState<String> = remember { mutableStateOf("") }
+
+    val openDialogSensSMS:MutableState<Boolean?> = remember { mutableStateOf(false) }
+    var DialogEditResultSMS :MutableState<String> = remember { mutableStateOf("0") }
+    val activity = LocalContext.current as Activity
+    val collectionDetailSMS:MutableState<CollectionDetail?> = remember { mutableStateOf(null) }
+
     if(openDialogShowDialog.value!!)
     {
         DialogView(
@@ -237,6 +259,54 @@ fun CardHistoricalCollectionDetail(
         }
     }
 
+    if(openDialogSensSMS.value!!)
+    {
+        DialogView(
+                "SMS"
+                ,""
+                ,onClickCancel = {
+            openDialogSensSMS.value = false
+        }
+                ,onClickAccept = {
+            sendSMS(
+                    DialogEditResultSMS.value,
+                    context,
+                    activity,
+                    collectionDetailSMS.value
+            )
+        }
+                ,statusButtonAccept = true
+                ,statusButtonIcon = false
+                ,context=context
+        ){
+            Row(
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                        horizontalAlignment = Alignment.Start,
+                        modifier=Modifier.weight(0.5f)
+                ) {
+                    Text(text = "Enviar SMS", fontWeight = FontWeight.Bold)
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+            ) {
+                Editext(
+                        status = true,
+                        text= DialogEditResultSMS,
+                        "Ingresa el numero telefonico",
+                        "Telefono",
+                        painterResource(id = R.drawable.ic_baseline_numbers_24),
+                        KeyboardType.Number
+                )
+            }
+        }
+    }
+
     Column(
             modifier = Modifier
                     .fillMaxSize()
@@ -255,6 +325,7 @@ fun CardHistoricalCollectionDetail(
                             .fillMaxWidth()
             ) {
                 itemsIndexed(listCollectionDetail) { index, line ->
+                    var expanded by remember { mutableStateOf(true) }
                     // Tu código aquí
                     var isCheckedQR: MutableState<Boolean> = remember { mutableStateOf(false) }
                     var isCheckedReceive: MutableState<Boolean> = remember { mutableStateOf(false) }
@@ -272,13 +343,65 @@ fun CardHistoricalCollectionDetail(
                                         .fillMaxWidth()
                         ) {
 
-                            Row(
-                                    //horizontalArrangement = Arrangement.Start,
-                                    modifier = Modifier.fillMaxWidth()
+                            AnimatedVisibility(
+                                    visible = expanded,
+                                    enter = expandIn(),
+                                    exit = shrinkOut()
                             ) {
-                                TableCell(text = line.CardName, weight = 1f,title = true)
-
+                                Row(
+                                        //horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    TableCell(text = line.CardName, weight = 1f, title = true)
+                                    Icon(
+                                            imageVector = ImageVector.vectorResource(R.drawable.baseline_chevron_right_24),
+                                            contentDescription = null,
+                                            tint = Color.Red,
+                                            modifier = Modifier.clickable {expanded=expanded.not()}
+                                    )
+                                }
                             }
+                            AnimatedVisibility(
+                                    visible = expanded.not(),
+                                    enter = expandIn(),
+                                    exit = shrinkOut()
+                            ) {
+                                Row(
+                                        //horizontalArrangement = Arrangement.Start,
+                                        modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Icon(
+                                            imageVector = ImageVector.vectorResource(R.drawable.baseline_chevron_left_24),
+                                            contentDescription = null,
+                                            tint = Color.Red,
+                                            modifier = Modifier.clickable {expanded=expanded.not()}
+                                    )
+                                    Column(modifier = Modifier.weight(1f).align(Alignment.CenterVertically), horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Icon(
+                                                imageVector = ImageVector.vectorResource(R.drawable.ic_print_black_24dp),
+                                                contentDescription = null,
+                                                tint = Color.Red,
+                                                modifier = Modifier.clickable {
+                                                    var collectionReceipPDF: CollectionReceipPDF = CollectionReceipPDF()
+                                                    collectionReceipPDF.generarPdf(context, line)
+                                                }
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Column(modifier = Modifier.weight(1f).align(Alignment.CenterVertically), horizontalAlignment = Alignment.CenterHorizontally) {
+                                        Icon(
+                                                imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_sms_black_24),
+                                                contentDescription = null,
+                                                tint = Color.Red,
+                                                modifier = Modifier.clickable {
+                                                    collectionDetailSMS.value=line
+                                                    openDialogSensSMS.value=true
+                                                }
+                                        )
+                                    }
+                                }
+                            }
+                            Divider()
                             Row(
                                     modifier = Modifier.fillMaxWidth()
                             ) {
@@ -335,7 +458,7 @@ fun CardHistoricalCollectionDetail(
                                             title = true,
                                     )
                                     Cell(
-                                            text = line.Status,
+                                            text = if(line.Status.equals("P")){"Pendiente"}else if(line.Status.equals("C")){"Conciliado"}else if(line.Status.equals("M")){"Manual"}else{ "Anulado"},
                                             title = true
                                     )
                                     Cell(
@@ -396,7 +519,7 @@ fun CardHistoricalCollectionDetail(
                                     Spacer(modifier = Modifier.height(10.dp))
                                     Row {
                                         Icon(
-                                                imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_sms_black_24),
+                                                imageVector = ImageVector.vectorResource(R.drawable.baseline_preview_24),
                                                 contentDescription = null,
                                                 tint = Color.Red,
                                                 modifier = Modifier.clickable {

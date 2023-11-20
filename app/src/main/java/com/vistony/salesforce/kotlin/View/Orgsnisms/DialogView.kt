@@ -5,11 +5,16 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -18,19 +23,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.vistony.salesforce.R
+import com.vistony.salesforce.kotlin.Utilities.sendSMS
 import com.vistony.salesforce.kotlin.View.Atoms.TableCell
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
+import com.vistony.salesforce.kotlin.View.Atoms.theme.RedVistony
 
 
 @Composable
@@ -136,13 +147,15 @@ fun DialogView(
     context: Context,
     content: @Composable () -> Unit,
 ) {
+    Log.e("REOS", "DialogView-DialogView-tittle: " +tittle)
+    Log.e("REOS", "DialogView-DialogView-subtittle: " +subtittle)
     Dialog(
         onDismissRequest = onClickCancel
     ) {
 
         Box(
             modifier = Modifier
-                .height(400.dp)
+                //.height(400.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -188,7 +201,7 @@ fun DialogView(
                                 status = true,
                                 IconActive = statusButtonIcon,
                                 context=context,
-                                backGroundColor = BlueVistony,
+                                backGroundColor = RedVistony,
                                 textColor = Color.White
                             )
                             if(statusButtonAccept)
@@ -200,7 +213,7 @@ fun DialogView(
                                     status = true,
                                     IconActive = statusButtonIcon,
                                     context=context,
-                                    backGroundColor = BlueVistony,
+                                    backGroundColor = RedVistony,
                                     textColor = Color.White
                                 )
                             }
@@ -492,3 +505,4 @@ fun PruebaDialog(
         }
     }
 }
+

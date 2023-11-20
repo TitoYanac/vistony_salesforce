@@ -44,50 +44,24 @@ class DispatchSheetFailedScreen : Fragment()
                         val appContext = LocalContext.current
                         val lifecycleOwner = LocalContext.current as LifecycleOwner
                         val detailDispatchSheetRepository = DetailDispatchSheetRepository()
-                        /*var detailDispatchSheetList by remember { mutableStateOf(emptyList<DetailDispatchSheet>()) }
-                        detailDispatchSheetViewModel = DetailDispatchSheetViewModel(detailDispatchSheetRepository)
-                        detailDispatchSheetViewModel?.getStateDetailDispatchSheet(
-                            SesionEntity.imei,
-                            ContainerDispatchView.parametrofecha,
-                            appContext,
-                            lifecycleOwner,
-                            "F"
-                        )
-                        detailDispatchSheetViewModel.status.observe(lifecycleOwner) { data ->
-                            // actualizar la UI con los datos obtenidos
-                            Log.e(
-                                "REOS",
-                                "DispatchSheetPendingScreen-onCreateView.result.observe.data.size"+data.size
-                            )
-                            //Conversation1(data)
-                            detailDispatchSheetList= data
-
-                        }*/
                         val detailDispatchSheetViewModel: DetailDispatchSheetViewModel = viewModel(
                             factory = DetailDispatchSheetViewModel.DetailDispatchSheetViewModelFactory(
                                 detailDispatchSheetRepository,
-                                appContext
+                                appContext,
+                                SesionEntity.imei
                             )
                         )
                         detailDispatchSheetViewModel?.getStateDetailDispatchSheet(
-                            SesionEntity.imei,
                             ContainerDispatchView.parametrofecha,
-                            appContext,
-                            lifecycleOwner,
                             "F"
                         )
 
                         var detailDispatchSheetDB=detailDispatchSheetViewModel.resultDB.collectAsState()
-                        //val notificationEntity by notificationViewModel.notificationLiveData.observeAsState(NotificationEntity())
-
                         when (detailDispatchSheetDB.value.Status) {
                             "Y" -> {
-                                //CardNotification(detailDispatchSheetDB.value.DATA)
-                                DispatchSheetTemplate(detailDispatchSheetDB.value.DATA,appContext,lifecycleOwner)
+                                DispatchSheetTemplate(detailDispatchSheetDB.value.UI,appContext,lifecycleOwner)
                             }
                         }
-
-                        //DispatchSheetTemplate(detailDispatchSheetList,appContext,lifecycleOwner)
                     }
                 }
             }

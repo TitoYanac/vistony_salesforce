@@ -36,6 +36,7 @@ data class CollectionHead(
         var Intent: String="0",
         var U_VIS_CollectionSalesPerson: String="N",
         var APIStatus: String="N",
+        var APIStatusCancel: String="N",
 )
 
 data class CollectionHeadEntity(

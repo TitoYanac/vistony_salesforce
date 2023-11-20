@@ -14,6 +14,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -45,6 +46,7 @@ import java.util.*
 import com.vistony.salesforce.kotlin.Utilities.*
 import com.vistony.salesforce.kotlin.View.Atoms.TextLabel
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
+import com.vistony.salesforce.kotlin.View.Atoms.theme.RedVistony
 
 @Composable
 fun MenuGetImage(
@@ -66,13 +68,14 @@ type: String
        // modifier = Modifier.selectableGroup()
     ) {
         Row(modifier = Modifier
-            .align(Alignment.CenterHorizontally)
+            //.align(Alignment.CenterHorizontally)
         ) {
             Text(text = description, color = Color.Gray)
         }
         Surface(
             shape = RoundedCornerShape(4.dp),
             elevation = 2.dp,
+            border = BorderStroke(2.dp, RedVistony), // Agregar un borde rojo
             modifier = Modifier
                 .selectable(
                     selected = expanded,

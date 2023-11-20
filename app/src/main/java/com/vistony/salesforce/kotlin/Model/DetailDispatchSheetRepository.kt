@@ -44,9 +44,10 @@ class DetailDispatchSheetRepository {
 
                             CoroutineScope(Dispatchers.Default).launch {
                                 try {
-                                    data!!.collect { value ->
-                                        _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
-                                    }
+                                    //data!!.collect { value ->
+                                       // _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    //}
+                                    _resultDB.value=DetailDispatchSheetEntity(Status="Y", UI = data!!)
                                 } catch (e: Exception) {
                                     println("The flow has thrown an exception: $e")
                                 }
@@ -60,9 +61,10 @@ class DetailDispatchSheetRepository {
                                     FechaDespacho, "S","P")
                             CoroutineScope(Dispatchers.Default).launch {
                                 try {
-                                    data!!.collect { value ->
-                                        _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
-                                    }
+                                    //data!!.collect { value ->
+                                    //    _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                   // }
+                                    _resultDB.value=DetailDispatchSheetEntity(Status="Y", UI = data!!)
                                 } catch (e: Exception) {
                                     println("The flow has thrown an exception: $e")
                                 }
@@ -75,9 +77,31 @@ class DetailDispatchSheetRepository {
                                     FechaDespacho, "E","")
                             CoroutineScope(Dispatchers.Default).launch {
                                 try {
-                                    data!!.collect { value ->
-                                        _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    //data!!.collect { value ->
+                                    //    _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    //}
+                                    _resultDB.value=DetailDispatchSheetEntity(Status="Y", UI = data!!)
+                                } catch (e: Exception) {
+                                    println("The flow has thrown an exception: $e")
+                                }
+                            }
+                        }
+                        type == "M" ->
+                        {
+                            var data=database?.detailDispatchSheetDao
+                                ?.getDetailDispatchSheetforMap(
+                                    FechaDespacho)
+                            CoroutineScope(Dispatchers.Default).launch {
+                                try {
+                                    //data!!.collect { value ->
+                                    //    _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    //}
+                                    var cont=0
+                                    data!!.forEach{
+                                        cont++
+                                        it.item_id=cont
                                     }
+                                    _resultDB.value=DetailDispatchSheetEntity(Status="Y", UI = data!!)
                                 } catch (e: Exception) {
                                     println("The flow has thrown an exception: $e")
                                 }
@@ -98,6 +122,91 @@ class DetailDispatchSheetRepository {
                 "DetailDispatchSheetRepository-getStateDispatchSheet-error: " + e.toString()
             )
         }
+    }
 
+    suspend fun getDetailDispatchSheetforMap(
+        FechaDespacho:String,
+        context: Context,
+        type: String
+    )
+    {
+        try {
+            val executor: ExecutorService = Executors.newFixedThreadPool(1)
+            /*Log.e(
+                "REOS",
+                "DetailDispatchSheetRepository-getStateDispatchSheet-FechaDespacho: " + FechaDespacho
+            )*/
+            for (i in 1..1) {
+                executor.execute {
+                    println("Tarea $i en ejecución en ${Thread.currentThread().name}")
+                    //Thread.sleep(1000)
+                    val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+
+                    when {
+                        type == "F" ->
+                        {
+                            var data=database?.detailDispatchSheetDao
+                                ?.getDetailDispatchSheetforDateStatus(
+                                    FechaDespacho, "A","V")
+
+                            CoroutineScope(Dispatchers.Default).launch {
+                                try {
+                                    //data!!.collect { value ->
+                                    // _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    //}
+                                    _resultDB.value=DetailDispatchSheetEntity(Status="Y", UI = data!!)
+                                } catch (e: Exception) {
+                                    println("The flow has thrown an exception: $e")
+                                }
+                            }
+
+                        }
+                        type == "P" ->
+                        {
+                            var data=database?.detailDispatchSheetDao
+                                ?.getDetailDispatchSheetforDateStatus(
+                                    FechaDespacho, "S","P")
+                            CoroutineScope(Dispatchers.Default).launch {
+                                try {
+                                    //data!!.collect { value ->
+                                    //    _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    // }
+                                    _resultDB.value=DetailDispatchSheetEntity(Status="Y", UI = data!!)
+                                } catch (e: Exception) {
+                                    println("The flow has thrown an exception: $e")
+                                }
+                            }
+                        }
+                        type == "E" ->
+                        {
+                            var data=database?.detailDispatchSheetDao
+                                ?.getDetailDispatchSheetforDateStatus(
+                                    FechaDespacho, "E","")
+                            CoroutineScope(Dispatchers.Default).launch {
+                                try {
+                                    //data!!.collect { value ->
+                                    //    _resultDB.value=DetailDispatchSheetEntity(Status="Y", DATA = value!!)
+                                    //}
+                                    _resultDB.value=DetailDispatchSheetEntity(Status="Y", UI = data!!)
+                                } catch (e: Exception) {
+                                    println("The flow has thrown an exception: $e")
+                                }
+                            }
+                        }
+                    }
+
+                    println("Tarea $i completada")
+                }
+
+
+            }
+            executor.shutdown()
+        }
+        catch (e: Exception) {
+            Log.e(
+                "REOS",
+                "DetailDispatchSheetRepository-getStateDispatchSheet-error: " + e.toString()
+            )
+        }
     }
 }

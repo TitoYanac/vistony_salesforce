@@ -1,5 +1,6 @@
 package com.vistony.salesforce.kotlin.View.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,6 +22,7 @@ import com.vistony.salesforce.R
 import com.vistony.salesforce.kotlin.View.Atoms.TableCell
 import com.vistony.salesforce.kotlin.View.Atoms.TableCellBody
 import com.vistony.salesforce.kotlin.View.Atoms.TextLabel
+import com.vistony.salesforce.kotlin.View.Atoms.theme.RedVistony
 import com.vistony.salesforce.kotlin.View.Atoms.theme.Typography
 import java.lang.reflect.Type
 
@@ -37,6 +39,7 @@ fun Spinner(
         Surface(
             shape = RoundedCornerShape(4.dp),
             elevation = 2.dp,
+            border = BorderStroke(2.dp, RedVistony), // Agregar un borde rojo
             modifier = Modifier
                 .selectable(
                     selected = expanded,
@@ -68,6 +71,7 @@ fun Spinner(
                     item {
                         Surface(
                             elevation = 2.dp,
+                            border = BorderStroke(1.dp, RedVistony), // Agregar un borde rojo
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {

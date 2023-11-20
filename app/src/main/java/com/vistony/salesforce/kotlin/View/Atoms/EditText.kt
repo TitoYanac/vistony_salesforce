@@ -1,9 +1,11 @@
 package com.vistony.salesforce.kotlin.View.components
 
 import android.graphics.drawable.Icon
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -23,6 +25,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
 import com.vistony.salesforce.R
+import com.vistony.salesforce.kotlin.View.Atoms.theme.RedVistony
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -58,14 +61,14 @@ fun Editext(
             label = { Text(label) },
             trailingIcon = { Icon(painter = painter
             //painterResource(id = R.drawable.ic_insert_comment_black_24dp)
-                , contentDescription = null, tint = BlueVistony) },
+                , contentDescription = null, tint = RedVistony) },
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType,imeAction = ImeAction.Go ),
             keyboardActions = KeyboardActions(
                 onGo = {
                     keyboardController?.hide()
                        },
             ),
-            modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
         )
         Text(
             text = "${text.value.length}/$maxCharacters",

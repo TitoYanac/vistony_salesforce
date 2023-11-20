@@ -8,6 +8,7 @@ import android.util.Size
 import android.widget.Toast
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -227,6 +228,7 @@ fun ButtonSurface(
         modifier = Modifier.selectableGroup()
     ) {
         Surface(
+            border = BorderStroke(2.dp, RedVistony), // Agregar un borde rojo
             contentColor= backGroundColor,
             color = backGroundColor,
             shape = RoundedCornerShape(4.dp),

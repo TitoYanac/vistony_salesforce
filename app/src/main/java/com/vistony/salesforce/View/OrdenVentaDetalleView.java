@@ -544,51 +544,82 @@ public class OrdenVentaDetalleView extends Fragment {
                         DialogoOrdenVentaDetalle().show();
                         break;
                     case "ecuador":
-                        UsuarioSQLite usuarioSQLite=new UsuarioSQLite(getContext());
-                        UsuarioSQLiteEntity usuarioSQLiteEntity=new UsuarioSQLiteEntity();
-                        int SIGAUS=0,OilTax=0;
-                        usuarioSQLiteEntity=usuarioSQLite.ObtenerUsuarioSesion();
-                        Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-usuarioSQLiteEntity.getOiltaxstatus(): " + usuarioSQLiteEntity.getOiltaxstatus());
-                        if(usuarioSQLiteEntity.getOiltaxstatus().equals("Y")){
-                            Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.size(): " + listadoProductosAgregados.size());
-                            for(int i=0;i<listadoProductosAgregados.size();++i)
-                            {
-                                //Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size(): " + listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size());
-                                if(listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion()!=null)
-                                {
-                                    Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size(): " + listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size());
-                                    for(int j=0;j<listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size();j++)
-                                    {
-                                        Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id(): " + listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id());
-                                        if(listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id().equals("ECOVALOR"))
-                                        {
-                                            SIGAUS++;
+                        FormulasController formulasController=new FormulasController(getContext());
+                        if (formulasController.ValidarMontoEnCero(listadoProductosAgregados)) {
+                            alertaValidacionMontoCero().show();
+                        } else {
+                            UsuarioSQLite usuarioSQLite = new UsuarioSQLite(getContext());
+                            UsuarioSQLiteEntity usuarioSQLiteEntity = new UsuarioSQLiteEntity();
+                            int SIGAUS = 0, OilTax = 0;
+                            usuarioSQLiteEntity = usuarioSQLite.ObtenerUsuarioSesion();
+                            Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-usuarioSQLiteEntity.getOiltaxstatus(): " + usuarioSQLiteEntity.getOiltaxstatus());
+                            if (usuarioSQLiteEntity.getOiltaxstatus().equals("Y")) {
+                                Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.size(): " + listadoProductosAgregados.size());
+                                for (int i = 0; i < listadoProductosAgregados.size(); ++i) {
+                                    //Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size(): " + listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size());
+                                    if (listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion() != null) {
+                                        Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size(): " + listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size());
+                                        for (int j = 0; j < listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().size(); j++) {
+                                            Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id(): " + listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id());
+                                            if (listadoProductosAgregados.get(i).getOrden_detalle_lista_orden_detalle_promocion().get(j).getOrden_detalle_producto_id().equals("ECOVALOR")) {
+                                                SIGAUS++;
+                                            }
                                         }
                                     }
+                                    Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_oil_tax(): " + listadoProductosAgregados.get(i).getOrden_detalle_oil_tax());
+                                    if (listadoProductosAgregados.get(i).getOrden_detalle_oil_tax().equals("Y")) {
+                                        OilTax++;
+                                    }
                                 }
-                                Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-listadoProductosAgregados.get(i).getOrden_detalle_oil_tax(): " + listadoProductosAgregados.get(i).getOrden_detalle_oil_tax());
-                                if(listadoProductosAgregados.get(i).getOrden_detalle_oil_tax().equals("Y"))
-                                {
-                                    OilTax++;
-                                }
-                            }
-                            Log.e("REOS","OrdenVentaDetalleView-onOptionsItemSelected-SIGAUS: "+SIGAUS);
-                            Log.e("REOS","OrdenVentaDetalleView-onOptionsItemSelected-OilTax: "+OilTax);
-                            if(OilTax==0)
-                            {
-                                DialogoOrdenVentaDetalle().show();
-                            }else
-                            {
-                                if(SIGAUS>0){
+                                Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-SIGAUS: " + SIGAUS);
+                                Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-OilTax: " + OilTax);
+                                if (OilTax == 0) {
                                     DialogoOrdenVentaDetalle().show();
-                                }else {
-                                    //calculateSIGAUS();
-                                    alertAddSIGAUS().show();
-                                }
-                            }
+                                } else {
+                                    if (SIGAUS > 0) {
+                                        Float cantidad=0f;
+                                        String cantidadEcovalor="0";
+                                        int position=0;
+                                        for(int j=0;j<listadoProductosAgregados.size();j++)
+                                        {
+                                            if(listadoProductosAgregados.get(j).getOrden_detalle_oil_tax() .equals("Y"))
+                                            {
+                                                cantidad=cantidad+ (Float.parseFloat(listadoProductosAgregados.get(j).getOrden_detalle_gal_acumulado()));
+                                            }
+                                            if(listadoProductosAgregados.get(j).getOrden_detalle_producto_id().equals("ECOVALOR"))
+                                            {
+                                                position=j;
+                                                cantidadEcovalor=listadoProductosAgregados.get(j).getOrden_detalle_cantidad();
+                                            }
 
-                        }else {
-                            DialogoOrdenVentaDetalle().show();
+                                        }
+
+                                        Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-cantidadGalonesSIGAUSactual: " + cantidad);
+                                        Log.e("REOS", "OrdenVentaDetalleView-onOptionsItemSelected-cantidadEcovalor: " + cantidadEcovalor);
+
+                                        if(Float.parseFloat(cantidadEcovalor)==cantidad)
+                                        {
+                                            DialogoOrdenVentaDetalle().show();
+                                        }
+                                        else {
+                                            newInstanceEliminaLineaOrdenVenta(position);
+                                            if(!formulasController.addSIGAUS(listadoProductosAgregados).isEmpty())
+                                            {
+                                                DialogoOrdenVentaDetalle().show();
+                                            }
+
+                                        }
+
+                                    } else {
+                                        //calculateSIGAUS();
+                                        alertAddSIGAUS().show();
+                                    }
+                                }
+
+                            } else {
+
+                                DialogoOrdenVentaDetalle().show();
+                            }
                         }
                         break;
                 }
