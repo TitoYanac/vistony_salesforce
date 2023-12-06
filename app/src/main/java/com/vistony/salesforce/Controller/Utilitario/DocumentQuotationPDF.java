@@ -269,6 +269,14 @@ public class DocumentQuotationPDF extends AppCompatActivity {
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
             tblgeneral.addCell(cellgneral);
+            cellgneral = new PdfPCell(new Phrase("",font3));
+            cellgneral.disableBorderSide(Rectangle.BOX);
+            cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblgeneral.addCell(cellgneral);
+            cellgneral = new PdfPCell(new Phrase("",font3));
+            cellgneral.disableBorderSide(Rectangle.BOX);
+            cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
+            tblgeneral.addCell(cellgneral);
             /*cellgneral = new PdfPCell(new Phrase("% Flete:",font3));
             cellgneral.disableBorderSide(Rectangle.BOX);
             cellgneral.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -393,7 +401,8 @@ public class DocumentQuotationPDF extends AppCompatActivity {
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tblLineas.addCell(cellLineasDetalle);
-                cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getPreciounitario()),font3));
+                //cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getPreciounitario()),font3));
+                cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(Convert.getTotaLine(ListaOrdenVentaDetalle.get(l).getPreciounitario(),ListaOrdenVentaDetalle.get(l).getPorcentajedescuento(),"0")),font3));
                 cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                 cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tblLineas.addCell(cellLineasDetalle);
@@ -408,7 +417,7 @@ public class DocumentQuotationPDF extends AppCompatActivity {
                 switch (BuildConfig.FLAVOR)
                 {
                     case "peru":
-                        cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontosubtotal()),font3));
+                        cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontosubtotalcondescuento()),font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         tblLineas.addCell(cellLineasDetalle);
@@ -465,12 +474,13 @@ public class DocumentQuotationPDF extends AppCompatActivity {
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
             cellResu.setBorder(Rectangle.LEFT);
             tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase(Convert.currencyForView(subtotal),font3));
+            //cellResu = new PdfPCell(new Phrase(Convert.currencyForView(subtotal),font3));
+            cellResu = new PdfPCell(new Phrase(Convert.currencyForView(FormulasController.CalcularMontoTotalconDescuento(subtotal,descuento)),font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
             cellResu.setBorder(Rectangle.RIGHT);
             tblResu.addCell(cellResu);
-            cellResu = new PdfPCell(new Phrase("Descuento",font3));
+            /*cellResu = new PdfPCell(new Phrase("Descuento",font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);
             cellResu.setBorder(Rectangle.LEFT);
@@ -479,7 +489,7 @@ public class DocumentQuotationPDF extends AppCompatActivity {
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_RIGHT);
             cellResu.setBorder(Rectangle.RIGHT);
-            tblResu.addCell(cellResu);
+            tblResu.addCell(cellResu);*/
             cellResu = new PdfPCell(new Phrase("IGV",font3));
             cellResu.disableBorderSide(Rectangle.BOX);
             cellResu.setHorizontalAlignment(Element.ALIGN_LEFT);

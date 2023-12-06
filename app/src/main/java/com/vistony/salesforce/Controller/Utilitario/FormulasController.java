@@ -85,7 +85,7 @@ public class FormulasController {
         return rpta.setScale(getScale(), RoundingMode.HALF_UP).toString();
     }
 
-    public String CalcularMontoTotalconDescuento(String MontoTotalLineaSinDescuento, String MontoDescuento) {
+    public static String CalcularMontoTotalconDescuento(String MontoTotalLineaSinDescuento, String MontoDescuento) {
         BigDecimal temp1 = new BigDecimal(MontoTotalLineaSinDescuento);
 
         BigDecimal repta = temp1.subtract(new BigDecimal(MontoDescuento)).setScale(getScale(), RoundingMode.HALF_UP);

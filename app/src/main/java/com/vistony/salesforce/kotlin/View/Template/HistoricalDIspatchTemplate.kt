@@ -62,6 +62,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vistony.salesforce.Controller.Utilitario.Convert
@@ -74,6 +75,7 @@ import com.vistony.salesforce.kotlin.Model.CollectionDetailViewModel
 import com.vistony.salesforce.kotlin.Model.CollectionHeadRepository
 import com.vistony.salesforce.kotlin.Model.CollectionHeadViewModel
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheet
+import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetEntity
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetRepository
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetUI
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetViewModel
@@ -137,22 +139,6 @@ fun HistoricalDispatchTemplate()
             if (showTabsExample) {
                     TabsExample(DateApp,appContext,lifecycleOwner)
             }
-
-            /*when(historicalCollectionDetail.value.Status)
-            {
-
-                "Y"->{
-                    var amountTemp:Float=0f
-                    CardHistoricalCollectionDetail(historicalCollectionDetail.value.data,appContext)
-
-                    quantity.value=historicalCollectionDetail.value.data.size.toString()
-                    historicalCollectionDetail.value.data.forEach{ detail->
-                        amountTemp += detail.AmountCharged.toFloat()
-                    }
-                    amount.value=amountTemp.toString()
-                }
-            }*/
-
         }
     }
 }
@@ -260,8 +246,8 @@ fun TabContent(
         lifecycleOwner:LifecycleOwner
 
 ) {
-
-    val detailDispatchSheetRepository = DetailDispatchSheetRepository()
+    Log.e("REOS", "HistoricalDispatchTemplate-TabContent-type: " + type)
+    val detailDispatchSheetRepository = DetailDispatchSheetRepository(appContext)
     val detailDispatchSheetViewModel: DetailDispatchSheetViewModel = viewModel(
             factory = DetailDispatchSheetViewModel.DetailDispatchSheetViewModelFactory(
                     detailDispatchSheetRepository,
@@ -273,13 +259,21 @@ fun TabContent(
             DateApp.value,
             type
     )
-    var detailDispatchSheetDB=detailDispatchSheetViewModel.resultDB.collectAsState()
-    when (detailDispatchSheetDB.value.Status) {
+    var detailDispatchSheetDB=detailDispatchSheetViewModel.result.collectAsState()
+    /*var detailDispatchSheetDB= MutableLiveData<DetailDispatchSheetEntity>()
+
+    detailDispatchSheetViewModel.resultDB.observeForever { newResultGet ->
+        // Actualizar el valor de _invoices cuando haya cambios
+        detailDispatchSheetDB.value = newResultGet
+        Log.e("REOS", "HistoricalDispatchTemplate-TabContent-detailDispatchSheetDB.value: " + detailDispatchSheetDB.value)
+    }*/
+
+    when (detailDispatchSheetDB.value?.Status) {
         "Y" -> {
-            CardHistoricalDispatch(detailDispatchSheetDB.value.UI,appContext)
+            CardHistoricalDispatch(detailDispatchSheetDB.value!!.UI,appContext)
+            //detailDispatchSheetViewModel.resetDetailDispatchSheet()
         }
     }
-
 }
 
 

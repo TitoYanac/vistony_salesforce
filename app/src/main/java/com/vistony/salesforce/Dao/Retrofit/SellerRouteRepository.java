@@ -3,12 +3,14 @@ package com.vistony.salesforce.Dao.Retrofit;
 import static com.vistony.salesforce.Controller.Utilitario.Utilitario.getDateTime;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.vistony.salesforce.Controller.Retrofit.Api;
 import com.vistony.salesforce.Controller.Retrofit.Config;
+import com.vistony.salesforce.Controller.Utilitario.Induvis;
 import com.vistony.salesforce.Dao.SQLite.BancoSQLite;
 import com.vistony.salesforce.Dao.SQLite.ParametrosSQLite;
 import com.vistony.salesforce.Dao.SQLite.SellerRouteSQLiteDao;
@@ -40,8 +42,8 @@ public class SellerRouteRepository  extends ViewModel {
                     executor.execute(() -> {
                     sellerRouteSQLiteDao = new SellerRouteSQLiteDao(context);
                     parametrosSQLite = new ParametrosSQLite(context);
-
-                    sellerRouteSQLiteDao.ClearTableSellerRoute();
+                       // Log.e("REOS","SellerRouteRepository.getAddSellerRoute.fecha "+Induvis.ConvertdatefordateSAP(fecha));
+                    sellerRouteSQLiteDao.ClearTableSellerRoute(Induvis.ConvertdatefordateSAP(fecha));
                     sellerRouteSQLiteDao.addSellerRoute(sellerRouteEntityResponse.getSellerRouteEntity());
                     Integer countSellerRoute=getCountSellerRoute(context);
                     parametrosSQLite.ActualizaCantidadRegistros("32", context.getResources().getString(R.string.seller_route), ""+countSellerRoute, getDateTime());

@@ -29,7 +29,7 @@ public class MenuConsultaCotizacionView extends Fragment {
     private String mParam1;
     private String mParam2;
     View v;
-    CardView cv_quotationdate;
+    CardView cv_quotationdate,cv_notification_quotation;
     OnFragmentInteractionListener mListener;
     public MenuConsultaCotizacionView() {
         // Required empty public constructor
@@ -68,11 +68,22 @@ public class MenuConsultaCotizacionView extends Fragment {
         // Inflate the layout for this fragment
         v= inflater.inflate(R.layout.fragment_menu_consulta_cotizacion_view, container, false);
         cv_quotationdate=v.findViewById(R.id.cv_quotationdate);
+        cv_notification_quotation=v.findViewById(R.id.cv_notification_quotation);
         cv_quotationdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String Fragment="MenuConsultaCotizacionView";
                 String accion="HistoricQuotation";
+                String compuesto=Fragment+"-"+accion;
+                mListener.onFragmentInteraction(compuesto,"");
+            }
+        });
+
+        cv_notification_quotation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String Fragment="MenuConsultaCotizacionView";
+                String accion="NotificationQuotation";
                 String compuesto=Fragment+"-"+accion;
                 mListener.onFragmentInteraction(compuesto,"");
             }

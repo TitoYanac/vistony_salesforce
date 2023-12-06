@@ -43,7 +43,7 @@ class TypeDispatchViewModel (
         }
     }
 
-    fun addTypeDispatch(Imei:String, context: Context, lifecycleOwner: LifecycleOwner)
+    fun addTypeDispatch()
     {
         Log.e(
             "REOS",
@@ -58,19 +58,18 @@ class TypeDispatchViewModel (
         }
 
 
-        typeDispatchRepository.status.observe(lifecycleOwner) { status ->
+        /*typeDispatchRepository.status.observe(lifecycleOwner) { status ->
             // actualizar la UI con los datos obtenidos
             Log.e(
                 "REOS",
                 "TypeDispatchViewModel-getTypeDispatch.result.observe.status"+status
             )
             _status.setValue(status)
-
         }
         Log.e(
             "REOS",
             "TypeDispatchViewModel-getTypeDispatch-_status"+_status.getValue()
-        )
+        )*/
     }
 
     fun getTypeDispatch(

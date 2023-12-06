@@ -128,7 +128,7 @@ class NotificationRepository {
                     Log.e("REOS", "NotificationRepository-getNotificationQuotation-response: " +response)
                     val notificationQuotation = response.body()
 
-                    if (response.isSuccessful&&notificationQuotation?.DATA?.size!!>0)
+                    if (response.isSuccessful&&notificationQuotation?.DATA!=null)
                     {
                         var list= notificationQuotation.DATA
                         _resultAPI.value= NotificationQuotationEntity (Status = "Y", DATA = list)

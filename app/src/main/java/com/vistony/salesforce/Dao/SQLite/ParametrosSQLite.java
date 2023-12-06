@@ -183,6 +183,7 @@ public class ParametrosSQLite {
     {
         String resultado="";
         abrir();
+        Log.e("REOS", "ParametrosSQLite-getDateTimeParemeterforName-name: "+name);
         Cursor fila = bd.rawQuery(
                 "Select fechacarga as date from parametros  where nombreparametro='"+name+"' and cantidadregistros>0 ",null);
 
@@ -190,7 +191,7 @@ public class ParametrosSQLite {
         {
             resultado= (fila.getString(0));
         }
-
+        Log.e("REOS", "ParametrosSQLite-getDateTimeParemeterforName-resultado: "+resultado);
         bd.close();
         return resultado;
     }

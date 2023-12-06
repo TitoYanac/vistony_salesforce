@@ -158,6 +158,7 @@ public class RutaVendedorRutaView extends Fragment implements SearchView.OnQuery
         });
         ParametrosSQLite parametrosSQLite=new ParametrosSQLite(getContext());
         String datesellerroute="";
+
         datesellerroute=parametrosSQLite.getDateTimeParemeterforName(getContext().getResources().getString(R.string.seller_route).toUpperCase());
 
         tv_update_date.setText("Fecha de Actualización: "+datesellerroute);

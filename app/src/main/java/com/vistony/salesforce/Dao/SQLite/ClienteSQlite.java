@@ -271,7 +271,7 @@ public class ClienteSQlite {
         try {
             Cursor fila = sqlite.rawQuery(
                     "Select " +
-                            "a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,a.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
+                            "a.cliente_id,a.compania_id,a.nombrecliente,d.domembarque_id,d.direccion,a.zona_id,a.ordenvisita,a.zona,a.rucdni,IFNULL(a.moneda,0),a.telefonofijo," +
                             "a.telefonomovil,a.correo,zipcode AS ubigeo_id,a.impuesto_id,a.impuesto,a.tipocambio,a.categoria,a.linea_credito,a.linea_credito_usado,a.terminopago_id,IFNULL(SUM(b.saldo),0),a.lista_precio" +
                             ",a.domfactura_id,a.lastpurchase,a.lineofbusiness,g.terminopago,g.contado,d.latitud,d.longitud,d.addresscode,(case when d.latitud='0' or d.latitud is null then '0' else '1' end) as geolocalizado,IFNULL(a.statuscounted,'N') as statuscount,a.customerwhitelist  FROM cliente a " +
                             "LEFT JOIN (Select compania_id,cliente_id,SUM(saldo) saldo,moneda from documentodeuda GROUP BY compania_id,cliente_id,saldo,moneda) b ON" +

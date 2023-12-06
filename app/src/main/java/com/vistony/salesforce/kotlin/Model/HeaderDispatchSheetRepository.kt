@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.kotlin.Utilities.api.RetrofitApi
 import com.vistony.salesforce.kotlin.Utilities.api.RetrofitConfig
-import com.vistony.salesforce.kotlin.View.Pages.ApiResponseEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Call
@@ -16,24 +15,16 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
-/*
-interface HeaderDispatchSheetRepositorykt {
-
-    suspend fun getStatusDispatchSheet(Imei: String,FechaDespacho: String,context: Context): MutableLiveData<String>
-}*/
-
-
 class HeaderDispatchSheetRepository(
     )
 {
-    private val _status = MutableLiveData<String>()
-    val status: MutableLiveData<String> = _status
+    private val _resultAPI = MutableStateFlow(HeaderDispatchSheetEntity())
+    val resultAPI: StateFlow<HeaderDispatchSheetEntity> get() = _resultAPI
 
     private val _resultDB = MutableStateFlow(HeaderDispatchSheetEntity())
     val resultDB: StateFlow<HeaderDispatchSheetEntity> get() = _resultDB
 
-    suspend fun getStateDispatchSheet(Imei:String,FechaDespacho:String,context:Context)
+    suspend fun getMasterDispatchSheetAPI(Imei:String,FechaDespacho:String,context:Context)
     {
         try {
             val retrofitConfig: RetrofitConfig? = RetrofitConfig()
@@ -114,14 +105,14 @@ class HeaderDispatchSheetRepository(
                         }
 
                         executor.shutdown()
-                        _status.setValue("1")
+                        _resultDB.value=HeaderDispatchSheetEntity(status = "Y")
                     } else {
-                        _status.setValue("0")
+                        _resultDB.value=HeaderDispatchSheetEntity(status = "N")
                     }
                 }
 
                 override fun onFailure(call: Call<DispatchSheetResponse?>, t: Throwable) {
-                    _status.setValue("0")
+                    _resultDB.value=HeaderDispatchSheetEntity(status = "N")
                 }
             })
         } catch (e: Exception) {
@@ -133,7 +124,7 @@ class HeaderDispatchSheetRepository(
     }
 
 
-    suspend fun getCodeDispatch(FechaDespacho:String,context:Context)
+    suspend fun getMasterDispatchSheetDB(FechaDespacho:String,context:Context)
     {
         try {
             val executor: ExecutorService = Executors.newFixedThreadPool(1)
@@ -144,12 +135,12 @@ class HeaderDispatchSheetRepository(
                     val database by lazy { AppDatabase.getInstance(context.applicationContext) }
                     Log.e(
                             "REOS",
-                            "HeaderDispatchSheetRepository-getCodeDispatch-FechaDespacho: " + FechaDespacho
+                            "HeaderDispatchSheetRepository-getMasterDispatchSheetDB-FechaDespacho: " + FechaDespacho
                     )
                     val data =  database?.headerDispatchSheetDao?.getCodeDispatch(FechaDespacho)
                     Log.e(
-                            "REOS",
-                            "HeaderDispatchSheetRepository-getCodeDispatch-data.value: " + data
+                        "REOS",
+                        "HeaderDispatchSheetRepository-getMasterDispatchSheetDB-data.value: " + data
                     )
                     _resultDB.value=HeaderDispatchSheetEntity(status = "Y", data = data!!)
                     println("Tarea $i completada")

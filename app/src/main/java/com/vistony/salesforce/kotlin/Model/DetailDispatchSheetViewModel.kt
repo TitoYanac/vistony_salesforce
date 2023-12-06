@@ -14,8 +14,11 @@ class DetailDispatchSheetViewModel
     private val Imei:String,
     ): ViewModel()
 {
-    private val _resultDB = MutableStateFlow(DetailDispatchSheetEntity())
-    val resultDB: StateFlow<DetailDispatchSheetEntity> get() = _resultDB
+    private val _result = MutableStateFlow(DetailDispatchSheetEntity())
+    val result: StateFlow<DetailDispatchSheetEntity> get() = _result
+
+    private val _resultDB = MutableLiveData<DetailDispatchSheetEntity>()
+    val resultDB: LiveData<DetailDispatchSheetEntity> get() = _resultDB
 
     class DetailDispatchSheetViewModelFactory(
         private val detailDispatchSheetRepository: DetailDispatchSheetRepository,
@@ -37,14 +40,31 @@ class DetailDispatchSheetViewModel
         //getInvoices()
         viewModelScope.launch {
             // Observar cambios en invoicesRepository.invoices
-            detailDispatchSheetRepository.resultDB.collect { newResultGet ->
+            //detailDispatchSheetRepository.resultDB.collect { newResultGet ->
+                detailDispatchSheetRepository.resultDB.observeForever { newResultGet ->
                 // Actualizar el valor de _invoices cuando haya cambios
                 _resultDB.value = newResultGet
-                Log.e("REOS", "NotificationViewModel-getNotification-_resultDB.value: " +_resultDB.value)
+                Log.e("REOS", "DetailDispatchSheetViewModel-newResultGet: " +newResultGet)
+            }
+        }
+
+        viewModelScope.launch {
+            // Observar cambios en invoicesRepository.invoices
+            detailDispatchSheetRepository.result.collect { newResultGet ->
+            //detailDispatchSheetRepository.resultDB.observeForever { newResultGet ->
+                // Actualizar el valor de _invoices cuando haya cambios
+                _result.value = newResultGet
+                Log.e("REOS", "DetailDispatchSheetViewModel-newResultGet: " +newResultGet)
             }
         }
     }
 
+    fun resetDetailDispatchSheet()
+    {
+        viewModelScope.launch {
+            _resultDB.value = DetailDispatchSheetEntity()
+        }
+    }
     fun getStateDetailDispatchSheet(
         FechaDespacho:String,
         type: String

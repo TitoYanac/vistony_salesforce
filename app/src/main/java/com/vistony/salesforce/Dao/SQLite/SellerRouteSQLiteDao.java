@@ -59,13 +59,13 @@ public class SellerRouteSQLiteDao {
         return 1;
     }
 
-    public ArrayList<SellerRouteEntity> getSellerRoute ()
+    public ArrayList<SellerRouteEntity> getSellerRoute (String FechaRuta)
     {
         listaSellerRouteEntity = new ArrayList<SellerRouteEntity>();
         SellerRouteEntity sellerRouteEntity;
         abrir();
         Cursor fila = bd.rawQuery(
-                "Select * from sellerroute",null);
+                "Select count(CardCode) from sellerroute where FechaRuta='"+FechaRuta+"'",null);
 
         while (fila.moveToNext())
         {
@@ -84,10 +84,10 @@ public class SellerRouteSQLiteDao {
         return listaSellerRouteEntity;
     }
 
-    public int ClearTableSellerRoute ()
+    public int ClearTableSellerRoute (String FechaRuta)
     {
         abrir();
-        bd.execSQL("delete from sellerroute ");
+        bd.execSQL("delete from sellerroute where FechaRuta='"+FechaRuta+"'");
         bd.close();
         return 1;
     }
@@ -110,6 +110,62 @@ public class SellerRouteSQLiteDao {
         }finally {
             bd.close();
         }
+
+        return resultado;
+    }
+
+    public Integer getCountSellerRouteForDate (String FechaRuta)
+    {
+        Integer resultado=0;
+
+        try {
+            abrir();
+            Cursor fila = bd.rawQuery("Select count(CardCode) from sellerroute where FechaRuta='"+FechaRuta+"'",null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+
+        }finally {
+            bd.close();
+        }
+        Log.e("REOS","SellerRouteSQLiteDao.getCountSellerRouteForDate.resultado"+resultado);
+        return resultado;
+    }
+
+    public Integer getCountSellerRouteForDateBalance (String FechaRuta)
+    {
+        Log.e("REOS","SellerRouteSQLiteDao.getCountSellerRouteForDateBalance.FechaRuta"+FechaRuta);
+        Integer resultado=0;
+
+        try {
+            abrir();
+            Cursor fila = bd.rawQuery(
+                    "SELECT COUNT(cardcode) FROM ( " +
+                    "Select DISTINCT CardCode from sellerroute A " +
+                            "INNER JOIN documentodeuda B on " +
+                            "A.CardCode=B.cliente_id and " +
+                            "A.Address=B.domembarque_id  " +
+                            "where A.FechaRuta='"+FechaRuta+"' " +
+                            "and B.saldo>0 " +
+                            "GROUP BY A.cardcode " +
+                            ")" +
+                            "" ,null);
+
+            while (fila.moveToNext())
+            {
+                resultado= Integer.parseInt(fila.getString(0));
+            }
+        }catch (Exception e)
+        {
+
+        }finally {
+            bd.close();
+        }
+        Log.e("REOS","SellerRouteSQLiteDao.getCountSellerRouteForDateBalance.resultado"+resultado);
         return resultado;
     }
 }

@@ -25,6 +25,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.R
+import com.vistony.salesforce.kotlin.Model.CollectionDetailRepository
+import com.vistony.salesforce.kotlin.Model.CollectionDetailViewModel
 import com.vistony.salesforce.kotlin.Model.DetailDispatchSheetUI
 import com.vistony.salesforce.kotlin.Model.Invoices
 import com.vistony.salesforce.kotlin.Model.InvoicesRepository
@@ -71,6 +73,17 @@ fun ProcessCollectionTemplate(
             expandedProcessCollection.value=false
         }
     }
+
+    val collectionDetailRepository : CollectionDetailRepository = CollectionDetailRepository(appContext)
+    val collectionDetailViewModel: CollectionDetailViewModel = viewModel(
+        factory = CollectionDetailViewModel.CollectionDetailViewModelFactory(
+            SesionEntity.imei,
+            appContext,
+            //lifecycleOwner,
+            collectionDetailRepository
+        )
+    )
+    collectionDetailViewModel.resetCollectionDetail()
 
     Surface(
         //modifier = Modifier.fillMaxHeight(),
@@ -138,6 +151,7 @@ fun ProcessCollectionTemplate(
                             invoices = invoices,
                             detailDispatchSheet.cliente_id,
                             currentSelection.value,
+                            collectionDetailViewModel,
                             InfoDialog = { openDialog.value = true },
                         )
                     }

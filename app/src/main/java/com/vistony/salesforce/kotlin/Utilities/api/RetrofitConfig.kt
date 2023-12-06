@@ -21,7 +21,8 @@ class RetrofitConfig {
                     //, "ecuador"
                     , "espania", "marruecos"
                 ,"peru"
-                -> "https://salesforce.vistony.pe"
+                //-> "https://salesforce.vistony.pe" //aqui se cambio por el de abajo
+                -> "http://190.12.79.132:8083"
                 "perurofalab"
                    // , "bolivia"
                     , "paraguay" -> "https://app.vistony.pe"
@@ -90,7 +91,8 @@ class RetrofitConfig {
                     //, "ecuador"
                     , "espania", "marruecos"
                   ,"peru"
-                -> "https://salesforce.vistony.pe"
+                // -> "https://salesforce.vistony.pe" //aqui se cambio por el de abajo
+                -> "http://190.12.79.132:8083"
                 "perurofalab"
                    // , "bolivia"
                     , "paraguay" ->                 //QA Peru

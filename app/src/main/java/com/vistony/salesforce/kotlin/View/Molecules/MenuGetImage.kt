@@ -243,7 +243,8 @@ fun CaptureImageCircle(
         context: Context,
         activity: Activity,
         tittle: String,
-        type:String
+        type:String,
+        color: Color= RedVistony
 ) {
     // Función para capturar la imagen con el launcher
     val permsRequestCode = 255
@@ -294,6 +295,7 @@ fun CaptureImageCircle(
                 resultFile = { resultFile ->
                     fileMutable.value=resultFile
                 },
+                color
         )
     }
 }
@@ -308,6 +310,7 @@ fun ItemGetImageCaptureCircle(
         tittle:String,
         type: String,
         resultFile: (File) -> Unit,
+        color: Color
 ) {
     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
     // Crea el File
@@ -375,7 +378,7 @@ fun ItemGetImageCaptureCircle(
                 },
                 size = DpSize(50.dp, 50.dp),
                 //color = colorButtonSave.value,
-                color = BlueVistony,
+                color = color,
                 roundedCornerShape = CircleShape
         )
         {

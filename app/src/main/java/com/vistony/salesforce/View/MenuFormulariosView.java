@@ -32,7 +32,7 @@ public class MenuFormulariosView extends Fragment {
     private String mParam1;
     private String mParam2;
     View v;
-    private CardView cv_catalogos,cv_agregarcliente,cv_reclamocliente,cv_form_supervisor;
+    private CardView cv_catalogos,cv_agregarcliente,cv_reclamocliente,cv_form_supervisor, cv_busqueda_formulario;
     OnFragmentInteractionListener mListener;
     public MenuFormulariosView() {
         // Required empty public constructor
@@ -74,14 +74,15 @@ public class MenuFormulariosView extends Fragment {
         cv_agregarcliente=v.findViewById(R.id.cv_agregarcliente);
         cv_reclamocliente=v.findViewById(R.id.cv_reclamocliente);
         cv_form_supervisor=v.findViewById(R.id.cv_form_supervisor);
+        cv_busqueda_formulario=v.findViewById(R.id.cv_busqueda_formulario);
 
-        if(!BuildConfig.FLAVOR.equals("peru"))
+        /*if(!BuildConfig.FLAVOR.equals("peru"))
         {
             cv_reclamocliente.setVisibility(View.GONE);
-        }
-        //cv_reclamocliente.setVisibility(View.GONE);
+        }*/
+        cv_reclamocliente.setVisibility(View.GONE);
         cv_agregarcliente.setVisibility(View.GONE);
-        cv_form_supervisor.setVisibility(View.GONE);
+        //cv_form_supervisor.setVisibility(View.GONE);
 
         cv_catalogos.setOnClickListener(v -> {
             String Fragment="MenuFormulariosView";
@@ -107,6 +108,13 @@ public class MenuFormulariosView extends Fragment {
         cv_form_supervisor.setOnClickListener(v -> {
             String Fragment="MenuFormulariosView";
             String accion="formsupervisor";
+            String compuesto=Fragment+"-"+accion;
+            mListener.onFragmentInteraction(compuesto,"");
+        });
+
+        cv_busqueda_formulario.setOnClickListener(v -> {
+            String Fragment="MenuFormulariosView";
+            String accion="busquedaformsupervisor";
             String compuesto=Fragment+"-"+accion;
             mListener.onFragmentInteraction(compuesto,"");
         });

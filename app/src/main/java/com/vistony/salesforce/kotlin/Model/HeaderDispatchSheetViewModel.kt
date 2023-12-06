@@ -11,23 +11,25 @@ import kotlinx.coroutines.launch
 class HeaderDispatchSheetViewModel(
     private val headerDispatchSheetRepository: HeaderDispatchSheetRepository,
     private val context: Context,
+    private val Imei: String,
     ) : ViewModel()  {
-
-    private val _status = MutableLiveData<String>()
-    val status: MutableLiveData<String> = _status
 
     private val _resultDB = MutableStateFlow(HeaderDispatchSheetEntity())
     val resultDB: StateFlow<HeaderDispatchSheetEntity> get() = _resultDB
 
+    private val _resultAPI = MutableStateFlow(HeaderDispatchSheetEntity())
+    val resultAPI: StateFlow<HeaderDispatchSheetEntity> get() = _resultAPI
     class HeaderDispatchSheetViewModelFactory(
             private val headerDispatchSheetRepository: HeaderDispatchSheetRepository,
             private val context: Context,
+            private val Imei: String,
     ): ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return HeaderDispatchSheetViewModel(
                     headerDispatchSheetRepository,
                     context,
+                    Imei
             ) as T
         }
     }
@@ -39,49 +41,35 @@ class HeaderDispatchSheetViewModel(
             headerDispatchSheetRepository.resultDB.collect { newResult ->
                 // Actualizar el valor de _invoices cuando haya cambios
                 _resultDB.value = newResult
-                Log.e("REOS", "FormularioTestViewModel-init-_result.value: " +_resultDB.value)
+                Log.e("REOS", "HeaderDispatchSheetViewModel-init-_resultDB.value: " +_resultDB.value)
+            }
+        }
+        viewModelScope.launch {
+            // Observar cambios en invoicesRepository.invoices
+            headerDispatchSheetRepository.resultAPI.collect { newResult ->
+                // Actualizar el valor de _invoices cuando haya cambios
+                _resultDB.value = newResult
+                Log.e("REOS", "HeaderDispatchSheetViewModel-init-resultAPI.value: " +resultAPI.value)
             }
         }
     }
 
-    fun getStateDispatchSheet(Imei:String,FechaDespacho:String,context: Context,lifecycleOwner:LifecycleOwner)
-    {
-        Log.e(
-            "REOS",
-            "HeaderDispatchSheetViewModel-getStateDispatchSheet-fun"
-        )
-        viewModelScope.launch {
-            Log.e(
-                "REOS",
-                "HeaderDispatchSheetViewModel-getStateDispatchSheet-Imei"+Imei
-            )
-            Log.e(
-                "REOS",
-                "HeaderDispatchSheetViewModel-getStateDispatchSheet-FechaDespacho"+FechaDespacho
-            )
-            headerDispatchSheetRepository.getStateDispatchSheet(Imei,FechaDespacho,context)
-        }
-
-
-        headerDispatchSheetRepository.status.observe(lifecycleOwner) { status ->
-            // actualizar la UI con los datos obtenidos
-            Log.e(
-                "REOS",
-                "HeaderDispatchSheetViewModel-getStateDispatchSheet.result.observe.status"+status
-            )
-            _status.setValue(status)
-
-        }
-        Log.e(
-            "REOS",
-            "HeaderDispatchSheetViewModel-getStateDispatchSheet-_status"+_status.getValue()
-        )
+    fun resetgetMasterDispatchSheetDB(){
+        _resultDB.value=HeaderDispatchSheetEntity()
     }
 
-    fun getCodeDispatch(FechaDespacho:String,context: Context)
+    fun getMasterDispatchSheetAPI(FechaDespacho:String)
     {
         viewModelScope.launch {
-            headerDispatchSheetRepository.getCodeDispatch(FechaDespacho,context)
+            headerDispatchSheetRepository.getMasterDispatchSheetAPI(Imei,FechaDespacho,context)
+        }
+    }
+
+    fun getMasterDispatchSheetDB(FechaDespacho:String)
+    {
+        Log.e("REOS", "HeaderDispatchSheetViewModel-getMasterDispatchSheetDB-FechaDespacho: " +FechaDespacho)
+        viewModelScope.launch {
+            headerDispatchSheetRepository.getMasterDispatchSheetDB(FechaDespacho,context)
         }
     }
 

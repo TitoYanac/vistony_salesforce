@@ -116,7 +116,10 @@ class CollectionDetailViewModel(
             }
         }
     }
-
+    fun resetCollectionDetail()
+    {
+        _result_add.value = CollectionDetailEntity()
+    }
     fun addListCollectionDetail(
         invoices:Invoices?,
         newBalance:String,

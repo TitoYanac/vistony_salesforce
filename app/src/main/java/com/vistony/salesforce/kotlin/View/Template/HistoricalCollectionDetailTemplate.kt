@@ -66,7 +66,6 @@ import com.vistony.salesforce.kotlin.View.Atoms.SwitchExample
 import com.vistony.salesforce.kotlin.View.Atoms.TableCell
 import com.vistony.salesforce.kotlin.View.Atoms.TextLabel
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
-import com.vistony.salesforce.kotlin.View.Pages.ApiResponse
 import com.vistony.salesforce.kotlin.View.components.ButtonCircle
 import com.vistony.salesforce.kotlin.View.components.DialogView
 import com.vistony.salesforce.kotlin.View.components.Editext

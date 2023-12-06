@@ -443,6 +443,31 @@ ParametrosView extends Fragment {
                         parametrosSQLite.InsertaParametros("31", this.getResources().getString(R.string.warehouse).toUpperCase(), "0", getDateTime());
                         parametrosSQLite.InsertaParametros("32", this.getResources().getString(R.string.seller_route).toUpperCase(), "0", getDateTime());
                     }
+                    else if(listaparametrosSQLiteEntity.size() == 19)
+                    {
+                        parametrosSQLite.LimpiarParametros();
+                        parametrosSQLite.InsertaParametros("1", this.getResources().getString(R.string.clients).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("2", this.getResources().getString(R.string.banks).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("5", this.getResources().getString(R.string.lbl_orderhed_payterms).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("6", this.getResources().getString(R.string.Agencies).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("7", this.getResources().getString(R.string.price_list).toUpperCase(), "0", getDateTime());
+                        //parametrosSQLite.InsertaParametros("8", "STOCK", "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("9", this.getResources().getString(R.string.list_promotion).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("10", this.getResources().getString(R.string.promotion_head).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("11", this.getResources().getString(R.string.promotion_detail).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("12", this.getResources().getString(R.string.route_workforce).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("17", this.getResources().getString(R.string.reasons_visit).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("21", this.getResources().getString(R.string.colors_head).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("22", this.getResources().getString(R.string.colors_detail).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("25", this.getResources().getString(R.string.ubigeous).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("26", this.getResources().getString(R.string.reason_free_transfer).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("27", this.getResources().getString(R.string.price_list_head).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("28", this.getResources().getString(R.string.busines_layer).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("29", this.getResources().getString(R.string.objects).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("30", this.getResources().getString(R.string.busines_layer_sales_detail).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("31", this.getResources().getString(R.string.warehouse).toUpperCase(), "0", getDateTime());
+                        parametrosSQLite.InsertaParametros("32", this.getResources().getString(R.string.seller_route).toUpperCase(), "0", getDateTime());
+                    }
                 }
                 break;
         }

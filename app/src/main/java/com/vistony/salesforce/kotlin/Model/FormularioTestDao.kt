@@ -5,13 +5,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.vistony.salesforce.kotlin.View.Pages.ApiResponse
-import com.vistony.salesforce.kotlin.View.Pages.DatosPrincipales
-import com.vistony.salesforce.kotlin.View.Pages.DatosVisita
-import com.vistony.salesforce.kotlin.View.Pages.Opcion
-import com.vistony.salesforce.kotlin.View.Pages.PreguntaRespuesta
-import com.vistony.salesforce.kotlin.View.Pages.ResumenVisita
-import com.vistony.salesforce.kotlin.View.Pages.TipoSalida
 
 @Dao
 interface FormularioTestDao {
@@ -81,5 +74,13 @@ interface FormularioTestDao {
 
     @Query("DELETE FROM option")
     fun deleteOpcion()
+
+
+    @Query("SELECT * FROM FormularioGaleria where numInforme=:numInforme /*AND status = 'N' */")
+    fun getFormularioGaleria(numInforme:String): List<FormularioGaleria>
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addFormularioGaleria(galeria: List<FormularioGaleria>)
 
 }

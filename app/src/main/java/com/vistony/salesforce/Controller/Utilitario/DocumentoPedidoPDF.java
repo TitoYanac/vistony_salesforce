@@ -379,8 +379,15 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
                 switch (BuildConfig.FLAVOR)
                 {
                     case "peru":
-                    case "bolivia":
+                    //case "bolivia":
                         cellLineasDetalle = new PdfPCell(new Phrase(Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
+                        cellLineasDetalle.disableBorderSide(Rectangle.BOX);
+                        cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                        tblLineas.addCell(cellLineasDetalle);
+                        break;
+                    case "bolivia":
+                        cellLineasDetalle = new PdfPCell(new Phrase(""+Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
+                        //cellLineasDetalle = new PdfPCell(new Phrase(""+Convert.currencyForView(ListaOrdenVentaDetalle.get(l).getMontototallinea()),font3));
                         cellLineasDetalle.disableBorderSide(Rectangle.BOX);
                         cellLineasDetalle.setHorizontalAlignment(Element.ALIGN_RIGHT);
                         tblLineas.addCell(cellLineasDetalle);
@@ -477,6 +484,7 @@ public class DocumentoPedidoPDF extends AppCompatActivity {
 
                     break;
                 case "ecuador":
+                //case "bolivia":
                     //PdfPTable tblResu2 = new PdfPTable(2);
                     tblResu.setWidthPercentage(100);
                     cellResu =  new PdfPCell(new Phrase("SubTotal:",font3));

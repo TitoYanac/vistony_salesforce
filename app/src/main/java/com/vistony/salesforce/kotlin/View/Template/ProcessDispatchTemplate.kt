@@ -68,7 +68,7 @@ fun ProcessDispatchTemplate(
     val reasonDispatchRepository: ReasonDispatchRepository = ReasonDispatchRepository()
     val reasonDispatchViewModel: ReasonDispatchViewModel = viewModel(
         factory = ReasonDispatchViewModel.ReasonDispatchViewModelFactory(
-            reasonDispatchRepository, context
+            SesionEntity.imei, reasonDispatchRepository, context
         )
     )
     val activity = LocalContext.current as Activity

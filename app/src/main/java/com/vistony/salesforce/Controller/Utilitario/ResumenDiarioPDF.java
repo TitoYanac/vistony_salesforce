@@ -32,6 +32,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.vistony.salesforce.BuildConfig;
 import com.vistony.salesforce.Dao.SQLite.QuoteEffectivenessSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.RutaVendedorSQLiteDao;
+import com.vistony.salesforce.Dao.SQLite.SellerRouteSQLiteDao;
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite;
 import com.vistony.salesforce.Dao.SQLite.VisitaSQLite;
 import com.vistony.salesforce.Entity.Retrofit.Modelo.HistoricContainerSalesEntity;
@@ -75,6 +76,7 @@ public class ResumenDiarioPDF extends AppCompatActivity {
     public void generarPdf(Context context, List<HistoricContainerSalesEntity> resumenDiarioEntityList, String fecha, List<SummaryofeffectivenessEntity> summaryofeffectivenessEntityList) {
         // Creamos el documento.
         RutaVendedorSQLiteDao rutaVendedorSQLiteDao = new RutaVendedorSQLiteDao(context);
+        SellerRouteSQLiteDao sellerRouteSQLiteDao = new SellerRouteSQLiteDao(context);
         VisitaSQLite visitaSQLite = new VisitaSQLite(context);
         Rectangle pagina = new Rectangle(
                 36, 36,
@@ -116,8 +118,11 @@ public class ResumenDiarioPDF extends AppCompatActivity {
                     else {
                         summaryofeffectivenessEntity.visits=String.valueOf (rutaVendedorSQLiteDao.ObtenerCantidadVisitadosRutaVendedor(fechasap,"1"));
                     }
-                    summaryofeffectivenessEntity.clients=String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1"));
-                    summaryofeffectivenessEntity.balanceclients=String.valueOf(rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1"));
+                    //summaryofeffectivenessEntity.clients=String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1"));
+                    summaryofeffectivenessEntity.clients=String.valueOf(sellerRouteSQLiteDao.getCountSellerRouteForDate(fechasap));
+                    //summaryofeffectivenessEntity.clients=String.valueOf(rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1"));
+                    //summaryofeffectivenessEntity.balanceclients=String.valueOf(rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1"));
+                    summaryofeffectivenessEntity.balanceclients=sellerRouteSQLiteDao.getCountSellerRouteForDateBalance(fechasap).toString();
                     summaryofeffectivenessEntity.collections =String.valueOf(visitaSQLite.getCountVisitWithTypeVisitCOB(fechasap,"1","02"));
                     summaryofeffectivenessEntity.amountcollections =String.valueOf(visitaSQLite.getSumVisitWithTypeCOB(fechasap,"1","02"));
 
@@ -155,15 +160,18 @@ public class ResumenDiarioPDF extends AppCompatActivity {
 
                     summaryofeffectivenessEntity.orderseffectiveness =Induvis.getAmountRouteeffectiveness(
                             Double.parseDouble(summaryofeffectivenessEntity.salesorders),
-                            rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+                            //rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+                            sellerRouteSQLiteDao.getCountSellerRouteForDate(fechasap)
                     );
                     summaryofeffectivenessEntity.collectionseffectiveness =Induvis.getAmountRouteeffectiveness(
                             Double.parseDouble(summaryofeffectivenessEntity.collections),
-                            rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
+                            //rutaVendedorSQLiteDao.GetCountClientwithBalance(fechasap,"1")
+                            sellerRouteSQLiteDao.getCountSellerRouteForDateBalance(fechasap)
                     );
                     summaryofeffectivenessEntity.visitseffectiveness =Induvis.getAmountRouteeffectiveness(
                             Double.parseDouble(summaryofeffectivenessEntity.visits),
-                            rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+                            //rutaVendedorSQLiteDao.ObtenerCantidadRutaVendedor(fechasap,"1")
+                            sellerRouteSQLiteDao.getCountSellerRouteForDate(fechasap)
                     );
                     summaryofeffectivenessEntityList.add(summaryofeffectivenessEntity);
                     //Agregar Fuera de Ruta

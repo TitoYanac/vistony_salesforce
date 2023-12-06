@@ -64,8 +64,6 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
     ,OnMapReadyCallback
 
 {
-    //private lateinit var mMap: GoogleMap  //declaration inside class
-    //private lateinit var headerDispatchSheetViewModel: HeaderDispatchSheetViewModel
     private lateinit var headerDispatchSheetViewModel: HeaderDispatchSheetViewModel
     private lateinit var clientViewModel: ClientViewModel
     private lateinit var detailDispatchSheetViewModel: DetailDispatchSheetViewModel
@@ -94,7 +92,62 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
                             )*/
                             val appContext = LocalContext.current
                             val lifecycleOwner = LocalContext.current as LifecycleOwner
-                            val detailDispatchSheetRepository = DetailDispatchSheetRepository()
+
+                            val headerDispatchSheetRepository = HeaderDispatchSheetRepository()
+                            val clientRepository = ClientRepository()
+                            val typeDispatchRepository = TypeDispatchRepository()
+                            val reasonDispatchRepository = ReasonDispatchRepository()
+                            //viewModel = ViewModelProvider(viewModelStoreOwner, HeaderDispatchSheetViewModel(headerDispatchSheetRepository))[HeaderDispatchSheetViewModel::class.java]
+                            //viewModel = ViewModelProvider(viewModelStoreOwner)[HeaderDispatchSheetViewModel::class.java]
+                            headerDispatchSheetViewModel = HeaderDispatchSheetViewModel(headerDispatchSheetRepository,appContext,SesionEntity.imei)
+                            typeDispatchViewModel = TypeDispatchViewModel(SesionEntity.imei,appContext,typeDispatchRepository)
+                            reasonDispatchViewModel = ReasonDispatchViewModel(SesionEntity.imei, reasonDispatchRepository,appContext)
+
+                            typeDispatchViewModel.status.observe(lifecycleOwner) { status ->
+                                // actualizar la UI con los datos obtenidos
+                                Log.e(
+                                    "REOS",
+                                    "DispatchSheetMapScreen-typeDispatchViewModel.result.observe.status"+status
+                                )
+                            }
+
+                            typeDispatchViewModel?.addTypeDispatch(
+                            )
+
+                            reasonDispatchViewModel.status.observe(lifecycleOwner) { status ->
+                                // actualizar la UI con los datos obtenidos
+                                Log.e(
+                                    "REOS",
+                                    "DispatchSheetMapScreen-reasonDispatchViewModel.result.observe.status"+status
+                                )
+                            }
+
+                            reasonDispatchViewModel?.addReasonDispatch()
+
+                            /*
+                            headerDispatchSheetViewModel.status.observe(lifecycleOwner) { status ->
+                                // actualizar la UI con los datos obtenidos
+                                Log.e(
+                                    "REOS",
+                                    "DispatchSheetMapScreen-headerDispatchSheetViewModel.result.observe.status"+status
+                                )
+                            }*/
+
+
+
+                            headerDispatchSheetViewModel?.getMasterDispatchSheetAPI(
+                                ContainerDispatchView.parametrofecha,
+                            )
+                            clientViewModel = ClientViewModel(clientRepository,SesionEntity.imei,appContext)
+                            clientViewModel.status.observe(lifecycleOwner) { status ->
+                                // actualizar la UI con los datos obtenidos
+                                Log.e(
+                                    "REOS",
+                                    "DispatchSheetMapScreen-clientViewModel.result.observe.status"+status
+                                )
+                            }
+                            clientViewModel?.getMasterClientAPI(ContainerDispatchView.parametrofecha,)
+                            val detailDispatchSheetRepository = DetailDispatchSheetRepository(appContext)
                             val detailDispatchSheetViewModel: DetailDispatchSheetViewModel =
                                 viewModel(
                                     factory = DetailDispatchSheetViewModel.DetailDispatchSheetViewModelFactory(
@@ -108,13 +161,18 @@ class DispatchSheetMapScreen : Fragment(),ViewModelStoreOwner
                                 "M"
                             )
 
-                            var detailDispatchSheetDB =
-                                detailDispatchSheetViewModel.resultDB.collectAsState()
+                            var detailDispatchSheetDB = detailDispatchSheetViewModel.result.collectAsState()
                             //val notificationEntity by notificationViewModel.notificationLiveData.observeAsState(NotificationEntity())
+                           /* var detailDispatchSheetDB=MutableLiveData<DetailDispatchSheetEntity>()
+                            detailDispatchSheetViewModel.resultDB.observeForever { newResultGet ->
+                                // Actualizar el valor de _invoices cuando haya cambios
+                                detailDispatchSheetDB.value = newResultGet
+                                Log.e("REOS", "NotificationViewModel-getNotification-_resultDB.value: " + detailDispatchSheetDB.value)
+                            }*/
 
-                            when (detailDispatchSheetDB.value.Status) {
+                            when (detailDispatchSheetDB.value?.Status) {
                                 "Y" -> {
-                                    StartGoogleMaps(detailDispatchSheetDB.value.UI)
+                                    StartGoogleMaps(detailDispatchSheetDB.value!!.UI)
                                 }
                             }
                         }

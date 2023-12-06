@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class ReasonDispatchViewModel  (
+    private val Imei:String,
     private val reasonDispatchRepository: ReasonDispatchRepository,
     private val context: Context,
 
@@ -20,12 +21,14 @@ class ReasonDispatchViewModel  (
     val result_get: StateFlow<ResponseReasonDispatch> get() = _result_get
 
     class ReasonDispatchViewModelFactory(
+        private val Imei:String,
         private val reasonDispatchRepository: ReasonDispatchRepository,
         private var context: Context
     ): ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ReasonDispatchViewModel(
+                Imei,
                 reasonDispatchRepository,
                 context
             ) as T
@@ -43,7 +46,7 @@ class ReasonDispatchViewModel  (
         }
     }
 
-    fun addReasonDispatch(Imei:String, context: Context, lifecycleOwner: LifecycleOwner)
+    fun addReasonDispatch()
     {
         Log.e(
             "REOS",
@@ -56,7 +59,7 @@ class ReasonDispatchViewModel  (
             )
             reasonDispatchRepository.addReasonDispatch (Imei,context)
         }
-        reasonDispatchRepository.status.observe(lifecycleOwner) { status ->
+        /*reasonDispatchRepository.status.observe(lifecycleOwner) { status ->
             // actualizar la UI con los datos obtenidos
             Log.e(
                 "REOS",
@@ -68,7 +71,7 @@ class ReasonDispatchViewModel  (
         Log.e(
             "REOS",
             "ReasonDispatchViewModel-getReasonDispatch-_status"+_status.getValue()
-        )
+        )*/
     }
 
     fun getReasonDispatch()

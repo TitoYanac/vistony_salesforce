@@ -39,7 +39,7 @@ data class HeaderDispatchSheet(
 )
 
 data class HeaderDispatchSheetEntity(
-        var status: String? = null,
+        var status: String? = "N",
         var data:List<HeaderDispatchSheet> = emptyList(),
         var listString:List<String> = emptyList(),
 )

@@ -10,13 +10,6 @@ import androidx.room.TypeConverters
 //import androidx.work.workDataOf
 //import com.vistony.salesforce.kotlin.data.UbigeousWorker.Companion.KEY_FILENAME
 import com.vistony.salesforce.kotlin.Utilities.DATABASE_NAME
-import com.vistony.salesforce.kotlin.View.Pages.ApiResponse
-import com.vistony.salesforce.kotlin.View.Pages.DatosPrincipales
-import com.vistony.salesforce.kotlin.View.Pages.DatosVisita
-import com.vistony.salesforce.kotlin.View.Pages.Opcion
-import com.vistony.salesforce.kotlin.View.Pages.PreguntaRespuesta
-import com.vistony.salesforce.kotlin.View.Pages.ResumenVisita
-import com.vistony.salesforce.kotlin.View.Pages.TipoSalida
 
 @Database(entities = [
     Ubigeous::class,
@@ -40,9 +33,10 @@ import com.vistony.salesforce.kotlin.View.Pages.TipoSalida
     TipoSalida::class,
     ResumenVisita::class,
     PreguntaRespuesta::class,
+    FormularioGaleria::class,
     Opcion::class,
     CollectionHead::class
-                     ], version = 85,exportSchema = false)
+                     ], version = 88,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,

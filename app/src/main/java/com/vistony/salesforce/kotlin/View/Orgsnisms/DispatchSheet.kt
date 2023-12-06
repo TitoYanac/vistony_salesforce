@@ -493,8 +493,6 @@ fun CardDispatch(
                     progress,
                     true
                 )
-
-
             }
         }
     }

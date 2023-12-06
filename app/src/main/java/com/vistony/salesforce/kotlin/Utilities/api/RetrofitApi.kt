@@ -3,7 +3,6 @@ package com.vistony.salesforce.kotlin.Utilities.api
 import com.vistony.salesforce.BuildConfig
 import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity
 import com.vistony.salesforce.kotlin.Model.*
-import com.vistony.salesforce.kotlin.View.Pages.ApiResponseEntity
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Response
@@ -72,5 +71,17 @@ interface RetrofitApi {
     //Call<CobranzaDetalleEntity> sendCollectionCountSend ( @Body RequestBody params);
     @PATCH(BuildConfig.BASE_ENDPOINTPOST + BuildConfig.BASE_ENVIRONMENT + "/Collections/{codeSap}")
     suspend fun updateCollection(@Path("codeSap") codeSap: String?, @Body params: RequestBody?): Response<CollectionDetailEntity?>?
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Superviser")
+    fun getFormSupervisor(
+        @Query("imei") imei: String?,
+        @Query("date") date: String?
+    ): Call<ApiResponse?>?
+
+    @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT +"/Superviser/Forms")
+    fun getListFormSupervisor(
+        @Query("fini") imei: String?,
+        @Query("fin") date: String?
+    ): Call<ApiResponseList>?
+
 
 }

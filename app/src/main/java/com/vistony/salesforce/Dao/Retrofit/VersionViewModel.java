@@ -49,7 +49,8 @@ public class VersionViewModel {
             //case "ecuador":
             //case "espania":
             case "marruecos":
-                baseUrl = "https://salesforce.vistony.pe";
+                // baseUrl = "https://salesforce.vistony.pe"; // aqui se cambio por el de abajo
+                baseUrl = "http://190.12.79.132:8083";
                 break;
             case "perurofalab":
                 //Ultima milla prueba bolivia

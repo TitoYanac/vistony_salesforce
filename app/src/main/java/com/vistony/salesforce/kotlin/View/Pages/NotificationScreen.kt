@@ -38,6 +38,7 @@ class NotificationScreen: Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         //color = MaterialTheme.colors.background
                     ) {
+                        requireActivity().title = "Notificaciones Cotización"
                         NotificationTemplate()
                     }
                 }

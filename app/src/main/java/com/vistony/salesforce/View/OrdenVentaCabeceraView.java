@@ -408,7 +408,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     listaDireccionCliente=direccionSQLite.getListAddressOV(listaOrdenVentaCabecera.get(g).getCliente_id(),listaOrdenVentaCabecera.get(g).getDomembarque_id());
                     historicoOVcantidaddescuento=listaOrdenVentaCabecera.get(g).getDescuentocontado();
                 }
-
+                Log.e("REOS", "OrdenVentaCabeceraView.OnCreate-listaOrdenVentaCabecera.cliente_domembarque_id:"+cliente_domembarque_id);
                 for(int l=0;l<listaClienteCabecera.size();l++)
                 {
                     nombrecliente=listaClienteCabecera.get(l).getNombrecliente();
@@ -441,6 +441,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
             if(Listado !=null){
 
                 for(int i=0;i<Listado.size();i++){
+
                     nombrecliente=Listado.get(i).getNombrecliente();
                     codigocliente=Listado.get(i).getCliente_id();
                     direccioncliente=Listado.get(i).getDireccion();
@@ -469,7 +470,7 @@ public class OrdenVentaCabeceraView extends Fragment implements View.OnClickList
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.Listado.get(i).getTerminopago_id(): "+Listado.get(i).getTerminopago_id());
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.cliente_terminopago_id: "+cliente_terminopago_id);
                     Log.e("REOS","OrdenVentaCabeceraView.OnCreate.Listado.statuscount: "+statuscount);
-
+                    Log.e("REOS", "OrdenVentaCabeceraView.OnCreate-Listado.cliente_domembarque_id:"+cliente_domembarque_id);
                 }
 
 

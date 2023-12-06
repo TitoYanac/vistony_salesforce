@@ -1,5 +1,6 @@
 package com.vistony.salesforce.kotlin.View.Template
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
@@ -64,12 +65,14 @@ import com.vistony.salesforce.kotlin.Utilities.getDateCurrent
 import com.vistony.salesforce.kotlin.Utilities.sendSMS
 import com.vistony.salesforce.kotlin.View.Atoms.*
 import com.vistony.salesforce.kotlin.View.Atoms.theme.BlueVistony
+import com.vistony.salesforce.kotlin.View.Atoms.theme.RedVistony
 import com.vistony.salesforce.kotlin.View.Molecules.*
 import com.vistony.salesforce.kotlin.View.Pages.text1
 import com.vistony.salesforce.kotlin.View.components.*
 import kotlinx.coroutines.flow.collect
 import java.util.*
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ContentDeposit()
 {
@@ -102,6 +105,7 @@ fun ContentDeposit()
             factory = HeaderDispatchSheetViewModel.HeaderDispatchSheetViewModelFactory(
                     headerDispatchSheetRepository,
                     appContext,
+                    SesionEntity.imei
             )
     )
     val amountDeposit:MutableState<String> = remember { mutableStateOf("0") }
@@ -138,29 +142,41 @@ fun ContentDeposit()
     collectionHeadViewModel.sendAPICollectionHead()
     collectionDetailViewModel.SendAPICollectionDetail(appContext, SesionEntity.compania_id,SesionEntity.usuario_id)
     collectionDetailViewModel.sendAPIUpdateDepositCollectionDetail()
+    var totalQuantity: MutableState<String> = remember {  mutableStateOf("0")}
+    var selectedQuantity: MutableState<String> = remember {  mutableStateOf("0")}
+    var amount: MutableState<String> = remember {  mutableStateOf("0")}
 
-    Column()
+    Scaffold(
+        topBar = {
+        },
+        bottomBar = {BottomBarDeposit(appContext,totalQuantity,selectedQuantity,amount)}
+    )
     {
-        StageOneDeposit(
-            collectionDetailViewModel,
-            statusBoolean,
-            amountDeposit,
-            typeCollection,
-            onSelectCollection = { collection ->
-                collectionlist.value = collection
-                openDialog.value = true
-                Log.e(
-                    "REOS",
-                    "DepositTemplate-ContentDeposit-collectionlist" + collectionlist
-                )
-            }
-        )
-
-        if (openDialog.value!!) {
-            StageTwoDeposit(
-                appContext,
-                bankViewModel,
+        Column()
+        {
+            StageOneDeposit(
+                collectionDetailViewModel,
                 statusBoolean,
+                amountDeposit,
+                typeCollection,
+                totalQuantity,
+                selectedQuantity,
+                amount,
+                onSelectCollection = { collection ->
+                    collectionlist.value = collection
+                    openDialog.value = true
+                    Log.e(
+                        "REOS",
+                        "DepositTemplate-ContentDeposit-collectionlist" + collectionlist
+                    )
+                }
+            )
+
+            if (openDialog.value!!) {
+                StageTwoDeposit(
+                    appContext,
+                    bankViewModel,
+                    statusBoolean,
                     activity,
                     headerDispatchSheetViewModel,
                     amountDeposit,
@@ -168,9 +184,9 @@ fun ContentDeposit()
                     collectionHeadViewModel,
                     collectionlist,
                     collectionDetailViewModel
-            )
+                )
+            }
         }
-
     }
 }
 
@@ -180,8 +196,12 @@ fun StageOneDeposit(
     statusBoolean: MutableState<Boolean>,
     amountDeposit: MutableState<String>,
     typeCollection: MutableState<String>,
+    totalQuantity: MutableState<String>,
+    selectedQuantity: MutableState<String>,
+    amount: MutableState<String>,
     onSelectCollection: (List<CollectionDetail> ) -> Unit
 ) {
+
     var DateApp: MutableState<String> = remember { mutableStateOf(getDate()!!) }
     //var expanded by remember { mutableStateOf(statusBoolean.value) }
 
@@ -199,13 +219,13 @@ fun StageOneDeposit(
         cardtTittle =
         {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ButtonCircle(OnClick = {}) {
+                ButtonCircle(OnClick = {}, color = BlueVistony) {
                     Text(
                         text = "1",
                         color = Color.White,
                         textAlign = TextAlign.Center,
                     ) }
-                TableCell(text = "DOCUMENTOS PENDIENTES POR DEPOSITAR", weight =1f ,title = true, textAlign = TextAlign.Center)
+                TableCell(text = "SELECCION DE DOCUMENTOS", weight =1f ,title = true, textAlign = TextAlign.Center)
             }
         }
         , cardContent =
@@ -219,14 +239,14 @@ fun StageOneDeposit(
                 Column() {
                     TextLabel(text = "Elegir una fecha para su consulta")
                     Row() {
-                        Column(modifier = Modifier.weight(1f)) {
+                        Column(modifier = Modifier.weight(0.90f)) {
                             //CalendarAppView(tittle = "Elegir una fecha para su consulta", DateApp = DateApp)
                             CalendarApp(
                                 DateApp = DateApp
                             )
                         }
                         Spacer(modifier = Modifier.width(5.dp))
-                        Column(modifier = Modifier.weight(0.15f)) {
+                        Column(modifier = Modifier.weight(0.10f)) {
                             ButtonCircle(
                                 OnClick = {
                                     collectionDetailViewModel.getCollectionDetailPendingDeposit(
@@ -255,7 +275,7 @@ fun StageOneDeposit(
                             Column(
                                 modifier = Modifier
                                     //.fillMaxSize()
-                                    .padding(10.dp)
+                                    //.padding(10.dp)
                             ) {
 
                                 val filteredData = remember(currentSelectionSpinner) {
@@ -277,8 +297,9 @@ fun StageOneDeposit(
                                             }
                                         )
                                     }
-                                    Spacer(modifier = Modifier.width(5.dp))
-                                    Column(modifier = Modifier.weight(0.15f)) {
+                                    /*Spacer(modifier = Modifier.width(5.dp))
+
+                                    Column(modifier = Modifier.weight(0.20f)) {
                                         ButtonCircle(
                                             size = DpSize(45.dp,45.dp),
                                             OnClick = {
@@ -296,8 +317,8 @@ fun StageOneDeposit(
                                                 //tint = if ( stepsStatus.get(index) == "Y") BlueVistony else Color.Gray
                                             )
                                         }
-                                    }
-                                    Spacer(modifier = Modifier.width(5.dp))
+                                    }*/
+                                    /*Spacer(modifier = Modifier.width(5.dp))
                                     Column(modifier = Modifier.weight(0.15f)) {
                                         ButtonCircle(
                                             size = DpSize(45.dp,45.dp),
@@ -314,12 +335,8 @@ fun StageOneDeposit(
                                                 //tint = if ( stepsStatus.get(index) == "Y") BlueVistony else Color.Gray
                                             )
                                         }
-                                    }
-
+                                    }*/
                                 }
-
-
-
                                     Box(
                                         modifier = Modifier
                                            // .weight(1f)
@@ -388,13 +405,12 @@ fun StageOneDeposit(
                                                                     }
                                                             ) {
                                                                 TableCell(
-                                                                    text = line.CardName!!,
+                                                                    text = ""+line.CardName,
                                                                     title = true,
                                                                     textAlign = TextAlign.Center,
                                                                     weight = 1f
                                                                 )
                                                             }
-
                                                             Row() {
                                                                 TableCell(
                                                                     text = "Tipo",
@@ -562,25 +578,30 @@ fun StageOneDeposit(
                                                             }
                                                         }
                                                     }
+                                                    Spacer(modifier = Modifier.height(20.dp))
                                                 }
                                             }
                                             //FloatingButtonMenuPreview()
-                                            Box(
+                                            /*Box(
                                                 modifier = Modifier.fillMaxSize(),
-                                                contentAlignment = Alignment.BottomStart
+                                                contentAlignment = Alignment.TopStart
                                             )
                                             {
                                                 ButtonCircle(
                                                     OnClick = {
-                                                        onSelectCollection(filteredData.value)
-                                                        statusBoolean.value = statusBoolean.value.not()
+                                                        //onSelectCollection(filteredData.value)
+                                                        //statusBoolean.value = statusBoolean.value.not()
+                                                        for (i in 0 until filteredData.value.size)
+                                                        {
+                                                            filteredData.value.get(i).StatusSelection=true
+                                                        }
                                                     },
                                                     size = DpSize(40.dp, 40.dp),
                                                     color = Color.Red
                                                 )
                                                 {
                                                     Icon(
-                                                        imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_send_24_white),
+                                                        imageVector = ImageVector.vectorResource(R.drawable.ic_baseline_check_box_red_24),
                                                         //ImageVector.vectorResource(if (statusList.get(index) == "Y"){R.drawable.ic_check}else{R.drawable.ic_baseline_close_24_white}),
                                                         contentDescription = null,
                                                         tint = Color.White,
@@ -588,12 +609,21 @@ fun StageOneDeposit(
                                                         //tint = if ( stepsStatus.get(index) == "Y") BlueVistony else Color.Gray
                                                     )
                                                 }
-                                            }
+                                            }*/
                                         }
                                     }
                                 //}
                                 // Información que siempre aparecerá en la parte inferior de la pantalla
-                                Column(
+                                totalQuantity.value="${
+                                    if (filteredData.value.isNullOrEmpty()) {
+                                        0
+                                    } else {
+                                        filteredData.value.size
+                                    }
+                                }"
+                                selectedQuantity.value=QuantitySelected.toString()
+                                amount.value = AmountSelected.toString()
+                                /*Column(
                                     modifier = Modifier
                                         //.fillMaxWidth()
                                         .background(BlueVistony, RoundedCornerShape(4.dp))
@@ -655,7 +685,7 @@ fun StageOneDeposit(
                                             color = Color.White,
                                         )
                                     }
-                                }
+                                }*/
                                 AnimatedVisibility(
                                     visible = statusBoolean.value,
                                     enter = expandIn(),
@@ -682,7 +712,7 @@ fun StageOneDeposit(
                                                     statusBoolean.value = statusBoolean.value.not()
                                                 },
                                                 context = contexto,
-                                                backGroundColor = BlueVistony,
+                                                backGroundColor = RedVistony,
                                                 textColor = Color.White,
                                                 status = true
                                             )
@@ -702,6 +732,7 @@ fun StageOneDeposit(
 }
 
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun StageTwoDeposit(
     context:Context,
@@ -735,6 +766,13 @@ fun StageTwoDeposit(
     val currentDispatchSelected = remember { mutableStateOf("SELECCIONAR CODIGO DEPOSITO") }
     val headerDispatch=headerDispatchSheetViewModel.resultDB.collectAsState()
     var headerDispatchlist: MutableList<String> = mutableListOf()
+    var colorButtonAfter by remember{ mutableStateOf(Color.Red)}
+    var colorButtonSave by remember{ mutableStateOf(Color.Red)}
+    var statusButtonSave by remember{ mutableStateOf(true)}
+    var colorButtonCapture by remember{ mutableStateOf(Color.Red)}
+    var statusButtonCapture by remember{ mutableStateOf(true)}
+    var colorButtonSync by remember{ mutableStateOf(Color.Red)}
+    var statusButtonSync by remember{ mutableStateOf(true)}
     when (banks.value.Status)
     {
         "Y"->{
@@ -840,7 +878,7 @@ fun StageTwoDeposit(
                                     /*collectionDetailViewModel.getCollectionDetailPendingDeposit(
                                             DateApp.value
                                     )*/
-                                    headerDispatchSheetViewModel.getCodeDispatch(DateApp.value,context)
+                                    headerDispatchSheetViewModel.getMasterDispatchSheetDB(DateApp.value)
                                 }, roundedCornerShape = RoundedCornerShape(4.dp)
                         ) {
                             Icon(
@@ -873,7 +911,7 @@ fun StageTwoDeposit(
             )
             {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    ButtonCircle(OnClick = {}) {
+                    ButtonCircle(OnClick = {}, color = BlueVistony) {
                         Text(
                             text = "2",
                             color = Color.White,
@@ -986,14 +1024,21 @@ fun StageTwoDeposit(
                                     contentDescription = null
                                 )
                             }*/
+
                             CaptureImageCircle(
                                     resultBitmap = { result ->
-                                        bitmapLocale.value=result
+                                        if(statusButtonCapture)
+                                        {
+                                            bitmapLocale.value=result
+                                        }else{
+                                            Toast.makeText(context,"El boton esta deshabilitado",Toast.LENGTH_LONG).show()
+                                        }
                                     },
                                     context,
                                     activity,
                                     "DEP",
-                                    "G"
+                                    "G",
+                                color = colorButtonCapture
                             )
                             Text(
                                 text = "Capturar",
@@ -1009,11 +1054,15 @@ fun StageTwoDeposit(
                         ) {
                             ButtonCircle(
                                 OnClick = {
-                                    openDialogShowDispatch.value=true
+                                    if(statusButtonSync) {
+                                        openDialogShowDispatch.value=true
+                                    }else{
+                                        Toast.makeText(context,"El boton esta deshabilitado",Toast.LENGTH_LONG).show()
+                                    }
                                 },
                                 size = DpSize(50.dp, 50.dp),
                                 //color = colorButtonSave.value,
-                                color = BlueVistony,
+                                color = colorButtonSync,
                                 roundedCornerShape = CircleShape
                             )
                             {
@@ -1038,8 +1087,8 @@ fun StageTwoDeposit(
                         ) {
                             ButtonCircle(
                                 OnClick = {
-
-                                    var collectionHead=CreateCollectionHead(
+                                    if(statusButtonSave) {
+                                        var collectionHead=CreateCollectionHead(
                                             context,
                                             amountDeposit.value,
                                             DialogEditResult.value,
@@ -1047,16 +1096,24 @@ fun StageTwoDeposit(
                                             currentSelectionSpinner2.value,
                                             currentSelectionSpinner.value,
                                             typeCollection.value
-                                    )
-                                    collectionHeadViewModel.addCollectionHead(collectionHead)
-                                    collectionHeadViewModel.sendAPICollectionHead()
-                                    collectionDetailViewModel.updateDepositCollectionDetail(collectionDetailList.value,DialogEditResult.value,currentSelectionSpinner.value)
-                                    collectionDetailViewModel.sendAPIUpdateDepositCollectionDetail()
-
+                                        )
+                                        collectionHeadViewModel.addCollectionHead(collectionHead)
+                                        collectionHeadViewModel.sendAPICollectionHead()
+                                        collectionDetailViewModel.updateDepositCollectionDetail(collectionDetailList.value,DialogEditResult.value,currentSelectionSpinner.value)
+                                        collectionDetailViewModel.sendAPIUpdateDepositCollectionDetail()
+                                        Toast.makeText(context,"Deposito Registrado Correctamente", Toast.LENGTH_SHORT).show()
+                                        colorButtonAfter=Color.Gray
+                                        colorButtonSave=Color.Gray
+                                        statusButtonSave=false
+                                        colorButtonCapture=Color.Gray
+                                        statusButtonCapture=false
+                                        colorButtonSync=Color.Gray
+                                        statusButtonSync=false
+                                    }
                                 },
                                 size = DpSize(50.dp, 50.dp),
                                 //color = colorButtonPrint,
-                                color = BlueVistony,
+                                color = colorButtonSave,
                                 roundedCornerShape = CircleShape
                             )
                             {
@@ -1092,7 +1149,7 @@ fun StageTwoDeposit(
                         description = "Anterior",
                         OnClick = { statusBoolean.value = statusBoolean.value.not() },
                         context = contexto,
-                        backGroundColor = BlueVistony,
+                        backGroundColor = colorButtonAfter,
                         textColor = Color.White,
                         status = true
                     )
@@ -1155,9 +1212,9 @@ fun FloatingButtonMenu() {
                         }*/
                         Box(
                             modifier = Modifier
-                                    .size(60.dp)
-                                    .background(Color.Red, CircleShape)
-                                    .clickable { }
+                                .size(60.dp)
+                                .background(Color.Red, CircleShape)
+                                .clickable { }
                             ,
                             contentAlignment = Alignment.Center
                         ) {
@@ -1180,8 +1237,8 @@ fun FloatingButtonMenu() {
                             .size(50.dp) // E // Aplicar una forma circular al botón*/
                     shape = CircleShape, // Utiliza CircleShape para la forma circular
                     modifier = Modifier
-                            .padding(16.dp)
-                            .size(50.dp) // Asegúrate de que el tamaño sea igual en ancho y alto
+                        .padding(16.dp)
+                        .size(50.dp) // Asegúrate de que el tamaño sea igual en ancho y alto
                 )
             }
 
@@ -1209,9 +1266,9 @@ fun FloatingButtonMenu() {
                     }*/
                     Box(
                         modifier = Modifier
-                                .size(60.dp)
-                                .background(Color.Red, CircleShape)
-                                .clickable { }
+                            .size(60.dp)
+                            .background(Color.Red, CircleShape)
+                            .clickable { }
                         ,
                         contentAlignment = Alignment.Center
                     ) {
@@ -1238,8 +1295,8 @@ fun FloatingButtonMenu() {
                 // Aplicar una forma circular al botón
                 shape = CircleShape, // Utiliza CircleShape para la forma circular
                 modifier = Modifier
-                        .padding(16.dp)
-                        .size(50.dp) // Asegúrate de que el tamaño sea igual en ancho y alto
+                    .padding(16.dp)
+                    .size(50.dp) // Asegúrate de que el tamaño sea igual en ancho y alto
             )
         }
     }
@@ -1249,4 +1306,74 @@ fun FloatingButtonMenu() {
 @Composable
 fun FloatingButtonMenuPreview() {
     FloatingButtonMenu()
+}
+
+@Composable
+fun BottomBarDeposit(
+    context:Context,
+    totalQuantity:MutableState<String>,
+    selectionQuantity:MutableState<String>,
+    amount:MutableState<String>
+)
+{
+    Row (modifier= Modifier
+        //.padding(10.dp)
+        .background(BlueVistony)
+        //.height(20.dp)
+        .fillMaxWidth()
+    ){
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .weight(0.7f)
+                .padding(10.dp, 0.dp)
+
+        ) {
+            Cell(
+                text = "Cantidad Total" ,
+                title = false,
+                color = Color.White,
+                fontSise = 20.sp
+            )
+            Cell(
+                text = "Cantidad Seleccionada" ,
+                title = false,
+                color = Color.White,
+                fontSise = 20.sp
+            )
+            Cell(
+                text = "Monto Seleccionado" ,
+                title = false,
+                color = Color.White,
+                fontSise = 20.sp
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+        Column(
+            horizontalAlignment = Alignment.End,
+            modifier = Modifier
+                .weight(0.3f)
+                .padding(10.dp, 0.dp)
+        ) {
+            Cell(
+                text = totalQuantity.value,
+                title = true,
+                color = Color.White,
+                fontSise = 20.sp
+            )
+            Cell(
+                text = selectionQuantity.value,
+                title = true,
+                color = Color.White,
+                fontSise = 20.sp
+            )
+            Cell(
+                text = Convert.currencyForView(if(amount.value==null){"0"}else{amount.value}) ,
+                title = true,
+                color = Color.White,
+                fontSise = 20.sp
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+        }
+    }
 }

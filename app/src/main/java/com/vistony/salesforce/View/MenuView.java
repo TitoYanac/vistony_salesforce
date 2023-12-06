@@ -74,12 +74,15 @@ import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity;
 import com.vistony.salesforce.Entity.SesionEntity;
 import com.vistony.salesforce.ListenerBackPress;
 import com.vistony.salesforce.R;
+import com.vistony.salesforce.kotlin.View.Pages.BusquedaFormularioSupervisor;
 import com.vistony.salesforce.kotlin.View.Pages.DepositScreen;
+import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetContainerScreen;
 import com.vistony.salesforce.kotlin.View.Pages.DispatchSheetMapScreen;
-import com.vistony.salesforce.kotlin.View.Pages.FormularioTest1;
+import com.vistony.salesforce.kotlin.View.Pages.FormularioSupervisor;
 import com.vistony.salesforce.kotlin.View.Pages.HistoricalCollectionDetail;
 import com.vistony.salesforce.kotlin.View.Pages.HistoricalCollectionHeader;
 import com.vistony.salesforce.kotlin.View.Pages.HistoricalDispatchScreen;
+import com.vistony.salesforce.kotlin.View.Pages.NotificationScreen;
 import com.vistony.salesforce.kotlin.View.Pages.ValidationAccountClient;
 
 
@@ -737,9 +740,10 @@ public class MenuView extends AppCompatActivity
                 {
                     case "peru":
                         //Version Java
-                        HojaDespachoFragment = new DispatchSheetView();
+                        //HojaDespachoFragment = new DispatchSheetView();
                         //Version Kotlin
-                        //HojaDespachoFragment = new ContainerDispatchView();
+                        HojaDespachoFragment = new ContainerDispatchView();
+                        //HojaDespachoFragment= new DispatchSheetContainerScreen();
                         break;
                     default:
                         HojaDespachoFragment = new DispatchSheetView();
@@ -764,9 +768,9 @@ public class MenuView extends AppCompatActivity
                 {
                     case "peru":
                         //Version Java
-                        CobranzaCabeceraFragment = new CobranzaCabeceraView();
+                        //CobranzaCabeceraFragment = new CobranzaCabeceraView();
                         //Version Kotlin
-                        //CobranzaCabeceraFragment = new DepositScreen();
+                        CobranzaCabeceraFragment = new DepositScreen();
                         break;
                     default:
                         CobranzaCabeceraFragment = new CobranzaCabeceraView();
@@ -1117,9 +1121,9 @@ public class MenuView extends AppCompatActivity
             if(tag2.equals("nuevoinicioHistoricoDepositoView"))
             {
                 //Version Java
-                contentFragment=new HistoricoDepositoView();
+                //contentFragment=new HistoricoDepositoView();
                 //Version Kotlin
-                //contentFragment=new HistoricalCollectionHeader();
+                contentFragment=new HistoricalCollectionHeader();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popllloppp");
                 ft.commit();
@@ -1143,9 +1147,9 @@ public class MenuView extends AppCompatActivity
             if(tag2.equals("COBRANZA"))
             {
                 //Version Java
-                contentFragment=new HistoricoCobranzaView();
+                //contentFragment=new HistoricoCobranzaView();
                 //Version Kotlin
-                //contentFragment = new HistoricalCollectionDetail();
+                contentFragment = new HistoricalCollectionDetail();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
@@ -1478,9 +1482,9 @@ public class MenuView extends AppCompatActivity
             if(tag2.equals("dispatch"))
             {
                 //Version Java
-                contentFragment=new HistoricStatusDispatchView() ;
+                //contentFragment=new HistoricStatusDispatchView() ;
                 //Version kotlin
-                //contentFragment=new HistoricalDispatchScreen();
+                contentFragment=new HistoricalDispatchScreen();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();
@@ -1513,7 +1517,10 @@ public class MenuView extends AppCompatActivity
                     contentFragment=new LeadClientesView();
                     break;
                 case "formsupervisor":
-                    contentFragment=new FormularioTest1();
+                    contentFragment=new FormularioSupervisor();
+                    break;
+                case "busquedaformsupervisor":
+                    contentFragment=new BusquedaFormularioSupervisor();
                     break;
             }
 
@@ -1928,6 +1935,13 @@ public class MenuView extends AppCompatActivity
             if(tag2.equals("HistoricQuotation"))
             {
                 contentFragment=new HistoricQuotationView();
+                ft.replace(R.id.content_menu_view,contentFragment,tag2);
+                ft.addToBackStack("popsssggggersa");
+                ft.commit();
+            }
+            if(tag2.equals("NotificationQuotation"))
+            {
+                contentFragment=new NotificationScreen();
                 ft.replace(R.id.content_menu_view,contentFragment,tag2);
                 ft.addToBackStack("popsssggggersa");
                 ft.commit();

@@ -692,4 +692,31 @@ public class Induvis {
 
         }
     }
+
+    public static String getTimeSSAP(String flavor,String timeBD){
+        String timeView="",hour,minute,second;
+        if(timeBD.equals(""))
+        {
+
+        }
+        else {
+            switch (flavor) {
+                case "peru":
+                case "bolivia":
+                case "ecuador":
+                case "chile":
+                case "paraguay":
+                case "perurofalab":
+                case "espania":
+                case "marruecos":
+                    hour = timeBD.substring(0, 2);
+                    minute = timeBD.substring(2, 4);
+                    second = timeBD.substring(4, 6);
+                    timeView = hour + ":" + minute+ ":"+second;
+                    break;
+            }
+        }
+        return timeView;
+    }
+
 }

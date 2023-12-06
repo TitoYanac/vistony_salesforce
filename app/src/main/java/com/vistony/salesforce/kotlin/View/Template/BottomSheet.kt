@@ -474,6 +474,7 @@ fun CollectionProcess(
     invoices: Invoices?,
     client:String,
     type: String,
+    collectionDetailViewModel: CollectionDetailViewModel,
     InfoDialog: () -> Unit
 ) {
 
@@ -499,7 +500,7 @@ fun CollectionProcess(
         }
         , cardContent =
         {
-            CardProcessCollection(invoiceViewModel,invoices,type,client,expandedProcessCollection,colorButtonCollectionAfter,statusButtonCollectionAfter )
+            CardProcessCollection(invoiceViewModel,invoices,type,client,expandedProcessCollection,colorButtonCollectionAfter,statusButtonCollectionAfter,collectionDetailViewModel )
         },cardBottom=
         {
             AnimatedVisibility(
@@ -557,55 +558,35 @@ private fun CardProcessCollection(
     ,expandedProcessCollection:MutableState<Boolean>
     ,colorButtonCollectionAfter:MutableState<Color>
     ,statusButtonCollectionAfter:MutableState<Boolean>
-){
+    ,collectionDetailViewModel: CollectionDetailViewModel
 
-    var textNumber by remember { mutableStateOf( "0") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    var enableEditext by remember { mutableStateOf( true) }
-    var colorEditext by remember { mutableStateOf(BlueVistony)}
+){
+    Log.e("REOS", "BottomSheet-CardProcessCollection-inicio")
+    //var textNumber by remember { mutableStateOf( "0") }
+    //val keyboardController = LocalSoftwareKeyboardController.current
+    //var enableEditext by remember { mutableStateOf( true) }
+    //var colorEditext by remember { mutableStateOf(BlueVistony)}
     var colorButtonSave:MutableState<Color> = remember { mutableStateOf(Color.LightGray)}
     var colorButtonPrint by remember { mutableStateOf(Color.LightGray)}
     var colorButtonValidate by remember { mutableStateOf(Color.LightGray)}
     var enableButtonSave by remember { mutableStateOf(false)}
     var enableButtonPrint by remember { mutableStateOf(false)}
     var enableButtonValidate by remember { mutableStateOf(false)}
-
     val appContext = LocalContext.current
-    //val lifecycleOwner = LocalContext.current as LifecycleOwner
-    val collectionDetailRepository :CollectionDetailRepository= CollectionDetailRepository(appContext)
-    val collectionDetailViewModel: CollectionDetailViewModel= viewModel(
-        factory = CollectionDetailViewModel.CollectionDetailViewModelFactory(
-            SesionEntity.imei,
-            appContext,
-            //lifecycleOwner,
-            collectionDetailRepository
-        )
-    )
+
     val commentary:String=""
     var collectionDetail: CollectionDetail? = null
     var collectionDetailResponseAdd = collectionDetailViewModel.result_add.collectAsState()
     val activity = LocalContext.current as Activity
     Log.e("REOS", "BottomSheet-CardProcessCollection-collectionDetailResponseAdd.value: "+collectionDetailResponseAdd.value)
     Log.e("REOS", "BottomSheet-CardProcessCollection-cardName: "+cardName)
-    if(collectionDetailResponseAdd.value.Status.equals("Y"))
-    {
-        colorButtonSave.value=Color.Gray
-        enableButtonSave=false
-        colorButtonValidate= RedVistony
-        colorButtonPrint= RedVistony
-        enableButtonPrint=true
-        enableButtonValidate=true
-        collectionDetailViewModel.SendAPICollectionDetail(appContext,SesionEntity.compania_id,SesionEntity.usuario_id)
-        Log.e(
-            "REOS",
-            "BottomSheet-CardProcessCollection-collectionDetailResponseAdd.EntroalIF.alterminarlaInsercion "
-        )
-    }
+
     var context= LocalContext.current
     val openDialogEdit:MutableState<Boolean?> = remember { mutableStateOf(false) }
     var DialogEditStatus by remember { mutableStateOf(true) }
     var DialogEditResult :MutableState<String> = remember { mutableStateOf("0") }
-    var receip :MutableState<String> = remember { mutableStateOf("0") }
+    var receip by remember { mutableStateOf("0") }
+    Log.e("REOS", "BottomSheet-CardProcessCollection-creacion-receip: "+receip)
     val openDialogCommentary:MutableState<Boolean?> = remember { mutableStateOf(false) }
     var DialogResultCommentary :MutableState<String> = remember { mutableStateOf("") }
     var DialogCommentaryStatus by remember { mutableStateOf(true) }
@@ -614,9 +595,25 @@ private fun CardProcessCollection(
     val openDialogSensSMS:MutableState<Boolean?> = remember { mutableStateOf(false) }
     var colorButtonCollection by remember { mutableStateOf(RedVistony)}
     var enableButtonCollection by remember { mutableStateOf(true)}
+    //receip="0"
+    Log.e("REOS", "BottomSheet-CardProcessCollection-acero-receip: "+receip)
 
-
-
+    if(!receip.equals("0")&&collectionDetailResponseAdd.value.data.isEmpty())
+    {
+        Log.e("REOS", "BottomSheet-CardProcessCollection-nuevacobranzaytenemosquelimpiartodo")
+        receip="0"
+        colorButtonCollection=RedVistony
+        enableButtonCollection=true
+        colorButtonSave.value=Color.LightGray
+        colorButtonPrint=Color.LightGray
+        colorButtonValidate=Color.LightGray
+        enableButtonSave=false
+        enableButtonPrint=false
+        enableButtonValidate=false
+        colorButtonCollectionAfter.value=RedVistony
+        statusButtonCollectionAfter.value=true
+        DialogEditResult.value="0"
+    }
     if(openDialogEdit.value!!)
     {
         DialogView(
@@ -645,7 +642,7 @@ private fun CardProcessCollection(
 
 
 
-    if(!DialogEditResult.value.equals("0")&&receip.value.equals("0")){
+    if(!DialogEditResult.value.equals("0")&&receip.equals("0")){
         colorButtonSave.value= RedVistony
         enableButtonSave=true
     }
@@ -655,10 +652,28 @@ private fun CardProcessCollection(
         "Y"->{
             for (i in 0 until collectionDetailResponseAdd.value.data!!.size) {
                 collectionDetail = collectionDetailResponseAdd.value.data!!.get(i)
-                receip.value=collectionDetailResponseAdd.value.data!!.get(i).Receip.toString()
+                receip=collectionDetailResponseAdd.value.data!!.get(i).Receip.toString()
             }
+            colorButtonSave.value=Color.Gray
+            enableButtonSave=false
+            colorButtonValidate= RedVistony
+            colorButtonPrint= RedVistony
+            enableButtonPrint=true
+            enableButtonValidate=true
+            collectionDetailViewModel.SendAPICollectionDetail(appContext,SesionEntity.compania_id,SesionEntity.usuario_id)
+
+            //collectionDetailViewModel.resetCollectionDetail()
+            Log.e(
+                "REOS",
+                "BottomSheet-CardProcessCollection-collectionDetailResponseAdd.EntroalIF.alterminarlaInsercion "
+            )
         }
     }
+
+    /*if(collectionDetailResponseAdd.value.Status.equals("Y"))
+    {
+
+    }*/
 
     if(openDialogCommentary.value!!)
     {
@@ -695,12 +710,12 @@ private fun CardProcessCollection(
             openDialogSensSMS.value = false
         }
                 ,onClickAccept = {
-            for (i in 0 until collectionDetailResponseAdd.value.data!!.size) {
+            /*for (i in 0 until collectionDetailResponseAdd.value.data!!.size) {
                 collectionDetail =
                         collectionDetailResponseAdd.value.data!!.get(
                                 i
                         )
-            }
+            }*/
             sendSMS(
                     DialogEditResultSMS.value,
                     appContext,
@@ -773,7 +788,7 @@ private fun CardProcessCollection(
                             ) {
                                 Row() {
                                     TableCell(
-                                        text = receip.value.toString(),
+                                        text = receip.toString(),
                                         title = true,
                                         weight = 1f,
                                         textAlign = TextAlign.End
@@ -1022,7 +1037,7 @@ private fun CardProcessCollection(
                                         if (enableButtonPrint) {
                                             var collectionReceipPDF: CollectionReceipPDF = CollectionReceipPDF()
                                             collectionReceipPDF.generarPdf(appContext, collectionDetail)
-
+                                            //collectionDetailViewModel.resetCollectionDetail()
                                         } else {
 
                                         }
@@ -1088,11 +1103,9 @@ private fun CardProcessCollection(
                             }
                         }
                     }
-              //  }
-        }
-
         }
     }
+}
 
 
 

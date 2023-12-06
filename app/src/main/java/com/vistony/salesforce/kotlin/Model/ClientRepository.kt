@@ -16,7 +16,7 @@ class ClientRepository {
     private val _status = MutableLiveData<String>()
     val status: MutableLiveData<String> = _status
 
-    suspend fun getClient(Imei:String,FechaDespacho:String,context: Context)
+    suspend fun getMasterClientAPI(Imei:String,FechaDespacho:String,context: Context)
     {
         Log.e(
             "REOS",
