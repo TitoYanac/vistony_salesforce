@@ -68,7 +68,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.vistony.salesforce.Entity.SesionEntity
 import com.vistony.salesforce.kotlin.Model.ApiResponse
-import com.vistony.salesforce.kotlin.Model.ApiResponseEntity
 import com.vistony.salesforce.kotlin.Model.FormularioTestRepository
 import com.vistony.salesforce.kotlin.Model.FormularioTestViewModel
 import com.vistony.salesforce.kotlin.Utilities.FormularioSupervisorPDF
@@ -88,7 +87,7 @@ fun FormularioSupervisorTemplate(
 ) {
     Log.e("MainFormularioSupervision", "Entro 2")
     val appContext = LocalContext.current
-    val formularioTestRepository = FormularioTestRepository()
+    val formularioTestRepository = FormularioTestRepository(context = appContext)
     val formularioTestViewModel: FormularioTestViewModel = viewModel(
         factory = FormularioTestViewModel.FormularioTestViewModelFactory(formularioTestRepository, appContext)
     )

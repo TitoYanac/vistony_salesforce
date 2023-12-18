@@ -62,14 +62,14 @@ class FormularioTestViewModel(
             val file = File(directory, "imagen_base64.txt")
             file.writeText(base64String)
              */
-            formularioTestRepository.addFormularioTest(context,apiResponse)
+            formularioTestRepository.addFormularioTest(apiResponse)
         }
     }
 
     fun sendFormularioTest()
     {
         viewModelScope.launch {
-            formularioTestRepository.sendFormularioTest(context)
+            formularioTestRepository.sendFormularioTest()
         }
     }
 

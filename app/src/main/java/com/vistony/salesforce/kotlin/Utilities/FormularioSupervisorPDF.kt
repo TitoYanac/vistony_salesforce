@@ -7,146 +7,254 @@ import android.graphics.BitmapFactory
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.core.content.FileProvider
 import com.lowagie.text.*
 import com.lowagie.text.pdf.PdfPCell
 import com.lowagie.text.pdf.PdfPTable
 import com.lowagie.text.pdf.PdfWriter
-import com.vistony.salesforce.Controller.Adapters.ListHistoricStatusDispatchAdapter
 import com.vistony.salesforce.Dao.SQLite.UsuarioSQLite
-import com.vistony.salesforce.Entity.SQLite.UsuarioSQLiteEntity
 import com.vistony.salesforce.R
 import com.vistony.salesforce.kotlin.Model.ApiResponse
-import com.vistony.salesforce.kotlin.Model.FormularioGaleria
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 
 
 class FormularioSupervisorPDF {
     private val NOMBRE_DIRECTORIO = "Formulario"
 
+    private val subheaderFont = Font(Font.HELVETICA, 18f, Font.BOLD)
+    private val bodyFont = Font(Font.HELVETICA, 14f)
+    @OptIn(DelicateCoroutinesApi::class)
     fun generarPdfFormularioSupervisorPDF(
         context: Context,
         apiResponse: ApiResponse,
         typePdf: String
     ) {
-        var ObjUsuario = UsuarioSQLiteEntity()
-        val usuarioSQLite = UsuarioSQLite(context)
-        ObjUsuario = usuarioSQLite.ObtenerUsuarioSesion()
-
-        val pagina = Rectangle(
-            36f, 36f,  //559
-            650f //, 806
-            , 1120f //PageSize.ARCH_A
-        )
-        val documento = Document(pagina)
-        val f = crearFichero("informe_"+apiResponse.datosPrincipales!!.numInforme +"_" + (apiResponse.datosPrincipales!!.fechaHoy)!!.split(" ").first()+".pdf")
-        val ficheroPdf = FileOutputStream(f!!.absolutePath)
-        val writer = PdfWriter.getInstance(documento, ficheroPdf)
-
-        documento.open()
-
-        var bitmap: Bitmap? = null
-        when (ObjUsuario.compania_id) {
-            "01" -> bitmap =
-                BitmapFactory.decodeResource(context.resources, R.mipmap.logo_negro_vistony)
-            "C011" -> bitmap =
-                BitmapFactory.decodeResource(context.resources, R.mipmap.logo_bluker_negro)
-            "13" -> bitmap =
-                BitmapFactory.decodeResource(context.resources, R.mipmap.logo_rofalab_negro2)
-            else -> bitmap =
-                BitmapFactory.decodeResource(context.resources, R.mipmap.logo_negro_vistony)
+        GlobalScope.launch(Dispatchers.IO) {
+            if(typePdf != "formularioprincipal"){
+                coroutineScope {
+                    val jobs = mutableListOf<Job>()
+                    if(apiResponse.galeria!= null){
+                        val cont = apiResponse.galeria!!.size
+                        for ( i in 0 until cont) {
+                            val formularioGaleria = apiResponse.galeria?.get(i)
+                            if(formularioGaleria != null && formularioGaleria.uri != null){
+                                Log.e("FormularioSupervisorPDF2", "Descargando imagen: ${formularioGaleria.uri}")
+                                val job = launch {
+                                    val nonNullUrlString :String? = formularioGaleria.uri
+                                    val bitmap: Bitmap = loadImageFromUrl(nonNullUrlString!!)!!
+                                    formularioGaleria.bitmap = bitmap
+                                }
+                                jobs.add(job)
+                            }
+                        }
+                    }
+                }
+            }
+            val usuarioSQLite = UsuarioSQLite(context)
+            val objUsuario = usuarioSQLite.ObtenerUsuarioSesion()
+            val pagina = crearPagina()
+            val documento = Document(pagina)
+            val fichero = crearFichero(apiResponse)
+            val ficheroPdf = FileOutputStream(fichero!!.absolutePath)
+            val writer = PdfWriter.getInstance(documento, ficheroPdf)
+            documento.open()
+            agregarLogo(documento, context, objUsuario.compania_id)
+            agregarTitulo(documento)
+            agregarDatosPrincipales(documento, apiResponse)
+            agregarDatosVisita(documento, apiResponse)
+            agregarDatosFormulario(documento, apiResponse, typePdf)
+            agregarGaleria(documento, apiResponse, typePdf)
+            documento.close()
+            writer.close()
+            openDocumentPDF(apiResponse.datosPrincipales!!.numInforme, context, apiResponse)
         }
-        /*val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        val imagen = Image.getInstance(stream.toByteArray())*/
-        val imagen = convertirImageBitmapAImage(bitmap)
-        imagen.alignment = Element.ALIGN_CENTER
-        documento.add(imagen)
+    }
+    private suspend fun loadImageFromUrl(url: String): Bitmap? {
+        Log.e(
+            "REOS"
+            ,
+            "HistoricalDispatchTemplate-loadImageFromUrl-url: "
+                    + url)
+        return try {
+            withContext(Dispatchers.IO)
+            {
+                var connection = URL(url).openConnection() as? HttpURLConnection
+                connection?.instanceFollowRedirects= false
+                connection?.connect()
+                val responseCode = connection?.responseCode
+                if (responseCode == HttpURLConnection.
+                    HTTP_OK
+                ) {
+                    val inputStream: InputStream = connection!!.
+                    inputStream
+                    val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+                    return@withContext bitmap
+                } else if (responseCode == HttpURLConnection.
+                    HTTP_MOVED_TEMP
+                ) {
+                    val newUrl = connection?.getHeaderField(
+                        "Location"
+                    )
+                    if (!newUrl.
+                        isNullOrBlank
+                            ()) {
+                        return@withContext loadImageFromUrl(newUrl)
+                    }
+                }
+                Log.e(
+                    "REOS"
+                    ,
+                    "HistoricalDispatchTemplate-loadImageFromUrl-connection failed. Response code:$responseCode"
+                )
+                return@withContext null
+            }
+        } catch (e: Exception) {
+// Manejar errores aquí
+            e.printStackTrace()
+            Log.e(
+                "REOS"
+                ,
+                "HistoricalDispatchTemplate-loadImageFromUrl-error: "
+                        + e)
+            return null
+        }
+    }
+    private fun agregarGaleria(documento: Document, apiResponse: ApiResponse, typePdf: String) {
+        apiResponse.galeria?.takeIf { it.isNotEmpty() }?.let { listGallery ->
+            for (photo in listGallery) {
+                try {
+                    val _bitmap : Bitmap = photo.bitmap
 
+                    val imagen: Image = convertirImageBitmapAImage(_bitmap)
+                    imagen.alignment = Image.MIDDLE
+                    documento.add(imagen)
+                    documento.add(Chunk.NEWLINE)
+                } catch (e: IOException) {
+                    // Maneja la excepción de decodificación Base64 aquí.
+                    Log.e("PDF Generation", "Error al decodificar Base64: ${e.message}")
+                    // Puedes optar por continuar con la iteración o realizar otra acción según tus necesidades.
+                }
+            }
+        } ?: run {
+            // La galería está vacía o apiResponse o galeria es nulo, puedes manejarlo de acuerdo a tus necesidades.
+            Log.e("PDF Generation", "La galería está vacía o apiResponse o galeria es nulo.")
+        }
 
+    }
 
-// Agregamos título
-        val title = Font(Font.HELVETICA, 24f, Font.BOLD)
-        documento.add(Paragraph("Formulario de Supervisión", title).apply {
-            spacingBefore = 16f
-            alignment = Element.ALIGN_CENTER
-        })
-
-        // Datos Principales
-        val subheaderFont = Font(Font.HELVETICA, 18f, Font.BOLD)
-        val bodyFont = Font(Font.HELVETICA, 14f)
+    private fun agregarDatosFormulario(documento: Document, apiResponse: ApiResponse, typePdf: String) {
 
         documento.add(Chunk.NEWLINE)
-        documento.add(Paragraph("Datos Principales", subheaderFont).apply {
+        documento.add(Paragraph("Formulario", subheaderFont).apply {
             spacingAfter = 16f}
         )
 
-// Crear tabla con 12 columnas
-        val tablaDatosPrincipales = PdfPTable(12)
+        val tablaFormulario : PdfPTable = crearTabla(documento)
 
-// Ajustar la tabla al 100% del ancho del documento
-        tablaDatosPrincipales.widthPercentage = 100f
-// Definir anchos de las columnas. Los valores son proporcionales, por ejemplo, 1:2 significa que la segunda columna es dos veces más ancha que la primera.
-        tablaDatosPrincipales.setWidths(floatArrayOf(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f))
-
-
-// Añadir celdas a la tabla para el número de informe y fecha
-
-        val cellNumInforme = PdfPCell(Phrase("Número de informe:", bodyFont))
-        cellNumInforme.colspan = 2
-        configurarCelda(cellNumInforme)
-        tablaDatosPrincipales.addCell(cellNumInforme)
-
-        val cellValorNumInforme = PdfPCell(Phrase(apiResponse.datosPrincipales!!.numInforme ?: "-", bodyFont))
-        cellValorNumInforme.colspan = 4
-        configurarCelda(cellValorNumInforme)
-        tablaDatosPrincipales.addCell(cellValorNumInforme)
+        agregarFila(tablaFormulario, listOf(
+            mapOf("label" to "Preguntas", "size" to 8),
+            mapOf("label" to "Respuesta", "size" to 2),
+            mapOf("label" to "Valor", "size" to 2)
+        ))
 
 
-        val cellFechaFormulario = PdfPCell(Phrase("Fecha:", bodyFont))
-        cellFechaFormulario.colspan = 2
-        configurarCelda(cellFechaFormulario)
-        tablaDatosPrincipales.addCell(cellFechaFormulario)
+        var sumaTotal by mutableStateOf(0)
+        val totalPreguntas = apiResponse.formulario!!.size
+        if(typePdf == "formularioprincipal"){
+            for(i in 0 until totalPreguntas){
+                val pregunta = apiResponse.formulario!![i].pregunta
+                val respuesta = apiResponse.formulario!![i].opciones[apiResponse.formulario!![i].respuesta!!.toInt() - 1].opcion
+                val valor = apiResponse.formulario!![i].respuesta // respuesta es el codigo de la opcion marcada (1 al 5)
+                agregarFila(tablaFormulario, listOf(
+                    mapOf("label" to "$i. $pregunta", "size" to 8),
+                    mapOf("label" to "$respuesta", "size" to 2),
+                    mapOf("label" to "$valor", "size" to 2)
+                ))
+                sumaTotal += valor!!.toInt()
+            }
+        }else{
+            for(i in 0 until totalPreguntas){
+                val pregunta = apiResponse.formulario!![i].pregunta
+                val respuesta = apiResponse.formulario!![i].respuesta // respuesta en la pantalla es (muy malo, malo , regular , bueno, muy bueno)
+                val valor = obtenerPuntuacionNumerica(apiResponse.formulario!![i].respuesta!!) // respuesta en pantalla busqueda es (muy malo, malo , regular , bueno, muy bueno)
+                agregarFila(tablaFormulario, listOf(
+                    mapOf("label" to "$i. $pregunta", "size" to 8),
+                    mapOf("label" to "$respuesta", "size" to 2),
+                    mapOf("label" to "$valor", "size" to 2)
+                ))
+                sumaTotal += valor!!.toInt()
+            }
+        }
 
-        val cellValorFechaFormulario = PdfPCell(Phrase((apiResponse.datosPrincipales?.fechaHoy)!!.split(" ").first() ?: "-", bodyFont))
-        cellValorFechaFormulario.colspan = 4
-        configurarCelda(cellValorFechaFormulario)
-        tablaDatosPrincipales.addCell(cellValorFechaFormulario)
+        agregarFila(tablaFormulario, listOf(
+            mapOf("label" to " ", "size" to 8),
+            mapOf("label" to "Promedio:", "size" to 2),
+            mapOf("label" to "${sumaTotal/totalPreguntas}", "size" to 2)
+        ))
 
-// Añadir celdas a la tabla para el nombre de supervisor
-        val cellNombreSupervisor = PdfPCell(Phrase("Nombre de Supervisor:", bodyFont))
-        cellNombreSupervisor.colspan = 3
-        configurarCelda(cellNombreSupervisor)
-        tablaDatosPrincipales.addCell(cellNombreSupervisor)
 
-        val cellValorSupervisor = PdfPCell(Phrase(apiResponse.datosPrincipales?.nombreSupervisor ?: "-", bodyFont))
-        cellValorSupervisor.colspan = 9
-        configurarCelda(cellValorSupervisor)
-        tablaDatosPrincipales.addCell(cellValorSupervisor)
+        documento.add(tablaFormulario)
 
-        val cellNombreVendedor = PdfPCell(Phrase("Nombre de Vendedor:", bodyFont))
-        cellNombreVendedor.colspan = 3
-        configurarCelda(cellNombreVendedor)
-        tablaDatosPrincipales.addCell(cellNombreVendedor)
+        documento.add(Chunk.NEWLINE)
+    }
 
-        val cellValorVendedor = PdfPCell(Phrase(apiResponse.datosPrincipales?.nombreVendedor ?: "-", bodyFont))
-        cellValorVendedor.colspan = 9
-        configurarCelda(cellValorVendedor)
-        tablaDatosPrincipales.addCell(cellValorVendedor)
+    private fun agregarFila(tabla: PdfPTable, data: List<Map<String, Any>>) {
+        for (item in data) {
+            val label = item["label"]
+            val size = item["size"]
 
-        documento.add(tablaDatosPrincipales)
+            agregarCelda(tabla ,label, size)
+        }
+    }
 
-        // Datos de Visita
+    private fun agregarCelda(tabla : PdfPTable, label: Any?, size: Any?) {
+        val celda = PdfPCell(Phrase(label.toString()))
+        celda.colspan = size.toString().toInt()
+        configurarCelda(celda)
+        tabla.addCell(celda)
+
+    }
+
+    private fun crearTabla(documento: Document): PdfPTable {
+        val tabla = PdfPTable(12)
+        tabla.widthPercentage = 100f
+        tabla.setWidths(floatArrayOf(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f))
+        return tabla
+    }
+
+
+    private fun obtenerPuntuacionNumerica(puntuacionString: String): Int {
+        return when (puntuacionString.lowercase(Locale.ROOT)) {
+            "muy malo" -> 1
+            "malo" -> 2
+            "regular" -> 3
+            "bueno" -> 4
+            "muy bueno" -> 5
+            "si" -> 5
+            "no" -> 1
+            else -> puntuacionString.toInt() // Valor predeterminado o indicador de puntuación no válida
+        }
+    }
+
+    private fun agregarDatosVisita(documento: Document, apiResponse: ApiResponse) {
+
         documento.add(Chunk.NEWLINE)
         documento.add(Paragraph("Datos Generales de la Visita", subheaderFont).apply {
             spacingAfter = 16f}
@@ -213,7 +321,7 @@ class FormularioSupervisorPDF {
 
         apiResponse.datosPrincipales?.tipoSalida?.forEach { item ->
             if(item.marcado != false){
-                val celdaTipoSalida = PdfPCell(Phrase("${item.opcion ?: "-"}"))
+                val celdaTipoSalida = PdfPCell(Phrase(item.opcion ?: "-"))
                 celdaTipoSalida.colspan = 12
                 configurarCelda(celdaTipoSalida)
                 tablaTipoVisita.addCell(celdaTipoSalida)
@@ -284,19 +392,12 @@ class FormularioSupervisorPDF {
         tablaDatosVisita2.addCell(cellValorClientesEmpadronados)
 
         documento.add(tablaDatosVisita2)
-
-
         documento.add(Chunk.NEWLINE)
-
         documento.add(Paragraph("Resumen", subheaderFont).apply {
             spacingAfter = 16f}
         )
-        // Crear tabla con 12 columnas
         val tablaResumen = PdfPTable(12)
-
-// Ajustar la tabla al 100% del ancho del documento
         tablaResumen.widthPercentage = 100f
-// Definir anchos de las columnas. Los valores son proporcionales, por ejemplo, 1:2 significa que la segunda columna es dos veces más ancha que la primera.
         tablaResumen.setWidths(floatArrayOf(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f))
 
         val celdaVaciaCabecera = PdfPCell(Phrase(" ", bodyFont))
@@ -331,168 +432,98 @@ class FormularioSupervisorPDF {
             tablaResumen.addCell(celdaResumenMonto)
 
         }
-
         documento.add(tablaResumen)
-
-
         documento.add(Chunk.NEWLINE)
-
-
-
         documento.add(Chunk.NEWLINE)
         documento.add(Paragraph("Comentario del trabajo de campo realizado", subheaderFont).apply {
             spacingAfter = 16f}
         )
-
-
-        // Crear tabla con 12 columnas
         val tablaComentarioAdicional = PdfPTable(12)
-
-// Ajustar la tabla al 100% del ancho del documento
         tablaComentarioAdicional.widthPercentage = 100f
-// Definir anchos de las columnas. Los valores son proporcionales, por ejemplo, 1:2 significa que la segunda columna es dos veces más ancha que la primera.
         tablaComentarioAdicional.setWidths(floatArrayOf(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f))
-
-
-        val celdaComentarioAdicional = PdfPCell(Phrase(apiResponse.comentario ?: "-"))
+        val celdaComentarioAdicional = PdfPCell(Phrase(apiResponse.comentario))
         celdaComentarioAdicional.colspan = 12
         configurarCelda(celdaComentarioAdicional)
         tablaComentarioAdicional.addCell(celdaComentarioAdicional)
 
         documento.add(tablaComentarioAdicional)
 
-        // Formulario
+    }
+
+    private fun agregarDatosPrincipales(documento: Document, apiResponse: ApiResponse) {
+
         documento.add(Chunk.NEWLINE)
-        documento.add(Paragraph("Formulario", subheaderFont).apply {
-            spacingAfter = 16f}
+        documento.add(Paragraph("Datos Principales", subheaderFont).apply {
+            spacingAfter = 16f
+        })
+
+        val tablaDatosPrincipales = PdfPTable(12).apply {
+            widthPercentage = 100f
+            setWidths(floatArrayOf(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f))
+        }
+
+        agregarCeldaConValor(tablaDatosPrincipales, "Número de informe:", apiResponse.datosPrincipales?.numInforme ?: "-", 2, 4, bodyFont)
+        agregarCeldaConValor(tablaDatosPrincipales, "Fecha:", (apiResponse.datosPrincipales?.fechaHoy)!!.split(" ").first(), 2, 4, bodyFont)
+        agregarCeldaConValor(tablaDatosPrincipales, "Nombre de Supervisor:", apiResponse.datosPrincipales?.nombreSupervisor ?: "-", 3, 9, bodyFont)
+        agregarCeldaConValor(tablaDatosPrincipales, "Nombre de Vendedor:", apiResponse.datosPrincipales?.nombreVendedor ?: "-", 3, 9, bodyFont)
+        documento.add(tablaDatosPrincipales)
+    }
+
+    private fun agregarCeldaConValor(tabla: PdfPTable, textoCelda: String, valor: String, colspanTexto: Int, colspanValor: Int, font: Font) {
+        val cellTexto = PdfPCell(Phrase(textoCelda, font)).apply {
+            colspan = colspanTexto
+            configurarCelda(this)
+        }
+        tabla.addCell(cellTexto)
+
+        val cellValor = PdfPCell(Phrase(valor, font)).apply {
+            colspan = colspanValor
+            configurarCelda(this)
+        }
+        tabla.addCell(cellValor)
+    }
+
+    private fun agregarTitulo(documento: Document) {
+        val titulo = "Formulario de Supervisión"
+        val estiloTitulo = Font(Font.HELVETICA, 24f, Font.BOLD)
+        val paragraph = Paragraph(titulo, estiloTitulo).apply {
+            spacingBefore = 16f
+            alignment = Element.ALIGN_CENTER
+        }
+        documento.add(paragraph)
+    }
+
+    private fun agregarLogo(documento: Document, context: Context, objUsuario: String) {
+        val recursosLogos = mapOf(
+            "01" to R.mipmap.logo_negro_vistony,
+            "C011" to R.mipmap.logo_bluker_negro,
+            "13" to R.mipmap.logo_rofalab_negro2
         )
 
+        val resourceId = recursosLogos[objUsuario] ?: R.mipmap.logo_negro_vistony
+        val bitmap = BitmapFactory.decodeResource(context.resources, resourceId)
 
+        val imagen = convertirImageBitmapAImage(bitmap)
+        imagen.alignment = Element.ALIGN_CENTER
+        documento.add(imagen)
+    }
 
-        // Crear tabla con 12 columnas
-        val tablaFormulario = PdfPTable(12)
-
-// Ajustar la tabla al 100% del ancho del documento
-        tablaFormulario.widthPercentage = 100f
-// Definir anchos de las columnas. Los valores son proporcionales, por ejemplo, 1:2 significa que la segunda columna es dos veces más ancha que la primera.
-        tablaFormulario.setWidths(floatArrayOf(1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f))
-
-
-        val celdaCabeceraPregunta = PdfPCell(Phrase("Preguntas"))
-        celdaCabeceraPregunta.colspan = 6
-        configurarCelda(celdaCabeceraPregunta)
-        tablaFormulario.addCell(celdaCabeceraPregunta)
-
-        val celdaCabeceraRespuesta = PdfPCell(Phrase("Respuestas"))
-        celdaCabeceraRespuesta.colspan = 4
-        configurarCelda(celdaCabeceraRespuesta)
-        tablaFormulario.addCell(celdaCabeceraRespuesta)
-
-        val celdaCabeceraValor = PdfPCell(Phrase("Valor"))
-        celdaCabeceraValor.colspan = 2
-        configurarCelda(celdaCabeceraValor)
-        tablaFormulario.addCell(celdaCabeceraValor)
-
-
-        var sumaTotal by mutableStateOf(0)
-
-
-        apiResponse.formulario?.forEachIndexed() { index, item ->
-            val celdaPregunta = PdfPCell(Phrase("${index+1}. ${item.pregunta ?: "-"}"))
-            celdaPregunta.colspan = 6
-            configurarCelda(celdaPregunta)
-            tablaFormulario.addCell(celdaPregunta)
-
-            var celdaOpcionSelected = PdfPCell(Phrase("-"))
-            if(typePdf=="formularioprincipal"){
-                item.opciones.forEachIndexed() { i, element ->
-                    if (element.valor == item.respuesta || element.opcion == item.respuesta) {
-                        celdaOpcionSelected = PdfPCell(Phrase(" ${item.opciones.get(i).opcion ?: "-"}"))
-                    }
-                }
-            }else{
-                celdaOpcionSelected = PdfPCell(Phrase(" ${item.respuesta}"))
-            }
-            celdaOpcionSelected.colspan = 4
-            configurarCelda(celdaOpcionSelected)
-            tablaFormulario.addCell(celdaOpcionSelected)
-
-            val puntuacion = obtenerPuntuacionNumerica( item.respuesta ?: "-")
-            val celdaRespuesta = PdfPCell(Phrase(puntuacion.toString() ?: "-"))
-            celdaRespuesta.colspan = 2
-            configurarCelda(celdaRespuesta)
-            tablaFormulario.addCell(celdaRespuesta)
-
-
-
-            sumaTotal += puntuacion
-
-        }
-
-        val celdaVacioFormulario = PdfPCell(Phrase( " "))
-        celdaVacioFormulario.colspan = 6
-        configurarCelda(celdaVacioFormulario)
-        tablaFormulario.addCell(celdaVacioFormulario)
-        val celdaFormularioTotal = PdfPCell(Phrase("Promedio:"))
-        celdaFormularioTotal.colspan = 4
-        configurarCelda(celdaFormularioTotal)
-        tablaFormulario.addCell(celdaFormularioTotal)
-
-        val celdaFormularioValorTotal = PdfPCell(Phrase((sumaTotal/apiResponse.formulario!!.size).toString() ?: "-"))
-        celdaFormularioValorTotal.colspan = 2
-        configurarCelda(celdaFormularioValorTotal)
-        tablaFormulario.addCell(celdaFormularioValorTotal)
-
-
-        documento.add(tablaFormulario)
-        // Comentario
-        documento.add(Chunk.NEWLINE)
-
-        apiResponse?.galeria?.takeIf { it.isNotEmpty() }?.let { listGallery ->
-            for (photo in listGallery) {
-                try {
-                    val _bitmap : Bitmap
-                    if(typePdf=="formularioprincipal"){
-                        _bitmap = photo.bitmap
-                    }else{
-                        _bitmap = ListHistoricStatusDispatchAdapter.getBitmapFromURL(photo.uri)
-                    }
-
-                    val imagen: Image = convertirImageBitmapAImage(_bitmap)
-                    imagen.alignment = Image.MIDDLE
-                    documento.add(imagen)
-                    documento.add(Chunk.NEWLINE)
-                } catch (e: IOException) {
-                    // Maneja la excepción de decodificación Base64 aquí.
-                    Log.e("PDF Generation", "Error al decodificar Base64: ${e.message}")
-                    // Puedes optar por continuar con la iteración o realizar otra acción según tus necesidades.
-                }
-            }
-        } ?: run {
-            // La galería está vacía o apiResponse o galeria es nulo, puedes manejarlo de acuerdo a tus necesidades.
-            Log.e("PDF Generation", "La galería está vacía o apiResponse o galeria es nulo.")
-        }
-
-        documento.close()
-
-        writer.close()
-        OpenDocumentPDF(apiResponse.datosPrincipales!!.numInforme, context, apiResponse)
+    private fun crearPagina(): Rectangle {
+        return Rectangle(
+            36f, 36f,  //559
+            650f //, 806
+            , 1120f //PageSize.ARCH_A
+        )
 
     }
 
     private fun convertirImageBitmapAImage(bitmap: Bitmap): Image {
-        // Tamaño deseado del cuadrado
         val squareSize = 500f
-
-        // Obtener las dimensiones originales de la imagen
         val originalWidth = bitmap.width.toFloat()
         val originalHeight = bitmap.height.toFloat()
-
-        // Calcular las nuevas dimensiones de la imagen manteniendo la proporción
         val aspectRatio = originalWidth / originalHeight
         val newWidth: Float
         val newHeight: Float
-
         if (originalWidth > originalHeight) {
             newWidth = squareSize
             newHeight = squareSize / aspectRatio
@@ -500,16 +531,10 @@ class FormularioSupervisorPDF {
             newWidth = squareSize * aspectRatio
             newHeight = squareSize
         }
-
-        // Redimensionar la imagen al nuevo tamaño
         val resizedBitmap = Bitmap.createScaledBitmap(bitmap, newWidth.toInt(), newHeight.toInt(), true)
-
-        // Convertir el bitmap redimensionado a bytes
         val outputStream = ByteArrayOutputStream()
         resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
         val imageBytes = outputStream.toByteArray()
-
-        // Crear una instancia de la clase Image de iText utilizando los bytes de la imagen redimensionada.
         return Image.getInstance(imageBytes)
     }
 
@@ -522,19 +547,17 @@ class FormularioSupervisorPDF {
         celda.paddingBottom = 5f
     }
     @Throws(IOException::class)
-    fun crearFichero(nombreFichero: String?): File? {
+    fun crearFichero(apiResponse: ApiResponse): File? {
+        val nombreFichero = "informe_"+apiResponse.datosPrincipales!!.numInforme +"_" + (apiResponse.datosPrincipales!!.fechaHoy)!!.split(" ").first()+".pdf"
         val ruta = getRuta()
         var fichero: File? = null
-        if (ruta != null) fichero = nombreFichero?.let { File(ruta, it) }
+        if (ruta != null) fichero = File(ruta, nombreFichero)
         return fichero
     }
 
 
 
     fun getRuta(): File? {
-
-        // El fichero sera almacenado en un directorio dentro del directorio
-        // Descargas
         var ruta: File? = null
         if (Environment.MEDIA_MOUNTED == Environment
                 .getExternalStorageState()
@@ -543,19 +566,16 @@ class FormularioSupervisorPDF {
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
                 NOMBRE_DIRECTORIO
             )
-            if (ruta != null) {
-                if (!ruta.mkdirs()) {
-                    if (!ruta.exists()) {
-                        return null
-                    }
+            if (!ruta.mkdirs()) {
+                if (!ruta.exists()) {
+                    return null
                 }
             }
-        } else {
         }
         return ruta
     }
 
-    private fun OpenDocumentPDF(recibo: String?, context: Context, apiResponse: ApiResponse) {
+    private fun openDocumentPDF(recibo: String?, context: Context, apiResponse: ApiResponse) {
         try {
             val file = File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path + File.separator
@@ -576,44 +596,6 @@ class FormularioSupervisorPDF {
         }
     }
 
-    private fun DeleteDocumentPDF(recibo: String, context: Context): Boolean {
-        var status = false
-        Log.e("REOS", "DocumentCobranzaPDF-DeleteDocumentPDF-Inicio")
-        try {
-            status = File(
-                (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path + File.separator
-                        + NOMBRE_DIRECTORIO + File.separator + recibo + ".pdf")
-            ).delete()
-            Log.e(
-                "REOS",
-                ("DocumentCobranzaPDF-DeleteDocumentPDF-ruta" + Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOWNLOADS
-                ).path + File.separator
-                        + NOMBRE_DIRECTORIO + File.separator + recibo + ".pdf")
-            )
-            //Uri  excelPath = FileProvider.getUriForFile(context, context.getPackageName(), file);
-            //Intent target = new Intent(Intent.ACTION_VIEW);
-            //target.setDataAndType(excelPath,"application/pdf");
-            //target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            //context.startActivity(target);
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e("REOS", "DocumentCobranzaPDF-DeleteDocumentPDF-error$e")
-            Toast.makeText(context, "No se pudo eliminar el Archivi PDF", Toast.LENGTH_SHORT).show()
-        }
-        Log.e("REOS", "DocumentCobranzaPDF-DeleteDocumentPDF-Finalizo")
-        return status
-    }
 }
 
-fun obtenerPuntuacionNumerica(puntuacionString: String): Int {
-    return when (puntuacionString.lowercase(Locale.ROOT)) {
-        "muy malo" -> 1
-        "malo" -> 2
-        "regular" -> 3
-        "bueno" -> 4
-        "muy bueno" -> 5
-        else -> puntuacionString.toInt() // Valor predeterminado o indicador de puntuación no válida
-    }
-}
 

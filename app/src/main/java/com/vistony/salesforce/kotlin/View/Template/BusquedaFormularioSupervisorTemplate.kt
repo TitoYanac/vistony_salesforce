@@ -3,7 +3,10 @@ package com.vistony.salesforce.kotlin.View.Template
 import PdfListViewModel
 import android.app.DatePickerDialog
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,29 +27,46 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.PictureAsPdf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
+import com.vistony.salesforce.Controller.Adapters.ListHistoricStatusDispatchAdapter
+import com.vistony.salesforce.R
+import com.vistony.salesforce.View.MenuView.context
 import com.vistony.salesforce.kotlin.Model.ApiResponse
+import com.vistony.salesforce.kotlin.Model.FormularioGaleria
 import com.vistony.salesforce.kotlin.Utilities.FormularioSupervisorPDF
+import com.vistony.salesforce.kotlin.View.components.DialogView
 import com.vistony.salesforce.kotlin.View.components.contexto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.text.SimpleDateFormat
@@ -70,7 +90,6 @@ fun BusquedaFormularioSupervisorTemplate() {
         val itemDate = item.date.time
         itemDate in validStartDate..validEndDate
     }
-
     val contexto = LocalContext.current
     // Crea una lista de elementos filtrados
     Column(
@@ -168,6 +187,51 @@ fun showDatePicker(selectedDate: Calendar, onDateSelected: (Calendar) -> Unit, u
 }
 @Composable
 fun PdfListItem(modifier: Modifier = Modifier, item: PdfItemData, listViewModel: PdfListViewModel, _contexto: Context) {
+
+    val _showdialog : MutableState<Boolean> = remember { mutableStateOf(false) }
+    val imageBitmap = remember { mutableStateOf<ImageBitmap?>(null) }
+    ImageDialog(imageBitmap = imageBitmap) { _showdialog.value = false }
+
+    val openDialogShowImage = remember { mutableStateOf(false) }
+
+    if(openDialogShowImage.value)
+    {
+        DialogView(
+            tittle = "Foto", subtittle = "", onClickCancel = {
+                openDialogShowImage.value = false
+            }, onClickAccept = {
+                openDialogShowImage.value = false
+            }, statusButtonAccept = false, statusButtonIcon = false, context = context
+        ) {
+            Image(
+                bitmap = imageBitmap.value!!,
+                contentDescription = "Google Maps", // decorative
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(0.dp, 10.dp, 0.dp, 0.dp)
+            )
+        }
+    }
+
+    if(openDialogShowImage.value)
+    {
+        DialogView(
+            tittle = "Foto", subtittle = "", onClickCancel = {
+                openDialogShowImage.value = false
+            }, onClickAccept = {
+                openDialogShowImage.value = false
+            }, statusButtonAccept = false, statusButtonIcon = false, context = context
+        ) {
+            Image(
+                bitmap = imageBitmap.value!!,
+                contentDescription = "Google Maps", // decorative
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(0.dp, 10.dp, 0.dp, 0.dp)
+            )
+        }
+    }
+
     Row(
         modifier = modifier
             .background(MaterialTheme.colors.background)
@@ -210,12 +274,14 @@ fun PdfListItem(modifier: Modifier = Modifier, item: PdfItemData, listViewModel:
                 )
             }
         }
-
         //val _context = LocalContext.current
+
         IconButton(
             onClick = {
+
+
                 Log.e("BusquedaFormularioSupervisorTemplate", "Descargando PDF: ${item.numInforme}")
-//contexto = LocaleContext.current
+
                 val formularioSupervisorPDF = FormularioSupervisorPDF()
                 val apiResponseList = listViewModel.apiResponseList.value?.data ?: emptyList()
 
@@ -224,10 +290,27 @@ fun PdfListItem(modifier: Modifier = Modifier, item: PdfItemData, listViewModel:
                 }
 
                 matchingApiResponse?.let {
-                    formularioSupervisorPDF.generarPdfFormularioSupervisorPDF(_contexto, it,"busquedaformulario")
+                    formularioSupervisorPDF.generarPdfFormularioSupervisorPDF(
+                        _contexto,
+                        it,
+                        "busquedaformulario"
+                    )
+                    /*if(it.galeria!=null&&it.galeria!!.first().bitmap!=null)
+                    {
+                        Log.e("retrofitTest4", "popup: ${it.galeria!!.first().bitmap.width} x ${it.galeria!!.first().bitmap.height}")
+                        val bitmap =  it.galeria!!.first().bitmap
+                        imageBitmap.value = bitmap.asImageBitmap()
+                        openDialogShowImage.value = true
 
-                } ?: Log.e("BusquedaFormularioSupervisorTemplate", "No matching API response found for ${item.numInforme}")
-            },
+                    }*/
+
+
+
+                } ?: Log.e(
+                    "BusquedaFormularioSupervisorTemplate",
+                    "No matching API response found for ${item.numInforme}"
+                )
+                                              },
             modifier = Modifier
                 .size(48.dp)
                 .clip(MaterialTheme.shapes.small)
@@ -237,7 +320,37 @@ fun PdfListItem(modifier: Modifier = Modifier, item: PdfItemData, listViewModel:
             Icon(Icons.Default.Download, contentDescription = null, tint = Color.White)
         }
     }
+
+
+
 }
+
+@Composable
+fun ImageDialog(imageBitmap: MutableState<ImageBitmap?>, onClose: () -> Unit) {
+
+    val context = LocalContext.current
+    val openDialogShowImage = remember { mutableStateOf(false) }
+
+    if(openDialogShowImage.value)
+    {
+        DialogView(
+            tittle = "Foto", subtittle = "", onClickCancel = {
+                openDialogShowImage.value = false
+            }, onClickAccept = {
+                openDialogShowImage.value = false
+            }, statusButtonAccept = false, statusButtonIcon = false, context = context
+        ) {
+            Image(
+                bitmap = imageBitmap.value!!,
+                contentDescription = "Google Maps", // decorative
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(0.dp, 10.dp, 0.dp, 0.dp)
+            )
+        }
+    }
+}
+
 
 class PdfItemData(val numInforme: String?,val name: String, val description: String, val date: Calendar)
 
@@ -247,3 +360,32 @@ fun PdfListPreview() {
     BusquedaFormularioSupervisorTemplate()
 }
 
+private suspend fun loadImageFromUrl(context: Context, url: String): Bitmap {
+    Log.e("REOS", "HistoricalDispatchTemplate-loadImageFromUrl-url: " + url)
+    return try {
+        withContext(Dispatchers.IO) {
+            var connection = URL(url).openConnection() as? HttpURLConnection
+            connection?.instanceFollowRedirects = false
+            connection?.connect()
+            val responseCode = connection?.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val inputStream: InputStream = connection!!.inputStream
+                val bitmap: Bitmap = BitmapFactory.decodeStream(inputStream)
+                return@withContext bitmap
+            } else if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+                val newUrl = connection?.getHeaderField("Location")
+                if (!newUrl.isNullOrBlank()) {
+                    // Si hay una nueva ubicación, intenta cargar la imagen desde la nueva URL
+                    return@withContext loadImageFromUrl(context, newUrl)
+                }
+            }
+            Log.e("REOS", "HistoricalDispatchTemplate-loadImageFromUrl-connection failed. Response code: $responseCode")
+            return@withContext BitmapFactory.decodeResource(context.resources, R.drawable.ic_launcher_background) // o devolver un valor predeterminado
+        }
+    } catch (e: Exception) {
+        // Manejar errores aquí
+        e.printStackTrace()
+        Log.e("REOS", "HistoricalDispatchTemplate-loadImageFromUrl-error: " + e)
+        return BitmapFactory.decodeResource(context.resources, R.drawable.ic_launcher_background) // o devolver un valor predeterminado
+    }
+}

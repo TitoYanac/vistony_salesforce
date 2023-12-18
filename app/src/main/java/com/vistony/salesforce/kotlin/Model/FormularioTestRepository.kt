@@ -2,303 +2,175 @@ package com.vistony.salesforce.kotlin.Model
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Environment
 import android.util.Log
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import com.vistony.salesforce.BuildConfig
 import com.vistony.salesforce.kotlin.Utilities.api.RetrofitApi
 import com.vistony.salesforce.kotlin.Utilities.api.RetrofitConfig
 import com.vistony.salesforce.kotlin.Utilities.getDateTimeCurrent
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
 import java.io.IOException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class FormularioTestRepository {
+class FormularioTestRepository(private val context: Context) {
+
     private val _resultDB = MutableStateFlow(ApiResponseEntity())
     val resultDB: StateFlow<ApiResponseEntity> get() = _resultDB
 
     private val _resultAPI = MutableStateFlow(ApiResponseEntity())
     val resultAPI: StateFlow<ApiResponseEntity> get() = _resultAPI
 
-    suspend fun addFormularioTest(context: Context,apiResponse: ApiResponse)
-    {
-        try {
-            val executor: ExecutorService = Executors.newFixedThreadPool(1)
-            for (i in 1..1) {
-                Log.e("gettingForm6", "apiresponsemodel_asd: ${apiResponse?.galeria?.size}")
+    private suspend fun addFormularioToDatabase(apiResponse: ApiResponse) {
+        withContext(Dispatchers.IO) {
+            try {
+                val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+                val numInforme = apiResponse.datosPrincipales!!.numInforme!!
+                apiResponse.numInforme = numInforme
+                apiResponse.datosVisita!!.numInforme = numInforme
+                apiResponse.dateregister = getDateTimeCurrent()!!
 
-                executor.execute {
-                    println("Tarea $i en ejecución en ${Thread.currentThread().name}")
-                    val database by lazy { AppDatabase.getInstance(context.applicationContext) }
-                    var numInforme=apiResponse.datosPrincipales!!.numInforme!!
-                    apiResponse.numInforme= numInforme
-                    apiResponse.datosVisita!!.numInforme=numInforme
-                    apiResponse.dateregister= getDateTimeCurrent()!!
-                    for (i in 0 until apiResponse.datosPrincipales!!.tipoSalida!!.size)
-                    {
-                        apiResponse.datosPrincipales!!.tipoSalida!!.get(i).numInforme=numInforme
-                    }
-                    for (i in 0 until apiResponse.datosVisita!!.resumen.size)
-                    {
-                        apiResponse.datosVisita!!.resumen!!.get(i).numInforme=numInforme
-                    }
-                    for (i in 0 until apiResponse.formulario!!.size)
-                    {
-                        apiResponse.formulario!!.get(i).numInforme=numInforme
-                    }
+                // Lógica para añadir formulario a la base de datos
+                database?.formularioTestDao?.addFormSuperviser(apiResponse)
+                database?.formularioTestDao?.addDatosPrincipales(apiResponse.datosPrincipales!!)
+                database?.formularioTestDao?.addDatosVisita(apiResponse.datosVisita)
+                database?.formularioTestDao?.addTipoSalida(apiResponse.datosPrincipales!!.tipoSalida)
+                database?.formularioTestDao?.addResumenVisita(apiResponse.datosVisita!!.resumen)
+                database?.formularioTestDao?.addPreguntaRespuesta(apiResponse.formulario)
 
-                    var data=database?.formularioTestDao?.addFormSuperviser (apiResponse)
-                    var data1=database?.formularioTestDao?.addDatosPrincipales (apiResponse.datosPrincipales!!)
-                    var data2=database?.formularioTestDao?.addDatosVisita (apiResponse.datosVisita)
-                    var data3=database?.formularioTestDao?.addTipoSalida (apiResponse.datosPrincipales!!.tipoSalida)
-                    var data4=database?.formularioTestDao?.addResumenVisita (apiResponse.datosVisita!!.resumen)
-                    var data5=database?.formularioTestDao?.addPreguntaRespuesta (apiResponse.formulario)
-
-                    Log.e("galeria", "galeria enviada a room: " + apiResponse.galeria?.size)
-                    if(apiResponse.galeria!!.isNotEmpty()){
-                        for (formularioGaleria in apiResponse.galeria!!) {
-                            formularioGaleria.numInforme=numInforme
-                            Log.e("galeria", "galeria enviada (img $i ) num informe: " +apiResponse.formulario!!.get(i).numInforme)
-                        }
-                        var data6=database?.formularioTestDao?.addFormularioGaleria (apiResponse.galeria!!)
-                    }else{
-                        Log.e("galeria", "galeria vacia")
+                // Lógica para añadir galería si existe
+                if (apiResponse.galeria?.isNotEmpty() == true) {
+                    for (formularioGaleria in apiResponse.galeria!!) {
+                        formularioGaleria.numInforme = numInforme
                     }
-
-                    _resultDB.value=ApiResponseEntity(StatusCode = "Y")
-                    println("Tarea $i completada")
+                    database?.formularioTestDao?.addFormularioGaleria(apiResponse.galeria!!)
                 }
 
+                _resultDB.value = ApiResponseEntity(StatusCode = "Y")
+            } catch (e: Exception) {
+                _resultDB.value = ApiResponseEntity(StatusCode = "N")
+                Log.e("REOS", "FormularioTestRepository-addFormularioToDatabase-error: $e")
             }
-            executor.shutdown()
-            Log.e("mostrandoApiResponseAdd", "mostrandoApiResponseAdd: ${apiResponse.galeria!!.size}")
-            Log.e("mostrandoApiResponseAdd", "mostrandoApiResponseAdd: ${_resultDB.value.Data!!.galeria!!.size}")
-        } catch (e: Exception) {
-            _resultDB.value=ApiResponseEntity(StatusCode = "N")
-            Log.e("REOS", "FormularioTestRepository-addFormularioTest-error: " + e.toString())
         }
     }
 
-    suspend fun sendFormularioTest(context: Context)
-    {
-        try {
-            val executor: ExecutorService = Executors.newFixedThreadPool(1)
-            for (i in 1..1) {
-                executor.execute {
+    private suspend fun sendFormularioToApi(apiResponse: ApiResponse) {
+        withContext(Dispatchers.IO) {
+            try {
+                // Lógica para enviar formulario a la API
+                val json = Gson().toJson(apiResponse)
+                val jsonRequest: RequestBody =
+                    json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+                val retrofitConfig: RetrofitConfig? = RetrofitConfig()
+                val service = retrofitConfig?.getClientLog()?.create(RetrofitApi::class.java)
 
-                    try {
-                    println("Tarea $i en ejecución en ${Thread.currentThread().name}")
-                    val database by lazy { AppDatabase.getInstance(context.applicationContext) }
-                    var data=database?.formularioTestDao?.getFormSuperviser ()
-                    Log.e("REOS", "FormularioTestRepository-sendFormularioTest-data: " + data)
-                    data!!.datosPrincipales=database?.formularioTestDao!!.getDatosPrincipales(data!!.numInforme)
-                    Log.e("REOS", "FormularioTestRepository-sendFormularioTest-data: " + data)
-                    data!!.datosPrincipales!!.tipoSalida=database?.formularioTestDao!!.getTipoSalida(data!!.numInforme)
-                    Log.e("REOS", "FormularioTestRepository-sendFormularioTest-data: " + data)
-                    data!!.datosVisita=database?.formularioTestDao!!.getDatosVisita(data!!.numInforme)
-                    Log.e("REOS", "FormularioTestRepository-sendFormularioTest-data: " + data)
-                    data!!.datosVisita!!.resumen=database?.formularioTestDao!!.getResumenVisita(data!!.numInforme)
-                    Log.e("REOS", "FormularioTestRepository-sendFormularioTest-data: " + data)
-                    data!!.formulario=database?.formularioTestDao!!.getPreguntaRespuesta(data!!.numInforme)
-                    //var data1=database?.formularioTestDao?.addDatosPrincipales (apiResponse.datosPrincipales)
-                    //var data2=database?.formularioTestDao?.addDatosVisita (apiResponse.datosVisita)
-                    //var data3=database?.formularioTestDao?.addTipoSalida (apiResponse.datosPrincipales.tipoSalida)
-                    //var data4=database?.formularioTestDao?.addResumenVisita (apiResponse.datosVisita!!.resumen)
-                    //var data5=database?.formularioTestDao?.addPreguntaRespuesta (apiResponse.formulario)
+                // Definir la variable database aquí
+                val database by lazy { AppDatabase.getInstance(context.applicationContext) }
 
-                    data!!.galeria=database?.formularioTestDao!!.getFormularioGaleria(data!!.numInforme)
-                    //aqui recuperar los datos de cameraviewmodel el listado de imagenes base 64 y convertir a json
+                service?.sendFormSupervisor(jsonRequest)?.enqueue(object : Callback<ApiResponseEntity?> {
+                    override fun onResponse(call: Call<ApiResponseEntity?>, response: Response<ApiResponseEntity?>) {
+                        val responseFormSupervisor = response.body()
+                        if (response.isSuccessful && responseFormSupervisor != null) {
+                            // Lógica para manejar la respuesta de la API
+                            var code = ""
+                            var numinforme = ""
+                            var message = ""
+                            var status = ""
 
-                        Log.e("galeria", "galeria enviada a room num informe: " + data?.numInforme);
-                        Log.e("galeria", "galeria enviada a room size: ${data?.galeria?.size}");
-                        Log.e("galeria", "galeria enviada a sap : ${data?.galeria}");
-
-                    var json: String? = null
-                    val gson = Gson()
-                        if (data!=null) {
-                            json = gson.toJson(data)
-                        }
-                        Log.e("REOS", "FormularioTestRepository-sendFormularioTest-json: $json")
-                        val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                        val file = File(directory, "json.txt")
-                        if (json != null) {
-                            file.writeText(json)
-                        }
-                        if (json != null) {
-                            //val jsonRequest: RequestBody = RequestBody.create(json, .parse("application/json; charset=utf-8"))
-                            val jsonRequest: RequestBody = RequestBody.create(
-                                ("application/json; charset=utf-8").toMediaTypeOrNull(),
-                                json
-                            )
-                            val retrofitConfig: RetrofitConfig? = RetrofitConfig()
-                            val service = retrofitConfig?.getClientLog()?.create(
-                                RetrofitApi
-                                ::class.java
-                            )
-
-                            service?.sendFormSupervisor(
-                                jsonRequest
-                            )?.enqueue(object : Callback<ApiResponseEntity?> {
-                                override fun onResponse(
-                                    call: Call<ApiResponseEntity?>,
-                                    response: Response<ApiResponseEntity?>
-                                ) {
-                                    val responseFormSupervisor = response.body()
-                                    if (response.isSuccessful && responseFormSupervisor != null) {
-                                        var code="";
-                                        var numinforme="";
-                                        var message="";
-                                        var status="";
-
-                                        if (responseFormSupervisor.StatusCode == "201") {
-                                            status="Y"
-                                        } else {
-                                            status="N"
-                                        }
-                                        code=responseFormSupervisor.Data!!.code
-                                        message=responseFormSupervisor.Data!!.message
-                                        numinforme=responseFormSupervisor.Data!!.num_informe
-                                        val executor1: ExecutorService = Executors.newFixedThreadPool(1)
-
-                                        for (i in 1..1) {
-                                            executor1.execute {
-                                                database?.formularioTestDao?.updateStatusFormSupervisor(code, message, status, numinforme)
-                                            }
-                                        }
-
-                                        executor1.shutdown()
-                                        Log.e("REOS", "FormularioTestRepository-sendFormularioTest-responseFormSupervisor: $responseFormSupervisor")
-                                        // for (respuesta in responseFormSupervisor!!.) {
-                                        /*var response = "N"
-                                        response =
-                                                if (respuesta.APICode != null && respuesta.APIErrorCode == "0") {
-                                                    "Y"
-                                                } else {
-                                                    "N"
-                                                }
-                                        val executor1: ExecutorService =
-                                                Executors.newFixedThreadPool(1)
-                                        for (i in 1..1) {
-                                            executor1.execute {
-                                                val data = database?.collectionDetailDao
-                                                        ?.updateCollectionDetailAPI(
-                                                                respuesta.Receip.toString(),
-                                                                UserID,
-                                                                respuesta.APICode!!,
-                                                                respuesta.APIMessage!!,
-                                                                response
-                                                        )
-                                            }
-                                        }
-                                        executor1.shutdown()
-
-                                        _result_send_API.value = CollectionDetailEntity(
-                                                Status = response,
-                                                data = emptyList()
-                                        )
-                                        Log.e(
-                                                "REOS",
-                                                "CollectionDetailRepository-SendAPICollectionDetail-_result_send_API.value:" + _result_send_API.value
-                                        )
-                                    */
-                                        // }
-                                    }
-                                }
-
-                                override fun onFailure(
-                                    call: Call<ApiResponseEntity?>,
-                                    t: Throwable
-                                ) {
-                                    Log.e("REOS", "FormularioTestRepository-sendFormularioTest-ingresoonFailure:"+ t.toString())
-                                    //Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-ingresoonFailure:" + t.toString())
-                                    //_result_send_API.value = CollectionDetailEntity(Status = "N", data = emptyList())
-                                }
-                            })
-                        }
-                    } catch (e: java.lang.Exception) {
-                        Log.e("REOS", "CollectionDetailRepository-SendAPICollectionDetail-error: $e")
-                    }
-
-                    println("Tarea $i completada")
-                }
-
-            }
-            executor.shutdown()
-        } catch (e: Exception) {
-            Log.e("REOS", "FormularioTestRepository-sendFormularioTest-error: " + e.toString())
-        }
-    }
-
-    suspend fun getFormularioTest(imei: String, date: String):ApiResponse?
-    {
-        var apiResponse: ApiResponse? = null  // Variable para almacenar la respuesta
-
-        try {
-            val executor: ExecutorService = Executors.newFixedThreadPool(1)
-            for (i in 1..1) {
-                executor.execute {
-
-                    val retrofitConfig: RetrofitConfig? = RetrofitConfig()
-                    val service = retrofitConfig?.getClientLog()?.create(
-                        RetrofitApi
-                        ::class.java
-                    )
-
-                    service?.getFormSupervisor(
-                        imei, date
-                    )?.enqueue(object : Callback<ApiResponse?> {
-
-                        override fun onResponse(
-                            call: Call<ApiResponse?>,
-                            response: Response<ApiResponse?>
-                        ) {
-                            Log.e("gettingForm", "reponse: $response")
-                            Log.e("gettingForm", "reponse.body(): ${response.body()}")
-                            val appResponse = response.body()
-                            if (response.isSuccessful&&appResponse!=null) {
-                                _resultAPI.value= ApiResponseEntity(StatusCode = "Y", Data = appResponse)
+                            if (responseFormSupervisor.StatusCode == "201") {
+                                status = "Y"
+                            } else {
+                                status = "N"
                             }
-                            Log.e("gettingForm", "appResponse: $appResponse")
-                            Log.e("gettingForm", "urlApi: ${BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT + "/Superviser"}")
-                            /*val jsonResponse =  simulateApiCall(imei, date)
+                            code = responseFormSupervisor.Data!!.code
+                            message = responseFormSupervisor.Data!!.message
+                            numinforme = responseFormSupervisor.Data!!.num_informe
 
-                            Log.e("miconsulta", "jsonResponse: $jsonResponse")
+                            val executor1: ExecutorService = Executors.newFixedThreadPool(1)
 
-                            val gson = GsonBuilder().create()
+                            for (i in 1..1) {
+                                executor1.execute {
+                                    database?.formularioTestDao?.updateStatusFormSupervisor(code, message, status, numinforme)
+                                }
+                            }
 
-                            apiResponse = gson.fromJson(jsonResponse, ApiResponse::class.java)*/
-
-
+                            executor1.shutdown()
+                            Log.e("REOS", "FormularioTestRepository-sendFormularioToApi-responseFormSupervisor: $responseFormSupervisor")
                         }
+                    }
 
-                        override fun onFailure(call: Call<ApiResponse?>, t: Throwable) {
-                            _resultAPI.value=ApiResponseEntity(StatusCode = "N")
-                        }
-                    })
-                }
+                    override fun onFailure(call: Call<ApiResponseEntity?>, t: Throwable) {
+                        Log.e("REOS", "FormularioTestRepository-sendFormularioToApi-onFailure: ${t.toString()}")
+                    }
+                })
+
+                // Actualizar estado
+                _resultAPI.value = ApiResponseEntity(StatusCode = "Y")
+            } catch (e: Exception) {
+                // Manejar excepciones de manera específica
+                Log.e("REOS", "FormularioTestRepository-sendFormularioToApi-error: $e")
             }
-            executor.shutdown()
-            return apiResponse
-        } catch (e: Exception) {
-            Log.e("REOS", "FormularioTestRepository-getFormularioTest-error: " + e.toString())
-            return null  // Retornamos null en caso de error
+        }
+    }
 
+    suspend fun addFormularioTest(apiResponse: ApiResponse) {
+        try {
+            addFormularioToDatabase(apiResponse)
+            sendFormularioToApi(apiResponse)
+        } catch (e: Exception) {
+            Log.e("REOS", "FormularioTestRepository-addFormularioTest-error: $e")
+        }
+    }
+
+    suspend fun sendFormularioTest() {
+        try {
+            val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+            val data = database?.formularioTestDao?.getFormSuperviser()
+
+            // Lógica para obtener formulario de la base de datos y enviar a la API
+            if (data != null) {
+                sendFormularioToApi(data)
+            }
+        } catch (e: Exception) {
+            Log.e("REOS", "FormularioTestRepository-sendFormularioTest-error: $e")
+        }
+    }
+
+    suspend fun getFormularioTest(imei: String, date: String): ApiResponse? {
+        try {
+            return withContext(Dispatchers.IO) {
+                val retrofitConfig: RetrofitConfig? = RetrofitConfig()
+                val service = retrofitConfig?.getClientLog()?.create(RetrofitApi::class.java)
+
+                // Lógica para obtener formulario de la API
+                val response = service?.getFormSupervisor(imei, date)?.execute()
+
+                if (response != null && response.isSuccessful) {
+                    return@withContext response.body()
+                } else {
+                    _resultAPI.value = ApiResponseEntity(StatusCode = "N")
+                }
+
+                return@withContext null
+            }
+        } catch (e: Exception) {
+            Log.e("REOS", "FormularioTestRepository-getFormularioTest-error: $e")
+            return null
         }
     }
 }
