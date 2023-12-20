@@ -38,14 +38,14 @@ class FormularioTestViewModel(
         viewModelScope.launch {
             formularioTestRepository.resultDB.collectLatest { newResult ->
                 _resultDB.value = newResult
-                Log.e("REOS", "FormularioTestViewModel-init-_result.value: $_resultDB.value")
+                Log.e("jesusdebug", "FormularioTestViewModel-init-_result.value: ${_resultDB.value}")
             }
         }
 
         viewModelScope.launch {
             formularioTestRepository.resultAPI.collectLatest { newResult ->
                 _resultAPI.value = newResult
-                Log.e("REOS", "FormularioTestViewModel-init-_result.value: $_resultAPI.value")
+                Log.e("jesusdebug", "FormularioTestViewModel-init-_resultAPI.value: ${_resultAPI.value}")
             }
         }
 

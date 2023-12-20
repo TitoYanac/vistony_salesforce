@@ -13,7 +13,7 @@ apply plugin: 'kotlin-kapt'
 android {
     signingConfigs {
         config {
-            storeFile file('C:\\Users\\tyanac\\StudioProjects\\backup\\salesforce-intenacional-principal\\key\\keyStore.jks')
+            storeFile file('C:\\Users\\tyanac\\StudioProjects\\salesforce-intenacional-principal\\key\\keyStore.jks')
             storePassword 'keyStore.jks'
             keyPassword 'keyStore.jks'
             keyAlias 'SalesForce'
@@ -125,8 +125,8 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe_V2"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Pruebas Autorizaciones B2B -->Produccion
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             versionName "2.2.21"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
@@ -170,8 +170,8 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"py.post"')
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.py"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.py"')
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             versionName "1.0.1"
             manifestPlaceholders = [country:"Paraguay"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PY"')
@@ -187,8 +187,8 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //---------------------------
             versionName "1.0.1"
             manifestPlaceholders = [country:"Perú"]

@@ -26,99 +26,26 @@ public class Config {
 
         String baseUrl=null;
         switch (BuildConfig.FLAVOR) {
-            //case "chile"://Produccion
-            //case "ecuador":
-            //QA Aprobaciones 11/07/2023
-            case "peru":
-                //Produccion
-                //case "bolivia":
-            //case "espania":
-            case "marruecos":
-                // baseUrl = "https://salesforce.vistony.pe"; // aqui se cambio por el de abajo
-                baseUrl = "http://190.12.79.132:8083";
+            case "peru":        baseUrl = "http://salesforce.vistony.pe";
                 break;
-            //case "chile"://QA
-            case "perurofalab":
-            //case "bolivia":
-            //case "paraguay":
-                //QA Peru
-            //case "peru":
-               baseUrl = "https://app.vistony.pe";
+            case "paraguay":    baseUrl = "http://salesforce.vistony.pe";
                 break;
-                //Produccion
-            /*case "peru":
-                baseUrl = "http://190.12.79.132:8083";
-            break;*/
-            //QA Aprobaciones
-            /*case "peru":
-                baseUrl = "http://190.12.79.132:8082";
-                break;*/
-            case "chile":
-                baseUrl = "http://190.12.79.132:8084";
+            case "perurofalab": baseUrl = "http://salesforce.vistony.pe";
                 break;
-            case "ecuador":
-                baseUrl = "http://190.12.79.132:8085";
+            case "marruecos":   baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "espania":
-                baseUrl = "http://190.12.79.132:8086";
+            case "chile":       baseUrl = "http://190.12.79.132:8084";
                 break;
-            case "bolivia":
-                baseUrl = "http://190.12.79.132:8088";
+            case "ecuador":     baseUrl = "http://190.12.79.132:8085";
                 break;
-            case "paraguay":
-                baseUrl = "http://190.12.79.132:8087";
+            case "espania":     baseUrl = "http://190.12.79.132:8086";
                 break;
-            default:
-                baseUrl = "http://salesforce.vistony.com";
+            case "bolivia":     baseUrl = "http://190.12.79.132:8088";
+                break;
+            default: baseUrl = "http://salesforce.vistony.pe";
                 break;
         }
-        String puerto = "";
-        switch (BuildConfig.FLAVOR) {
-            case "chile":
-                //puerto = ":8054";
-                //Produccion----------
-                //puerto = ":8054";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                //-----------------------
-                break;
-            case "bolivia":
-                //puerto = ":8052";
-                puerto = "";
-                break;
-            case "ecuador":
-                //puerto = ":8050";
-                puerto = "";
-                break;
-            case "peru":
-                //Produccion----------
-                //puerto = ":8001";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                //-----------------------
-                break;
-            case "perurofalab":
-                //Produccion----------
-                //puerto = ":8001";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                //-----------------------
-                break;
-            case "paraguay":
-                //puerto = ":8051";
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                break;
-            case "espania":
-                puerto = "";
-                break;
-            case "marruecos":
-                puerto = "";
-                break;
-        }
+        Log.e("jesusdebug", "-RetrofitConfig-getClientLog-baseUrl" + baseUrl );
         try{
             if(client2==null) {
                 client2 = new OkHttpClient. Builder()
@@ -132,7 +59,7 @@ public class Config {
 
            if(retrofit2==null){
                retrofit2 = new Retrofit.Builder()
-                            .baseUrl( baseUrl+puerto)
+                            .baseUrl( baseUrl)
                             .addConverterFactory(GsonConverterFactory.create()).client(client2)
                             .build();
 
@@ -147,98 +74,25 @@ public class Config {
     public static Retrofit getClientLogin() {
 
         String baseUrl=null;
+
         switch (BuildConfig.FLAVOR) {
-            //case "chile"://Produccion
-            //QA Aprobaciones 11/07/2023
-            case "peru":
-                //Produccion
-            //case "ecuador":
-            //case "espania":
-            case "marruecos":
-                // baseUrl = "https://salesforce.vistony.pe"; // aqui se cambio por el de abajo
-                baseUrl = "http://190.12.79.132:8083";
+            case "peru":        baseUrl = "http://salesforce.vistony.pe";
                 break;
-            case "perurofalab":
-            //case "chile"://QA
-            //case "bolivia":
-            //case "paraguay":
-                //QA Peru
-            //case "peru":
-                baseUrl = "https://app.vistony.pe";
+            case "paraguay":    baseUrl = "http://salesforce.vistony.pe";
                 break;
-            //Produccion
-            /*case "peru":
-                baseUrl = "http://190.12.79.132:8083";
-                break;*/
-            //QA Aprobaciones
-            /*case "peru":
-                baseUrl = "http://190.12.79.132:8082";
-                break;*/
-            case "chile":
-                baseUrl = "http://190.12.79.132:8084";
+            case "perurofalab": baseUrl = "http://salesforce.vistony.pe";
                 break;
-            case "ecuador":
-                baseUrl = "http://190.12.79.132:8085";
+            case "marruecos":   baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "espania":
-                baseUrl = "http://190.12.79.132:8086";
+            case "chile":       baseUrl = "http://190.12.79.132:8084";
                 break;
-            case "bolivia":
-                baseUrl = "http://190.12.79.132:8088";
+            case "ecuador":     baseUrl = "http://190.12.79.132:8085";
                 break;
-            case "paraguay":
-                baseUrl = "http://190.12.79.132:8087";
+            case "espania":     baseUrl = "http://190.12.79.132:8086";
                 break;
-            default:
-                baseUrl = "http://salesforce.vistony.com";
+            case "bolivia":     baseUrl = "http://190.12.79.132:8088";
                 break;
-        }
-        String puerto = "";
-        switch (BuildConfig.FLAVOR) {
-            case "chile":
-                //puerto = ":8054";
-                //Produccion----------
-                //puerto = ":8054";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                //-----------------------
-                break;
-            case "bolivia":
-                //puerto = ":8052";
-                puerto = "";
-                break;
-            case "ecuador":
-                //puerto = ":8050";
-                puerto = "";
-                break;
-            case "peru":
-                //Produccion----------
-                //puerto = ":8001";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                //-----------------------
-                break;
-            case "perurofalab":
-                //Produccion----------
-                //puerto = ":8001";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                //-----------------------
-                break;
-            case "paraguay":
-                //puerto = ":8051";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                break;
-            case "espania":
-                puerto = "";
-                break;
-            case "marruecos":
-                puerto = "";
+            default: baseUrl = "http://salesforce.vistony.pe";
                 break;
         }
         try{
@@ -254,7 +108,7 @@ public class Config {
 
             if(retrofit==null){
                 retrofit = new Retrofit.Builder()
-                        .baseUrl( baseUrl+puerto)
+                        .baseUrl( baseUrl)
                         .addConverterFactory(GsonConverterFactory.create()).client(client)
                         .build();
 
@@ -269,96 +123,27 @@ public class Config {
     public static Retrofit getClentSesionStart() {
 
         String baseUrl=null;
-        //if(BuildConfig.FLAVOR.equals("peru"))
-        //if(BuildConfig.FLAVOR.equals("peru"))
-        /*if(BuildConfig.FLAVOR.equals("peru")||BuildConfig.FLAVOR.equals("chile")||BuildConfig.FLAVOR.equals("bolivia"))
-        {
-            baseUrl = "https://salesforce.vistony.pe";
-        }else {
-            baseUrl = "http://salesforce.vistony.com";
-        }*/
         switch (BuildConfig.FLAVOR) {
-            //case "chile"://Produccion
-            //QA Aprobaciones 11/07/2023
-            case "peru":
-            //case "ecuador":
-            //case "espania":
-            case "marruecos":
-                // baseUrl = "https://salesforce.vistony.pe"; // aqui se cambio por el de abajo
-                baseUrl = "http://190.12.79.132:8083";
+            case "peru":        baseUrl = "http://salesforce.vistony.pe";
                 break;
-            case "chile"://QA
-            case "perurofalab":
-            //case "bolivia":
-            //case "paraguay":
-            //case "peru":
-                baseUrl = "https://app.vistony.pe";
+            case "paraguay":    baseUrl = "http://salesforce.vistony.pe";
                 break;
-             //Produccion
-            /*case "peru":
-                baseUrl = "http://190.12.79.132:8083";
-                break;*/
-            //QA Aprobaciones
-            /*case "peru":
-                baseUrl = "http://190.12.79.132:8082";
-                break;*/
-            case "ecuador":
-                baseUrl = "http://190.12.79.132:8085";
+            case "perurofalab": baseUrl = "http://salesforce.vistony.pe";
                 break;
-            case "espania":
-                baseUrl = "http://190.12.79.132:8086";
+            case "marruecos":   baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "bolivia":
-                baseUrl = "http://190.12.79.132:8088";
+            case "chile":       baseUrl = "http://190.12.79.132:8084";
                 break;
-            case "paraguay":
-                baseUrl = "http://190.12.79.132:8087";
+            case "ecuador":     baseUrl = "http://190.12.79.132:8085";
                 break;
-            default:
-                baseUrl = "http://salesforce.vistony.com";
+            case "espania":     baseUrl = "http://190.12.79.132:8086";
+                break;
+            case "bolivia":     baseUrl = "http://190.12.79.132:8088";
+                break;
+            default: baseUrl = "http://salesforce.vistony.pe";
                 break;
         }
-        //Produccion-------------------------------
-        //String baseUrl = "http://salesforce.vistony.com";
-        //------------------------------------------
-        //Pruebas QA--------------- Nueva Produccion
-        //String baseUrl = "https://salesforce.vistony.pe";
-        //------------------
-        //String baseUrl = "http://200.107.154.233";
 
-        String puerto = "";
-        switch (BuildConfig.FLAVOR) {
-            case "chile":
-                //puerto = ":8054";
-                //Produccion----------
-                //puerto = ":8054";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                //-----------------------
-                break;
-            case "bolivia":
-                //puerto = ":8052";
-                puerto = "";
-                break;
-            case "ecuador":
-                //puerto = ":8050";
-                puerto = "";
-                break;
-            case "peru":
-                //Produccion----------
-                //puerto = ":8001";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                //-----------------------
-                break;
-            case "paraguay":
-                //puerto = ":8051";
-                //Pruebas QA------------- Nueva Produccion
-                puerto = "";
-                break;
-        }
         try{
             if(client==null) {
                 client = new OkHttpClient. Builder()
@@ -372,7 +157,7 @@ public class Config {
 
             if(retrofit==null){
                 retrofit = new Retrofit.Builder()
-                        .baseUrl( baseUrl+puerto)
+                        .baseUrl( baseUrl)
                         .addConverterFactory(GsonConverterFactory.create()).client(client)
                         .build();
 

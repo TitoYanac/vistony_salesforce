@@ -17,48 +17,17 @@ class RetrofitConfig {
         var baseUrl: String? = null
         baseUrl =
             when (BuildConfig.FLAVOR) {
-                "chile"
-                    //, "ecuador"
-                    , "espania", "marruecos"
-                ,"peru"
-                //-> "https://salesforce.vistony.pe" //aqui se cambio por el de abajo
-                -> "http://190.12.79.132:8083"
-                "perurofalab"
-                   // , "bolivia"
-                    , "paraguay" -> "https://app.vistony.pe"
-                //"peru" ->"http://190.12.79.132:8083"
-                "bolivia" -> "http://190.12.79.132:8088"
-                "ecuador" -> "http://190.12.79.132:8085"
-                else -> "http://salesforce.vistony.com"
+                "chile"         -> "http://190.12.79.132:8083"
+                "espania"       -> "http://190.12.79.132:8083"
+                "marruecos"     -> "http://190.12.79.132:8083"
+                "paraguay"      -> "http://salesforce.vistony.pe"               //QA Peru
+                "peru"          -> "http://salesforce.vistony.pe"
+                "perurofalab"   -> "http://salesforce.vistony.pe"
+                "bolivia"       -> "http://190.12.79.132:8088"
+                "ecuador"       -> "http://190.12.79.132:8085"
+                else            -> "http://salesforce.vistony.pe"
             }
-        var puerto = ""
-        when (BuildConfig.FLAVOR) {
-            "chile" ->                 //puerto = ":8054";
-                //Produccion----------
-                //puerto = ":8054";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = ""
-            "bolivia" ->                 //puerto = ":8052";
-                puerto = ""
-            "ecuador" ->                 //puerto = ":8050";
-                puerto = ""
-            "peru" ->                 //Produccion----------
-                //puerto = ":8001";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = ""
-            "perurofalab" ->                 //Produccion----------
-                //puerto = ":8001";
-                //--------------------
-                //Pruebas QA------------- Nueva Produccion
-                puerto = ""
-            "paraguay" ->                 //puerto = ":8051";
-                //Pruebas QA------------- Nueva Produccion
-                puerto = ""
-            "espania" -> puerto = ""
-            "marruecos" -> puerto = ""
-        }
+        Log.e("REOS", "-RetrofitConfig-getClientLog-baseUrl$baseUrl")
         try {
             if (client2 == null) {
                 client2 = OkHttpClient.Builder()
@@ -71,7 +40,7 @@ class RetrofitConfig {
             }
             if (retrofit2 == null) {
                 retrofit2 = Retrofit.Builder()
-                    .baseUrl(baseUrl + puerto)
+                    .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create()).client(client2)
                     .build()
             }
@@ -87,42 +56,17 @@ class RetrofitConfig {
         var baseUrl: String? = null
         baseUrl =
             when (BuildConfig.FLAVOR) {
-                "chile"
-                    //, "ecuador"
-                    , "espania", "marruecos"
-                  ,"peru"
-                // -> "https://salesforce.vistony.pe" //aqui se cambio por el de abajo
-                -> "http://190.12.79.132:8083"
-                "perurofalab"
-                   // , "bolivia"
-                    , "paraguay" ->                 //QA Peru
-                    //case "peru":
-                    "https://app.vistony.pe"
-                //"peru" ->"http://190.12.79.132:8083"
-                "bolivia" -> "http://190.12.79.132:8088"
-                "ecuador" -> "http://190.12.79.132:8085"
-                else -> "http://salesforce.vistony.com"
+                "chile"         -> "http://190.12.79.132:8083"
+                "espania"       -> "http://190.12.79.132:8083"
+                "marruecos"     -> "http://190.12.79.132:8083"
+                "paraguay"      -> "http://salesforce.vistony.pe"               //QA Peru
+                "peru"          -> "http://salesforce.vistony.pe"
+                "perurofalab"   -> "http://salesforce.vistony.pe"
+                "bolivia"       -> "http://190.12.79.132:8088"
+                "ecuador"       -> "http://190.12.79.132:8085"
+                else            -> "http://salesforce.vistony.pe"
             }
-        Log.e("REOS", "-RetrofitConfig-getClientLog-baseUrl$baseUrl")
-        var puerto = ""
-        when (BuildConfig.FLAVOR) {
-            "chile" ->                 //puerto = ":8054";
-                puerto = ""
-            "bolivia" ->                 //puerto = ":8052";
-                puerto = ""
-            "ecuador" ->                 //puerto = ":8050";
-                puerto = ""
-            "peru" ->                 //Produccion----------
-                puerto = ""
-            "perurofalab" ->                 //Produccion----------
-
-                puerto = ""
-            "paraguay" ->                 //puerto = ":8051";
-                puerto = ""
-            "espania" -> puerto = ""
-            "marruecos" -> puerto = ""
-        }
-        Log.e("REOS", "-RetrofitConfig-getClientLog-puerto$puerto")
+        Log.e("jesusdebug", "-RetrofitConfig-getClientLog-baseUrl$baseUrl")
         try {
             if (client == null) {
                 client = OkHttpClient.Builder()
@@ -135,7 +79,7 @@ class RetrofitConfig {
             }
             if (retrofit == null) {
                 retrofit = Retrofit.Builder()
-                    .baseUrl(baseUrl + puerto)
+                    .baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create()).client(client)
                     .build()
             }

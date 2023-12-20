@@ -320,8 +320,10 @@ data class PreguntaRespuesta(
 data class Opcion(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
+    @SerializedName("code") var code: String? = "",
     @SerializedName("opcion") var opcion: String? = "",
     @SerializedName("valor") var valor: String? = "",
+    @SerializedName("marcado") var marcado: Boolean = false,
     var numInforme: String? = "0",
 )
 
