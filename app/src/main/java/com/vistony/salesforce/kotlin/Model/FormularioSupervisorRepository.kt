@@ -27,8 +27,10 @@ import retrofit2.Response
 import java.io.IOException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.max
 
-class FormularioTestRepository(private val context: Context) {
+@Suppress("SpellCheckingInspection")
+class FormularioSupervisorRepository(private val context: Context) {
 
     private val _resultDB = MutableStateFlow(ApiResponseEntity())
     val resultDB: StateFlow<ApiResponseEntity> get() = _resultDB
@@ -37,50 +39,82 @@ class FormularioTestRepository(private val context: Context) {
     val resultAPI: StateFlow<ApiResponseEntity> get() = _resultAPI
 
     private suspend fun addFormularioToDatabase(apiResponse: ApiResponse) {
+
+
         withContext(Dispatchers.IO) {
             try {
-                val database by lazy { AppDatabase.getInstance(context.applicationContext) }
-                val numInforme = apiResponse.datosPrincipales!!.numInforme!!
-                apiResponse.numInforme = numInforme
-                apiResponse.datosVisita!!.numInforme = numInforme
                 apiResponse.dateregister = getDateTimeCurrent()!!
 
-                // Lógica para añadir formulario a la base de datos
-                database?.formularioTestDao?.addFormSuperviser(apiResponse)
-                database?.formularioTestDao?.addDatosPrincipales(apiResponse.datosPrincipales!!)
-                database?.formularioTestDao?.addDatosVisita(apiResponse.datosVisita)
-                database?.formularioTestDao?.addTipoSalida(apiResponse.datosPrincipales!!.tipoSalida)
-                database?.formularioTestDao?.addResumenVisita(apiResponse.datosVisita!!.resumen)
-                database?.formularioTestDao?.addPreguntaRespuesta(apiResponse.formulario)
-
-                // Lógica para añadir galería si existe
-                if (apiResponse.galeria?.isNotEmpty() == true) {
-                    for (formularioGaleria in apiResponse.galeria!!) {
-                        formularioGaleria.numInforme = numInforme
+                val numInforme = apiResponse.datosPrincipales!!.numInforme!!
+                apiResponse.numInforme = numInforme
+                for (tiposalida in apiResponse.datosPrincipales!!.tipoSalida!!) {
+                    tiposalida.numInforme = numInforme
+                }
+                apiResponse.datosVisita!!.numInforme = numInforme
+                for (resumen in apiResponse.datosVisita!!.resumen!!) {
+                    resumen.numInforme = numInforme
+                }
+                for (pregunta in apiResponse.formulario!!) {
+                    pregunta.numInforme = numInforme
+                    for(option in pregunta.opciones!!){
+                        option.numInforme = numInforme
                     }
-                    database?.formularioTestDao?.addFormularioGaleria(apiResponse.galeria!!)
+                }
+                for (imagen in apiResponse.galeria!!) {
+                    imagen.numInforme = numInforme
+                }
+                /*apiResponse!!.galeria!!.forEach { item->
+                    item.numInforme = numInforme
+                }*/
+
+                Log.e("jesusdebug3", "apiResponse.numInforme ${apiResponse.numInforme}")
+                Log.e("jesusdebug3", "apiResponse.datosPrincipales ${apiResponse.datosPrincipales!!.numInforme}")
+                Log.e("jesusdebug3", "apiResponse.datosPrincipales ${apiResponse.datosPrincipales!!.tipoSalida!![0].numInforme}")
+                Log.e("jesusdebug3", "apiResponse.datosVisita ${apiResponse.datosVisita!!.numInforme}")
+                Log.e("jesusdebug3", "apiResponse.datosVisita ${apiResponse.datosVisita!!.resumen!![0].numInforme}")
+                Log.e("jesusdebug3", "apiResponse.formulario ${apiResponse.formulario!![0].numInforme}")
+                Log.e("jesusdebug3", "apiResponse.galeria ${apiResponse.galeria!![0].numInforme}")
+                Log.e("jesusdebug3", "apiResponse.comentario ${apiResponse.comentario}")
+
+                for (preguntaRespuesta in apiResponse.formulario!!) {
+                    Log.e("jesusdebug3", "pregunta ${preguntaRespuesta.numInforme}")
+                }
+                for (imagen in apiResponse.galeria!!) {
+                    Log.e("jesusdebug3", "galeria ${imagen.numInforme}")
                 }
 
-                _resultDB.value = ApiResponseEntity(StatusCode = "Y")
+                val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+                database?.formularioSupervisorDao?.addFormSuperviser(apiResponse)
+                database?.formularioSupervisorDao?.addDatosPrincipales(apiResponse.datosPrincipales!!)
+                database?.formularioSupervisorDao?.addDatosVisita(apiResponse.datosVisita)
+                database?.formularioSupervisorDao?.addTipoSalida(apiResponse.datosPrincipales!!.tipoSalida)
+                database?.formularioSupervisorDao?.addResumenVisita(apiResponse.datosVisita!!.resumen)
+                database?.formularioSupervisorDao?.addPreguntaRespuesta(apiResponse.formulario)
+
+                database?.formularioSupervisorDao?.addFormularioGaleria(apiResponse.galeria!!)
+
+
+                _resultDB.value = ApiResponseEntity(StatusCode = "Y", Data = apiResponse)
+                Log.e("jesusdebug4", "addFormularioToDatabase: ${_resultDB.value}")
             } catch (e: Exception) {
-                _resultDB.value = ApiResponseEntity(StatusCode = "N")
-                Log.e("REOS", "FormularioTestRepository-addFormularioToDatabase-error: $e")
+                //borrar registro que capturo el catch del room
+                _resultDB.value = ApiResponseEntity(StatusCode = "N", Data = apiResponse)
+                Log.e("REOS", "FormularioSupervisorRepository-addFormularioToDatabase-error: $e")
             }
         }
     }
 
-    private suspend fun sendFormularioToApi(apiResponse: ApiResponse) {
+    suspend fun sendFormularioToApi(apiResponse: ApiResponse) {
+        Log.e("jesusdebug2", "sendFormularioToApi")
         withContext(Dispatchers.IO) {
             try {
                 // Lógica para enviar formulario a la API
                 val json = Gson().toJson(apiResponse)
-                val jsonRequest: RequestBody =
-                    json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+                Log.e("jesusdebug2", "json: $json")
+                val jsonRequest: RequestBody = json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
                 val retrofitConfig: RetrofitConfig? = RetrofitConfig()
                 val service = retrofitConfig?.getClientLog()?.create(RetrofitApi::class.java)
 
-                // Definir la variable database aquí
-                val database by lazy { AppDatabase.getInstance(context.applicationContext) }
 
                 service?.sendFormSupervisor(jsonRequest)?.enqueue(object : Callback<ApiResponseEntity?> {
                     override fun onResponse(call: Call<ApiResponseEntity?>, response: Response<ApiResponseEntity?>) {
@@ -99,23 +133,25 @@ class FormularioTestRepository(private val context: Context) {
                             }
                             code = responseFormSupervisor.Data!!.code
                             message = responseFormSupervisor.Data!!.message
-                            numinforme = responseFormSupervisor.Data!!.num_informe
+                            numinforme = responseFormSupervisor.Data!!.numInforme
 
                             val executor1: ExecutorService = Executors.newFixedThreadPool(1)
 
                             for (i in 1..1) {
                                 executor1.execute {
-                                    database?.formularioTestDao?.updateStatusFormSupervisor(code, message, status, numinforme)
+                                    // Definir la variable database aquí
+                                    val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+                                    database?.formularioSupervisorDao?.updateStatusFormSupervisor(code, message, status, numinforme)
                                 }
                             }
 
                             executor1.shutdown()
-                            Log.e("REOS", "FormularioTestRepository-sendFormularioToApi-responseFormSupervisor: $responseFormSupervisor")
+                            Log.e("REOS", "FormularioSupervisorRepository-sendFormularioToApi-responseFormSupervisor: $responseFormSupervisor")
                         }
                     }
 
                     override fun onFailure(call: Call<ApiResponseEntity?>, t: Throwable) {
-                        Log.e("REOS", "FormularioTestRepository-sendFormularioToApi-onFailure: ${t.toString()}")
+                        Log.e("REOS", "FormularioSupervisorRepository-sendFormularioToApi-onFailure: ${t.toString()}")
                     }
                 })
 
@@ -123,56 +159,76 @@ class FormularioTestRepository(private val context: Context) {
                 _resultAPI.value = ApiResponseEntity(StatusCode = "Y")
             } catch (e: Exception) {
                 // Manejar excepciones de manera específica
-                Log.e("REOS", "FormularioTestRepository-sendFormularioToApi-error: $e")
+                Log.e("jesuserror", "FormularioSupervisorRepository-sendFormularioToApi-error: $e")
             }
         }
     }
 
-    suspend fun addFormularioTest(apiResponse: ApiResponse) {
+    suspend fun enviar_a_ROOM_FormularioSupervisor(apiResponse: ApiResponse) {
+        Log.e("jesusdebug", "enviando a room apiResponse: $apiResponse")
         try {
             addFormularioToDatabase(apiResponse)
-            sendFormularioToApi(apiResponse)
         } catch (e: Exception) {
-            Log.e("REOS", "FormularioTestRepository-addFormularioTest-error: $e")
+            Log.e("jesuserror", "FormularioSupervisorRepository-addFormularioTest-error: $e")
         }
     }
 
-    suspend fun sendFormularioTest() {
+    /*suspend fun sendFormularioSupervisor(apiResponse: ApiResponse) {
         try {
-            val database by lazy { AppDatabase.getInstance(context.applicationContext) }
-            val data = database?.formularioTestDao?.getFormSuperviser()
+            withContext(Dispatchers.IO) {
+                val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+                val data = database?.formularioSupervisorDao?.getFormSuperviser()
+                Log.e("jesusdebug2", "data: $data")
 
-            // Lógica para obtener formulario de la base de datos y enviar a la API
-            if (data != null) {
-                sendFormularioToApi(data)
+                // Lógica para obtener formulario de la base de datos y enviar a la API
+                if (data != null) {
+                    Log.e("jesusdebug2", "hay datos en la base de datos")
+                    sendFormularioToApi(apiResponse)
+                } else {
+                    Log.e("jesusdebug2", "no hay datos en la base de datos")
+                }
             }
         } catch (e: Exception) {
-            Log.e("REOS", "FormularioTestRepository-sendFormularioTest-error: $e")
+            Log.e("jesuserror", "FormularioSupervisorRepository-sendFormularioTest-error: $e")
         }
-    }
-
-    suspend fun getFormularioTest(imei: String, date: String): ApiResponse? {
+    }*/
+    suspend fun conseguir_desde_API_FormularioSupervisor(imei: String, date: String): ApiResponseEntity {
         try {
             return withContext(Dispatchers.IO) {
                 val retrofitConfig: RetrofitConfig? = RetrofitConfig()
                 val service = retrofitConfig?.getClientLog()?.create(RetrofitApi::class.java)
 
+
                 // Lógica para obtener formulario de la API
                 val response = service?.getFormSupervisor(imei, date)?.execute()
 
+
                 if (response != null && response.isSuccessful) {
-                    return@withContext response.body()
+
+                    val database by lazy { AppDatabase.getInstance(context.applicationContext) }
+                    val ultimoFormulario = database?.formularioSupervisorDao?.getLastNumInformeFormSuperviser()!!
+                    Log.e("jesusdebug", "ultimoFormulario: $ultimoFormulario")
+                    Log.e("jesusdebug", "response.body()!!.numInforme: ${response.body()!!.datosPrincipales!!.numInforme}")
+                    val correlativo = max(ultimoFormulario.toInt(),response.body()!!.datosPrincipales!!.numInforme!!.toInt()) + 1
+                    Log.e("jesusdebug", "correlativo: $correlativo")
+                    Log.e("jesusdebug", "FormularioSupervisorRepository-getFormularioTest-response.body: ${response.body()}")
+                    val obj = ApiResponseEntity( StatusCode = "Y", Data = response.body())
+                    obj.Data!!.datosPrincipales!!.numInforme = correlativo.toString()
+                    return@withContext obj
+                    //return@withContext response.body()
                 } else {
-                    _resultAPI.value = ApiResponseEntity(StatusCode = "N")
+                    return@withContext ApiResponseEntity(StatusCode = "N")
                 }
 
-                return@withContext null
+                //return@withContext null
             }
         } catch (e: Exception) {
-            Log.e("REOS", "FormularioTestRepository-getFormularioTest-error: $e")
-            return null
+            Log.e("REOS", "FormularioSupervisorRepository-getFormularioTest-error: $e")
+            return ApiResponseEntity(StatusCode = "N")
         }
     }
+
+
 }
 
 
@@ -226,21 +282,13 @@ data class ApiResponse(
     @Ignore
     @SerializedName("formulario") var formulario: List<PreguntaRespuesta>? = listOf(),
     @SerializedName("comentario") var comentario: String = "",
-    @ColumnInfo(name = "numInforme")
-    var numInforme: String = "",
-    @ColumnInfo(name = "chkrecibido")
-    var chkrecibido: String = "N",
-    @ColumnInfo(name = "code")
-    var code: String = "",
-    @ColumnInfo(name = "message")
-    var message: String = "",
-    @ColumnInfo(name = "dateregister")
-    var dateregister: String = "",
+    @SerializedName("num_informe") var numInforme: String = "",
+    @SerializedName("chkrecibido") var chkrecibido: String = "N",
+    @SerializedName("code") var code: String = "",
+    @SerializedName("message") var message: String = "",
+    @SerializedName("dateregister") var dateregister: String = "",
     @Ignore
-    @ColumnInfo(name = "num_informe")
-    var num_informe: String = "",
-    @Ignore
-    @SerializedName("galeria") var galeria: List<FormularioGaleria>? = listOf(), // lista de String de imagenes base 64
+    @SerializedName("galeria") var galeria: List<FormularioGaleria>? = listOf() // lista de String de imagenes base 64
 )
 
 @Entity(tableName = "FormularioGaleria")
@@ -254,7 +302,7 @@ data class FormularioGaleria(
     @SerializedName("ErrorCode") var errorCode: String = "",
     var numInforme: String? = "",
     @Ignore
-    @SerializedName("bitmap") var bitmap: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
+    @SerializedName("bitmap") var bitmap: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
 )
 
 @Entity(tableName = "maindata")
@@ -266,7 +314,7 @@ data class DatosPrincipales(
     @SerializedName("nombre_supervisor") var nombreSupervisor: String? = "",
     @SerializedName("nombre_vendedor") var nombreVendedor: String? = "",
     @Ignore
-    @SerializedName("tipo_salida") var tipoSalida: List<TipoSalida>? = listOf(),
+    @SerializedName("tipo_salida") var tipoSalida: List<TipoSalida>? = listOf()
 )
 
 @Entity(tableName = "visitdata")
@@ -281,7 +329,7 @@ data class DatosVisita(
     @SerializedName("resumen") var resumen: List<ResumenVisita> = listOf(),
     @SerializedName("clientes_nuevos") var clientesNuevos: String? = "0",
     @SerializedName("clientes_empadronados") var clientesEmpadronados: String? = "0",
-    var numInforme: String? = "0",
+    var numInforme: String? = "0"
 )
 
 @Entity(tableName = "outputtype")
@@ -291,7 +339,7 @@ data class TipoSalida(
     @SerializedName("opcion") var opcion: String? = "",
     @SerializedName("valor") var valor: String? = "",
     @SerializedName("marcado") var marcado: Boolean? = false,
-    var numInforme: String? = "0",
+    var numInforme: String? = "0"
 )
 
 @Entity(tableName = "visitsummary")
@@ -301,7 +349,7 @@ data class ResumenVisita(
     @SerializedName("tipo") var tipo: String? = "",
     @SerializedName("cantidad") var cantidad: String? = "0",
     @SerializedName("monto") var monto: String? = "0",
-    var numInforme: String? = "0",
+    var numInforme: String? = "0"
 )
 
 @Entity(tableName = "questionanswer")
@@ -312,8 +360,9 @@ data class PreguntaRespuesta(
     @Ignore
     @SerializedName("opciones") var opciones: List<Opcion> = listOf(),
     @SerializedName("respuesta") var respuesta: String? = "",
+    @SerializedName("valor") var valor: String? = "",
     var numInforme: String? = "0",
-    @SerializedName("code") var code: String?="",
+    @SerializedName("code") var code: String? = ""
 )
 
 @Entity(tableName = "option")
@@ -323,15 +372,16 @@ data class Opcion(
     @SerializedName("code") var code: String? = "",
     @SerializedName("opcion") var opcion: String? = "",
     @SerializedName("valor") var valor: String? = "",
-    @SerializedName("marcado") var marcado: Boolean = false,
-    var numInforme: String? = "0",
+    //@SerializedName("marcado") var marcado: Boolean = false,
+    var numInforme: String? = "0"
 )
 
 data class ApiResponseEntity(
     var StatusCode:String="",
     @SerializedName("Data")
-    var Data: ApiResponse? = null,
+    var Data: ApiResponse? = null
 )
+
 data class ApiResponseList(
     @SerializedName("Data")
     val data: List<ApiResponse>

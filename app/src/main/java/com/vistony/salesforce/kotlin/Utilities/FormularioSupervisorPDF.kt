@@ -54,7 +54,7 @@ class FormularioSupervisorPDF {
                         val cont = apiResponse.galeria!!.size
                         for ( i in 0 until cont) {
                             val formularioGaleria = apiResponse.galeria?.get(i)
-                            if(formularioGaleria != null && formularioGaleria.uri != null){
+                            if(formularioGaleria?.uri != null){
                                 Log.e("FormularioSupervisorPDF2", "Descargando imagen: ${formularioGaleria.uri}")
                                 val job = launch {
                                     val nonNullUrlString :String? = formularioGaleria.uri
@@ -87,11 +87,6 @@ class FormularioSupervisorPDF {
         }
     }
     private suspend fun loadImageFromUrl(url: String): Bitmap? {
-        Log.e(
-            "REOS"
-            ,
-            "HistoricalDispatchTemplate-loadImageFromUrl-url: "
-                    + url)
         return try {
             withContext(Dispatchers.IO)
             {
@@ -109,30 +104,15 @@ class FormularioSupervisorPDF {
                 } else if (responseCode == HttpURLConnection.
                     HTTP_MOVED_TEMP
                 ) {
-                    val newUrl = connection?.getHeaderField(
-                        "Location"
-                    )
-                    if (!newUrl.
-                        isNullOrBlank
-                            ()) {
+                    val newUrl = connection?.getHeaderField("Location")
+                    if (!newUrl.isNullOrBlank()) {
                         return@withContext loadImageFromUrl(newUrl)
                     }
                 }
-                Log.e(
-                    "REOS"
-                    ,
-                    "HistoricalDispatchTemplate-loadImageFromUrl-connection failed. Response code:$responseCode"
-                )
                 return@withContext null
             }
         } catch (e: Exception) {
-// Manejar errores aquí
             e.printStackTrace()
-            Log.e(
-                "REOS"
-                ,
-                "HistoricalDispatchTemplate-loadImageFromUrl-error: "
-                        + e)
             return null
         }
     }
@@ -178,10 +158,12 @@ class FormularioSupervisorPDF {
         var sumaTotal by mutableStateOf(0)
         val totalPreguntas = apiResponse.formulario!!.size
         if(typePdf == "formularioprincipal"){
+
             for(i in 0 until totalPreguntas){
-                val pregunta = apiResponse.formulario!![i].pregunta
-                val respuesta = apiResponse.formulario!![i].opciones[apiResponse.formulario!![i].respuesta!!.toInt() - 1].opcion
-                val valor = apiResponse.formulario!![i].respuesta // respuesta es el codigo de la opcion marcada (1 al 5)
+                val item = apiResponse.formulario!![i]
+                val pregunta = item.pregunta
+                val respuesta = item.respuesta
+                val valor = item.valor // respuesta es el codigo de la opcion marcada (1 al 5)
                 agregarFila(tablaFormulario, listOf(
                     mapOf("label" to "$i. $pregunta", "size" to 8),
                     mapOf("label" to "$respuesta", "size" to 2),
@@ -191,9 +173,10 @@ class FormularioSupervisorPDF {
             }
         }else{
             for(i in 0 until totalPreguntas){
-                val pregunta = apiResponse.formulario!![i].pregunta
-                val respuesta = apiResponse.formulario!![i].respuesta // respuesta en la pantalla es (muy malo, malo , regular , bueno, muy bueno)
-                val valor = obtenerPuntuacionNumerica(apiResponse.formulario!![i].respuesta!!) // respuesta en pantalla busqueda es (muy malo, malo , regular , bueno, muy bueno)
+                val item = apiResponse.formulario!![i]
+                val pregunta = item.pregunta
+                val respuesta = item.respuesta // respuesta en la pantalla es (muy malo, malo , regular , bueno, muy bueno)
+                val valor = obtenerPuntuacionNumerica(item.respuesta!!) // respuesta en pantalla busqueda es (muy malo, malo , regular , bueno, muy bueno)
                 agregarFila(tablaFormulario, listOf(
                     mapOf("label" to "$i. $pregunta", "size" to 8),
                     mapOf("label" to "$respuesta", "size" to 2),

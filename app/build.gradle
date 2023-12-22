@@ -125,8 +125,8 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.pe_V2"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Pruebas Autorizaciones B2B -->Produccion
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
             versionName "2.2.21"
             manifestPlaceholders = [country:"Perú"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PE"')
@@ -149,8 +149,8 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.bo"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.bo"')
             //----------Ambiente QA
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
             //----------Produccion 13.10.2023
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post"')
@@ -170,8 +170,8 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"py.post"')
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.py"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.py"')
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
             versionName "1.0.1"
             manifestPlaceholders = [country:"Paraguay"]
             buildConfigField('String' , 'COUNTRY_DEFAULT', '"PY"')
@@ -187,8 +187,8 @@ android {
             //buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
             //buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
             //Produccion------
-            buildConfigField('String' , 'BASE_ENDPOINT', '"get.qa"')
-            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.qa"')
+            buildConfigField('String' , 'BASE_ENDPOINT', '"get.test"')
+            buildConfigField('String' , 'BASE_ENDPOINTPOST', '"post.test"')
             //---------------------------
             versionName "1.0.1"
             manifestPlaceholders = [country:"Perú"]

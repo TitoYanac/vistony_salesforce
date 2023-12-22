@@ -20,12 +20,12 @@ class RetrofitConfig {
                 "chile"         -> "http://190.12.79.132:8083"
                 "espania"       -> "http://190.12.79.132:8083"
                 "marruecos"     -> "http://190.12.79.132:8083"
-                "paraguay"      -> "http://salesforce.vistony.pe"               //QA Peru
-                "peru"          -> "http://salesforce.vistony.pe"
-                "perurofalab"   -> "http://salesforce.vistony.pe"
-                "bolivia"       -> "http://190.12.79.132:8088"
-                "ecuador"       -> "http://190.12.79.132:8085"
-                else            -> "http://salesforce.vistony.pe"
+                "paraguay"      -> "http://190.12.79.132:8083"               //QA Peru
+                "peru"          -> "http://190.12.79.132:8083"
+                "perurofalab"   -> "http://190.12.79.132:8083"
+                "bolivia"       -> "http://190.12.79.132:8083"
+                "ecuador"       -> "http://190.12.79.132:8083"
+                else            -> "http://190.12.79.132:8083"
             }
         Log.e("REOS", "-RetrofitConfig-getClientLog-baseUrl$baseUrl")
         try {
@@ -59,12 +59,12 @@ class RetrofitConfig {
                 "chile"         -> "http://190.12.79.132:8083"
                 "espania"       -> "http://190.12.79.132:8083"
                 "marruecos"     -> "http://190.12.79.132:8083"
-                "paraguay"      -> "http://salesforce.vistony.pe"               //QA Peru
-                "peru"          -> "http://salesforce.vistony.pe"
-                "perurofalab"   -> "http://salesforce.vistony.pe"
-                "bolivia"       -> "http://190.12.79.132:8088"
-                "ecuador"       -> "http://190.12.79.132:8085"
-                else            -> "http://salesforce.vistony.pe"
+                "paraguay"      -> "http://190.12.79.132:8083"               //QA Peru
+                "peru"          -> "http://190.12.79.132:8083"
+                "perurofalab"   -> "http://190.12.79.132:8083"
+                "bolivia"       -> "http://190.12.79.132:8083"
+                "ecuador"       -> "http://190.12.79.132:8083"
+                else            -> "http://190.12.79.132:8083"
             }
         Log.e("jesusdebug", "-RetrofitConfig-getClientLog-baseUrl$baseUrl")
         try {

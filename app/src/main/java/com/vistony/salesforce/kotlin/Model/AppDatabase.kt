@@ -36,7 +36,7 @@ import com.vistony.salesforce.kotlin.Utilities.DATABASE_NAME
     FormularioGaleria::class,
     Opcion::class,
     CollectionHead::class
-                     ], version = 88,exportSchema = false)
+                     ], version = 90,exportSchema = false)
 //@Database(entities = [Ubigeous::class], version = 1,exportSchema = false)
 @TypeConverters(
     DetailDispatchConverter::class,
@@ -61,7 +61,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val salesCalendarDao:SalesCalendarDao
     abstract val notificationDao:NotificationDao
     abstract val bankDao:BankDao
-    abstract val formularioTestDao:FormularioTestDao
+    abstract val formularioSupervisorDao:FormularioSupervisorDao
     abstract val collectionHeadDao:CollectionHeadDao
 
     companion object {
@@ -90,23 +90,5 @@ abstract class AppDatabase : RoomDatabase() {
             }
             return instance
         }
-
-        // Create and pre-populate the database. See this article for more details:
-        // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
-        /*fun buildDatabase(context: Context): RoomDatabase {
-            return Room.databaseBuilder(context, RoomDatabase::class.java, DATABASE_NAME)
-                .addCallback(
-                    object : RoomDatabase.Callback() {
-                        override fun onCreate(db: SupportSQLiteDatabase) {
-                            super.onCreate(db)
-                            val request = OneTimeWorkRequestBuilder<UbigeousWorker>()
-                                .setInputData(workDataOf(KEY_FILENAME to PLANT_DATA_FILENAME))
-                                .build()
-                            WorkManager.getInstance(context).enqueue(request)
-                        }
-                    }
-                )
-                .build()
-        }*/
     }
 }

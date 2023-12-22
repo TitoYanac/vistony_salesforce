@@ -7,19 +7,20 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vistony.salesforce.Entity.SesionEntity.imei
 import com.vistony.salesforce.kotlin.Model.ApiResponse
 import com.vistony.salesforce.kotlin.Model.ApiResponseList
 import com.vistony.salesforce.kotlin.Utilities.api.RetrofitApi
+import com.vistony.salesforce.kotlin.Utilities.api.RetrofitConfig
 import com.vistony.salesforce.kotlin.View.Template.PdfItemData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -31,9 +32,8 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class PdfListViewModel : ViewModel() {
-    private val _pdfItems = mutableStateOf<List<PdfItemData>>(emptyList())
-
-    val pdfItems: State<List<PdfItemData>> = _pdfItems
+    private val _pdfItems = MutableStateFlow<List<PdfItemData>>(emptyList())
+    val pdfItems= _pdfItems.asStateFlow()
 
     private val _apiResponseList = mutableStateOf<ApiResponseList?>(null)
     val apiResponseList: State<ApiResponseList?> = _apiResponseList
@@ -63,20 +63,15 @@ class PdfListViewModel : ViewModel() {
     }
 
     fun loadPdfItems() {
-        val client = OkHttpClient.Builder().build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://190.12.79.132:8083/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-
-        val api = retrofit.create(RetrofitApi::class.java)
-
         var startDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(_selectedStartDate.value.time)
         var endDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(_selectedEndDate.value.time)
 
-        api.getListFormSupervisor(startDate, endDate)?.enqueue(object :
+        val retrofitConfig: RetrofitConfig? = RetrofitConfig()
+        val service = retrofitConfig?.getClientLog()?.create(
+            RetrofitApi
+            ::class.java
+        )
+        service?.getListFormSupervisor(fini = startDate, fin = endDate, imei = imei)?.enqueue(object :
             Callback<ApiResponseList?> {
             override fun onResponse(
                 call: Call<ApiResponseList?>,
@@ -89,38 +84,42 @@ class PdfListViewModel : ViewModel() {
                             if (response.isSuccessful) {
                                 val listApiResponse: ApiResponseList? = response.body()
                                 _apiResponseList.value = listApiResponse
-                                Log.e("retrofitListapiresponse", "ListApiResponse size: ${listApiResponse?.data?.size}")
+                                Log.e("jesusdebug5", "ListApiResponse size: ${listApiResponse?.data?.size}")
+                                var aux = emptyList<PdfItemData>()
+                                if(listApiResponse != null) {
+                                    listApiResponse?.data
+                                        ?.filterNotNull()
+                                        ?.forEach { apiResponseItem ->
+                                            try {
+                                                val fechaString = apiResponseItem.datosPrincipales?.fechaHoy.toString().split(" ").first()
+                                                val formatoEsperado = "yyyy-MM-dd"
+                                                val formato = SimpleDateFormat(formatoEsperado, Locale.getDefault())
+                                                val fechaParseada: Date? = fechaString?.let { formato.parse(it) }
 
-                                val pdfItems = listApiResponse?.data?.mapNotNull { item ->
-                                    val fechaString = item.datosPrincipales?.fechaHoy.toString().split(" ").first()
-                                    val formatoEsperado = "yyyy-MM-dd"
-                                    val formato = SimpleDateFormat(formatoEsperado, Locale.getDefault())
-                                    val fechaParseada: Date? = fechaString?.let { formato.parse(it) }
+                                                val calendar = Calendar.getInstance()
+                                                fechaParseada?.let { calendar.time = it }
 
-                                    val calendar = Calendar.getInstance()
-                                    fechaParseada?.let { calendar.time = it }
+                                                val obj = PdfItemData(
+                                                    numInforme = apiResponseItem.datosPrincipales?.numInforme?.toString() ?: "",
+                                                    name = apiResponseItem.datosPrincipales?.nombreVendedor ?: "",
+                                                    description = apiResponseItem.datosPrincipales?.nombreSupervisor ?: "",
+                                                    date = calendar ?: Calendar.getInstance()
+                                                )
 
-                                    /*if (item.galeria != null) {
-                                        Log.e("retrofitTest3", "galeria size: ${item.galeria!!.size}")
-                                        val cont = item.galeria!!.size
+                                                aux += obj
 
-                                        try {
-                                            cargarImagenes(apiResponse = item, context = context)
-                                            // Procesar las imágenes cargadas...
-                                        } catch (e: Exception) {
-                                            e.printStackTrace()
+
+                                            } catch (e: Exception) {
+                                                Log.e("retrofitTest", "Error al procesar un elemento de la API: ${e.message}")
+                                            }
                                         }
-                                    }*/
 
-                                    PdfItemData(
-                                        numInforme = item.datosPrincipales?.numInforme?.toString() ?: "",
-                                        name = item.datosPrincipales?.nombreVendedor ?: "",
-                                        description = item.datosPrincipales?.nombreSupervisor ?: "",
-                                        date = calendar ?: Calendar.getInstance()
-                                    )
+                                    _pdfItems.value = aux
+
                                 }
+                                Log.e("jesusdebug5", "pdflist size: ${_pdfItems.value?.size}")
 
-                                _pdfItems.value = pdfItems ?: emptyList()
+
                             } else {
                                 Log.e("retrofitTest", "Error en la respuesta de la API: ${response.headers()}")
                                 Log.e("retrofitTest", "Error en la respuesta de la API: ${response.code()}")

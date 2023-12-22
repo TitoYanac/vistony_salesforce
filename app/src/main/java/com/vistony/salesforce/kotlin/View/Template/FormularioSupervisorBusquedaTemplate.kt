@@ -27,12 +27,12 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.PictureAsPdf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,56 +40,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
-import com.vistony.salesforce.Controller.Adapters.ListHistoricStatusDispatchAdapter
 import com.vistony.salesforce.R
 import com.vistony.salesforce.View.MenuView.context
-import com.vistony.salesforce.kotlin.Model.ApiResponse
-import com.vistony.salesforce.kotlin.Model.FormularioGaleria
 import com.vistony.salesforce.kotlin.Utilities.FormularioSupervisorPDF
 import com.vistony.salesforce.kotlin.View.components.DialogView
 import com.vistony.salesforce.kotlin.View.components.contexto
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import java.util.concurrent.Executor
 
 @Composable
-fun BusquedaFormularioSupervisorTemplate() {
-    val pdfListViewModel: PdfListViewModel = viewModel()
-    // Obtén las fechas de inicio y fin
-    val startDate = pdfListViewModel.selectedStartDate.value.time
-    val endDate = pdfListViewModel.selectedEndDate.value.time
-
-    // Asegúrate de que endDate sea mayor o igual a startDate
-    val validStartDate = if (startDate >= endDate) endDate else startDate
-    val validEndDate = if (startDate >= endDate) startDate else endDate
-
+fun FormularioSupervisorBusquedaTemplate(pdfListViewModel: PdfListViewModel) {
     // Filtrar la lista de elementos entre las fechas seleccionadas
-    val pdfItems = pdfListViewModel.pdfItems.value.filter { item ->
-        val itemDate = item.date.time
-        itemDate in validStartDate..validEndDate
-    }
+    val pdfItems = pdfListViewModel.pdfItems.collectAsState()
+    Log.e("jesusdebug5", "pdfitems: ${pdfItems.value}")
+
     val contexto = LocalContext.current
     // Crea una lista de elementos filtrados
     Column(
@@ -105,13 +80,7 @@ fun BusquedaFormularioSupervisorTemplate() {
         ) {
             DatePickerButton(
                 onClick = {
-                    showDatePicker(
-                        pdfListViewModel.selectedStartDate.value,
-                        { pdfListViewModel.onStartDateSelected(it) },
-                        { updatedText ->
-                            pdfListViewModel.onStartDateButtonTextUpdated(updatedText)
-                        }
-                    )
+                    showDatePicker(pdfListViewModel=pdfListViewModel,type = "startDate")
                 },
                 label = pdfListViewModel.startDateButtonText.value,
                 modifier = Modifier.weight(1f)
@@ -121,11 +90,7 @@ fun BusquedaFormularioSupervisorTemplate() {
 
             DatePickerButton(
                 onClick = {
-                    showDatePicker(
-                        pdfListViewModel.selectedEndDate.value,
-                        { pdfListViewModel.onEndDateSelected(it) },
-                        { updatedText -> pdfListViewModel.onEndDateButtonTextUpdated(updatedText) }
-                    )
+                    showDatePicker(pdfListViewModel=pdfListViewModel,type = "endDate")
                 },
                 label = pdfListViewModel.endDateButtonText.value,
                 modifier = Modifier.weight(1f)
@@ -133,7 +98,7 @@ fun BusquedaFormularioSupervisorTemplate() {
         }
         // Lista de elementos filtrados
         LazyColumn {
-            items(pdfItems) { item ->
+            items(pdfItems.value.asReversed()) { item ->
                 PdfListItem(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -165,7 +130,10 @@ fun DatePickerButton(onClick: () -> Unit, label: String, modifier: Modifier) {
         }
     }
 }
-fun showDatePicker(selectedDate: Calendar, onDateSelected: (Calendar) -> Unit, updateButtonText: (String) -> Unit) {
+fun showDatePicker(pdfListViewModel: PdfListViewModel, type: String) {
+
+    val selectedDate = pdfListViewModel.selectedStartDate.value
+
     val datePickerDialog = DatePickerDialog(
         contexto,
         { _, year, month, day ->
@@ -174,10 +142,17 @@ fun showDatePicker(selectedDate: Calendar, onDateSelected: (Calendar) -> Unit, u
                 set(Calendar.MONTH, month)
                 set(Calendar.DAY_OF_MONTH, day)
             }
-            onDateSelected(selectedCalendar)
-            // Actualiza el texto del botón con la fecha seleccionada
-            val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selectedCalendar.time)
-            updateButtonText(formattedDate)
+            if (type == "startDate") {
+                pdfListViewModel.onStartDateSelected(selectedCalendar)
+                // Actualiza el texto del botón con la fecha seleccionada
+                val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selectedCalendar.time)
+                pdfListViewModel.onStartDateButtonTextUpdated(formattedDate)
+            } else if (type == "endDate") {
+                pdfListViewModel.onEndDateSelected(selectedCalendar)
+                // Actualiza el texto del botón con la fecha seleccionada
+                val formattedDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(selectedCalendar.time)
+                pdfListViewModel.onEndDateButtonTextUpdated(formattedDate)
+            }
         },
         selectedDate.get(Calendar.YEAR),
         selectedDate.get(Calendar.MONTH),
@@ -354,11 +329,6 @@ fun ImageDialog(imageBitmap: MutableState<ImageBitmap?>, onClose: () -> Unit) {
 
 class PdfItemData(val numInforme: String?,val name: String, val description: String, val date: Calendar)
 
-@Preview(showBackground = true)
-@Composable
-fun PdfListPreview() {
-    BusquedaFormularioSupervisorTemplate()
-}
 
 private suspend fun loadImageFromUrl(context: Context, url: String): Bitmap {
     Log.e("REOS", "HistoricalDispatchTemplate-loadImageFromUrl-url: " + url)

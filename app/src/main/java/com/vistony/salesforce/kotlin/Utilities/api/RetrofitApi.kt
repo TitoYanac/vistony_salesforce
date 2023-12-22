@@ -1,7 +1,6 @@
 package com.vistony.salesforce.kotlin.Utilities.api
 
 import com.vistony.salesforce.BuildConfig
-import com.vistony.salesforce.Entity.Retrofit.Modelo.CobranzaDetalleEntity
 import com.vistony.salesforce.kotlin.Model.*
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -79,8 +78,9 @@ interface RetrofitApi {
 
     @GET(BuildConfig.BASE_ENDPOINT + BuildConfig.BASE_ENVIRONMENT +"/Superviser/Forms")
     fun getListFormSupervisor(
-        @Query("fini") imei: String?,
-        @Query("fin") date: String?
+        @Query("fini") fini: String?,
+        @Query("fin") fin: String?,
+        @Query("imei") imei: String?
     ): Call<ApiResponseList>?
 
 

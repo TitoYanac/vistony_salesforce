@@ -1,5 +1,6 @@
 package com.vistony.salesforce.kotlin.View.Pages
 
+import PdfListViewModel
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,11 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.vistony.salesforce.kotlin.View.Atoms.theme.VistonyTheme
-import com.vistony.salesforce.kotlin.View.Template.BusquedaFormularioSupervisorTemplate
+import com.vistony.salesforce.kotlin.View.Template.FormularioSupervisorBusquedaTemplate
 import kotlinx.coroutines.launch
 
 class BusquedaFormularioSupervisor : Fragment() {
@@ -49,7 +47,9 @@ class BusquedaFormularioSupervisor : Fragment() {
                                 modifier = Modifier.fillMaxSize(),
                                 color = MaterialTheme.colors.background
                             ) {
-                                BusquedaFormularioSupervisorTemplate()
+
+                                val pdfListViewModel: PdfListViewModel = viewModel()
+                                FormularioSupervisorBusquedaTemplate(pdfListViewModel = pdfListViewModel)
                             }
                         }
                     }

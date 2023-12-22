@@ -2,7 +2,6 @@ package com.vistony.salesforce.kotlin.View.Pages
 
 import FormularioSupervisorTemplate
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +20,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -31,17 +29,11 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.vistony.salesforce.kotlin.Model.FormularioTestRepository
-import com.vistony.salesforce.kotlin.Model.FormularioTestViewModel
+import com.vistony.salesforce.kotlin.Model.FormularioSupervisorRepository
+import com.vistony.salesforce.kotlin.Model.FormularioSupervisorViewModel
 import com.vistony.salesforce.kotlin.View.Atoms.theme.VistonyTheme
 import com.vistony.salesforce.kotlin.View.Template.componentsFormularioSupervisor.ModelFormularioSupervisorTemplate.CameraImageViewModel
-import com.vistony.salesforce.kotlin.View.Template.componentsFormularioSupervisor.Pages.CamaraScreen
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 class FormularioSupervisor : Fragment() {
@@ -64,19 +56,14 @@ class FormularioSupervisor : Fragment() {
                             ) {
 
 
-                                val navController = rememberNavController()
                                 val cameraImageViewModel: CameraImageViewModel = viewModel()
+                                val formularioSupervisorRepository = FormularioSupervisorRepository(context = LocalContext.current)
+                                val formularioSupervisorViewModel: FormularioSupervisorViewModel = viewModel(
+                                    factory = FormularioSupervisorViewModel.FormularioSupervisorViewModelFactory(formularioSupervisorRepository = formularioSupervisorRepository)
+                                )
 
+                                FormularioSupervisorTemplate(cameraImageViewModel,formularioSupervisorViewModel)
 
-                                NavHost(navController = navController, startDestination = "formulario") {
-                                    composable("formulario") {
-                                        FormularioSupervisorTemplate(navController, cameraImageViewModel)
-                                        //BusquedaFormularioSupervisor()
-                                    }
-                                    composable("camara") {
-                                        CamaraScreen(cameraImageViewModel, navController)
-                                    }
-                                }
                             }
                         }
                     }
@@ -101,12 +88,7 @@ class FormularioSupervisor : Fragment() {
 
 
 
-fun getDateCurrentFormulario(): String {
-    val format = "yyyy-MM-dd"
-    val currentDate = LocalDate.now()
-    val formatter = DateTimeFormatter.ofPattern(format)
-    return currentDate.format(formatter)
-}
+
 
 @Composable
 fun ErrorScreen() {

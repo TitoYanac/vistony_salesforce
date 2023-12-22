@@ -7,11 +7,13 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface FormularioTestDao {
+interface FormularioSupervisorDao {
 
-    @Query("SELECT  * FROM formsuperviser WHERE chkrecibido='N' LIMIT 1")
+    @Query("SELECT  * FROM formsuperviser WHERE chkrecibido='N' ORDER BY numInforme DESC LIMIT 1")
     fun getFormSuperviser(): ApiResponse
 
+    @Query("SELECT MAX(IFNULL(numInforme,0)) as num FROM formsuperviser")
+    fun getLastNumInformeFormSuperviser(): String
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addFormSuperviser(FormSuperviser: ApiResponse)
 

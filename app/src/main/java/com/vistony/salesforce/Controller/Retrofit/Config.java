@@ -26,23 +26,23 @@ public class Config {
 
         String baseUrl=null;
         switch (BuildConfig.FLAVOR) {
-            case "peru":        baseUrl = "http://salesforce.vistony.pe";
+            case "peru":        baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "paraguay":    baseUrl = "http://salesforce.vistony.pe";
+            case "paraguay":    baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "perurofalab": baseUrl = "http://salesforce.vistony.pe";
+            case "perurofalab": baseUrl = "http://190.12.79.132:8083";
                 break;
             case "marruecos":   baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "chile":       baseUrl = "http://190.12.79.132:8084";
+            case "chile":       baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "ecuador":     baseUrl = "http://190.12.79.132:8085";
+            case "ecuador":     baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "espania":     baseUrl = "http://190.12.79.132:8086";
+            case "espania":     baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "bolivia":     baseUrl = "http://190.12.79.132:8088";
+            case "bolivia":     baseUrl = "http://190.12.79.132:8083";
                 break;
-            default: baseUrl = "http://salesforce.vistony.pe";
+            default: baseUrl = "http://190.12.79.132:8083";
                 break;
         }
         Log.e("jesusdebug", "-RetrofitConfig-getClientLog-baseUrl" + baseUrl );
@@ -76,23 +76,23 @@ public class Config {
         String baseUrl=null;
 
         switch (BuildConfig.FLAVOR) {
-            case "peru":        baseUrl = "http://salesforce.vistony.pe";
+            case "peru":        baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "paraguay":    baseUrl = "http://salesforce.vistony.pe";
+            case "paraguay":    baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "perurofalab": baseUrl = "http://salesforce.vistony.pe";
+            case "perurofalab": baseUrl = "http://190.12.79.132:8083";
                 break;
             case "marruecos":   baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "chile":       baseUrl = "http://190.12.79.132:8084";
+            case "chile":       baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "ecuador":     baseUrl = "http://190.12.79.132:8085";
+            case "ecuador":     baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "espania":     baseUrl = "http://190.12.79.132:8086";
+            case "espania":     baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "bolivia":     baseUrl = "http://190.12.79.132:8088";
+            case "bolivia":     baseUrl = "http://190.12.79.132:8083";
                 break;
-            default: baseUrl = "http://salesforce.vistony.pe";
+            default: baseUrl = "http://190.12.79.132:8083";
                 break;
         }
         try{
@@ -124,23 +124,23 @@ public class Config {
 
         String baseUrl=null;
         switch (BuildConfig.FLAVOR) {
-            case "peru":        baseUrl = "http://salesforce.vistony.pe";
+            case "peru":        baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "paraguay":    baseUrl = "http://salesforce.vistony.pe";
+            case "paraguay":    baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "perurofalab": baseUrl = "http://salesforce.vistony.pe";
+            case "perurofalab": baseUrl = "http://190.12.79.132:8083";
                 break;
             case "marruecos":   baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "chile":       baseUrl = "http://190.12.79.132:8084";
+            case "chile":       baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "ecuador":     baseUrl = "http://190.12.79.132:8085";
+            case "ecuador":     baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "espania":     baseUrl = "http://190.12.79.132:8086";
+            case "espania":     baseUrl = "http://190.12.79.132:8083";
                 break;
-            case "bolivia":     baseUrl = "http://190.12.79.132:8088";
+            case "bolivia":     baseUrl = "http://190.12.79.132:8083";
                 break;
-            default: baseUrl = "http://salesforce.vistony.pe";
+            default: baseUrl = "http://190.12.79.132:8083";
                 break;
         }
 
